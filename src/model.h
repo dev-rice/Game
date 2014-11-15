@@ -22,7 +22,7 @@ class Model {
 public:
     Model();
     void draw(glm::mat4*, glm::mat4*, glm::mat4*);
-    void useTexture(const char*);
+    void useTexture(const char*, GLuint);
 
 private:
     GLfloat* parseOBJVertices(const char*);
@@ -37,6 +37,7 @@ private:
     GLuint shader_program;
 
     GLuint model_uniform;
+    GLuint texture_number;
 };
 
 #endif

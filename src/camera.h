@@ -2,6 +2,7 @@
 
 struct Camera {
     float x, y, z;
+    float y_rot;
     float sensitivity;
 
     Camera() : x(0), y(0), z(0), sensitivity(0.05) {}

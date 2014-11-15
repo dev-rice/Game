@@ -15,6 +15,7 @@
 #include <math.h>
 #include <cstdlib>
 #include <vector>
+#include <time.h>
 
 #include <random>
 
@@ -29,24 +30,43 @@ GLFWwindow* initializeGLFWWindow(int, int);
 //////////////////////////
 // Implementation
 int main() {
-    float width = 800.0f;
-    float height = 600.0f;
+    srand(time(NULL));
+
+    float width = 1920.0f;
+    float height = 1080.0f;
     GLFWwindow* window = initializeGLFWWindow(width, height);
 
+    // Zooming stuff
+    float field_of_view = 45.0f;
+    float last_field_of_view = 45.0f;
+    bool zoom_pressed = false;
+    float start_time = 0;
 
-    Camera camera(0.0f, 0.0f, 2.0f);
-    glm::mat4 proj_matrix = glm::perspective(45.0f, width / height, 1.0f, 100.0f);
+    Camera camera(0.0f, 0.0f, 25.0f);
     glm::mat4 view_matrix = glm::mat4();
+
 
     std::vector<Drawable> drawables;
 
+    // Load models with textures. Textures should
+    // load independently but for now you have to
+    // keep track of the texture number even when
+    // loading a new model
     Model cube1 = Model();
-    cube1.useTexture("res/diamond2.png");
+    cube1.useTexture("res/diamond2.png", 0);
+    Model cube2 = Model();
+    cube2.useTexture("res/simple.png", 1);
 
-    for (int i = -25; i < 25; ++i){
-        for (int j = -25; j < 25; ++j){
-
-            drawables.push_back(Drawable(&cube1, glm::vec3(i, j, rand() % 2)));
+    for (int i = -10; i < 10; ++i){
+        for (int j = -10; j < 10; ++j){
+            if (rand() % 2){
+                drawables.push_back(Drawable(&cube1, glm::vec3(i, j, 1)));
+            }
+        }
+    }
+    for (int i = -10; i < 10; ++i){
+        for (int j = -10; j < 10; ++j){
+            drawables.push_back(Drawable(&cube2, glm::vec3(i, j, 0)));
         }
     }
     // Display loop
@@ -80,12 +100,53 @@ int main() {
         if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS){
             camera.y += camera.sensitivity;
         }
+        if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS){
+            camera.y_rot += 1.0f;
+        }
+        if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS){
+            camera.y_rot -= 1.0f;
+        }
+
+        // Zoom code, should be changed for cleanliness and it doesn't respond
+        // well to high frequency clicks
+        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_2) == GLFW_PRESS){
+            if (!zoom_pressed) {
+                start_time = (float)glfwGetTime();
+                zoom_pressed = true;
+            }
+        } else {
+            if (zoom_pressed){
+                start_time = (float)glfwGetTime();
+                zoom_pressed = false;
+            }
+        }
+        if (zoom_pressed) { 
+            float delta_t = (float)glfwGetTime() - start_time;
+            if (delta_t < 0.75){
+                field_of_view = (1.5 / delta_t) + 22.5;
+                field_of_view = fmin(field_of_view, last_field_of_view);
+                last_field_of_view = field_of_view;
+            }
+        } else {
+            float delta_t = (float)glfwGetTime() - start_time;
+            if (delta_t < 0.75){
+                field_of_view = -(1.5 / delta_t) + 45.0f;
+                field_of_view = fmax(field_of_view, last_field_of_view);
+                last_field_of_view = field_of_view;
+            }
+        }
+        // End of bad zoom code
+
+
+        glm::mat4 proj_matrix = glm::perspective(field_of_view, width / height, 1.0f, 100.0f);
 
         view_matrix = glm::lookAt(
             glm::vec3(camera.x, camera.y, camera.z),
             glm::vec3(camera.x, camera.y, -1.0f),
             glm::vec3(0.0f, 1.0f, 0.0f)
         );
+        view_matrix = glm::rotate(view_matrix, camera.y_rot, glm::vec3(0.0f, 1.0f, 0.0f));
+
 
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -112,9 +173,9 @@ GLFWwindow* initializeGLFWWindow(int width, int height){
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
     // Windowed
-    GLFWwindow* window = glfwCreateWindow(width, height, "OpenGL", nullptr, nullptr); 
-    // Fullscreen (Epilepsy mode)
-    // GLFWwindow* window = glfwCreateWindow(1366, 768, "OpenGL", glfwGetPrimaryMonitor(), nullptr);
+    // GLFWwindow* window = glfwCreateWindow(width, height, "OpenGL", nullptr, nullptr); 
+    // Fullscreen 
+    GLFWwindow* window = glfwCreateWindow(width, height, "OpenGL", glfwGetPrimaryMonitor(), nullptr);
 
     // Create the OpenGL context in the window
     glfwMakeContextCurrent(window);

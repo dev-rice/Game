@@ -2,6 +2,7 @@
 
 Model::Model(){
     GLfloat vertices[] = {
+        // x     y      z      r     g     b    tx    ty
         -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
          0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
          0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
@@ -95,6 +96,8 @@ Model::Model(){
 
 void Model::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, glm::mat4* model_matrix){
     glBindVertexArray(vao);
+    
+    glUniform1i(glGetUniformLocation(shader_program, "tex"), texture_number);
 
     glUniformMatrix4fv(glGetUniformLocation(shader_program, "model"), 1, GL_FALSE, glm::value_ptr(*model_matrix));
     glUniformMatrix4fv(glGetUniformLocation(shader_program, "view"), 1, GL_FALSE, glm::value_ptr(*view_matrix));    
@@ -104,12 +107,16 @@ void Model::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, glm::mat4* mode
 
 }
 
-void Model::useTexture(const char* filename){
+void Model::useTexture(const char* filename, GLuint texture_number){
+    // No idea how to avoid this right now but the texture
+    // numbers go like GL_TEXTURE0 = 33984, GL_TEXTURE1 = 33985, ...
+    GLuint texture_value = texture_number + 33984;
+
     // Load the texture
     int width, height;
     unsigned char* image;
     // Set the active texture
-    glActiveTexture(GL_TEXTURE0);
+    glActiveTexture(texture_value);
     glBindTexture(GL_TEXTURE_2D, texture);
     // Load the image
     image = SOIL_load_image(filename, &width, &height, 0, SOIL_LOAD_RGB);
@@ -125,5 +132,6 @@ void Model::useTexture(const char* filename){
     glGenerateMipmap(GL_TEXTURE_2D);
     SOIL_free_image_data(image);
     // Link the texture
-    glUniform1i(glGetUniformLocation(shader_program, "tex"), 0);
+    // glUniform1i(glGetUniformLocation(shader_program, "tex"), texture_value);
+    this->texture_number = texture_number;
 }
