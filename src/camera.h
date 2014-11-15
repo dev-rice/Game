@@ -1,10 +1,28 @@
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
-struct Camera {
+class Camera {
+public:
+    Camera();
+    Camera(float, float, float);
+    Camera(float, float, float, float, float);
+
+    void moveX(int);
+    void moveY(int);
+    void moveZ(int);
+
+    void rotateX(int);
+    void rotateY(int);
+    void rotateZ(int);
+
+    glm::mat4 getViewMatrix();
+
+private:
     float x, y, z;
-    float y_rot;
-    float sensitivity;
+    float x_rot, y_rot, z_rot;
 
-    Camera() : x(0), y(0), z(0), sensitivity(0.05) {}
-    Camera(float x, float y, float z) : x(x), y(y), z(z), sensitivity(0.05) {}
+    float move_sensitivity;
+    float rotate_sensitivity;
+
 };

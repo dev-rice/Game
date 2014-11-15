@@ -44,7 +44,7 @@ int main() {
 
     Camera camera(0.0f, 0.0f, 25.0f);
     glm::mat4 view_matrix = glm::mat4();
-
+    glm::mat4 proj_matrix = glm::mat4();
 
     std::vector<Drawable> drawables;
 
@@ -83,28 +83,28 @@ int main() {
 
         // Camera controls
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS){
-            camera.z -= camera.sensitivity;
+            camera.moveZ(-1);
         }
         if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS){
-            camera.z += camera.sensitivity;
+            camera.moveZ(1);
         }
         if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS){
-            camera.x += camera.sensitivity;
+            camera.moveX(1);
         }
         if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS){
-            camera.x -= camera.sensitivity;
+            camera.moveX(-1);
         }
         if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS){
-            camera.y -= camera.sensitivity;
+            camera.moveY(-1);
         }
         if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS){
-            camera.y += camera.sensitivity;
+            camera.moveY(1);
         }
         if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS){
-            camera.y_rot += 1.0f;
+            camera.rotateY(-1.0f);
         }
         if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS){
-            camera.y_rot -= 1.0f;
+            camera.rotateY(1.0f);
         }
 
         // Zoom code, should be changed for cleanliness and it doesn't respond
@@ -138,15 +138,8 @@ int main() {
         // End of bad zoom code
 
 
-        glm::mat4 proj_matrix = glm::perspective(field_of_view, width / height, 1.0f, 100.0f);
-
-        view_matrix = glm::lookAt(
-            glm::vec3(camera.x, camera.y, camera.z),
-            glm::vec3(camera.x, camera.y, -1.0f),
-            glm::vec3(0.0f, 1.0f, 0.0f)
-        );
-        view_matrix = glm::rotate(view_matrix, camera.y_rot, glm::vec3(0.0f, 1.0f, 0.0f));
-
+        proj_matrix = glm::perspective(field_of_view, width / height, 1.0f, 100.0f);
+        view_matrix = camera.getViewMatrix();
 
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
