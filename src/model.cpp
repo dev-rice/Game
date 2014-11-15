@@ -66,9 +66,24 @@ Model::Model(){
 
     glGenTextures(1, &texture);
 
-    GLuint vertex_shader = ShaderLoader::loadVertexShader("shaders/vertex_shader.glsl");
-    GLuint fragment_shader = ShaderLoader::loadFragmentShader("shaders/fragment_shader.glsl");
-    shader_program = ShaderLoader::combineShaderProgram(vertex_shader, fragment_shader);
+}
+
+void Model::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, glm::mat4* model_matrix){
+    glBindVertexArray(vao);
+    
+    glUniform1i(glGetUniformLocation(shader_program, "tex"), texture_number);
+    glUniform1f(glGetUniformLocation(shader_program, "time"), (float)glfwGetTime());
+
+    glUniformMatrix4fv(glGetUniformLocation(shader_program, "model"), 1, GL_FALSE, glm::value_ptr(*model_matrix));
+    glUniformMatrix4fv(glGetUniformLocation(shader_program, "view"), 1, GL_FALSE, glm::value_ptr(*view_matrix));    
+    glUniformMatrix4fv(glGetUniformLocation(shader_program, "proj"), 1, GL_FALSE, glm::value_ptr(*proj_matrix));
+
+    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+
+}
+
+void Model::attachShader(GLuint shader_program){
+    this->shader_program = shader_program;
 
     // Get the reference to the "position" attribute defined in
     // the vertex shader
@@ -91,21 +106,6 @@ Model::Model(){
     glEnableVertexAttribArray(texAttrib);
     glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE,
                            8*sizeof(float), (void*)(6*sizeof(float)));
-
-}
-
-void Model::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, glm::mat4* model_matrix){
-    glBindVertexArray(vao);
-    
-    glUniform1i(glGetUniformLocation(shader_program, "tex"), texture_number);
-    glUniform1f(glGetUniformLocation(shader_program, "time"), (float)glfwGetTime());
-
-    glUniformMatrix4fv(glGetUniformLocation(shader_program, "model"), 1, GL_FALSE, glm::value_ptr(*model_matrix));
-    glUniformMatrix4fv(glGetUniformLocation(shader_program, "view"), 1, GL_FALSE, glm::value_ptr(*view_matrix));    
-    glUniformMatrix4fv(glGetUniformLocation(shader_program, "proj"), 1, GL_FALSE, glm::value_ptr(*proj_matrix));
-
-    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
-
 }
 
 void Model::useTexture(const char* filename, GLuint texture_number){

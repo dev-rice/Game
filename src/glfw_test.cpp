@@ -32,8 +32,8 @@ GLFWwindow* initializeGLFWWindow(int, int);
 int main() {
     srand(time(NULL));
 
-    float width = 1920.0f;
-    float height = 1080.0f;
+    float width = 1366.0f;
+    float height = 768.0f;
     GLFWwindow* window = initializeGLFWWindow(width, height);
 
     // Zooming stuff
@@ -48,14 +48,20 @@ int main() {
 
     std::vector<Drawable> drawables;
 
+    GLuint vertex_shader = ShaderLoader::loadVertexShader("shaders/vertex_shader.glsl");
+    GLuint fragment_shader = ShaderLoader::loadFragmentShader("shaders/fragment_shader.glsl");
+    GLuint shader_program = ShaderLoader::combineShaderProgram(vertex_shader, fragment_shader);
+
     // Load models with textures. Textures should
     // load independently but for now you have to
     // keep track of the texture number even when
     // loading a new model
     Model cube1 = Model();
     cube1.useTexture("res/diamond2.png", 0);
+    cube1.attachShader(shader_program);
     Model cube2 = Model();
     cube2.useTexture("res/plank.png", 1);
+    cube2.attachShader(shader_program);
 
     for (int i = -10; i < 10; ++i){
         for (int j = -10; j < 10; ++j){
