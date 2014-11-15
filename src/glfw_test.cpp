@@ -56,23 +56,23 @@ int main() {
     // load independently but for now you have to
     // keep track of the texture number even when
     // loading a new model
-    Model cube1 = Model();
-    cube1.useTexture("res/diamond2.png", 0);
-    cube1.attachShader(shader_program);
-    Model cube2 = Model();
-    cube2.useTexture("res/plank.png", 1);
-    cube2.attachShader(shader_program);
+    Model cube = Model();
+    cube.useTexture("res/green.png", 0);
+    cube.attachShader(shader_program);
+    Model floor_cube = Model();
+    floor_cube.useTexture("res/diamond2.png", 1);
+    floor_cube.attachShader(shader_program);
 
     for (int i = -10; i < 10; ++i){
         for (int j = -10; j < 10; ++j){
             if (rand() % 2){
-                drawables.push_back(Drawable(&cube1, glm::vec3(i, 1, j)));
+                drawables.push_back(Drawable(&cube, glm::vec3(i, 1, j)));
             }
         }
     }
     for (int i = -10; i < 10; ++i){
         for (int j = -10; j < 10; ++j){
-            drawables.push_back(Drawable(&cube2, glm::vec3(i, 0, j)));
+            drawables.push_back(Drawable(&floor_cube, glm::vec3(i, 0, j)));
         }
     }
     // Display loop
