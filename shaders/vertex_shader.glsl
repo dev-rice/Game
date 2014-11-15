@@ -20,10 +20,10 @@ void main() {
     // Order is important on the multiplication!
     world_position = proj * view * model * vec4(position, 1.0);
     // Wrapping effect
-    gl_Position = vec4(world_position.x, world_position.y - pow(1.1, world_position.z + 2), world_position.z, world_position.w);
+    // gl_Position = vec4(world_position.x, world_position.y + pow(1.15, world_position.z + 2), world_position.z, world_position.w);
     
     // Wavy ground effect
-    // gl_Position = vec4(world_position.x, world_position.y + 0.5 * sin(world_position.z) , world_position.z, world_position.w);
+    gl_Position = vec4(world_position.x, world_position.y + (sin(time + world_position.z)), world_position.z, world_position.w);
 
     // Boring normal effect
     // gl_Position = world_position;
