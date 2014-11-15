@@ -60,13 +60,13 @@ int main() {
     for (int i = -10; i < 10; ++i){
         for (int j = -10; j < 10; ++j){
             if (rand() % 2){
-                drawables.push_back(Drawable(&cube1, glm::vec3(i, j, 1)));
+                drawables.push_back(Drawable(&cube1, glm::vec3(i, 1, j)));
             }
         }
     }
     for (int i = -10; i < 10; ++i){
         for (int j = -10; j < 10; ++j){
-            drawables.push_back(Drawable(&cube2, glm::vec3(i, j, 0)));
+            drawables.push_back(Drawable(&cube2, glm::vec3(i, 0, j)));
         }
     }
     // Display loop

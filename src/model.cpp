@@ -98,6 +98,7 @@ void Model::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, glm::mat4* mode
     glBindVertexArray(vao);
     
     glUniform1i(glGetUniformLocation(shader_program, "tex"), texture_number);
+    glUniform1f(glGetUniformLocation(shader_program, "time"), (float)glfwGetTime());
 
     glUniformMatrix4fv(glGetUniformLocation(shader_program, "model"), 1, GL_FALSE, glm::value_ptr(*model_matrix));
     glUniformMatrix4fv(glGetUniformLocation(shader_program, "view"), 1, GL_FALSE, glm::value_ptr(*view_matrix));    
