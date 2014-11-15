@@ -36,7 +36,7 @@ Model::Model(){
     GLuint elements[] = {
         0, 1, 3,
         1, 2, 3,
-         
+
         4, 5, 7,
         5, 6, 7,
 
@@ -71,13 +71,18 @@ Model::Model(){
 void Model::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, glm::mat4* model_matrix){
     glBindVertexArray(vao);
     
+    // Tell the shader which texture to use
     glUniform1i(glGetUniformLocation(shader_program, "tex"), texture_number);
+    
+    // Update the time uniform
     glUniform1f(glGetUniformLocation(shader_program, "time"), (float)glfwGetTime());
 
+    // Update the model, view, and projection matrices
     glUniformMatrix4fv(glGetUniformLocation(shader_program, "model"), 1, GL_FALSE, glm::value_ptr(*model_matrix));
     glUniformMatrix4fv(glGetUniformLocation(shader_program, "view"), 1, GL_FALSE, glm::value_ptr(*view_matrix));    
     glUniformMatrix4fv(glGetUniformLocation(shader_program, "proj"), 1, GL_FALSE, glm::value_ptr(*proj_matrix));
 
+    // Draw the things
     glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 
 }
@@ -108,11 +113,7 @@ void Model::attachShader(GLuint shader_program){
                            8*sizeof(float), (void*)(6*sizeof(float)));
 }
 
-void Model::useTexture(const char* filename, GLuint texture_number){
-    // No idea how to avoid this right now but the texture
-    // numbers go like GL_TEXTURE0 = 33984, GL_TEXTURE1 = 33985, ...
-    GLuint texture_value = texture_number + 33984;
-
+void Model::useTexture(const char* filename, GLuint texture_value){
     // Load the texture
     int width, height;
     unsigned char* image;
@@ -133,6 +134,9 @@ void Model::useTexture(const char* filename, GLuint texture_number){
     glGenerateMipmap(GL_TEXTURE_2D);
     SOIL_free_image_data(image);
     // Link the texture
-    // glUniform1i(glGetUniformLocation(shader_program, "tex"), texture_value);
+
+    // No idea how to avoid this right now but the texture
+    // numbers go like GL_TEXTURE0 = 33984, GL_TEXTURE1 = 33985, ...
+    GLuint texture_number = texture_value - 33984;
     this->texture_number = texture_number;
 }

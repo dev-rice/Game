@@ -2,6 +2,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+const float MOVE_SENSITIVITY = 0.1;
+const float ROTATE_SENSITIVITY = 0.025;
+
 class Camera {
 public:
     Camera();
@@ -24,5 +27,7 @@ private:
 
     float move_sensitivity;
     float rotate_sensitivity;
+    
+    
 
 };

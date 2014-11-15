@@ -1,12 +1,14 @@
 #include "camera.h"
 
+
+
 Camera::Camera(){
     this->x = 0.0f;
     this->y = 0.0f;
     this->z = 0.0f;
 
-    this->move_sensitivity = 0.1;
-    this->rotate_sensitivity = 0.01;
+    this->move_sensitivity = MOVE_SENSITIVITY;
+    this->rotate_sensitivity = ROTATE_SENSITIVITY;
 }
 
 Camera::Camera(float x, float y, float z){
@@ -14,8 +16,8 @@ Camera::Camera(float x, float y, float z){
     this->y = y;
     this->z = z;
 
-    this->move_sensitivity = 0.1;
-    this->rotate_sensitivity = 0.01;
+    this->move_sensitivity = MOVE_SENSITIVITY;
+    this->rotate_sensitivity = ROTATE_SENSITIVITY;
 }
 
 Camera::Camera(float x, float y, float z, float move_sensitivity, float rotate_sensitivity){
