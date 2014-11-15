@@ -55,7 +55,7 @@ int main() {
     Model cube1 = Model();
     cube1.useTexture("res/diamond2.png", 0);
     Model cube2 = Model();
-    cube2.useTexture("res/simple.png", 1);
+    cube2.useTexture("res/plank.png", 1);
 
     for (int i = -10; i < 10; ++i){
         for (int j = -10; j < 10; ++j){
@@ -169,6 +169,9 @@ GLFWwindow* initializeGLFWWindow(int width, int height){
     // GLFWwindow* window = glfwCreateWindow(width, height, "OpenGL", nullptr, nullptr); 
     // Fullscreen 
     GLFWwindow* window = glfwCreateWindow(width, height, "OpenGL", glfwGetPrimaryMonitor(), nullptr);
+
+    // Hide the mouse
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
     // Create the OpenGL context in the window
     glfwMakeContextCurrent(window);
