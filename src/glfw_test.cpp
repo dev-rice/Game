@@ -71,9 +71,11 @@ int main() {
 
     for (int i = -10; i < 10; ++i){
         for (int j = -10; j < 10; ++j){
-            int height = rand() % 5;
-            for (int k = 1; k <= height; ++k){
-                drawables.push_back(Drawable(&cube, glm::vec3(i, k, j)));
+            if (rand() % 3 == 0){
+                int height = rand() % 4;
+                for (int k = 1; k <= height; ++k){
+                    drawables.push_back(Drawable(&cube, glm::vec3(i, k, j)));
+                } 
             }
         }
     }
