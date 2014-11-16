@@ -57,10 +57,10 @@ int main() {
     // keep track of the texture number even when
     // loading a new model
     Model cube = Model();
-    cube.useTexture("res/outline.png", GL_TEXTURE0);
+    cube.useTexture("res/green.png", GL_TEXTURE0);
     cube.attachShader(shader_program);
     Model floor_cube = Model();
-    floor_cube.useTexture("res/diamond2.png", GL_TEXTURE1);
+    floor_cube.useTexture("res/plank.png", GL_TEXTURE1);
     floor_cube.attachShader(shader_program);
 
     // for (int i = 0; i > -200; --i){
@@ -114,10 +114,16 @@ int main() {
             camera.moveY(1);
         }
         if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS){
-            camera.rotateY(-1.0f);
+            camera.rotateY(1);
         }
         if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS){
-            camera.rotateY(1.0f);
+            camera.rotateY(-1);
+        }
+        if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS){
+            camera.rotateX(1);
+        }
+        if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS){
+            camera.rotateX(-1);
         }
 
         // Zoom code, should be changed for cleanliness and it doesn't respond
@@ -150,6 +156,12 @@ int main() {
         }
         // End of bad zoom code
 
+        // Mouse camera moving that doesn't quite work
+        // double mouseX, mouseY;
+        // glfwGetCursorPos(window, &mouseX, &mouseY);
+        // glfwSetCursorPos(window, width / 2, height / 2);
+        // camera.rotateY(- (mouseX - width / 2));
+
 
         proj_matrix = glm::perspective(field_of_view, width / height, 1.0f, 100.0f);
         view_matrix = camera.getViewMatrix();
@@ -176,6 +188,9 @@ GLFWwindow* initializeGLFWWindow(int width, int height){
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
+    // Set up the MSAA level 
+    glfwWindowHint(GLFW_SAMPLES, 16);
+
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
     // Windowed
@@ -184,7 +199,7 @@ GLFWwindow* initializeGLFWWindow(int width, int height){
     GLFWwindow* window = glfwCreateWindow(width, height, "OpenGL", glfwGetPrimaryMonitor(), nullptr);
 
     // Hide the mouse
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+    // glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
     // Create the OpenGL context in the window
     glfwMakeContextCurrent(window);
@@ -202,6 +217,13 @@ GLFWwindow* initializeGLFWWindow(int width, int height){
 
     // Set up the correct depth rendering 
     glEnable(GL_DEPTH_TEST);
+    
+    // Set up backface culling maybe?
+    glFrontFace(GL_CW);
+    glCullFace(GL_BACK);
+
+    // Add MSAA
+    glEnable(GL_MULTISAMPLE);
 
     return window;   
 }

@@ -1,7 +1,5 @@
 #include "camera.h"
 
-
-
 Camera::Camera(){
     this->x = 0.0f;
     this->y = 0.0f;
@@ -31,7 +29,7 @@ Camera::Camera(float x, float y, float z, float move_sensitivity, float rotate_s
 
 void Camera::moveX(int direction){
     x += move_sensitivity * direction * cos(y_rot);
-    z += move_sensitivity * direction * sin(y_rot);
+    z -= move_sensitivity * direction * sin(y_rot);
 }
 
 void Camera::moveY(int direction){
@@ -39,7 +37,7 @@ void Camera::moveY(int direction){
 }
 
 void Camera::moveZ(int direction){
-    x -= move_sensitivity * direction * sin(y_rot);
+    x += move_sensitivity * direction * sin(y_rot);
     z += move_sensitivity * direction * cos(y_rot);
 }
 
@@ -56,9 +54,13 @@ void Camera::rotateZ(int direction){
 }
 
 glm::mat4 Camera::getViewMatrix(){
+    glm::vec4 unit = glm::vec4(x, y, z - 1.0f, 1.0f);
+    
+    
+
     glm::mat4 view_matrix = glm::lookAt(
         glm::vec3(x, y, z),
-        glm::vec3(x + sin(y_rot), y, z - cos(y_rot)),
+        glm::vec3(x - sin(y_rot), y, z - cos(y_rot)),
         glm::vec3(0.0f, 1.0f, 0.0f)
     );
     return view_matrix;
