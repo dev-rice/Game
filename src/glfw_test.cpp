@@ -56,30 +56,11 @@ int main() {
     // load independently but for now you have to
     // keep track of the texture number even when
     // loading a new model
-    Model cube = Model("res/models/cubey.obj");
+    Model cube = Model("res/models/gethtransport.obj");
     cube.useTexture("res/textures/cubey.png", GL_TEXTURE0);
     cube.attachShader(shader_program);
 
     drawables.push_back(Drawable(&cube, glm::vec3(0.0f, 0.0f, 0.0f)));
-    
-    // Model floor_cube = Model();
-    // floor_cube.useTexture("res/plank.png", GL_TEXTURE1);
-    // floor_cube.attachShader(shader_program);
-    // for (int i = -10; i < 10; ++i){
-    //     for (int j = -10; j < 10; ++j){
-    //         if (rand() % 6 == 0){
-    //             int height = (rand() % 3);
-    //             for (int k = 1; k <= height; ++k){
-    //                 drawables.push_back(Drawable(&cube, glm::vec3(2 * i, 2 * k, 2 * j)));
-    //             } 
-    //         }
-    //     }
-    // }
-    // for (int i = -10; i < 10; ++i){
-    //     for (int j = -10; j < 10; ++j){
-    //         drawables.push_back(Drawable(&floor_cube, glm::vec3(2 * i, 0, 2 * j)));
-    //     }
-    // }
 
     // Display loop
     while(!glfwWindowShouldClose(window)) {

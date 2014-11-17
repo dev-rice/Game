@@ -31,6 +31,8 @@ private:
     GLuint*  parseOBJFaces(const char*);
 
 
+    GLuint num_faces;
+
     // Pointers to all that openGL stuff
     GLuint vao;
     GLuint vbo;
