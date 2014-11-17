@@ -32,8 +32,8 @@ GLFWwindow* initializeGLFWWindow(int, int);
 int main() {
     srand(time(NULL));
 
-    float width = 1366.0f;
-    float height = 768.0f;
+    float width = 800.0f;
+    float height = 600.0f;
     GLFWwindow* window = initializeGLFWWindow(width, height);
 
     // Zooming stuff
@@ -42,7 +42,7 @@ int main() {
     bool zoom_pressed = false;
     float start_time = 0;
 
-    Camera camera(0.0f, 0.0f, 25.0f);
+    Camera camera(0.0f, 0.0f, 5.0f);
     glm::mat4 view_matrix = glm::mat4();
     glm::mat4 proj_matrix = glm::mat4();
 
@@ -57,33 +57,30 @@ int main() {
     // keep track of the texture number even when
     // loading a new model
     Model cube = Model();
-    cube.useTexture("res/green.png", GL_TEXTURE0);
+    cube.useTexture("res/cubey.png", GL_TEXTURE0);
     cube.attachShader(shader_program);
-    Model floor_cube = Model();
-    floor_cube.useTexture("res/plank.png", GL_TEXTURE1);
-    floor_cube.attachShader(shader_program);
 
-    // for (int i = 0; i > -200; --i){
-    //     drawables.push_back(Drawable(&cube, glm::vec3(0, 0, i)));
-    //     drawables.push_back(Drawable(&cube, glm::vec3(1, 0, i)));
-
+    drawables.push_back(Drawable(&cube, glm::vec3(0.0f, 0.0f, 0.0f)));
+    
+    // Model floor_cube = Model();
+    // floor_cube.useTexture("res/plank.png", GL_TEXTURE1);
+    // floor_cube.attachShader(shader_program);
+    // for (int i = -10; i < 10; ++i){
+    //     for (int j = -10; j < 10; ++j){
+    //         if (rand() % 6 == 0){
+    //             int height = (rand() % 3);
+    //             for (int k = 1; k <= height; ++k){
+    //                 drawables.push_back(Drawable(&cube, glm::vec3(2 * i, 2 * k, 2 * j)));
+    //             } 
+    //         }
+    //     }
+    // }
+    // for (int i = -10; i < 10; ++i){
+    //     for (int j = -10; j < 10; ++j){
+    //         drawables.push_back(Drawable(&floor_cube, glm::vec3(2 * i, 0, 2 * j)));
+    //     }
     // }
 
-    for (int i = -10; i < 10; ++i){
-        for (int j = -10; j < 10; ++j){
-            if (rand() % 3 == 0){
-                int height = rand() % 4;
-                for (int k = 1; k <= height; ++k){
-                    drawables.push_back(Drawable(&cube, glm::vec3(i, k, j)));
-                } 
-            }
-        }
-    }
-    for (int i = -10; i < 10; ++i){
-        for (int j = -10; j < 10; ++j){
-            drawables.push_back(Drawable(&floor_cube, glm::vec3(i, 0, j)));
-        }
-    }
     // Display loop
     while(!glfwWindowShouldClose(window)) {
         // Swap display/rendering buffers
@@ -168,7 +165,7 @@ int main() {
         proj_matrix = glm::perspective(field_of_view, width / height, 1.0f, 100.0f);
         view_matrix = camera.getViewMatrix();
 
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         for (int i = 0; i < drawables.size(); ++i){
@@ -189,16 +186,15 @@ GLFWwindow* initializeGLFWWindow(int width, int height){
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
     // Set up the MSAA level 
     glfwWindowHint(GLFW_SAMPLES, 16);
 
-    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-
     // Windowed
-    // GLFWwindow* window = glfwCreateWindow(width, height, "OpenGL", nullptr, nullptr); 
+    GLFWwindow* window = glfwCreateWindow(width, height, "OpenGL", nullptr, nullptr); 
     // Fullscreen 
-    GLFWwindow* window = glfwCreateWindow(width, height, "OpenGL", glfwGetPrimaryMonitor(), nullptr);
+    // GLFWwindow* window = glfwCreateWindow(width, height, "OpenGL", glfwGetPrimaryMonitor(), nullptr);
 
     // Hide the mouse
     // glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
@@ -220,11 +216,11 @@ GLFWwindow* initializeGLFWWindow(int width, int height){
     // Set up the correct depth rendering 
     glEnable(GL_DEPTH_TEST);
     
-    // Set up backface culling maybe?
+    // Set up back-face culling maybe?
     glFrontFace(GL_CW);
     glCullFace(GL_BACK);
 
-    // Add MSAA
+    // Enable MSAA
     glEnable(GL_MULTISAMPLE);
 
     return window;   

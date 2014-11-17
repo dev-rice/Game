@@ -17,6 +17,7 @@
 #include <vector>
 
 #include "shader_loader.h"
+#include "mesh.h"
 
 class Model {
 public:
