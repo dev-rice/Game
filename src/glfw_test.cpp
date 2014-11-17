@@ -56,8 +56,8 @@ int main() {
     // load independently but for now you have to
     // keep track of the texture number even when
     // loading a new model
-    Model cube = Model();
-    cube.useTexture("res/cubey.png", GL_TEXTURE0);
+    Model cube = Model("res/models/cubey.obj");
+    cube.useTexture("res/textures/cubey.png", GL_TEXTURE0);
     cube.attachShader(shader_program);
 
     drawables.push_back(Drawable(&cube, glm::vec3(0.0f, 0.0f, 0.0f)));
@@ -165,7 +165,7 @@ int main() {
         proj_matrix = glm::perspective(field_of_view, width / height, 1.0f, 100.0f);
         view_matrix = camera.getViewMatrix();
 
-        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         for (int i = 0; i < drawables.size(); ++i){

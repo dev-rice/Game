@@ -12,8 +12,7 @@
 
 class Mesh{
 public:
-	Mesh();
-	void loadMeshFromFile(const char fileName[]);
+	Mesh(const char*);
 	
     GLfloat* getVertexArray();
 	GLuint* getFaceArray();
@@ -21,6 +20,9 @@ public:
     int getVerticesSize();
     int getFacesSize();
 private:
+    
+    void loadMeshFromFile(const char*);
+
 	std::vector<GLuint> final_tris;
 	std::vector<GLfloat> final_verts;
 };

@@ -1,8 +1,7 @@
 #include "model.h"
 
-Model::Model(){
-    Mesh mesh = Mesh();
-    mesh.loadMeshFromFile("res/cubey.obj");
+Model::Model(const char* filename){
+    Mesh mesh = Mesh(filename);
     GLfloat* vertices = mesh.getVertexArray();
     GLuint* elements = mesh.getFaceArray();
 

@@ -10,11 +10,11 @@
 
 #include "mesh.h"
 
-Mesh::Mesh(){
-	// Nothin' do
+Mesh::Mesh(const char* filename){
+	loadMeshFromFile(filename);
 }
 
-void Mesh::loadMeshFromFile(const char fileName[]){
+void Mesh::loadMeshFromFile(const char* fileName){
 	float tempX, tempY, tempZ;
 	int tempA, tempB, tempC, tempD, tempE, tempF;
 
