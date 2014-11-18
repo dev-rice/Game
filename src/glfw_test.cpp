@@ -26,7 +26,7 @@
 //////////////////////////
 // Function prototypes
 GLFWwindow* initializeGLFWWindow(int, int, bool);
-void handleCameraInputs(GLFWwindow*, Camera*);
+void handleInputs(GLFWwindow*, Camera*);
 
 //////////////////////////
 // Implementation
@@ -59,9 +59,7 @@ int main(int argc, char* argv[]) {
 
     Camera camera(0.0f, 0.0f, 10.0f);
     glm::mat4 view_matrix = glm::mat4();
-    glm::mat4 proj_matrix = glm::mat4();
-
-    std::vector<Drawable> drawables;
+    glm::mat4 proj_matrix = glm::perspective(45.0f, width / height, 1.0f, 100.0f);
 
     GLuint vertex_shader = ShaderLoader::loadVertexShader("shaders/vertex_shader.glsl");
     GLuint fragment_shader = ShaderLoader::loadFragmentShader("shaders/fragment_shader.glsl");
@@ -79,6 +77,7 @@ int main(int argc, char* argv[]) {
     ship.useTexture("res/textures/grass.jpeg", GL_TEXTURE1);
     ship.attachShader(shader_program);
 
+    std::vector<Drawable> drawables;
     drawables.push_back(Drawable(&cube, glm::vec3(0.0f, 0.0f, 0.0f)));
     drawables.push_back(Drawable(&ship, glm::vec3(0.0f, 2.0f, 0.0f)));
 
@@ -87,21 +86,17 @@ int main(int argc, char* argv[]) {
         // Swap display/rendering buffers
         glfwSwapBuffers(window);
         
-        // Handle events
-        glfwPollEvents();
-        // Check to see if escape is pressed. If so, close the window
-        if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
-            glfwSetWindowShouldClose(window, GL_TRUE);
-        }
+        handleInputs(window, &camera);
 
-        handleCameraInputs(window, &camera);
-
-        proj_matrix = glm::perspective(field_of_view, width / height, 1.0f, 100.0f);
+        // Update the view matrix based on the current
+        // camera location / position
         view_matrix = camera.getViewMatrix();
 
+        // Clear the screen so we can draw again
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        // Draw all the drawables
         for (int i = 0; i < drawables.size(); ++i){
             drawables[i].draw(&view_matrix, &proj_matrix);
         }
@@ -114,7 +109,14 @@ int main(int argc, char* argv[]) {
     return 0;
 }
 
-void handleCameraInputs(GLFWwindow* window, Camera* camera){
+void handleInputs(GLFWwindow* window, Camera* camera){
+    // Handle events
+    glfwPollEvents();
+    // Check to see if escape is pressed. If so, close the window
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
+        glfwSetWindowShouldClose(window, GL_TRUE);
+    }
+
     // Camera controls
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS){
         camera->moveZ(-1);
