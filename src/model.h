@@ -22,25 +22,20 @@
 class Model {
 public:
     Model(const char*, GLfloat);
+    
     void draw(glm::mat4*, glm::mat4*, glm::mat4*);
     void attachShader(GLuint);
     void useTexture(const char*, GLuint);
 
 private:
-    GLfloat* parseOBJVertices(const char*);
-    GLuint*  parseOBJFaces(const char*);
-
 
     GLuint num_faces;
     GLfloat scale;
+
     // Pointers to all that openGL stuff
     GLuint vao;
-    GLuint vbo;
-    GLuint ebo;
-    GLuint texture;
     GLuint shader_program;
 
-    GLuint model_uniform;
     GLuint texture_number;
 };
 

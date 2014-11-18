@@ -23,12 +23,12 @@ void main() {
     world_position = proj * view * model * vec4(position * scale, 1.0);
 
     // Wrapping effect
-    gl_Position = vec4(world_position.x, world_position.y + pow(1.25, world_position.z + 2) + (0.5*sin(time + world_position.z)), world_position.z, world_position.w);
+    // gl_Position = vec4(world_position.x, world_position.y + pow(1.25, world_position.z + 2), world_position.z, world_position.w);
     
     // Wavy ground effect
     // gl_Position = vec4(world_position.x, world_position.y + (0.5*sin(time + world_position.z)), world_position.z, world_position.w);
 
     // Boring normal effect
-    // gl_Position = world_position;
+    gl_Position = world_position;
 
 }

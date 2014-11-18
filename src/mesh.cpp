@@ -31,7 +31,7 @@ void Mesh::loadMeshFromFile(const char* fileName){
 	ifile = fopen(fileName, "r");
 
 	if(ifile == NULL){
-		printf("Error opening file %s", fileName);
+		printf("Error opening file %s\n", fileName);
 		return;
 	
 	}
