@@ -69,5 +69,5 @@ glm::mat4 Camera::getViewMatrix(){
 void Camera::print(){
     printf("Camera\n");
     printf("    position = [%f, %f, %f]\n", x, y, z);
-    printf("    rotation = [%f, %f, %f]\n", x_rot, y_rot, z_rot);
+    printf("    rotation = [%f, %f, %f]\n", 180 * x_rot / M_PI, 180 * y_rot / M_PI, 180 * z_rot / M_PI);
 }
