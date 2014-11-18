@@ -4,6 +4,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <stdio.h>
 
 const float MOVE_SENSITIVITY = 0.1;
 const float ROTATE_SENSITIVITY = 0.025;
@@ -21,6 +22,8 @@ public:
     void rotateX(int);
     void rotateY(int);
     void rotateZ(int);
+
+    void print();
 
     glm::mat4 getViewMatrix();
 

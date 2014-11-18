@@ -30,12 +30,17 @@ World::World(float width, float height){
 }
 
 void World::update(){
+    system("clear");
+    camera.print();
+
     // Update the view matrix based on the current
     // camera location / position
     view_matrix = camera.getViewMatrix();
 
     // Draw all the drawables
     for (int i = 0; i < drawables.size(); ++i){
+        glm::vec3 position = drawables[i].getPosition();
+        drawables[i].moveTo(position + glm::vec3(-0.01f, 0.0f, 0.0f));
         drawables[i].draw(&view_matrix, &proj_matrix);
     }
 }
