@@ -21,6 +21,7 @@
 
 class Model {
 public:
+    Model() {;}
     Model(const char*, GLfloat);
     
     void draw(glm::mat4*, glm::mat4*, glm::mat4*);

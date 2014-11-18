@@ -19,9 +19,7 @@
 
 #include <random>
 
-#include "model.h"
-#include "camera.h"
-#include "drawable.h"
+#include "world.h"
 
 //////////////////////////
 // Function prototypes
@@ -57,49 +55,26 @@ int main(int argc, char* argv[]) {
 
     GLFWwindow* window = initializeGLFWWindow(width, height, fullscreen);
 
-    Camera camera(0.0f, 0.0f, 10.0f);
-    glm::mat4 view_matrix = glm::mat4();
-    glm::mat4 proj_matrix = glm::perspective(45.0f, width / height, 1.0f, 100.0f);
-
-    GLuint vertex_shader = ShaderLoader::loadVertexShader("shaders/vertex_shader.glsl");
-    GLuint fragment_shader = ShaderLoader::loadFragmentShader("shaders/fragment_shader.glsl");
-    GLuint shader_program = ShaderLoader::combineShaderProgram(vertex_shader, fragment_shader);
-
-    // Load models with textures. Textures should
-    // load independently but for now you have to
-    // keep track of the texture number even when
-    // loading a new model
-    Model cube = Model("res/models/cubey.obj", 1.0f);
-    cube.useTexture("res/textures/cubey.png", GL_TEXTURE0);
-    cube.attachShader(shader_program);
-
-    Model ship = Model("res/models/gethtransport.obj", 1.0f);
-    ship.useTexture("res/textures/grass.jpeg", GL_TEXTURE1);
-    ship.attachShader(shader_program);
-
-    std::vector<Drawable> drawables;
-    drawables.push_back(Drawable(&cube, glm::vec3(0.0f, 0.0f, 0.0f)));
-    drawables.push_back(Drawable(&ship, glm::vec3(0.0f, 2.0f, 0.0f)));
+    World world(width, height);
 
     // Display loop
     while(!glfwWindowShouldClose(window)) {
         // Swap display/rendering buffers
         glfwSwapBuffers(window);
         
-        handleInputs(window, &camera);
-
-        // Update the view matrix based on the current
-        // camera location / position
-        view_matrix = camera.getViewMatrix();
+        // Handle events
+        glfwPollEvents();
+        // Check to see if escape is pressed. If so, close the window
+        if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
+            glfwSetWindowShouldClose(window, GL_TRUE);
+        }
 
         // Clear the screen so we can draw again
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // Draw all the drawables
-        for (int i = 0; i < drawables.size(); ++i){
-            drawables[i].draw(&view_matrix, &proj_matrix);
-        }
+        world.handleInputs(window);
+        world.update();
     }
 
     // Shut down GLFW before exiting the program
@@ -107,47 +82,6 @@ int main(int argc, char* argv[]) {
 
     // Nothing went wrong!
     return 0;
-}
-
-void handleInputs(GLFWwindow* window, Camera* camera){
-    // Handle events
-    glfwPollEvents();
-    // Check to see if escape is pressed. If so, close the window
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
-        glfwSetWindowShouldClose(window, GL_TRUE);
-    }
-
-    // Camera controls
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS){
-        camera->moveZ(-1);
-    }
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS){
-        camera->moveZ(1);
-    }
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS){
-        camera->moveX(1);
-    }
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS){
-        camera->moveX(-1);
-    }
-    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS){
-        camera->moveY(-1);
-    }
-    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS){
-        camera->moveY(1);
-    }
-    if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS){
-        camera->rotateY(1);
-    }
-    if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS){
-        camera->rotateY(-1);
-    }
-    if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS){
-        camera->rotateX(1);
-    }
-    if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS){
-        camera->rotateX(-1);
-    }
 }
 
 GLFWwindow* initializeGLFWWindow(int width, int height, bool fullscreen){
