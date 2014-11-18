@@ -13,8 +13,10 @@
 GLFWwindow* initializeGLFWWindow(int, int, bool);
 
 int main(int argc, char* argv[]) {
+    // Make the randomizer random
     srand(time(NULL));
 
+    // Parse command line arguments
     float width;
     float height;
     bool fullscreen;
@@ -38,8 +40,10 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
+    // Create the window
     GLFWwindow* window = initializeGLFWWindow(width, height, fullscreen);
 
+    // Create the world
     World world(width, height);
 
     // Display loop

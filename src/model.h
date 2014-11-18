@@ -38,6 +38,7 @@ private:
     GLuint shader_program;
 
     GLuint texture_number;
+    bool has_texture;
 };
 
 #endif

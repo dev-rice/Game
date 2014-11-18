@@ -19,7 +19,7 @@ World::World(float width, float height){
     cube.attachShader(shader_program);
 
     Model ship = Model("res/models/gethtransport.obj", 1.0f);
-    ship.useTexture("res/textures/grass.jpeg", GL_TEXTURE1);
+    // ship.useTexture("res/textures/checkerboard.png", GL_TEXTURE1);
     ship.attachShader(shader_program);
 
     models.push_back(cube);
@@ -41,6 +41,8 @@ void World::update(){
 }
 
 void World::handleInputs(GLFWwindow* window){
+    glfwPollEvents();
+    
     // Camera controls
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS){
         camera.moveZ(-1);

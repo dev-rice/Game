@@ -27,8 +27,7 @@ Model::Model(const char* filename, GLfloat scale){
 void Model::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, glm::mat4* model_matrix){
     glBindVertexArray(vao);
     
-    // Tell the shader which texture to use
-    glUniform1i(glGetUniformLocation(shader_program, "tex"), this->texture_number);
+    
     
     // Set the scale, this is not really going to be a thing, probably
     glUniform1f(glGetUniformLocation(shader_program, "scale"), this->scale);
@@ -41,11 +40,16 @@ void Model::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, glm::mat4* mode
     glUniformMatrix4fv(glGetUniformLocation(shader_program, "view"), 1, GL_FALSE, glm::value_ptr(*view_matrix));    
     glUniformMatrix4fv(glGetUniformLocation(shader_program, "proj"), 1, GL_FALSE, glm::value_ptr(*proj_matrix));
 
-    // Draw the things
-    // Wireframe
-    // glDrawElements(GL_LINE_LOOP, this->num_faces, GL_UNSIGNED_INT, 0);
-    // Regular
-    glDrawElements(GL_TRIANGLES, this->num_faces, GL_UNSIGNED_INT, 0);
+    // Tell the shader whether there is a texture or not.
+    glUniform1i(glGetUniformLocation(shader_program, "has_texture"), has_texture);
+
+    if (has_texture){
+        // Tell the shader which texture to use
+        glUniform1i(glGetUniformLocation(shader_program, "tex"), this->texture_number);
+        glDrawElements(GL_TRIANGLES, this->num_faces, GL_UNSIGNED_INT, 0);
+    } else {
+        glDrawElements(GL_LINE_LOOP, this->num_faces, GL_UNSIGNED_INT, 0);
+    }
 
 }
 
@@ -96,8 +100,8 @@ void Model::useTexture(const char* filename, GLuint texture_value){
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     // Do nearest interpolation for scaling the image up and down.
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     // Mipmaps increase efficiency or something
     glGenerateMipmap(GL_TEXTURE_2D);
     SOIL_free_image_data(image);
@@ -107,4 +111,5 @@ void Model::useTexture(const char* filename, GLuint texture_value){
     // numbers go like GL_TEXTURE0 = 33984, GL_TEXTURE1 = 33985, ...
     GLuint texture_number = texture_value - 33984;
     this->texture_number = texture_number;
+    has_texture = true;
 }
