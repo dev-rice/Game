@@ -57,12 +57,6 @@ int main(int argc, char* argv[]) {
 
     GLFWwindow* window = initializeGLFWWindow(width, height, fullscreen);
 
-    // Zooming stuff
-    // float field_of_view = 45.0f;
-    // float last_field_of_view = 45.0f;
-    // bool zoom_pressed = false;
-    // float start_time = 0;
-
     Camera camera(0.0f, 0.0f, 10.0f);
     glm::mat4 view_matrix = glm::mat4();
     glm::mat4 proj_matrix = glm::mat4();
@@ -101,37 +95,6 @@ int main(int argc, char* argv[]) {
         }
 
         handleCameraInputs(window, &camera);
-
-        // Zoom code, should be changed for cleanliness and it doesn't respond
-        // well to high frequency clicks
-        // if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_2) == GLFW_PRESS){
-        //     if (!zoom_pressed) {
-        //         start_time = (float)glfwGetTime();
-        //         zoom_pressed = true;
-        //     }
-        // } else {
-        //     if (zoom_pressed){
-        //         start_time = (float)glfwGetTime();
-        //         zoom_pressed = false;
-        //     }
-        // }
-        // if (zoom_pressed) { 
-        //     float delta_t = (float)glfwGetTime() - start_time;
-        //     if (delta_t < 0.75){
-        //         field_of_view = (1.5 / delta_t) + 22.5;
-        //         field_of_view = fmin(field_of_view, last_field_of_view);
-        //         last_field_of_view = field_of_view;
-        //     }
-        // } else {
-        //     float delta_t = (float)glfwGetTime() - start_time;
-        //     if (delta_t < 0.75){
-        //         field_of_view = -(1.5 / delta_t) + 45.0f;
-        //         field_of_view = fmax(field_of_view, last_field_of_view);
-        //         last_field_of_view = field_of_view;
-        //     }
-        // }
-        // End of bad zoom code
-
 
         proj_matrix = glm::perspective(field_of_view, width / height, 1.0f, 100.0f);
         view_matrix = camera.getViewMatrix();
