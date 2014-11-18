@@ -161,16 +161,18 @@ GLFWwindow* initializeGLFWWindow(int width, int height, bool fullscreen){
     // Set up the MSAA level 
     glfwWindowHint(GLFW_SAMPLES, 4);
 
+    const char* windowTitle = "OpenGL";
+
     GLFWwindow* window;
 
     if (fullscreen){
         // Fullscreen 
-        window = glfwCreateWindow(width, height, "OpenGL", glfwGetPrimaryMonitor(),
+        window = glfwCreateWindow(width, height, windowTitle, glfwGetPrimaryMonitor(),
             nullptr);
 
     } else {
         // Windowed
-        window = glfwCreateWindow(width, height, "OpenGL", nullptr, nullptr); 
+        window = glfwCreateWindow(width, height, windowTitle, nullptr, nullptr); 
     }
 
     // Hide the mouse
