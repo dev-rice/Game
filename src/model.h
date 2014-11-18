@@ -21,7 +21,7 @@
 
 class Model {
 public:
-    Model(const char*);
+    Model(const char*, GLfloat);
     void draw(glm::mat4*, glm::mat4*, glm::mat4*);
     void attachShader(GLuint);
     void useTexture(const char*, GLuint);
@@ -32,7 +32,7 @@ private:
 
 
     GLuint num_faces;
-
+    GLfloat scale;
     // Pointers to all that openGL stuff
     GLuint vao;
     GLuint vbo;

@@ -29,11 +29,11 @@ GLFWwindow* initializeGLFWWindow(int, int);
 
 //////////////////////////
 // Implementation
-int main() {
+int main(int argc, char* argv[]) {
     srand(time(NULL));
 
-    float width = 800.0f;
-    float height = 600.0f;
+    float width = 1920.0f;
+    float height = 1080.0f;
     GLFWwindow* window = initializeGLFWWindow(width, height);
 
     // Zooming stuff
@@ -42,7 +42,7 @@ int main() {
     bool zoom_pressed = false;
     float start_time = 0;
 
-    Camera camera(0.0f, 0.0f, 5.0f);
+    Camera camera(0.0f, 0.0f, 0.0f);
     glm::mat4 view_matrix = glm::mat4();
     glm::mat4 proj_matrix = glm::mat4();
 
@@ -56,11 +56,24 @@ int main() {
     // load independently but for now you have to
     // keep track of the texture number even when
     // loading a new model
-    Model cube = Model("res/models/gethtransport.obj");
-    cube.useTexture("res/textures/cubey.png", GL_TEXTURE0);
+    Model lamp = Model("res/models/lamppost.obj", 0.1f);
+    lamp.useTexture("res/textures/lamppost.png", GL_TEXTURE0);
+    lamp.attachShader(shader_program);
+
+    Model cube = Model("res/models/square.obj", 0.5f);
+    cube.useTexture("res/textures/grass.jpeg", GL_TEXTURE1);
     cube.attachShader(shader_program);
 
-    drawables.push_back(Drawable(&cube, glm::vec3(0.0f, 0.0f, 0.0f)));
+    for (int i = 0; i < 200; ++i){
+        drawables.push_back(Drawable(&lamp, glm::vec3(2*i, 0.0f, -1.0f)));
+        drawables.push_back(Drawable(&lamp, glm::vec3(2*i, 0.0f,  1.0f))); 
+    }
+    for (int i = 0; i < 200; ++i){
+        for (int j = 1; j < 8; ++j){
+            drawables.push_back(Drawable(&cube, glm::vec3(i, 0.05f, j - 4.0f)));
+        }
+    }
+
 
     // Display loop
     while(!glfwWindowShouldClose(window)) {
@@ -173,9 +186,9 @@ GLFWwindow* initializeGLFWWindow(int width, int height){
     glfwWindowHint(GLFW_SAMPLES, 16);
 
     // Windowed
-    GLFWwindow* window = glfwCreateWindow(width, height, "OpenGL", nullptr, nullptr); 
+    // GLFWwindow* window = glfwCreateWindow(width, height, "OpenGL", nullptr, nullptr); 
     // Fullscreen 
-    // GLFWwindow* window = glfwCreateWindow(width, height, "OpenGL", glfwGetPrimaryMonitor(), nullptr);
+    GLFWwindow* window = glfwCreateWindow(width, height, "OpenGL", glfwGetPrimaryMonitor(), nullptr);
 
     // Hide the mouse
     // glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);

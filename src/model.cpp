@@ -1,27 +1,28 @@
 #include "model.h"
 
-Model::Model(const char* filename){
+Model::Model(const char* filename, GLfloat scale){
     Mesh mesh = Mesh(filename);
     GLfloat* vertices = mesh.getVertexArray();
     GLuint* elements = mesh.getFaceArray();
 
-    printf("\nVertices (size = %d):\n\t", mesh.getVerticesSize() * sizeof(GLfloat));
-    for (int i = 0; i < mesh.getVerticesSize(); ++i){
-        if (i % 8 == 0 && i != 0){
-            printf("\n\t");
-        }
-        printf("%f,\t", vertices[i]);
+    num_faces = mesh.getFacesSize();
+    // printf("\nVertices (size = %d):\n\t", mesh.getVerticesSize() * sizeof(GLfloat));
+    // for (int i = 0; i < mesh.getVerticesSize(); ++i){
+    //     if (i % 8 == 0 && i != 0){
+    //         printf("\n\t");
+    //     }
+    //     printf("%f,\t", vertices[i]);
         
-    }
-    printf("\nElements (size = %d):\n\t", mesh.getFacesSize() * sizeof(GLuint));
-    for (int i = 0; i < mesh.getFacesSize(); ++i){
-        if (i % 3 == 0 && i != 0){
-            printf("\n\t");
-        }
-        printf("%d,\t", elements[i]);
+    // }
+    // printf("\nElements (size = %d):\n\t", mesh.getFacesSize() * sizeof(GLuint));
+    // for (int i = 0; i < mesh.getFacesSize(); ++i){
+    //     if (i % 3 == 0 && i != 0){
+    //         printf("\n\t");
+    //     }
+    //     printf("%d,\t", elements[i]);
         
-    }
-    printf("\n");
+    // }
+    // printf("\n");
     
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
@@ -36,9 +37,9 @@ Model::Model(const char* filename){
     // glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements, GL_STATIC_DRAW);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh.getFacesSize() * sizeof(GLuint), elements, GL_STATIC_DRAW);
 
-    num_faces = mesh.getFacesSize();
-
     glGenTextures(1, &texture);
+
+    this->scale = scale;
 
 }
 
@@ -48,6 +49,9 @@ void Model::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, glm::mat4* mode
     // Tell the shader which texture to use
     glUniform1i(glGetUniformLocation(shader_program, "tex"), texture_number);
     
+    // Set the scale, this is not really going to be a thing
+    glUniform1f(glGetUniformLocation(shader_program, "scale"), this->scale);
+
     // Update the time uniform
     glUniform1f(glGetUniformLocation(shader_program, "time"), (float)glfwGetTime());
 
@@ -88,6 +92,9 @@ void Model::attachShader(GLuint shader_program){
 }
 
 void Model::useTexture(const char* filename, GLuint texture_value){
+    // This is a bade way to do it, no idea why but it slows down
+    // a ton when using two textures.
+
     // Load the texture
     int width, height;
     unsigned char* image;
@@ -102,8 +109,8 @@ void Model::useTexture(const char* filename, GLuint texture_value){
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     // Do nearest interpolation for scaling the image up and down.
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     // Mipmaps increase efficiency or something
     glGenerateMipmap(GL_TEXTURE_2D);
     SOIL_free_image_data(image);
