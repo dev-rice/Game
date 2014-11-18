@@ -4,30 +4,14 @@
 #include <GLFW/glfw3.h>
 #include <OpenGL/OpenGL.h>
 
-#include <SOIL.h>
-
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
-#include <thread>
 #include <stdio.h>
-#include <math.h>
 #include <cstdlib>
-#include <vector>
-#include <time.h>
-
 #include <random>
 
 #include "world.h"
 
-//////////////////////////
-// Function prototypes
 GLFWwindow* initializeGLFWWindow(int, int, bool);
-void handleInputs(GLFWwindow*, Camera*);
 
-//////////////////////////
-// Implementation
 int main(int argc, char* argv[]) {
     srand(time(NULL));
 
@@ -38,11 +22,12 @@ int main(int argc, char* argv[]) {
     if (argc == 2 && std::string(argv[1]) == "-f"){
         width  = 1366;
         height = 768;
-        printf("Loading fullscreen with resolution: %f by %f", width, height);
+        printf("Loading in fullscreen mode with resolution: %d by %d", (int)width, (int)height);
         fullscreen = true;
     } else if (argc == 4 && std::string(argv[1]) == "-w") {
         sscanf(argv[2], "%f", &width);
         sscanf(argv[3], "%f", &height);
+        printf("Loading in windowed mode with resolution: %d by %d", (int)width, (int)height);
         fullscreen = false;
     } else {
         printf("\nCommand line options:\n");
