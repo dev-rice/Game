@@ -27,8 +27,6 @@ Model::Model(const char* filename, GLfloat scale){
 void Model::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, glm::mat4* model_matrix){
     glBindVertexArray(vao);
     
-    
-    
     // Set the scale, this is not really going to be a thing, probably
     glUniform1f(glGetUniformLocation(shader_program, "scale"), this->scale);
 

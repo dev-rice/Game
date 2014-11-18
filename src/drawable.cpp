@@ -10,6 +10,14 @@ Drawable::Drawable(Model* model, glm::vec3 position) {
     this->model = model;
 }
 
+void Drawable::moveTo(glm::vec3 new_position){
+    position = new_position;
+}
+
+glm::vec3 Drawable::getPosition(){
+    return position;
+}
+
 void Drawable::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix){
     
     // Create the model matrix based on position
