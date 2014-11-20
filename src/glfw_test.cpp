@@ -2,7 +2,10 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <OpenGL/OpenGL.h>
+// MAC
+// #include <OpenGL/OpenGL.h>
+// LINUX
+#include <GL/gl.h>
 
 #include <stdio.h>
 #include <cstdlib>
@@ -22,8 +25,8 @@ int main(int argc, char* argv[]) {
     bool fullscreen;
     
     if (argc == 2 && std::string(argv[1]) == "-f"){
-        width  = 1366;
-        height = 768;
+        width  = 1920;
+        height = 1080;
         printf("Loading in fullscreen mode with resolution: %d by %d", (int)width, (int)height);
         fullscreen = true;
     } else if (argc == 4 && std::string(argv[1]) == "-w") {

@@ -3,10 +3,14 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <OpenGL/OpenGL.h>
+// MAC
+// #include <OpenGL/OpenGL.h>
+// LINUX
+#include <GL/gl.h>
 
 #include <SOIL.h>
 
+#define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>

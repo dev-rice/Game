@@ -3,7 +3,10 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <OpenGL/OpenGL.h>
+// MAC
+// #include <OpenGL/OpenGL.h>
+// LINUX
+#include <GL/gl.h>
 
 #include <stdio.h>
 
