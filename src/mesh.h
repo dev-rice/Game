@@ -3,12 +3,17 @@
 // and mesh object creation
 // Trevor Westphal
 
+#if defined __APPLE__ && __MACH__
+    #include <OpenGL/OpenGL.h>
+// #elif defined __gnu_linux__
+#endif
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 // MAC
 // #include <OpenGL/OpenGL.h>
 // LINUX
-#include <GL/gl.h>
+// #include <GL/gl.h>
 
 #include <vector>
 

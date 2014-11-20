@@ -1,12 +1,13 @@
 #ifndef Drawable_h
 #define Drawable_h
 
+#if defined __APPLE__ && __MACH__
+    #include <OpenGL/OpenGL.h>
+// #elif defined __gnu_linux__
+#endif
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-// MAC
-// #include <OpenGL/OpenGL.h>
-// LINUX
-#include <GL/gl.h>
 
 #define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
