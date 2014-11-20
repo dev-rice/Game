@@ -46,6 +46,7 @@ void Model::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, glm::mat4* mode
         glUniform1i(glGetUniformLocation(shader_program, "tex"), this->texture_number);
         glDrawElements(GL_TRIANGLES, this->num_faces, GL_UNSIGNED_INT, 0);
     } else {
+        glDrawElements(GL_TRIANGLES, this->num_faces, GL_UNSIGNED_INT, 0);
         glDrawElements(GL_LINE_LOOP, this->num_faces, GL_UNSIGNED_INT, 0);
     }
 
