@@ -14,19 +14,19 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "model.h"
+#include "mesh.h"
 
 class Drawable {
 public:
-    Drawable(Model*);
-    Drawable(Model*, glm::vec3);
+    Drawable(Mesh*);
+    Drawable(Mesh*, glm::vec3);
 
     void draw(glm::mat4*, glm::mat4*);
     void moveTo(glm::vec3);
     glm::vec3 getPosition();
 
 private:
-    Model* model;
+    Mesh* mesh;
 
     glm::vec3 position;
     glm::vec3 rotation;

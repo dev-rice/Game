@@ -1,13 +1,13 @@
 #include "drawable.h"
 
-Drawable::Drawable(Model* model){
+Drawable::Drawable(Mesh* mesh){
     position = glm::vec3(0.0f, 0.0f, 0.0f);
-    this->model = model;
+    this->mesh = mesh;
 }
 
-Drawable::Drawable(Model* model, glm::vec3 position) {
+Drawable::Drawable(Mesh* mesh, glm::vec3 position) {
     this->position = position;
-    this->model = model;
+    this->mesh = mesh;
 }
 
 void Drawable::moveTo(glm::vec3 new_position){
@@ -30,5 +30,5 @@ void Drawable::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix){
     // z rotation
     model_matrix = glm::rotate(model_matrix, rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
 
-    model->draw(view_matrix, proj_matrix, &model_matrix);
+    mesh->draw(view_matrix, proj_matrix, &model_matrix);
 }

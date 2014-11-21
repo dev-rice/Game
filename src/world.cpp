@@ -14,19 +14,19 @@ World::World(float width, float height){
     // load independently but for now you have to
     // keep track of the texture number even when
     // loading a new model
-    Model cube = Model("res/models/lamppost.obj", 0.1f);
+    Mesh cube = Mesh("res/models/lamppost.obj", 0.1f);
     cube.useTexture("res/textures/lamppost.png", GL_TEXTURE0);
     cube.attachShader(shader_program);
 
-    Model ship = Model("res/models/gethtransport.obj", 1.0f);
+    Mesh ship = Mesh("res/models/gethtransport.obj", 1.0f);
     // ship.useTexture("res/textures/checkerboard.png", GL_TEXTURE1);
     ship.attachShader(shader_program);
 
-    models.push_back(cube);
-    models.push_back(ship);
+    meshes.push_back(cube);
+    meshes.push_back(ship);
 
-    drawables.push_back(Drawable(&models[0], glm::vec3(0.0f, 0.0f, 0.0f)));
-    drawables.push_back(Drawable(&models[1], glm::vec3(2.0f, 0.0f, 0.0f)));
+    drawables.push_back(Drawable(&meshes[0], glm::vec3(0.0f, 0.0f, 0.0f)));
+    drawables.push_back(Drawable(&meshes[1], glm::vec3(2.0f, 0.0f, 0.0f)));
 }
 
 void World::update(){

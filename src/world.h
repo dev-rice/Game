@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "model.h"
+#include "mesh.h"
 #include "drawable.h"
 #include "camera.h"
 
@@ -17,7 +17,7 @@ public:
 private:
     Camera camera;
 
-    std::vector<Model> models;
+    std::vector<Mesh> meshes;
     std::vector<Drawable> drawables;
 
     glm::mat4 view_matrix;

@@ -1,135 +1,113 @@
-// model.cpp
-// implementation of the model class
-// Trevor Westphal
-
-#include <vector>  // vector
-#include <fstream> // fgets
-#include <stdio.h> // sscanf
-#include <map>	   // map
-#include <array>   // array
-
 #include "mesh.h"
 
-Mesh::Mesh(const char* filename){
-	loadMeshFromFile(filename);
+Mesh::Mesh(const char* filename, GLfloat scale){
+    this->scale = scale;
+
+    MeshLoader mesh_loader = MeshLoader(filename);
+    GLfloat* vertices = mesh_loader.getVertexArray();
+    GLuint* elements = mesh_loader.getFaceArray();
+    num_faces = mesh_loader.getFacesSize();
+    
+    GLuint vbo, ebo;
+
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+
+    glGenBuffers(1, &vbo);               // Generate 1 buffer
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);  // Make vbo the active array buffer
+    glBufferData(GL_ARRAY_BUFFER, mesh_loader.getVerticesSize() * sizeof(GLfloat), vertices, GL_STATIC_DRAW);
+
+    glGenBuffers(1, &ebo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh_loader.getFacesSize() * sizeof(GLuint), elements, GL_STATIC_DRAW);
+
+
 }
 
-void Mesh::loadMeshFromFile(const char* fileName){
-	float tempX, tempY, tempZ;
-	int tempA, tempB, tempC, tempD, tempE, tempF;
+void Mesh::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, glm::mat4* model_matrix){
+    glBindVertexArray(vao);
+    
+    // Set the scale, this is not really going to be a thing, probably
+    glUniform1f(glGetUniformLocation(shader_program, "scale"), this->scale);
 
-	std::vector<GLfloat> verts3D;
-	std::vector<GLfloat> verts2D;
-	std::vector<GLuint> tris3D;
-	std::vector<GLuint> tris2D;
+    // Update the time uniform
+    glUniform1f(glGetUniformLocation(shader_program, "time"), (float)glfwGetTime());
 
-	int triCount = 0;
+    // Update the model, view, and projection matrices
+    glUniformMatrix4fv(glGetUniformLocation(shader_program, "model"), 1, GL_FALSE, glm::value_ptr(*model_matrix));
+    glUniformMatrix4fv(glGetUniformLocation(shader_program, "view"), 1, GL_FALSE, glm::value_ptr(*view_matrix));    
+    glUniformMatrix4fv(glGetUniformLocation(shader_program, "proj"), 1, GL_FALSE, glm::value_ptr(*proj_matrix));
 
-	char buffer[128];
+    // Tell the shader whether there is a texture or not.
+    glUniform1i(glGetUniformLocation(shader_program, "has_texture"), has_texture);
 
-	FILE *ifile;
-	ifile = fopen(fileName, "r");
+    if (has_texture){
+        // Tell the shader which texture to use
+        glUniform1i(glGetUniformLocation(shader_program, "tex"), this->texture_number);
+        glDrawElements(GL_TRIANGLES, this->num_faces, GL_UNSIGNED_INT, 0);
+    } else {
+        glDrawElements(GL_LINE_LOOP, this->num_faces, GL_UNSIGNED_INT, 0);
+    }
 
-	if(ifile == NULL){
-		printf("Error opening file %s\n", fileName);
-		return;
-	
-	}
-
-	while(! feof(ifile)){
-		if(fgets(buffer, 128, ifile) == NULL){
-			// Can't read into buffer
-			break;
-		}
-
-		if(buffer[0] == 'v'){
-			if(buffer[1] == 't'){
-				// texture vertex
-				sscanf(buffer, "%*2c %f %f", &tempX, &tempY);
-				verts2D.push_back((GLfloat)tempX);
-				verts2D.push_back((GLfloat)(1.0f - tempY));
-			} else {
-				// 3d vertex
-				sscanf(buffer, "%*c %f %f %f", &tempX, &tempY, &tempZ);
-				verts3D.push_back((GLfloat)tempX);
-				verts3D.push_back((GLfloat)tempY);
-				verts3D.push_back((GLfloat)tempZ);
-			}
-		} else if(buffer[0] == 'f'){
-			// Face declarations
-			sscanf(buffer, "%*c %d/%d %d/%d %d/%d", &tempA, &tempD, &tempB, &tempE, &tempC, &tempF);
-			tris3D.push_back((GLuint)tempA);
-			tris3D.push_back((GLuint)tempB);
-			tris3D.push_back((GLuint)tempC);
-			tris2D.push_back((GLuint)tempD);
-			tris2D.push_back((GLuint)tempE);
-			tris2D.push_back((GLuint)tempF);
-			triCount++;
-		}
-	}
-
-	fclose(ifile);
-
-	// Setting up the data structure to see if vertex mapping has already been done
-	int count = 1;
-
-	std::map<std::array<GLuint, 2>, GLuint> mappedEdgeLoops;
-
-	for(int i(0); i < triCount; ++i){
-
-		for(int j(0); j < 3; ++j){
-
-			std::array<GLuint, 2> tuple = {tris3D[i*3+j], tris2D[i*3+j]};
-
-			int result = mappedEdgeLoops[tuple];
-
-			if(result == 0){
-				// Has not been declared yet
-				mappedEdgeLoops[tuple] = count;
-				count++;
-
-				// Acessing 3D vertices indicated by the connection list
-				tempX = verts3D[ (tuple[0]-1)*3+0 ];
-				tempY = verts3D[ (tuple[0]-1)*3+1 ];
-				tempZ = verts3D[ (tuple[0]-1)*3+2 ];
-				// Acessing 2D vertices indicated by the connection list
-				GLfloat tempX2 = verts2D[ (tuple[1]-1)*2+0 ];
-				GLfloat tempY2 = verts2D[ (tuple[1]-1)*2+1 ];
-
-				final_verts.push_back(tempX);
-				final_verts.push_back(tempY);
-				final_verts.push_back(tempZ);
-				final_verts.push_back(1.0f);
-				final_verts.push_back(1.0f);
-				final_verts.push_back(1.0f);
-				final_verts.push_back(tempX2);
-				final_verts.push_back(tempY2);
-			}	
-			final_tris.push_back(mappedEdgeLoops[tuple]-1);		
-		}
-	}
 }
 
-GLfloat* Mesh::getVertexArray(){
-	GLfloat* vertices = new GLfloat[final_verts.size()];
-	for (int i = 0; i < final_verts.size(); ++i){
-		vertices[i] = final_verts[i];
-	}
-	return vertices;
+void Mesh::attachShader(GLuint shader_program){
+    this->shader_program = shader_program;
+
+    // Get the reference to the "position" attribute defined in
+    // the vertex shader
+    GLint posAttrib = glGetAttribLocation(shader_program, "position");
+    glEnableVertexAttribArray(posAttrib);
+    // Load the position attributes from our array with width 3. The position
+    // values start at index 0. Tell it to load 2 values
+    glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE,
+                           8*sizeof(float), 0);
+
+    GLint colAttrib = glGetAttribLocation(shader_program, "color");
+    glEnableVertexAttribArray(colAttrib);
+    // Load the color pointer from our array with width 3. The color values
+    // start at index 2. Tell it to load 3 value
+    glVertexAttribPointer(colAttrib, 3, GL_FLOAT, GL_FALSE,
+                           8*sizeof(float), (void*)(3*sizeof(float)));
+
+    // Link the texture coordinates to the shader.
+    GLint texAttrib = glGetAttribLocation(shader_program, "texcoord");
+    glEnableVertexAttribArray(texAttrib);
+    glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE,
+                           8*sizeof(float), (void*)(6*sizeof(float)));
 }
 
-GLuint* Mesh::getFaceArray(){
-	GLuint* faces = new GLuint[final_tris.size()];
-	for (int i = 0; i < final_tris.size(); ++i){
-		faces[i] = final_tris[i];
-	}
-	return faces;
-}
+void Mesh::useTexture(const char* filename, GLuint texture_value){
+    // This is a bad way to do it, no idea why but it slows down
+    // a ton when using two textures.
+    
+    GLuint texture;
+    glGenTextures(1, &texture);
 
-int Mesh::getVerticesSize(){
-	return final_verts.size();
-}
+    // Load the texture
+    int width, height;
+    unsigned char* image;
+    // Set the active texture
+    glActiveTexture(texture_value);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    // Load the image
+    image = SOIL_load_image(filename, &width, &height, 0, SOIL_LOAD_RGB);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB,
+                 GL_UNSIGNED_BYTE, image);
+    // Set the texture wrapping to repeat
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    // Do nearest interpolation for scaling the image up and down.
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    // Mipmaps increase efficiency or something
+    glGenerateMipmap(GL_TEXTURE_2D);
+    SOIL_free_image_data(image);
+    // Link the texture
 
-int Mesh::getFacesSize(){
-	return final_tris.size();
+    // No idea how to avoid this right now but the texture
+    // numbers go like GL_TEXTURE0 = 33984, GL_TEXTURE1 = 33985, ...
+    GLuint texture_number = texture_value - 33984;
+    this->texture_number = texture_number;
+    has_texture = true;
 }

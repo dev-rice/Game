@@ -1,7 +1,5 @@
-// mesh.h
-// Header file for *.obj file importing
-// and mesh object creation
-// Trevor Westphal
+#ifndef Mesh_h
+#define Mesh_h
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -11,22 +9,41 @@
 // #elif defined __gnu_linux__
 #endif
 
+#include <SOIL.h>
+
+#define GLM_FORCE_RADIANS
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+#include <stdio.h>
+#include <math.h>
+#include <cstdlib>
 #include <vector>
 
+#include "shader_loader.h"
+#include "mesh_loader.h"
 
-class Mesh{
+class Mesh {
 public:
-	Mesh(const char*);
-	
-    GLfloat* getVertexArray();
-	GLuint* getFaceArray();
+    Mesh() {;}
+    Mesh(const char*, GLfloat);
     
-    int getVerticesSize();
-    int getFacesSize();
-private:
-    
-    void loadMeshFromFile(const char*);
+    void draw(glm::mat4*, glm::mat4*, glm::mat4*);
+    void attachShader(GLuint);
+    void useTexture(const char*, GLuint);
 
-	std::vector<GLuint> final_tris;
-	std::vector<GLfloat> final_verts;
+private:
+
+    GLuint num_faces;
+    GLfloat scale;
+
+    // Pointers to all that openGL stuff
+    GLuint vao;
+    GLuint shader_program;
+
+    GLuint texture_number;
+    bool has_texture;
 };
+
+#endif
