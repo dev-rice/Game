@@ -8,6 +8,24 @@ Mesh::Mesh(const char* filename, GLfloat scale){
     GLuint* elements = mesh_loader.getFaceArray();
     num_faces = mesh_loader.getFacesSize();
     
+    // printf("\nVertices (size = %d):\n\t", mesh_loader.getVerticesSize() * sizeof(GLfloat));
+    // for (int i = 0; i < mesh_loader.getVerticesSize(); ++i){
+    //     if (i % 8 == 0 && i != 0){
+    //         printf("\n\t");
+    //     }
+    //     printf("%f,\t", vertices[i]);
+        
+    // }
+    // printf("\nElements (size = %d):\n\t", mesh_loader.getFacesSize() * sizeof(GLuint));
+    // for (int i = 0; i < mesh_loader.getFacesSize(); ++i){
+    //     if (i % 3 == 0 && i != 0){
+    //         printf("\n\t");
+    //     }
+    //     printf("%d,\t", elements[i]);
+        
+    // }
+    // printf("\n");
+
     GLuint vbo, ebo;
 
     glGenVertexArrays(1, &vao);
@@ -21,10 +39,9 @@ Mesh::Mesh(const char* filename, GLfloat scale){
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh_loader.getFacesSize() * sizeof(GLuint), elements, GL_STATIC_DRAW);
 
-
 }
 
-void Mesh::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, glm::mat4* model_matrix){
+void Mesh::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, glm::mat4* model_matrix, glm::vec3 light_position){
     glBindVertexArray(vao);
     
     // Set the scale, this is not really going to be a thing, probably
@@ -32,6 +49,17 @@ void Mesh::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, glm::mat4* model
 
     // Update the time uniform
     glUniform1f(glGetUniformLocation(shader_program, "time"), (float)glfwGetTime());
+
+    // Update the light position
+    GLfloat* light_array = new GLfloat[3];
+    light_array[0] = light_position.x;
+    light_array[1] = light_position.y;
+    light_array[2] = light_position.z;
+
+    glUniform3fv(glGetUniformLocation(shader_program, "light_position"), 1, light_array);
+
+    light_array = NULL;
+    delete light_array;
 
     // Update the model, view, and projection matrices
     glUniformMatrix4fv(glGetUniformLocation(shader_program, "model"), 1, GL_FALSE, glm::value_ptr(*model_matrix));
@@ -63,11 +91,11 @@ void Mesh::attachShader(GLuint shader_program){
     glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE,
                            8*sizeof(float), 0);
 
-    GLint colAttrib = glGetAttribLocation(shader_program, "color");
-    glEnableVertexAttribArray(colAttrib);
-    // Load the color pointer from our array with width 3. The color values
+    GLint normalAttrib = glGetAttribLocation(shader_program, "normal");
+    glEnableVertexAttribArray(normalAttrib);
+    // Load the normal pointer from our array with width 3. The normal values
     // start at index 2. Tell it to load 3 value
-    glVertexAttribPointer(colAttrib, 3, GL_FLOAT, GL_FALSE,
+    glVertexAttribPointer(normalAttrib, 3, GL_FLOAT, GL_FALSE,
                            8*sizeof(float), (void*)(3*sizeof(float)));
 
     // Link the texture coordinates to the shader.

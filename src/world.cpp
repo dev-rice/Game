@@ -14,36 +14,36 @@ World::World(float width, float height){
     // load independently but for now you have to
     // keep track of the texture number even when
     // loading a new model
-    Mesh cube = Mesh("res/models/lamppost.obj", 0.1f);
-    cube.useTexture("res/textures/lamppost.png", GL_TEXTURE0);
+    Mesh cube = Mesh("res/models/raygun.obj", 1.0f);
+    cube.useTexture("res/textures/checkerboard.png", GL_TEXTURE0);
     cube.attachShader(shader_program);
 
-    Mesh ship = Mesh("res/models/gethtransport.obj", 1.0f);
+    // Mesh ship = Mesh("res/models/gethtransport.obj", 1.0f);
     // ship.useTexture("res/textures/checkerboard.png", GL_TEXTURE1);
-    ship.attachShader(shader_program);
+    // ship.attachShader(shader_program);
 
     meshes.push_back(cube);
-    meshes.push_back(ship);
+    // meshes.push_back(ship);
 
     drawables.push_back(Drawable(&meshes[0], glm::vec3(0.0f, 0.0f, 0.0f)));
-    drawables.push_back(Drawable(&meshes[1], glm::vec3(2.0f, 0.0f, 0.0f)));
+    // drawables.push_back(Drawable(&meshes[1], glm::vec3(2.0f, 0.0f, 0.0f)));
 }
 
 void World::update(){
-    system("clear");
-    camera.print();
+    // system("clear");
+    // camera.print();
 
     // Update the view matrix based on the current
     // camera location / position
     view_matrix = camera.getViewMatrix();
-
+    glm::vec3 light_position = camera.getPosition();
     // Draw all the drawables
     for (int i = 0; i < drawables.size(); ++i){
         // This is how you move things
         // glm::vec3 position = drawables[i].getPosition();
         // drawables[i].moveTo(position + glm::vec3(-0.01f, 0.0f, 0.0f));
         
-        drawables[i].draw(&view_matrix, &proj_matrix);
+        drawables[i].draw(&view_matrix, &proj_matrix, light_position);
     }
 }
 

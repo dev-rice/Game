@@ -27,6 +27,7 @@ public:
 
     void print();
 
+    glm::vec3 getPosition();
     glm::mat4 getViewMatrix();
 
 private:

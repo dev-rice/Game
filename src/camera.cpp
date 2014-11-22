@@ -66,6 +66,10 @@ glm::mat4 Camera::getViewMatrix(){
     return view_matrix;
 }
 
+glm::vec3 Camera::getPosition(){
+    return glm::vec3(x, y, z);
+}
+
 void Camera::print(){
     printf("Camera\n");
     printf("    position = [%f, %f, %f]\n", x, y, z);

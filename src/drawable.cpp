@@ -18,7 +18,7 @@ glm::vec3 Drawable::getPosition(){
     return position;
 }
 
-void Drawable::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix){
+void Drawable::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, glm::vec3 light_position){
     
     // Create the model matrix based on position
     model_matrix = glm::translate(glm::mat4(), position);
@@ -30,5 +30,5 @@ void Drawable::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix){
     // z rotation
     model_matrix = glm::rotate(model_matrix, rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
 
-    mesh->draw(view_matrix, proj_matrix, &model_matrix);
+    mesh->draw(view_matrix, proj_matrix, &model_matrix, light_position);
 }
