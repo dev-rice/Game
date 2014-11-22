@@ -25,8 +25,8 @@ void main() {
     vec4 world_position = view * model * vec4(position * scale, 1.0);
     vec4 final_position = proj * world_position;
 
-    light_vector = light_position;
-    // light_vector = vec3(1.0, 1.0, 0.0);
+    vec4 temp_light = vec4(light_position, 1.0);
+    light_vector = vec3(temp_light.x, temp_light.y, temp_light.z);
 
     // Wrapping effect
     // gl_Position = vec4(final_position.x, final_position.y + pow(1.25, final_position.z + 2), final_position.z, final_position.w);

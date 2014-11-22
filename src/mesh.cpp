@@ -41,7 +41,7 @@ Mesh::Mesh(const char* filename, GLfloat scale){
 
 }
 
-void Mesh::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, glm::mat4* model_matrix, glm::vec3 light_position){
+void Mesh::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, glm::mat4* model_matrix){
     glBindVertexArray(vao);
     
     // Set the scale, this is not really going to be a thing, probably
@@ -52,9 +52,9 @@ void Mesh::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, glm::mat4* model
 
     // Update the light position
     GLfloat* light_array = new GLfloat[3];
-    light_array[0] = light_position.x;
-    light_array[1] = light_position.y;
-    light_array[2] = light_position.z;
+    light_array[0] = 2.0f;
+    light_array[1] = 2.0f;
+    light_array[2] = 0.0f;
 
     glUniform3fv(glGetUniformLocation(shader_program, "light_position"), 1, light_array);
 

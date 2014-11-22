@@ -29,7 +29,7 @@ public:
     Mesh() {;}
     Mesh(const char*, GLfloat);
     
-    void draw(glm::mat4*, glm::mat4*, glm::mat4*, glm::vec3);
+    void draw(glm::mat4*, glm::mat4*, glm::mat4*);
     void attachShader(GLuint);
     void useTexture(const char*, GLuint);
 
