@@ -20,6 +20,5 @@ void main() {
     // Trevor's Algorithm
     // vec4 ambiance = vec4(0.1, 0.1, 0.1, 1.0);
 
-
     outColor = texture(tex, Texcoord) * vec4(cosTheta * light_color * intensity, 1.0) + ambiance;
 }
