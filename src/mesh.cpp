@@ -105,7 +105,7 @@ void Mesh::attachShader(GLuint shader_program){
                            8*sizeof(float), (void*)(6*sizeof(float)));
 }
 
-void Mesh::useTexture(const char* filename, GLuint texture_value){
+void Mesh::useTexture(const char* filename, GLuint texture_value, GLuint filter){
     // This is a bad way to do it, no idea why but it slows down
     // a ton when using two textures.
     
@@ -126,8 +126,8 @@ void Mesh::useTexture(const char* filename, GLuint texture_value){
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     // Do nearest interpolation for scaling the image up and down.
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
     // Mipmaps increase efficiency or something
     glGenerateMipmap(GL_TEXTURE_2D);
     SOIL_free_image_data(image);
