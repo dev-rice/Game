@@ -24,6 +24,11 @@
 #include "shader_loader.h"
 #include "mesh_loader.h"
 
+const GLuint DIFFUSE  = 0;
+const GLuint SPECULAR = 1;
+const GLuint NORMAL   = 2;
+const GLuint EMISSIVE = 3;
+
 class Mesh {
 public:
     Mesh() {;}
@@ -31,7 +36,7 @@ public:
     
     void draw(glm::mat4*, glm::mat4*, glm::mat4*);
     void attachShader(GLuint);
-    void useTexture(const char*, GLuint, GLuint, int);
+    void useTexture(const char*, GLuint, GLuint);
 
 private:
 
@@ -44,6 +49,7 @@ private:
 
     GLuint diffuse_texture;
     GLuint specular_texture;
+    GLuint normal_map;
     GLuint emissive_texture;
 };
 

@@ -68,6 +68,7 @@ void Mesh::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, glm::mat4* model
 
     glUniform1i(glGetUniformLocation(shader_program, "diffuse_texture"), this->diffuse_texture);
     glUniform1i(glGetUniformLocation(shader_program, "specular_texture"), this->specular_texture);
+    glUniform1i(glGetUniformLocation(shader_program, "normal_map"), this->normal_map);
 
     glDrawElements(GL_TRIANGLES, this->num_faces, GL_UNSIGNED_INT, 0);
 
@@ -99,10 +100,27 @@ void Mesh::attachShader(GLuint shader_program){
                            8*sizeof(float), (void*)(6*sizeof(float)));
 }
 
-void Mesh::useTexture(const char* filename, GLuint texture_value, GLuint filter, int type){
-    // This is a bad way to do it, no idea why but it slows down
-    // a ton when using two textures.
-    
+void Mesh::useTexture(const char* filename, GLuint filter, GLuint type){
+    GLuint texture_value;
+    switch(type){
+        case DIFFUSE:
+            texture_value = GL_TEXTURE0;
+            this->diffuse_texture = 0;
+            break;
+        case SPECULAR:
+            texture_value = GL_TEXTURE1;
+            this->specular_texture = 1;
+            break;
+        case NORMAL:
+            texture_value = GL_TEXTURE2;
+            this->normal_map = 2;
+            break;
+        case EMISSIVE:
+            texture_value = GL_TEXTURE3;
+            this->emissive_texture = 3;
+            break;
+    }
+        
     GLuint texture;
     glGenTextures(1, &texture);
 
@@ -126,19 +144,5 @@ void Mesh::useTexture(const char* filename, GLuint texture_value, GLuint filter,
     glGenerateMipmap(GL_TEXTURE_2D);
     SOIL_free_image_data(image);
 
-    // No idea how to avoid this right now but the texture
-    // numbers go like GL_TEXTURE0 = 33984, GL_TEXTURE1 = 33985, ...
-    GLuint texture_number = texture_value - 33984;
-    
-    switch(type){
-        case 0:
-            this->diffuse_texture = texture_number;
-            break;
-        case 1:
-            this->specular_texture = texture_number;
-            break;
-        case 2:
-            this->emissive_texture = texture_number;
-            break;
-    }
+   
 }
