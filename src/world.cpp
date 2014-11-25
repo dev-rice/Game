@@ -14,8 +14,8 @@ World::World(float width, float height){
     // load independently but for now you have to
     // keep track of the texture number even when
     // loading a new model
-    Mesh cube = Mesh("res/models/cube.obj", 1.0f);
-    cube.useTexture("res/textures/checkerboard.png", GL_TEXTURE0, GL_NEAREST);
+    Mesh cube = Mesh("res/models/raygun.obj", 1.0f);
+    cube.useTexture("res/textures/raygun.png", GL_TEXTURE0, GL_NEAREST);
     cube.attachShader(shader_program);
 
     // Mesh ship = Mesh("res/models/gethtransport.obj", 1.0f);

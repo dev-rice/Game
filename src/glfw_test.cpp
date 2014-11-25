@@ -83,7 +83,7 @@ int main(int argc, char* argv[]) {
     // Shut down GLFW before exiting the program
     glfwTerminate();
 
-    system("clear");
+    // system("clear");
 
     // Nothing went wrong!
     return 0;
