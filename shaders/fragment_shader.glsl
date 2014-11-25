@@ -13,13 +13,12 @@ uniform sampler2D specular_texture;
 uniform sampler2D normal_map;
 
 void main() {
-    vec3 normal = surface_normal;
     vec3 light_color = vec3(0.9, 0.9, 1.0);
-    float cosTheta = dot(normalize(normal), normalize(light_vector));
+    float cosTheta = dot(normalize(surface_normal), normalize(light_vector));
     cosTheta = clamp(cosTheta, 0.0, 1.0);
     float intensity = 10 / (pow(light_vector.x, 2) + pow(light_vector.y, 2) + pow(light_vector.z, 2));
 
-    vec3 reflection = reflect(-normalize(light_vector), normalize(normal));
+    vec3 reflection = reflect(-normalize(light_vector), normalize(surface_normal));
     float cosAlpha = clamp(dot(normalize(viewing_vector), reflection), 0.0, 1.0);
 
 
