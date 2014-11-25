@@ -54,7 +54,7 @@ void Mesh::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, glm::mat4* model
     GLfloat* light_array = new GLfloat[3];
     light_array[0] = 2.0f;
     light_array[1] = 2.0f;
-    light_array[2] = 0.0f;
+    light_array[2] = 2.0f;
 
     glUniform3fv(glGetUniformLocation(shader_program, "light_position"), 1, light_array);
 
@@ -66,16 +66,8 @@ void Mesh::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, glm::mat4* model
     glUniformMatrix4fv(glGetUniformLocation(shader_program, "view"), 1, GL_FALSE, glm::value_ptr(*view_matrix));    
     glUniformMatrix4fv(glGetUniformLocation(shader_program, "proj"), 1, GL_FALSE, glm::value_ptr(*proj_matrix));
 
-    // Tell the shader whether there is a texture or not.
-    glUniform1i(glGetUniformLocation(shader_program, "has_texture"), has_texture);
-
-    if (has_texture){
-        // Tell the shader which texture to use
-        glUniform1i(glGetUniformLocation(shader_program, "tex"), this->texture_number);
-        glDrawElements(GL_TRIANGLES, this->num_faces, GL_UNSIGNED_INT, 0);
-    } else {
-        glDrawElements(GL_LINE_LOOP, this->num_faces, GL_UNSIGNED_INT, 0);
-    }
+    glUniform1i(glGetUniformLocation(shader_program, "tex"), this->texture_number);
+    glDrawElements(GL_TRIANGLES, this->num_faces, GL_UNSIGNED_INT, 0);
 
 }
 
@@ -131,11 +123,9 @@ void Mesh::useTexture(const char* filename, GLuint texture_value, GLuint filter)
     // Mipmaps increase efficiency or something
     glGenerateMipmap(GL_TEXTURE_2D);
     SOIL_free_image_data(image);
-    // Link the texture
 
     // No idea how to avoid this right now but the texture
     // numbers go like GL_TEXTURE0 = 33984, GL_TEXTURE1 = 33985, ...
     GLuint texture_number = texture_value - 33984;
     this->texture_number = texture_number;
-    has_texture = true;
 }

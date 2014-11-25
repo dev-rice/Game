@@ -14,7 +14,7 @@ World::World(float width, float height){
     // load independently but for now you have to
     // keep track of the texture number even when
     // loading a new model
-    Mesh cube = Mesh("res/models/raygun.obj", 1.0f);
+    Mesh cube = Mesh("res/models/cube.obj", 1.0f);
     cube.useTexture("res/textures/checkerboard.png", GL_TEXTURE0, GL_NEAREST);
     cube.attachShader(shader_program);
 
@@ -24,14 +24,10 @@ World::World(float width, float height){
 
     meshes.push_back(cube);
 
-    drawables.push_back(Drawable(&meshes[0], glm::vec3(1.0f, 0.0f, 0.0f)));
-    drawables.push_back(Drawable(&meshes[0], glm::vec3(-1.0f, 0.0f, 0.0f)));
+    drawables.push_back(Drawable(&meshes[0], glm::vec3(0.0f, 0.0f, 0.0f)));
 }
 
 void World::update(){
-    // system("clear");
-    // camera.print();
-
     // Update the view matrix based on the current
     // camera location / position
     view_matrix = camera.getViewMatrix();

@@ -50,6 +50,8 @@ int main(int argc, char* argv[]) {
     // Create the world
     World world(width, height);
 
+    float last_time = glfwGetTime();
+
     // Display loop
     while(!glfwWindowShouldClose(window)) {
         // Swap display/rendering buffers
@@ -66,12 +68,22 @@ int main(int argc, char* argv[]) {
         glClearColor(0.16f, 0.16f, 0.16f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        float delta_t = glfwGetTime() - last_time;
+        
+        // system("clear");
+        // printf("Time since last frame draw: %f seconds\n", delta_t);
+        // printf("Framerate: %f fps\n", 1 / delta_t);
+
         world.handleInputs(window);
         world.update();
+
+        last_time = glfwGetTime();
     }
 
     // Shut down GLFW before exiting the program
     glfwTerminate();
+
+    system("clear");
 
     // Nothing went wrong!
     return 0;

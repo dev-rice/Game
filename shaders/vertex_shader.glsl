@@ -18,23 +18,14 @@ uniform float scale;
 uniform vec3 light_position;
 
 void main() {
-    surface_normal = normal;
     Texcoord = texcoord;
 
     // Order is important on the multiplication!
-    vec4 world_position = view * model * vec4(position * scale, 1.0);
-    vec4 final_position = proj * world_position;
+    gl_Position = proj * view * model * vec4(position, 1.0);
 
-    vec4 temp_light = vec4(light_position, 1.0);
-    light_vector = vec3(temp_light.x, temp_light.y, temp_light.z);
+    vec4 light_vector_temp = (view * vec4(light_position, 1.0)) - (view * model * vec4(position, 1.0));
+    light_vector = vec3(light_vector_temp.xyz);
 
-    // Wrapping effect
-    // gl_Position = vec4(final_position.x, final_position.y + pow(1.25, final_position.z + 2), final_position.z, final_position.w);
-    
-    // Wavy ground effect
-    // gl_Position = vec4(final_position.x, final_position.y + (0.5*sin(time + final_position.z)), final_position.z, final_position.w);
-
-    // Boring normal effect
-    gl_Position = final_position;
-
+    vec4 surface_normal_temp = view * model * vec4(normal, 1.0);
+    surface_normal = vec3(surface_normal_temp.xyz);
 }

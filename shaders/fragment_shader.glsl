@@ -12,12 +12,11 @@ uniform sampler2D tex;
 void main() {
     vec3 light_color = vec3(0.99, 1.0, 0.97);
     float cosTheta = dot(normalize(surface_normal), normalize(light_vector));
-    float intensity = 10 / (pow(light_vector.x, 2) + pow(light_vector.y, 2) + pow(light_vector.z, 2));
+    cosTheta = clamp(cosTheta, 0.0, 1.0);
+    float intensity = 25 / (pow(light_vector.x, 2) + pow(light_vector.y, 2) + pow(light_vector.z, 2));
 
-    // Chris's Algorithm
-    vec4 ambiance = vec4(0.01, 0.01, 0.01, 1.0);
-    // Trevor's Algorithm
-    // vec4 ambiance = vec4(0.1, 0.1, 0.1, 1.0);
+    vec4 ambiance = vec4(0.1, 0.1, 0.1, 1.0);
 
-    outColor = texture(tex, Texcoord) * vec4(cosTheta * light_color * intensity, 1.0) + ambiance;
+    outColor = texture(tex, Texcoord) * (vec4(cosTheta * light_color * intensity, 1.0) + ambiance);
+    // outColor = texture(tex, Texcoord);
 }
