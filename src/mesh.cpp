@@ -54,7 +54,7 @@ void Mesh::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, glm::mat4* model
     GLfloat* light_array = new GLfloat[3];
     light_array[0] = 2.0f;
     light_array[1] = 0.0f;
-    light_array[2] = 2.0f * sin(glfwGetTime());
+    light_array[2] = 2.0f ;
 
     glUniform3fv(glGetUniformLocation(shader_program, "light_position"), 1, light_array);
 

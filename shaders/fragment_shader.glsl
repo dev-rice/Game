@@ -3,7 +3,7 @@
 in vec2 Texcoord;
 in vec3 surface_normal;
 in vec3 light_vector;
-in vec3 vertex_position;
+in vec3 viewing_vector;
 
 out vec4 outColor;
 
@@ -17,7 +17,7 @@ void main() {
     float intensity = 10 / (pow(light_vector.x, 2) + pow(light_vector.y, 2) + pow(light_vector.z, 2));
 
     vec3 reflection = reflect(-normalize(light_vector), normalize(surface_normal));
-    float cosAlpha = clamp(dot(reflection, normalize(vertex_position)), 0.0, 1.0);
+    float cosAlpha = clamp(dot(normalize(viewing_vector), reflection), 0.0, 1.0);
 
     vec4 ambiance = vec4(0.05, 0.05, 0.05, 1.0);
 
