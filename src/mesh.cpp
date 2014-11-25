@@ -52,7 +52,7 @@ void Mesh::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, glm::mat4* model
 
     // Update the light position
     GLfloat* light_array = new GLfloat[3];
-    light_array[0] = 1.0f;
+    light_array[0] = 2.5f;
     light_array[1] = 2.5f * cos(glfwGetTime()) + 1.0f;
     light_array[2] = 2.0f * sin(glfwGetTime());
 
@@ -66,7 +66,9 @@ void Mesh::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, glm::mat4* model
     glUniformMatrix4fv(glGetUniformLocation(shader_program, "view"), 1, GL_FALSE, glm::value_ptr(*view_matrix));    
     glUniformMatrix4fv(glGetUniformLocation(shader_program, "proj"), 1, GL_FALSE, glm::value_ptr(*proj_matrix));
 
-    glUniform1i(glGetUniformLocation(shader_program, "tex"), this->texture_number);
+    glUniform1i(glGetUniformLocation(shader_program, "diffuse_texture"), this->diffuse_texture);
+    glUniform1i(glGetUniformLocation(shader_program, "emissive_texture"), this->emissive_texture);
+
     glDrawElements(GL_TRIANGLES, this->num_faces, GL_UNSIGNED_INT, 0);
 
 }
@@ -97,7 +99,7 @@ void Mesh::attachShader(GLuint shader_program){
                            8*sizeof(float), (void*)(6*sizeof(float)));
 }
 
-void Mesh::useTexture(const char* filename, GLuint texture_value, GLuint filter){
+void Mesh::useTexture(const char* filename, GLuint texture_value, GLuint filter, int type){
     // This is a bad way to do it, no idea why but it slows down
     // a ton when using two textures.
     
@@ -111,8 +113,8 @@ void Mesh::useTexture(const char* filename, GLuint texture_value, GLuint filter)
     glActiveTexture(texture_value);
     glBindTexture(GL_TEXTURE_2D, texture);
     // Load the image
-    image = SOIL_load_image(filename, &width, &height, 0, SOIL_LOAD_RGB);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB,
+    image = SOIL_load_image(filename, &width, &height, 0, SOIL_LOAD_RGBA);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
                  GL_UNSIGNED_BYTE, image);
     // Set the texture wrapping to repeat
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -127,5 +129,13 @@ void Mesh::useTexture(const char* filename, GLuint texture_value, GLuint filter)
     // No idea how to avoid this right now but the texture
     // numbers go like GL_TEXTURE0 = 33984, GL_TEXTURE1 = 33985, ...
     GLuint texture_number = texture_value - 33984;
-    this->texture_number = texture_number;
+    
+    switch(type){
+        case 0:
+            this->diffuse_texture = texture_number;
+            break;
+        case 1:
+            this->emissive_texture = texture_number;
+            break;
+    }
 }

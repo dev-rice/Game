@@ -138,6 +138,10 @@ GLFWwindow* initializeGLFWWindow(int width, int height, bool fullscreen){
     glFrontFace(GL_CW);
     glCullFace(GL_BACK);
 
+    // Alpha transparency
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_ONE,GL_ONE_MINUS_SRC_ALPHA);
+
     // Enable MSAA
     glEnable(GL_MULTISAMPLE);
 

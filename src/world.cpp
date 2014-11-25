@@ -15,7 +15,8 @@ World::World(float width, float height){
     // keep track of the texture number even when
     // loading a new model
     Mesh cube = Mesh("res/models/raygun.obj", 1.0f);
-    cube.useTexture("res/textures/raygun.png", GL_TEXTURE0, GL_LINEAR);
+    cube.useTexture("res/textures/raygun_noreflection_diff.png", GL_TEXTURE0, GL_NEAREST, 0);
+    cube.useTexture("res/textures/raygun_emissive.png", GL_TEXTURE1, GL_NEAREST, 1);
     cube.attachShader(shader_program);
 
     // Mesh ship = Mesh("res/models/gethtransport.obj", 1.0f);

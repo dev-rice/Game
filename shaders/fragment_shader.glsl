@@ -8,7 +8,8 @@ in vec3 viewing_vector;
 out vec4 outColor;
 
 uniform float time;
-uniform sampler2D tex;
+uniform sampler2D diffuse_texture;
+uniform sampler2D emissive_texture;
 
 void main() {
     vec3 light_color = vec3(0.9, 0.9, 1.0);
@@ -19,10 +20,10 @@ void main() {
     vec3 reflection = reflect(-normalize(light_vector), normalize(surface_normal));
     float cosAlpha = clamp(dot(normalize(viewing_vector), reflection), 0.0, 1.0);
 
-    vec4 ambiance = vec4(0.05, 0.05, 0.05, 1.0);
 
+    float ambient_component = 0.1;
     float diffuse_component = intensity * cosTheta;
-    float specular_component = 10 * pow(cosAlpha, 10);
+    float specular_component = 5 * pow(cosAlpha, 5);
 
-    outColor = vec4(light_color, 1.0) * texture(tex, Texcoord) * (diffuse_component + specular_component + ambiance);
+    outColor = (vec4(light_color * (ambient_component + diffuse_component + specular_component), 1.0) * texture(diffuse_texture, Texcoord));
 }

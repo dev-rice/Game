@@ -31,7 +31,7 @@ public:
     
     void draw(glm::mat4*, glm::mat4*, glm::mat4*);
     void attachShader(GLuint);
-    void useTexture(const char*, GLuint, GLuint);
+    void useTexture(const char*, GLuint, GLuint, int);
 
 private:
 
@@ -42,7 +42,8 @@ private:
     GLuint vao;
     GLuint shader_program;
 
-    GLuint texture_number;
+    GLuint diffuse_texture;
+    GLuint emissive_texture;
 };
 
 #endif
