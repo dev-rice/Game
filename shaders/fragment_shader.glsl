@@ -25,8 +25,8 @@ void main() {
 
     vec4 diffuse_component = intensity * cosTheta * vec4(light_color, 1.0) * texture(diffuse_texture, Texcoord);
 
-    float specularity = texture(specular_texture, Texcoord).w * 5;
-    vec4 specular_component = specularity * pow(cosAlpha, 10) * vec4(light_color, 1.0) * texture(diffuse_texture, Texcoord);
+    float specularity = texture(specular_texture, Texcoord).w;
+    vec4 specular_component = specularity * pow(cosAlpha, 10) * vec4(light_color, 1.0) * texture(specular_texture, Texcoord);
 
     outColor = diffuse_component + specular_component + ambient_component;
 }
