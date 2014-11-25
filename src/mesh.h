@@ -43,6 +43,7 @@ private:
     GLuint shader_program;
 
     GLuint diffuse_texture;
+    GLuint specular_texture;
     GLuint emissive_texture;
 };
 

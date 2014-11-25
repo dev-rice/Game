@@ -9,7 +9,7 @@ out vec4 outColor;
 
 uniform float time;
 uniform sampler2D diffuse_texture;
-uniform sampler2D emissive_texture;
+uniform sampler2D specular_texture;
 
 void main() {
     vec3 light_color = vec3(0.9, 0.9, 1.0);
@@ -21,9 +21,12 @@ void main() {
     float cosAlpha = clamp(dot(normalize(viewing_vector), reflection), 0.0, 1.0);
 
 
-    float ambient_component = 0.1;
-    float diffuse_component = intensity * cosTheta;
-    float specular_component = 5 * pow(cosAlpha, 5);
+    vec4 ambient_component = vec4(0.0, 0.0, 0.0, 1.0);
 
-    outColor = (vec4(light_color * (ambient_component + diffuse_component + specular_component), 1.0) * texture(diffuse_texture, Texcoord));
+    vec4 diffuse_component = intensity * cosTheta * vec4(light_color, 1.0) * texture(diffuse_texture, Texcoord);
+
+    float specularity = texture(specular_texture, Texcoord).w * 5;
+    vec4 specular_component = specularity * pow(cosAlpha, 10) * vec4(light_color, 1.0) * texture(diffuse_texture, Texcoord);
+
+    outColor = diffuse_component + specular_component + ambient_component;
 }

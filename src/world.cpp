@@ -15,8 +15,8 @@ World::World(float width, float height){
     // keep track of the texture number even when
     // loading a new model
     Mesh cube = Mesh("res/models/raygun.obj", 1.0f);
-    cube.useTexture("res/textures/raygun_noreflection_diff.png", GL_TEXTURE0, GL_NEAREST, 0);
-    cube.useTexture("res/textures/raygun_emissive.png", GL_TEXTURE1, GL_NEAREST, 1);
+    cube.useTexture("res/textures/raygun_diffuse.png", GL_TEXTURE0, GL_LINEAR, 0);
+    cube.useTexture("res/textures/raygun_specular.png", GL_TEXTURE1, GL_LINEAR, 1);
     cube.attachShader(shader_program);
 
     // Mesh ship = Mesh("res/models/gethtransport.obj", 1.0f);
@@ -26,9 +26,9 @@ World::World(float width, float height){
     meshes.push_back(cube);
 
     drawables.push_back(Drawable(&meshes[0], glm::vec3(0.0f, 0.0f, 0.0f)));
-    drawables.push_back(Drawable(&meshes[0], glm::vec3(0.0f, 5.0f, 0.0f)));
-    drawables.push_back(Drawable(&meshes[0], glm::vec3(5.0f, 0.0f, 0.0f)));
-    drawables.push_back(Drawable(&meshes[0], glm::vec3(5.0f, 5.0f, 0.0f)));
+    // drawables.push_back(Drawable(&meshes[0], glm::vec3(0.0f, 5.0f, 0.0f)));
+    // drawables.push_back(Drawable(&meshes[0], glm::vec3(5.0f, 0.0f, 0.0f)));
+    // drawables.push_back(Drawable(&meshes[0], glm::vec3(5.0f, 5.0f, 0.0f)));
 
 }
 

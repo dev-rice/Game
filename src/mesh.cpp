@@ -52,7 +52,7 @@ void Mesh::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, glm::mat4* model
 
     // Update the light position
     GLfloat* light_array = new GLfloat[3];
-    light_array[0] = 2.5f;
+    light_array[0] = 4.0f;
     light_array[1] = 2.5f * cos(glfwGetTime()) + 1.0f;
     light_array[2] = 2.0f * sin(glfwGetTime());
 
@@ -67,7 +67,7 @@ void Mesh::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, glm::mat4* model
     glUniformMatrix4fv(glGetUniformLocation(shader_program, "proj"), 1, GL_FALSE, glm::value_ptr(*proj_matrix));
 
     glUniform1i(glGetUniformLocation(shader_program, "diffuse_texture"), this->diffuse_texture);
-    glUniform1i(glGetUniformLocation(shader_program, "emissive_texture"), this->emissive_texture);
+    glUniform1i(glGetUniformLocation(shader_program, "specular_texture"), this->specular_texture);
 
     glDrawElements(GL_TRIANGLES, this->num_faces, GL_UNSIGNED_INT, 0);
 
@@ -135,6 +135,9 @@ void Mesh::useTexture(const char* filename, GLuint texture_value, GLuint filter,
             this->diffuse_texture = texture_number;
             break;
         case 1:
+            this->specular_texture = texture_number;
+            break;
+        case 2:
             this->emissive_texture = texture_number;
             break;
     }
