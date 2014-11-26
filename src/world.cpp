@@ -21,9 +21,18 @@ World::World(float width, float height){
     raygun.useTexture("res/textures/raygun_emissive.png", GL_LINEAR, EMISSIVE);
     raygun.attachShader(shader_program);
 
+    Mesh other_gun = Mesh("res/models/raygun.obj", 1.0f);
+    other_gun.useTexture("res/textures/checkerboard.png", GL_NEAREST, DIFFUSE);
+    other_gun.useTexture("res/textures/raygun_specular.png", GL_LINEAR, SPECULAR);
+    other_gun.useTexture("res/textures/raygun_normal.png", GL_LINEAR, NORMAL);
+    other_gun.useTexture("res/textures/raygun_emissive.png", GL_LINEAR, EMISSIVE);
+    other_gun.attachShader(shader_program);
+
     meshes.push_back(raygun);
+    meshes.push_back(other_gun);
 
     drawables.push_back(Drawable(&meshes[0], glm::vec3(0.0f, 0.0f, 0.0f)));
+    drawables.push_back(Drawable(&meshes[1], glm::vec3(5.0f, 0.0f, 0.0f)));
 
 }
 

@@ -51,6 +51,7 @@ private:
     GLuint specular_texture;
     GLuint normal_map;
     GLuint emissive_texture;
+
 };
 
 #endif

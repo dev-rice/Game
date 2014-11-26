@@ -31,7 +31,7 @@ void main() {
     vec4 diffuse_component = vec4(diffuse.rgb * intensity * cosTheta, diffuse.w);
 
     float specularity = specular.w;
-    vec4 specular_component = vec4(specular.rgb * specularity * pow(cosAlpha, 10), specular.w);
+    vec4 specular_component = vec4(specular.rgb * specularity * pow(cosAlpha,5), specular.w);
 
     vec4 emissive_component = vec4(emissive.rgb, 1.0);
 

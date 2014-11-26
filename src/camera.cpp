@@ -56,8 +56,6 @@ void Camera::rotateZ(int direction){
 glm::mat4 Camera::getViewMatrix(){
     glm::vec4 unit = glm::vec4(x, y, z - 1.0f, 1.0f);
     
-    
-
     glm::mat4 view_matrix = glm::lookAt(
         glm::vec3(x, y, z),
         glm::vec3(x - sin(y_rot), y, z - cos(y_rot)),

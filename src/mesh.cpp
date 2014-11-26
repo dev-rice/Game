@@ -66,10 +66,14 @@ void Mesh::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, glm::mat4* model
     glUniformMatrix4fv(glGetUniformLocation(shader_program, "view"), 1, GL_FALSE, glm::value_ptr(*view_matrix));    
     glUniformMatrix4fv(glGetUniformLocation(shader_program, "proj"), 1, GL_FALSE, glm::value_ptr(*proj_matrix));
 
-    glUniform1i(glGetUniformLocation(shader_program, "diffuse_texture"), this->diffuse_texture);
-    glUniform1i(glGetUniformLocation(shader_program, "specular_texture"), this->specular_texture);
-    glUniform1i(glGetUniformLocation(shader_program, "normal_map"), this->normal_map);
-    glUniform1i(glGetUniformLocation(shader_program, "emissive_texture"), this->emissive_texture);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, this->diffuse_texture);
+    glActiveTexture(GL_TEXTURE0 + 1);
+    glBindTexture(GL_TEXTURE_2D, this->specular_texture);
+    glActiveTexture(GL_TEXTURE0 + 2);
+    glBindTexture(GL_TEXTURE_2D, this->normal_map);
+    glActiveTexture(GL_TEXTURE0 + 3);
+    glBindTexture(GL_TEXTURE_2D, this->emissive_texture);
 
     glDrawElements(GL_TRIANGLES, this->num_faces, GL_UNSIGNED_INT, 0);
 
@@ -99,31 +103,37 @@ void Mesh::attachShader(GLuint shader_program){
     glEnableVertexAttribArray(texAttrib);
     glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE,
                            8*sizeof(float), (void*)(6*sizeof(float)));
+
+    glUniform1i(glGetUniformLocation(shader_program, "diffuse_texture"), 0);
+    glUniform1i(glGetUniformLocation(shader_program, "specular_texture"), 1);
+    glUniform1i(glGetUniformLocation(shader_program, "normal_map"), 2);
+    glUniform1i(glGetUniformLocation(shader_program, "emissive_texture"), 3);
 }
 
 void Mesh::useTexture(const char* filename, GLuint filter, GLuint type){
+        
+    GLuint texture;
+    glGenTextures(1, &texture);
+
     GLuint texture_value;
     switch(type){
         case DIFFUSE:
             texture_value = GL_TEXTURE0;
-            this->diffuse_texture = 0;
+            this->diffuse_texture = texture;
             break;
         case SPECULAR:
-            texture_value = GL_TEXTURE1;
-            this->specular_texture = 1;
+            texture_value = GL_TEXTURE0 + 1;
+            this->specular_texture = texture;
             break;
         case NORMAL:
-            texture_value = GL_TEXTURE2;
-            this->normal_map = 2;
+            texture_value = GL_TEXTURE0 + 2;
+            this->normal_map = texture;
             break;
         case EMISSIVE:
-            texture_value = GL_TEXTURE3;
-            this->emissive_texture = 3;
+            texture_value = GL_TEXTURE0 + 3;
+            this->emissive_texture = texture;
             break;
     }
-        
-    GLuint texture;
-    glGenTextures(1, &texture);
 
     // Load the texture
     int width, height;
