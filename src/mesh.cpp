@@ -53,8 +53,8 @@ void Mesh::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, glm::mat4* model
     // Update the light position
     GLfloat* light_array = new GLfloat[3];
     light_array[0] = 3.0f;
-    light_array[1] = 2.5f * cos(glfwGetTime()) + 1.0f;
-    light_array[2] = 2.0f * sin(glfwGetTime());
+    light_array[1] = 2.5f * cos(glfwGetTime()*0.5) + 1.0f;
+    light_array[2] = 2.0f * sin(glfwGetTime()*0.5);
 
     glUniform3fv(glGetUniformLocation(shader_program, "light_position"), 1, light_array);
 

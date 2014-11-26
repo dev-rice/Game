@@ -21,14 +21,16 @@ uniform vec3 light_position;
 void main() {
     Texcoord = texcoord;
 
-    // Order is important on the multiplication!
-    gl_Position = proj * view * model * vec4(position, 1.0);
+    vec3 scaled_position = position * scale;
 
-    vec4 light_vector_temp = (view * vec4(light_position, 1.0)) - (view * model * vec4(position, 1.0));
+    // Order is important on the multiplication!
+    gl_Position = proj * view * model * vec4(scaled_position, 1.0);
+
+    vec4 light_vector_temp = (view * vec4(light_position, 1.0)) - (view * model * vec4(scaled_position, 1.0));
     light_vector = vec3(light_vector_temp.xyz);
 
     vec4 surface_normal_temp = view * model * vec4(normal, 0.0);
     surface_normal = vec3(surface_normal_temp.xyz);
 
-    viewing_vector = vec3(0,0,0) - (view * model * vec4(position, 1.0)).xyz;
+    viewing_vector = vec3(0,0,0) - (view * model * vec4(scaled_position, 1.0)).xyz;
 }

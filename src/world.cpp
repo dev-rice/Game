@@ -24,7 +24,7 @@ World::World(float width, float height){
     other_gun.useTexture("res/textures/base_emissive.png", GL_LINEAR, EMISSIVE);
     other_gun.attachShader(shader_program);
 
-    Mesh polycube = Mesh("res/models/manypoly.obj", 1.0f);
+    Mesh polycube = Mesh("res/models/manypoly.obj", 0.5f);
     polycube.useTexture("res/textures/base_diffuse.png", GL_NEAREST, DIFFUSE);
     polycube.useTexture("res/textures/base_specular.png", GL_LINEAR, SPECULAR);
     polycube.useTexture("res/textures/base_normal.png", GL_LINEAR, NORMAL);

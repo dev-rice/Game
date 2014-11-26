@@ -14,6 +14,7 @@ uniform sampler2D normal_map;
 uniform sampler2D emissive_texture;
 
 void main() {
+    
     vec3 light_color = vec3(0.95, 0.95, 1.0);
     float cosTheta = dot(normalize(surface_normal), normalize(light_vector));
     cosTheta = clamp(cosTheta, 0.0, 1.0);
