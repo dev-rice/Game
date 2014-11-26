@@ -68,11 +68,11 @@ void Mesh::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, glm::mat4* model
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, this->diffuse_texture);
-    glActiveTexture(GL_TEXTURE0 + 1);
+    glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, this->specular_texture);
-    glActiveTexture(GL_TEXTURE0 + 2);
+    glActiveTexture(GL_TEXTURE2);
     glBindTexture(GL_TEXTURE_2D, this->normal_map);
-    glActiveTexture(GL_TEXTURE0 + 3);
+    glActiveTexture(GL_TEXTURE3);
     glBindTexture(GL_TEXTURE_2D, this->emissive_texture);
 
     glDrawElements(GL_TRIANGLES, this->num_faces, GL_UNSIGNED_INT, 0);
@@ -125,15 +125,15 @@ void Mesh::useTexture(const char* filename, GLuint filter, GLuint type){
             this->diffuse_texture = texture;
             break;
         case SPECULAR:
-            texture_value = GL_TEXTURE0 + 1;
+            texture_value = GL_TEXTURE1;
             this->specular_texture = texture;
             break;
         case NORMAL:
-            texture_value = GL_TEXTURE0 + 2;
+            texture_value = GL_TEXTURE2;
             this->normal_map = texture;
             break;
         case EMISSIVE:
-            texture_value = GL_TEXTURE0 + 3;
+            texture_value = GL_TEXTURE3;
             this->emissive_texture = texture;
             break;
     }
