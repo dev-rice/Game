@@ -11,9 +11,10 @@ uniform float time;
 uniform sampler2D diffuse_texture;
 uniform sampler2D specular_texture;
 uniform sampler2D normal_map;
+uniform sampler2D emissive_texture;
 
 void main() {
-    vec3 light_color = vec3(0.9, 0.9, 1.0);
+    vec3 light_color = vec3(0.95, 0.95, 1.0);
     float cosTheta = dot(normalize(surface_normal), normalize(light_vector));
     cosTheta = clamp(cosTheta, 0.0, 1.0);
     float intensity = 10 / (pow(light_vector.x, 2) + pow(light_vector.y, 2) + pow(light_vector.z, 2));
@@ -21,13 +22,19 @@ void main() {
     vec3 reflection = reflect(-normalize(light_vector), normalize(surface_normal));
     float cosAlpha = clamp(dot(normalize(viewing_vector), reflection), 0.0, 1.0);
 
+    vec4 diffuse = texture(diffuse_texture, Texcoord);
+    vec4 specular = texture(specular_texture, Texcoord);
+    vec4 emissive = texture(emissive_texture, Texcoord);
 
-    vec4 ambient_component = vec4(0.0, 0.0, 0.0, 1.0);
+    vec4 ambient_component = vec4(0.05, 0.05, 0.05, 0.0) * diffuse;
 
-    vec4 diffuse_component = intensity * cosTheta * vec4(light_color, 1.0) * texture(diffuse_texture, Texcoord);
+    vec4 diffuse_component = vec4(diffuse.rgb * intensity * cosTheta, diffuse.w);
 
-    float specularity = texture(specular_texture, Texcoord).w;
-    vec4 specular_component = specularity * pow(cosAlpha, 10) * vec4(light_color, 1.0) * texture(specular_texture, Texcoord);
+    float specularity = specular.w;
+    vec4 specular_component = vec4(specular.rgb * specularity * pow(cosAlpha, 10), specular.w);
 
-    outColor = diffuse_component + specular_component + ambient_component;
+    vec4 emissive_component = vec4(emissive.rgb, 1.0);
+
+    outColor = mix(diffuse_component + specular_component + ambient_component,
+                emissive_component, emissive.w);
 }

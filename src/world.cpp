@@ -18,6 +18,7 @@ World::World(float width, float height){
     raygun.useTexture("res/textures/raygun_diffuse.png", GL_LINEAR, DIFFUSE);
     raygun.useTexture("res/textures/raygun_specular.png", GL_LINEAR, SPECULAR);
     raygun.useTexture("res/textures/raygun_normal.png", GL_LINEAR, NORMAL);
+    raygun.useTexture("res/textures/raygun_emissive.png", GL_LINEAR, EMISSIVE);
     raygun.attachShader(shader_program);
 
     meshes.push_back(raygun);

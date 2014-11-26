@@ -69,6 +69,7 @@ void Mesh::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, glm::mat4* model
     glUniform1i(glGetUniformLocation(shader_program, "diffuse_texture"), this->diffuse_texture);
     glUniform1i(glGetUniformLocation(shader_program, "specular_texture"), this->specular_texture);
     glUniform1i(glGetUniformLocation(shader_program, "normal_map"), this->normal_map);
+    glUniform1i(glGetUniformLocation(shader_program, "emissive_texture"), this->emissive_texture);
 
     glDrawElements(GL_TRIANGLES, this->num_faces, GL_UNSIGNED_INT, 0);
 
