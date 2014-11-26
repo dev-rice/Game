@@ -112,6 +112,9 @@ void Mesh::attachShader(GLuint shader_program){
 
 void Mesh::useTexture(const char* filename, GLuint filter, GLuint type){
         
+    // Loading textures should probably be done at a higher level to prevent
+    // having the same texture in multiple spots in memory.
+
     GLuint texture;
     glGenTextures(1, &texture);
 

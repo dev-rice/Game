@@ -10,10 +10,6 @@ World::World(float width, float height){
     GLuint fragment_shader = ShaderLoader::loadFragmentShader("shaders/fragment_shader.glsl");
     GLuint shader_program = ShaderLoader::combineShaderProgram(vertex_shader, fragment_shader);
 
-    // Load models with textures. Textures should
-    // load independently but for now you have to
-    // keep track of the texture number even when
-    // loading a new model
     Mesh raygun = Mesh("res/models/raygun.obj", 1.0f);
     raygun.useTexture("res/textures/raygun_diffuse.png", GL_LINEAR, DIFFUSE);
     raygun.useTexture("res/textures/raygun_specular.png", GL_LINEAR, SPECULAR);
@@ -22,17 +18,26 @@ World::World(float width, float height){
     raygun.attachShader(shader_program);
 
     Mesh other_gun = Mesh("res/models/raygun.obj", 1.0f);
-    other_gun.useTexture("res/textures/checkerboard.png", GL_NEAREST, DIFFUSE);
-    other_gun.useTexture("res/textures/raygun_specular.png", GL_LINEAR, SPECULAR);
-    other_gun.useTexture("res/textures/raygun_normal.png", GL_LINEAR, NORMAL);
-    other_gun.useTexture("res/textures/raygun_emissive.png", GL_LINEAR, EMISSIVE);
+    other_gun.useTexture("res/textures/base_diffuse.png", GL_NEAREST, DIFFUSE);
+    other_gun.useTexture("res/textures/base_specular.png", GL_LINEAR, SPECULAR);
+    other_gun.useTexture("res/textures/base_normal.png", GL_LINEAR, NORMAL);
+    other_gun.useTexture("res/textures/base_emissive.png", GL_LINEAR, EMISSIVE);
     other_gun.attachShader(shader_program);
+
+    Mesh polycube = Mesh("res/models/manypoly.obj", 1.0f);
+    polycube.useTexture("res/textures/base_diffuse.png", GL_NEAREST, DIFFUSE);
+    polycube.useTexture("res/textures/base_specular.png", GL_LINEAR, SPECULAR);
+    polycube.useTexture("res/textures/base_normal.png", GL_LINEAR, NORMAL);
+    polycube.useTexture("res/textures/base_emissive.png", GL_LINEAR, EMISSIVE);
+    polycube.attachShader(shader_program);
 
     meshes.push_back(raygun);
     meshes.push_back(other_gun);
+    meshes.push_back(polycube);
 
     drawables.push_back(Drawable(&meshes[0], glm::vec3(0.0f, 0.0f, 0.0f)));
     drawables.push_back(Drawable(&meshes[1], glm::vec3(5.0f, 0.0f, 0.0f)));
+    drawables.push_back(Drawable(&meshes[2], glm::vec3(2.5f, 2.0f, 0.0f)));
 
 }
 
