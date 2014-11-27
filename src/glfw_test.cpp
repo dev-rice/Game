@@ -25,9 +25,17 @@ int main(int argc, char* argv[]) {
     float height;
     bool fullscreen;
     
+    glfwInit();
+
     if (argc == 2 && std::string(argv[1]) == "-f"){
-        width  = 1920;
-        height = 1080;
+        const GLFWvidmode * mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+
+        width  = mode->width;
+        height = mode->height;
+
+        mode = NULL;
+        delete mode;
+
         printf("Loading in fullscreen mode with resolution: %d by %d", (int)width, (int)height);
         fullscreen = true;
     } else if (argc == 4 && std::string(argv[1]) == "-w") {
@@ -90,7 +98,7 @@ int main(int argc, char* argv[]) {
 }
 
 GLFWwindow* initializeGLFWWindow(int width, int height, bool fullscreen){
-    glfwInit();
+    // glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
