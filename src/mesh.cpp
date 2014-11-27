@@ -118,22 +118,17 @@ void Mesh::useTexture(const char* filename, GLuint filter, GLuint type){
     GLuint texture;
     glGenTextures(1, &texture);
 
-    GLuint texture_value;
     switch(type){
         case DIFFUSE:
-            texture_value = GL_TEXTURE0;
             this->diffuse_texture = texture;
             break;
         case SPECULAR:
-            texture_value = GL_TEXTURE1;
             this->specular_texture = texture;
             break;
         case NORMAL:
-            texture_value = GL_TEXTURE2;
             this->normal_map = texture;
             break;
         case EMISSIVE:
-            texture_value = GL_TEXTURE3;
             this->emissive_texture = texture;
             break;
     }
@@ -141,8 +136,6 @@ void Mesh::useTexture(const char* filename, GLuint filter, GLuint type){
     // Load the texture
     int width, height;
     unsigned char* image;
-    // Set the active texture
-    glActiveTexture(texture_value);
     glBindTexture(GL_TEXTURE_2D, texture);
     // Load the image
     image = SOIL_load_image(filename, &width, &height, 0, SOIL_LOAD_RGBA);
