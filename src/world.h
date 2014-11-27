@@ -9,10 +9,10 @@
 
 class World{
 public:
-    World(float, float);
+    World(GLFWwindow*);
 
     void update();
-    void handleInputs(GLFWwindow*);
+    void handleInputs();
 
 private:
     Camera camera;
@@ -22,6 +22,8 @@ private:
 
     glm::mat4 view_matrix;
     glm::mat4 proj_matrix;
+
+    GLFWwindow* window;
 };
 
 #endif

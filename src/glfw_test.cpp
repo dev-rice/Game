@@ -11,8 +11,10 @@
 #include <stdio.h>
 #include <cstdlib>
 #include <random>
+#include <iostream>
 
 #include "world.h"
+#include "texture_container.h"
 
 GLFWwindow* initializeGLFWWindow(int, int, bool);
 
@@ -36,12 +38,12 @@ int main(int argc, char* argv[]) {
         mode = NULL;
         delete mode;
 
-        printf("Loading in fullscreen mode with resolution: %d by %d", (int)width, (int)height);
+        printf("Loading in fullscreen mode with resolution: %d by %d\n", (int)width, (int)height);
         fullscreen = true;
     } else if (argc == 4 && std::string(argv[1]) == "-w") {
         sscanf(argv[2], "%f", &width);
         sscanf(argv[3], "%f", &height);
-        printf("Loading in windowed mode with resolution: %d by %d", (int)width, (int)height);
+        printf("Loading in windowed mode with resolution: %d by %d\n", (int)width, (int)height);
         fullscreen = false;
     } else {
         printf("\nCommand line options:\n");
@@ -56,7 +58,7 @@ int main(int argc, char* argv[]) {
     GLFWwindow* window = initializeGLFWWindow(width, height, fullscreen);
 
     // Create the world
-    World world(width, height);
+    World world(window);
 
     float last_time = glfwGetTime();
 
@@ -82,7 +84,7 @@ int main(int argc, char* argv[]) {
         // printf("Time since last frame draw: %f seconds\n", delta_t);
         // printf("Framerate: %f fps\n", 1 / delta_t);
 
-        world.handleInputs(window);
+        world.handleInputs();
         world.update();
 
         last_time = glfwGetTime();

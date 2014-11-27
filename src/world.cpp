@@ -1,10 +1,15 @@
 #include "world.h"
 
-World::World(float width, float height){
+World::World(GLFWwindow* window){
+    this->window = window;
+
+    int width, height;
+    glfwGetFramebufferSize(window, &width, &height);
+
     camera = Camera(0.0f, 0.0f, 10.0f);
     
-    view_matrix = glm::mat4();
-    proj_matrix = glm::perspective(45.0f, width / height, 0.1f, 100.0f);
+    view_matrix = camera.getViewMatrix();
+    proj_matrix = glm::perspective(45.0f, (float)width / (float)height, 0.1f, 100.0f);
 
     GLuint vertex_shader = ShaderLoader::loadVertexShader("shaders/vertex_shader.glsl");
     GLuint fragment_shader = ShaderLoader::loadFragmentShader("shaders/fragment_shader.glsl");
@@ -56,7 +61,7 @@ void World::update(){
     }
 }
 
-void World::handleInputs(GLFWwindow* window){
+void World::handleInputs(){
     glfwPollEvents();
     
     // Camera controls
