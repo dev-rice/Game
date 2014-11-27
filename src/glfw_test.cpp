@@ -14,7 +14,6 @@
 #include <iostream>
 
 #include "world.h"
-#include "texture_container.h"
 
 GLFWwindow* initializeGLFWWindow(int, int, bool);
 
