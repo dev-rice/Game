@@ -66,33 +66,33 @@ void World::handleInputs(){
     
     // Camera controls
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS){
-        camera.moveZ(-1);
+        camera.moveZ(-0.1);
     }
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS){
-        camera.moveZ(1);
+        camera.moveZ(0.1);
     }
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS){
-        camera.moveX(1);
+        camera.moveX(0.1);
     }
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS){
-        camera.moveX(-1);
+        camera.moveX(-0.1);
     }
     if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS){
-        camera.moveY(-1);
+        camera.moveY(-0.1);
     }
     if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS){
-        camera.moveY(1);
+        camera.moveY(0.1);
     }
     if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS){
-        camera.rotateY(1);
+        camera.rotateLocalY(1);
     }
     if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS){
-        camera.rotateY(-1);
+        camera.rotateLocalY(-1);
     }
     if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS){
-        camera.rotateX(1);
+        camera.rotateLocalX(1);
     }
     if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS){
-        camera.rotateX(-1);
+        camera.rotateLocalX(-1);
     }
 }
