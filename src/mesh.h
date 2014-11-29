@@ -37,7 +37,6 @@ public:
     void draw(glm::mat4*, glm::mat4*, glm::mat4*);
     void attachShader(GLuint);
     void attachTexture(GLuint, GLuint);
-    void useTexture(const char*, GLuint, GLuint);
 
 private:
 
