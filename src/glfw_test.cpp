@@ -56,8 +56,18 @@ int main(int argc, char* argv[]) {
     // Create the window
     GLFWwindow* window = initializeGLFWWindow(width, height, fullscreen);
 
+    TextureContainer textures;
+    textures.addTexture("res/textures/raygun_diffuse.png", GL_LINEAR);
+    textures.addTexture("res/textures/base_diffuse.png", GL_NEAREST);
+    textures.addTexture("res/textures/raygun_specular.png", GL_LINEAR);
+    textures.addTexture("res/textures/base_specular.png", GL_NEAREST);
+    textures.addTexture("res/textures/raygun_normal.png", GL_LINEAR);
+    textures.addTexture("res/textures/base_normal.png", GL_NEAREST);
+    textures.addTexture("res/textures/raygun_emissive.png", GL_LINEAR);
+    textures.addTexture("res/textures/base_emissive.png", GL_NEAREST);
+
     // Create the world
-    World world(window);
+    World world(window, &textures);
 
     float last_time = glfwGetTime();
 
@@ -143,9 +153,9 @@ GLFWwindow* initializeGLFWWindow(int width, int height, bool fullscreen){
     // Set up the correct depth rendering 
     glEnable(GL_DEPTH_TEST);
     
-    // Set up back-face culling maybe?
-    glFrontFace(GL_CW);
-    glCullFace(GL_BACK);
+    // Describe what constitutes the front face, and enable backface culling
+    glFrontFace(GL_CCW);
+    glEnable(GL_CULL_FACE);
 
     // Alpha transparency
     glEnable(GL_BLEND);

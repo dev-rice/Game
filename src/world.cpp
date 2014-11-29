@@ -1,7 +1,8 @@
 #include "world.h"
 
-World::World(GLFWwindow* window){
+World::World(GLFWwindow* window, TextureContainer* textures){
     this->window = window;
+    this->textures = textures;
 
     int width, height;
     glfwGetFramebufferSize(window, &width, &height);
@@ -16,24 +17,24 @@ World::World(GLFWwindow* window){
     GLuint shader_program = ShaderLoader::combineShaderProgram(vertex_shader, fragment_shader);
 
     Mesh raygun = Mesh("res/models/raygun.obj", 1.0f);
-    raygun.useTexture("res/textures/raygun_diffuse.png", GL_LINEAR, DIFFUSE);
-    raygun.useTexture("res/textures/raygun_specular.png", GL_LINEAR, SPECULAR);
-    raygun.useTexture("res/textures/raygun_normal.png", GL_LINEAR, NORMAL);
-    raygun.useTexture("res/textures/raygun_emissive.png", GL_LINEAR, EMISSIVE);
+    raygun.attachTexture(textures->getTexture("raygun_diffuse.png"), DIFFUSE);
+    raygun.attachTexture(textures->getTexture("raygun_specular.png"), SPECULAR);
+    raygun.attachTexture(textures->getTexture("raygun_normal.png"), NORMAL);
+    raygun.attachTexture(textures->getTexture("raygun_emissive.png"), EMISSIVE);
     raygun.attachShader(shader_program);
 
     Mesh other_gun = Mesh("res/models/raygun.obj", 1.0f);
-    other_gun.useTexture("res/textures/base_diffuse.png", GL_NEAREST, DIFFUSE);
-    other_gun.useTexture("res/textures/base_specular.png", GL_LINEAR, SPECULAR);
-    other_gun.useTexture("res/textures/base_normal.png", GL_LINEAR, NORMAL);
-    other_gun.useTexture("res/textures/base_emissive.png", GL_LINEAR, EMISSIVE);
+    other_gun.attachTexture(textures->getTexture("base_diffuse.png"), DIFFUSE);
+    other_gun.attachTexture(textures->getTexture("base_specular.png"), SPECULAR);
+    other_gun.attachTexture(textures->getTexture("base_normal.png"), NORMAL);
+    other_gun.attachTexture(textures->getTexture("base_emissive.png"), EMISSIVE);
     other_gun.attachShader(shader_program);
 
-    Mesh polycube = Mesh("res/models/manypoly.obj", 0.5f);
-    polycube.useTexture("res/textures/base_diffuse.png", GL_NEAREST, DIFFUSE);
-    polycube.useTexture("res/textures/base_specular.png", GL_LINEAR, SPECULAR);
-    polycube.useTexture("res/textures/base_normal.png", GL_LINEAR, NORMAL);
-    polycube.useTexture("res/textures/base_emissive.png", GL_LINEAR, EMISSIVE);
+    Mesh polycube = Mesh("res/models/manypoly.obj", 1.0f);
+    polycube.attachTexture(textures->getTexture("base_diffuse.png"), DIFFUSE);
+    polycube.attachTexture(textures->getTexture("base_specular.png"), SPECULAR);
+    polycube.attachTexture(textures->getTexture("base_normal.png"), NORMAL);
+    polycube.attachTexture(textures->getTexture("base_emissive.png"), EMISSIVE);
     polycube.attachShader(shader_program);
 
     meshes.push_back(raygun);

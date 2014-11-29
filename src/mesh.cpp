@@ -110,6 +110,23 @@ void Mesh::attachShader(GLuint shader_program){
     glUniform1i(glGetUniformLocation(shader_program, "emissive_texture"), 3);
 }
 
+void Mesh::attachTexture(GLuint texture, GLuint type){
+    switch(type){
+        case DIFFUSE:
+            this->diffuse_texture = texture;
+            break;
+        case SPECULAR:
+            this->specular_texture = texture;
+            break;
+        case NORMAL:
+            this->normal_map = texture;
+            break;
+        case EMISSIVE:
+            this->emissive_texture = texture;
+            break;
+    }
+}
+
 void Mesh::useTexture(const char* filename, GLuint filter, GLuint type){
         
     // Loading textures should probably be done at a higher level to prevent

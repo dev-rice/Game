@@ -6,10 +6,11 @@
 #include "mesh.h"
 #include "drawable.h"
 #include "camera.h"
+#include "texture_container.h"
 
 class World{
 public:
-    World(GLFWwindow*);
+    World(GLFWwindow*, TextureContainer*);
 
     void update();
     void handleInputs();
@@ -24,6 +25,7 @@ private:
     glm::mat4 proj_matrix;
 
     GLFWwindow* window;
+    TextureContainer* textures;
 };
 
 #endif

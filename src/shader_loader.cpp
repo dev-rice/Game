@@ -43,9 +43,6 @@ GLuint ShaderLoader::loadFragmentShader(const char* filename){
 
 
 GLuint ShaderLoader::combineShaderProgram(GLuint vertex_shader, GLuint fragment_shader){
-    // Describe what constitutes the front face, and enable backface culling
-    glFrontFace(GL_CCW);
-    glEnable(GL_CULL_FACE);
 
     // Combine the shaders into a single program
     GLuint shaderProgram = glCreateProgram();
