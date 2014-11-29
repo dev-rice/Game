@@ -30,20 +30,11 @@ World::World(GLFWwindow* window, TextureContainer* textures){
     other_gun.attachTexture(textures->getTexture("base_emissive.png"), EMISSIVE);
     other_gun.attachShader(shader_program);
 
-    Mesh polycube = Mesh("res/models/manypoly.obj", 1.0f);
-    polycube.attachTexture(textures->getTexture("base_diffuse.png"), DIFFUSE);
-    polycube.attachTexture(textures->getTexture("base_specular.png"), SPECULAR);
-    polycube.attachTexture(textures->getTexture("base_normal.png"), NORMAL);
-    polycube.attachTexture(textures->getTexture("base_emissive.png"), EMISSIVE);
-    polycube.attachShader(shader_program);
-
     meshes.push_back(raygun);
     meshes.push_back(other_gun);
-    meshes.push_back(polycube);
 
     drawables.push_back(Drawable(&meshes[0], glm::vec3(0.0f, 0.0f, 0.0f)));
     drawables.push_back(Drawable(&meshes[1], glm::vec3(5.0f, 0.0f, 0.0f)));
-    drawables.push_back(Drawable(&meshes[2], glm::vec3(2.5f, 2.0f, 0.0f)));
 
 }
 
