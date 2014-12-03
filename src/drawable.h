@@ -20,9 +20,12 @@ class Drawable {
 public:
     Drawable(Mesh*);
     Drawable(Mesh*, glm::vec3);
+    Drawable(Mesh*, glm::vec3, glm::vec3);
 
     void draw(glm::mat4*, glm::mat4*);
     void moveTo(glm::vec3);
+    void setRotation(glm::vec3);
+
     glm::vec3 getPosition();
 
 private:

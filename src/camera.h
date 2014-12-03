@@ -9,13 +9,13 @@
 #include <stdio.h>
 
 const float MOVE_SENSITIVITY = 0.1;
-const float ROTATE_SENSITIVITY = 0.025;
+const float ROTATE_SENSITIVITY = 0.0025;
 
 class Camera {
 public:
     Camera();
-    Camera(float, float, float);
-    Camera(float, float, float, float, float);
+    Camera(glm::vec3);
+    Camera(glm::vec3, float, float);
 
     void moveX(int);
     void moveY(int);
@@ -31,12 +31,16 @@ public:
     glm::mat4 getViewMatrix();
 
 private:
-    float x, y, z;
-    float x_rot, y_rot, z_rot;
+    glm::vec3 position;
+    glm::vec3 rotation;
+
+    glm::vec3 local_x;
+    glm::vec3 local_y;
+    glm::vec3 local_z;
 
     float move_sensitivity;
     float rotate_sensitivity;
-    
+
 };
 
 

@@ -7,7 +7,7 @@ World::World(GLFWwindow* window, TextureContainer* textures){
     int width, height;
     glfwGetFramebufferSize(window, &width, &height);
 
-    camera = Camera(0.0f, 0.0f, 10.0f);
+    camera = Camera(glm::vec3(0.0f, 0.0f, 10.0f));
     
     view_matrix = camera.getViewMatrix();
     proj_matrix = glm::perspective(45.0f, (float)width / (float)height, 0.1f, 100.0f);
@@ -23,9 +23,9 @@ World::World(GLFWwindow* window, TextureContainer* textures){
     raygun.attachTexture(textures->getTexture("raygun_emissive.png"), EMISSIVE);
     raygun.attachShader(shader_program);
 
-    Mesh other_gun = Mesh("res/models/raygun.obj", 1.0f);
-    other_gun.attachTexture(textures->getTexture("base_diffuse.png"), DIFFUSE);
-    other_gun.attachTexture(textures->getTexture("base_specular.png"), SPECULAR);
+    Mesh other_gun = Mesh("res/models/manypoly.obj", 1.0f);
+    other_gun.attachTexture(textures->getTexture("blue_diffuse.png"), DIFFUSE);
+    other_gun.attachTexture(textures->getTexture("all_specular.png"), SPECULAR);
     other_gun.attachTexture(textures->getTexture("base_normal.png"), NORMAL);
     other_gun.attachTexture(textures->getTexture("base_emissive.png"), EMISSIVE);
     other_gun.attachShader(shader_program);
@@ -33,7 +33,7 @@ World::World(GLFWwindow* window, TextureContainer* textures){
     meshes.push_back(raygun);
     meshes.push_back(other_gun);
 
-    drawables.push_back(Drawable(&meshes[0], glm::vec3(0.0f, 0.0f, 0.0f)));
+    drawables.push_back(Drawable(&meshes[0], glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(3.141592 / 10, 3.141592 / 2, 3.141592 / 8)));
     drawables.push_back(Drawable(&meshes[1], glm::vec3(5.0f, 0.0f, 0.0f)));
 
 }
@@ -57,6 +57,7 @@ void World::handleInputs(){
     glfwPollEvents();
     
     // Camera controls
+    // Movement
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS){
         camera.moveZ(-1);
     }
@@ -75,6 +76,8 @@ void World::handleInputs(){
     if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS){
         camera.moveY(1);
     }
+
+    // Rotation
     if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS){
         camera.rotateY(1);
     }
@@ -86,5 +89,11 @@ void World::handleInputs(){
     }
     if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS){
         camera.rotateX(-1);
+    }
+    if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS){
+        camera.rotateZ(1);
+    }
+    if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS){
+        camera.rotateZ(-1);
     }
 }

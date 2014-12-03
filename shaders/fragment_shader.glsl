@@ -27,14 +27,20 @@ void main() {
     vec4 specular = texture(specular_texture, Texcoord);
     vec4 emissive = texture(emissive_texture, Texcoord);
 
-    vec4 ambient_component = vec4(0.05, 0.05, 0.05, 0.0) * diffuse;
+    vec4 ambient_component = vec4(0.05, 0.05, 0.05, 1.0) * diffuse;
 
     vec4 diffuse_component = vec4(diffuse.rgb * intensity * cosTheta, diffuse.w);
 
     float specularity = specular.w;
-    vec4 specular_component = vec4(specular.rgb * specularity * pow(cosAlpha,5), specular.w);
+    vec4 specular_component = vec4(specular.rgb * specularity * pow(cosAlpha,15), specular.w);
 
     vec4 emissive_component = vec4(emissive.rgb, 1.0);
+
+    // ambient_component  = vec4(0.0, 0.0, 0.0, 0.0);
+    // diffuse_component  = vec4(0.0, 0.0, 0.0, 0.0);
+    // specular_component = vec4(0.0, 0.0, 0.0, 0.0);
+    // emissive_component = vec4(0.0, 0.0, 0.0, 1.0);
+
 
     outColor = mix(diffuse_component + specular_component + ambient_component,
                 emissive_component, emissive.w);

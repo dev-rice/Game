@@ -1,69 +1,92 @@
 #include "camera.h"
 
 Camera::Camera(){
-    this->x = 0.0f;
-    this->y = 0.0f;
-    this->z = 0.0f;
+    this->position = glm::vec3(0.0f, 0.0f, 0.0f);
+
+    local_x = glm::vec3(1.0f, 0.0f, 0.0f);
+    local_y = glm::vec3(0.0f, 1.0f, 0.0f);
+    local_z = glm::vec3(0.0f, 0.0f, 1.0f);
 
     this->move_sensitivity = MOVE_SENSITIVITY;
     this->rotate_sensitivity = ROTATE_SENSITIVITY;
 }
 
-Camera::Camera(float x, float y, float z){
-    this->x = x;
-    this->y = y;
-    this->z = z;
+Camera::Camera(glm::vec3 position){
+    this->position = position;
+
+    local_x = glm::vec3(1.0f, 0.0f, 0.0f);
+    local_y = glm::vec3(0.0f, 1.0f, 0.0f);
+    local_z = glm::vec3(0.0f, 0.0f, 1.0f);
 
     this->move_sensitivity = MOVE_SENSITIVITY;
     this->rotate_sensitivity = ROTATE_SENSITIVITY;
 }
 
-Camera::Camera(float x, float y, float z, float move_sensitivity, float rotate_sensitivity){
-    this->x = x;
-    this->y = y;
-    this->z = z;
+Camera::Camera(glm::vec3 position, float move_sensitivity, float rotate_sensitivity){
+    this->position = position;
+
+    local_x = glm::vec3(1.0f, 0.0f, 0.0f);
+    local_y = glm::vec3(0.0f, 1.0f, 0.0f);
+    local_z = glm::vec3(0.0f, 0.0f, 1.0f);
 
     this->move_sensitivity = move_sensitivity;
     this->rotate_sensitivity = rotate_sensitivity;
 }
 
 void Camera::moveX(int direction){
-    x += move_sensitivity * direction * cos(y_rot);
-    z -= move_sensitivity * direction * sin(y_rot);
+    position += move_sensitivity * direction * local_x;
 }
 
 void Camera::moveY(int direction){
-    y += move_sensitivity * direction;
+    position += move_sensitivity * direction * local_y;
 }
 
 void Camera::moveZ(int direction){
-    x += move_sensitivity * direction * sin(y_rot);
-    z += move_sensitivity * direction * cos(y_rot);
+    position += move_sensitivity * direction * local_z;
 }
 
 void Camera::rotateX(int direction){
-    x_rot += rotate_sensitivity * direction;
+    rotation.x += rotate_sensitivity * direction;
 }
 
 void Camera::rotateY(int direction){
-    y_rot += rotate_sensitivity * direction;
+    rotation.y += rotate_sensitivity * direction;
 }
 
 void Camera::rotateZ(int direction){
-    z_rot += rotate_sensitivity * direction;
+    rotation.z += rotate_sensitivity * direction;
 }
 
 glm::mat4 Camera::getViewMatrix(){
-    glm::vec4 unit = glm::vec4(x, y, z - 1.0f, 1.0f);
-    
     // Original vectors
     // eye      <x, y, z>
     // center   <x, y, z> - <0, 0, 1>
     // up       <0, 1, 0>
+    glm::vec3 eye    = position;
+    glm::vec3 center = position - glm::vec3(0.0f, 0.0f, 1.0f);
+    glm::vec3 up     = local_y;
 
-    glm::vec3 eye    = glm::vec3(x, y, z);
-    glm::vec3 center = glm::vec3(x, y, z) - glm::vec3(sin(y_rot), 0, cos(y_rot)); 
-    glm::vec3 up     = glm::vec3(0, 1, 0);
+    // X rotation matrix 
+    glm::mat3 x_rotation_matrix = glm::mat3( 1.0f, 0.0f      , 0.0f,
+                                             0.0f, cos(rotation.x), -sin(rotation.x),
+                                             0.0f, sin(rotation.x), cos(rotation.x));
+
+    // Y rotation matrix
+    glm::mat3 y_rotation_matrix = glm::mat3( cos(rotation.y), 0.0f, sin(rotation.y),
+                                             0.0f      , 1.0f, 0.0f,
+                                            -sin(rotation.y), 0.0f, cos(rotation.y));
+
+
+    glm::mat3 rotation_matrix = y_rotation_matrix;
+
+    // Transform the center vector
+    center = rotation_matrix * center;
+    local_x = rotation_matrix * glm::vec3(1.0f, 0.0f, 0.0f);
+    local_y = rotation_matrix * glm::vec3(0.0f, 1.0f, 0.0f);
+    local_z = rotation_matrix * glm::vec3(0.0f, 0.0f, 1.0f);
+
+   
+    print();
 
     glm::mat4 view_matrix = glm::lookAt(eye, center, up);
 
@@ -71,11 +94,14 @@ glm::mat4 Camera::getViewMatrix(){
 }
 
 glm::vec3 Camera::getPosition(){
-    return glm::vec3(x, y, z);
+    return position;
 }
 
 void Camera::print(){
     printf("Camera\n");
-    printf("    position = [%f, %f, %f]\n", x, y, z);
-    printf("    rotation = [%f, %f, %f]\n", 180 * x_rot / M_PI, 180 * y_rot / M_PI, 180 * z_rot / M_PI);
+    printf("    position = <%f, %f, %f>\n", position.x, position.y, position.z);
+    printf("    rotation = <%f, %f, %f>\n\n", 180 * rotation.x / M_PI, 180 * rotation.y / M_PI, 180 * rotation.z / M_PI);
+    printf("    local_x  = <%f, %f, %f>\n", local_x.x, local_x.y, local_x.z);
+    printf("    local_y  = <%f, %f, %f>\n", local_y.x, local_y.y, local_y.z);
+    printf("    local_z  = <%f, %f, %f>\n", local_z.x, local_z.y, local_z.z);
 }

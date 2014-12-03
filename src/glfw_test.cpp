@@ -66,6 +66,10 @@ int main(int argc, char* argv[]) {
     textures.addTexture("res/textures/raygun_emissive.png", GL_LINEAR);
     textures.addTexture("res/textures/base_emissive.png", GL_NEAREST);
 
+    textures.addTexture("res/textures/blue_diffuse.png", GL_NEAREST);
+    textures.addTexture("res/textures/all_specular.png", GL_NEAREST);
+
+
     // Create the world
     World world(window, &textures);
 
@@ -89,9 +93,9 @@ int main(int argc, char* argv[]) {
 
         float delta_t = glfwGetTime() - last_time;
         
-        // system("clear");
-        // printf("Time since last frame draw: %f seconds\n", delta_t);
-        // printf("Framerate: %f fps\n", 1 / delta_t);
+        system("clear");
+        printf("Time since last frame draw: %f seconds\n", delta_t);
+        printf("Framerate: %f fps\n", 1 / delta_t);
 
         world.handleInputs();
         world.update();
