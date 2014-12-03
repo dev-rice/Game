@@ -82,7 +82,7 @@ glm::mat4 Camera::getViewMatrix(){
                                              sin(rotation.z),  cos(rotation.z), 0.0f,
                                              0.0f           , 0.0f            , 1.0f);
 
-    glm::mat3 rotation_matrix = z_rotation_matrix * y_rotation_matrix * x_rotation_matrix;
+    glm::mat3 rotation_matrix = y_rotation_matrix * x_rotation_matrix;
 
     // Transform the center vector
     center = position - (rotation_matrix * glm::vec3(0.0f, 0.0f, 1.0f));
