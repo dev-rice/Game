@@ -23,7 +23,7 @@ World::World(GLFWwindow* window, TextureContainer* textures){
     raygun.attachTexture(textures->getTexture("raygun_emissive.png"), EMISSIVE);
     raygun.attachShader(shader_program);
 
-    Mesh other_gun = Mesh("res/models/spheretest.obj", 1.0f);
+    Mesh other_gun = Mesh("res/models/sphere.obj", 1.0f);
     other_gun.attachTexture(textures->getTexture("blue_diffuse.png"), DIFFUSE);
     other_gun.attachTexture(textures->getTexture("all_specular.png"), SPECULAR);
     other_gun.attachTexture(textures->getTexture("base_normal.png"), NORMAL);
@@ -35,7 +35,7 @@ World::World(GLFWwindow* window, TextureContainer* textures){
 
     drawables.push_back(Drawable(&meshes[0], glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(3.141592 / 10, 3.141592 / 2, 3.141592 / 8)));
     for(int i = 0; i < 10; ++i){
-        glm::vec3 position = glm::vec3(rand() % 10, rand() % 10, rand() % 10);
+        glm::vec3 position = glm::vec3(rand() % 10, rand() % 10, rand() % 10) - glm::vec3(5.0f, 5.0f, 5.0f);
         glm::vec3 rotation = glm::vec3(0.0f, 0.0f, M_PI/2.0f);
         drawables.push_back(Drawable(&meshes[1], position, rotation));
     }
