@@ -86,11 +86,13 @@ glm::mat4 Camera::getViewMatrix(){
 
     // Transform the center vector
     center = position - (rotation_matrix * glm::vec3(0.0f, 0.0f, 1.0f));
+    
+    // Transform the camera axes
     local_x = rotation_matrix * glm::vec3(1.0f, 0.0f, 0.0f);
     local_y = rotation_matrix * glm::vec3(0.0f, 1.0f, 0.0f);
     local_z = rotation_matrix * glm::vec3(0.0f, 0.0f, 1.0f);
 
-   
+    // Debug
     print();
 
     glm::mat4 view_matrix = glm::lookAt(eye, center, up);
