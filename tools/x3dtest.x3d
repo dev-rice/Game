@@ -15,7 +15,7 @@
 		            groundColor="0.051 0.051 0.051"
 		            skyColor="0.051 0.051 0.051"
 		            />
-		<Transform DEF="Cube_001_TRANSFORM"
+		<Transform DEF="raygun_TRANSFORM"
 		           translation="14.201922 12.452227 -3.373228"
 		           scale="1.000000 1.000000 1.000000"
 		           rotation="-0.345239 0.238862 0.907610 2.773566"
