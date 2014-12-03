@@ -9,7 +9,7 @@
 #include <stdio.h>
 
 const float MOVE_SENSITIVITY = 0.1;
-const float ROTATE_SENSITIVITY = 0.0025;
+const float ROTATE_SENSITIVITY = 0.025;
 
 class Camera {
 public:

@@ -72,20 +72,27 @@ glm::mat4 Camera::getViewMatrix(){
                                              0.0f, sin(rotation.x), cos(rotation.x));
 
     // Y rotation matrix
-    glm::mat3 y_rotation_matrix = glm::mat3( cos(rotation.y), 0.0f, sin(rotation.y),
-                                             0.0f      , 1.0f, 0.0f,
-                                            -sin(rotation.y), 0.0f, cos(rotation.y));
+    glm::mat3 y_rotation_matrix = glm::mat3( cos(rotation.y) , 0.0f, sin(rotation.y),
+                                             0.0f            , 1.0f, 0.0f,
+                                             -sin(rotation.y), 0.0f, cos(rotation.y));
+    y_rotation_matrix = glm::inverse(y_rotation_matrix);
 
+    // Z rotation matrix
+    glm::mat3 z_rotation_matrix = glm::mat3( cos(rotation.z), -sin(rotation.z), 0.0f,
+                                             sin(rotation.z),  cos(rotation.z), 0.0f,
+                                             0.0f           , 0.0f            , 1.0f);
 
-    glm::mat3 rotation_matrix = y_rotation_matrix;
+    glm::mat3 rotation_matrix = y_rotation_matrix * x_rotation_matrix;
 
     // Transform the center vector
-    center = rotation_matrix * center;
+    center = position - (rotation_matrix * glm::vec3(0.0f, 0.0f, 1.0f));
+    
+    // Transform the camera axes
     local_x = rotation_matrix * glm::vec3(1.0f, 0.0f, 0.0f);
     local_y = rotation_matrix * glm::vec3(0.0f, 1.0f, 0.0f);
     local_z = rotation_matrix * glm::vec3(0.0f, 0.0f, 1.0f);
 
-   
+    // Debug
     print();
 
     glm::mat4 view_matrix = glm::lookAt(eye, center, up);

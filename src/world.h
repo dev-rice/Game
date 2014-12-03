@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <random>
+#include <math.h>
 
 #include "mesh.h"
 #include "drawable.h"
