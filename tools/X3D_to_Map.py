@@ -2,15 +2,47 @@
 # uses python3
 # Trevor Westphal
 # converts *.x3d scenes to the custom *.map files
+#
+# Map file Specifiation
+# 
+# First, the list of unique objects in the scene
+# These start with the "m" tag, for mesh
+# These are found assuming they are .obj files
+# For example:
+# m Cube.obj
+#
+# Secondly, the list of unique textures in the scene
+# These start with the "t" tag, for texture
+# These are found assuming the following format
+# - If it is a diffuse map, (object name)_diff.png
+# - If it is a speculat map, (object name)_spec.png
+# - If it is a normal map, (object name)_norm.png
+# - If it is an emissive map, (object name)_emit.png
+# We will not look for jpg/jpeg. Those are stupid and should be hated.
+# For example:
+# t Cube_diff.png
+#
+# Next, the application of certain textures to certain models, and location
+# This is a longer, more complex field, denoted with the "d" tag, for drawable
+# The first entry is the name of the object, with an appended *.obj if a corresponding file has been found
+# The next entries are texture entries. These are the textures that will be applied to the model
+# They are ALWAYS in the order
+# DIFF SPEC NORM EMIT
+# the argument "nt" denotes "No Texture".
+# The next three entries after the textures are the x, y, and z position
+# Then the scale
+# Then the x, y, and z rotation
+# For example:
+# d Cube.obj Cube_diff.png Cube_spec.png nt nt 0.0 0.0 0.0 1.0 0.0 0.0 0.0
+#
+# And that's the file spec
 
 import sys
 import os
-from math import atan2
-from math import acos
-from math import sqrt
+from math import *
 
 class ObjectReference:
-	def __init__(self, name, x, y, z, scale, q1, q2, q3, q4):
+	def __init__(self, name, x, y, z, scale, x_rot, y_rot, z_rot, angle):
 		self.x3dName = name
 
 		self.matchedName = ""
@@ -25,11 +57,10 @@ class ObjectReference:
 
 		self.scale = scale
 
-		versor = sqrt( (q1*q1)+(q2*q2)+(q3*q3)+(q4*q4) )
-		self.qw_rot = (q1/versor)
-		self.qx_rot = (q2/versor)
-		self.qy_rot = (q3/versor)
-		self.qz_rot = (q4/versor)
+		self.x_rot = x_rot
+		self.y_rot = y_rot
+		self.z_rot = z_rot
+		self.angle = angle
 
 	def getDescriptor(self):
 		if(self.matchedName != ""):
@@ -40,36 +71,34 @@ class ObjectReference:
 		if(self.matchedDiffTexName != ""):
 			diff = self.matchedDiffTexName
 		else:
-			diff = "default_diff.png"
+			diff = "nt"
 
 		if(self.matchedSpecTexName != ""):
 			spec = self.matchedSpecTexName
 		else:
-			spec = "default_spec_norm_emit.png"
+			spec = "nt"
 
 		if(self.matchedNormTexName != ""):
 			norm = self.matchedNormTexName
 		else:
-			norm = "default_spec_norm_emit.png"
+			norm = "nt"
 
 		if(self.matchedEmitTexName != ""):
 			emit = self.matchedEmitTexName
 		else:
-			emit = "default_spec_norm_emit.png"
+			emit = "nt"
 
-		q1 = self.qw_rot
-		q2 = self.qx_rot
-		q3 = self.qy_rot
-		q4 = self.qz_rot
+		x = self.x_rot
+		y = self.y_rot
+		z = self.z_rot
+		angle = self.angle
 
-		# This might be fuckity
-		x_rot = atan2( (q1*q3)+(q2*q4), (q1*q4)+(q2*q3) )
+		# This is not be fuckity
+		heading = atan2(y * sin(angle)- x * z * (1 - cos(angle)) , 1 - (y*y + z*z ) * (1 - cos(angle)))
+		attitude = asin(x * y * (1 - cos(angle)) + z * sin(angle))
+		bank = atan2(x * sin(angle)-y * z * (1 - cos(angle)) , 1 - (x*x + z*z) * (1 - cos(angle)))
 
-		y_rot = acos( (q3*q3)+(q4*q4)-(q1*q1)-(q2*q2) )
-
-		z_rot = atan2( (q1*q3)+(q2*q4), (q2*q3)+(q1*q4) )
-
-		return ("%s %s %s %s %s %f %f %f %f %f %f %f\n" % (name, diff, spec, norm, emit, self.x_pos, self.y_pos, self.z_pos, self.scale, x_rot, y_rot, z_rot))
+		return ("d %s %s %s %s %s %f %f %f %f %f %f %f\n" % (name, diff, spec, norm, emit, self.x_pos, self.y_pos, self.z_pos, self.scale, heading, attitude, bank))
 
 
 

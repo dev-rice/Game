@@ -16,29 +16,21 @@ World::World(GLFWwindow* window, TextureContainer* textures){
     GLuint fragment_shader = ShaderLoader::loadFragmentShader("shaders/fragment_shader.glsl");
     GLuint shader_program = ShaderLoader::combineShaderProgram(vertex_shader, fragment_shader);
 
-    Mesh raygun = Mesh("res/models/raygun.obj", 1.0f);
-    raygun.attachTexture(textures->getTexture("raygun_diffuse.png"), DIFFUSE);
-    raygun.attachTexture(textures->getTexture("raygun_specular.png"), SPECULAR);
-    raygun.attachTexture(textures->getTexture("raygun_normal.png"), NORMAL);
-    raygun.attachTexture(textures->getTexture("raygun_emissive.png"), EMISSIVE);
-    raygun.attachShader(shader_program);
+    Mesh fence = Mesh("res/models/fence.obj", 0.3f);
+    fence.attachTexture(textures->getTexture("fence_diff.png"), DIFFUSE);
+    fence.attachTexture(textures->getTexture("base_specular.png"), SPECULAR);
+    fence.attachTexture(textures->getTexture("base_normal.png"), NORMAL);
+    fence.attachTexture(textures->getTexture("base_emissive.png"), EMISSIVE);
+    fence.attachShader(shader_program);
 
-    Mesh other_gun = Mesh("res/models/sphere.obj", 1.0f);
-    other_gun.attachTexture(textures->getTexture("blue_diffuse.png"), DIFFUSE);
-    other_gun.attachTexture(textures->getTexture("all_specular.png"), SPECULAR);
-    other_gun.attachTexture(textures->getTexture("base_normal.png"), NORMAL);
-    other_gun.attachTexture(textures->getTexture("base_emissive.png"), EMISSIVE);
-    other_gun.attachShader(shader_program);
+    meshes.push_back(fence);
 
-    meshes.push_back(raygun);
-    meshes.push_back(other_gun);
-
-    drawables.push_back(Drawable(&meshes[0], glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(3.141592 / 10, 3.141592 / 2, 3.141592 / 8)));
-    for(int i = 0; i < 10; ++i){
-        glm::vec3 position = glm::vec3(rand() % 10, rand() % 10, rand() % 10) - glm::vec3(5.0f, 5.0f, 5.0f);
-        glm::vec3 rotation = glm::vec3(0.0f, 0.0f, M_PI/2.0f);
-        drawables.push_back(Drawable(&meshes[1], position, rotation));
-    }
+    drawables.push_back(Drawable(&meshes[0], glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)));
+    // for(int i = 0; i < 10; ++i){
+    //     glm::vec3 position = glm::vec3(rand() % 10, rand() % 10, rand() % 10) - glm::vec3(5.0f, 5.0f, 5.0f);
+    //     glm::vec3 rotation = glm::vec3(0.0f, 0.0f, M_PI/2.0f);
+    //     drawables.push_back(Drawable(&meshes[1], position, rotation));
+    // }
 
 }
 
