@@ -5,9 +5,12 @@
 
 import sys
 import os
+from math import atan2
+from math import acos
+from math import sqrt
 
 class ObjectReference:
-	def __init__(self, name, x, y, z, scale, x_rot, y_rot, z_rot, angle):
+	def __init__(self, name, x, y, z, scale, q1, q2, q3, q4):
 		self.x3dName = name
 
 		self.matchedName = ""
@@ -22,10 +25,11 @@ class ObjectReference:
 
 		self.scale = scale
 
-		self.x_rot = x_rot
-		self.y_rot = y_rot
-		self.z_rot = z_rot
-		self.angle = angle
+		versor = sqrt( (q1*q1)+(q2*q2)+(q3*q3)+(q4*q4) )
+		self.qw_rot = (q1/versor)
+		self.qx_rot = (q2/versor)
+		self.qy_rot = (q3/versor)
+		self.qz_rot = (q4/versor)
 
 	def getDescriptor(self):
 		if(self.matchedName != ""):
@@ -53,9 +57,19 @@ class ObjectReference:
 		else:
 			emit = "default_spec_norm_emit.png"
 
-		# Need to convert rotation shit
+		q1 = self.qw_rot
+		q2 = self.qx_rot
+		q3 = self.qy_rot
+		q4 = self.qz_rot
 
-		return ("%s %s %s %s %s %f %f %f %f %f %f %f\n" % (name, diff, spec, norm, emit, self.x_pos, self.y_pos, self.z_pos, self.scale, 1.0, 1.0, 1.0))
+		# This might be fuckity
+		x_rot = atan2( (q1*q3)+(q2*q4), (q1*q4)+(q2*q3) )
+
+		y_rot = acos( (q3*q3)+(q4*q4)-(q1*q1)-(q2*q2) )
+
+		z_rot = atan2( (q1*q3)+(q2*q4), (q2*q3)+(q1*q4) )
+
+		return ("%s %s %s %s %s %f %f %f %f %f %f %f\n" % (name, diff, spec, norm, emit, self.x_pos, self.y_pos, self.z_pos, self.scale, x_rot, y_rot, z_rot))
 
 
 
