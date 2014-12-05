@@ -7,24 +7,6 @@ Mesh::Mesh(const char* filename, GLfloat scale){
     GLfloat* vertices = mesh_loader.getVertexArray();
     GLuint* elements = mesh_loader.getFaceArray();
     num_faces = mesh_loader.getFacesSize();
-    
-    // printf("\nVertices (size = %d):\n\t", mesh_loader.getVerticesSize() * sizeof(GLfloat));
-    // for (int i = 0; i < mesh_loader.getVerticesSize(); ++i){
-    //     if (i % 8 == 0 && i != 0){
-    //         printf("\n\t");
-    //     }
-    //     printf("%f,\t", vertices[i]);
-        
-    // }
-    // printf("\nElements (size = %d):\n\t", mesh_loader.getFacesSize() * sizeof(GLuint));
-    // for (int i = 0; i < mesh_loader.getFacesSize(); ++i){
-    //     if (i % 3 == 0 && i != 0){
-    //         printf("\n\t");
-    //     }
-    //     printf("%d,\t", elements[i]);
-        
-    // }
-    // printf("\n");
 
     GLuint vbo, ebo;
 
@@ -51,15 +33,13 @@ void Mesh::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, glm::mat4* model
     glUniform1f(glGetUniformLocation(shader_program, "time"), (float)glfwGetTime());
 
     // Update the light position
-    GLfloat* light_array = new GLfloat[3];
-    light_array[0] = 3.0f;
-    light_array[1] = 2.5f * cos(glfwGetTime()*0.5) + 1.0f;
-    light_array[2] = 2.0f * sin(glfwGetTime()*0.5);
+    GLfloat light_position[3] = {3.0f, 2.5f, 2.0f};
+    GLfloat light_color[3] = {1.0f, 0.9f, 0.9f};
+    GLfloat light_intensity[1] = {10.0f};
 
-    glUniform3fv(glGetUniformLocation(shader_program, "light_position"), 1, light_array);
-
-    light_array = NULL;
-    delete light_array;
+    glUniform3fv(glGetUniformLocation(shader_program, "light.position"), 1, light_position);
+    glUniform3fv(glGetUniformLocation(shader_program, "light.color"), 1, light_color);
+    glUniform1fv(glGetUniformLocation(shader_program, "light.intensity"), 1, light_intensity);
 
     // Update the model, view, and projection matrices
     glUniformMatrix4fv(glGetUniformLocation(shader_program, "model"), 1, GL_FALSE, glm::value_ptr(*model_matrix));
@@ -108,21 +88,4 @@ void Mesh::attachShader(GLuint shader_program){
     glUniform1i(glGetUniformLocation(shader_program, "specular_texture"), 1);
     glUniform1i(glGetUniformLocation(shader_program, "normal_map"), 2);
     glUniform1i(glGetUniformLocation(shader_program, "emissive_texture"), 3);
-}
-
-void Mesh::attachTexture(GLuint texture, GLuint type){
-    switch(type){
-        case DIFFUSE:
-            this->diffuse_texture = texture;
-            break;
-        case SPECULAR:
-            this->specular_texture = texture;
-            break;
-        case NORMAL:
-            this->normal_map = texture;
-            break;
-        case EMISSIVE:
-            this->emissive_texture = texture;
-            break;
-    }
 }
