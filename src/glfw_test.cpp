@@ -12,6 +12,7 @@
 #include <cstdlib>
 #include <random>
 #include <iostream>
+#include <vector>
 
 #include "world.h"
 
@@ -56,6 +57,21 @@ int main(int argc, char* argv[]) {
     // Create the window
     GLFWwindow* window = initializeGLFWWindow(width, height, fullscreen);
 
+    GLuint vertex_shader = ShaderLoader::loadVertexShader("shaders/vertex_shader.glsl");
+    GLuint fragment_shader = ShaderLoader::loadFragmentShader("shaders/fragment_shader.glsl");
+    GLuint shader_program = ShaderLoader::combineShaderProgram(vertex_shader, fragment_shader);
+    
+    std::vector<Mesh*> meshes;
+    Mesh fence = Mesh("res/models/fence.obj", 1.0f);
+    fence.attachShader(shader_program);
+
+    meshes.push_back(&fence);
+
+    for (int i = 0; i < meshes.size(); ++i){
+        printf("meshes[%d] -> %p, num_faces = %d\n", i, meshes[i], meshes[i]->num_faces);
+    }
+
+
     TextureContainer textures;
     textures.addTexture("res/textures/default_diff.png", GL_NEAREST);
     textures.addTexture("res/textures/default_spec_norm_emit.png", GL_NEAREST);
@@ -63,7 +79,7 @@ int main(int argc, char* argv[]) {
 
 
     // Create the world
-    World world(window, &textures);
+    World world(window, meshes, &textures);
 
     float last_time = glfwGetTime();
 

@@ -13,7 +13,7 @@
 
 class World{
 public:
-    World(GLFWwindow*, TextureContainer*);
+    World(GLFWwindow*, std::vector<Mesh*>, TextureContainer*);
 
     void update();
     void handleInputs();
@@ -21,7 +21,7 @@ public:
 private:
     Camera camera;
 
-    std::vector<Mesh> meshes;
+    std::vector<Mesh*> meshes;
     std::vector<Drawable> drawables;
 
     glm::mat4 view_matrix;

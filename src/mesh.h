@@ -38,10 +38,10 @@ public:
     void draw(glm::mat4*, glm::mat4*, glm::mat4*, TextureSet);
     void attachShader(GLuint);
     void attachTexture(GLuint, GLuint);
+    GLuint num_faces;
 
 private:
 
-    GLuint num_faces;
     GLfloat scale;
 
     // Pointers to all that openGL stuff

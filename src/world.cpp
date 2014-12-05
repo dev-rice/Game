@@ -1,8 +1,9 @@
 #include "world.h"
 
-World::World(GLFWwindow* window, TextureContainer* textures){
+World::World(GLFWwindow* window, std::vector<Mesh*> meshes, TextureContainer* textures){
     this->window = window;
     this->textures = textures;
+    this->meshes = meshes;
 
     int width, height;
     glfwGetFramebufferSize(window, &width, &height);
@@ -11,15 +12,6 @@ World::World(GLFWwindow* window, TextureContainer* textures){
     
     view_matrix = camera.getViewMatrix();
     proj_matrix = glm::perspective(45.0f, (float)width / (float)height, 0.1f, 100.0f);
-
-    GLuint vertex_shader = ShaderLoader::loadVertexShader("shaders/vertex_shader.glsl");
-    GLuint fragment_shader = ShaderLoader::loadFragmentShader("shaders/fragment_shader.glsl");
-    GLuint shader_program = ShaderLoader::combineShaderProgram(vertex_shader, fragment_shader);
-
-    Mesh fence = Mesh("res/models/fence.obj", 1.0f);
-    fence.attachShader(shader_program);
-
-    meshes.push_back(fence);
     
     TextureSet fence_textures;
     fence_textures.diffuse = textures->getTexture("fence_diff.png");
@@ -27,9 +19,12 @@ World::World(GLFWwindow* window, TextureContainer* textures){
     fence_textures.normal = textures->getTexture("default_spec_norm_emit.png");
     fence_textures.emissive = textures->getTexture("default_spec_norm_emit.png");
 
+    for (int i = 0; i < meshes.size(); ++i){
+        printf("meshes[%d] -> %p, num_faces = %d\n", i, meshes[i], meshes[i]->num_faces);
+    }
 
 
-    Drawable thefence = Drawable(&meshes[0], glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+    Drawable thefence = Drawable(meshes[0], glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
     thefence.attachTextureSet(fence_textures);
     drawables.push_back(thefence);
 
