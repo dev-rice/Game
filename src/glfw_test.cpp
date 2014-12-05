@@ -57,19 +57,8 @@ int main(int argc, char* argv[]) {
     GLFWwindow* window = initializeGLFWWindow(width, height, fullscreen);
 
     TextureContainer textures;
-    textures.addTexture("res/textures/raygun_diffuse.png", GL_LINEAR);
-    textures.addTexture("res/textures/base_diffuse.png", GL_NEAREST);
-    textures.addTexture("res/textures/raygun_specular.png", GL_LINEAR);
-    textures.addTexture("res/textures/base_specular.png", GL_NEAREST);
-    textures.addTexture("res/textures/raygun_normal.png", GL_LINEAR);
-    textures.addTexture("res/textures/base_normal.png", GL_NEAREST);
-    textures.addTexture("res/textures/raygun_emissive.png", GL_LINEAR);
-    textures.addTexture("res/textures/base_emissive.png", GL_NEAREST);
-
-    textures.addTexture("res/textures/blue_diffuse.png", GL_NEAREST);
-    textures.addTexture("res/textures/all_specular.png", GL_NEAREST);
-    textures.addTexture("res/textures/fence_diff.png", GL_LINEAR);
-
+    textures.addTexture("res/textures/default_diff.png", GL_LINEAR);
+    textures.addTexture("res/textures/default_spec_norm_emit.png", GL_LINEAR);
 
 
     // Create the world

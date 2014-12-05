@@ -9,7 +9,7 @@
 # These start with the "m" tag, for mesh
 # These are found assuming they are .obj files
 # For example:
-# m Cube.obj
+# m cube.obj
 #
 # Secondly, the list of unique textures in the scene
 # These start with the "t" tag, for texture
@@ -20,8 +20,8 @@
 # - If it is an emissive map, (object name)_emit.png
 # We will not look for jpg/jpeg. Those are stupid and should be hated.
 # For example:
-# t Cube_diff.png
-# t Cube_spec.png
+# t cube_diff.png
+# t cube_spec.png
 #
 # Next, the application of certain textures to certain models, and location
 # This is a longer, more complex field, denoted with the "d" tag, for drawable
