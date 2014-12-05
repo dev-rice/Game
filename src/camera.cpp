@@ -78,9 +78,10 @@ glm::mat4 Camera::getViewMatrix(){
     y_rotation_matrix = glm::inverse(y_rotation_matrix);
 
     // Z rotation matrix
-    glm::mat3 z_rotation_matrix = glm::mat3( cos(rotation.z), -sin(rotation.z), 0.0f,
-                                             sin(rotation.z),  cos(rotation.z), 0.0f,
-                                             0.0f           , 0.0f            , 1.0f);
+    // #warning Useless z rotation
+    // glm::mat3 z_rotation_matrix = glm::mat3( cos(rotation.z), -sin(rotation.z), 0.0f,
+    //                                          sin(rotation.z),  cos(rotation.z), 0.0f,
+    //                                          0.0f           , 0.0f            , 1.0f);
 
     glm::mat3 rotation_matrix = y_rotation_matrix * x_rotation_matrix;
 

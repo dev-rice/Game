@@ -67,11 +67,6 @@ int main(int argc, char* argv[]) {
 
     meshes.push_back(&fence);
 
-    for (int i = 0; i < meshes.size(); ++i){
-        printf("meshes[%d] -> %p, num_faces = %d\n", i, meshes[i], meshes[i]->num_faces);
-    }
-
-
     TextureContainer textures;
     textures.addTexture("res/textures/default_diff.png", GL_NEAREST);
     textures.addTexture("res/textures/default_spec_norm_emit.png", GL_NEAREST);

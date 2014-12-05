@@ -19,10 +19,6 @@ World::World(GLFWwindow* window, std::vector<Mesh*> meshes, TextureContainer* te
     fence_textures.normal = textures->getTexture("default_spec_norm_emit.png");
     fence_textures.emissive = textures->getTexture("default_spec_norm_emit.png");
 
-    for (int i = 0; i < meshes.size(); ++i){
-        printf("meshes[%d] -> %p, num_faces = %d\n", i, meshes[i], meshes[i]->num_faces);
-    }
-
     Drawable thefence = Drawable(meshes[0], glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
     thefence.attachTextureSet(fence_textures);
     drawables.push_back(thefence);
