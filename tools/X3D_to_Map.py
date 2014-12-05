@@ -162,7 +162,7 @@ class Converter:
             self.searchForTextures = True
 
     def printUsage(self):
-        print("X3D_to_Map usage:\n\n -so\n\tEnable searching for related objects\n -st\n\tEnable searching for related texture images\n -d\n\tIgnore related files and write defaultplaceholders\n\tThis overrides any other options\n")
+        print("\nX3D_to_Map usage:\npython3 X3D_to_Map.py [input file] [argument list]\n\n -so\n\tEnable searching for related objects\n -st\n\tEnable searching for related texture images\n -d\n\tIgnore related files and write defaults\n\tThis overrides any other options\n")
 
     def scanFile(self):
         ifile = open(self.inputFileName, "r")
@@ -252,23 +252,15 @@ class Converter:
 
             if(obj.matchedDiffTexName != "" and obj.matchedDiffTexName not in UniqueTexturesList):
                 UniqueTexturesList.append(obj.matchedDiffTexName)
-            elif("default_diff.png" not in UniqueTexturesList):
-                UniqueTexturesList.append("default_diff.png")
 
             if(obj.matchedSpecTexName != "" and obj.matchedSpecTexName not in UniqueTexturesList):
                 UniqueTexturesList.append(obj.matchedSpecTexName)
-            elif("default_spec_norm_emit.png" not in UniqueTexturesList):
-                UniqueTexturesList.append("default_spec_norm_emit.png")
 
             if(obj.matchedNormTexName != "" and obj.matchedNormTexName not in UniqueTexturesList):
                 UniqueTexturesList.append(obj.matchedNormTexName)
-            elif("default_spec_norm_emit.png" not in UniqueTexturesList):
-                UniqueTexturesList.append("default_spec_norm_emit.png")
 
             if(obj.matchedEmitTexName != "" and obj.matchedEmitTexName not in UniqueTexturesList):
                 UniqueTexturesList.append(obj.matchedEmitTexName)
-            elif("default_spec_norm_emit.png" not in UniqueTexturesList):
-                UniqueTexturesList.append("default_spec_norm_emit.png")
 
         ObjectReference.StaticUniqueTexturesList = UniqueTexturesList
         ObjectReference.StaticUniqueObjectsList  = UniqueObjectsList
