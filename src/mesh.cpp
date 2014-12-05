@@ -59,7 +59,6 @@ void Mesh::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, glm::mat4* model
     glUniform3fv(glGetUniformLocation(shader_program, "light.color"), 1, light_color);
     glUniform1fv(glGetUniformLocation(shader_program, "light.intensity"), 1, light_intensity);
 
-
     // Update the model, view, and projection matrices
     glUniformMatrix4fv(glGetUniformLocation(shader_program, "model"), 1, GL_FALSE, glm::value_ptr(*model_matrix));
     glUniformMatrix4fv(glGetUniformLocation(shader_program, "view"), 1, GL_FALSE, glm::value_ptr(*view_matrix));    
