@@ -28,7 +28,7 @@ void Drawable::setRotation(glm::vec3 rotation){
     this->rotation = rotation;
 }
 
-void Drawable::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix){
+void Drawable::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, Light* light){
     
     // Create the model matrix based on position
     model_matrix = glm::translate(glm::mat4(), position);
@@ -41,7 +41,7 @@ void Drawable::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix){
     model_matrix = glm::rotate(model_matrix, rotation.y, y_axis);
     model_matrix = glm::rotate(model_matrix, rotation.z, z_axis);
 
-    mesh->draw(view_matrix, proj_matrix, &model_matrix, texture_set);
+    mesh->draw(view_matrix, proj_matrix, &model_matrix, &texture_set, light);
 }
 
 void Drawable::attachTextureSet(TextureSet texture_set){

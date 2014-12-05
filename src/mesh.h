@@ -24,13 +24,14 @@
 #include "shader_loader.h"
 #include "mesh_loader.h"
 #include "texture_set.h"
+#include "light.h"
 
 class Mesh {
 public:
     Mesh() {;}
     Mesh(const char*, GLfloat);
     
-    void draw(glm::mat4*, glm::mat4*, glm::mat4*, TextureSet);
+    void draw(glm::mat4*, glm::mat4*, glm::mat4*, TextureSet*, Light*);
     void attachShader(GLuint);
     void attachTexture(GLuint, GLuint);
 
