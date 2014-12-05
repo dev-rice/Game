@@ -41,5 +41,9 @@ void Drawable::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix){
     model_matrix = glm::rotate(model_matrix, rotation.y, y_axis);
     model_matrix = glm::rotate(model_matrix, rotation.z, z_axis);
 
-    mesh->draw(view_matrix, proj_matrix, &model_matrix);
+    mesh->draw(view_matrix, proj_matrix, &model_matrix, texture_set);
+}
+
+void Drawable::attachTextureSet(TextureSet texture_set){
+    this->texture_set = texture_set;
 }

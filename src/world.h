@@ -9,6 +9,7 @@
 #include "drawable.h"
 #include "camera.h"
 #include "texture_container.h"
+#include "texture_set.h"
 
 class World{
 public:

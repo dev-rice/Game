@@ -23,6 +23,7 @@
 
 #include "shader_loader.h"
 #include "mesh_loader.h"
+#include "texture_set.h"
 
 const GLuint DIFFUSE  = 0;
 const GLuint SPECULAR = 1;
@@ -34,7 +35,7 @@ public:
     Mesh() {;}
     Mesh(const char*, GLfloat);
     
-    void draw(glm::mat4*, glm::mat4*, glm::mat4*);
+    void draw(glm::mat4*, glm::mat4*, glm::mat4*, TextureSet);
     void attachShader(GLuint);
     void attachTexture(GLuint, GLuint);
 

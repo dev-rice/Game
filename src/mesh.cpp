@@ -41,7 +41,7 @@ Mesh::Mesh(const char* filename, GLfloat scale){
 
 }
 
-void Mesh::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, glm::mat4* model_matrix){
+void Mesh::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, glm::mat4* model_matrix, TextureSet texture_set){
     glBindVertexArray(vao);
     
     // Set the scale, this is not really going to be a thing, probably
@@ -67,13 +67,13 @@ void Mesh::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, glm::mat4* model
     glUniformMatrix4fv(glGetUniformLocation(shader_program, "proj"), 1, GL_FALSE, glm::value_ptr(*proj_matrix));
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, this->diffuse_texture);
+    glBindTexture(GL_TEXTURE_2D, texture_set.diffuse);
     glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, this->specular_texture);
+    glBindTexture(GL_TEXTURE_2D, texture_set.specular);
     glActiveTexture(GL_TEXTURE2);
-    glBindTexture(GL_TEXTURE_2D, this->normal_map);
+    glBindTexture(GL_TEXTURE_2D, texture_set.normal);
     glActiveTexture(GL_TEXTURE3);
-    glBindTexture(GL_TEXTURE_2D, this->emissive_texture);
+    glBindTexture(GL_TEXTURE_2D, texture_set.emissive);
 
     glDrawElements(GL_TRIANGLES, this->num_faces, GL_UNSIGNED_INT, 0);
 

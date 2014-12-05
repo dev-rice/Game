@@ -93,7 +93,7 @@ glm::mat4 Camera::getViewMatrix(){
     local_z = rotation_matrix * glm::vec3(0.0f, 0.0f, 1.0f);
 
     // Debug
-    print();
+    // print();
 
     glm::mat4 view_matrix = glm::lookAt(eye, center, up);
 
