@@ -1,5 +1,15 @@
 #include "texture_container.h"
 
+TextureContainer::TextureContainer(){
+    glGenTextures(1, &default_texture);
+    float color[] = { 1.0f, 0.0f, 1.0f, 1.0f };
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_FLOAT, color);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+}
+
 void TextureContainer::addTexture(const char* filename, GLuint filter){
     GLuint texture;
     glGenTextures(1, &texture);
@@ -25,8 +35,14 @@ void TextureContainer::addTexture(const char* filename, GLuint filter){
 
     textures.push_back(texture);
 
+    printf("Bound texture file '%s' to %d on the graphics card.\n", filename, texture);
+
 }
 
 GLuint TextureContainer::getTexture(int index){
-    return textures[index];
+    if (index == -1){
+        return default_texture;
+    } else {
+        return textures[index];
+    }
 }

@@ -18,11 +18,13 @@
 
 class TextureContainer {
 public:
-    TextureContainer() {;}
+    TextureContainer();
     void addTexture(const char*, GLuint);
     GLuint getTexture(int);
 
 private:
+    GLuint default_texture;
+
     std::vector<GLuint> textures;
 };
 

@@ -85,16 +85,30 @@ void Level::loadLevel(const char * fileName){
 
         if(buffer[0] == 'd'){
             sscanf(buffer, "%*c %d %d %d %d %d %f %f %f %f %f %f %f", &objectIndex, &diffIndex, &specIndex, &normIndex, &emitIndex, &x, &y, &z, &scale, &x_rot, &y_rot, &z_rot);
-            printf("Z: %f\n", z);
-            // Add the drawable to drawables
+
             Mesh* mesh = &meshes[objectIndex];
+
+            printf("Loading object with texture indeces:\n");
+            printf("    diffuse = %d\n", diffIndex);
+            printf("    specular = %d\n", specIndex);
+            printf("    normal = %d\n", normIndex);
+            printf("    emissive = %d\n", emitIndex);
 
             GLint diffuse = textures.getTexture(diffIndex);
             GLint specular = textures.getTexture(specIndex);
             GLint normal = textures.getTexture(normIndex);
             GLint emissive = textures.getTexture(emitIndex);
 
-            TextureSet texture_set = TextureSet(diffuse, specular, normal, emissive);
+            printf("    diffuse = %d\n", diffuse);
+            printf("    specular = %d\n", specular);
+            printf("    normal = %d\n", normal);
+            printf("    emissive = %d\n", emissive);
+
+            TextureSet texture_set;
+            texture_set.diffuse = diffuse;
+            texture_set.specular = specular;
+            texture_set.normal = normal;
+            texture_set.emissive = emissive;
 
             glm::vec3 position = glm::vec3(x, y, z);
             glm::vec3 rotation = glm::vec3(x_rot, y_rot, z_rot);

@@ -57,26 +57,8 @@ int main(int argc, char* argv[]) {
     // Create the window
     GLFWwindow* window = initializeGLFWWindow(width, height, fullscreen);
 
-    GLuint vertex_shader = ShaderLoader::loadVertexShader("shaders/vertex_shader.glsl");
-    GLuint fragment_shader = ShaderLoader::loadFragmentShader("shaders/fragment_shader.glsl");
-    GLuint shader_program = ShaderLoader::combineShaderProgram(vertex_shader, fragment_shader);
-    
-    std::vector<Mesh*> meshes;
-    Mesh fence = Mesh("res/models/fence.obj", 1.0f);
-    fence.attachShader(shader_program);
-
-    meshes.push_back(&fence);
-
-    TextureContainer textures;
-    textures.addTexture("res/textures/default_diff.png", GL_NEAREST);
-    textures.addTexture("res/textures/default_spec_norm_emit.png", GL_NEAREST);
-    textures.addTexture("res/textures/fence_diff.png", GL_LINEAR);
-
-
     // Create the world
-    World world(window, meshes, &textures);
-
-    float last_time = glfwGetTime();
+    World world(window);
 
     // Display loop
     while(!glfwWindowShouldClose(window)) {
@@ -94,22 +76,12 @@ int main(int argc, char* argv[]) {
         glClearColor(0.16f, 0.16f, 0.16f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        float delta_t = glfwGetTime() - last_time;
-        
-        // system("clear");
-        // printf("Time since last frame draw: %f seconds\n", delta_t);
-        // printf("Framerate: %f fps\n", 1 / delta_t);
-
-        world.handleInputs();
         world.update();
 
-        last_time = glfwGetTime();
     }
 
     // Shut down GLFW before exiting the program
     glfwTerminate();
-
-    // system("clear");
 
     // Nothing went wrong!
     return 0;

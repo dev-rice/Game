@@ -12,7 +12,7 @@
 class TextureSet {
 public:
     TextureSet() {;}
-    TextureSet(GLint, GLint, GLint, GLint);
+    TextureSet(GLuint, GLuint, GLuint, GLuint);
 
     GLuint diffuse;
     GLuint specular;

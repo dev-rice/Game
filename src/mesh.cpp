@@ -41,6 +41,14 @@ void Mesh::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, glm::mat4* model
     glUniformMatrix4fv(glGetUniformLocation(shader_program, "view"), 1, GL_FALSE, glm::value_ptr(*view_matrix));    
     glUniformMatrix4fv(glGetUniformLocation(shader_program, "proj"), 1, GL_FALSE, glm::value_ptr(*proj_matrix));
 
+    printf("#################\n");
+    printf("%d\n", texture_set->diffuse);
+    printf("%d\n", texture_set->specular);
+    printf("%d\n", texture_set->normal);
+    printf("%d\n", texture_set->emissive);
+    printf("#################\n");
+
+
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture_set->diffuse);
     glActiveTexture(GL_TEXTURE1);

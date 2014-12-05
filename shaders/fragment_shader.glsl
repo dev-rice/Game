@@ -46,9 +46,9 @@ void main() {
     // ambient_component  = vec4(0.0, 0.0, 0.0, 0.0);
     // diffuse_component  = vec4(0.0, 0.0, 0.0, 0.0);
     // specular_component = vec4(0.0, 0.0, 0.0, 0.0);
-    // emissive_component = vec4(0.0, 0.0, 0.0, 1.0);
+    // emissive_component = vec4(0.0, 0.0, 0.0, 0.0);
 
-
-    outColor = mix(diffuse_component + specular_component + ambient_component,
-                emissive_component, emissive.w);
+    outColor = diffuse;
+    // outColor = mix(diffuse_component + specular_component + ambient_component,
+                // emissive_component, emissive.w);
 }
