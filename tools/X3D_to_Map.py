@@ -21,19 +21,20 @@
 # We will not look for jpg/jpeg. Those are stupid and should be hated.
 # For example:
 # t Cube_diff.png
+# t Cube_spec.png
 #
 # Next, the application of certain textures to certain models, and location
 # This is a longer, more complex field, denoted with the "d" tag, for drawable
-# The first entry is the name of the object, with an appended *.obj if a corresponding file has been found
+# The first entry is the index of the object in the above list of objects
 # The next entries are texture entries. These are the textures that will be applied to the model
 # They are ALWAYS in the order
 # DIFF SPEC NORM EMIT
-# the argument "nt" denotes "No Texture".
+# the argument -1 denotes No Texture.
 # The next three entries after the textures are the x, y, and z position
 # Then the scale
 # Then the x, y, and z rotation
 # For example:
-# d Cube.obj Cube_diff.png Cube_spec.png nt nt 0.0 0.0 0.0 1.0 0.0 0.0 0.0
+# d 0 0 1 -1 -1 0.0 0.0 0.0 1.0 0.0 0.0 0.0
 #
 # And that's the file spec
 
@@ -42,6 +43,10 @@ import os
 from math import *
 
 class ObjectReference:
+
+	StaticUniqueObjectsList = []
+	StaticUniqueTexturesList = []
+
 	def __init__(self, name, x, y, z, scale, x_rot, y_rot, z_rot, angle):
 		self.x3dName = name
 
@@ -64,29 +69,44 @@ class ObjectReference:
 
 	def getDescriptor(self):
 		if(self.matchedName != ""):
-			name = self.matchedName
+			try:
+				name = self.StaticUniqueObjectsList.index(self.matchedName)
+			except:
+				name = 0
 		else:
-			name = self.x3dName
+			name = 0
 
 		if(self.matchedDiffTexName != ""):
-			diff = self.matchedDiffTexName
+			try:
+				diff = self.StaticUniqueTexturesList.index(self.matchedDiffTexName)
+			except:
+				diff = -1
 		else:
-			diff = "nt"
+			diff = -1
 
 		if(self.matchedSpecTexName != ""):
-			spec = self.matchedSpecTexName
+			try:
+				spec = self.StaticUniqueTexturesList.index(self.matchedSpecTexName)
+			except:
+				spec = -1
 		else:
-			spec = "nt"
+			spec = -1
 
 		if(self.matchedNormTexName != ""):
-			norm = self.matchedNormTexName
+			try:
+				norm = self.StaticUniqueTexturesList.index(self.matchedNormTexName)
+			except:
+				norm = -1
 		else:
-			norm = "nt"
+			norm = -1
 
 		if(self.matchedEmitTexName != ""):
-			emit = self.matchedEmitTexName
+			try:
+				emit = self.StaticUniqueTexturesList.index(self.matchedEmitTexName)
+			except:
+				emit = -1
 		else:
-			emit = "nt"
+			emit = -1
 
 		x = self.x_rot
 		y = self.y_rot
@@ -249,6 +269,9 @@ class Converter:
 				UniqueTexturesList.append(obj.matchedEmitTexName)
 			elif("default_spec_norm_emit.png" not in UniqueTexturesList):
 				UniqueTexturesList.append("default_spec_norm_emit.png")
+
+		ObjectReference.StaticUniqueTexturesList = UniqueTexturesList
+		ObjectReference.StaticUniqueObjectsList  = UniqueObjectsList
 
 		ofile = open(self.outputFileName, "w")
 

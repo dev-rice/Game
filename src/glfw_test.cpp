@@ -68,7 +68,7 @@ int main(int argc, char* argv[]) {
 
     textures.addTexture("res/textures/blue_diffuse.png", GL_NEAREST);
     textures.addTexture("res/textures/all_specular.png", GL_NEAREST);
-    textures.addTexture("res/textures/fence_diff.png", GL_NEAREST);
+    textures.addTexture("res/textures/fence_diff.png", GL_LINEAR);
 
 
 
