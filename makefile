@@ -10,6 +10,7 @@
 # This gets rid of any stray material (*.mtl) files in resources
 
 all:
+	@ echo Please specify target platform
 mac:
 	@ echo $$(( $$(cat buildcount.txt) + 1 )) > buildcount.txt
 	@ echo Build number $$(cat buildcount.txt)
