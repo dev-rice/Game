@@ -1,0 +1,16 @@
+# Converted .map file
+
+# Included Meshes (m)
+m elbow.obj
+m fence.obj
+
+# Included Textures (t)
+t default_diff.png
+t default_spec_norm_emit.png
+t fence_diff.png
+
+# Object location, rotation, scale, and texture binding
+d 0 -1 -1 -1 -1 -5.117056 0.000000 -3.043495 1.000000 2.443460 -0.000000 -1.570796
+d 0 -1 -1 -1 -1 -5.076571 0.000000 2.953000 1.000000 -2.443460 0.000000 -1.570796
+d 0 -1 -1 -1 -1 0.000000 1.000000 0.000000 1.000000 -3.141592 -0.000000 -1.570797
+d 1 2 -1 -1 -1 -6.160132 0.000000 0.000000 1.000000 -3.141592 -0.000000 -1.570797
