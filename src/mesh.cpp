@@ -23,7 +23,7 @@ Mesh::Mesh(const char* filename, GLfloat scale){
 
 }
 
-void Mesh::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, glm::mat4* model_matrix, TextureSet texture_set){
+void Mesh::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, glm::mat4* model_matrix, TextureSet* texture_set, Light* light){
     glBindVertexArray(vao);
     
     // Set the scale, this is not really going to be a thing, probably
@@ -32,14 +32,9 @@ void Mesh::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, glm::mat4* model
     // Update the time uniform
     glUniform1f(glGetUniformLocation(shader_program, "time"), (float)glfwGetTime());
 
-    // Update the light position
-    GLfloat light_position[3] = {3.0f, 2.5f, 2.0f};
-    GLfloat light_color[3] = {1.0f, 0.9f, 0.9f};
-    GLfloat light_intensity[1] = {10.0f};
-
-    glUniform3fv(glGetUniformLocation(shader_program, "light.position"), 1, light_position);
-    glUniform3fv(glGetUniformLocation(shader_program, "light.color"), 1, light_color);
-    glUniform1fv(glGetUniformLocation(shader_program, "light.intensity"), 1, light_intensity);
+    glUniform3fv(glGetUniformLocation(shader_program, "light.position"), 1, light->getPosition());
+    glUniform3fv(glGetUniformLocation(shader_program, "light.color"), 1, light->getColor());
+    glUniform1fv(glGetUniformLocation(shader_program, "light.intensity"), 1, light->getIntensity());
 
     // Update the model, view, and projection matrices
     glUniformMatrix4fv(glGetUniformLocation(shader_program, "model"), 1, GL_FALSE, glm::value_ptr(*model_matrix));
@@ -47,13 +42,13 @@ void Mesh::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, glm::mat4* model
     glUniformMatrix4fv(glGetUniformLocation(shader_program, "proj"), 1, GL_FALSE, glm::value_ptr(*proj_matrix));
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture_set.diffuse);
+    glBindTexture(GL_TEXTURE_2D, texture_set->diffuse);
     glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, texture_set.specular);
+    glBindTexture(GL_TEXTURE_2D, texture_set->specular);
     glActiveTexture(GL_TEXTURE2);
-    glBindTexture(GL_TEXTURE_2D, texture_set.normal);
+    glBindTexture(GL_TEXTURE_2D, texture_set->normal);
     glActiveTexture(GL_TEXTURE3);
-    glBindTexture(GL_TEXTURE_2D, texture_set.emissive);
+    glBindTexture(GL_TEXTURE_2D, texture_set->emissive);
 
     glDrawElements(GL_TRIANGLES, this->num_faces, GL_UNSIGNED_INT, 0);
 

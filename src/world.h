@@ -10,6 +10,7 @@
 #include "camera.h"
 #include "texture_container.h"
 #include "texture_set.h"
+#include "light.h"
 
 class World{
 public:
@@ -29,6 +30,8 @@ private:
 
     GLFWwindow* window;
     TextureContainer* textures;
+
+    Light light;
 };
 
 #endif

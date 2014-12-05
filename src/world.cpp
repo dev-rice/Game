@@ -13,6 +13,8 @@ World::World(GLFWwindow* window, std::vector<Mesh*> meshes, TextureContainer* te
     view_matrix = camera.getViewMatrix();
     proj_matrix = glm::perspective(45.0f, (float)width / (float)height, 0.1f, 100.0f);
     
+    light = Light(glm::vec3(3.0f, 2.5f, 2.0f), glm::vec3(1.0f, 0.9f, 0.9f), 10.0f);
+
     TextureSet fence_textures;
     fence_textures.diffuse = textures->getTexture("fence_diff.png");
     fence_textures.specular = textures->getTexture("default_spec_norm_emit.png");
@@ -36,7 +38,7 @@ void World::update(){
         // glm::vec3 position = drawables[i].getPosition();
         // drawables[i].moveTo(position + glm::vec3(-0.01f, 0.0f, 0.0f));
         
-        drawables[i].draw(&view_matrix, &proj_matrix);
+        drawables[i].draw(&view_matrix, &proj_matrix, &light);
     }
 }
 
