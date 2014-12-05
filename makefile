@@ -1,9 +1,24 @@
+# Details of code:
+#
+# echo $$(( $$(cat buildcount.txt) + 1 )) > buildcount.txt
+# This reads in from buildcount.txt, increments, and saves
+#
+# echo Build number $$(cat buildcount.txt)
+# This prints out the build number
+#
+# rm -f res/models/*.mtl
+# This gets rid of any stray material (*.mtl) files in resources
+
 all:
 mac:
 	@ echo $$(( $$(cat buildcount.txt) + 1 )) > buildcount.txt
 	@ echo Build number $$(cat buildcount.txt)
+	@ rm -f res/models/*.mtl
+
 	g++ src/*.cpp  -o glfw_test -framework OpenGl -framework CoreFoundation -I/usr/local/include -lglfw3 -lglew -lSOIL
 linux:
 	@ echo $$(( $$(cat buildcount.txt) + 1 )) > buildcount.txt
 	@ echo Build number $$(cat buildcount.txt)
+	@ rm -f res/models/*.mtl
+
 	g++ -std=c++11 src/*.cpp  -o glfw_test -lGL -lGLEW -I /usr/lib/x86_64-linux-gnu/ -lglfw -I /usr/local/include -lSOIL	
