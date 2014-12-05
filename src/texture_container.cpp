@@ -1,12 +1,13 @@
 #include "texture_container.h"
 
 TextureContainer::TextureContainer(){
+    // Sets the default texture to be pink, 100% alpha
     glGenTextures(1, &default_texture);
 
     // Set the active texture
     glBindTexture(GL_TEXTURE_2D, default_texture);
-    // Load the image
     
+    // Load the image
     GLfloat pixel[] = {1.0f, 0.0f, 1.0f, 1.0f};
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA,
                  GL_FLOAT, pixel);
