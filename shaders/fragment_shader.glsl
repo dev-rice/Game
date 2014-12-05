@@ -1,9 +1,16 @@
 #version 330
 
+struct Light {
+    vec3 position;
+    vec3 color;
+    float intensity;
+};
+
 in vec2 Texcoord;
 in vec3 surface_normal;
 in vec3 light_vector;
 in vec3 viewing_vector;
+in Light main_light;
 
 out vec4 outColor;
 
@@ -15,10 +22,10 @@ uniform sampler2D emissive_texture;
 
 void main() {
     
-    vec3 light_color = vec3(0.95, 0.95, 1.0);
+    vec3 light_color = main_light.color;
     float cosTheta = dot(normalize(surface_normal), normalize(light_vector));
     cosTheta = clamp(cosTheta, 0.0, 1.0);
-    float intensity = 10 / (pow(light_vector.x, 2) + pow(light_vector.y, 2) + pow(light_vector.z, 2));
+    float intensity = main_light.intensity / (pow(light_vector.x, 2) + pow(light_vector.y, 2) + pow(light_vector.z, 2));
 
     vec3 reflection = reflect(-normalize(light_vector), normalize(surface_normal));
     float cosAlpha = clamp(dot(normalize(viewing_vector), reflection), 0.0, 1.0);
