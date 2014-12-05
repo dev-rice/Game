@@ -2,10 +2,18 @@
 
 TextureContainer::TextureContainer(){
     glGenTextures(1, &default_texture);
-    float color[] = { 1.0f, 0.0f, 1.0f, 1.0f };
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_FLOAT, color);
+
+    // Set the active texture
+    glBindTexture(GL_TEXTURE_2D, default_texture);
+    // Load the image
+    
+    GLfloat pixel[] = {1.0f, 0.0f, 1.0f, 1.0f};
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA,
+                 GL_FLOAT, pixel);
+    // Set the texture wrapping to repeat
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    // Do nearest interpolation for scaling the image up and down.
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 }

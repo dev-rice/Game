@@ -13,7 +13,7 @@ Level::Level(GLFWwindow* window){
     camera = Camera(glm::vec3(0.0f, 0.0f, 10.0f));
     view_matrix = camera.getViewMatrix();
     
-    light = Light(glm::vec3(3.0f, 2.5f, 2.0f), glm::vec3(1.0f, 0.9f, 0.9f), 10.0f);
+    light = Light(glm::vec3(-9.0f, 2.5f, 0.0f), glm::vec3(1.0f, 0.9f, 0.9f), 10.0f);
 
     GLuint vertex_shader = ShaderLoader::loadVertexShader("shaders/vertex_shader.glsl");
     GLuint fragment_shader = ShaderLoader::loadFragmentShader("shaders/fragment_shader.glsl");
@@ -79,7 +79,7 @@ void Level::loadLevel(const char * fileName){
             strcat(actual, textureFileName);
 
             //  Add this texture to the texture container
-            textures.addTexture(textureFileName, GL_LINEAR);
+            textures.addTexture(actual, GL_LINEAR);
 
         }
 
@@ -87,12 +87,6 @@ void Level::loadLevel(const char * fileName){
             sscanf(buffer, "%*c %d %d %d %d %d %f %f %f %f %f %f %f", &objectIndex, &diffIndex, &specIndex, &normIndex, &emitIndex, &x, &y, &z, &scale, &x_rot, &y_rot, &z_rot);
 
             Mesh* mesh = &meshes[objectIndex];
-
-            printf("Loading object with texture indeces:\n");
-            printf("    diffuse = %d\n", diffIndex);
-            printf("    specular = %d\n", specIndex);
-            printf("    normal = %d\n", normIndex);
-            printf("    emissive = %d\n", emitIndex);
 
             GLint diffuse = textures.getTexture(diffIndex);
             GLint specular = textures.getTexture(specIndex);
