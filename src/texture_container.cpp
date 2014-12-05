@@ -23,23 +23,10 @@ void TextureContainer::addTexture(const char* filename, GLuint filter){
     glGenerateMipmap(GL_TEXTURE_2D);
     SOIL_free_image_data(image);
 
-    char* temp_filename = (char*)filename;
+    textures.push_back(texture);
 
-    std::string name = basename(temp_filename);
-    textures[name] = texture;
-
-    temp_filename = NULL;
-    delete temp_filename;
 }
 
-GLuint TextureContainer::getTexture(std::string name){
-    return textures[name];
-}
-
-void TextureContainer::print(){
-    std::map<std::string, GLuint>::iterator it;
-    for (it = textures.begin(); it != textures.end(); ++it){
-        printf("%s => %d\n", (it->first).c_str(), it->second);
-    }
-    printf("\n");
+GLuint TextureContainer::getTexture(int index){
+    return textures[index];
 }

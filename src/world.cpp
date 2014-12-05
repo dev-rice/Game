@@ -1,49 +1,50 @@
 #include "world.h"
-#include "level_loader.h"
 
 World::World(GLFWwindow* window, std::vector<Mesh*> meshes, TextureContainer* textures){
     this->window = window;
     this->textures = textures;
     this->meshes = meshes;
 
-    Level l;
-    l.loadLevel("res/maps/scene.map");
+    level = Level(window);
+    level.loadLevel("res/maps/scene.map");
 
-    int width, height;
-    glfwGetFramebufferSize(window, &width, &height);
+    // int width, height;
+    // glfwGetFramebufferSize(window, &width, &height);
 
-    camera = Camera(glm::vec3(0.0f, 0.0f, 10.0f));
+    // camera = Camera(glm::vec3(0.0f, 0.0f, 10.0f));
     
-    view_matrix = camera.getViewMatrix();
-    proj_matrix = glm::perspective(45.0f, (float)width / (float)height, 0.1f, 100.0f);
+    // view_matrix = camera.getViewMatrix();
+    // proj_matrix = glm::perspective(45.0f, (float)width / (float)height, 0.1f, 100.0f);
     
-    light = Light(glm::vec3(3.0f, 2.5f, 2.0f), glm::vec3(1.0f, 0.9f, 0.9f), 10.0f);
+    // light = Light(glm::vec3(3.0f, 2.5f, 2.0f), glm::vec3(1.0f, 0.9f, 0.9f), 10.0f);
 
-    TextureSet fence_textures;
-    fence_textures.diffuse = textures->getTexture("fence_diff.png");
-    fence_textures.specular = textures->getTexture("default_spec_norm_emit.png");
-    fence_textures.normal = textures->getTexture("default_spec_norm_emit.png");
-    fence_textures.emissive = textures->getTexture("default_spec_norm_emit.png");
+    // TextureSet fence_textures;
+    // fence_textures.diffuse = textures->getTexture(2);
+    // fence_textures.specular = textures->getTexture(1);
+    // fence_textures.normal = textures->getTexture(1);
+    // fence_textures.emissive = textures->getTexture(1);
 
-    Drawable thefence = Drawable(meshes[0], glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-    thefence.attachTextureSet(fence_textures);
-    drawables.push_back(thefence);
+    // Drawable thefence = Drawable(meshes[0], glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+    // thefence.attachTextureSet(fence_textures);
+    // drawables.push_back(thefence);
 
 }
 
 void World::update(){
-    // Update the view matrix based on the current
-    // camera location / position
-    view_matrix = camera.getViewMatrix();
+    // // Update the view matrix based on the current
+    // // camera location / position
+    // view_matrix = camera.getViewMatrix();
     
-    // Draw all the drawables
-    for (int i = 0; i < drawables.size(); ++i){
-        // This is how you move things
-        // glm::vec3 position = drawables[i].getPosition();
-        // drawables[i].moveTo(position + glm::vec3(-0.01f, 0.0f, 0.0f));
+    // // Draw all the drawables
+    // for (int i = 0; i < drawables.size(); ++i){
+    //     // This is how you move things
+    //     // glm::vec3 position = drawables[i].getPosition();
+    //     // drawables[i].moveTo(position + glm::vec3(-0.01f, 0.0f, 0.0f));
         
-        drawables[i].draw(&view_matrix, &proj_matrix, &light);
-    }
+    //     drawables[i].draw(&view_matrix, &proj_matrix, &light);
+    // }
+    level.handleInputs();
+    level.draw();
 }
 
 void World::handleInputs(){

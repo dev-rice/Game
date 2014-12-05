@@ -11,6 +11,7 @@
 #include "texture_container.h"
 #include "texture_set.h"
 #include "light.h"
+#include "level.h"
 
 class World{
 public:
@@ -32,6 +33,8 @@ private:
     TextureContainer* textures;
 
     Light light;
+
+    Level level;
 };
 
 #endif

@@ -9,7 +9,11 @@
 // #elif defined __gnu_linux__
 #endif
 
-struct TextureSet {
+class TextureSet {
+public:
+    TextureSet() {;}
+    TextureSet(GLint, GLint, GLint, GLint);
+
     GLuint diffuse;
     GLuint specular;
     GLuint normal;

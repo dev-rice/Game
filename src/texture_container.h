@@ -1,3 +1,6 @@
+#ifndef TextureContainer_h
+#define TextureContainer_h
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
@@ -8,7 +11,7 @@
 
 #include <SOIL.h>
 
-#include <map>
+#include <vector>
 #include <string>
 #include <libgen.h>
 #include <stdlib.h>
@@ -17,8 +20,10 @@ class TextureContainer {
 public:
     TextureContainer() {;}
     void addTexture(const char*, GLuint);
-    GLuint getTexture(std::string);
-    void print();
+    GLuint getTexture(int);
+
 private:
-    std::map<std::string, GLuint> textures;
+    std::vector<GLuint> textures;
 };
+
+#endif
