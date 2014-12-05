@@ -7,24 +7,6 @@ Mesh::Mesh(const char* filename, GLfloat scale){
     GLfloat* vertices = mesh_loader.getVertexArray();
     GLuint* elements = mesh_loader.getFaceArray();
     num_faces = mesh_loader.getFacesSize();
-    
-    // printf("\nVertices (size = %d):\n\t", mesh_loader.getVerticesSize() * sizeof(GLfloat));
-    // for (int i = 0; i < mesh_loader.getVerticesSize(); ++i){
-    //     if (i % 8 == 0 && i != 0){
-    //         printf("\n\t");
-    //     }
-    //     printf("%f,\t", vertices[i]);
-        
-    // }
-    // printf("\nElements (size = %d):\n\t", mesh_loader.getFacesSize() * sizeof(GLuint));
-    // for (int i = 0; i < mesh_loader.getFacesSize(); ++i){
-    //     if (i % 3 == 0 && i != 0){
-    //         printf("\n\t");
-    //     }
-    //     printf("%d,\t", elements[i]);
-        
-    // }
-    // printf("\n");
 
     GLuint vbo, ebo;
 
@@ -106,21 +88,4 @@ void Mesh::attachShader(GLuint shader_program){
     glUniform1i(glGetUniformLocation(shader_program, "specular_texture"), 1);
     glUniform1i(glGetUniformLocation(shader_program, "normal_map"), 2);
     glUniform1i(glGetUniformLocation(shader_program, "emissive_texture"), 3);
-}
-
-void Mesh::attachTexture(GLuint texture, GLuint type){
-    switch(type){
-        case DIFFUSE:
-            this->diffuse_texture = texture;
-            break;
-        case SPECULAR:
-            this->specular_texture = texture;
-            break;
-        case NORMAL:
-            this->normal_map = texture;
-            break;
-        case EMISSIVE:
-            this->emissive_texture = texture;
-            break;
-    }
 }

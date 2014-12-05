@@ -25,11 +25,6 @@
 #include "mesh_loader.h"
 #include "texture_set.h"
 
-const GLuint DIFFUSE  = 0;
-const GLuint SPECULAR = 1;
-const GLuint NORMAL   = 2;
-const GLuint EMISSIVE = 3;
-
 class Mesh {
 public:
     Mesh() {;}
@@ -38,20 +33,15 @@ public:
     void draw(glm::mat4*, glm::mat4*, glm::mat4*, TextureSet);
     void attachShader(GLuint);
     void attachTexture(GLuint, GLuint);
-    GLuint num_faces;
 
 private:
 
     GLfloat scale;
+    GLuint num_faces;
 
     // Pointers to all that openGL stuff
     GLuint vao;
     GLuint shader_program;
-
-    GLuint diffuse_texture;
-    GLuint specular_texture;
-    GLuint normal_map;
-    GLuint emissive_texture;
 
 };
 
