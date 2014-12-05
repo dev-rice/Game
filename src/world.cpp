@@ -1,9 +1,13 @@
 #include "world.h"
+#include "level_loader.h"
 
 World::World(GLFWwindow* window, std::vector<Mesh*> meshes, TextureContainer* textures){
     this->window = window;
     this->textures = textures;
     this->meshes = meshes;
+
+    Level l;
+    l.loadLevel("res/maps/scene.map");
 
     int width, height;
     glfwGetFramebufferSize(window, &width, &height);

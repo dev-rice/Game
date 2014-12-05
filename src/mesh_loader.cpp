@@ -1,4 +1,4 @@
-// model.cpp
+// mesh_loader.cpp
 // implementation of the model class
 // Trevor Westphal
 
