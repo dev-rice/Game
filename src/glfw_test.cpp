@@ -57,8 +57,9 @@ int main(int argc, char* argv[]) {
     GLFWwindow* window = initializeGLFWWindow(width, height, fullscreen);
 
     TextureContainer textures;
-    textures.addTexture("res/textures/default_diff.png", GL_LINEAR);
-    textures.addTexture("res/textures/default_spec_norm_emit.png", GL_LINEAR);
+    textures.addTexture("res/textures/default_diff.png", GL_NEAREST);
+    textures.addTexture("res/textures/default_spec_norm_emit.png", GL_NEAREST);
+    textures.addTexture("res/textures/fence_diff.png", GL_LINEAR);
 
 
     // Create the world

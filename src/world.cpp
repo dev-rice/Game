@@ -17,7 +17,7 @@ World::World(GLFWwindow* window, TextureContainer* textures){
     GLuint shader_program = ShaderLoader::combineShaderProgram(vertex_shader, fragment_shader);
 
     Mesh fence = Mesh("res/models/fence.obj", 0.3f);
-    fence.attachTexture(textures->getTexture("default_diff.png"), DIFFUSE);
+    fence.attachTexture(textures->getTexture("fence_diff.png"), DIFFUSE);
     fence.attachTexture(textures->getTexture("default_spec_norm_emit.png"), SPECULAR);
     fence.attachTexture(textures->getTexture("default_spec_norm_emit.png"), NORMAL);
     fence.attachTexture(textures->getTexture("default_spec_norm_emit.png"), EMISSIVE);
