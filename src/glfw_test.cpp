@@ -85,9 +85,9 @@ int main(int argc, char* argv[]) {
 
         float delta_t = glfwGetTime() - last_time;
         
-        system("clear");
-        printf("Time since last frame draw: %f seconds\n", delta_t);
-        printf("Framerate: %f fps\n", 1 / delta_t);
+        // system("clear");
+        // printf("Time since last frame draw: %f seconds\n", delta_t);
+        // printf("Framerate: %f fps\n", 1 / delta_t);
 
         world.handleInputs();
         world.update();

@@ -17,15 +17,22 @@ World::World(GLFWwindow* window, TextureContainer* textures){
     GLuint shader_program = ShaderLoader::combineShaderProgram(vertex_shader, fragment_shader);
 
     Mesh fence = Mesh("res/models/fence.obj", 1.0f);
-    fence.attachTexture(textures->getTexture("fence_diff.png"), DIFFUSE);
-    fence.attachTexture(textures->getTexture("default_spec_norm_emit.png"), SPECULAR);
-    fence.attachTexture(textures->getTexture("default_spec_norm_emit.png"), NORMAL);
-    fence.attachTexture(textures->getTexture("default_spec_norm_emit.png"), EMISSIVE);
     fence.attachShader(shader_program);
 
     meshes.push_back(fence);
+    
+    TextureSet fence_textures;
+    fence_textures.diffuse = textures->getTexture("fence_diff.png");
+    fence_textures.specular = textures->getTexture("default_spec_norm_emit.png");
+    fence_textures.normal = textures->getTexture("default_spec_norm_emit.png");
+    fence_textures.emissive = textures->getTexture("default_spec_norm_emit.png");
 
-    drawables.push_back(Drawable(&meshes[0], glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)));
+
+    Drawable thefence = Drawable(&meshes[0], glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+    thefence.attachTextureSet(fence_textures);
+
+
+    drawables.push_back(thefence);
     // for(int i = 0; i < 10; ++i){
     //     glm::vec3 position = glm::vec3(rand() % 10, rand() % 10, rand() % 10) - glm::vec3(5.0f, 5.0f, 5.0f);
     //     glm::vec3 rotation = glm::vec3(0.0f, 0.0f, M_PI/2.0f);

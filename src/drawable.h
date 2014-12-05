@@ -15,6 +15,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "mesh.h"
+#include "texture_set.h"
 
 class Drawable {
 public:
@@ -28,6 +29,9 @@ public:
 
     glm::vec3 getPosition();
 
+    void attachTextureSet(TextureSet);
+
+
 private:
     Mesh* mesh;
 
@@ -35,6 +39,8 @@ private:
     glm::vec3 rotation;
     
     glm::mat4 model_matrix;
+
+    TextureSet texture_set;
 };
 
 #endif
