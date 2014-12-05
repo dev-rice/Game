@@ -28,16 +28,10 @@ World::World(GLFWwindow* window, TextureContainer* textures){
     fence_textures.emissive = textures->getTexture("default_spec_norm_emit.png");
 
 
+
     Drawable thefence = Drawable(&meshes[0], glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
     thefence.attachTextureSet(fence_textures);
-
-
     drawables.push_back(thefence);
-    // for(int i = 0; i < 10; ++i){
-    //     glm::vec3 position = glm::vec3(rand() % 10, rand() % 10, rand() % 10) - glm::vec3(5.0f, 5.0f, 5.0f);
-    //     glm::vec3 rotation = glm::vec3(0.0f, 0.0f, M_PI/2.0f);
-    //     drawables.push_back(Drawable(&meshes[1], position, rotation));
-    // }
 
 }
 
