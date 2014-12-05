@@ -118,7 +118,7 @@ class ObjectReference:
         # This is not be fuckity
         heading = atan2(y * sin(angle)- x * z * (1 - cos(angle)) , 1 - (y*y + z*z ) * (1 - cos(angle)))
         attitude = asin(x * y * (1 - cos(angle)) + z * sin(angle))
-        # attitude = attitude + 1.7079
+        attitude = attitude + 1.7079
         bank = atan2(x * sin(angle)-y * z * (1 - cos(angle)) , 1 - (x*x + z*z) * (1 - cos(angle)))
 
         return ("d %s %s %s %s %s %f %f %f %f %f %f %f\n" % (name, diff, spec, norm, emit, self.x_pos, self.y_pos, self.z_pos, self.scale, attitude, heading, bank))
