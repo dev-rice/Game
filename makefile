@@ -22,3 +22,7 @@ linux:
 	@ rm -f res/models/*.mtl
 
 	g++ -std=c++11 src/*.cpp  -o glfw_test -lGL -lGLEW -I /usr/lib/x86_64-linux-gnu/ -lglfw -I /usr/local/include -lSOIL	
+
+discard:
+	@ git clean -df
+	@ git checkout -- .
