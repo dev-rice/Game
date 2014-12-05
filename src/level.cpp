@@ -13,7 +13,7 @@ Level::Level(GLFWwindow* window){
     camera = Camera(glm::vec3(0.0f, 0.0f, 10.0f));
     view_matrix = camera.getViewMatrix();
     
-    light = Light(glm::vec3(2.0f, 0.0f, 5.0f), glm::vec3(1.0f, 0.9f, 0.9f), 10.0f);
+    light = Light(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f), 50.0f);
 
     GLuint vertex_shader = ShaderLoader::loadVertexShader("shaders/vertex_shader.glsl");
     GLuint fragment_shader = ShaderLoader::loadFragmentShader("shaders/fragment_shader.glsl");

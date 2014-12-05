@@ -8,7 +8,7 @@ TextureContainer::TextureContainer(){
     glBindTexture(GL_TEXTURE_2D, default_texture);
     
     // Load the image
-    GLfloat pixel[] = {1.0f, 0.0f, 1.0f, 1.0f};
+    GLfloat pixel[] = {1.0f, 0.0f, 1.0f, 0.0f};
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA,
                  GL_FLOAT, pixel);
     // Set the texture wrapping to repeat
