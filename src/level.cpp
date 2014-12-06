@@ -65,8 +65,8 @@ void Level::loadLevel(const char * fileName){
             char actual[80] = "";
             strcat(actual, MODEL_PATH);
             strcat(actual, objectFileName);
-            Mesh mesh = Mesh(actual, 1.0f);
-            mesh.attachShader(shader_program);
+            Mesh mesh = Mesh(actual, shader_program, 1.0f);
+            // mesh.attachShader(shader_program);
             meshes.push_back(mesh);
         }
 
@@ -93,11 +93,6 @@ void Level::loadLevel(const char * fileName){
             GLint normal = textures.getTexture(normIndex);
             GLint emissive = textures.getTexture(emitIndex);
 
-            printf("    diffuse = %d\n", diffuse);
-            printf("    specular = %d\n", specular);
-            printf("    normal = %d\n", normal);
-            printf("    emissive = %d\n", emissive);
-
             TextureSet texture_set;
             texture_set.diffuse = diffuse;
             texture_set.specular = specular;
@@ -115,7 +110,6 @@ void Level::loadLevel(const char * fileName){
             delete mesh;
         }
     }
-
 }
 
 void Level::handleInputs(){
