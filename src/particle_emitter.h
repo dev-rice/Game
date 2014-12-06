@@ -4,7 +4,7 @@
 #warning Remove me once particles have been included at a higher level
 #include <glm/glm.hpp>
 
-#include <vector>
+#include <deque>
 
 #include "particle.h"
 
@@ -14,12 +14,10 @@ public:
     ParticleEmitter(glm::vec3, glm::vec3, int, float, float, float, float);
     void draw();
 private:
-    void populateParticles();
-
-    std::vector<Particle> particles;
+    std::deque<Particle> particles;
 
     glm::vec3 position;
-    glm::vec3 accelDir;
+    glm::vec3 initDir;
 
     int particleCount;
     float initialSpeed;

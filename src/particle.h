@@ -4,5 +4,7 @@
 class Particle{
 public:
     Particle();
+    void setInitialValues();
+    void draw();
 private:  
 };
