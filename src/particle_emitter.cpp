@@ -30,6 +30,8 @@ ParticleEmitter::ParticleEmitter(glm::vec3 position, glm::vec3 initDir, int part
 
 void ParticleEmitter::draw(){
 
+    #warning This may be a bottleneck: 7 calls to rand() every frame draw
+    
     glm::vec3 newPosition = position + glm::vec3(getRandomOffset(), getRandomOffset(), getRandomOffset());
     glm::vec3 newInitDir  = initDir  + glm::vec3(getRandomOffset(), getRandomOffset(), getRandomOffset());
 
