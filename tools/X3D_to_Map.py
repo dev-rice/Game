@@ -24,10 +24,10 @@
 # t cube_spec.png
 #
 # Next, the application of certain textures to certain models, and location
-# IMPORTANT! Indices begin with 1-based indexing!
 # This is a longer, more complex field, denoted with the "d" tag, for drawable
 # The first entry is the index of the object in the above list of objects
 # The next entries are texture entries. These are the textures that will be applied to the model
+# IMPORTANT! Texture Indices begin with 1-based indexing!
 # They are ALWAYS in the order
 # DIFF SPEC NORM EMIT
 # the argument 0 denotes No Texture.
@@ -35,7 +35,7 @@
 # Then the scale
 # Then the x, y, and z rotation
 # For example:
-# d 1 1 2 0 0 0.0 0.0 0.0 1.0 0.0 0.0 0.0
+# d 0 1 2 0 0 0.0 0.0 0.0 1.0 0.0 0.0 0.0
 #
 # And that's the file spec
 
@@ -122,7 +122,8 @@ class ObjectReference:
         bank = atan2(x * sin(angle)-y * z * (1 - cos(angle)) , 1 - (x*x + z*z) * (1 - cos(angle)))
         bank = bank + 1.57079632679
 
-        return ("d %s %s %s %s %s %f %f %f %f %f %f %f\n" % (name, diff, spec, norm, emit, self.x_pos, self.y_pos, self.z_pos, self.scale, attitude, heading, bank))
+        # Add 1 to texture for one-based indexing
+        return ("d %s %s %s %s %s %f %f %f %f %f %f %f\n" % (name, diff+1, spec+1, norm+1, emit+1, self.x_pos, self.y_pos, self.z_pos, self.scale, attitude, heading, bank))
 
 class Converter:
     def __init__(self):
