@@ -1,6 +1,6 @@
 #include "mesh.h"
 
-Mesh::Mesh(const char* filename, GLfloat scale){
+Mesh::Mesh(const char* filename, GLuint shader, GLfloat scale){
     this->scale = scale;
 
     MeshLoader mesh_loader = MeshLoader(filename);
@@ -20,6 +20,8 @@ Mesh::Mesh(const char* filename, GLfloat scale){
     glGenBuffers(1, &ebo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh_loader.getFacesSize() * sizeof(GLuint), elements, GL_STATIC_DRAW);
+
+    attachShader(shader);
 
 }
 
@@ -55,6 +57,14 @@ void Mesh::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, glm::mat4* model
 }
 
 void Mesh::attachShader(GLuint shader_program){
+    // As soon as you've bound a certain VAO, every time you call glVertexAttribPointer, 
+    //that information will be stored in that VAO. This makes switching between different vertex data 
+    //and vertex formats as easy as binding a different VAO! Just remember that a VAO doesn't store 
+    //any vertex data by itself, it just references the VBOs you've created and how to retrieve the
+    // attribute values from them.
+
+    glBindVertexArray(vao);
+
     this->shader_program = shader_program;
 
     // Get the reference to the "position" attribute defined in
