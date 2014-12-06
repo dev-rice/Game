@@ -8,6 +8,10 @@
 #
 # rm -f res/models/*.mtl
 # This gets rid of any stray material (*.mtl) files in resources
+#
+# git clean -df
+# git checkout -- .
+#This removes all uncommitted changes, reverting to the last commit
 
 all:
 	@ echo Please specify target platform
