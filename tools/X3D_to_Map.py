@@ -24,17 +24,18 @@
 # t cube_spec.png
 #
 # Next, the application of certain textures to certain models, and location
+# IMPORTANT! Indices begin with 1-based indexing!
 # This is a longer, more complex field, denoted with the "d" tag, for drawable
 # The first entry is the index of the object in the above list of objects
 # The next entries are texture entries. These are the textures that will be applied to the model
 # They are ALWAYS in the order
 # DIFF SPEC NORM EMIT
-# the argument -1 denotes No Texture.
+# the argument 0 denotes No Texture.
 # The next three entries after the textures are the x, y, and z position
 # Then the scale
 # Then the x, y, and z rotation
 # For example:
-# d 0 0 1 -1 -1 0.0 0.0 0.0 1.0 0.0 0.0 0.0
+# d 1 1 2 0 0 0.0 0.0 0.0 1.0 0.0 0.0 0.0
 #
 # And that's the file spec
 
