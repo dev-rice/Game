@@ -13,6 +13,8 @@ public:
     ParticleEmitter(glm::vec3, glm::vec3, int, float, float, float, float);
     void draw();
 private:
+    float getRandomOffset();
+
     std::deque<Particle> particles;
 
     glm::vec3 position;
@@ -23,4 +25,5 @@ private:
     float deceleration;
     float decay;
     float randomAmount;
+    float halfRandomAmount;
 };

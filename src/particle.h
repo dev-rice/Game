@@ -6,7 +6,7 @@
 class Particle{
 public:
     Particle(glm::vec3, glm::vec3, float, float, float);
-    void setInitialValues(glm::vec3, glm::vec3, float, float, float);
+    void setInitialValues(glm::vec3, glm::vec3, float);
     void draw();
 private:  
     glm::vec3 position;
