@@ -30,13 +30,13 @@ void ParticleEmitter::draw(){
     // Can grow up to a size of particleCount, but not bigger,
     // recylcing particle objects
     if(particles.size() < particleCount){ 
-        Particle p;
+        Particle p(position, initDir, initialSpeed, deceleration, decay);
         // Randomize this shit
         particles.push_back(p);
     } else {
         Particle front = particles[0];
         particles.pop_front();
-        front.setInitialValues();
+        front.setInitialValues(position, initDir, initialSpeed, deceleration, decay);
         particles.push_back(front);
     }
 

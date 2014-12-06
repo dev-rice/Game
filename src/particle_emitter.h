@@ -1,7 +1,6 @@
 // particle_emitter.h
 // Trevor Westphal
 
-#warning Remove me once particles have been included at a higher level
 #include <glm/glm.hpp>
 
 #include <deque>
