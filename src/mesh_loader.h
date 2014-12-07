@@ -18,11 +18,9 @@ class MeshLoader{
 public:
     MeshLoader(const char*);
     
-    GLfloat* getVertexArray();
-    GLuint* getFaceArray();
+    std::vector<GLfloat> getVertexArray();
+    std::vector<GLuint>  getFaceArray();
     
-    int getVerticesSize();
-    int getFacesSize();
 private:
     
     void loadMeshFromFile(const char*);

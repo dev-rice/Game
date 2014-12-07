@@ -20,8 +20,8 @@
 class Drawable {
 public:
     Drawable(Mesh*);
-    Drawable(Mesh*, glm::vec3);
-    Drawable(Mesh*, glm::vec3, glm::vec3);
+    Drawable(Mesh*, glm::vec3, GLfloat);
+    Drawable(Mesh*, glm::vec3, glm::vec3, GLfloat);
 
     void draw(glm::mat4*, glm::mat4*, Light*);
     void moveTo(glm::vec3);
@@ -34,6 +34,8 @@ public:
 
 private:
     Mesh* mesh;
+
+    GLfloat scale;
 
     glm::vec3 position;
     glm::vec3 rotation;

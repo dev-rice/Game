@@ -129,26 +129,18 @@ void MeshLoader::loadMeshFromFile(const char* fileName){
 
 }
 
-GLfloat* MeshLoader::getVertexArray(){
+std::vector<GLfloat> MeshLoader::getVertexArray(){
     GLfloat* vertices = new GLfloat[final_verts.size()];
     for (int i = 0; i < final_verts.size(); ++i){
         vertices[i] = final_verts[i];
     }
-    return vertices;
+    return final_verts;
 }
 
-GLuint* MeshLoader::getFaceArray(){
+std::vector<GLuint> MeshLoader::getFaceArray(){
     GLuint* faces = new GLuint[final_tris.size()];
     for (int i = 0; i < final_tris.size(); ++i){
         faces[i] = final_tris[i];
     }
-    return faces;
-}
-
-int MeshLoader::getVerticesSize(){
-    return final_verts.size();
-}
-
-int MeshLoader::getFacesSize(){
-    return final_tris.size();
+    return final_tris;
 }

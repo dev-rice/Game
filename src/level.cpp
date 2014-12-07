@@ -60,19 +60,17 @@ void Level::loadLevel(const char * fileName){
 
         if(buffer[0] == 'm'){
             sscanf(buffer, "%*c %s", objectFileName);
-            printf("Mesh: %s\n", objectFileName);
             // Add this mesh to meshes
             char actual[80] = "";
             strcat(actual, MODEL_PATH);
             strcat(actual, objectFileName);
-            Mesh mesh = Mesh(actual, shader_program, 1.0f);
-            // mesh.attachShader(shader_program);
+            Mesh mesh = Mesh(actual);
+            mesh.attachShader(shader_program);
             meshes.push_back(mesh);
         }
 
         if(buffer[0] == 't'){
             sscanf(buffer, "%*c %s", textureFileName);
-            printf("Texture: %s\n", textureFileName);
             
             char actual[80] = "";
             strcat(actual, TEXTURE_PATH);
@@ -102,7 +100,7 @@ void Level::loadLevel(const char * fileName){
             glm::vec3 position = glm::vec3(x, y, z);
             glm::vec3 rotation = glm::vec3(x_rot, y_rot, z_rot);
 
-            Drawable drawable = Drawable(mesh, position, rotation);
+            Drawable drawable = Drawable(mesh, position, rotation, scale);
             drawable.attachTextureSet(texture_set);
             drawables.push_back(drawable);
 

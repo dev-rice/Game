@@ -1,13 +1,21 @@
 #include "mesh.h"
 
-Mesh::Mesh(const char* filename, GLuint shader, GLfloat scale){
-    this->scale = scale;
+Mesh::Mesh(const char* filename){
 
     MeshLoader mesh_loader = MeshLoader(filename);
-    GLfloat* vertices = mesh_loader.getVertexArray();
-    GLuint* elements = mesh_loader.getFaceArray();
-    num_faces = mesh_loader.getFacesSize();
+    std::vector<GLfloat> vertices = mesh_loader.getVertexArray();
+    std::vector<GLuint>  elements = mesh_loader.getFaceArray();
+    num_faces = elements.size();
 
+    loadMeshData(vertices, elements);
+}
+
+Mesh::Mesh(std::vector<GLfloat> vertices, std::vector<GLuint> elements){
+
+    loadMeshData(vertices, elements);
+}
+
+void Mesh::loadMeshData(std::vector<GLfloat> vertices, std::vector<GLuint> elements){
     GLuint vbo, ebo;
 
     glGenVertexArrays(1, &vao);
@@ -15,21 +23,18 @@ Mesh::Mesh(const char* filename, GLuint shader, GLfloat scale){
 
     glGenBuffers(1, &vbo);               // Generate 1 buffer
     glBindBuffer(GL_ARRAY_BUFFER, vbo);  // Make vbo the active array buffer
-    glBufferData(GL_ARRAY_BUFFER, mesh_loader.getVerticesSize() * sizeof(GLfloat), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), vertices.data(), GL_STATIC_DRAW);
 
     glGenBuffers(1, &ebo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh_loader.getFacesSize() * sizeof(GLuint), elements, GL_STATIC_DRAW);
-
-    attachShader(shader);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements.size()* sizeof(GLuint), elements.data(), GL_STATIC_DRAW);
 
 }
-
-void Mesh::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, glm::mat4* model_matrix, TextureSet* texture_set, Light* light){
+void Mesh::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, glm::mat4* model_matrix, GLfloat scale, TextureSet* texture_set, Light* light){
     glBindVertexArray(vao);
     
     // Set the scale, this is not really going to be a thing, probably
-    glUniform1f(glGetUniformLocation(shader_program, "scale"), this->scale);
+    glUniform1f(glGetUniformLocation(shader_program, "scale"), scale);
 
     // Update the time uniform
     glUniform1f(glGetUniformLocation(shader_program, "time"), (float)glfwGetTime());
