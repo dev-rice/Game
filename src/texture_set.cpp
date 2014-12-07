@@ -7,8 +7,8 @@ TextureSet::TextureSet(GLuint diff, GLuint spec, GLuint norm, GLuint emit){
     printf("  normal:   %d\n", norm);
     printf("  emissive: %d\n\n", emit);
 
-    GLuint pink = TextureLoader::getPink();
-    GLuint alpha = TextureLoader::getAlpha();
+    GLuint pink = TextureLoader::loadPink();
+    GLuint alpha = TextureLoader::loadAlpha();
 
     printf("Pink:  %d\n", pink);
     printf("Alpha: %d\n", alpha);
