@@ -15,4 +15,5 @@ private:
     float initialSpeed;
     float deceleration;
     int decayTicks;
+    int currentTick;
 };
