@@ -94,29 +94,10 @@ void Level::loadLevel(const char * fileName){
             printf("  normal:   %d\n", normIndex);
             printf("  emissive: %d\n\n", emitIndex);
 
-            // If the index is 0, load a default texture
-            GLuint diffuse, specular, normal, emissive;
-
-            if (diffIndex == 0){
-                diffuse = 0;
-            } else {
-                diffuse  = textures[diffIndex-1];
-            }
-            if (specIndex == 0){
-                specular = 0;
-            } else {
-                specular  = textures[specIndex-1];
-            }            
-            if (normIndex == 0){
-                normal = 0;
-            } else {
-                normal  = textures[normIndex-1];
-            }            
-            if (emitIndex == 0){
-                emissive = 0;
-            } else {
-                emissive  = textures[emitIndex-1];
-            }
+            GLuint diffuse = getTexture(diffIndex);
+            GLuint specular = getTexture(specIndex);
+            GLuint normal = getTexture(normIndex);
+            GLuint emissive = getTexture(emitIndex);
 
             TextureSet texture_set(diffuse, specular, normal, emissive);
 
@@ -131,6 +112,17 @@ void Level::loadLevel(const char * fileName){
             delete mesh;
         }
     }
+}
+
+GLuint Level::getTexture(GLuint index){
+    GLuint texture;
+    if (index == 0){
+        texture = 0;
+    } else {
+        texture = textures[index - 1];
+    }
+
+    return texture;
 }
 
 void Level::handleInputs(){

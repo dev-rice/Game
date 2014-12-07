@@ -29,6 +29,9 @@ public:
 
     std::vector<Drawable*> getDrawable();
 private:
+
+    GLuint getTexture(GLuint);
+
     GLFWwindow* window;
     
     Camera camera;
