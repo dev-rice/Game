@@ -5,7 +5,6 @@ Mesh::Mesh(const char* filename){
     MeshLoader mesh_loader = MeshLoader(filename);
     std::vector<GLfloat> vertices = mesh_loader.getVertexArray();
     std::vector<GLuint>  elements = mesh_loader.getFaceArray();
-    num_faces = elements.size();
 
     loadMeshData(vertices, elements);
 }
@@ -16,6 +15,8 @@ Mesh::Mesh(std::vector<GLfloat> vertices, std::vector<GLuint> elements){
 }
 
 void Mesh::loadMeshData(std::vector<GLfloat> vertices, std::vector<GLuint> elements){
+    num_faces = elements.size();
+    
     GLuint vbo, ebo;
 
     glGenVertexArrays(1, &vao);

@@ -19,12 +19,15 @@ Level::Level(GLFWwindow* window){
     GLuint fragment_shader = ShaderLoader::loadFragmentShader("shaders/fragment_shader.glsl");
     shader_program = ShaderLoader::combineShaderProgram(vertex_shader, fragment_shader);
 
+    this->emitter = ParticleEmitter();
 }
 
 void Level::draw(){
     // Update the view matrix based on the current
     // camera location / position
     view_matrix = camera.getViewMatrix();
+
+    emitter.draw(&view_matrix, &proj_matrix, &light);
     
     // Draw all the drawables
     for (int i = 0; i < drawables.size(); ++i){
@@ -112,6 +115,20 @@ void Level::loadLevel(const char * fileName){
             delete mesh;
         }
     }
+
+    // plane = Mesh("res/models/elbow.obj");
+    // plane.attachShader(shader_program);
+
+    // glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
+    // glm::vec3 rotation = glm::vec3(0.0f, 0.0f, 0.0f);
+    // GLfloat the_scale = 1.0f;
+
+    // TextureSet texture_set(0, 0, 0, 0);
+
+    // Drawable drawable = Drawable(&plane, position, rotation, scale);
+    // drawable.attachTextureSet(texture_set);
+    // drawables.push_back(drawable);
+
 }
 
 GLuint Level::getTexture(GLuint index){

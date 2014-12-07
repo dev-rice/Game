@@ -20,6 +20,9 @@ public:
     static GLuint loadPink();
     static GLuint loadAlpha();
 
+    // static GLuint alpha;
+    // static Gluint pink;
+
     static GLuint loadTextureFromFile(const char*, GLuint);
     static GLuint loadTextureFromPixel(std::vector<GLfloat>);
 

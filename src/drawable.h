@@ -19,6 +19,7 @@
 
 class Drawable {
 public:
+    Drawable (){;}
     Drawable(Mesh*);
     Drawable(Mesh*, glm::vec3, GLfloat);
     Drawable(Mesh*, glm::vec3, glm::vec3, GLfloat);
