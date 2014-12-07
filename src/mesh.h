@@ -29,15 +29,17 @@
 class Mesh {
 public:
     Mesh() {;}
-    Mesh(const char*, GLuint, GLfloat);
-    
-    void draw(glm::mat4*, glm::mat4*, glm::mat4*, TextureSet*, Light*);
+    Mesh(const char*);
+    Mesh(std::vector<GLfloat>, std::vector<GLuint>);
+
+    void draw(glm::mat4*, glm::mat4*, glm::mat4*, GLfloat, TextureSet*, Light*);
     void attachShader(GLuint);
     void attachTexture(GLuint, GLuint);
 
 private:
 
-    GLfloat scale;
+    void loadMeshData(std::vector<GLfloat>, std::vector<GLuint>);
+
     GLuint num_faces;
 
     // Pointers to all that openGL stuff

@@ -44,8 +44,6 @@ void TextureContainer::addTexture(const char* filename, GLuint filter){
 
     textures.push_back(texture);
 
-    printf("Bound texture file '%s' to %d on the graphics card.\n", filename, texture);
-
 }
 
 GLuint TextureContainer::getTexture(int index){
