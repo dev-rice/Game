@@ -9,6 +9,10 @@
 // #elif defined __gnu_linux__
 #endif
 
+#include <vector>
+
+#include "texture_loader.h"
+
 class TextureSet {
 public:
     TextureSet() {;}

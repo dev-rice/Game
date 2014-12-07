@@ -18,6 +18,7 @@ Level::Level(GLFWwindow* window){
     GLuint vertex_shader = ShaderLoader::loadVertexShader("shaders/vertex_shader.glsl");
     GLuint fragment_shader = ShaderLoader::loadFragmentShader("shaders/fragment_shader.glsl");
     shader_program = ShaderLoader::combineShaderProgram(vertex_shader, fragment_shader);
+
 }
 
 void Level::draw(){
@@ -77,7 +78,8 @@ void Level::loadLevel(const char * fileName){
             strcat(actual, textureFileName);
 
             //  Add this texture to the texture container
-            textures.addTexture(actual, GL_LINEAR);
+            GLuint texture = TextureLoader::loadTextureFromFile(actual, GL_LINEAR);
+            textures.push_back(texture);
 
         }
 
@@ -86,16 +88,12 @@ void Level::loadLevel(const char * fileName){
 
             Mesh* mesh = &meshes[objectIndex];
 
-            GLint diffuse = textures.getTexture(diffIndex);
-            GLint specular = textures.getTexture(specIndex);
-            GLint normal = textures.getTexture(normIndex);
-            GLint emissive = textures.getTexture(emitIndex);
+            GLuint diffuse  = textures[diffIndex - 1];
+            GLuint specular = textures[specIndex - 1];
+            GLuint normal   = textures[normIndex - 1];
+            GLuint emissive = textures[emitIndex - 1];
 
-            TextureSet texture_set;
-            texture_set.diffuse = diffuse;
-            texture_set.specular = specular;
-            texture_set.normal = normal;
-            texture_set.emissive = emissive;
+            TextureSet texture_set(diffuse, specular, normal, emissive);
 
             glm::vec3 position = glm::vec3(x, y, z);
             glm::vec3 rotation = glm::vec3(x_rot, y_rot, z_rot);
