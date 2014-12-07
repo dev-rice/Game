@@ -5,7 +5,7 @@
 
 class Particle{
 public:
-    Particle(glm::vec3, glm::vec3, float, float, float);
+    Particle(glm::vec3, glm::vec3, float, float, int);
     void setInitialValues(glm::vec3, glm::vec3, float);
     void draw();
 private:  
@@ -14,5 +14,5 @@ private:
 
     float initialSpeed;
     float deceleration;
-    float decay;
+    int decayTicks;
 };

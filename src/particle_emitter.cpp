@@ -11,11 +11,11 @@ ParticleEmitter::ParticleEmitter(){
 
     this->initialSpeed = 1.0f;
     this->deceleration = 1.0f;
-    this->decay = 1.0f;
+    this->decayTicks = 1;
     this->randomAmount = 0.0f;
 }
 
-ParticleEmitter::ParticleEmitter(glm::vec3 position, glm::vec3 initDir, int particleCount, float initialSpeed, float deceleration, float decay, float randomAmount){
+ParticleEmitter::ParticleEmitter(glm::vec3 position, glm::vec3 initDir, int particleCount, float initialSpeed, float deceleration, float randomAmount, int decayTicks){
     this->position = position;
     this->initDir = initDir;
 
@@ -23,7 +23,7 @@ ParticleEmitter::ParticleEmitter(glm::vec3 position, glm::vec3 initDir, int part
 
     this->initialSpeed = initialSpeed;
     this->deceleration = deceleration;
-    this->decay = decay;
+    this->decayTicks = decayTicks;
     this->randomAmount = randomAmount;
     this->halfRandomAmount = randomAmount/2;
 }
@@ -31,17 +31,16 @@ ParticleEmitter::ParticleEmitter(glm::vec3 position, glm::vec3 initDir, int part
 void ParticleEmitter::draw(){
 
     #warning This may be a bottleneck: 7 calls to rand() every frame draw
-    
+
     glm::vec3 newPosition = position + glm::vec3(getRandomOffset(), getRandomOffset(), getRandomOffset());
     glm::vec3 newInitDir  = initDir  + glm::vec3(getRandomOffset(), getRandomOffset(), getRandomOffset());
 
     float newInitSpeed = initialSpeed + getRandomOffset();
 
-    // Can grow up to a size of particleCount, but not bigger,
-    // recylcing particle objects
+    // Can grow up to a size of particleCount, but not bigger
+    // recycling particle objects
     if(particles.size() < particleCount){ 
-        Particle p(newPosition, newInitDir, newInitSpeed, deceleration, decay);
-        // Randomize this shit
+        Particle p(newPosition, newInitDir, newInitSpeed, deceleration, decayTicks);
         particles.push_back(p);
     } else {
         Particle front = particles[0];

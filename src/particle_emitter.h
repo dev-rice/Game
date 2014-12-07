@@ -10,7 +10,7 @@
 class ParticleEmitter{
 public:
     ParticleEmitter();
-    ParticleEmitter(glm::vec3, glm::vec3, int, float, float, float, float);
+    ParticleEmitter(glm::vec3, glm::vec3, int, float, float, float, int);
     void draw();
 private:
     float getRandomOffset();
@@ -23,7 +23,7 @@ private:
     int particleCount;
     float initialSpeed;
     float deceleration;
-    float decay;
+    float decayTicks;
     float randomAmount;
     float halfRandomAmount;
 };
