@@ -3,7 +3,7 @@
 # Trevor Westphal
 # converts *.x3d scenes to the custom *.map files
 #
-# Map file Specifiation
+# Map file Specification
 # 
 # First, the list of unique objects in the scene
 # These start with the "m" tag, for mesh
@@ -15,7 +15,7 @@
 # These start with the "t" tag, for texture
 # These are found assuming the following format
 # - If it is a diffuse map, (object name)_diff.png
-# - If it is a speculat map, (object name)_spec.png
+# - If it is a specular map, (object name)_spec.png
 # - If it is a normal map, (object name)_norm.png
 # - If it is an emissive map, (object name)_emit.png
 # We will not look for jpg/jpeg. Those are stupid and should be hated.
@@ -142,18 +142,18 @@ class Converter:
         self.writeToFile()      
 
     def parseArguments(self, arguments):
-        if(len(arguments)>4 or len(arguments)<3):
+        if(len(arguments)>5 or len(arguments)<4):
             self.printUsage()
             exit(1)
 
         self.inputFileName = arguments[1]
-        self.outputFileName = self.inputFileName.split(".")[0]+".map"
+        self.outputFileName = arguments[2]
 
-        option1 = arguments[2]
+        option1 = arguments[3]
         option2 = ""
 
         try:
-            option2 = arguments[3]
+            option2 = arguments[4]
         except:
             pass
 
@@ -165,7 +165,7 @@ class Converter:
             self.searchForTextures = True
 
     def printUsage(self):
-        print("\nX3D_to_Map usage:\npython3 X3D_to_Map.py [input file] [argument list]\n\n -so\n\tEnable searching for related objects\n -st\n\tEnable searching for related texture images\n -d\n\tIgnore related files and write defaults\n\tThis overrides any other options\n")
+        print("\nX3D_to_Map usage:\npython3 X3D_to_Map.py [input file] [output file] [argument list]\n\n -so\n\tEnable searching for related objects\n -st\n\tEnable searching for related texture images\n -d\n\tIgnore related files and write defaults\n\tThis overrides any other options\n")
 
     def scanFile(self):
         ifile = open(self.inputFileName, "r")
