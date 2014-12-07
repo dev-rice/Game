@@ -28,9 +28,9 @@ void Particle::draw(){
     if(currentTick < decayTicks){
         currentTick++;
 
-        float something = (currentTick/float(decayTicks)
+        float something = (currentTick/float(decayTicks));
 
-        position+=(initDir * initialSpeed); // Needs deceleration
+        position += (initDir * initialSpeed); // Needs deceleration
 
         // Now actually draw the damn thing
     }

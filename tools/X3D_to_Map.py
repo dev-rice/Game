@@ -146,6 +146,7 @@ class ObjectReference:
             name = 0
 
         # p 3 1.0 1.0 1.0 0.0 1.0 0.0 2.0 3600
+        # TODO tweak default settings
         return ("p %d %f %f %f 0.0 1.0 0.0 1.0 2.0 3600" % (name, self.x_pos, self.y_pos, self.z_pos))
 
 class Converter:
