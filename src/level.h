@@ -8,10 +8,10 @@
 
 #include "drawable.h"
 #include "mesh.h"
-#include "texture_container.h"
 #include "camera.h"
 #include "shader_loader.h"
 #include "light.h"
+#include "texture_loader.h"
 
 static const char* MODEL_PATH = "res/models/";
 static const char* TEXTURE_PATH = "res/textures/";
@@ -34,7 +34,7 @@ private:
     Camera camera;
     Light light;
 
-    TextureContainer textures;
+    std::vector<GLuint> textures;
     std::vector<Mesh> meshes;
     std::vector<Drawable> drawables;
 
