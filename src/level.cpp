@@ -88,10 +88,35 @@ void Level::loadLevel(const char * fileName){
 
             Mesh* mesh = &meshes[objectIndex];
 
-            GLuint diffuse  = textures[diffIndex - 1];
-            GLuint specular = textures[specIndex - 1];
-            GLuint normal   = textures[normIndex - 1];
-            GLuint emissive = textures[emitIndex - 1];
+            printf("Creating Texture Set with:\n");
+            printf("  diffuse:  %d\n", diffIndex);
+            printf("  specular: %d\n", specIndex);
+            printf("  normal:   %d\n", normIndex);
+            printf("  emissive: %d\n\n", emitIndex);
+
+            // If the index is 0, load a default texture
+            GLuint diffuse, specular, normal, emissive;
+
+            if (diffIndex == 0){
+                diffuse = 0;
+            } else {
+                diffuse  = textures[diffIndex-1];
+            }
+            if (specIndex == 0){
+                specular = 0;
+            } else {
+                specular  = textures[specIndex-1];
+            }            
+            if (normIndex == 0){
+                normal = 0;
+            } else {
+                normal  = textures[normIndex-1];
+            }            
+            if (emitIndex == 0){
+                emissive = 0;
+            } else {
+                emissive  = textures[emitIndex-1];
+            }
 
             TextureSet texture_set(diffuse, specular, normal, emissive);
 

@@ -41,8 +41,6 @@ GLuint TextureLoader::loadTextureFromFile(const char* filename, GLuint filter){
     glGenerateMipmap(GL_TEXTURE_2D);
     SOIL_free_image_data(image);
 
-    printf("loaded texture file '%s' to location %d\n", filename, texture);
-
     return texture;
 
 }
@@ -65,8 +63,6 @@ GLuint TextureLoader::loadTextureFromPixel(std::vector<GLfloat> pixel){
     // Do nearest interpolation for scaling the image up and down.
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-    printf("Loaded a texture from pixel and put it in location %d\n", texture);
 
     return texture;
 }

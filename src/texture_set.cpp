@@ -1,17 +1,9 @@
 #include "texture_set.h"
 
 TextureSet::TextureSet(GLuint diff, GLuint spec, GLuint norm, GLuint emit){
-    printf("Creating Texture Set with:\n");
-    printf("  diffuse:  %d\n", diff);
-    printf("  specular: %d\n", spec);
-    printf("  normal:   %d\n", norm);
-    printf("  emissive: %d\n\n", emit);
 
     GLuint pink = TextureLoader::loadPink();
     GLuint alpha = TextureLoader::loadAlpha();
-
-    printf("Pink:  %d\n", pink);
-    printf("Alpha: %d\n", alpha);
 
     if (diff == 0){
         printf("diffuse is zero, setting ");
@@ -36,12 +28,5 @@ TextureSet::TextureSet(GLuint diff, GLuint spec, GLuint norm, GLuint emit){
             this->emissive = alpha;
         }
     }
-
-    // printf("Texture Set:\n");
-    // printf("  diffuse  = %d\n", diffuse);
-    // printf("  specular = %d\n", specular);
-    // printf("  normal   = %d\n", normal);
-    // printf("  emissive = %d\n\n", emissive);
-
     
 }
