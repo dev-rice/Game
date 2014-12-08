@@ -1,6 +1,9 @@
 // particle_emitter.h
 // Trevor Westphal
 
+#ifndef ParticleEmitter_h
+#define ParticleEmitter_h
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
@@ -9,35 +12,43 @@
 // #elif defined __gnu_linux__
 #endif
 
-#define GLM_FORCE_RADIANS
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
+// #define GLM_FORCE_RADIANS
+// #include <glm/glm.hpp>
+// #include <glm/gtc/matrix_transform.hpp>
+// #include <glm/gtc/type_ptr.hpp>
 
 #include <vector>
 #include <random>
 #include <deque>
 
 
-#include "mesh.h"
 #include "particle.h"
-#include "light.h"
 #include "drawable.h"
+#include "mesh.h"
+#include "camera.h"
+#include "shader_loader.h"
+#include "light.h"
+#include "texture_loader.h"
+#include "texture_set.h"
 
 class ParticleEmitter{
 public:
-    ParticleEmitter();
-    ParticleEmitter(glm::vec3, glm::vec3, int, float, float, float, int);
+    ParticleEmitter() {;}
+    ParticleEmitter(GLuint);
+    ParticleEmitter(Drawable);
+    ParticleEmitter(glm::vec3, glm::vec3, int, float, float, float, int, GLuint);
     void draw(glm::mat4*, glm::mat4*, Light*);
+
+    Drawable plane_draw;
+
 private:
     float getRandomOffset();
-    void loadMesh();
 
     std::deque<Particle> particles;
 
     glm::vec3 position;
     glm::vec3 initDir;
-
+   
     int particleCount;
     float initialSpeed;
     float deceleration;
@@ -45,6 +56,9 @@ private:
     float randomAmount;
     float halfRandomAmount;
 
+    Mesh* plane_pointer;
     Mesh plane;
-    Drawable drawable;
+
 };
+
+#endif

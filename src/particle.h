@@ -8,14 +8,12 @@
 
 class Particle{
 public:
-    Particle(glm::vec3, glm::vec3, float, float, int, Mesh*);
+    Particle(glm::vec3, glm::vec3, float, float, int);
     void setInitialValues(glm::vec3, glm::vec3, float);
-    void draw(glm::mat4*, glm::mat4*, Light*);
+    void draw();
 private:  
     glm::vec3 position;
     glm::vec3 initDir;
-
-    Drawable particleDrawable;
 
     float initialSpeed;
     float deceleration;

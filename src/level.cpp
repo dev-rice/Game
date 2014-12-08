@@ -19,16 +19,15 @@ Level::Level(GLFWwindow* window){
     GLuint fragment_shader = ShaderLoader::loadFragmentShader("shaders/fragment_shader.glsl");
     shader_program = ShaderLoader::combineShaderProgram(vertex_shader, fragment_shader);
 
-    this->emitter = ParticleEmitter();
 }
 
 void Level::draw(){
     // Update the view matrix based on the current
     // camera location / position
     view_matrix = camera.getViewMatrix();
-
-    emitter.draw(&view_matrix, &proj_matrix, &light);
     
+    this->emitter.draw(&view_matrix, &proj_matrix, &light);
+
     // Draw all the drawables
     for (int i = 0; i < drawables.size(); ++i){
         // This is how you move things
@@ -91,12 +90,6 @@ void Level::loadLevel(const char * fileName){
 
             Mesh* mesh = &meshes[objectIndex];
 
-            printf("Creating Texture Set with:\n");
-            printf("  diffuse:  %d\n", diffIndex);
-            printf("  specular: %d\n", specIndex);
-            printf("  normal:   %d\n", normIndex);
-            printf("  emissive: %d\n\n", emitIndex);
-
             GLuint diffuse = getTexture(diffIndex);
             GLuint specular = getTexture(specIndex);
             GLuint normal = getTexture(normIndex);
@@ -115,19 +108,32 @@ void Level::loadLevel(const char * fileName){
             delete mesh;
         }
     }
+ 
+    GLfloat planeVerts[] = {-0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+                             0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+                            -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+                             0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,};
 
-    // plane = Mesh("res/models/elbow.obj");
-    // plane.attachShader(shader_program);
+    GLuint  planeFaces[] = {0, 1, 2, 1, 2, 3};
 
-    // glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
-    // glm::vec3 rotation = glm::vec3(0.0f, 0.0f, 0.0f);
-    // GLfloat the_scale = 1.0f;
+    std::vector<GLfloat> planeVertsVector(planeVerts, planeVerts + sizeof(planeVerts) / sizeof(GLfloat));
+    std::vector<GLuint> planeFacesVector(planeFaces, planeFaces + sizeof(planeFaces) / sizeof(GLuint));
 
-    // TextureSet texture_set(0, 0, 0, 0);
+    plane = Mesh(planeVertsVector, planeFacesVector);
+    plane.attachShader(shader_program);
 
-    // Drawable drawable = Drawable(&plane, position, rotation, scale);
-    // drawable.attachTextureSet(texture_set);
-    // drawables.push_back(drawable);
+    glm::vec3 position = glm::vec3(-2.0f, 2.0f, 0.0f);
+    glm::vec3 rotation = glm::vec3(0.0f, 0.0f, 0.0f);
+    GLfloat the_scale = 2.0f;
+
+    TextureSet texture_set(0, 0, 0, 0);
+
+    plane_draw = Drawable(&plane, position, rotation, the_scale);
+    plane_draw.attachTextureSet(texture_set);
+
+    this->emitter = Emitter(shader_program);
+    // emitter = Emitter(plane, plane_draw);
+
 
 }
 

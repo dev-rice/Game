@@ -3,7 +3,7 @@
 
 #include "particle_emitter.h"
 
-ParticleEmitter::ParticleEmitter(){
+ParticleEmitter::ParticleEmitter(GLuint shader_program){
     this->position = glm::vec3(0.0f, 1.0f, 1.0f);
     this->initDir = glm::vec3(0.0f, 1.0f, 0.0f);
 
@@ -13,13 +13,40 @@ ParticleEmitter::ParticleEmitter(){
     this->decayTicks = 60;
     this->randomAmount = 0.0f;
 
-    loadMesh();
+    GLfloat planeVerts[] = {-0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+                             0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+                            -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+                             0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,};
 
-    Particle p(position, initDir, initialSpeed, deceleration, decayTicks, &plane);
-    this->particles.push_back(p);
+    GLuint  planeFaces[] = {0, 1, 2, 1, 2, 3};
+
+    std::vector<GLfloat> planeVertsVector(planeVerts, planeVerts + sizeof(planeVerts) / sizeof(GLfloat));
+    std::vector<GLuint> planeFacesVector(planeFaces, planeFaces + sizeof(planeFaces) / sizeof(GLuint));
+
+
+    plane = Mesh(planeVertsVector, planeFacesVector);
+    plane.attachShader(shader_program);
+
+    plane_pointer = &plane;
+
+    position = glm::vec3(-2.0f, 2.0f, 0.0f);
+    glm::vec3 rotation = glm::vec3(0.0f, 0.0f, 0.0f);
+    GLfloat the_scale = 2.0f;
+
+    TextureSet texture_set(0, 0, 0, 0);
+
+    printf("plane: %p\n", plane_pointer);
+
+    this->plane_draw = Drawable(plane_pointer, position, rotation, the_scale);
+    this->plane_draw.attachTextureSet(texture_set);
+
 }
 
-ParticleEmitter::ParticleEmitter(glm::vec3 position, glm::vec3 initDir, int particleCount, float initialSpeed, float deceleration, float randomAmount, int decayTicks){
+ParticleEmitter::ParticleEmitter(Drawable plane_draw){
+    this->plane_draw = plane_draw;
+}
+
+ParticleEmitter::ParticleEmitter(glm::vec3 position, glm::vec3 initDir, int particleCount, float initialSpeed, float deceleration, float randomAmount, int decayTicks, GLuint shader_program){
     this->position = position;
     this->initDir = initDir;
 
@@ -30,28 +57,6 @@ ParticleEmitter::ParticleEmitter(glm::vec3 position, glm::vec3 initDir, int part
     this->decayTicks = decayTicks;
     this->randomAmount = randomAmount;
     this->halfRandomAmount = randomAmount/2;
-
-    loadMesh();
-}
-
-void ParticleEmitter::loadMesh(){
-
-    GLuint vertex_shader = ShaderLoader::loadVertexShader("shaders/vertex_shader.glsl");
-    GLuint fragment_shader = ShaderLoader::loadFragmentShader("shaders/fragment_shader.glsl");
-    GLuint shader_program = ShaderLoader::combineShaderProgram(vertex_shader, fragment_shader);
-
-    GLfloat planeVerts[] = {0.5f,  0.5f, 0.0f,
-                            0.5f, -0.5f, 0.0f, 
-                           -0.5f,  0.5f, 0.0f, 
-                           -0.5f, -0.5f, 0.0f};
-
-    GLuint  planeFaces[] = {0, 1, 2, 1, 2, 3};
-
-    std::vector<GLfloat> planeVertsVector(planeVerts, planeVerts + sizeof(planeVerts) / sizeof(GLfloat));
-    std::vector<GLuint> planeFacesVector(planeFaces, planeFaces + sizeof(planeFaces) / sizeof(GLuint));
-    // plane = Mesh(planeVertsVector, planeFacesVector);
-    plane = Mesh("res/models/elbow.obj");
-    plane.attachShader(shader_program);
 }
 
 void ParticleEmitter::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, Light* light){
@@ -77,11 +82,12 @@ void ParticleEmitter::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, Light
     //     particles.push_back(front);
     // }
 
-    for(int i(0); i < particles.size(); ++i){
-        particles[i].draw(view_matrix, proj_matrix, light);
-    }
+    // for(int i(0); i < particles.size(); ++i){
+        // particles[i].draw(view_matrix, proj_matrix, light);
+    // }
+    printf("plane: %p\n", plane_pointer);
+    plane_draw.draw(view_matrix, proj_matrix, light);
 
-    // drawable.draw(view_matrix, proj_matrix, light);
 }
 
 float ParticleEmitter::getRandomOffset(){

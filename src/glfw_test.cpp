@@ -18,7 +18,16 @@
 
 GLFWwindow* initializeGLFWWindow(int, int, bool);
 
+class Box {
+   public:
+      double length;   // Length of a box
+      double breadth;  // Breadth of a box
+      double height;   // Height of a box
+};
+
 int main(int argc, char* argv[]) {
+    Box fucking_box;
+    
     // Make the randomizer random
     srand(time(NULL));
 
@@ -133,8 +142,8 @@ GLFWwindow* initializeGLFWWindow(int width, int height, bool fullscreen){
     glEnable(GL_DEPTH_TEST);
     
     // Describe what constitutes the front face, and enable backface culling
-    glFrontFace(GL_CCW);
-    glEnable(GL_CULL_FACE);
+    // glFrontFace(GL_CCW);
+    // glEnable(GL_CULL_FACE);
 
     // Alpha transparency
     glEnable(GL_BLEND);

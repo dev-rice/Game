@@ -2,6 +2,8 @@
 
 Drawable::Drawable(Mesh* mesh){
     position = glm::vec3(0.0f, 0.0f, 0.0f);
+    rotation = glm::vec3(0.0f, 0.0f, 0.0f);
+
     this->mesh = mesh;
 }
 

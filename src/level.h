@@ -12,7 +12,8 @@
 #include "shader_loader.h"
 #include "light.h"
 #include "texture_loader.h"
-#include "particle_emitter.h"
+#include "texture_set.h"
+#include "emitter.h"
 
 static const char* MODEL_PATH = "res/models/";
 static const char* TEXTURE_PATH = "res/textures/";
@@ -28,7 +29,6 @@ public:
 
     void handleInputs();
 
-    std::vector<Drawable*> getDrawable();
 private:
 
     GLuint getTexture(GLuint);
@@ -42,15 +42,15 @@ private:
     std::vector<Mesh> meshes;
     std::vector<Drawable> drawables;
 
-    ParticleEmitter emitter;
+    Emitter emitter;
 
     GLuint shader_program;
 
     glm::mat4 view_matrix;
     glm::mat4 proj_matrix;
 
-
     Mesh plane;
+    Drawable plane_draw;
 
 };
 
