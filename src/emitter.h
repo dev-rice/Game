@@ -31,7 +31,7 @@ public:
     ~Emitter();
     Emitter(GLuint);
 
-    void draw(glm::mat4*, glm::mat4*, Light*);
+    void draw(Camera*, glm::mat4*, Light*);
 private:
     int maxParticles;
 

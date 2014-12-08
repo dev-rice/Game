@@ -6,7 +6,7 @@ Emitter::Emitter(GLuint shader_program){
                             -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
                              0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,};
 
-    GLuint  planeFaces[] = {0, 1, 2, 1, 2, 3};
+    GLuint  planeFaces[] = {2, 1, 0, 1, 2, 3};
 
     std::vector<GLfloat> planeVertsVector(planeVerts, planeVerts + sizeof(planeVerts) / sizeof(GLfloat));
     std::vector<GLuint> planeFacesVector(planeFaces, planeFaces + sizeof(planeFaces) / sizeof(GLuint));
@@ -24,6 +24,7 @@ Emitter::Emitter(GLuint shader_program){
 }
 
 Emitter::~Emitter(){
+    // Fix me or something
     delete billboard;
     delete texture_set;
 
@@ -36,7 +37,7 @@ Emitter::~Emitter(){
     }
 }
 
-void Emitter::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, Light* light){
+void Emitter::draw(Camera* camera, glm::mat4* proj_matrix, Light* light){
 
     float r1 = (rand()%100)/float(100)-0.5f;
     float r2 = (rand()%100)/float(100)-0.76f;
@@ -54,6 +55,6 @@ void Emitter::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, Light* light)
     }
 
     for (int i = 0; i < particles.size(); ++i){
-        particles[i]->draw(view_matrix, proj_matrix, light);
+        particles[i]->draw(camera, proj_matrix, light);
     }
 }

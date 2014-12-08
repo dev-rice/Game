@@ -4,7 +4,7 @@
 #include "level.h"
 
 Level::~Level(){
-    #warning This leaks memory here, but inverting it causes a segfault
+    #warning This leaks memory here, but correcting it causes a segfault
     // See http://stackoverflow.com/questions/13223399/c-deleting-a-pointer
 
     //emitter->~Emitter();
@@ -39,7 +39,7 @@ void Level::draw(){
     // camera location / position
     view_matrix = camera.getViewMatrix();
     
-    emitter->draw(&view_matrix, &proj_matrix, &light);
+    emitter->draw(&camera, &proj_matrix, &light);
 
     // Draw all the drawables
     for (int i = 0; i < drawables.size(); ++i){

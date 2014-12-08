@@ -142,8 +142,8 @@ GLFWwindow* initializeGLFWWindow(int width, int height, bool fullscreen){
     glEnable(GL_DEPTH_TEST);
     
     // Describe what constitutes the front face, and enable backface culling
-    // glFrontFace(GL_CCW);
-    // glEnable(GL_CULL_FACE);
+    glFrontFace(GL_CCW);
+    glEnable(GL_CULL_FACE);
 
     // Alpha transparency
     glEnable(GL_BLEND);

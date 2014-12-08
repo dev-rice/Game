@@ -105,6 +105,10 @@ glm::vec3 Camera::getPosition(){
     return position;
 }
 
+glm::vec3 Camera::getRotation(){
+    return rotation;
+}
+
 void Camera::print(){
     printf("Camera\n");
     printf("    position = <%f, %f, %f>\n", position.x, position.y, position.z);

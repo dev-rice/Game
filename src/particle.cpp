@@ -29,7 +29,7 @@ void Particle::setInitialValues(glm::vec3 position, glm::vec3 initDir, float ini
     this->currentTick = 0;
 }
 
-void Particle::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, Light* light){
+void Particle::draw(Camera* camera, glm::mat4* proj_matrix, Light* light){
 
     if(currentTick < decayTicks){
         currentTick++;
@@ -42,7 +42,9 @@ void Particle::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, Light* light
         position +=  initDir * position_scalar;
 
         drawable->moveTo(position);
-        drawable->draw(view_matrix, proj_matrix, light);
+        drawable->setRotation(camera->getRotation());
+        glm::mat4 view_matrix = camera->getViewMatrix();
+        drawable->draw(&view_matrix, proj_matrix, light);
 
     }
 
