@@ -32,6 +32,10 @@ void Drawable::setRotation(glm::vec3 rotation){
     this->rotation = rotation;
 }
 
+void Drawable::setScale(GLfloat scale){
+    this->scale = scale;
+}
+
 void Drawable::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, Light* light){
     
     // Create the model matrix based on position

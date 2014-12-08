@@ -34,7 +34,9 @@ void Particle::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, Light* light
     if(currentTick < decayTicks){
         currentTick++;
 
-        float something = (currentTick/float(decayTicks));
+        float scale = 1- (currentTick/float(decayTicks));
+
+        drawable->setScale(scale);
 
         float position_scalar = fmax((initialSpeed - currentTick * deceleration), 0.0f);
         position +=  initDir * position_scalar;

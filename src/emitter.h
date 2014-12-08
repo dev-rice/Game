@@ -32,6 +32,7 @@ public:
 
     void draw(glm::mat4*, glm::mat4*, Light*);
 private:
+
     Mesh* billboard;
     TextureSet* texture_set;
 

@@ -27,6 +27,7 @@ public:
     void draw(glm::mat4*, glm::mat4*, Light*);
     void moveTo(glm::vec3);
     void setRotation(glm::vec3);
+    void setScale(GLfloat);
 
     glm::vec3 getPosition();
 

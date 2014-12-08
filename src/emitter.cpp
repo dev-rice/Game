@@ -29,6 +29,10 @@ Emitter::~Emitter(){
 }
 
 void Emitter::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, Light* light){
+
+    
+
+    
     for (int i = 0; i < particles.size(); ++i){
         particles[i]->draw(view_matrix, proj_matrix, light);
     }
