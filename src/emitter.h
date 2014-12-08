@@ -13,7 +13,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include <vector>
+#include <deque>
+#include <random>
 
 #include "drawable.h"
 #include "mesh.h"
@@ -32,11 +33,12 @@ public:
 
     void draw(glm::mat4*, glm::mat4*, Light*);
 private:
+    int maxParticles;
 
     Mesh* billboard;
     TextureSet* texture_set;
 
-    std::vector<Particle*> particles;
+    std::deque<Particle*> particles;
 
 };
 
