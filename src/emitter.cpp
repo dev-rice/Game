@@ -30,12 +30,16 @@ Emitter::~Emitter(){
 
 void Emitter::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, Light* light){
 
-    float r1 = (rand()%100)/float(100)-0.5;
-    float r2 = (rand()%100)/float(100)-0.5;
+    float r1 = (rand()%100)/float(100)-0.5f;
+    float r2 = (rand()%100)/float(100)-0.76f;
+
+    r1*=0.5f;
+    r2*=0.5f;
 
     if(particles.size() < maxParticles){
         particles.push_back(new Particle(glm::vec3(-2.0f+r1, 0.0f+r2, 0.0f+r2), glm::vec3(0.0f+r2, 1.0f+r1, 0.0f+r2), 0.1f, 0.0015f, 50, billboard, texture_set));
     } else {
+        delete particles.front();
         particles.pop_front();
         particles.push_back(new Particle(glm::vec3(-2.0f+r2, 0.0f+r1, 0.0f+r1), glm::vec3(0.0f+r2, 1.0f+r2, 0.0f+r1), 0.1f, 0.0015f, 50, billboard, texture_set));
     }
