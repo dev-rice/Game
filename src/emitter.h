@@ -13,6 +13,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include <vector>
+
 #include "drawable.h"
 #include "mesh.h"
 #include "camera.h"
@@ -30,9 +32,10 @@ public:
 
     void draw(glm::mat4*, glm::mat4*, Light*);
 private:
-    Particle* particle;
     Mesh* billboard;
     TextureSet* texture_set;
+
+    std::vector<Particle*> particles;
 
 };
 
