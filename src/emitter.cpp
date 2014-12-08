@@ -24,8 +24,16 @@ Emitter::Emitter(GLuint shader_program){
 }
 
 Emitter::~Emitter(){
-    billboard = NULL;
     delete billboard;
+    delete texture_set;
+
+    texture_set = NULL;
+    billboard = NULL;
+
+    for(int i(0); i < particles.size(); ++i){
+        delete particles[i];
+        particles[i] = NULL;
+    }
 }
 
 void Emitter::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, Light* light){
