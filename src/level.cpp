@@ -4,6 +4,12 @@
 #include "level.h"
 
 Level::~Level(){
+    #warning This leaks memory here, but inverting it causes a segfault
+    // See http://stackoverflow.com/questions/13223399/c-deleting-a-pointer
+
+    //emitter->~Emitter();
+    //Manual deletion doesn't work either :(
+
     emitter = NULL;
     delete emitter;
 }
