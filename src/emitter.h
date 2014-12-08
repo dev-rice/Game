@@ -1,3 +1,5 @@
+#ifndef Emitter_h
+#define Emitter_h
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
@@ -31,3 +33,5 @@ private:
     Mesh billboard;
 
 };
+
+#endif
