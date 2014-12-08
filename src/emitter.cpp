@@ -17,15 +17,15 @@ Emitter::Emitter(GLuint shader_program){
     std::vector<GLfloat> planeVertsVector(planeVerts, planeVerts + sizeof(planeVerts) / sizeof(GLfloat));
     std::vector<GLuint> planeFacesVector(planeFaces, planeFaces + sizeof(planeFaces) / sizeof(GLuint));
 
-    this->billboard = Mesh(planeVertsVector, planeFacesVector);
-    this->billboard.attachShader(shader_program);
+    billboard = new Mesh(planeVertsVector, planeFacesVector);
+    billboard->attachShader(shader_program);
     
-    this->particle = Drawable(&(this->billboard));
+    particle = new Drawable(billboard);
     TextureSet texture_set(0, 0, 0, 0);
-    this->particle.attachTextureSet(texture_set);
+    particle->attachTextureSet(texture_set);
 
-    printf("     billboard = %p\n", &(this->billboard));
-    printf("     particle  = %p\n", &(this->particle));
+    printf("     billboard = %p\n", &(billboard));
+    printf("     particle  = %p\n", &(particle));
 
     
 
@@ -33,18 +33,26 @@ Emitter::Emitter(GLuint shader_program){
 }
 
 Emitter::Emitter(Mesh billboard, Drawable particle){
-    this->billboard = billboard;
-    this->particle = particle;
+    this->billboard = &billboard;
+    this->particle = &particle;
 
     printf("Created emitter: %p\n", this);
-    printf("     billboard = %p\n", &(this->billboard));
-    printf("     particle  = %p\n", &(this->particle));
+    printf("     billboard = %p\n", &(billboard));
+    printf("     particle  = %p\n", &(particle));
+}
+
+Emitter::~Emitter(){
+    billboard = NULL;
+    particle = NULL;
+
+    delete billboard;
+    delete particle;
 }
 
 void Emitter::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, Light* light){
     printf("Called draw on emitter at %p\n", this);
-    printf("              billboard = %p\n", &(this->billboard));
-    printf("              particle  = %p\n", &(this->particle));
+    printf("              billboard = %p\n", &(billboard));
+    printf("              particle  = %p\n", &(particle));
 
-    this->particle.draw(view_matrix, proj_matrix, light);
+    particle->draw(view_matrix, proj_matrix, light);
 }

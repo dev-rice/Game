@@ -3,6 +3,11 @@
 
 #include "level.h"
 
+Level::~Level(){
+    emitter = NULL;
+    delete emitter;
+}
+
 Level::Level(GLFWwindow* window){
     this->window = window;
 
@@ -19,6 +24,8 @@ Level::Level(GLFWwindow* window){
     GLuint fragment_shader = ShaderLoader::loadFragmentShader("shaders/fragment_shader.glsl");
     shader_program = ShaderLoader::combineShaderProgram(vertex_shader, fragment_shader);
 
+    emitter = new Emitter(shader_program);
+
 }
 
 void Level::draw(){
@@ -26,7 +33,7 @@ void Level::draw(){
     // camera location / position
     view_matrix = camera.getViewMatrix();
     
-    this->emitter.draw(&view_matrix, &proj_matrix, &light);
+    emitter->draw(&view_matrix, &proj_matrix, &light);
 
     // Draw all the drawables
     for (int i = 0; i < drawables.size(); ++i){
@@ -131,7 +138,7 @@ void Level::loadLevel(const char * fileName){
     plane_draw = Drawable(&plane, position, rotation, the_scale);
     plane_draw.attachTextureSet(texture_set);
 
-    this->emitter = Emitter(shader_program);
+    // this->emitter = Emitter(shader_program);
     // emitter = Emitter(plane, plane_draw);
 
 

@@ -24,13 +24,14 @@
 class Emitter {
 public:
     Emitter();
+    ~Emitter();
     Emitter(GLuint);
     Emitter(Mesh, Drawable);
 
     void draw(glm::mat4*, glm::mat4*, Light*);
 private:
-    Drawable particle;
-    Mesh billboard;
+    Drawable* particle;
+    Mesh* billboard;
 
 };
 

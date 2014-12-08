@@ -22,6 +22,7 @@ static const char* TEXTURE_PATH = "res/textures/";
 class Level{
 public:
     Level() {;}
+    ~Level();
     Level(GLFWwindow*);
     void loadLevel(const char *);
 
@@ -42,7 +43,7 @@ private:
     std::vector<Mesh> meshes;
     std::vector<Drawable> drawables;
 
-    Emitter emitter;
+    Emitter* emitter;
 
     GLuint shader_program;
 
