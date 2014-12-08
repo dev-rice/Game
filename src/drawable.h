@@ -35,6 +35,8 @@ public:
 
 
 private:
+
+    void load(Mesh*, GLuint, glm::vec3, glm::vec3, GLfloat);
     Mesh* mesh;
 
     GLuint shader_program;

@@ -74,8 +74,5 @@ void Mesh::attachGeometryToShader(GLuint shader_program){
     glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE,
                            8*sizeof(float), (void*)(6*sizeof(float)));
 
-    glUniform1i(glGetUniformLocation(shader_program, "diffuse_texture"), 0);
-    glUniform1i(glGetUniformLocation(shader_program, "specular_texture"), 1);
-    glUniform1i(glGetUniformLocation(shader_program, "normal_map"), 2);
-    glUniform1i(glGetUniformLocation(shader_program, "emissive_texture"), 3);
+    
 }

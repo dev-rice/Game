@@ -1,26 +1,20 @@
 #include "drawable.h"
 
 Drawable::Drawable(Mesh* mesh, GLuint shader_program){
-    position = glm::vec3(0.0f, 0.0f, 0.0f);
-    rotation = glm::vec3(0.0f, 0.0f, 0.0f);
-    scale = 1.0f;
-    this->mesh = mesh;
+    load(mesh, shader_program, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f);
 
-    this->shader_program = shader_program;
-    this->mesh->attachGeometryToShader(shader_program);
 }
 
 Drawable::Drawable(Mesh* mesh, GLuint shader_program, glm::vec3 position, GLfloat scale) {
-    this->position = position;
-    this->mesh = mesh;
-    this->scale = scale;
-    
-    this->shader_program = shader_program;
-    this->mesh->attachGeometryToShader(shader_program);
-
+    load(mesh, shader_program, position, glm::vec3(0.0f, 0.0f, 0.0f), scale);
 }
 
 Drawable::Drawable(Mesh* mesh, GLuint shader_program, glm::vec3 position, glm::vec3 rotation, GLfloat scale) {
+    load(mesh, shader_program, position, rotation, scale);
+
+}
+
+void load(Mesh* mesh, GLuint shader_program, glm::vec3 position, glm::vec3 rotation, GLfloat scale) {
     this->position = position;
     this->rotation = rotation;
     this->mesh = mesh;
@@ -29,6 +23,10 @@ Drawable::Drawable(Mesh* mesh, GLuint shader_program, glm::vec3 position, glm::v
     this->shader_program = shader_program;
     this->mesh->attachGeometryToShader(shader_program);
 
+    glUniform1i(glGetUniformLocation(shader_program, "diffuse_texture"), 0);
+    glUniform1i(glGetUniformLocation(shader_program, "specular_texture"), 1);
+    glUniform1i(glGetUniformLocation(shader_program, "normal_map"), 2);
+    glUniform1i(glGetUniformLocation(shader_program, "emissive_texture"), 3);
 }
 
 void Drawable::moveTo(glm::vec3 new_position){
