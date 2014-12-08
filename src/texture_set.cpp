@@ -13,10 +13,18 @@ void TextureSet::load(GLuint diff, GLuint spec, GLuint norm, GLuint emit){
     GLuint alpha = TextureLoader::loadAlpha();
 
     if (diff == 0){
-        this->diffuse = pink;
-        this->specular = pink;
-        this->normal = pink;
-        this->emissive = pink;
+        if (emit == 0){
+            this->diffuse = pink;
+            this->specular = pink;
+            this->normal = pink;
+            this->emissive = pink;
+        } else {
+            this->diffuse = alpha;
+            this->specular = alpha;
+            this->normal = alpha;
+            this->emissive = emit;
+        }
+        
     }
     else {
         this->diffuse = diff;
