@@ -14,7 +14,7 @@ Drawable::Drawable(Mesh* mesh, GLuint shader_program, glm::vec3 position, glm::v
 
 }
 
-void load(Mesh* mesh, GLuint shader_program, glm::vec3 position, glm::vec3 rotation, GLfloat scale) {
+void Drawable::load(Mesh* mesh, GLuint shader_program, glm::vec3 position, glm::vec3 rotation, GLfloat scale) {
     this->position = position;
     this->rotation = rotation;
     this->mesh = mesh;
@@ -74,6 +74,12 @@ void Drawable::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, Light* light
     glUniformMatrix4fv(glGetUniformLocation(shader_program, "view"), 1, GL_FALSE, glm::value_ptr(*view_matrix));    
     glUniformMatrix4fv(glGetUniformLocation(shader_program, "proj"), 1, GL_FALSE, glm::value_ptr(*proj_matrix));
 
+    bindTextures();
+
+    mesh->draw();
+}
+
+void Drawable::bindTextures(){
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture_set.diffuse);
     glActiveTexture(GL_TEXTURE1);
@@ -82,10 +88,7 @@ void Drawable::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, Light* light
     glBindTexture(GL_TEXTURE_2D, texture_set.normal);
     glActiveTexture(GL_TEXTURE3);
     glBindTexture(GL_TEXTURE_2D, texture_set.emissive);
-
-    mesh->draw();
 }
-
 void Drawable::attachTextureSet(TextureSet texture_set){
     this->texture_set = texture_set;
 }

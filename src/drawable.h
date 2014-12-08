@@ -37,6 +37,10 @@ public:
 private:
 
     void load(Mesh*, GLuint, glm::vec3, glm::vec3, GLfloat);
+    void updateUniformData();
+    void bindTextures();
+
+
     Mesh* mesh;
 
     GLuint shader_program;
