@@ -19,10 +19,10 @@
 
 class Drawable {
 public:
-    Drawable (){;}
-    Drawable(Mesh*);
-    Drawable(Mesh*, glm::vec3, GLfloat);
-    Drawable(Mesh*, glm::vec3, glm::vec3, GLfloat);
+    Drawable () {;}
+    Drawable(Mesh*, GLuint);
+    Drawable(Mesh*, GLuint, glm::vec3, GLfloat);
+    Drawable(Mesh*, GLuint, glm::vec3, glm::vec3, GLfloat);
 
     void draw(glm::mat4*, glm::mat4*, Light*);
     void moveTo(glm::vec3);
@@ -36,6 +36,8 @@ public:
 
 private:
     Mesh* mesh;
+
+    GLuint shader_program;
 
     GLfloat scale;
 

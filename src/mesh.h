@@ -21,9 +21,7 @@
 #include <cstdlib>
 #include <vector>
 
-#include "shader_loader.h"
 #include "mesh_loader.h"
-#include "texture_set.h"
 #include "light.h"
 
 class Mesh {
@@ -32,10 +30,9 @@ public:
     Mesh(const char*);
     Mesh(std::vector<GLfloat>, std::vector<GLuint>);
 
-    void draw(glm::mat4*, glm::mat4*, glm::mat4*, GLfloat, TextureSet*, Light*);
-    void attachShader(GLuint);
-    void attachTexture(GLuint, GLuint);
-
+    void draw();
+    void bindVAO();
+    void attachGeometryToShader(GLuint);
 private:
 
     void loadMeshData(std::vector<GLfloat>, std::vector<GLuint>);
@@ -44,7 +41,6 @@ private:
 
     // Pointers to all that openGL stuff
     GLuint vao;
-    GLuint shader_program;
 
 };
 

@@ -81,7 +81,7 @@ void Level::loadLevel(const char * fileName){
             strcat(actual, MODEL_PATH);
             strcat(actual, objectFileName);
             Mesh mesh = Mesh(actual);
-            mesh.attachShader(shader_program);
+            mesh.attachGeometryToShader(shader_program);
             meshes.push_back(mesh);
         }
 
@@ -113,7 +113,7 @@ void Level::loadLevel(const char * fileName){
             glm::vec3 position = glm::vec3(x, y, z);
             glm::vec3 rotation = glm::vec3(x_rot, y_rot, z_rot);
 
-            Drawable drawable = Drawable(mesh, position, rotation, scale);
+            Drawable drawable = Drawable(mesh, shader_program, position, rotation, scale);
             drawable.attachTextureSet(texture_set);
             drawables.push_back(drawable);
 

@@ -1,23 +1,34 @@
 #include "drawable.h"
 
-Drawable::Drawable(Mesh* mesh){
+Drawable::Drawable(Mesh* mesh, GLuint shader_program){
     position = glm::vec3(0.0f, 0.0f, 0.0f);
     rotation = glm::vec3(0.0f, 0.0f, 0.0f);
     scale = 1.0f;
     this->mesh = mesh;
+
+    this->shader_program = shader_program;
+    this->mesh->attachGeometryToShader(shader_program);
 }
 
-Drawable::Drawable(Mesh* mesh, glm::vec3 position, GLfloat scale) {
+Drawable::Drawable(Mesh* mesh, GLuint shader_program, glm::vec3 position, GLfloat scale) {
     this->position = position;
     this->mesh = mesh;
     this->scale = scale;
+    
+    this->shader_program = shader_program;
+    this->mesh->attachGeometryToShader(shader_program);
+
 }
 
-Drawable::Drawable(Mesh* mesh, glm::vec3 position, glm::vec3 rotation, GLfloat scale) {
+Drawable::Drawable(Mesh* mesh, GLuint shader_program, glm::vec3 position, glm::vec3 rotation, GLfloat scale) {
     this->position = position;
     this->rotation = rotation;
     this->mesh = mesh;
     this->scale = scale;
+    
+    this->shader_program = shader_program;
+    this->mesh->attachGeometryToShader(shader_program);
+
 }
 
 void Drawable::moveTo(glm::vec3 new_position){
@@ -37,7 +48,8 @@ void Drawable::setScale(GLfloat scale){
 }
 
 void Drawable::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, Light* light){
-    
+    mesh->bindVAO();
+
     // Create the model matrix based on position
     model_matrix = glm::translate(glm::mat4(), position);
 
@@ -49,7 +61,31 @@ void Drawable::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, Light* light
     model_matrix = glm::rotate(model_matrix, rotation.y, y_axis);
     model_matrix = glm::rotate(model_matrix, rotation.z, z_axis);
 
-    mesh->draw(view_matrix, proj_matrix, &model_matrix, scale, &texture_set, light);
+    // Set the scale, this is not really going to be a thing, probably
+    glUniform1f(glGetUniformLocation(shader_program, "scale"), scale);
+
+    // Update the time uniform
+    glUniform1f(glGetUniformLocation(shader_program, "time"), (float)glfwGetTime());
+
+    glUniform3fv(glGetUniformLocation(shader_program, "light.position"), 1, light->getPosition());
+    glUniform3fv(glGetUniformLocation(shader_program, "light.color"), 1, light->getColor());
+    glUniform1fv(glGetUniformLocation(shader_program, "light.intensity"), 1, light->getIntensity());
+
+    // Update the model, view, and projection matrices
+    glUniformMatrix4fv(glGetUniformLocation(shader_program, "model"), 1, GL_FALSE, glm::value_ptr(model_matrix));
+    glUniformMatrix4fv(glGetUniformLocation(shader_program, "view"), 1, GL_FALSE, glm::value_ptr(*view_matrix));    
+    glUniformMatrix4fv(glGetUniformLocation(shader_program, "proj"), 1, GL_FALSE, glm::value_ptr(*proj_matrix));
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture_set.diffuse);
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, texture_set.specular);
+    glActiveTexture(GL_TEXTURE2);
+    glBindTexture(GL_TEXTURE_2D, texture_set.normal);
+    glActiveTexture(GL_TEXTURE3);
+    glBindTexture(GL_TEXTURE_2D, texture_set.emissive);
+
+    mesh->draw();
 }
 
 void Drawable::attachTextureSet(TextureSet texture_set){

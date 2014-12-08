@@ -12,7 +12,7 @@ Emitter::Emitter(GLuint shader_program){
     std::vector<GLuint> planeFacesVector(planeFaces, planeFaces + sizeof(planeFaces) / sizeof(GLuint));
 
     billboard = new Mesh(planeVertsVector, planeFacesVector);
-    billboard->attachShader(shader_program);
+    billboard->attachGeometryToShader(shader_program);
     
     texture_set = new TextureSet(0, 0, 0, 0);
 
