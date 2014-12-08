@@ -39,9 +39,10 @@ void Emitter::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, Light* light)
     if(particles.size() < maxParticles){
         particles.push_back(new Particle(glm::vec3(-2.0f+r1, 0.0f+r2, 0.0f+r2), glm::vec3(0.0f+r2, 1.0f+r1, 0.0f+r2), 0.1f, 0.0015f, 50, billboard, texture_set));
     } else {
-        delete particles.front();
+        Particle* ptr = particles[0];
         particles.pop_front();
-        particles.push_back(new Particle(glm::vec3(-2.0f+r2, 0.0f+r1, 0.0f+r1), glm::vec3(0.0f+r2, 1.0f+r2, 0.0f+r1), 0.1f, 0.0015f, 50, billboard, texture_set));
+        ptr->setInitialValues(glm::vec3(-2.0f+r2, 0.0f+r1, 0.0f+r1), glm::vec3(0.0f+r2, 1.0f+r2, 0.0f+r1), 0.1f);
+        particles.push_back(ptr);
     }
 
     for (int i = 0; i < particles.size(); ++i){
