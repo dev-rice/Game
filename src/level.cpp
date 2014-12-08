@@ -15,7 +15,7 @@ Level::Level(GLFWwindow* window){
     glfwGetFramebufferSize(window, &width, &height);
     proj_matrix = glm::perspective(45.0f, (float)width / (float)height, 0.1f, 100.0f);
     
-    camera = Camera(glm::vec3(0.0f, 0.0f, 10.0f));
+    camera = Camera(glm::vec3(0.0f, 1.0f, 10.0f));
     view_matrix = camera.getViewMatrix();
     
     light = Light(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f), 50.0f);
@@ -115,33 +115,6 @@ void Level::loadLevel(const char * fileName){
             delete mesh;
         }
     }
- 
-    GLfloat planeVerts[] = {-0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
-                             0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-                            -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
-                             0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,};
-
-    GLuint  planeFaces[] = {0, 1, 2, 1, 2, 3};
-
-    std::vector<GLfloat> planeVertsVector(planeVerts, planeVerts + sizeof(planeVerts) / sizeof(GLfloat));
-    std::vector<GLuint> planeFacesVector(planeFaces, planeFaces + sizeof(planeFaces) / sizeof(GLuint));
-
-    plane = Mesh(planeVertsVector, planeFacesVector);
-    plane.attachShader(shader_program);
-
-    glm::vec3 position = glm::vec3(-2.0f, 2.0f, 0.0f);
-    glm::vec3 rotation = glm::vec3(0.0f, 0.0f, 0.0f);
-    GLfloat the_scale = 2.0f;
-
-    TextureSet texture_set(0, 0, 0, 0);
-
-    plane_draw = Drawable(&plane, position, rotation, the_scale);
-    plane_draw.attachTextureSet(texture_set);
-
-    // this->emitter = Emitter(shader_program);
-    // emitter = Emitter(plane, plane_draw);
-
-
 }
 
 GLuint Level::getTexture(GLuint index){

@@ -1,12 +1,6 @@
 #include "emitter.h"
 
-Emitter::Emitter(){
-    printf("Created emitter: %p\n", this);
-}
-
 Emitter::Emitter(GLuint shader_program){
-    printf("Created emitter: %p\n", this);
-
     GLfloat planeVerts[] = {-0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
                              0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f,
                             -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
@@ -20,25 +14,10 @@ Emitter::Emitter(GLuint shader_program){
     billboard = new Mesh(planeVertsVector, planeFacesVector);
     billboard->attachShader(shader_program);
     
-    particle = new Drawable(billboard);
-    TextureSet texture_set(0, 0, 0, 0);
-    particle->attachTextureSet(texture_set);
+    texture_set = new TextureSet(0, 0, 0, 0);
 
-    printf("     billboard = %p\n", &(billboard));
-    printf("     particle  = %p\n", &(particle));
+    particle = new Particle(glm::vec3(-2.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.1f, 0.001f, 50, billboard, texture_set);
 
-    
-
-
-}
-
-Emitter::Emitter(Mesh billboard, Drawable particle){
-    this->billboard = &billboard;
-    this->particle = &particle;
-
-    printf("Created emitter: %p\n", this);
-    printf("     billboard = %p\n", &(billboard));
-    printf("     particle  = %p\n", &(particle));
 }
 
 Emitter::~Emitter(){
@@ -50,9 +29,5 @@ Emitter::~Emitter(){
 }
 
 void Emitter::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, Light* light){
-    printf("Called draw on emitter at %p\n", this);
-    printf("              billboard = %p\n", &(billboard));
-    printf("              particle  = %p\n", &(particle));
-
     particle->draw(view_matrix, proj_matrix, light);
 }

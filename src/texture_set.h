@@ -15,13 +15,16 @@
 
 class TextureSet {
 public:
-    TextureSet() {;}
+    TextureSet();
     TextureSet(GLuint, GLuint, GLuint, GLuint);
 
     GLuint diffuse;
     GLuint specular;
     GLuint normal;
     GLuint emissive;
+
+private:
+    void load(GLuint, GLuint, GLuint, GLuint);
 };
 
 #endif

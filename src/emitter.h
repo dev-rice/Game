@@ -20,18 +20,19 @@
 #include "light.h"
 #include "texture_loader.h"
 #include "texture_set.h"
+#include "particle.h"
 
 class Emitter {
 public:
     Emitter();
     ~Emitter();
     Emitter(GLuint);
-    Emitter(Mesh, Drawable);
 
     void draw(glm::mat4*, glm::mat4*, Light*);
 private:
-    Drawable* particle;
+    Particle* particle;
     Mesh* billboard;
+    TextureSet* texture_set;
 
 };
 

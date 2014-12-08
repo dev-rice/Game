@@ -1,7 +1,14 @@
 #include "texture_set.h"
 
-TextureSet::TextureSet(GLuint diff, GLuint spec, GLuint norm, GLuint emit){
+TextureSet::TextureSet(){
+    load(0, 0, 0, 0);
+}
 
+TextureSet::TextureSet(GLuint diff, GLuint spec, GLuint norm, GLuint emit){
+    load(diff, spec, norm, emit);
+}
+
+void TextureSet::load(GLuint diff, GLuint spec, GLuint norm, GLuint emit){
     GLuint pink = TextureLoader::loadPink();
     GLuint alpha = TextureLoader::loadAlpha();
 
@@ -26,5 +33,4 @@ TextureSet::TextureSet(GLuint diff, GLuint spec, GLuint norm, GLuint emit){
             this->emissive = alpha;
         }
     }
-    
 }
