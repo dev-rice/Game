@@ -37,30 +37,6 @@ void Mesh::bindVAO(){
 }
 void Mesh::draw(){
     
-    // // Set the scale, this is not really going to be a thing, probably
-    // glUniform1f(glGetUniformLocation(shader_program, "scale"), scale);
-
-    // // Update the time uniform
-    // glUniform1f(glGetUniformLocation(shader_program, "time"), (float)glfwGetTime());
-
-    // glUniform3fv(glGetUniformLocation(shader_program, "light.position"), 1, light->getPosition());
-    // glUniform3fv(glGetUniformLocation(shader_program, "light.color"), 1, light->getColor());
-    // glUniform1fv(glGetUniformLocation(shader_program, "light.intensity"), 1, light->getIntensity());
-
-    // // Update the model, view, and projection matrices
-    // glUniformMatrix4fv(glGetUniformLocation(shader_program, "model"), 1, GL_FALSE, glm::value_ptr(*model_matrix));
-    // glUniformMatrix4fv(glGetUniformLocation(shader_program, "view"), 1, GL_FALSE, glm::value_ptr(*view_matrix));    
-    // glUniformMatrix4fv(glGetUniformLocation(shader_program, "proj"), 1, GL_FALSE, glm::value_ptr(*proj_matrix));
-
-    // glActiveTexture(GL_TEXTURE0);
-    // glBindTexture(GL_TEXTURE_2D, texture_set->diffuse);
-    // glActiveTexture(GL_TEXTURE1);
-    // glBindTexture(GL_TEXTURE_2D, texture_set->specular);
-    // glActiveTexture(GL_TEXTURE2);
-    // glBindTexture(GL_TEXTURE_2D, texture_set->normal);
-    // glActiveTexture(GL_TEXTURE3);
-    // glBindTexture(GL_TEXTURE_2D, texture_set->emissive);
-
     glDrawElements(GL_TRIANGLES, this->num_faces, GL_UNSIGNED_INT, 0);
 
 }
