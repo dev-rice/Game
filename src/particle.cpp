@@ -23,7 +23,7 @@ void Particle::setInitialValues(glm::vec3 position, glm::vec3 velocity, glm::vec
     this->lifespan = lifespan;
 
     this->age = 0;
-    this->x_rot = 0.0f;
+    this->planeRotation = 0.0f;
 }
 
 void Particle::draw(Camera* camera, glm::mat4* proj_matrix, Light* light){
@@ -35,10 +35,10 @@ void Particle::draw(Camera* camera, glm::mat4* proj_matrix, Light* light){
     //     drawable->setScale(scale);
 
         dir = position - camera->getPosition();
-        float y_rot = acos(dir.x/dir.z);
-        float z_rot = acos(dir.y/sqrt(pow(dir.x,2)+pow(dir.z,2)));
-        x_rot+=rotationSpeed;
-        drawable->setRotation(glm::vec3(x_rot, y_rot, z_rot));
+        float x_rot = acos(dir.x/dir.z);
+        float y_rot = acos(dir.y/sqrt(pow(dir.x,2)+pow(dir.z,2)));
+        planeRotation+=rotationSpeed;
+        drawable->setRotation(glm::vec3(x_rot, y_rot, planeRotation));
 
         velocity += acceleration;
         position += velocity;

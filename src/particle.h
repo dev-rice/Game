@@ -24,7 +24,7 @@ private:
     glm::vec3 dir;
 
     float rotationSpeed;
-    float x_rot;
+    float planeRotation;
 
     ScalingOption scaleWithAge;
     FadingOption alphaWithAge;
