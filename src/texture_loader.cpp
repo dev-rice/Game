@@ -14,7 +14,7 @@ GLuint TextureLoader::loadAlpha(){
     alpha_pixel.push_back(0.0f);
     alpha_pixel.push_back(0.0f);
     alpha_pixel.push_back(0.0f);
-    alpha_pixel.push_back(0.1f);
+    alpha_pixel.push_back(0.0f);
     return TextureLoader::loadTextureFromPixel(alpha_pixel);
 }
 
