@@ -19,10 +19,12 @@ public:
     void draw(Camera*, glm::mat4*, Light*);
 private:  
     glm::vec3 position;
-    glm::vec3 Velocity;
+    glm::vec3 velocity;
     glm::vec3 acceleration;
+    glm::vec3 dir;
 
     float rotationSpeed;
+    float x_rot;
 
     ScalingOption scaleWithAge;
     FadingOption alphaWithAge;

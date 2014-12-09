@@ -44,8 +44,8 @@ Emitter::~Emitter(){
 void Emitter::draw(Camera* camera, glm::mat4* proj_matrix, Light* light){
 
     glm::vec3 position(0.0f, 0.0f, 0.0f);
-    glm::vec3 velocity(0.0f, 1.0f, 0.0f);
-    glm::vec3 acceleration(0.0f, 0.0f, 0.0f);
+    glm::vec3 velocity(0.0f, 0.1f, 0.0f);
+    glm::vec3 acceleration(0.0f, -0.001f, 0.0f);
     float rotation = 0.0f;
     int lifespan = 1000;
 

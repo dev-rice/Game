@@ -11,27 +11,44 @@ Particle::Particle(Mesh* mesh, TextureSet* texture_set, GLuint shader_program){
 }
 
 void Particle::setInitialValues(glm::vec3 position, glm::vec3 velocity, glm::vec3 acceleration, float rotationSpeed, int lifespan, ScalingOption scaleWithAge, FadingOption alphaWithAge){
+    this->position = position;
+    this->velocity = velocity;
+    this->acceleration = acceleration;
 
+    this->rotationSpeed = rotationSpeed;
+
+    this->scaleWithAge = scaleWithAge;
+    this->alphaWithAge = alphaWithAge;
+
+    this->lifespan = lifespan;
+
+    this->age = 0;
+    this->x_rot = 0.0f;
 }
 
 void Particle::draw(Camera* camera, glm::mat4* proj_matrix, Light* light){
 
-    // if(currentTick < decayTicks){
-    //     currentTick++;
+    if(age < lifespan){
+        age++;
 
-    //     float scale = 1- (currentTick/float(decayTicks));
 
     //     drawable->setScale(scale);
 
-    //     float position_scalar = fmax((initialSpeed - currentTick * deceleration), 0.0f);
-    //     position +=  initDir * position_scalar;
+        dir = position - camera->getPosition();
+        float y_rot = acos(dir.x/dir.z);
+        float z_rot = acos(dir.y/sqrt(pow(dir.x,2)+pow(dir.z,2)));
+        x_rot+=rotationSpeed;
+        drawable->setRotation(glm::vec3(x_rot, y_rot, z_rot));
 
-    //     drawable->moveTo(position);
-    //     drawable->setRotation(camera->getRotation());
-    //     glm::mat4 view_matrix = camera->getViewMatrix();
-    //     drawable->draw(&view_matrix, proj_matrix, light);
+        velocity += acceleration;
+        position += velocity;
 
-    // }
+        drawable->moveTo(position);
+        
+        glm::mat4 view_matrix = camera->getViewMatrix();
+        drawable->draw(&view_matrix, proj_matrix, light);
+
+    }
 
 
 
