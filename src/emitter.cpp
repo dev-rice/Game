@@ -17,7 +17,7 @@ Emitter::Emitter(GLuint shader_program){
 
     texture_set = new TextureSet(0, 0, 0, emit);
 
-    this->maxParticles = 100;
+    this->maxParticles = 1000;
     this->shader_program = shader_program;
 
 
@@ -47,11 +47,11 @@ void Emitter::draw(Camera* camera, glm::mat4* proj_matrix, Light* light){
     float r1 = (rand()%100)/float(100)-0.5f;
     float r2 = (rand()%100)/float(100)-0.76f;
 
-    r1*=0.5f;
-    r2*=0.5f;
+    r1*=0.05f;
+    r2*=0.05f;
 
     if(particles.size() < maxParticles){
-        particles.push_back(new Particle(glm::vec3(-2.0f+r1, 0.0f+r2, 0.0f+r2), glm::vec3(0.0f+r2, 1.0f+r1, 0.0f+r2), 0.1f, 0.0015f, 50, billboard, texture_set, shader_program));
+        particles.push_back(new Particle(glm::vec3(-2.0f+r1, 0.0f+r2, 0.0f+r2), glm::vec3(0.0f+r2, 1.0f+r1, 0.0f+r2), 0.1f, 0.00009f, 1000, billboard, texture_set, shader_program));
     } else {
         Particle* ptr = particles[0];
         particles.pop_front();

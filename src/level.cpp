@@ -26,8 +26,8 @@ Level::Level(GLFWwindow* window){
     
     light = Light(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f), 50.0f);
 
-    GLuint vertex_shader = ShaderLoader::loadVertexShader("shaders/vertex_shader.glsl");
-    GLuint fragment_shader = ShaderLoader::loadFragmentShader("shaders/fragment_shader.glsl");
+    GLuint vertex_shader = ShaderLoader::loadVertexShader("shaders/thingy.vs");
+    GLuint fragment_shader = ShaderLoader::loadFragmentShader("shaders/thingy.fs");
     shader_program = ShaderLoader::combineShaderProgram(vertex_shader, fragment_shader);
 
     emitter = new Emitter(shader_program);
