@@ -12,14 +12,19 @@ Emitter::Emitter(GLuint shader_program){
     std::vector<GLuint> planeFacesVector(planeFaces, planeFaces + sizeof(planeFaces) / sizeof(GLuint));
 
     billboard = new Mesh(planeVertsVector, planeFacesVector);
-    billboard->attachGeometryToShader(shader_program);
     
-    texture_set = new TextureSet(0, 0, 0, 0);
+    GLuint emit = TextureLoader::loadTextureFromFile("res/textures/ok.png", GL_NEAREST);
+
+    texture_set = new TextureSet(0, 0, 0, emit);
 
     this->maxParticles = 100;
+    this->shader_program = shader_program;
 
-    particles.push_back(new Particle(glm::vec3(-2.2f, 0.0f, 0.0f), glm::vec3(-0.25f, 1.0f, 0.0f), 0.08f, 0.0015f, 50, billboard, texture_set));
-    particles.push_back(new Particle(glm::vec3(-1.8f, 0.0f, 0.0f), glm::vec3(0.25f, 1.0f, 0.0f), 0.08f, 0.0015f, 50, billboard, texture_set));
+
+    #warning Particles do not load unless an initial one is put in the deque
+    Particle* ptr = new Particle(billboard, texture_set, shader_program);
+    particles.push_back(ptr);
+
 
 }
 
@@ -38,6 +43,8 @@ Emitter::~Emitter(){
 }
 
 void Emitter::draw(Camera* camera, glm::mat4* proj_matrix, Light* light){
+    // glm::mat4 view_matrix = camera->getViewMatrix();
+    // particle->draw(&view_matrix, proj_matrix, light);
 
     float r1 = (rand()%100)/float(100)-0.5f;
     float r2 = (rand()%100)/float(100)-0.76f;
@@ -46,7 +53,7 @@ void Emitter::draw(Camera* camera, glm::mat4* proj_matrix, Light* light){
     r2*=0.5f;
 
     if(particles.size() < maxParticles){
-        particles.push_back(new Particle(glm::vec3(-2.0f+r1, 0.0f+r2, 0.0f+r2), glm::vec3(0.0f+r2, 1.0f+r1, 0.0f+r2), 0.1f, 0.0015f, 50, billboard, texture_set));
+        particles.push_back(new Particle(glm::vec3(-2.0f+r1, 0.0f+r2, 0.0f+r2), glm::vec3(0.0f+r2, 1.0f+r1, 0.0f+r2), 0.1f, 0.0015f, 50, billboard, texture_set, shader_program));
     } else {
         Particle* ptr = particles[0];
         particles.pop_front();

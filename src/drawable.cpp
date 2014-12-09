@@ -2,7 +2,6 @@
 
 Drawable::Drawable(Mesh* mesh, GLuint shader_program){
     load(mesh, shader_program, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f);
-
 }
 
 Drawable::Drawable(Mesh* mesh, GLuint shader_program, glm::vec3 position, GLfloat scale) {

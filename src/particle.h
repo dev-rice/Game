@@ -9,7 +9,8 @@
 
 class Particle{
 public:
-    Particle(glm::vec3, glm::vec3, float, float, int, Mesh*, TextureSet*);
+    Particle(Mesh*, TextureSet*, GLuint);
+    Particle(glm::vec3, glm::vec3, float, float, int, Mesh*, TextureSet*, GLuint);
     
     void setInitialValues(glm::vec3, glm::vec3, float);
     void draw(Camera*, glm::mat4*, Light*);

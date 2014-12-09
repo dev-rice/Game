@@ -36,7 +36,10 @@ private:
     int maxParticles;
 
     Mesh* billboard;
+    Drawable* particle;
     TextureSet* texture_set;
+
+    GLuint shader_program;
 
     std::deque<Particle*> particles;
 
