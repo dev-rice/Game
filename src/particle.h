@@ -17,6 +17,7 @@ public:
 
     void setInitialValues(glm::vec3, glm::vec3, glm::vec3, float, int, ScalingOption, FadingOption);
     void draw(Camera*, glm::mat4*, Light*);
+    bool isDead();
 private:  
     glm::vec3 position;
     glm::vec3 velocity;

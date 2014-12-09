@@ -31,6 +31,7 @@ Level::Level(GLFWwindow* window){
     shader_program = ShaderLoader::combineShaderProgram(vertex_shader, fragment_shader);
 
     emitter = new Emitter(shader_program);
+    emitter->setParticleDensity(1000);
 
 }
 

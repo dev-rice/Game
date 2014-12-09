@@ -32,7 +32,7 @@ void Particle::draw(Camera* camera, glm::mat4* proj_matrix, Light* light){
         age++;
 
 
-    //     drawable->setScale(scale);
+        drawable->setScale(1.0-(age/float(lifespan)));
 
         // dir = position - camera->getPosition();
         // float x_rot = acos(dir.x/dir.z);
@@ -56,7 +56,8 @@ void Particle::draw(Camera* camera, glm::mat4* proj_matrix, Light* light){
         drawable->draw(&view_matrix, proj_matrix, light);
 
     }
+}
 
-
-
+bool Particle::isDead(){
+    return (!(age<lifespan));
 }

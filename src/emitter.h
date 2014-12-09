@@ -32,8 +32,13 @@ public:
     Emitter(GLuint);
 
     void draw(Camera*, glm::mat4*, Light*);
+    void setParticleDensity(int);
 private:
+    void prepareParticles();
+
     int maxParticles;
+    int density;
+    int lifespan;
 
     Mesh* billboard;
     Drawable* particle;
