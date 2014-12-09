@@ -80,14 +80,14 @@ void Drawable::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, Light* light
 
 void Drawable::bindTextures(){
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture_set.diffuse);
+    glBindTexture(GL_TEXTURE_2D, texture_set->diffuse);
     glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, texture_set.specular);
+    glBindTexture(GL_TEXTURE_2D, texture_set->specular);
     glActiveTexture(GL_TEXTURE2);
-    glBindTexture(GL_TEXTURE_2D, texture_set.normal);
+    glBindTexture(GL_TEXTURE_2D, texture_set->normal);
     glActiveTexture(GL_TEXTURE3);
-    glBindTexture(GL_TEXTURE_2D, texture_set.emissive);
+    glBindTexture(GL_TEXTURE_2D, texture_set->emissive);
 }
 void Drawable::attachTextureSet(TextureSet texture_set){
-    this->texture_set = texture_set;
+    this->texture_set = new TextureSet(texture_set);
 }

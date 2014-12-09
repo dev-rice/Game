@@ -52,7 +52,7 @@ private:
     
     glm::mat4 model_matrix;
 
-    TextureSet texture_set;
+    TextureSet* texture_set;
 };
 
 #endif
