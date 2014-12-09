@@ -45,6 +45,13 @@ Emitter::~Emitter(){
 }
 
 void Emitter::setParticleDensity(int density){
+    // If the user does not explicitly set the density
+    // using this function (thus creating different, 
+    // custom particle behavior), the emitter will
+    // generate the density that will look best as per
+    // the lifespan and the total number of particles
+    // This will prevent live particles from being
+    // recycled before it is their time
     this->density = density;
 }
 
@@ -57,6 +64,7 @@ void Emitter::draw(Camera* camera, glm::mat4* proj_matrix, Light* light){
 
 void Emitter::prepareParticles(){
     for(int i(0); i < density; ++i){
+        // Shitty random generation for now
         float rand1 = (rand()%100)/100.0f -0.5f;
         float rand2 = (rand()%100)/100.0f -0.5f;
 
@@ -68,8 +76,9 @@ void Emitter::prepareParticles(){
         glm::vec3 acceleration(0.0f, -0.001f, 0.0f);
         float rotation = 0.0f;
         
-        // Recycle the particles instead of allocating new ones
-        Particle* ptr = 0; // Weird that the pointer must be explicitly set to 0, but crashes without this
+        // Particle recycling!
+        // Weird that the pointer must be explicitly set to 0, but crashes without this
+        Particle* ptr = 0; 
         if(particles.size() < maxParticles){
             ptr = new Particle(billboard, texture_set, shader_program);
         } 
