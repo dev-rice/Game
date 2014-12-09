@@ -25,12 +25,10 @@ Emitter::Emitter(GLuint shader_program){
     #warning Particles do not load unless an initial one is put in the deque
     Particle* ptr = new Particle(billboard, texture_set, shader_program);
     // particles.push_back(ptr);
-
-
 }
 
 Emitter::~Emitter(){
-    // Fix me or something
+    // Deallocation is good!
     delete billboard;
     delete texture_set;
 
@@ -45,20 +43,22 @@ Emitter::~Emitter(){
 
 void Emitter::draw(Camera* camera, glm::mat4* proj_matrix, Light* light){
 
-    float r1 = (rand()%100)/float(100)-0.5f;
-    float r2 = (rand()%100)/float(100)-0.76f;
+    glm::vec3 position(0.0f, 0.0f, 0.0f);
+    glm::vec3 velocity(0.0f, 1.0f, 0.0f);
+    glm::vec3 acceleration(0.0f, 0.0f, 0.0f);
+    float rotation = 0.0f;
+    int lifespan = 1000;
 
-    r1*=0.25f;
-    r2*=0.25f;
-
+    // Recycle the particles instead of allocating new ones
+    Particle* ptr;
     if(particles.size() < maxParticles){
-        particles.push_back(new Particle(glm::vec3(-2.5f+r1, 1.5f+r2, 0.01f+r2), glm::vec3(-1.0f+r2, 0.1f+r1, 0.01f+r2), 0.2f, 0.0015f, 100, billboard, texture_set, shader_program));
+        ptr = new Particle(billboard, texture_set, shader_program);
     } else {
-        Particle* ptr = particles[0];
+        ptr = particles[0];
         particles.pop_front();
-        ptr->setInitialValues(glm::vec3(-2.5f+r2, 1.5f+r1, 0.01f+r1), glm::vec3(-1.0f+r2, 0.1f+r2, 0.01f+r1), 0.2f);
-        particles.push_back(ptr);
     }
+    ptr->setInitialValues(position, velocity, acceleration, rotation, lifespan, Particle::ScalingOption::SCALE_NONE, Particle::FadingOption::FADE_NONE);
+    particles.push_back(ptr);
 
     for (int i = 0; i < particles.size(); ++i){
         particles[i]->draw(camera, proj_matrix, light);
