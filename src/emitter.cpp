@@ -13,11 +13,12 @@ Emitter::Emitter(GLuint shader_program){
 
     billboard = new Mesh(planeVertsVector, planeFacesVector);
     
-    GLuint emit = TextureLoader::loadTextureFromFile("res/textures/smoke_part.png", GL_NEAREST);
+    // GLuint spec = TextureLoader::loadTextureFromFile("res/textures/bubble_spec.png", GL_NEAREST);
+    GLuint emit = TextureLoader::loadTextureFromFile("res/textures/laser.png", GL_NEAREST);
 
     texture_set = new TextureSet(0, 0, 0, emit);
 
-    this->maxParticles = 1000;
+    this->maxParticles = 250;
     this->shader_program = shader_program;
 
 
@@ -47,15 +48,15 @@ void Emitter::draw(Camera* camera, glm::mat4* proj_matrix, Light* light){
     float r1 = (rand()%100)/float(100)-0.5f;
     float r2 = (rand()%100)/float(100)-0.76f;
 
-    r1*=0.05f;
-    r2*=0.05f;
+    r1*=0.25f;
+    r2*=0.25f;
 
     if(particles.size() < maxParticles){
-        particles.push_back(new Particle(glm::vec3(-2.0f+r1, 0.0f+r2, 0.0f+r2), glm::vec3(0.0f+r2, 1.0f+r1, 0.0f+r2), 0.1f, 0.00009f, 1000, billboard, texture_set, shader_program));
+        particles.push_back(new Particle(glm::vec3(-2.5f+r1, 1.5f+r2, 0.01f+r2), glm::vec3(-1.0f+r2, 0.1f+r1, 0.01f+r2), 0.2f, 0.0015f, 100, billboard, texture_set, shader_program));
     } else {
         Particle* ptr = particles[0];
         particles.pop_front();
-        ptr->setInitialValues(glm::vec3(-2.0f+r2, 0.0f+r1, 0.0f+r1), glm::vec3(0.0f+r2, 1.0f+r2, 0.0f+r1), 0.1f);
+        ptr->setInitialValues(glm::vec3(-2.5f+r2, 1.5f+r1, 0.01f+r1), glm::vec3(-1.0f+r2, 0.1f+r2, 0.01f+r1), 0.2f);
         particles.push_back(ptr);
     }
 
