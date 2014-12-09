@@ -34,13 +34,20 @@ void Particle::draw(Camera* camera, glm::mat4* proj_matrix, Light* light){
 
     //     drawable->setScale(scale);
 
-        dir = position - camera->getPosition();
-        float x_rot = acos(dir.x/dir.z);
-        float y_rot = acos(dir.y/sqrt(pow(dir.x,2)+pow(dir.z,2)));
-        planeRotation+=rotationSpeed;
-        drawable->setRotation(glm::vec3(x_rot, y_rot, planeRotation));
+        // dir = position - camera->getPosition();
+        // float x_rot = acos(dir.x/dir.z);
+        // float y_rot = acos(dir.y/sqrt(pow(dir.x,2)+pow(dir.z,2)));
+        // planeRotation+=rotationSpeed;
+        // drawable->setRotation(glm::vec3(x_rot, y_rot, planeRotation));
 
         velocity += acceleration;
+        // Change the zero to be the map height for real pretend physics!
+        if(position.y < 0.0f){
+            velocity.y = (velocity.y * -0.6f);
+        }
+        if(velocity.y < 0.0005f && velocity.y > -0.0005f && position.y < 0.1f && position.y > -0.1f){
+            velocity*=0.5f;
+        }
         position += velocity;
 
         drawable->moveTo(position);
