@@ -55,7 +55,6 @@ void Mesh::attachGeometryToShader(GLuint shader_program){
     bool already_bound = std::find(bound_shaders.begin(), bound_shaders.end(), shader_program) != bound_shaders.end();
 
     if(!already_bound){
-        #warning For some reason we do not need to bind the VAO before attaching the geometry data to the shader.
         glBindVertexArray(vao);
 
         // Get the reference to the "position" attribute defined in
