@@ -18,7 +18,7 @@ Emitter::Emitter(GLuint shader_program){
 
     texture_set = new TextureSet(0, 0, 0, emit);
 
-    this->maxParticles = 1000;
+    this->maxParticles = 250;
     this->shader_program = shader_program;
 
 
@@ -56,27 +56,15 @@ void Emitter::draw(Camera* camera, glm::mat4* proj_matrix, Light* light){
     int lifespan = 1000;
 
     // Recycle the particles instead of allocating new ones
-    Particle* ptr1;
-    Particle* ptr2;
-    Particle* ptr3;
+    Particle* ptr;
     if(particles.size() < maxParticles){
-        ptr1 = new Particle(billboard, texture_set, shader_program);
-        ptr2 = new Particle(billboard, texture_set, shader_program);
-        ptr3 = new Particle(billboard, texture_set, shader_program);
-        } else {
-        ptr1 = particles[0];
-        particles.pop_front();
-        ptr2 = particles[0];
-        particles.pop_front();
-        ptr3 = particles[0];
+        ptr = new Particle(billboard, texture_set, shader_program);
+    } else {
+        ptr = particles[0];
         particles.pop_front();
     }
-    ptr1->setInitialValues(position, velocity, acceleration, rotation, lifespan, Particle::ScalingOption::SCALE_NONE, Particle::FadingOption::FADE_NONE);
-    ptr2->setInitialValues(position, velocity, acceleration, rotation, lifespan, Particle::ScalingOption::SCALE_NONE, Particle::FadingOption::FADE_NONE);
-    ptr3->setInitialValues(position, velocity, acceleration, rotation, lifespan, Particle::ScalingOption::SCALE_NONE, Particle::FadingOption::FADE_NONE);
-    particles.push_back(ptr1);
-    particles.push_back(ptr2);
-    particles.push_back(ptr3);
+    ptr->setInitialValues(position, velocity, acceleration, rotation, lifespan, Particle::ScalingOption::SCALE_NONE, Particle::FadingOption::FADE_NONE);
+    particles.push_back(ptr);
 
     for (int i = 0; i < particles.size(); ++i){
         particles[i]->draw(camera, proj_matrix, light);

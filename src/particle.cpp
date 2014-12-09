@@ -43,7 +43,7 @@ void Particle::draw(Camera* camera, glm::mat4* proj_matrix, Light* light){
         velocity += acceleration;
         // Change the zero to be the map height for real pretend physics!
         if(position.y < 0.0f){
-            velocity.y = (velocity.y * -0.6f);
+            velocity.y = (velocity.y * -0.8f);
         }
         if(velocity.y < 0.0005f && velocity.y > -0.0005f && position.y < 0.1f && position.y > -0.1f){
             velocity*=0.5f;
