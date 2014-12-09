@@ -6,15 +6,15 @@
 #include "texture_set.h"
 
 Particle::Particle(Mesh* mesh, TextureSet* texture_set, GLuint shader_program){
-    position = glm::vec3(0.0f, 0.0f, 0.0f);
-    initDir = glm::vec3(0.0f, 0.0f, 0.0f);
-    initialSpeed = 0.0f;
-    deceleration = 0.0f;
-    decayTicks = 100;
-    currentTick = 0;
+    // position = glm::vec3(0.0f, 0.0f, 0.0f);
+    // initDir = glm::vec3(0.0f, 0.0f, 0.0f);
+    // initialSpeed = 0.0f;
+    // deceleration = 0.0f;
+    // decayTicks = 100;
+    // currentTick = 0;
 
     drawable = new Drawable(mesh, shader_program);
-    drawable->attachTextureSet(*texture_set);
+    // drawable->attachTextureSet(*texture_set);
 }
 
 Particle::Particle(glm::vec3 position, glm::vec3 initDir, float initialSpeed, float deceleration, int decayTicks, Mesh* billboard, TextureSet* texture_set, GLuint shader_program){

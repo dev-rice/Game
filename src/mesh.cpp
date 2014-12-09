@@ -47,32 +47,39 @@ void Mesh::attachGeometryToShader(GLuint shader_program){
     //and vertex formats as easy as binding a different VAO! Just remember that a VAO doesn't store 
     //any vertex data by itself, it just references the VBOs you've created and how to retrieve the
     // attribute values from them.
+    
 
-    #warning For some reason we do not need to bind the VAO before attaching the geometry data to the shader.
-    // glBindVertexArray(vao);
+    // Because binding the geometry to the shader multiple times on the same vao causes problems, we 
+    // check we have already binded the data.
 
+    bool already_bound = std::find(bound_shaders.begin(), bound_shaders.end(), shader_program) != bound_shaders.end();
 
-    // Get the reference to the "position" attribute defined in
-    // the vertex shader
-    GLint posAttrib = glGetAttribLocation(shader_program, "position");
-    glEnableVertexAttribArray(posAttrib);
-    // Load the position attributes from our array with width 3. The position
-    // values start at index 0. Tell it to load 2 values
-    glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE,
-                           8*sizeof(float), 0);
+    if(!already_bound){
+        #warning For some reason we do not need to bind the VAO before attaching the geometry data to the shader.
+        glBindVertexArray(vao);
 
-    GLint normalAttrib = glGetAttribLocation(shader_program, "normal");
-    glEnableVertexAttribArray(normalAttrib);
-    // Load the normal pointer from our array with width 3. The normal values
-    // start at index 2. Tell it to load 3 value
-    glVertexAttribPointer(normalAttrib, 3, GL_FLOAT, GL_FALSE,
-                           8*sizeof(float), (void*)(3*sizeof(float)));
+        // Get the reference to the "position" attribute defined in
+        // the vertex shader
+        GLint posAttrib = glGetAttribLocation(shader_program, "position");
+        glEnableVertexAttribArray(posAttrib);
+        // Load the position attributes from our array with width 3. The position
+        // values start at index 0. Tell it to load 2 values
+        glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE,
+                               8*sizeof(float), 0);
 
-    // Link the texture coordinates to the shader.
-    GLint texAttrib = glGetAttribLocation(shader_program, "texcoord");
-    glEnableVertexAttribArray(texAttrib);
-    glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE,
-                           8*sizeof(float), (void*)(6*sizeof(float)));
+        GLint normalAttrib = glGetAttribLocation(shader_program, "normal");
+        glEnableVertexAttribArray(normalAttrib);
+        // Load the normal pointer from our array with width 3. The normal values
+        // start at index 2. Tell it to load 3 value
+        glVertexAttribPointer(normalAttrib, 3, GL_FLOAT, GL_FALSE,
+                               8*sizeof(float), (void*)(3*sizeof(float)));
 
+        // Link the texture coordinates to the shader.
+        GLint texAttrib = glGetAttribLocation(shader_program, "texcoord");
+        glEnableVertexAttribArray(texAttrib);
+        glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE,
+                               8*sizeof(float), (void*)(6*sizeof(float)));
+        bound_shaders.push_back(shader_program);
+    }
     
 }

@@ -39,7 +39,6 @@ void Level::draw(){
     // camera location / position
     view_matrix = camera.getViewMatrix();
     
-    emitter->draw(&camera, &proj_matrix, &light);
 
     // Draw all the drawables
     for (int i = 0; i < drawables.size(); ++i){
@@ -49,6 +48,9 @@ void Level::draw(){
         
         drawables[i].draw(&view_matrix, &proj_matrix, &light);
     }
+
+    emitter->draw(&camera, &proj_matrix, &light);
+    
 }
 
 void Level::loadLevel(const char * fileName){
@@ -121,6 +123,8 @@ void Level::loadLevel(const char * fileName){
             delete mesh;
         }
     }
+
+
 }
 
 GLuint Level::getTexture(GLuint index){

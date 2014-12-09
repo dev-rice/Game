@@ -13,7 +13,7 @@ Emitter::Emitter(GLuint shader_program){
 
     billboard = new Mesh(planeVertsVector, planeFacesVector);
     
-    GLuint emit = TextureLoader::loadTextureFromFile("res/textures/ok.png", GL_NEAREST);
+    GLuint emit = TextureLoader::loadTextureFromFile("res/textures/smoke_part.png", GL_NEAREST);
 
     texture_set = new TextureSet(0, 0, 0, emit);
 
@@ -23,7 +23,7 @@ Emitter::Emitter(GLuint shader_program){
 
     #warning Particles do not load unless an initial one is put in the deque
     Particle* ptr = new Particle(billboard, texture_set, shader_program);
-    particles.push_back(ptr);
+    // particles.push_back(ptr);
 
 
 }
@@ -43,8 +43,6 @@ Emitter::~Emitter(){
 }
 
 void Emitter::draw(Camera* camera, glm::mat4* proj_matrix, Light* light){
-    // glm::mat4 view_matrix = camera->getViewMatrix();
-    // particle->draw(&view_matrix, proj_matrix, light);
 
     float r1 = (rand()%100)/float(100)-0.5f;
     float r2 = (rand()%100)/float(100)-0.76f;

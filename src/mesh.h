@@ -20,6 +20,7 @@
 #include <math.h>
 #include <cstdlib>
 #include <vector>
+#include <algorithm>
 
 #include "mesh_loader.h"
 #include "light.h"
@@ -41,6 +42,10 @@ private:
 
     // Pointers to all that openGL stuff
     GLuint vao;
+
+    bool already_bound;
+
+    std::vector<GLuint> bound_shaders;
 
 };
 
