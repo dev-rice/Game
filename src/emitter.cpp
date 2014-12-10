@@ -14,13 +14,16 @@ Emitter::Emitter(GLuint shader_program){
     billboard = new Mesh(planeVertsVector, planeFacesVector);
     
     // GLuint spec = TextureLoader::loadTextureFromFile("res/textures/bubble_spec.png", GL_NEAREST);
-    GLuint emit = TextureLoader::loadTextureFromFile("res/textures/spark_part.png", GL_NEAREST);
+    GLuint emit = TextureLoader::loadTextureFromFile("res/textures/snowflake_part_1.png", GL_LINEAR);
 
     texture_set = new TextureSet(0, 0, 0, emit);
 
     this->maxParticles = 1000;
-    this->lifespan = 200;
+    this->lifespan = 500;
     this->density = (this->maxParticles)/(this->lifespan);
+
+    this->isShotgun = false;
+    this->hasFired = false;
 
     this->shader_program = shader_program;
 
@@ -62,18 +65,32 @@ void Emitter::draw(Camera* camera, glm::mat4* proj_matrix, Light* light){
     }
 }
 
+void Emitter::makeShotgun(){
+    density = maxParticles;
+    isShotgun = true;
+    hasFired = false;
+}
+
 void Emitter::prepareParticles(){
+
+    if(hasFired && isShotgun){
+        return;
+    }
+
+    hasFired = true;
+
     for(int i(0); i < density; ++i){
         // Shitty random generation for now
         float rand1 = (rand()%100)/100.0f -0.5f;
         float rand2 = (rand()%100)/100.0f -0.5f;
+        float rand3 = (rand()%100)/100.0f -0.5f;
 
         rand1*=0.2;
         rand2*=0.2;
 
-        glm::vec3 position(rand1/2.0f, 0.0f, rand2/2.0f);
-        glm::vec3 velocity(rand1, 0.1f, rand2);
-        glm::vec3 acceleration(0.0f, -0.001f, 0.0f);
+        glm::vec3 position(rand1*60.0f, 10.0f, rand2*60.0f);
+        glm::vec3 velocity(0.0f, -0.02f, 0.0f);
+        glm::vec3 acceleration(0.0f, 0.0f, 0.0f);
         float rotation = 0.0f;
         
         // Particle recycling!

@@ -33,12 +33,16 @@ public:
 
     void draw(Camera*, glm::mat4*, Light*);
     void setParticleDensity(int);
+    void makeShotgun();
 private:
     void prepareParticles();
 
     int maxParticles;
     int density;
     int lifespan;
+
+    bool isShotgun;
+    bool hasFired;
 
     Mesh* billboard;
     Drawable* particle;
@@ -47,7 +51,6 @@ private:
     GLuint shader_program;
 
     std::deque<Particle*> particles;
-
 };
 
 #endif

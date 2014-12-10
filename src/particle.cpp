@@ -32,8 +32,30 @@ void Particle::draw(Camera* camera, glm::mat4* proj_matrix, Light* light){
         age++;
 
 
-        drawable->setScale(1.0-(age/float(lifespan)));
+        switch(scaleWithAge){
+        case ScalingOption::SCALE_DOWN_WITH_AGE:
+            drawable->setScale(1.0-(age/float(lifespan)));
+            break;
+        case ScalingOption::SCALE_UP_WITH_AGE:
+            drawable->setScale(age/float(lifespan));
+            break;
+        case ScalingOption::SCALE_NONE:
+            break;
+        }
 
+        // TODO add fading with age
+        switch(alphaWithAge){
+        case FadingOption::FADE_OUT_WITH_AGE:
+            // older makes more transparent
+            break;
+        case FadingOption::FADE_IN_WITH_AGE:
+            // older makes more opaque
+            break;
+        case FadingOption::FADE_NONE:
+            break;
+        }
+
+        // TODO billboard facing
         // dir = position - camera->getPosition();
         // float x_rot = acos(dir.x/dir.z);
         // float y_rot = acos(dir.y/sqrt(pow(dir.x,2)+pow(dir.z,2)));
