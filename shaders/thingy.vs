@@ -34,8 +34,16 @@ void main() {
     // Order is important on the multiplication!
     gl_Position = proj * view * model * vec4(scaled_position, 1.0);
 
-    vec4 light_to_surface = (view * vec4(light.position, 1.0)) - (view * model * vec4(scaled_position, 1.0));
-    light_vector = light_to_surface.xyz;
+    // 
+    // vec4 light_to_surface = (view * vec4(light.position, 1.0)) - (view * model * vec4(scaled_position, 1.0));
+    // light_vector = light_to_surface.xyz;
+
+    // Directional Lighting
+    vec3 direction_vector = normalize(vec3(1.0, 1.0, 0.0));
+    vec4 light_position = vec4(direction_vector.xyz, 0.0);
+    vec4 light_to_surface = view * (light_position);
+    light_vector = 5.0 * (light_to_surface).xyz;
+
 
     vec4 surface_normal_temp = view * model * vec4(normal, 0.0);
     surface_normal = vec3(surface_normal_temp.xyz);
