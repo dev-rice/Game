@@ -69,6 +69,8 @@ int main(int argc, char* argv[]) {
     // Create the world
     World world(window);
 
+    float last_time = glfwGetTime();
+
     // Display loop
     while(!glfwWindowShouldClose(window)) {
         // Swap display/rendering buffers
@@ -84,6 +86,14 @@ int main(int argc, char* argv[]) {
         // Clear the screen so we can draw again
         glClearColor(0.16f, 0.16f, 0.16f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        system("clear");
+        float frame_time = glfwGetTime() - last_time;
+        last_time = glfwGetTime();
+        printf("Frame draw time: %f\n", frame_time);
+        printf("FPS: %f\n", 1 / frame_time);
+
+
 
         world.update();
 

@@ -91,6 +91,12 @@ void Emitter::prepareParticles(){
         glm::vec3 position(rand1*60.0f, 10.0f, rand2*60.0f);
         glm::vec3 velocity(0.0f, -0.02f, 0.0f);
         glm::vec3 acceleration(0.0f, 0.0f, 0.0f);
+       
+        // Random wind interaction for snow particles. 
+        if (rand() % 1000){
+            velocity += glm::vec3(0.001 * (rand() % 5), - abs(0.0005 * (rand() % 5)), 0.001 * (rand() % 5));
+        }
+
         float rotation = 0.0f;
         
         // Particle recycling!

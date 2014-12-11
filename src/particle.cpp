@@ -72,6 +72,9 @@ void Particle::draw(Camera* camera, glm::mat4* proj_matrix, Light* light){
         }
         position += velocity;
 
+        glm::vec3 rotation = camera->getRotation();
+        rotation.x = -rotation.x;
+        drawable->setRotation(rotation);
         drawable->moveTo(position);
         
         glm::mat4 view_matrix = camera->getViewMatrix();

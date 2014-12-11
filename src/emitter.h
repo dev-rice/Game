@@ -15,6 +15,7 @@
 
 #include <deque>
 #include <random>
+#include <math.h>
 
 #include "drawable.h"
 #include "mesh.h"
