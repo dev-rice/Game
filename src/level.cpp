@@ -4,6 +4,7 @@
 #include "level.h"
 
 Level::~Level(){
+    printf("Calling the Level destructor.");
     #warning This leaks memory here, but correcting it causes a segfault
     // See http://stackoverflow.com/questions/13223399/c-deleting-a-pointer
 

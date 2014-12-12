@@ -87,11 +87,11 @@ int main(int argc, char* argv[]) {
         glClearColor(0.16f, 0.16f, 0.16f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        system("clear");
-        float frame_time = glfwGetTime() - last_time;
-        last_time = glfwGetTime();
-        printf("Frame draw time: %f\n", frame_time);
-        printf("FPS: %f\n", 1 / frame_time);
+        // system("clear");
+        // float frame_time = glfwGetTime() - last_time;
+        // last_time = glfwGetTime();
+        // printf("Frame draw time: %f\n", frame_time);
+        // printf("FPS: %f\n", 1 / frame_time);
 
 
 

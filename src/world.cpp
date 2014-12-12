@@ -1,13 +1,26 @@
 #include "world.h"
 
 World::World(GLFWwindow* window){
-    Level* level = new Level(window, "res/maps/axefence.map");
+    this->window = window;
+
+    addLevel("res/maps/scene.map");
+    addLevel("res/maps/axefence.map");
+
+}
+
+World::~World(){
+
+}
+
+void World::addLevel(const char* filename){
+    Level* level = new Level(window, filename);
     levels.push_back(level);
     
     level = NULL;
     delete level;
 
-    current_level = 0;
+    // For now the current level is set to whatever was just added.
+    current_level = levels.size() - 1;
 }
 
 void World::update(){
