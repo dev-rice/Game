@@ -7,7 +7,7 @@ Level::~Level(){
     #warning This leaks memory here, but correcting it causes a segfault
     // See http://stackoverflow.com/questions/13223399/c-deleting-a-pointer
 
-    //emitter->~Emitter();
+    emitter->~Emitter();
     //Manual deletion doesn't work either :(
 
     emitter = NULL;
