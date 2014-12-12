@@ -18,6 +18,7 @@ public:
     void setInitialValues(glm::vec3, glm::vec3, glm::vec3, float, int, ScalingOption, FadingOption);
     void draw(Camera*, glm::mat4*, Light*);
     bool isDead();
+    void enablePhysics(float);
 private:  
     glm::vec3 position;
     glm::vec3 velocity;
@@ -26,6 +27,9 @@ private:
 
     float rotationSpeed;
     float planeRotation;
+    float elasticity;
+
+    bool physicsEnabled;
 
     ScalingOption scaleWithAge;
     FadingOption alphaWithAge;

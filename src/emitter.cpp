@@ -18,8 +18,8 @@ Emitter::Emitter(GLuint shader_program){
 
     texture_set = new TextureSet(0, 0, 0, emit);
 
-    this->maxParticles = 1000;
-    this->lifespan = 500;
+    this->maxParticles = 2000;
+    this->lifespan = 1000;
     this->density = (this->maxParticles)/(this->lifespan);
 
     this->isShotgun = false;
@@ -91,8 +91,8 @@ void Emitter::prepareParticles(Camera* camera){
         glm::vec3 position(rand1*60.0f, 10.0f, rand2*60.0f);
         // Emitter parented to camera
         // position+=camera->getPosition();
-        glm::vec3 velocity(0.0f, -0.02f, 0.0f);
-        glm::vec3 acceleration(0.0f, 0.0f, 0.0f);
+        glm::vec3 velocity(0.0f, 0.0f, 0.0f);
+        glm::vec3 acceleration(0.0f, -0.0005f, 0.0f);
        
         // Random wind interaction for snow particles. 
         if (rand() % 1000){
@@ -113,6 +113,7 @@ void Emitter::prepareParticles(Camera* camera){
         }
         if(ptr){
             ptr->setInitialValues(position, velocity, acceleration, rotation, lifespan, Particle::ScalingOption::SCALE_NONE, Particle::FadingOption::FADE_NONE);
+            ptr->enablePhysics(0.1f);
             particles.push_back(ptr);
         }
     }

@@ -24,6 +24,15 @@ void Particle::setInitialValues(glm::vec3 position, glm::vec3 velocity, glm::vec
 
     this->age = 0;
     this->planeRotation = 0.0f;
+
+    physicsEnabled = false;
+}
+
+void Particle::enablePhysics(float elasticity){
+    // We will probably need a pointer to the map for the height so 
+    // it will bounce realistically
+    physicsEnabled = true;
+    this->elasticity = elasticity;
 }
 
 void Particle::draw(Camera* camera, glm::mat4* proj_matrix, Light* light){
@@ -63,13 +72,17 @@ void Particle::draw(Camera* camera, glm::mat4* proj_matrix, Light* light){
         // drawable->setRotation(glm::vec3(x_rot, y_rot, planeRotation));
 
         velocity += acceleration;
+
         // Change the zero to be the map height for real pretend physics!
-        // if(position.y < 0.0f){
-        //     velocity.y = (velocity.y * -0.8f);
-        // }
-        // if(velocity.y < 0.0005f && velocity.y > -0.0005f && position.y < 0.1f && position.y > -0.1f){
-        //     velocity*=0.5f;
-        // }
+        if(physicsEnabled){
+            if(position.y < 0.0f){
+                velocity.y = (velocity.y * -1.0f * elasticity);
+            }
+            if(velocity.y < 0.0005f && velocity.y > -0.0005f && position.y < 0.1f && position.y > -0.1f){
+                velocity*=0.5f;
+            }
+        }
+
         position += velocity;
 
         glm::vec3 rotation = camera->getRotation();
