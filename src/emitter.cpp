@@ -29,7 +29,7 @@ Emitter::Emitter(GLuint shader_program){
 
 
     #warning Particles do not load unless an initial one is put in the deque
-    Particle* ptr = new Particle(billboard, texture_set, shader_program);
+    Particle* ptr = new Particle(billboard, shader_program);
     // particles.push_back(ptr);
 }
 
@@ -105,7 +105,9 @@ void Emitter::prepareParticles(Camera* camera){
         // Weird that the pointer must be explicitly set to 0, but crashes without this
         Particle* ptr = 0; 
         if(particles.size() < maxParticles){
-            ptr = new Particle(billboard, texture_set, shader_program);
+            ptr = new Particle(billboard, shader_program);
+            ptr->attachTextureSet(*texture_set);
+
         } 
         if(particles.size() > 0 && particles[0]->isDead()){
             ptr = particles[0];

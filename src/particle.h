@@ -7,20 +7,23 @@
 #include "camera.h"
 #include "mesh.h" 
 
-class Particle{
+class Particle : public Drawable {
 public:
     enum class ScalingOption { SCALE_UP_WITH_AGE, SCALE_DOWN_WITH_AGE, SCALE_NONE};
     enum class FadingOption { FADE_OUT_WITH_AGE, FADE_IN_WITH_AGE, FADE_NONE};
 
-    Particle(Mesh*, TextureSet*, GLuint);
+    Particle(Mesh*, GLuint);
+    Particle(Mesh*, GLuint, glm::vec3, GLfloat);
+    Particle(Mesh*, GLuint, glm::vec3, glm::vec3, GLfloat);
+
     // ~Particle();
 
     void setInitialValues(glm::vec3, glm::vec3, glm::vec3, float, int, ScalingOption, FadingOption);
     void draw(Camera*, glm::mat4*);
     bool isDead();
     void enablePhysics(float);
+    
 private:  
-    glm::vec3 position;
     glm::vec3 velocity;
     glm::vec3 acceleration;
     glm::vec3 dir;

@@ -38,9 +38,6 @@ protected:
     void updateUniformData(glm::mat4*, glm::mat4*);
     void updateModelMatrix();
     void load(Mesh*, GLuint, glm::vec3, glm::vec3, GLfloat);
-
-private:
-
     void bindTextures();
 
 

@@ -4,10 +4,16 @@
 #include "particle.h"
 #include "texture_loader.h"
 #include "texture_set.h"
+Particle::Particle(Mesh* mesh, GLuint shader_program) : Drawable(mesh, shader_program){
 
-Particle::Particle(Mesh* mesh, TextureSet* texture_set, GLuint shader_program){
-    drawable = new Drawable(mesh, shader_program);
-    drawable->attachTextureSet(*texture_set);
+}
+
+Particle::Particle(Mesh* mesh, GLuint shader_program, glm::vec3 position, GLfloat scale): Drawable(mesh, shader_program, position, scale) {
+
+}
+
+Particle::Particle(Mesh* mesh, GLuint shader_program, glm::vec3 position, glm::vec3 rotation, GLfloat scale): Drawable(mesh, shader_program, position, rotation, scale) {
+
 }
 
 void Particle::setInitialValues(glm::vec3 position, glm::vec3 velocity, glm::vec3 acceleration, float rotationSpeed, int lifespan, ScalingOption scaleWithAge, FadingOption alphaWithAge){
@@ -43,10 +49,11 @@ void Particle::draw(Camera* camera, glm::mat4* proj_matrix){
 
         switch(scaleWithAge){
         case ScalingOption::SCALE_DOWN_WITH_AGE:
-            drawable->setScale(1.0-(age/float(lifespan)));
+            // drawable->setScale(1.0-(age/float(lifespan)));
+
             break;
         case ScalingOption::SCALE_UP_WITH_AGE:
-            drawable->setScale(age/float(lifespan));
+            // drawable->setScale(age/float(lifespan));
             break;
         case ScalingOption::SCALE_NONE:
             break;
@@ -85,12 +92,10 @@ void Particle::draw(Camera* camera, glm::mat4* proj_matrix){
 
         position += velocity;
 
-        glm::vec3 rotation = camera->getRotation();
+        rotation = camera->getRotation();
         rotation.x = -rotation.x;
-        drawable->setRotation(rotation);
-        drawable->setPosition(position);
         
-        drawable->draw(camera, proj_matrix);
+        Drawable::draw(camera, proj_matrix);
 
     }
 }

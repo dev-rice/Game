@@ -48,12 +48,12 @@ void main() {
     // specular_component = vec4(0.0, 0.0, 0.0, 0.0);
     // emissive_component = vec4(1.0, 0.0, 1.0, 1.0);
 
-    outColor = vec4(1.0, 0.0, 1.0, 1.0);
+    // outColor = vec4(1.0, 0.0, 1.0, 1.0);
 
-    // vec4 texel = mix(diffuse_component + specular_component + ambient_component,
-    //             emissive_component, emissive.a);
-    // if (texel.a < 0.5){
-    //     discard;
-    // }
-    // outColor = texel;
+    vec4 texel = mix(diffuse_component + specular_component + ambient_component,
+                emissive_component, emissive.a);
+    if (texel.a < 0.5){
+        discard;
+    }
+    outColor = texel;
 }

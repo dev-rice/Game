@@ -50,7 +50,7 @@ void Level::draw(){
         drawables[i].draw(&camera, &proj_matrix);
     }
 
-    // emitter->draw(&camera, &proj_matrix);
+    emitter->draw(&camera, &proj_matrix);
     
 }
 

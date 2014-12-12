@@ -22,10 +22,10 @@ void Drawable::load(Mesh* mesh, GLuint shader_program, glm::vec3 position, glm::
     this->shader_program = shader_program;
     this->mesh->attachGeometryToShader(shader_program);
 
-    // glUniform1i(glGetUniformLocation(shader_program, "diffuse_texture"), 0);
-    // glUniform1i(glGetUniformLocation(shader_program, "specular_texture"), 1);
-    // glUniform1i(glGetUniformLocation(shader_program, "normal_map"), 2);
-    // glUniform1i(glGetUniformLocation(shader_program, "emissive_texture"), 3);
+    glUniform1i(glGetUniformLocation(shader_program, "diffuse_texture"), 0);
+    glUniform1i(glGetUniformLocation(shader_program, "specular_texture"), 1);
+    glUniform1i(glGetUniformLocation(shader_program, "normal_map"), 2);
+    glUniform1i(glGetUniformLocation(shader_program, "emissive_texture"), 3);
 }
 
 void Drawable::setPosition(glm::vec3 new_position){
@@ -77,7 +77,7 @@ void Drawable::draw(Camera* camera, glm::mat4* proj_matrix){
 
     updateModelMatrix();    
     updateUniformData(&view_matrix, proj_matrix);
-    // bindTextures();
+    bindTextures();
 
     mesh->draw();
 }
