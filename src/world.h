@@ -20,8 +20,8 @@ public:
     void handleInputs();
 
 private:
-
-    Level level;
+    std::vector<Level*> levels;
+    int current_level;
 };
 
 #endif

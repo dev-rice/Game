@@ -22,27 +22,24 @@ static const char* TEXTURE_PATH = "res/textures/";
 
 class Level{
 public:
-    Level() {;}
     ~Level();
-    Level(GLFWwindow*);
-    void loadLevel(const char *);
+    Level(GLFWwindow*, const char*);
 
     void draw();
-
     void handleInputs();
 
 private:
-
+    void loadLevel(const char *);
     GLuint getTexture(GLuint);
+
 
     GLFWwindow* window;
     
-    Camera camera;
-    Light light;
+    Camera* camera;
 
     std::vector<GLuint> textures;
-    std::vector<Mesh> meshes;
-    std::vector<Drawable> drawables;
+    std::vector<Mesh*> meshes;
+    std::vector<Drawable*> drawables;
 
     Emitter* emitter;
 
@@ -50,9 +47,6 @@ private:
 
     glm::mat4 view_matrix;
     glm::mat4 proj_matrix;
-
-    Mesh plane;
-    Drawable plane_draw;
 
 };
 

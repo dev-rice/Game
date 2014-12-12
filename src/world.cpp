@@ -1,12 +1,16 @@
 #include "world.h"
 
 World::World(GLFWwindow* window){
-    level = Level(window);
-    level.loadLevel("res/maps/axefence.map");
+    Level* level = new Level(window, "res/maps/axefence.map");
+    levels.push_back(level);
+    
+    level = NULL;
+    delete level;
 
+    current_level = 0;
 }
 
 void World::update(){
-    level.handleInputs();
-    level.draw();
+    levels[current_level]->handleInputs();
+    levels[current_level]->draw();
 }

@@ -1,6 +1,9 @@
 // particle.h
 // Trevor Westphal
 
+#ifndef Particle_h
+#define Particle_h
+
 #include <glm/glm.hpp>
 
 #include "drawable.h"
@@ -42,3 +45,5 @@ private:
 
     Drawable* drawable;
 };
+
+#endif
