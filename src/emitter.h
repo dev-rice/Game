@@ -36,7 +36,7 @@ public:
     void setParticleDensity(int);
     void makeShotgun();
 private:
-    void prepareParticles();
+    void prepareParticles(Camera*);
 
     int maxParticles;
     int density;

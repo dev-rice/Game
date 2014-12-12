@@ -2,7 +2,7 @@
 
 World::World(GLFWwindow* window){
     level = Level(window);
-    level.loadLevel("res/maps/scene.map");
+    level.loadLevel("res/maps/axefence.map");
 
 }
 

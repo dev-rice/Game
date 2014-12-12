@@ -59,7 +59,7 @@ void Emitter::setParticleDensity(int density){
 }
 
 void Emitter::draw(Camera* camera, glm::mat4* proj_matrix, Light* light){
-    prepareParticles();
+    prepareParticles(camera);
     for (int i = 0; i < particles.size(); ++i){
         particles[i]->draw(camera, proj_matrix, light);
     }
@@ -71,7 +71,7 @@ void Emitter::makeShotgun(){
     hasFired = false;
 }
 
-void Emitter::prepareParticles(){
+void Emitter::prepareParticles(Camera* camera){
 
     if(hasFired && isShotgun){
         return;
@@ -89,6 +89,8 @@ void Emitter::prepareParticles(){
         rand2*=0.2;
 
         glm::vec3 position(rand1*60.0f, 10.0f, rand2*60.0f);
+        // Emitter parented to camera
+        // position+=camera->getPosition();
         glm::vec3 velocity(0.0f, -0.02f, 0.0f);
         glm::vec3 acceleration(0.0f, 0.0f, 0.0f);
        
