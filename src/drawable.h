@@ -26,13 +26,17 @@ public:
     Drawable(Mesh*, GLuint, glm::vec3, glm::vec3, GLfloat);
 
     void draw(Camera*, glm::mat4*);
-    void setPosition(glm::vec3);
-    void setRotation(glm::vec3);
-    void setScale(GLfloat);
-
-    glm::vec3 getPosition();
-
     void attachTextureSet(TextureSet);
+
+    void setPosition(glm::vec3 p) {position = p;}
+    void setRotation(glm::vec3 r) {rotation = r;}
+    void setScale(GLfloat s) {scale = s;}
+
+    glm::vec3 getPosition() {return position;}
+    glm::vec3 getRotation() {return rotation;}
+    GLfloat getScale() {return scale;}
+
+
 
 protected:
     void updateUniformData(glm::mat4*, glm::mat4*);
