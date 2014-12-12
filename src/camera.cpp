@@ -33,6 +33,10 @@ Camera::Camera(glm::vec3 position, float move_sensitivity, float rotate_sensitiv
     this->rotate_sensitivity = rotate_sensitivity;
 }
 
+void Camera::setRotation(glm::vec3 rotation){
+    this->rotation = rotation;
+}
+
 void Camera::moveX(int direction){
     position += move_sensitivity * direction * local_x;
 }

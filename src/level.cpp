@@ -21,7 +21,8 @@ Level::Level(GLFWwindow* window){
     glfwGetFramebufferSize(window, &width, &height);
     proj_matrix = glm::perspective(45.0f, (float)width / (float)height, 0.1f, 100.0f);
     
-    camera = Camera(glm::vec3(2.0f, 1.0f, 3.0f));
+    camera = Camera(glm::vec3(0.0f, 20.0f, 20.0f));
+    camera.setRotation(glm::vec3(0.78f, 0.0f, 0.0f));
     view_matrix = camera.getViewMatrix();
     
     light = Light(glm::vec3(0.0f, 5.0f, 2.0f), glm::vec3(0.0f, -1.0f, 0.0f), 50.0f);
@@ -30,7 +31,7 @@ Level::Level(GLFWwindow* window){
     GLuint fragment_shader = ShaderLoader::loadFragmentShader("shaders/thingy.fs");
     shader_program = ShaderLoader::combineShaderProgram(vertex_shader, fragment_shader);
 
-    emitter = new Emitter(shader_program);
+    // emitter = new Emitter(shader_program);
     // emitter->makeShotgun();
 
 }
@@ -50,7 +51,7 @@ void Level::draw(){
         drawables[i].draw(&view_matrix, &proj_matrix, &light);
     }
 
-    emitter->draw(&camera, &proj_matrix, &light);
+    // emitter->draw(&camera, &proj_matrix, &light);
     
 }
 
