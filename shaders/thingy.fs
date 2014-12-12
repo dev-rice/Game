@@ -22,10 +22,10 @@ uniform sampler2D emissive_texture;
 
 void main() {
     
-    vec3 light_color = main_light.color;
+    vec3 light_color = vec3(1.0, 1.0, 1.0);
     float cosTheta = dot(normalize(surface_normal), normalize(light_vector));
     cosTheta = clamp(cosTheta, 0.0, 1.0);
-    float intensity = main_light.intensity / (pow(light_vector.x, 2) + pow(light_vector.y, 2) + pow(light_vector.z, 2));
+    float intensity = 100.0 / (pow(light_vector.x, 2) + pow(light_vector.y, 2) + pow(light_vector.z, 2));
 
     vec3 reflection = reflect(-normalize(light_vector), normalize(surface_normal));
     float cosAlpha = clamp(dot(normalize(viewing_vector), reflection), 0.0, 1.0);
@@ -46,13 +46,14 @@ void main() {
     // ambient_component  = vec4(0.0, 0.0, 0.0, 0.0);
     // diffuse_component  = vec4(0.0, 0.0, 0.0, 0.0);
     // specular_component = vec4(0.0, 0.0, 0.0, 0.0);
-    // emissive_component = vec4(0.0, 0.0, 0.0, 0.0);
+    // emissive_component = vec4(1.0, 0.0, 1.0, 1.0);
 
-    // outColor = diffuse_component;
-    vec4 texel = mix(diffuse_component + specular_component + ambient_component,
-                emissive_component, emissive.a);
-    if (texel.a < 0.5){
-        discard;
-    }
-    outColor = texel;
+    outColor = vec4(1.0, 0.0, 1.0, 1.0);
+
+    // vec4 texel = mix(diffuse_component + specular_component + ambient_component,
+    //             emissive_component, emissive.a);
+    // if (texel.a < 0.5){
+    //     discard;
+    // }
+    // outColor = texel;
 }

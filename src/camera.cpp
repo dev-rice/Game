@@ -93,9 +93,12 @@ glm::mat4 Camera::getViewMatrix(){
     center = position - (rotation_matrix * glm::vec3(0.0f, 0.0f, 1.0f));
     
     // Transform the camera axes
-    local_x = rotation_matrix * glm::vec3(1.0f, 0.0f, 0.0f);
+    // local_x = rotation_matrix * glm::vec3(1.0f, 0.0f, 0.0f);
     local_y = rotation_matrix * glm::vec3(0.0f, 1.0f, 0.0f);
-    local_z = rotation_matrix * glm::vec3(0.0f, 0.0f, 1.0f);
+    // local_z = rotation_matrix * glm::vec3(0.0f, 0.0f, 1.0f);
+
+    local_x = glm::vec3(1.0f, 0.0f, 0.0f);
+    local_z = glm::vec3(0.0f, 0.0f, 1.0f);
 
     // Debug
     // print();

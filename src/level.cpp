@@ -31,8 +31,7 @@ Level::Level(GLFWwindow* window){
     GLuint fragment_shader = ShaderLoader::loadFragmentShader("shaders/thingy.fs");
     shader_program = ShaderLoader::combineShaderProgram(vertex_shader, fragment_shader);
 
-    // emitter = new Emitter(shader_program);
-    // emitter->makeShotgun();
+    emitter = new Emitter(shader_program);
 
 }
 
@@ -46,12 +45,12 @@ void Level::draw(){
     for (int i = 0; i < drawables.size(); ++i){
         // This is how you move things
         // glm::vec3 position = drawables[i].getPosition();
-        // drawables[i].moveTo(position + glm::vec3(-0.01f, 0.0f, 0.0f));
+        // drawables[i].setPosition(position + glm::vec3(-0.01f, 0.0f, 0.0f));
         
-        drawables[i].draw(&view_matrix, &proj_matrix, &light);
+        drawables[i].draw(&camera, &proj_matrix);
     }
 
-    // emitter->draw(&camera, &proj_matrix, &light);
+    // emitter->draw(&camera, &proj_matrix);
     
 }
 
@@ -117,7 +116,7 @@ void Level::loadLevel(const char * fileName){
             glm::vec3 position = glm::vec3(x, y, z);
             glm::vec3 rotation = glm::vec3(x_rot, y_rot, z_rot);
 
-            Drawable drawable = Drawable(mesh, shader_program, position, rotation, scale);
+            Doodad drawable = Doodad(mesh, shader_program, position, rotation, scale);
             drawable.attachTextureSet(texture_set);
             drawables.push_back(drawable);
 

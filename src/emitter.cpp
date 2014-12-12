@@ -14,7 +14,7 @@ Emitter::Emitter(GLuint shader_program){
     billboard = new Mesh(planeVertsVector, planeFacesVector);
     
     // GLuint spec = TextureLoader::loadTextureFromFile("res/textures/bubble_spec.png", GL_NEAREST);
-    GLuint emit = TextureLoader::loadTextureFromFile("res/textures/rain_part.png", GL_LINEAR);
+    GLuint emit = TextureLoader::loadTextureFromFile("res/textures/snowflake_part_1.png", GL_LINEAR);
 
     texture_set = new TextureSet(0, 0, 0, emit);
 
@@ -58,10 +58,10 @@ void Emitter::setParticleDensity(int density){
     this->density = density;
 }
 
-void Emitter::draw(Camera* camera, glm::mat4* proj_matrix, Light* light){
+void Emitter::draw(Camera* camera, glm::mat4* proj_matrix){
     prepareParticles(camera);
     for (int i = 0; i < particles.size(); ++i){
-        particles[i]->draw(camera, proj_matrix, light);
+        particles[i]->draw(camera, proj_matrix);
     }
 }
 
@@ -91,8 +91,8 @@ void Emitter::prepareParticles(Camera* camera){
         glm::vec3 position(rand1*60.0f, 10.0f, rand2*60.0f);
         // Emitter parented to camera
         // position+=camera->getPosition();
-        glm::vec3 velocity(0.0f, 0.0f, 0.0f);
-        glm::vec3 acceleration(0.0f, -0.0005f, 0.0f);
+        glm::vec3 velocity(0.0f, -0.02f, 0.0f);
+        glm::vec3 acceleration(0.0f, 0.0f, 0.0f);
        
         // Random wind interaction for snow particles. 
         if (rand() % 1000){

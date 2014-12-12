@@ -32,7 +32,7 @@ public:
     ~Emitter();
     Emitter(GLuint);
 
-    void draw(Camera*, glm::mat4*, Light*);
+    void draw(Camera*, glm::mat4*);
     void setParticleDensity(int);
     void makeShotgun();
 private:

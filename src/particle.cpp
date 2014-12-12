@@ -35,7 +35,7 @@ void Particle::enablePhysics(float elasticity){
     this->elasticity = elasticity;
 }
 
-void Particle::draw(Camera* camera, glm::mat4* proj_matrix, Light* light){
+void Particle::draw(Camera* camera, glm::mat4* proj_matrix){
 
     if(age < lifespan){
         age++;
@@ -88,10 +88,9 @@ void Particle::draw(Camera* camera, glm::mat4* proj_matrix, Light* light){
         glm::vec3 rotation = camera->getRotation();
         rotation.x = -rotation.x;
         drawable->setRotation(rotation);
-        drawable->moveTo(position);
+        drawable->setPosition(position);
         
-        glm::mat4 view_matrix = camera->getViewMatrix();
-        drawable->draw(&view_matrix, proj_matrix, light);
+        drawable->draw(camera, proj_matrix);
 
     }
 }

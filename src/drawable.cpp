@@ -22,13 +22,13 @@ void Drawable::load(Mesh* mesh, GLuint shader_program, glm::vec3 position, glm::
     this->shader_program = shader_program;
     this->mesh->attachGeometryToShader(shader_program);
 
-    glUniform1i(glGetUniformLocation(shader_program, "diffuse_texture"), 0);
-    glUniform1i(glGetUniformLocation(shader_program, "specular_texture"), 1);
-    glUniform1i(glGetUniformLocation(shader_program, "normal_map"), 2);
-    glUniform1i(glGetUniformLocation(shader_program, "emissive_texture"), 3);
+    // glUniform1i(glGetUniformLocation(shader_program, "diffuse_texture"), 0);
+    // glUniform1i(glGetUniformLocation(shader_program, "specular_texture"), 1);
+    // glUniform1i(glGetUniformLocation(shader_program, "normal_map"), 2);
+    // glUniform1i(glGetUniformLocation(shader_program, "emissive_texture"), 3);
 }
 
-void Drawable::moveTo(glm::vec3 new_position){
+void Drawable::setPosition(glm::vec3 new_position){
     position = new_position;
 }
 
@@ -44,9 +44,20 @@ void Drawable::setScale(GLfloat scale){
     this->scale = scale;
 }
 
-void Drawable::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, Light* light){
-    mesh->bindVAO();
+void Drawable::updateUniformData(glm::mat4* view_matrix, glm::mat4* proj_matrix){
+    // Set the scale, this is not really going to be a thing, probably
+    glUniform1f(glGetUniformLocation(shader_program, "scale"), scale);
 
+    // Update the time uniform
+    glUniform1f(glGetUniformLocation(shader_program, "time"), (float)glfwGetTime());
+
+    // Update the model, view, and projection matrices
+    glUniformMatrix4fv(glGetUniformLocation(shader_program, "model"), 1, GL_FALSE, glm::value_ptr(model_matrix));
+    glUniformMatrix4fv(glGetUniformLocation(shader_program, "view"), 1, GL_FALSE, glm::value_ptr(*view_matrix));    
+    glUniformMatrix4fv(glGetUniformLocation(shader_program, "proj"), 1, GL_FALSE, glm::value_ptr(*proj_matrix));
+}
+
+void Drawable::updateModelMatrix(){
     // Create the model matrix based on position
     model_matrix = glm::translate(glm::mat4(), position);
 
@@ -57,23 +68,16 @@ void Drawable::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix, Light* light
     model_matrix = glm::rotate(model_matrix, rotation.x, x_axis);
     model_matrix = glm::rotate(model_matrix, rotation.y, y_axis);
     model_matrix = glm::rotate(model_matrix, rotation.z, z_axis);
+}
 
-    // Set the scale, this is not really going to be a thing, probably
-    glUniform1f(glGetUniformLocation(shader_program, "scale"), scale);
+void Drawable::draw(Camera* camera, glm::mat4* proj_matrix){
+    mesh->bindVAO();
 
-    // Update the time uniform
-    glUniform1f(glGetUniformLocation(shader_program, "time"), (float)glfwGetTime());
+    glm::mat4 view_matrix = camera->getViewMatrix();
 
-    glUniform3fv(glGetUniformLocation(shader_program, "light.position"), 1, light->getPosition());
-    glUniform3fv(glGetUniformLocation(shader_program, "light.color"), 1, light->getColor());
-    glUniform1fv(glGetUniformLocation(shader_program, "light.intensity"), 1, light->getIntensity());
-
-    // Update the model, view, and projection matrices
-    glUniformMatrix4fv(glGetUniformLocation(shader_program, "model"), 1, GL_FALSE, glm::value_ptr(model_matrix));
-    glUniformMatrix4fv(glGetUniformLocation(shader_program, "view"), 1, GL_FALSE, glm::value_ptr(*view_matrix));    
-    glUniformMatrix4fv(glGetUniformLocation(shader_program, "proj"), 1, GL_FALSE, glm::value_ptr(*proj_matrix));
-
-    bindTextures();
+    updateModelMatrix();    
+    updateUniformData(&view_matrix, proj_matrix);
+    // bindTextures();
 
     mesh->draw();
 }

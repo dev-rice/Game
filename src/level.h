@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "drawable.h"
+#include "doodad.h"
 #include "mesh.h"
 #include "camera.h"
 #include "shader_loader.h"

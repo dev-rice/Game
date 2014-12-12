@@ -15,6 +15,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "mesh.h"
+#include "camera.h"
 #include "texture_set.h"
 
 class Drawable {
@@ -24,8 +25,8 @@ public:
     Drawable(Mesh*, GLuint, glm::vec3, GLfloat);
     Drawable(Mesh*, GLuint, glm::vec3, glm::vec3, GLfloat);
 
-    void draw(glm::mat4*, glm::mat4*, Light*);
-    void moveTo(glm::vec3);
+    void draw(Camera*, glm::mat4*);
+    void setPosition(glm::vec3);
     void setRotation(glm::vec3);
     void setScale(GLfloat);
 
@@ -33,11 +34,13 @@ public:
 
     void attachTextureSet(TextureSet);
 
+protected:
+    void updateUniformData(glm::mat4*, glm::mat4*);
+    void updateModelMatrix();
+    void load(Mesh*, GLuint, glm::vec3, glm::vec3, GLfloat);
 
 private:
 
-    void load(Mesh*, GLuint, glm::vec3, glm::vec3, GLfloat);
-    void updateUniformData();
     void bindTextures();
 
 
