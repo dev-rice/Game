@@ -14,12 +14,12 @@ Emitter::Emitter(GLuint shader_program){
     billboard = new Mesh(planeVertsVector, planeFacesVector);
     
     // GLuint spec = TextureLoader::loadTextureFromFile("res/textures/bubble_spec.png", GL_NEAREST);
-    GLuint emit = TextureLoader::loadTextureFromFile("res/textures/snowflake_part_1.png", GL_LINEAR);
+    GLuint emit = TextureLoader::loadTextureFromFile("res/textures/rain_part.png", GL_LINEAR);
 
     texture_set = new TextureSet(0, 0, 0, emit);
 
     this->maxParticles = 2000;
-    this->lifespan = 1000;
+    this->lifespan = 500;
     this->density = (this->maxParticles)/(this->lifespan);
 
     this->isShotgun = false;
@@ -113,7 +113,6 @@ void Emitter::prepareParticles(Camera* camera){
         }
         if(ptr){
             ptr->setInitialValues(position, velocity, acceleration, rotation, lifespan, Particle::ScalingOption::SCALE_NONE, Particle::FadingOption::FADE_NONE);
-            ptr->enablePhysics(0.1f);
             particles.push_back(ptr);
         }
     }
