@@ -11,6 +11,5 @@ uniform sampler2D normal_map;
 uniform sampler2D emissive_texture;
 
 void main(){
-    // outColor = texture(emissive_texture, Texcoord);
-    outColor = vec4(1.0, 0.0, 1.0, 1.0);
+    outColor = texture(emissive_texture, Texcoord);
 }

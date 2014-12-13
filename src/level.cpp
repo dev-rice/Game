@@ -35,14 +35,7 @@ Level::Level(GLFWwindow* window, const char* filename){
     GLuint particle_fs = ShaderLoader::loadFragmentShader("shaders/particle.fs");
     GLuint particle_shader = ShaderLoader::combineShaderProgram(particle_vs, particle_fs);
 
-    printf("doodad_vs: %d\n", doodad_vs);
-    printf("doodad_fs: %d\n", doodad_fs);
-    printf("particle_vs: %d\n", particle_vs);
-    printf("particle_fs: %d\n", particle_fs);
-    printf("doodad_shader: %d\n", doodad_shader);
-    printf("particle_shader:%d\n", particle_shader);
-
-    emitter = new Emitter(doodad_shader);
+    emitter = new Emitter(particle_shader);
 
     loadLevel(filename);
 
