@@ -34,7 +34,6 @@ Level::Level(GLFWwindow* window, const char* filename){
     GLuint particle_vs = ShaderLoader::loadVertexShader("shaders/particle.vs");
     GLuint particle_fs = ShaderLoader::loadFragmentShader("shaders/particle.fs");
     GLuint particle_shader = ShaderLoader::combineShaderProgram(particle_vs, particle_fs);
-
     emitter = new Emitter(particle_shader);
 
     loadLevel(filename);
@@ -45,7 +44,6 @@ void Level::draw(){
     // Update the view matrix based on the current
     // camera location / position
     view_matrix = camera->getViewMatrix();
-    
 
     // Draw all the drawables
     for (int i = 0; i < drawables.size(); ++i){
@@ -60,19 +58,19 @@ void Level::draw(){
     
 }
 
-void Level::loadLevel(const char* fileName){
+void Level::loadLevel(const char* filename){
 
     char buffer[128];
-    char objectFileName[40];
-    char textureFileName[40];
+    char object_filename[40];
+    char texture_filename[40];
     int objectIndex, diffIndex, specIndex, normIndex, emitIndex;
     float x, y, z, scale, x_rot, y_rot, z_rot;
 
     FILE * ifile;
-     ifile = fopen(fileName, "r");
+     ifile = fopen(filename, "r");
 
     if(ifile == NULL){
-        printf("Error opening file %s\n", fileName);
+        printf("Error opening file %s\n", filename);
         return;
     
     }
@@ -84,11 +82,11 @@ void Level::loadLevel(const char* fileName){
         }
 
         if(buffer[0] == 'm'){
-            sscanf(buffer, "%*c %s", objectFileName);
+            sscanf(buffer, "%*c %s", object_filename);
             // Add this mesh to meshes
             char actual[80] = "";
             strcat(actual, MODEL_PATH);
-            strcat(actual, objectFileName);
+            strcat(actual, object_filename);
             Mesh* mesh = new Mesh(actual);
             meshes.push_back(mesh);
 
@@ -97,11 +95,11 @@ void Level::loadLevel(const char* fileName){
         }
 
         if(buffer[0] == 't'){
-            sscanf(buffer, "%*c %s", textureFileName);
+            sscanf(buffer, "%*c %s", texture_filename);
             
             char actual[80] = "";
             strcat(actual, TEXTURE_PATH);
-            strcat(actual, textureFileName);
+            strcat(actual, texture_filename);
 
             //  Add this texture to the texture container
             GLuint texture = TextureLoader::loadTextureFromFile(actual, GL_LINEAR);

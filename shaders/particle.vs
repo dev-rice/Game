@@ -18,4 +18,5 @@ void main(){
     vec4 world_position = model * vec4(position, 1.0);
 
     gl_Position = proj * view * world_position;
+    
 }

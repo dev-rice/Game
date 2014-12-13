@@ -71,6 +71,7 @@ void Mesh::attachGeometryToShader(GLuint shader_program){
     // As soon as you've bound a certain VAO, every time you call glVertexAttribPointer, 
     // that information will be stored in that VAO. This makes switching between different vertex data 
     // and vertex formats as easy as binding a different VAO.    
+    glUseProgram(shader_program);
 
     // Because binding the geometry to the shader multiple times on the same vao causes problems, we 
     // check we have already bound the data.
