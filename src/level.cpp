@@ -34,6 +34,7 @@ Level::Level(GLFWwindow* window, const char* filename){
     GLuint particle_vs = ShaderLoader::loadVertexShader("shaders/particle.vs");
     GLuint particle_fs = ShaderLoader::loadFragmentShader("shaders/particle.fs");
     GLuint particle_shader = ShaderLoader::combineShaderProgram(particle_vs, particle_fs);
+   
     emitter = new Emitter(particle_shader);
 
     loadLevel(filename);

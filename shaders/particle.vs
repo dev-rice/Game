@@ -15,7 +15,8 @@ uniform float scale;
 
 void main(){
     Texcoord = texcoord;
-    vec4 world_position = model * vec4(position, 1.0);
+    vec4 scaled_position =  vec4(scale * position, 1.0);
+    vec4 world_position = model * scaled_position;
 
     gl_Position = proj * view * world_position;
     

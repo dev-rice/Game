@@ -50,12 +50,12 @@ void Particle::draw(Camera* camera, glm::mat4* proj_matrix){
         switch(scaleWithAge){
         case ScalingOption::SCALE_DOWN_WITH_AGE:
             scale = 1.0-(age/float(lifespan));
-
             break;
         case ScalingOption::SCALE_UP_WITH_AGE:
             scale = age/float(lifespan);
             break;
         case ScalingOption::SCALE_NONE:
+            scale = 1.0f;
             break;
         }
 

@@ -13,12 +13,11 @@ Emitter::Emitter(GLuint shader_program){
 
     billboard = new Mesh(planeVertsVector, planeFacesVector);
     
-    GLuint emit = TextureLoader::loadTextureFromFile("res/textures/snowflake_part_1.png", GL_LINEAR);
-
+    GLuint emit = TextureLoader::loadTextureFromFile("res/textures/fire_part.png", GL_LINEAR);
     texture_set = new TextureSet(0, 0, 0, emit);
 
-    this->maxParticles = 2000;
-    this->lifespan = 500;
+    this->maxParticles = 200;
+    this->lifespan = 100;
     this->density = (this->maxParticles)/(this->lifespan);
 
     this->isShotgun = false;
@@ -76,23 +75,20 @@ void Emitter::prepareParticles(Camera* camera){
 
     for(int i(0); i < density; ++i){
         // Shitty random generation for now
-        float rand1 = (rand()%100)/100.0f -0.5f;
-        float rand2 = (rand()%100)/100.0f -0.5f;
-        float rand3 = (rand()%100)/100.0f -0.5f;
+        float rand1 = ((rand()%100)/100.0f)-0.5f;
+        float rand2 = ((rand()%100)/100.0f)-0.5f;
+        float rand3 = ((rand()%100)/100.0f)-0.5f;
 
-        rand1*=0.2;
-        rand2*=0.2;
-
-        glm::vec3 position(rand1*60.0f, 10.0f, rand2*60.0f);
+        glm::vec3 position(-1.3f+rand1, 0.0f, rand2);
         // Emitter parented to camera
         // position+=camera->getPosition();
-        glm::vec3 velocity(0.0f, -0.02f, 0.0f);
+        glm::vec3 velocity(0.0f, 0.01f+(0.01f*rand3), 0.0f);
         glm::vec3 acceleration(0.0f, 0.0f, 0.0f);
        
         // Random wind interaction for snow particles. 
-        if (rand() % 1000){
-            velocity += glm::vec3(0.001 * (rand() % 5), - abs(0.0005 * (rand() % 5)), 0.001 * (rand() % 5));
-        }
+        // if (rand() % 1000){
+        //     velocity += glm::vec3(0.001 * (rand() % 5), - abs(0.0005 * (rand() % 5)), 0.001 * (rand() % 5));
+        // }
 
         float rotation = 0.0f;
         
@@ -109,7 +105,7 @@ void Emitter::prepareParticles(Camera* camera){
             particles.pop_front();
         }
         if(ptr){
-            ptr->setInitialValues(position, velocity, acceleration, rotation, lifespan, Particle::ScalingOption::SCALE_NONE, Particle::FadingOption::FADE_NONE);
+            ptr->setInitialValues(position, velocity, acceleration, rotation, lifespan, Particle::ScalingOption::SCALE_DOWN_WITH_AGE, Particle::FadingOption::FADE_NONE);
             particles.push_back(ptr);
         }
     }
