@@ -40,28 +40,25 @@ GLuint ShaderLoader::loadFragmentShader(const char* filename){
     return fragment_shader;
 }
 
-
-
 GLuint ShaderLoader::combineShaderProgram(GLuint vertex_shader, GLuint fragment_shader){
 
     // Combine the shaders into a single program
-    GLuint shaderProgram = glCreateProgram();
-    glAttachShader(shaderProgram, vertex_shader);
-    glAttachShader(shaderProgram, fragment_shader);
+    GLuint shader_program = glCreateProgram();
+    glAttachShader(shader_program, vertex_shader);
+    glAttachShader(shader_program, fragment_shader);
 
     // Tell the fragment shader to use something??
-    glBindFragDataLocation(shaderProgram, 0, "outColor");
+    glBindFragDataLocation(shader_program, 0, "outColor");
 
-    // Tell the graphics card about the shader program and use it
-    glLinkProgram(shaderProgram);
-    glUseProgram(shaderProgram);
+    // Put the shader on the graphics card.
+    glLinkProgram(shader_program);
 
     // Free up the space from the vetex and fragment shader because
     // they have been combined into the shader program.
     glDeleteShader(vertex_shader);
     glDeleteShader(fragment_shader);
 
-    return shaderProgram;
+    return shader_program;
 }
 
 const char* ShaderLoader::GLSLParse(const char* filename){

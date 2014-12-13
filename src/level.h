@@ -43,7 +43,7 @@ private:
 
     Emitter* emitter;
 
-    GLuint shader_program;
+    GLuint doodad_shader;
 
     glm::mat4 view_matrix;
     glm::mat4 proj_matrix;

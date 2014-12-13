@@ -18,7 +18,6 @@ Drawable::Drawable(Mesh* mesh, GLuint shader_program, glm::vec3 position, glm::v
 }
 
 void Drawable::load(Mesh* mesh, GLuint shader_program, glm::vec3 position, glm::vec3 rotation, GLfloat scale) {
-    printf("Loading drawable with shader: %d\n", shader_program);
     // Set the position, rotation, scale, and mesh pointer
     this->position = position;
     this->rotation = rotation;
@@ -62,6 +61,8 @@ void Drawable::updateModelMatrix(){
 }
 
 void Drawable::draw(Camera* camera, glm::mat4* proj_matrix){
+    glUseProgram(shader_program);
+    
     // Bind the Mesh's VAO. This lets us put transformations and textures on
     // top of the geometry. 
     mesh->bindVAO();

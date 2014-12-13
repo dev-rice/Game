@@ -40,10 +40,8 @@ private:
 
     GLuint num_faces;
 
-    // Pointers to all that openGL stuff
     GLuint vao;
-
-    bool already_bound;
+    GLuint vbo;
 
     std::vector<GLuint> bound_shaders;
 

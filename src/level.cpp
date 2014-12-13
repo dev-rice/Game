@@ -22,27 +22,27 @@ Level::Level(GLFWwindow* window, const char* filename){
     glfwGetFramebufferSize(window, &width, &height);
     proj_matrix = glm::perspective(45.0f, (float)width / (float)height, 0.1f, 100.0f);
     
-    // camera = new Camera(glm::vec3(0.0f, 20.0f, 20.0f));
-    // camera->setRotation(glm::vec3(0.78f, 0.0f, 0.0f));
-    camera = new Camera(glm::vec3(0.0f, 1.0f, 0.0f));
+    camera = new Camera(glm::vec3(0.0f, 20.0f, 20.0f));
+    camera->setRotation(glm::vec3(0.78f, 0.0f, 0.0f));
+    // camera = new Camera(glm::vec3(0.0f, 1.0f, 0.0f));
     view_matrix = camera->getViewMatrix();
     
     GLuint doodad_vs = ShaderLoader::loadVertexShader("shaders/doodad.vs");
     GLuint doodad_fs = ShaderLoader::loadFragmentShader("shaders/doodad.fs");
-    shader_program = ShaderLoader::combineShaderProgram(doodad_vs, doodad_fs);
+    doodad_shader = ShaderLoader::combineShaderProgram(doodad_vs, doodad_fs);
 
-    GLuint particle_vs = ShaderLoader::loadVertexShader("shaders/doodad.vs");
-    GLuint particle_fs = ShaderLoader::loadFragmentShader("shaders/doodad.fs");
-    GLuint particle_shader_program = ShaderLoader::combineShaderProgram(particle_vs, particle_fs);
+    GLuint particle_vs = ShaderLoader::loadVertexShader("shaders/particle.vs");
+    GLuint particle_fs = ShaderLoader::loadFragmentShader("shaders/particle.fs");
+    GLuint particle_shader = ShaderLoader::combineShaderProgram(particle_vs, particle_fs);
 
     printf("doodad_vs: %d\n", doodad_vs);
     printf("doodad_fs: %d\n", doodad_fs);
     printf("particle_vs: %d\n", particle_vs);
     printf("particle_fs: %d\n", particle_fs);
-    printf("doodad_shader_program: %d\n", shader_program);
-    printf("particle_shader_program:%d\n", particle_shader_program);
+    printf("doodad_shader: %d\n", doodad_shader);
+    printf("particle_shader:%d\n", particle_shader);
 
-    emitter = new Emitter(particle_shader_program);
+    emitter = new Emitter(doodad_shader);
 
     loadLevel(filename);
 
@@ -97,7 +97,6 @@ void Level::loadLevel(const char* fileName){
             strcat(actual, MODEL_PATH);
             strcat(actual, objectFileName);
             Mesh* mesh = new Mesh(actual);
-            mesh->attachGeometryToShader(shader_program);
             meshes.push_back(mesh);
 
             mesh = NULL;
@@ -132,7 +131,7 @@ void Level::loadLevel(const char* fileName){
             glm::vec3 position = glm::vec3(x, y, z);
             glm::vec3 rotation = glm::vec3(x_rot, y_rot, z_rot);
 
-            Doodad* drawable = new Doodad(mesh, shader_program, position, rotation, scale);
+            Doodad* drawable = new Doodad(mesh, doodad_shader, position, rotation, scale);
             drawable->attachTextureSet(texture_set);
             drawables.push_back(drawable);
             

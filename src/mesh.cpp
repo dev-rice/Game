@@ -43,7 +43,7 @@ void Mesh::loadMeshData(std::vector<GLfloat> vertices, std::vector<GLuint> eleme
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
 
-    GLuint vbo, ebo;
+    GLuint ebo;
 
     // Store all of the vertex data in a Vertex Buffer Object (VBO)
     glGenBuffers(1, &vbo);   
@@ -78,8 +78,11 @@ void Mesh::attachGeometryToShader(GLuint shader_program){
 
     // If this shader does not already have the data, bind it.
     if(!already_bound){
+        
         glBindVertexArray(vao);
-
+        // Bind the VBO to ensure the correct vertex data gets pushed to the shader.
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        
         // Get the reference to the "position" attribute defined in
         // the vertex shader
         GLint posAttrib = glGetAttribLocation(shader_program, "position");

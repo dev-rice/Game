@@ -26,11 +26,6 @@ Emitter::Emitter(GLuint shader_program){
 
     this->shader_program = shader_program;
 
-
-    #warning Particles do not load unless this is done for some reason.
-    Particle* ptr = new Particle(billboard, shader_program);
-    ptr = NULL;
-    delete ptr;
 }
 
 Emitter::~Emitter(){
