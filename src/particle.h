@@ -43,7 +43,5 @@ private:
     int lifespan;
     int age;
 
-    Drawable* drawable;
 };
-
 #endif

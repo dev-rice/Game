@@ -22,15 +22,27 @@ Level::Level(GLFWwindow* window, const char* filename){
     glfwGetFramebufferSize(window, &width, &height);
     proj_matrix = glm::perspective(45.0f, (float)width / (float)height, 0.1f, 100.0f);
     
-    camera = new Camera(glm::vec3(0.0f, 20.0f, 20.0f));
-    camera->setRotation(glm::vec3(0.78f, 0.0f, 0.0f));
+    // camera = new Camera(glm::vec3(0.0f, 20.0f, 20.0f));
+    // camera->setRotation(glm::vec3(0.78f, 0.0f, 0.0f));
+    camera = new Camera(glm::vec3(0.0f, 1.0f, 0.0f));
     view_matrix = camera->getViewMatrix();
     
-    GLuint vertex_shader = ShaderLoader::loadVertexShader("shaders/thingy.vs");
-    GLuint fragment_shader = ShaderLoader::loadFragmentShader("shaders/thingy.fs");
-    shader_program = ShaderLoader::combineShaderProgram(vertex_shader, fragment_shader);
+    GLuint doodad_vs = ShaderLoader::loadVertexShader("shaders/doodad.vs");
+    GLuint doodad_fs = ShaderLoader::loadFragmentShader("shaders/doodad.fs");
+    shader_program = ShaderLoader::combineShaderProgram(doodad_vs, doodad_fs);
 
-    emitter = new Emitter(shader_program);
+    GLuint particle_vs = ShaderLoader::loadVertexShader("shaders/doodad.vs");
+    GLuint particle_fs = ShaderLoader::loadFragmentShader("shaders/doodad.fs");
+    GLuint particle_shader_program = ShaderLoader::combineShaderProgram(particle_vs, particle_fs);
+
+    printf("doodad_vs: %d\n", doodad_vs);
+    printf("doodad_fs: %d\n", doodad_fs);
+    printf("particle_vs: %d\n", particle_vs);
+    printf("particle_fs: %d\n", particle_fs);
+    printf("doodad_shader_program: %d\n", shader_program);
+    printf("particle_shader_program:%d\n", particle_shader_program);
+
+    emitter = new Emitter(particle_shader_program);
 
     loadLevel(filename);
 

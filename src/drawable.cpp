@@ -18,6 +18,7 @@ Drawable::Drawable(Mesh* mesh, GLuint shader_program, glm::vec3 position, glm::v
 }
 
 void Drawable::load(Mesh* mesh, GLuint shader_program, glm::vec3 position, glm::vec3 rotation, GLfloat scale) {
+    printf("Loading drawable with shader: %d\n", shader_program);
     // Set the position, rotation, scale, and mesh pointer
     this->position = position;
     this->rotation = rotation;

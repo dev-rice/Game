@@ -1,16 +1,9 @@
 #version 330
 
-struct Light {
-    vec3 position;
-    vec3 color;
-    float intensity;
-};
-
 in vec2 Texcoord;
 in vec3 surface_normal;
 in vec3 light_vector;
 in vec3 viewing_vector;
-in Light main_light;
 
 out vec4 outColor;
 

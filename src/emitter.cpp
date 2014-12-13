@@ -13,7 +13,6 @@ Emitter::Emitter(GLuint shader_program){
 
     billboard = new Mesh(planeVertsVector, planeFacesVector);
     
-    // GLuint spec = TextureLoader::loadTextureFromFile("res/textures/bubble_spec.png", GL_NEAREST);
     GLuint emit = TextureLoader::loadTextureFromFile("res/textures/snowflake_part_1.png", GL_LINEAR);
 
     texture_set = new TextureSet(0, 0, 0, emit);
@@ -28,9 +27,10 @@ Emitter::Emitter(GLuint shader_program){
     this->shader_program = shader_program;
 
 
-    #warning Particles do not load unless an initial one is put in the deque
+    #warning Particles do not load unless this is done for some reason.
     Particle* ptr = new Particle(billboard, shader_program);
-    // particles.push_back(ptr);
+    ptr = NULL;
+    delete ptr;
 }
 
 Emitter::~Emitter(){
@@ -103,7 +103,7 @@ void Emitter::prepareParticles(Camera* camera){
         
         // Particle recycling!
         // Weird that the pointer must be explicitly set to 0, but crashes without this
-        Particle* ptr = 0; 
+        Particle* ptr; 
         if(particles.size() < maxParticles){
             ptr = new Particle(billboard, shader_program);
             ptr->attachTextureSet(*texture_set);

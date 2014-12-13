@@ -3,8 +3,8 @@
 World::World(GLFWwindow* window){
     this->window = window;
 
-    addLevel("res/maps/scene.map");
-    addLevel("res/maps/axefence.map");
+    // addLevel("res/maps/scene.map");
+    // addLevel("res/maps/axefence.map");
     addLevel("res/maps/axefencefire.map");
 
 }

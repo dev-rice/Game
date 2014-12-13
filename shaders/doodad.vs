@@ -1,11 +1,5 @@
 #version 330
 
-struct Light {
-    vec3 position;
-    vec3 color;
-    float intensity;
-};
-
 in vec3 position;
 in vec3 normal;
 in vec2 texcoord;
@@ -14,7 +8,6 @@ out vec2 Texcoord;
 out vec3 surface_normal;
 out vec3 light_vector;
 out vec3 viewing_vector;
-out Light main_light;
 
 uniform mat4 model;
 uniform mat4 view;
@@ -23,11 +16,9 @@ uniform mat4 proj;
 uniform float time;
 uniform float scale;
 
-uniform Light light;
-
 void main() {
     Texcoord = texcoord;
-    main_light = light;
+    // main_light = light;
 
     vec3 scaled_position = position * scale;
     vec4 world_position = model * vec4(scaled_position, 1.0);
