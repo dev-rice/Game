@@ -28,12 +28,10 @@ public:
     void enablePhysics(float);
     virtual void attachTextureSet(TextureSet);
 
-protected:
+private:  
     void updateUniformData();
     void bindTextures();
 
-
-private:  
     glm::vec3 velocity;
     glm::vec3 acceleration;
     glm::vec3 dir;

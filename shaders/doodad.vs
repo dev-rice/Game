@@ -37,8 +37,7 @@ void main() {
     vec4 light_temp = view * (light_position);
     light_to_surface = distance_to_light * (light_temp).xyz;
 
-    vec4 surface_normal_temp = view * model * vec4(normal, 0.0);
-    surface_normal = vec3(surface_normal_temp.xyz);
+    surface_normal = (view * model * vec4(normal, 0.0)).xyz;
 
     camera_to_surface = vec3(0,0,0) - (view * model * vec4(scaled_position, 1.0)).xyz;
 }
