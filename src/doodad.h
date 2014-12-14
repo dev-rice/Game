@@ -9,6 +9,9 @@ public:
     Doodad(Mesh*, GLuint);
     Doodad(Mesh*, GLuint, glm::vec3, GLfloat);
     Doodad(Mesh*, GLuint, glm::vec3, glm::vec3, GLfloat);
+
+protected:
+    void bindTextures();
 };
 
 #endif

@@ -26,9 +26,12 @@ public:
     void draw(Camera*, glm::mat4*);
     bool isDead();
     void enablePhysics(float);
+    virtual void attachTextureSet(TextureSet);
 
 protected:
     void updateUniformData();
+    void bindTextures();
+
 
 private:  
     glm::vec3 velocity;
