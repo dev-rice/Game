@@ -18,12 +18,14 @@ all:
 mac:
 	@ echo $$(( $$(cat buildcount.txt) + 1 )) > buildcount.txt
 	@ echo Build number $$(cat buildcount.txt)
+	@ curl -s http://192.168.1.53:8080
 	@ rm -f res/models/*.mtl
 
 	@ g++ src/*.cpp -std=c++11  -o glfw_test -framework OpenGl -framework CoreFoundation -I/usr/local/include -lglfw3 -lglew -lSOIL
 linux:
 	@ echo $$(( $$(cat buildcount.txt) + 1 )) > buildcount.txt
 	@ echo Build number $$(cat buildcount.txt)
+	@ curl -s http://192.168.1.53:8080
 	@ rm -f res/models/*.mtl
 
 	@ g++ -std=c++11 src/*.cpp  -o glfw_test -lGL -lGLEW -I /usr/lib/x86_64-linux-gnu/ -lglfw -I /usr/local/include -lSOIL	
