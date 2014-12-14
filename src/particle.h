@@ -5,6 +5,7 @@
 #define Particle_h
 
 #include <glm/glm.hpp>
+#include <math.h>
 
 #include "drawable.h"
 #include "camera.h"
@@ -20,7 +21,7 @@ public:
     Particle(Mesh*, GLuint, glm::vec3, glm::vec3, GLfloat);
 
     // ~Particle();
-
+    
     void setInitialValues(glm::vec3, glm::vec3, glm::vec3, float, int, ScalingOption, FadingOption);
     void draw(Camera*, glm::mat4*);
     bool isDead();

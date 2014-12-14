@@ -71,13 +71,6 @@ void Particle::draw(Camera* camera, glm::mat4* proj_matrix){
             break;
         }
 
-        // TODO billboard facing
-        // dir = position - camera->getPosition();
-        // float x_rot = acos(dir.x/dir.z);
-        // float y_rot = acos(dir.y/sqrt(pow(dir.x,2)+pow(dir.z,2)));
-        // planeRotation+=rotationSpeed;
-        // drawable->setRotation(glm::vec3(x_rot, y_rot, planeRotation));
-
         velocity += acceleration;
 
         // Change the zero to be the map height for real pretend physics!
@@ -91,9 +84,6 @@ void Particle::draw(Camera* camera, glm::mat4* proj_matrix){
         }
 
         position += velocity;
-
-        rotation = camera->getRotation();
-        rotation.x = -rotation.x;
         
         Drawable::draw(camera, proj_matrix);
 

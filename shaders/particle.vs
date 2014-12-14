@@ -13,10 +13,19 @@ uniform mat4 proj;
 uniform float time;
 uniform float scale;
 
+
 void main(){
     Texcoord = texcoord;
-    vec4 scaled_position =  vec4(scale * position, 1.0);
-    vec4 world_position = model * scaled_position;
+
+    vec3 scaled_position =  scale * position;
+
+    mat4 rotation_matrix = mat4( view[0][0], view[1][0], view[2][0], 0.0,
+                                 view[0][1], view[1][1], view[2][1], 0.0,
+                                 view[0][2], view[1][2], view[2][2], 0.0,
+                                 0.0       , 0.0       , 0.0       , 1.0);
+
+    vec4 world_position = rotation_matrix * vec4(scaled_position, 1.0);
+    world_position = model * world_position;
 
     gl_Position = proj * view * world_position;
     
