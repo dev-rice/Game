@@ -41,7 +41,7 @@ protected:
     void bindTextures();
     void updateModelMatrix();
 
-    virtual void updateUniformData(glm::mat4*, glm::mat4*);
+    virtual void updateUniformData();
 
     Mesh* mesh;
 

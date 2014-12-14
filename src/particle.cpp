@@ -95,7 +95,7 @@ void Particle::draw(Camera* camera, glm::mat4* proj_matrix){
     }
 }
 
-void Particle::updateUniformData(glm::mat4* view_matrix, glm::mat4* proj_matrix){
+void Particle::updateUniformData(){
     // Set the scale, this is not really going to be a thing, probably
     // ^ It's definitely a thing
     glUniform1f(glGetUniformLocation(shader_program, "scale"), scale);
@@ -109,10 +109,6 @@ void Particle::updateUniformData(glm::mat4* view_matrix, glm::mat4* proj_matrix)
     // Tell the shader the current time
     glUniform1f(glGetUniformLocation(shader_program, "time"), (float)glfwGetTime());
 
-    // Update the current model, view, and projection matrices in the shader.
-    glUniformMatrix4fv(glGetUniformLocation(shader_program, "model"), 1, GL_FALSE, glm::value_ptr(model_matrix));
-    glUniformMatrix4fv(glGetUniformLocation(shader_program, "view"), 1, GL_FALSE, glm::value_ptr(*view_matrix));    
-    glUniformMatrix4fv(glGetUniformLocation(shader_program, "proj"), 1, GL_FALSE, glm::value_ptr(*proj_matrix));
 }
 
 bool Particle::isDead(){

@@ -28,7 +28,7 @@ public:
     void enablePhysics(float);
 
 protected:
-    void updateUniformData(glm::mat4*, glm::mat4*);
+    void updateUniformData();
 
 private:  
     glm::vec3 velocity;
