@@ -29,7 +29,7 @@ void Particle::setInitialValues(glm::vec3 position, glm::vec3 velocity, glm::vec
     this->lifespan = lifespan;
 
     this->age = 0;
-    this->planeRotation = 0.0f;
+    this->plane_rotation = 0.0f;
 
     physicsEnabled = false;
 }
@@ -45,7 +45,6 @@ void Particle::draw(Camera* camera, glm::mat4* proj_matrix){
 
     if(age < lifespan){
         age++;
-
 
         switch(scaleWithAge){
         case ScalingOption::SCALE_DOWN_WITH_AGE:
@@ -63,11 +62,14 @@ void Particle::draw(Camera* camera, glm::mat4* proj_matrix){
         switch(alphaWithAge){
         case FadingOption::FADE_OUT_WITH_AGE:
             // older makes more transparent
+            opacity = 1.0-(0.5*age/float(lifespan));
             break;
         case FadingOption::FADE_IN_WITH_AGE:
             // older makes more opaque
+            opacity = 0.5*age/float(lifespan);
             break;
         case FadingOption::FADE_NONE:
+            opacity = 1.0f;
             break;
         }
 
@@ -88,6 +90,26 @@ void Particle::draw(Camera* camera, glm::mat4* proj_matrix){
         Drawable::draw(camera, proj_matrix);
 
     }
+}
+
+void Particle::updateUniformData(glm::mat4* view_matrix, glm::mat4* proj_matrix){
+    // Set the scale, this is not really going to be a thing, probably
+    // ^ It's definitely a thing
+    glUniform1f(glGetUniformLocation(shader_program, "scale"), scale);
+
+    // Set the opacity in the shader
+    glUniform1f(glGetUniformLocation(shader_program, "opacity"), (float)opacity);
+    
+    // Set the planar rotation
+    glUniform1f(glGetUniformLocation(shader_program, "plane_rotation"), (float)plane_rotation);
+
+    // Tell the shader the current time
+    glUniform1f(glGetUniformLocation(shader_program, "time"), (float)glfwGetTime());
+
+    // Update the current model, view, and projection matrices in the shader.
+    glUniformMatrix4fv(glGetUniformLocation(shader_program, "model"), 1, GL_FALSE, glm::value_ptr(model_matrix));
+    glUniformMatrix4fv(glGetUniformLocation(shader_program, "view"), 1, GL_FALSE, glm::value_ptr(*view_matrix));    
+    glUniformMatrix4fv(glGetUniformLocation(shader_program, "proj"), 1, GL_FALSE, glm::value_ptr(*proj_matrix));
 }
 
 bool Particle::isDead(){

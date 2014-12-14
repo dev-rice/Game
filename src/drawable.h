@@ -28,8 +28,6 @@ public:
     void draw(Camera*, glm::mat4*);
     void attachTextureSet(TextureSet);
 
-    void rotateAround(glm::vec3, GLfloat);
-
     void setPosition(glm::vec3 p) {position = p;}
     void setRotation(glm::vec3 r) {rotation = r;}
     void setScale(GLfloat s) {scale = s;}
@@ -39,10 +37,11 @@ public:
     GLfloat getScale() {return scale;}
 
 protected:
-    void updateUniformData(glm::mat4*, glm::mat4*);
-    void updateModelMatrix();
     void load(Mesh*, GLuint, glm::vec3, glm::vec3, GLfloat);
     void bindTextures();
+    void updateModelMatrix();
+
+    virtual void updateUniformData(glm::mat4*, glm::mat4*);
 
     Mesh* mesh;
 

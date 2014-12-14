@@ -105,7 +105,7 @@ void Emitter::prepareParticles(Camera* camera){
             particles.pop_front();
         }
         if(ptr){
-            ptr->setInitialValues(position, velocity, acceleration, rotation, lifespan, Particle::ScalingOption::SCALE_DOWN_WITH_AGE, Particle::FadingOption::FADE_NONE);
+            ptr->setInitialValues(position, velocity, acceleration, rotation, lifespan, Particle::ScalingOption::SCALE_DOWN_WITH_AGE, Particle::FadingOption::FADE_OUT_WITH_AGE);
             particles.push_back(ptr);
         }
     }

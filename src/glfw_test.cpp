@@ -69,6 +69,7 @@ int main(int argc, char* argv[]) {
     // Create the world
     World world(window);
 
+    std::vector<float> all_fps;
     float last_time = glfwGetTime();
 
     // Display loop
@@ -89,16 +90,31 @@ int main(int argc, char* argv[]) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // system("clear");
-        // float frame_time = glfwGetTime() - last_time;
-        // last_time = glfwGetTime();
-        // printf("Frame draw time: %f\n", frame_time);
-        // printf("FPS: %f\n", 1 / frame_time);
-
-
+        float frame_time = glfwGetTime() - last_time;
+        last_time = glfwGetTime();
+        all_fps.push_back(1.0 / frame_time);
 
         world.update();
 
     }
+
+    float total = 0;
+    float min = all_fps[0];
+    float max = all_fps[0];
+
+    for (int i = 0; i < all_fps.size(); ++i){
+        total += all_fps[i];
+        if (all_fps[i] > max){
+            max = all_fps[i];
+        }
+        if (all_fps[i] < min){
+            min = all_fps[i];
+        }
+    }
+    float average = total / all_fps.size();
+    printf("Average FPS: %f\n", average);
+    printf("Minimum FPS: %f\n", min);
+    printf("Maximum FPS: %f\n", max);
 
     // Shut down GLFW before exiting the program
     glfwTerminate();

@@ -31,6 +31,23 @@ void Drawable::load(Mesh* mesh, GLuint shader_program, glm::vec3 position, glm::
 
 }
 
+void Drawable::bindTextures(){
+    // Put each texture into the correct location for this Drawable. GL_TEXTURE0-3
+    // correspond to the uniforms set in attachTextureSet(). This is where we actually 
+    // tell the graphics card which textures to use.
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture_set->diffuse);
+
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, texture_set->specular);
+
+    glActiveTexture(GL_TEXTURE2);
+    glBindTexture(GL_TEXTURE_2D, texture_set->normal);
+
+    glActiveTexture(GL_TEXTURE3);
+    glBindTexture(GL_TEXTURE_2D, texture_set->emissive);
+}
+
 void Drawable::draw(Camera* camera, glm::mat4* proj_matrix){
     glUseProgram(shader_program);
     
@@ -68,28 +85,6 @@ void Drawable::attachTextureSet(TextureSet texture_set){
     glUniform1i(glGetUniformLocation(shader_program, "emissive_texture"), 3);
 
     this->texture_set = new TextureSet(texture_set);
-}
-
-void Drawable::rotateAround(glm::vec3 rotation_axis, GLfloat angle){
-    // glm::mat4 rotation_matrix = glm::mat4();
-    // rotation_matrix = glm::rotate
-}
-
-void Drawable::bindTextures(){
-    // Put each texture into the correct location for this Drawable. GL_TEXTURE0-3
-    // correspond to the uniforms set in attachTextureSet(). This is where we actually 
-    // tell the graphics card which textures to use.
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture_set->diffuse);
-
-    glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, texture_set->specular);
-
-    glActiveTexture(GL_TEXTURE2);
-    glBindTexture(GL_TEXTURE_2D, texture_set->normal);
-
-    glActiveTexture(GL_TEXTURE3);
-    glBindTexture(GL_TEXTURE_2D, texture_set->emissive);
 }
 
 void Drawable::updateUniformData(glm::mat4* view_matrix, glm::mat4* proj_matrix){

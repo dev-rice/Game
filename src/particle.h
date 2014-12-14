@@ -26,15 +26,19 @@ public:
     void draw(Camera*, glm::mat4*);
     bool isDead();
     void enablePhysics(float);
-    
+
+protected:
+    void updateUniformData(glm::mat4*, glm::mat4*);
+
 private:  
     glm::vec3 velocity;
     glm::vec3 acceleration;
     glm::vec3 dir;
 
     float rotationSpeed;
-    float planeRotation;
+    float plane_rotation;
     float elasticity;
+    float opacity;
 
     bool physicsEnabled;
 

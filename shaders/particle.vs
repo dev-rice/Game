@@ -12,7 +12,7 @@ uniform mat4 proj;
 
 uniform float time;
 uniform float scale;
-
+uniform float plane_rotation;
 
 void main(){
     Texcoord = texcoord;
