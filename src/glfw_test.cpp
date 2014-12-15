@@ -78,12 +78,27 @@ int main(int argc, char* argv[]) {
     GLuint basic_fs = ShaderLoader::loadFragmentShader("shaders/basic.fs");
     GLuint basic_shader = ShaderLoader::combineShaderProgram(basic_vs, basic_fs);
 
-    GLfloat planeVerts[] = {-0.5f,  0.5f, 0.0f, 1.0f,
-                             0.5f,  0.5f, 1.0f, 1.0f,
-                            -0.5f, -0.5f, 0.0f, 0.0f,
-                             0.5f, -0.5f, 1.0f, 0.0f,};
+    // GLfloat planeVerts[] = {-0.5f,  0.5f, 0.0f, 1.0f,
+    //                          0.5f,  0.5f, 1.0f, 1.0f,
+    //                         -0.5f, -0.5f, 0.0f, 0.0f,
+    //                          0.5f, -0.5f, 1.0f, 0.0f,};
 
-    GLuint  planeFaces[] = {2, 1, 0, 1, 2, 3};
+    // GLfloat planeVerts[] = {-1.0f,  1.0f, 0.0f, 1.0f,
+    //                          1.0f,  1.0f, 1.0f, 1.0f,
+    //                         -1.0f, -1.0f, 0.0f, 0.0f,
+    //                          1.0f, -1.0f, 1.0f, 0.0f,};
+
+    GLfloat planeVerts[] = {
+             0.0f,  0.0f,  0.0f, 1.0f,
+             1.0f,  0.0f,  1.0f, 1.0f,
+             1.0f, -1.0f,  1.0f, 0.0f,
+
+             1.0f, -1.0f,  1.0f, 0.0f,
+             0.0f, -1.0f,  0.0f, 0.0f,
+             0.0f,  0.0f,  0.0f, 1.0f
+    };
+
+    GLuint  planeFaces[] = {0, 1, 3, 3, 2, 0};
 
     std::vector<GLfloat> vertices(planeVerts, planeVerts + sizeof(planeVerts) / sizeof(GLfloat));
     std::vector<GLuint> elements(planeFaces, planeFaces + sizeof(planeFaces) / sizeof(GLuint));
@@ -102,9 +117,9 @@ int main(int argc, char* argv[]) {
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), vertices.data(), GL_STATIC_DRAW);
 
     // Store all of the face data in a Element Buffer Object (EBO)
-    glGenBuffers(1, &ebo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements.size()* sizeof(GLuint), elements.data(), GL_STATIC_DRAW);
+    // glGenBuffers(1, &ebo);
+    // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+    // glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements.size()* sizeof(GLuint), elements.data(), GL_STATIC_DRAW);
 
     glUseProgram(basic_shader);
     glBindVertexArray(vao);
@@ -184,11 +199,18 @@ int main(int argc, char* argv[]) {
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
         glDisable(GL_DEPTH_TEST);
-        glUseProgram(basic_shader);
+        glDisable(GL_CULL_FACE);
+        
         glBindVertexArray(vao);
+        
+        glUseProgram(basic_shader);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texColorBuffer);
-        glDrawElements(GL_TRIANGLES, num_faces, GL_UNSIGNED_INT, 0);
+        
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+
+        glEnable(GL_CULL_FACE);
+
     }
 
     float total = 0;
