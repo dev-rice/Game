@@ -27,8 +27,8 @@ Level::Level(GLFWwindow* window, const char* filename){
     camera = new Camera(glm::vec3(0.0f, 2.0f, 4.0f));
     view_matrix = camera->getViewMatrix();
     
-    GLuint doodad_vs = ShaderLoader::loadVertexShader("shaders/doodad.vs");
-    GLuint doodad_fs = ShaderLoader::loadFragmentShader("shaders/doodad.fs");
+    GLuint doodad_vs = ShaderLoader::loadVertexShader("shaders/doodad_point.vs");
+    GLuint doodad_fs = ShaderLoader::loadFragmentShader("shaders/doodad_point.fs");
     doodad_shader = ShaderLoader::combineShaderProgram(doodad_vs, doodad_fs);
 
     GLuint particle_vs = ShaderLoader::loadVertexShader("shaders/particle.vs");

@@ -37,8 +37,8 @@ vec4 lightFragment(vec3 light_vector, vec3 light_color, float light_power){
 }
 
 void main() {
-    vec3 light_color = vec3(1.0, 1.0, 1.0);
-    float light_power = 100.0;
+    vec3 light_color = vec3(1.0, 0.3, 0.1);
+    float light_power = 5.0;
     vec4 lit_component = lightFragment(light_to_surface, light_color, light_power);
     
     vec4 emissive = texture(emissive_texture, Texcoord);
