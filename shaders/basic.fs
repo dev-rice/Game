@@ -11,6 +11,7 @@ void main() {
         outColor = vec4(1.0, 0.0, 1.0, 1.0);
 
     } else {
-        outColor = texture(texFramebuffer, Texcoord);
+        vec3 color = texture(texFramebuffer, Texcoord).rgb;
+        outColor = vec4(1 - color, 1.0);
     }
 }

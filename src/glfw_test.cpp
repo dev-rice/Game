@@ -90,21 +90,17 @@ int main(int argc, char* argv[]) {
 
     GLfloat planeVerts[] = {
              0.25f, -0.25f,  0.0f, 1.0f,
-             1.0f, -0.25f,  1.0f, 1.0f,
-             1.0f, -1.0f,  1.0f, 0.0f,
+             1.0f,  -0.25f,  1.0f, 1.0f,
+             1.0f,  -1.0f ,  1.0f, 0.0f,
 
-             1.0f, -1.0f,  1.0f, 0.0f,
-             0.25f, -1.0f,  0.0f, 0.0f,
+             1.0f,  -1.0f ,  1.0f, 0.0f,
+             0.25f, -1.0f ,  0.0f, 0.0f,
              0.25f, -0.25f,  0.0f, 1.0f
     };
 
-    GLuint  planeFaces[] = {0, 1, 3, 3, 2, 0};
 
     std::vector<GLfloat> vertices(planeVerts, planeVerts + sizeof(planeVerts) / sizeof(GLfloat));
-    std::vector<GLuint> elements(planeFaces, planeFaces + sizeof(planeFaces) / sizeof(GLuint));
 
-    // We need to know how many faces to draw later on.
-    GLuint num_faces = elements.size();
     
     // Create our Vertex Array Object (VAO) which will hold our vertex and element data. 
     GLuint vao, vbo, ebo;
@@ -115,11 +111,6 @@ int main(int argc, char* argv[]) {
     glGenBuffers(1, &vbo);   
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), vertices.data(), GL_STATIC_DRAW);
-
-    // Store all of the face data in a Element Buffer Object (EBO)
-    // glGenBuffers(1, &ebo);
-    // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-    // glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements.size()* sizeof(GLuint), elements.data(), GL_STATIC_DRAW);
 
     glUseProgram(basic_shader);
     glBindVertexArray(vao);
@@ -141,7 +132,7 @@ int main(int argc, char* argv[]) {
     // Load the texture attributes from our vertex spec with width 4. The texture 
     // values start at index 4. Tell it to load 2 values.
     glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE,
-                           4*sizeof(float), (void*)(3*sizeof(float)));
+                           4*sizeof(float), (void*)(2*sizeof(float)));
 
     // Create frame buffer
     GLuint frameBuffer;
