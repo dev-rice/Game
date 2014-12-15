@@ -78,10 +78,10 @@ int main(int argc, char* argv[]) {
     GLuint basic_fs = ShaderLoader::loadFragmentShader("shaders/basic.fs");
     GLuint basic_shader = ShaderLoader::combineShaderProgram(basic_vs, basic_fs);
 
-    GLfloat planeVerts[] = {-0.5f,  0.5f, 0.0f, 0.0f,
-                             0.5f,  0.5f, 1.0f, 0.0f,
-                            -0.5f, -0.5f, 0.0f, 1.0f,
-                             0.5f, -0.5f, 1.0f, 1.0f,};
+    GLfloat planeVerts[] = {-0.5f,  0.5f, 0.0f, 1.0f,
+                             0.5f,  0.5f, 1.0f, 1.0f,
+                            -0.5f, -0.5f, 0.0f, 0.0f,
+                             0.5f, -0.5f, 1.0f, 0.0f,};
 
     GLuint  planeFaces[] = {2, 1, 0, 1, 2, 3};
 
