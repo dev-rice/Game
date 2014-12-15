@@ -89,13 +89,13 @@ int main(int argc, char* argv[]) {
     //                          1.0f, -1.0f, 1.0f, 0.0f,};
 
     GLfloat planeVerts[] = {
-             0.0f,  0.0f,  0.0f, 1.0f,
-             1.0f,  0.0f,  1.0f, 1.0f,
+             0.25f, -0.25f,  0.0f, 1.0f,
+             1.0f, -0.25f,  1.0f, 1.0f,
              1.0f, -1.0f,  1.0f, 0.0f,
 
              1.0f, -1.0f,  1.0f, 0.0f,
-             0.0f, -1.0f,  0.0f, 0.0f,
-             0.0f,  0.0f,  0.0f, 1.0f
+             0.25f, -1.0f,  0.0f, 0.0f,
+             0.25f, -0.25f,  0.0f, 1.0f
     };
 
     GLuint  planeFaces[] = {0, 1, 3, 3, 2, 0};
@@ -207,7 +207,10 @@ int main(int argc, char* argv[]) {
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texColorBuffer);
         
+        glUniform1f(glGetUniformLocation(basic_shader, "is_outline"), false);
         glDrawArrays(GL_TRIANGLES, 0, 6);
+        glUniform1f(glGetUniformLocation(basic_shader, "is_outline"), true);
+        glDrawArrays(GL_LINE_LOOP, 0, 6);
 
         glEnable(GL_CULL_FACE);
 
