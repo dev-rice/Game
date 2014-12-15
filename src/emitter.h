@@ -35,7 +35,7 @@ public:
     void draw(Camera*, glm::mat4*);
     void setParticleDensity(int);
     void makeShotgun();
-private:
+protected:
     void prepareParticles(Camera*);
 
     int maxParticles;

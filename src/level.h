@@ -15,6 +15,7 @@
 #include "texture_loader.h"
 #include "texture_set.h"
 #include "emitter.h"
+#include "fire_emitter.h"
 
 static const char* MODEL_PATH = "res/models/";
 static const char* TEXTURE_PATH = "res/textures/";
