@@ -78,16 +78,6 @@ int main(int argc, char* argv[]) {
     GLuint basic_fs = ShaderLoader::loadFragmentShader("shaders/basic.fs");
     GLuint basic_shader = ShaderLoader::combineShaderProgram(basic_vs, basic_fs);
 
-    // GLfloat planeVerts[] = {-0.5f,  0.5f, 0.0f, 1.0f,
-    //                          0.5f,  0.5f, 1.0f, 1.0f,
-    //                         -0.5f, -0.5f, 0.0f, 0.0f,
-    //                          0.5f, -0.5f, 1.0f, 0.0f,};
-
-    // GLfloat planeVerts[] = {-1.0f,  1.0f, 0.0f, 1.0f,
-    //                          1.0f,  1.0f, 1.0f, 1.0f,
-    //                         -1.0f, -1.0f, 0.0f, 0.0f,
-    //                          1.0f, -1.0f, 1.0f, 0.0f,};
-
     GLfloat planeVerts[] = {
              0.25f, -0.25f,  0.0f, 1.0f,
              1.0f,  -0.25f,  1.0f, 1.0f,
@@ -98,6 +88,15 @@ int main(int argc, char* argv[]) {
              0.25f, -0.25f,  0.0f, 1.0f
     };
 
+    // GLfloat planeVerts[] = {
+    //     -1.0f, 1.0f,  0.0f, 1.0f,
+    //     1.0f,  1.0f,  1.0f, 1.0f,
+    //     1.0f,  -1.0f ,  1.0f, 0.0f,
+
+    //     1.0f,  -1.0f ,  1.0f, 0.0f,
+    //     -1.0f, -1.0f ,  0.0f, 0.0f,
+    //     -1.0f, 1.0f,  0.0f, 1.0f
+    // };
 
     std::vector<GLfloat> vertices(planeVerts, planeVerts + sizeof(planeVerts) / sizeof(GLfloat));
 
@@ -153,6 +152,14 @@ int main(int argc, char* argv[]) {
 
     glUseProgram(basic_shader);
     glUniform1i(glGetUniformLocation(basic_shader, "texFramebuffer"), 0);
+
+    GLuint rboDepthStencil;
+    glGenRenderbuffers(1, &rboDepthStencil);
+    glBindRenderbuffer(GL_RENDERBUFFER, rboDepthStencil);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
+    glFramebufferRenderbuffer(
+      GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rboDepthStencil
+    );
 
     // Display loop
     while(!glfwWindowShouldClose(window)) {
