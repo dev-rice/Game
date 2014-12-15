@@ -30,17 +30,19 @@ class Emitter {
 public:
     Emitter();
     ~Emitter();
-    Emitter(GLuint);
+    Emitter(GLuint, glm::vec3);
 
     void draw(Camera*, glm::mat4*);
     void setParticleDensity(int);
     void makeShotgun();
 protected:
-    void prepareParticles(Camera*);
+    virtual void prepareParticles(Camera*);
 
     int maxParticles;
     int density;
     int lifespan;
+
+    glm::vec3 position;
 
     bool isShotgun;
     bool hasFired;
