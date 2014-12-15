@@ -115,8 +115,6 @@ int main(int argc, char* argv[]) {
     // Tell shader to read GL_TEXTURE0
     framebuffer_window.attachTexture(texColorBuffer);
 
-    
-
     // Display loop
     while(!glfwWindowShouldClose(window)) {
         // Swap display/rendering buffers
@@ -154,6 +152,21 @@ int main(int argc, char* argv[]) {
         
         // Render the framebuffer texture to the screen
         framebuffer_window.draw();
+
+        double mouse_x;
+        double mouse_y;
+
+        glm::mat3 projection = glm::mat3( width / 2.0f, 0.0f         , width / 2.0f  ,
+                                          0.0f        , -height / 2.0f, height / 2.0f,
+                                          0.0f        , 0.0f         , 1.0f           );
+
+        glfwGetCursorPos(window, &mouse_x, &mouse_y);
+
+        glm::vec3 mouse_position = glm::vec3(mouse_x, mouse_y, 1.0);
+        glm::vec3 gl_mouse_position = mouse_position * glm::inverse(projection);
+
+        printf("screen: %f, %f\n", mouse_x, mouse_y);
+        printf("world:  %f, %f\n\n", gl_mouse_position.x, gl_mouse_position.y);
 
     }
 

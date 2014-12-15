@@ -56,7 +56,7 @@ void Level::draw(){
     }
 
     emitter->draw(camera, &proj_matrix);
-
+    
 }
 
 void Level::loadLevel(const char* filename){
