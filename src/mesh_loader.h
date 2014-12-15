@@ -2,6 +2,8 @@
 // Header file for *.obj file importing
 // and mesh object creation
 // Trevor Westphal
+#ifndef MeshLoader_h
+#define MeshLoader_h
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -28,3 +30,5 @@ private:
     std::vector<GLuint> final_tris;
     std::vector<GLfloat> final_verts;
 };
+
+#endif

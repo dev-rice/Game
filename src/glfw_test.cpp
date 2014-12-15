@@ -15,6 +15,8 @@
 #include <vector>
 
 #include "world.h"
+#include "flat_mesh.h"
+#include "flat_drawable.h"
 
 GLFWwindow* initializeGLFWWindow(int, int, bool);
 
@@ -74,48 +76,14 @@ int main(int argc, char* argv[]) {
 
 
     // Framebuffer Shtuff
+    FlatMesh flat_mesh = FlatMesh();
     
-
-    // Create 2D mesh for framebuffer to draw onto.
-    GLfloat planeVerts[] = {
-             0.25f, -0.25f,  0.0f, 1.0f,
-             1.0f,  -0.25f,  1.0f, 1.0f,
-             1.0f,  -1.0f ,  1.0f, 0.0f,
-
-             1.0f,  -1.0f ,  1.0f, 0.0f,
-             0.25f, -1.0f ,  0.0f, 0.0f,
-             0.25f, -0.25f,  0.0f, 1.0f
-    };
-
-    std::vector<GLfloat> vertices(planeVerts, planeVerts + sizeof(planeVerts) / sizeof(GLfloat));
-    
-    GLuint vao, vbo;
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
-
-    glGenBuffers(1, &vbo);   
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), vertices.data(), GL_STATIC_DRAW);
-
     // Load framebuffer shader
     GLuint basic_vs = ShaderLoader::loadVertexShader("shaders/basic.vs");
     GLuint basic_fs = ShaderLoader::loadFragmentShader("shaders/basic.fs");
     GLuint basic_shader = ShaderLoader::combineShaderProgram(basic_vs, basic_fs);
 
-    // Attach mesh data to the shader
-    glUseProgram(basic_shader);
-    glBindVertexArray(vao);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    
-    GLint posAttrib = glGetAttribLocation(basic_shader, "position");
-    glEnableVertexAttribArray(posAttrib);
-    glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE,
-                           4*sizeof(float), 0);
-
-    GLint texAttrib = glGetAttribLocation(basic_shader, "texcoord");
-    glEnableVertexAttribArray(texAttrib);
-    glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE,
-                           4*sizeof(float), (void*)(2*sizeof(float)));
+    FlatDrawable framebuffer_window = FlatDrawable(&flat_mesh, basic_shader, 0.25, 0.25, glm::vec2(0.75, -0.75));
 
     // Create frame buffer
     GLuint frameBuffer;
@@ -145,8 +113,9 @@ int main(int argc, char* argv[]) {
     );
 
     // Tell shader to read GL_TEXTURE0
-    glUseProgram(basic_shader);
-    glUniform1i(glGetUniformLocation(basic_shader, "texFramebuffer"), 0);
+    framebuffer_window.attachTexture(texColorBuffer);
+
+    
 
     // Display loop
     while(!glfwWindowShouldClose(window)) {
@@ -184,20 +153,7 @@ int main(int argc, char* argv[]) {
         world.update();
         
         // Render the framebuffer texture to the screen
-        // glDisable(GL_DEPTH_TEST);
-        // glDisable(GL_CULL_FACE);
-        
-        // glBindVertexArray(vao);
-        
-        // glUseProgram(basic_shader);
-        // glActiveTexture(GL_TEXTURE0);
-        // glBindTexture(GL_TEXTURE_2D, texColorBuffer);
-        
-        // glUniform1f(glGetUniformLocation(basic_shader, "is_outline"), false);
-        // glDrawArrays(GL_TRIANGLES, 0, 6);
-        // glUniform1f(glGetUniformLocation(basic_shader, "is_outline"), true);
-        // glDrawArrays(GL_LINE_LOOP, 0, 6);
-
+        framebuffer_window.draw();
 
     }
 
