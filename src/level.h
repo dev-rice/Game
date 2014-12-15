@@ -41,8 +41,7 @@ private:
     std::vector<GLuint> textures;
     std::vector<Mesh*> meshes;
     std::vector<Drawable*> drawables;
-
-    Emitter* emitter;
+    std::vector<Emitter*> emitters;
 
     GLuint doodad_shader;
 
