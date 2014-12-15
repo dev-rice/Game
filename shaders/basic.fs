@@ -11,6 +11,6 @@ void main() {
     if (is_outline){
         outColor = vec4(1.0, 0.0, 1.0, 1.0);
     } else {
-        outColor = vec4(1.0, 1.0, 4.0, 1.0) * texture(texFramebuffer, Texcoord);
+        outColor = vec4(1 - texture(texFramebuffer, Texcoord).rgb, 1.0);
     }
 }

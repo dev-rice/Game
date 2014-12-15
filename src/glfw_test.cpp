@@ -184,19 +184,19 @@ int main(int argc, char* argv[]) {
         world.update();
         
         // Render the framebuffer texture to the screen
-        glDisable(GL_DEPTH_TEST);
-        glDisable(GL_CULL_FACE);
+        // glDisable(GL_DEPTH_TEST);
+        // glDisable(GL_CULL_FACE);
         
-        glBindVertexArray(vao);
+        // glBindVertexArray(vao);
         
-        glUseProgram(basic_shader);
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, texColorBuffer);
+        // glUseProgram(basic_shader);
+        // glActiveTexture(GL_TEXTURE0);
+        // glBindTexture(GL_TEXTURE_2D, texColorBuffer);
         
-        glUniform1f(glGetUniformLocation(basic_shader, "is_outline"), false);
-        glDrawArrays(GL_TRIANGLES, 0, 6);
-        glUniform1f(glGetUniformLocation(basic_shader, "is_outline"), true);
-        glDrawArrays(GL_LINE_LOOP, 0, 6);
+        // glUniform1f(glGetUniformLocation(basic_shader, "is_outline"), false);
+        // glDrawArrays(GL_TRIANGLES, 0, 6);
+        // glUniform1f(glGetUniformLocation(basic_shader, "is_outline"), true);
+        // glDrawArrays(GL_LINE_LOOP, 0, 6);
 
 
     }
