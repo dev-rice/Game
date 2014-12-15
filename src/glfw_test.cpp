@@ -84,6 +84,7 @@ int main(int argc, char* argv[]) {
     GLuint basic_shader = ShaderLoader::combineShaderProgram(basic_vs, basic_fs);
 
     FlatDrawable framebuffer_window = FlatDrawable(&flat_mesh, basic_shader, 0.25, 0.25, glm::vec2(0.75, -0.75));
+    FlatDrawable mouse = FlatDrawable(&flat_mesh, basic_shader, 0.05, 0.05, glm::vec2(0.75, -0.75));
 
     // Create frame buffer
     GLuint frameBuffer;
@@ -112,8 +113,12 @@ int main(int argc, char* argv[]) {
       GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rboDepthStencil
     );
 
+    GLuint mouse_texture = TextureLoader::loadTextureFromFile("res/textures/cursor_ui.png", GL_LINEAR);
+
     // Tell shader to read GL_TEXTURE0
     framebuffer_window.attachTexture(texColorBuffer);
+    mouse.attachTexture(mouse_texture);
+
 
     // Display loop
     while(!glfwWindowShouldClose(window)) {
@@ -168,6 +173,9 @@ int main(int argc, char* argv[]) {
         printf("screen: %f, %f\n", mouse_x, mouse_y);
         printf("world:  %f, %f\n\n", gl_mouse_position.x, gl_mouse_position.y);
 
+        mouse.setPosition(glm::vec2(gl_mouse_position.x, gl_mouse_position.y));
+        mouse.draw();
+
     }
 
     float total = 0;
@@ -221,7 +229,7 @@ GLFWwindow* initializeGLFWWindow(int width, int height, bool fullscreen){
     }
 
     // Hide the mouse
-    // glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
     // Create the OpenGL context in the window
     glfwMakeContextCurrent(window);
