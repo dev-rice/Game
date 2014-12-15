@@ -72,6 +72,82 @@ int main(int argc, char* argv[]) {
     std::vector<float> all_fps;
     float last_time = glfwGetTime();
 
+
+    // Framebuffer Shtuff
+    GLuint basic_vs = ShaderLoader::loadVertexShader("shaders/basic.vs");
+    GLuint basic_fs = ShaderLoader::loadFragmentShader("shaders/basic.fs");
+    GLuint basic_shader = ShaderLoader::combineShaderProgram(basic_vs, basic_fs);
+
+    GLfloat planeVerts[] = {-0.5f,  0.5f, 0.0f, 0.0f,
+                             0.5f,  0.5f, 1.0f, 0.0f,
+                            -0.5f, -0.5f, 0.0f, 1.0f,
+                             0.5f, -0.5f, 1.0f, 1.0f,};
+
+    GLuint  planeFaces[] = {2, 1, 0, 1, 2, 3};
+
+    std::vector<GLfloat> vertices(planeVerts, planeVerts + sizeof(planeVerts) / sizeof(GLfloat));
+    std::vector<GLuint> elements(planeFaces, planeFaces + sizeof(planeFaces) / sizeof(GLuint));
+
+    // We need to know how many faces to draw later on.
+    GLuint num_faces = elements.size();
+    
+    // Create our Vertex Array Object (VAO) which will hold our vertex and element data. 
+    GLuint vao, vbo, ebo;
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+
+    // Store all of the vertex data in a Vertex Buffer Object (VBO)
+    glGenBuffers(1, &vbo);   
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), vertices.data(), GL_STATIC_DRAW);
+
+    // Store all of the face data in a Element Buffer Object (EBO)
+    glGenBuffers(1, &ebo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements.size()* sizeof(GLuint), elements.data(), GL_STATIC_DRAW);
+
+    glUseProgram(basic_shader);
+    glBindVertexArray(vao);
+    // Bind the VBO to ensure the correct vertex data gets pushed to the shader.
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    
+    // Get the reference to the "position" attribute defined in
+    // the vertex shader
+    GLint posAttrib = glGetAttribLocation(basic_shader, "position");
+    glEnableVertexAttribArray(posAttrib);
+    // Load the position attributes from our vertex spec with width 4. The position
+    // values start at index 0. Tell it to load 3 values.
+    glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE,
+                           4*sizeof(float), 0);
+
+    // Link the texture coordinates to the shader.
+    GLint texAttrib = glGetAttribLocation(basic_shader, "texcoord");
+    glEnableVertexAttribArray(texAttrib);
+    // Load the texture attributes from our vertex spec with width 4. The texture 
+    // values start at index 4. Tell it to load 2 values.
+    glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE,
+                           4*sizeof(float), (void*)(3*sizeof(float)));
+
+    // Create frame buffer
+    GLuint frameBuffer;
+    glGenFramebuffers(1, &frameBuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+
+    // Create texture to hold color buffer
+    GLuint texColorBuffer;
+    glGenTextures(1, &texColorBuffer);
+    glBindTexture(GL_TEXTURE_2D, texColorBuffer);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texColorBuffer, 0);
+
+    glUseProgram(basic_shader);
+    glUniform1i(glGetUniformLocation(basic_shader, "texFramebuffer"), 0);
+
     // Display loop
     while(!glfwWindowShouldClose(window)) {
         // Swap display/rendering buffers
@@ -94,8 +170,25 @@ int main(int argc, char* argv[]) {
         last_time = glfwGetTime();
         all_fps.push_back(1.0 / frame_time);
 
+        glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+        glClearColor(0.0, 0.0, 0.0, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glEnable(GL_DEPTH_TEST);
         world.update();
 
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+        glEnable(GL_DEPTH_TEST);
+        world.update();
+        
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+        glDisable(GL_DEPTH_TEST);
+        glUseProgram(basic_shader);
+        glBindVertexArray(vao);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texColorBuffer);
+        glDrawElements(GL_TRIANGLES, num_faces, GL_UNSIGNED_INT, 0);
     }
 
     float total = 0;
