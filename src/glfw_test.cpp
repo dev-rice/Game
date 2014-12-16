@@ -88,8 +88,7 @@ int main(int argc, char* argv[]) {
 
         // Clear the screen so we can draw again
         // glClearColor(0.16f, 0.16f, 0.16f, 1.0f);
-        glClearColor(0.0, 0.0, 0.0, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        
 
         // system("clear");
         float frame_time = glfwGetTime() - last_time;
