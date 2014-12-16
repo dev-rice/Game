@@ -28,7 +28,7 @@ Level::Level(GLFWwindow* window, const char* filename){
     GLuint particle_fs = ShaderLoader::loadFragmentShader("shaders/particle.fs");
     GLuint particle_shader = ShaderLoader::combineShaderProgram(particle_vs, particle_fs);
    
-    emitters.push_back(new FireEmitter(particle_shader, glm::vec3(-1.4f, 0.0f, 0.0f), 0.5f));
+    emitters.push_back(new SnowEmitter(particle_shader, glm::vec3(-1.4f, 0.0f, 0.0f)));
 
     loadLevel(filename);
 

@@ -15,8 +15,8 @@ Emitter::Emitter(GLuint shader_program, glm::vec3 position){
 
     billboard = new Mesh(planeVertsVector, planeFacesVector);
     
-    // GLuint emit = TextureLoader::loadTextureFromFile("res/textures/fire_part.png", GL_LINEAR);
-    // texture_set = new TextureSet(0, 0, 0, emit);
+    GLuint emit = TextureLoader::loadTextureFromFile("res/textures/part_snow.png", GL_LINEAR);
+    texture_set = new TextureSet(0, 0, 0, emit);
 
     this->maxParticles = 200;
     this->lifespan = 100;
@@ -100,7 +100,6 @@ void Emitter::prepareParticles(Camera* camera){
         if(particles.size() < maxParticles){
             ptr = new Particle(billboard, shader_program);
             ptr->attachTextureSet(*texture_set);
-
         } 
         if(particles.size() > 0 && particles[0]->isDead()){
             ptr = particles[0];
