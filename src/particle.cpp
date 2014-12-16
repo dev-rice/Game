@@ -62,7 +62,7 @@ void Particle::enablePhysics(float elasticity){
 }
 
 void Particle::draw(Camera* camera, glm::mat4* proj_matrix){
-
+    // float time = glfwGetTime();
     if(age < lifespan){
         age++;
 
