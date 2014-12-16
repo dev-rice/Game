@@ -5,7 +5,7 @@
 
 SnowEmitter::SnowEmitter(GLuint shader_program, glm::vec3 position) : Emitter(shader_program, position){
     // Hardcoded snow particle texture
-    GLuint emit = TextureLoader::loadTextureFromFile("res/textures/part_snow.png", GL_LINEAR);
+    GLuint emit = TextureLoader::loadTextureFromFile("res/textures/snow_part.png", GL_LINEAR);
     texture_set = new TextureSet(0, 0, 0, emit);
 
     // Hardcoded density, maximum, and lifespan
