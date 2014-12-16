@@ -5,14 +5,7 @@
 
 Level::~Level(){
     printf("Calling the Level destructor.");
-    #warning This leaks memory here, but correcting it causes a segfault
-    // See http://stackoverflow.com/questions/13223399/c-deleting-a-pointer
-
-    emitter->~Emitter();
-    //Manual deletion doesn't work either :(
-
-    emitter = NULL;
-    delete emitter;
+    #warning Deletion needs to be properly implemented
 }
 
 Level::Level(GLFWwindow* window, const char* filename){
@@ -35,7 +28,7 @@ Level::Level(GLFWwindow* window, const char* filename){
     GLuint particle_fs = ShaderLoader::loadFragmentShader("shaders/particle.fs");
     GLuint particle_shader = ShaderLoader::combineShaderProgram(particle_vs, particle_fs);
    
-    emitter = new Emitter(particle_shader);
+    emitters.push_back(new FireEmitter(particle_shader, glm::vec3(-1.4f, 0.0f, 0.0f), 0.5f));
 
     loadLevel(filename);
 
@@ -55,7 +48,9 @@ void Level::draw(){
         drawables[i]->draw(camera, &proj_matrix);
     }
 
-    emitter->draw(camera, &proj_matrix);
+    for(int i(0); i < emitters.size(); ++i){
+        emitters[i]->draw(camera, &proj_matrix);
+    }
     
 }
 
