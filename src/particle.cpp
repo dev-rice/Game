@@ -73,6 +73,9 @@ void Particle::draw(Camera* camera, glm::mat4* proj_matrix){
         case ScalingOption::SCALE_UP_WITH_AGE:
             scale = age/float(lifespan);
             break;
+        case ScalingOption::SCALE_SMOKE:
+            scale = 2.0f + age/float(lifespan);
+            break;
         case ScalingOption::SCALE_NONE:
             scale = 1.0f;
             break;

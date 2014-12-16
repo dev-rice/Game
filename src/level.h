@@ -18,6 +18,7 @@
 #include "emitter.h"
 #include "fire_emitter.h"
 #include "snow_emitter.h"
+#include "smoke_emitter.h"
 
 static const char* MODEL_PATH = "res/models/";
 static const char* TEXTURE_PATH = "res/textures/";

@@ -13,7 +13,7 @@
 
 class Particle : public Drawable {
 public:
-    enum class ScalingOption { SCALE_UP_WITH_AGE, SCALE_DOWN_WITH_AGE, SCALE_NONE};
+    enum class ScalingOption { SCALE_UP_WITH_AGE, SCALE_SMOKE, SCALE_DOWN_WITH_AGE, SCALE_NONE};
     enum class FadingOption { FADE_OUT_WITH_AGE, FADE_IN_WITH_AGE, FADE_NONE};
 
     Particle(Mesh*, GLuint);
