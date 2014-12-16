@@ -17,6 +17,7 @@ public:
 
     void update();
 private:
+    void handleInputs();
 
     GLFWwindow* window;
     Level* level;

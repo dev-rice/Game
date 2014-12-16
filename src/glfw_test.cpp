@@ -86,11 +86,6 @@ int main(int argc, char* argv[]) {
             glfwSetWindowShouldClose(window, GL_TRUE);
         }
 
-        // Clear the screen so we can draw again
-        // glClearColor(0.16f, 0.16f, 0.16f, 1.0f);
-        
-
-        // system("clear");
         float frame_time = glfwGetTime() - last_time;
         last_time = glfwGetTime();
         all_fps.push_back(1.0 / frame_time);

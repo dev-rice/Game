@@ -47,7 +47,7 @@ GameView::GameView(GLFWwindow* window, Level* level){
 }
 
 void GameView::update(){
-    level->handleInputs();
+    handleInputs();
     
     glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
     glClearColor(0.0, 0.0, 0.0, 1.0f);
@@ -60,5 +60,55 @@ void GameView::update(){
     level->draw();
     framebuffer_window->draw();
 
+}
+
+void GameView::handleInputs(){
+    Camera* camera = level->getCamera();
+    
+    glfwPollEvents();
+    
+    // Camera controls
+    // Movement
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS){
+        camera->moveZ(-1);
+    }
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS){
+        camera->moveZ(1);
+    }
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS){
+        camera->moveX(1);
+    }
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS){
+        camera->moveX(-1);
+    }
+    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS){
+        camera->moveY(-1);
+    }
+    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS){
+        camera->moveY(1);
+    }
+
+    // Rotation
+    if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS){
+        camera->rotateY(1);
+    }
+    if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS){
+        camera->rotateY(-1);
+    }
+    if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS){
+        camera->rotateX(1);
+    }
+    if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS){
+        camera->rotateX(-1);
+    }
+    if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS){
+        camera->rotateZ(1);
+    }
+    if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS){
+        camera->rotateZ(-1);
+    }
+
+    camera = NULL;
+    delete camera;
 }
 

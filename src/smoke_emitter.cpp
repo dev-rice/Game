@@ -10,7 +10,7 @@ SmokeEmitter::SmokeEmitter(GLuint shader_program, glm::vec3 position, float radi
     this->radius = radius;
 
     // Hardcoded smoke particle texture
-    GLuint emit = TextureLoader::loadTextureFromFile("res/textures/smoke_part.png", GL_LINEAR);
+    GLuint emit = TextureLoader::loadTextureFromFile("res/textures/smoke2_part.png", GL_LINEAR);
     texture_set = new TextureSet(0, 0, 0, emit);
 
     // Hardcoded density, maximum, and lifespan

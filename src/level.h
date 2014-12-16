@@ -30,13 +30,13 @@ public:
     Level(GLFWwindow*, const char*);
 
     void draw();
-    void handleInputs();
+    
+    Camera* getCamera() {return camera;}
 
 private:
     void loadLevel(const char *);
     GLuint getTexture(GLuint);
-
-
+    
     GLFWwindow* window;
     
     Camera* camera;
