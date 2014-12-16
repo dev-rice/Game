@@ -25,7 +25,7 @@ void main() {
     gl_Position = proj * view * world_position;
 
     // Point lighting
-    vec3 light_position = vec3(-1.5, 0.5 , 0.0);
+    vec3 light_position = vec3(-1.5, 0.5, 0.0);
     vec4 light_temp = (view * vec4(light_position, 1.0)) - (view * model * vec4(scaled_position, 1.0));
     light_to_surface = light_temp.xyz;
 
