@@ -108,7 +108,7 @@ void Particle::draw(Camera* camera, glm::mat4* proj_matrix){
         position += velocity;
         
         // Exaggerated planar rotation.
-        // plane_rotation += 0.1;
+        plane_rotation += rotationSpeed;
 
         Drawable::draw(camera, proj_matrix);
 

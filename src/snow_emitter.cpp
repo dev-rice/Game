@@ -5,7 +5,7 @@
 
 SnowEmitter::SnowEmitter(GLuint shader_program, glm::vec3 position) : Emitter(shader_program, position){
     // Hardcoded snow particle texture
-    GLuint emit = TextureLoader::loadTextureFromFile("res/textures/part_snow.png", GL_LINEAR);
+    GLuint emit = TextureLoader::loadTextureFromFile("res/textures/snow_part.png", GL_LINEAR);
     texture_set = new TextureSet(0, 0, 0, emit);
 
     // Hardcoded density, maximum, and lifespan
@@ -17,21 +17,21 @@ SnowEmitter::SnowEmitter(GLuint shader_program, glm::vec3 position) : Emitter(sh
 void SnowEmitter::prepareParticles(Camera* camera){
     for(int i(0); i < density; ++i){
 
-        // range -5.0 < x < 5.0
-        float random1 = ((rand()%100)/100.0f)*10.0f - 5.0f;
+        // range -10.0 < x < 10.0
+        float random1 = ((rand()%100)/100.0f)*20.0f - 10.0f;
 
-        // range -10.0 < x < 0.0
-        float random2 = ((rand()%100)/100.0f)*10.0f - 10.0f;
+        // range -20.0 < x < 0.0
+        float random2 = ((rand()%100)/100.0f)*-20.0f;
 
         float random3 = 0.0f;
         if(rand()%10 == 1){
             random3 = ((rand()%100)/100.0f)*0.01f - 0.005;
         }
 
-        glm::vec3 newPosition(random1, 1.0f, random2);
+        glm::vec3 newPosition(random1, 1.0f, random2+5.0f);
         newPosition += camera->getPosition();
 
-        glm::vec3 velocity(random3, -0.01, 0.0f);
+        glm::vec3 velocity(random3, -0.02, 0.0f);
         glm::vec3 acceleration(0.0f, 0.0f, 0.0f);
         
         // Particle recycling!
