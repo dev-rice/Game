@@ -30,6 +30,7 @@ Level::Level(GLFWwindow* window, const char* filename){
    
     emitters.push_back(new FireEmitter(particle_shader, glm::vec3(-1.4f, 0.0f, 0.0f), 0.7f));
     emitters.push_back(new SmokeEmitter(particle_shader, glm::vec3(-1.4f, 0.0f, 0.0f), 0.7f));
+    emitters.push_back(new SnowEmitter(particle_shader, glm::vec3(-1.4f, 0.0f, 0.0f)));
 
     loadLevel(filename);
 

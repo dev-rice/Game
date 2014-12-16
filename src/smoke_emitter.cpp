@@ -60,7 +60,7 @@ void SmokeEmitter::prepareParticles(Camera* camera){
             particles.pop_front();
         }
         if(ptr){
-            ptr->setInitialValues(newPosition, velocity, acceleration, randomRotation, lifespan, Particle::ScalingOption::SCALE_SMOKE, Particle::FadingOption::FADE_OUT_WITH_AGE);
+            ptr->setInitialValues(newPosition, velocity, acceleration, randomRotation, lifespan, Particle::ScalingOption::SCALE_SMOKE, Particle::FadingOption::FADE_SMOKE);
             particles.push_back(ptr);
         }
     }

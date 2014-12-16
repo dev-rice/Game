@@ -85,11 +85,14 @@ void Particle::draw(Camera* camera, glm::mat4* proj_matrix){
         switch(alphaWithAge){
         case FadingOption::FADE_OUT_WITH_AGE:
             // older makes more transparent
-            opacity = 1.0-(0.5*age/float(lifespan));
+            opacity = 1.0f-(0.5f*age/float(lifespan));
             break;
         case FadingOption::FADE_IN_WITH_AGE:
             // older makes more opaque
-            opacity = 0.5*age/float(lifespan);
+            opacity = 0.5f*age/float(lifespan);
+            break;
+        case FadingOption::FADE_SMOKE:
+            opacity = 0.6f-0.0000003f*(age-700)*(age-700);
             break;
         case FadingOption::FADE_NONE:
             opacity = 1.0f;
