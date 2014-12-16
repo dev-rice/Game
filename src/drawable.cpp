@@ -32,6 +32,9 @@ void Drawable::load(Mesh* mesh, GLuint shader_program, glm::vec3 position, glm::
 }
 
 void Drawable::draw(Camera* camera, glm::mat4* proj_matrix){
+    glEnable(GL_CULL_FACE);
+    glEnable(GL_DEPTH_TEST);
+    
     glUseProgram(shader_program);
     
     // Bind the Mesh's VAO. This lets us put transformations and textures on

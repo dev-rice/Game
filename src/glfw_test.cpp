@@ -74,52 +74,6 @@ int main(int argc, char* argv[]) {
     std::vector<float> all_fps;
     float last_time = glfwGetTime();
 
-
-    // Framebuffer Shtuff
-    FlatMesh flat_mesh = FlatMesh();
-    
-    // Load framebuffer shader
-    GLuint basic_vs = ShaderLoader::loadVertexShader("shaders/basic.vs");
-    GLuint basic_fs = ShaderLoader::loadFragmentShader("shaders/basic.fs");
-    GLuint basic_shader = ShaderLoader::combineShaderProgram(basic_vs, basic_fs);
-
-    FlatDrawable framebuffer_window = FlatDrawable(&flat_mesh, basic_shader, 0.25, 0.25, glm::vec2(0.75, -0.75));
-    FlatDrawable mouse = FlatDrawable(&flat_mesh, basic_shader, 0.05, 0.05, glm::vec2(0.75, -0.75));
-
-    // Create frame buffer
-    GLuint frameBuffer;
-    glGenFramebuffers(1, &frameBuffer);
-
-    // Create texture for framebuffer
-    GLuint texColorBuffer;
-    glGenTextures(1, &texColorBuffer);
-    glBindTexture(GL_TEXTURE_2D, texColorBuffer);
-    
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    //  Bind framebuffer and link texture to it
-    glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texColorBuffer, 0);
-
-    // Add the depth buffer to the framebuffer
-    GLuint rboDepthStencil;
-    glGenRenderbuffers(1, &rboDepthStencil);
-    glBindRenderbuffer(GL_RENDERBUFFER, rboDepthStencil);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
-    glFramebufferRenderbuffer(
-      GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rboDepthStencil
-    );
-
-    GLuint mouse_texture = TextureLoader::loadTextureFromFile("res/textures/cursor_ui.png", GL_LINEAR);
-
-    // Tell shader to read GL_TEXTURE0
-    framebuffer_window.attachTexture(texColorBuffer);
-    mouse.attachTexture(mouse_texture);
-
-
     // Display loop
     while(!glfwWindowShouldClose(window)) {
         // Swap display/rendering buffers
@@ -142,22 +96,10 @@ int main(int argc, char* argv[]) {
         last_time = glfwGetTime();
         all_fps.push_back(1.0 / frame_time);
 
-        // Render to the framebuffer
-        glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-        glClearColor(0.0, 0.0, 0.0, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        
-        glEnable(GL_CULL_FACE);
-        glEnable(GL_DEPTH_TEST);
         world.update();
 
-        // Render the world to the screen
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        world.update();
-        
-        // Render the framebuffer texture to the screen
-        framebuffer_window.draw();
-
+        ////////////////////////////////////////////////////////////////
+        // Find the mouse position in FlatDrawable coordinates
         double mouse_x;
         double mouse_y;
 
@@ -169,12 +111,8 @@ int main(int argc, char* argv[]) {
 
         glm::vec3 mouse_position = glm::vec3(mouse_x, mouse_y, 1.0);
         glm::vec3 gl_mouse_position = mouse_position * glm::inverse(projection);
+        ////////////////////////////////////////////////////////////////
 
-        printf("screen: %f, %f\n", mouse_x, mouse_y);
-        printf("world:  %f, %f\n\n", gl_mouse_position.x, gl_mouse_position.y);
-
-        mouse.setPosition(glm::vec2(gl_mouse_position.x, gl_mouse_position.y));
-        mouse.draw();
 
     }
 

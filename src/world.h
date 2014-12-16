@@ -11,6 +11,7 @@
 #include "texture_set.h"
 #include "light.h"
 #include "level.h"
+#include "game_view.h"
 
 class World{
 public:
@@ -23,6 +24,8 @@ public:
 
 private:
     GLFWwindow* window;
+
+    GameView* game_view;
 
     std::vector<Level*> levels;
     int current_level;
