@@ -13,6 +13,7 @@ public:
     SmokeEmitter(GLuint, glm::vec3, float);
 private:
     float radius;
+    int count;
     void prepareParticles(Camera*);
 };  
 

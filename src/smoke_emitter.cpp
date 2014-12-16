@@ -21,9 +21,13 @@ SmokeEmitter::SmokeEmitter(GLuint shader_program, glm::vec3 position, float radi
 }
 
 void SmokeEmitter::prepareParticles(Camera* camera){
-    if(rand()%20 != 0){
+    
+    if(count <  20){
+        count++;
         return;
     }
+
+    count = 0;
 
     for(int i(0); i < density; ++i){
 
@@ -34,7 +38,7 @@ void SmokeEmitter::prepareParticles(Camera* camera){
         float randomRadius = ((rand()%100)/100.0f)*radius;
 
         // range 0.0 < x < 0.005
-        float randomRotation = ((rand()%100)/20000.0f);
+        float randomRotation = ((rand()%100)/10000.0f) - 0.005;
 
         // Generate particles in a circle, then transform the generated coordinates
         // to the actual emitter position
