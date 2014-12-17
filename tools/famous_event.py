@@ -14,22 +14,28 @@ def getListItemsFromList(list_item):
                 for content in contents:
                     list_contents.append(content)
         else:
-            list_contents.append(item.text)
+            list_contents.append(item.text + " ")
 
     return list_contents
 
 if len(sys.argv) == 2:
     year = int(sys.argv[1])
-    # print year
+    random_event = ""
+    if (year < 2600):
+        response = urllib2.urlopen('http://en.wikipedia.org/wiki/' + str(year))
+        html = response.read()
 
-    response = urllib2.urlopen('http://en.wikipedia.org/wiki/' + str(year))
-    html = response.read()
+        soup = BeautifulSoup(html)
 
-    soup = BeautifulSoup(html)
+        headers = soup.findAll('ul')
+        random_header = random.choice(headers)
 
-    headers = soup.findAll('ul')
-    random_header = random.choice(headers)
+        list_contents = getListItemsFromList(random_header)
+        random_event = random.choice(list_contents)
+    else:
+        other_events = [ "The Zerg Swarms finally conquer Texas.",
+                         "Humans discover Middle Earth.",
+                         "The 2048 bit computer is invented."]
+        random_event = random.choice(other_events)
 
-    list_contents = getListItemsFromList(random_header)
-    random_event = random.choice(list_contents)
     print "In the year \033[94m%d\033[0m: %s\n" % (year, random_event)

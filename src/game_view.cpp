@@ -53,11 +53,11 @@ GameView::GameView(GLFWwindow* window, Level* level){
         fprintf(stderr, "Could not init freetype library\n");
     }
 
-    FT_Face face;
+    // FT_Face face;
  
-    if(FT_New_Face(ft, "FreeSans.ttf", 0, &face)) {
-        fprintf(stderr, "Could not open font\n");
-    }
+    // if(FT_New_Face(ft, "res/fonts/Inconsolata-Regular.ttf", 0, &face)) {
+    //     fprintf(stderr, "Could not open font\n");
+    // }
     //////////////////////////////////////////////////////////////////
 
 }
