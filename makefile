@@ -24,7 +24,7 @@ linux:
 	@ ./tools/buildcount.sh
 	@ rm -f res/models/*.mtl
 
-	@ g++ -std=c++11 src/*.cpp  -o glfw_test -lGL -lGLEW -I /usr/lib/x86_64-linux-gnu/ -lglfw -I /usr/local/include -lSOIL -I/usr/include/freetype2	-lfreetype
+	@ g++ -std=c++11 src/*.cpp  -o glfw_test -lGL -lGLEW -I /usr/lib/x86_64-linux-gnu/ -lglfw -I /usr/local/include -lSOIL
 
 discard:
 	@ git clean -df
