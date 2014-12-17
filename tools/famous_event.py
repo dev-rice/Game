@@ -43,7 +43,7 @@ if len(sys.argv) == 2:
             random_event = random.choice(list_contents)
         else:
             random_event = getRandomEvent()
-    except ImportError:
+    except (IndexError, ImportError):
         random_event = getRandomEvent()
 
     print "In the year \033[94m%d\033[0m: %s\n" % (year, random_event)

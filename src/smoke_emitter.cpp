@@ -18,6 +18,7 @@ SmokeEmitter::SmokeEmitter(GLuint shader_program, glm::vec3 position, float radi
     this->lifespan = 2000;
     this->density = 1;
     // this->density = (this->maxParticles)/(this->lifespan);
+    count = 0;
 }
 
 void SmokeEmitter::prepareParticles(Camera* camera){
@@ -50,7 +51,7 @@ void SmokeEmitter::prepareParticles(Camera* camera){
         
         // Particle recycling!
         // Weird that the pointer must be explicitly set to 0, but crashes without this
-        Particle* ptr = 0; 
+        Particle* ptr; 
         if(particles.size() < maxParticles){
             ptr = new Particle(billboard, shader_program);
             ptr->attachTextureSet(*texture_set);

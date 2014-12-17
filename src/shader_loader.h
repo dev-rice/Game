@@ -10,15 +10,16 @@
 #endif
 
 #include <stdio.h>
+#include <string>
 
 class ShaderLoader {
 public:
-    static GLuint loadVertexShader(const char*);
-    static GLuint loadFragmentShader(const char*);
+    static GLuint loadVertexShader(std::string);
+    static GLuint loadFragmentShader(std::string);
     static GLuint combineShaderProgram(GLuint, GLuint);
 
 private:
-    static const char* GLSLParse(const char*);
+    static std::string GLSLParse(std::string);
 
 };
 

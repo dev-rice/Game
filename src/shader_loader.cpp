@@ -1,9 +1,12 @@
 #include "shader_loader.h"
 
-GLuint ShaderLoader::loadVertexShader(const char* filename){
+GLuint ShaderLoader::loadVertexShader(std::string filename){
     // Create the vertex shader
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-    const char* vertex_source = GLSLParse(filename);
+    
+    std::string source = GLSLParse(filename);
+    const char* vertex_source = source.c_str();
+    
     glShaderSource(vertex_shader, 1, &vertex_source, NULL);
 
     // Compile it
@@ -20,10 +23,13 @@ GLuint ShaderLoader::loadVertexShader(const char* filename){
     return vertex_shader;
 } 
 
-GLuint ShaderLoader::loadFragmentShader(const char* filename){
+GLuint ShaderLoader::loadFragmentShader(std::string filename){
  // Create the fragment shader
     GLuint fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-    const char* fragment_source = GLSLParse(filename);
+    
+    std::string source = GLSLParse(filename);
+    const char* fragment_source = source.c_str();
+    
     glShaderSource(fragment_shader, 1, &fragment_source, NULL);
     
     // Compile it
@@ -61,23 +67,24 @@ GLuint ShaderLoader::combineShaderProgram(GLuint vertex_shader, GLuint fragment_
     return shader_program;
 }
 
-const char* ShaderLoader::GLSLParse(const char* filename){
+std::string ShaderLoader::GLSLParse(std::string filename){
     // Open the file in read mode
-    FILE* file = fopen(filename, "r");
+    const char* filename_temp = filename.c_str();
+    FILE* file = fopen(filename_temp, "r");
 
-    // Count the number of characters in the file
+    // // Count the number of characters in the file
     int size_of_file = 0;
     while (fgetc(file) != EOF){
         ++size_of_file;
     }
 
-    // Create a character array with the correct size
-    char* contents = new char[size_of_file];
-    // We need to rewind so that we read from the top again
+    // // Create a character array with the correct size
+    char* contents = new char[size_of_file + 1];
+    // // We need to rewind so that we read from the top again
     rewind(file);
-
-    // Scan through the file and add each character 
-    // to the array. 
+    
+    // // Scan through the file and add each character 
+    // // to the array. 
     int index = 0;
     char current_char;
     while((current_char = fgetc(file)) != EOF){
@@ -85,11 +92,15 @@ const char* ShaderLoader::GLSLParse(const char* filename){
         index++;
     }    
 
-    // Close the file
+    // // Close the file
     fclose(file);
-
+    
     // Add the null terminator
     contents[size_of_file] = 0;
-    
-    return contents;
+
+    std::string to_return(contents);
+
+    delete [] contents;
+
+    return to_return;
 }
