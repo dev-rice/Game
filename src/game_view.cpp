@@ -42,9 +42,6 @@ GameView::GameView(GLFWwindow* window, Level* level){
     // Tell shader to read GL_TEXTURE0
     framebuffer_window->attachTexture(framebuffer_texture);
 
-    flat_mesh = NULL;
-    delete flat_mesh;
-
 }
 
 void GameView::update(){
@@ -109,7 +106,5 @@ void GameView::handleInputs(){
         camera->rotateZ(-1);
     }
 
-    camera = NULL;
-    delete camera;
 }
 

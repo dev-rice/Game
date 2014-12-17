@@ -107,7 +107,6 @@ int main(int argc, char* argv[]) {
         glm::vec3 gl_mouse_position = mouse_position * glm::inverse(projection);
         ////////////////////////////////////////////////////////////////
 
-
     }
 
     float total = 0;
