@@ -1,6 +1,9 @@
 #ifndef GameView_h
 #define GameView_h
 
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
 #include "mesh.h"
 #include "drawable.h"
 #include "camera.h"

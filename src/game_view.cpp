@@ -44,6 +44,22 @@ GameView::GameView(GLFWwindow* window, Level* level){
 
     flat_mesh = NULL;
     delete flat_mesh;
+
+    //////////////////////////////////////////////////////////////////
+    // Text shit
+    FT_Library ft;
+ 
+    if(FT_Init_FreeType(&ft)) {
+        fprintf(stderr, "Could not init freetype library\n");
+    }
+
+    FT_Face face;
+ 
+    if(FT_New_Face(ft, "FreeSans.ttf", 0, &face)) {
+        fprintf(stderr, "Could not open font\n");
+    }
+    //////////////////////////////////////////////////////////////////
+
 }
 
 void GameView::update(){

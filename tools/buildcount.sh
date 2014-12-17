@@ -1,4 +1,5 @@
 #!/bin/bash
 
-IP=$(curl -s http://yakkio.com:8080)
-printf "\e[94m%s\e[39m %s\n" "Build Number:" "$IP"
+NUM=$(curl -s http://yakkio.com:8080)
+printf "Build Number: \033[94m%s\033[39m\n" "$NUM"
+python ./tools/famous_event.py "$NUM"

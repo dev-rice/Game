@@ -1,0 +1,35 @@
+from BeautifulSoup import BeautifulSoup 
+import urllib2
+import random
+import sys
+
+def getListItemsFromList(list_item):
+    list_items = list_item.findAll('li')
+    list_contents = []
+    for item in list_items:
+        sublists = item.findAll('ul')
+        if len(sublists) != 0:
+            for list in sublists:
+                contents = getListItemsFromList(list)
+                for content in contents:
+                    list_contents.append(content)
+        else:
+            list_contents.append(item.text)
+
+    return list_contents
+
+if len(sys.argv) == 2:
+    year = int(sys.argv[1])
+    # print year
+
+    response = urllib2.urlopen('http://en.wikipedia.org/wiki/' + str(year))
+    html = response.read()
+
+    soup = BeautifulSoup(html)
+
+    headers = soup.findAll('ul')
+    random_header = random.choice(headers)
+
+    list_contents = getListItemsFromList(random_header)
+    random_event = random.choice(list_contents)
+    print "In the year \033[94m%d\033[0m: %s\n" % (year, random_event)
