@@ -99,5 +99,8 @@ std::string ShaderLoader::GLSLParse(const char* filename){
     
     std::string to_return = contents;
 
+    delete contents;
+    contents = NULL;
+
     return to_return;
 }
