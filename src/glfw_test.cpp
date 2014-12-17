@@ -107,7 +107,7 @@ int main(int argc, char* argv[]) {
     GLuint text_shader = ShaderLoader::combineShaderProgram(text_vs, text_fs);
 
     FlatMesh* flat_mesh = new FlatMesh();
-    FlatDrawable character_box = FlatDrawable(flat_mesh, text_shader, 0.05, 0.05, glm::vec2(0.0, 0.0));
+    FlatDrawable character_box = FlatDrawable(flat_mesh, text_shader, 0.01, 0.01, glm::vec2(-0.9, 0.9));
 
     GLuint character_texture;
     glActiveTexture(GL_TEXTURE0);
