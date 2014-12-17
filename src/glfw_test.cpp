@@ -14,6 +14,9 @@
 #include <iostream>
 #include <vector>
 
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
 #include "world.h"
 #include "flat_mesh.h"
 #include "flat_drawable.h"
@@ -74,6 +77,52 @@ int main(int argc, char* argv[]) {
     std::vector<float> all_fps;
     float last_time = glfwGetTime();
 
+    //////////////////////////////////////////////////////////////////
+    // Text shit
+
+    FT_Library ft;
+    if(FT_Init_FreeType(&ft)) {
+        fprintf(stderr, "Could not init freetype library\n");
+        return 1;
+    }
+
+    FT_Face face;
+    if(FT_New_Face(ft, "res/fonts/Inconsolata-Regular.ttf", 0, &face)) {
+        fprintf(stderr, "Could not open font\n");
+        return 1;
+    }
+
+    if(FT_Load_Char(face, 'a', FT_LOAD_RENDER)) {
+        fprintf(stderr, "Could not load character 'X'\n");
+        return 1;
+    }
+    FT_GlyphSlot g = face->glyph;
+
+    GLuint text_vs = ShaderLoader::loadVertexShader("shaders/text.vs");
+    GLuint text_fs = ShaderLoader::loadFragmentShader("shaders/text.fs");
+    GLuint text_shader = ShaderLoader::combineShaderProgram(text_vs, text_fs);
+
+    FlatMesh* flat_mesh = new FlatMesh();
+    FlatDrawable character_box = FlatDrawable(flat_mesh, text_shader, 0.25, 0.25, glm::vec2(0.0, 0.0));
+
+    GLuint character_texture;
+    glActiveTexture(GL_TEXTURE0);
+    glGenTextures(1, &character_texture);
+    glBindTexture(GL_TEXTURE_2D, character_texture);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, g->bitmap.width, g->bitmap.rows, 0, GL_RED, GL_UNSIGNED_BYTE, g->bitmap.buffer);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+     
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    character_box.attachTexture(character_texture);
+
+    ////////////////////////////////////////////////////////////////// 
+
+
     // Display loop
     while(!glfwWindowShouldClose(window)) {
         // Swap display/rendering buffers
@@ -92,6 +141,8 @@ int main(int argc, char* argv[]) {
 
         world.update();
 
+        character_box.draw();
+
         ////////////////////////////////////////////////////////////////
         // Find the mouse position in FlatDrawable coordinates
         double mouse_x;
@@ -109,6 +160,9 @@ int main(int argc, char* argv[]) {
 
 
     }
+
+    delete flat_mesh;
+    flat_mesh = NULL;
 
     float total = 0;
     float min = all_fps[0];
