@@ -92,8 +92,9 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    if(FT_Load_Char(face, 'a', FT_LOAD_RENDER)) {
-        fprintf(stderr, "Could not load character 'X'\n");
+    char to_render = 'a';
+    if(FT_Load_Char(face, to_render, FT_LOAD_RENDER)) {
+        fprintf(stderr, "Could not load character '%c'.\n", to_render);
         return 1;
     }
     FT_GlyphSlot g = face->glyph;
