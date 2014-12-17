@@ -3,10 +3,7 @@
 GLuint ShaderLoader::loadVertexShader(const char* filename){
     // Create the vertex shader
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-    
-    std::string source = GLSLParse(filename);
-    const char* vertex_source = source.c_str();
-    
+    const char* vertex_source = GLSLParse(filename);
     glShaderSource(vertex_shader, 1, &vertex_source, NULL);
 
     // Compile it
@@ -26,10 +23,7 @@ GLuint ShaderLoader::loadVertexShader(const char* filename){
 GLuint ShaderLoader::loadFragmentShader(const char* filename){
  // Create the fragment shader
     GLuint fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-    
-    std::string source = GLSLParse(filename);
-    const char* fragment_source = source.c_str();
-    
+    const char* fragment_source = GLSLParse(filename);
     glShaderSource(fragment_shader, 1, &fragment_source, NULL);
     
     // Compile it
@@ -67,7 +61,7 @@ GLuint ShaderLoader::combineShaderProgram(GLuint vertex_shader, GLuint fragment_
     return shader_program;
 }
 
-std::string ShaderLoader::GLSLParse(const char* filename){
+const char* ShaderLoader::GLSLParse(const char* filename){
     // Open the file in read mode
     FILE* file = fopen(filename, "r");
 
@@ -97,10 +91,5 @@ std::string ShaderLoader::GLSLParse(const char* filename){
     // Add the null terminator
     contents[size_of_file] = 0;
     
-    std::string to_return = contents;
-
-    delete contents;
-    contents = NULL;
-
-    return to_return;
+    return contents;
 }

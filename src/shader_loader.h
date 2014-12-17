@@ -10,7 +10,6 @@
 #endif
 
 #include <stdio.h>
-#include <string>
 
 class ShaderLoader {
 public:
@@ -19,7 +18,7 @@ public:
     static GLuint combineShaderProgram(GLuint, GLuint);
 
 private:
-    static std::string GLSLParse(const char*);
+    static const char* GLSLParse(const char*);
 
 };
 
