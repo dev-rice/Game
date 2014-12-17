@@ -80,14 +80,13 @@ int main(int argc, char* argv[]) {
     //////////////////////////////////////////////////////////////////
     // Text shit
 
-   FT_Library ft;
- 
+    FT_Library ft;
     if(FT_Init_FreeType(&ft)) {
         fprintf(stderr, "Could not init freetype library\n");
         return 1;
     }
+    
     FT_Face face;
- 
     if(FT_New_Face(ft, "res/fonts/FreeSans.ttf", 0, &face)) {
         fprintf(stderr, "Could not open font\n");
         return 1;
