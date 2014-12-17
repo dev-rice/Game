@@ -24,7 +24,7 @@ FlatMesh::FlatMesh(){
 }
 
 void FlatMesh::draw(){
-    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 6);
 }
 
 void FlatMesh::bindVAO(){

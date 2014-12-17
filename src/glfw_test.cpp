@@ -23,6 +23,8 @@
 
 GLFWwindow* initializeGLFWWindow(int, int, bool);
 
+void renderCharacter(FT_Face, FlatDrawable*, GLuint, char);
+
 class Box {
    public:
       double length;   // Length of a box
@@ -85,9 +87,9 @@ int main(int argc, char* argv[]) {
         fprintf(stderr, "Could not init freetype library\n");
         return 1;
     }
-    
+
     FT_Face face;
-    if(FT_New_Face(ft, "res/fonts/FreeSans.ttf", 0, &face)) {
+    if(FT_New_Face(ft, "res/fonts/Inconsolata-Regular.ttf", 0, &face)) {
         fprintf(stderr, "Could not open font\n");
         return 1;
     }
@@ -106,14 +108,11 @@ int main(int argc, char* argv[]) {
     GLuint text_shader = ShaderLoader::combineShaderProgram(text_vs, text_fs);
 
     FlatMesh* flat_mesh = new FlatMesh();
-    FlatDrawable character_box = FlatDrawable(flat_mesh, text_shader, 0.01, 0.01, glm::vec2(-0.9, 0.9));
+    FlatDrawable character_box = FlatDrawable(flat_mesh, text_shader, 0.015, 0.015, glm::vec2(-0.9, 0.9));
 
     GLuint character_texture;
-    glActiveTexture(GL_TEXTURE0);
     glGenTextures(1, &character_texture);
     glBindTexture(GL_TEXTURE_2D, character_texture);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, g->bitmap.width, g->bitmap.rows, 0, GL_RED, GL_UNSIGNED_BYTE, g->bitmap.buffer);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -144,8 +143,16 @@ int main(int argc, char* argv[]) {
 
         world.update();
 
-        character_box.draw();
+        for (int i = 0; i < 43; ++i){
+            character_box.setPosition(glm::vec2(-0.9 + 0.0375*i, 0.9));
+            renderCharacter(face, &character_box, character_texture, (char)(i + 48));   
+        }
 
+        for (int i = 0; i < 34; ++i){
+            character_box.setPosition(glm::vec2(-0.9 + 0.0375*i, 0.8));
+            renderCharacter(face, &character_box, character_texture, (char)(i + 92));   
+        }
+            
         ////////////////////////////////////////////////////////////////
         // Find the mouse position in FlatDrawable coordinates
         double mouse_x;
@@ -190,6 +197,19 @@ int main(int argc, char* argv[]) {
 
     // Nothing went wrong!
     return 0;
+}
+
+void renderCharacter(FT_Face face, FlatDrawable* box, GLuint texture, char to_render){
+    if(FT_Load_Char(face, to_render, FT_LOAD_RENDER)) {
+        fprintf(stderr, "Could not load character '%c'.\n", to_render);
+    }
+    FT_GlyphSlot g = face->glyph;
+    
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, g->bitmap.width, g->bitmap.rows, 0, GL_RED, GL_UNSIGNED_BYTE, g->bitmap.buffer);
+    
+    box->draw();
+
 }
 
 GLFWwindow* initializeGLFWWindow(int width, int height, bool fullscreen){
