@@ -80,17 +80,20 @@ int main(int argc, char* argv[]) {
     //////////////////////////////////////////////////////////////////
     // Text shit
 
-    FT_Library ft;
+   FT_Library ft;
+ 
     if(FT_Init_FreeType(&ft)) {
         fprintf(stderr, "Could not init freetype library\n");
         return 1;
     }
-
     FT_Face face;
-    if(FT_New_Face(ft, "res/fonts/Inconsolata-Regular.ttf", 0, &face)) {
+ 
+    if(FT_New_Face(ft, "res/fonts/FreeSans.ttf", 0, &face)) {
         fprintf(stderr, "Could not open font\n");
         return 1;
     }
+
+    FT_Set_Pixel_Sizes(face, 0, 48);
 
     char to_render = 'a';
     if(FT_Load_Char(face, to_render, FT_LOAD_RENDER)) {
@@ -104,7 +107,7 @@ int main(int argc, char* argv[]) {
     GLuint text_shader = ShaderLoader::combineShaderProgram(text_vs, text_fs);
 
     FlatMesh* flat_mesh = new FlatMesh();
-    FlatDrawable character_box = FlatDrawable(flat_mesh, text_shader, 0.25, 0.25, glm::vec2(0.0, 0.0));
+    FlatDrawable character_box = FlatDrawable(flat_mesh, text_shader, 0.05, 0.05, glm::vec2(0.0, 0.0));
 
     GLuint character_texture;
     glActiveTexture(GL_TEXTURE0);
