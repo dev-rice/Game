@@ -7,5 +7,5 @@ out vec4 outColor;
 uniform sampler2D texFramebuffer;
 
 void main() {
-    outColor = vec4(1, 1, 1, texture(texFramebuffer, Texcoord).r);
+    outColor = texture(texFramebuffer, Texcoord);
 }
