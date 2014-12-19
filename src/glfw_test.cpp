@@ -84,7 +84,9 @@ int main(int argc, char* argv[]) {
     GLuint text_shader = ShaderLoader::combineShaderProgram(text_vs, text_fs);
 
     CharacterMesh* flat_mesh = new CharacterMesh();
-    CharacterDrawable character_box = CharacterDrawable(flat_mesh, text_shader, 0.05, 0.05 * (width / height), glm::vec2(-0.5, 0.5));
+    float x = -0.95;
+    float y = 0.9;
+    CharacterDrawable character_box = CharacterDrawable(flat_mesh, text_shader, 0.02, 0.02 * (width / height), glm::vec2(x, y));
 
     GLuint character_texture = TextureLoader::loadTextureFromFile("res/fonts/font_sheet.png", GL_NEAREST);
 
@@ -111,13 +113,36 @@ int main(int argc, char* argv[]) {
 
         world.update();
 
+        // Benchmark
         // for (int i = 0; i < 100; ++i){
         //     float x = (float)(rand() % 100) / 100.0;
         //     float y = (float)(rand() % 100) / 100.0;
+
+        //     // Random value between 48 and 85, inclusive
+        //     char to_render = (rand() % 38) + 48;
+            
+        //     character_box.setCharacter(to_render);
         //     character_box.setPosition(glm::vec2(x, y));
         //     character_box.draw();
         // }
+
+        // I should probably write a function for this
+        character_box.setCharacter('G');
+        character_box.setPosition(glm::vec2(x + 0.04, y));
         character_box.draw();
+
+        character_box.setCharacter('A');
+        character_box.setPosition(glm::vec2(x + 0.08, y));
+        character_box.draw();
+
+        character_box.setCharacter('M');
+        character_box.setPosition(glm::vec2(x + 0.12, y));
+        character_box.draw();
+
+        character_box.setCharacter('E');
+        character_box.setPosition(glm::vec2(x + 0.16, y));
+        character_box.draw();
+
 
             
         ////////////////////////////////////////////////////////////////

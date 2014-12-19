@@ -10,15 +10,6 @@ CharacterMesh::CharacterMesh(){
     float delta_v = CHARACTER_HEIGHT / IMAGE_HEIGHT;
     float delta_u = CHARACTER_WIDTH / IMAGE_WIDTH;
 
-    // GLfloat planeVerts[] = {
-    //          -1.0f,  1.0f,  0.0f, delta_v,
-    //           1.0f,  1.0f,  delta_u, delta_v,
-    //           1.0f, -1.0f,  delta_u, 0.0f,
-
-    //           1.0f, -1.0f,  delta_u, 0.0f,
-    //          -1.0f, -1.0f,  0.0f, 0.0f,
-    //          -1.0f,  1.0f,  0.0f, delta_v,
-    // };
     GLfloat planeVerts[] = {
              -1.0f,  1.0f,  0.0f, 0.0f,
               1.0f,  1.0f,  delta_u, 0.0f,
