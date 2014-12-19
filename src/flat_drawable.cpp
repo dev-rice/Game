@@ -23,10 +23,16 @@ void FlatDrawable::draw(){
     
     glUniformMatrix3fv(glGetUniformLocation(shader_program, "transformation"), 1, GL_FALSE, glm::value_ptr(transformation));
 
+    updateUniformData();
+
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture);
 
     mesh->draw();
+}
+
+void FlatDrawable::updateUniformData(){
+    
 }
 
 void FlatDrawable::attachTexture(GLuint texture){

@@ -6,9 +6,10 @@ in vec2 texcoord;
 out vec2 Texcoord;
 
 uniform mat3 transformation;
+uniform vec2 uv_offset;
 
 void main() {
-    Texcoord = vec2(texcoord.x, 1.0 - texcoord.y);
+    Texcoord = vec2(texcoord.x + uv_offset.x, 1.0 - texcoord.y + uv_offset.y);
     vec3 position_temp = vec3(position, 1.0) * transformation;
     gl_Position = vec4(position_temp.xy, 0.0, 1.0);
 }

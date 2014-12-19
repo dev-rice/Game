@@ -1,11 +1,16 @@
-#include "flat_mesh.h"
+#ifndef CharacterMesh_h
+#define CharacterMesh_h
 
-const float CHARACTER_WIDTH = 16;
-const float CHARACTER_HEIGHT = 20;
-const float IMAGE_HEIGHT = 256;
-const float IMAGE_WIDTH = 256;
+#include "flat_mesh.h"
 
 class CharacterMesh : public FlatMesh {
 public:
     CharacterMesh();
+
+    static const float CHARACTER_WIDTH;
+    static const float CHARACTER_HEIGHT;
+    static const float IMAGE_HEIGHT;
+    static const float IMAGE_WIDTH;
 };
+
+#endif

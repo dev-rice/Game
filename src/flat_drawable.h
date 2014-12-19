@@ -29,7 +29,8 @@ public:
 
     void setPosition(glm::vec2 p) {position = p;}
 
-private:
+protected:
+    virtual void updateUniformData();
 
     FlatMesh* mesh;
     GLuint shader_program;

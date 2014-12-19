@@ -18,6 +18,7 @@
 #include "flat_mesh.h"
 #include "flat_drawable.h"
 #include "character_mesh.h"
+#include "character_drawable.h"
 
 GLFWwindow* initializeGLFWWindow(int, int, bool);
 
@@ -83,11 +84,12 @@ int main(int argc, char* argv[]) {
     GLuint text_shader = ShaderLoader::combineShaderProgram(text_vs, text_fs);
 
     CharacterMesh* flat_mesh = new CharacterMesh();
-    FlatDrawable character_box = FlatDrawable(flat_mesh, text_shader, 0.5, 0.5, glm::vec2(-0.5, 0.5));
+    CharacterDrawable character_box = CharacterDrawable(flat_mesh, text_shader, 0.025, 0.025, glm::vec2(-0.5, 0.5));
 
     GLuint character_texture = TextureLoader::loadTextureFromFile("res/fonts/font_sheet.png", GL_NEAREST);
 
     character_box.attachTexture(character_texture);
+    character_box.setCharacter('A');
     ////////////////////////////////////////////////////////////////// 
 
 
@@ -109,7 +111,14 @@ int main(int argc, char* argv[]) {
 
         world.update();
 
+        // for (int i = 0; i < 100; ++i){
+        //     float x = (float)(rand() % 100) / 100.0;
+        //     float y = (float)(rand() % 100) / 100.0;
+        //     character_box.setPosition(glm::vec2(x, y));
+        //     character_box.draw();
+        // }
         character_box.draw();
+
             
         ////////////////////////////////////////////////////////////////
         // Find the mouse position in FlatDrawable coordinates
