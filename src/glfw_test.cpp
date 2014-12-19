@@ -20,7 +20,7 @@
 #include "character_mesh.h"
 #include "character_drawable.h"
 
-void renderString(CharacterDrawable*, std::string);
+void renderString(CharacterDrawable*, glm::vec2, std::string);
 GLFWwindow* initializeGLFWWindow(int, int, bool);
 
 class Box {
@@ -88,15 +88,14 @@ int main(int argc, char* argv[]) {
     CharacterMesh* flat_mesh = new CharacterMesh();
     float x = -0.95;
     float y = 0.9;
-    CharacterDrawable character_box = CharacterDrawable(flat_mesh, text_shader, 0.01, 0.01 * (width / height), glm::vec2(x, y));
+    CharacterDrawable character_box = CharacterDrawable(flat_mesh, text_shader, 0.02, 0.02 * (width / height), glm::vec2(x, y));
 
-    GLuint character_texture = TextureLoader::loadTextureFromFile("res/fonts/font_sheet.png", GL_LINEAR);
+    GLuint character_texture = TextureLoader::loadTextureFromFile("res/fonts/inconsolata_font.png", GL_LINEAR);
 
     character_box.attachTexture(character_texture);
-    character_box.setCharacter('A');
     ////////////////////////////////////////////////////////////////// 
     
-    float delay_time = 0.1f;
+    float delay_time = 0.05f;
     float last_update_time = glfwGetTime() - delay_time;
 
     std::string fps_count = "";
@@ -119,31 +118,18 @@ int main(int argc, char* argv[]) {
 
         world.update();
 
-        // Benchmark
-        // for (int i = 0; i < 100; ++i){
-        //     float x = (float)(rand() % 100) / 100.0;
-        //     float y = (float)(rand() % 100) / 100.0;
-
-        //     // Random value between 48 and 85, inclusive
-        //     char to_render = (rand() % 38) + 48;
-            
-        //     character_box.setCharacter(to_render);
-        //     character_box.setPosition(glm::vec2(x, y));
-        //     character_box.draw();
-        // }
-
         if ((glfwGetTime() - last_update_time) >= delay_time){
-            char buff[100];
-            sprintf(buff, "FPS: %.2f", 1.0 / frame_time);
-            fps_count = buff;
+            char buffer[100];
+            sprintf(buffer, "FPS: %.2f", 1.0 / frame_time);
+            fps_count = buffer;
             last_update_time = glfwGetTime();
         }
-
-        renderString(&character_box, fps_count);
         
+        renderString(&character_box, glm::vec2(-0.95, 0.95), fps_count);
 
+        // renderString(&character_box, glm::vec2(-0.95, 0.95), "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG.");
+        // renderString(&character_box, glm::vec2(-0.95, 0.85), "the quick brown fox jumps over the lazy dog.");
 
-            
         ////////////////////////////////////////////////////////////////
         // Find the mouse position in FlatDrawable coordinates
         double mouse_x;
@@ -189,12 +175,12 @@ int main(int argc, char* argv[]) {
     return 0;
 }
 
-void renderString(CharacterDrawable* box, std::string to_render){
-    float x = -0.95;
-    float y = 0.9;
+void renderString(CharacterDrawable* box, glm::vec2 position, std::string to_render){
+    float font_scale = 0.02;
+    float spacing = 0.1 * font_scale;
     for (int i = 0; i < to_render.size(); ++i){
         box->setCharacter(to_render[i]);
-        box->setPosition(glm::vec2(x + 0.02 * i, y));
+        box->setPosition(glm::vec2(position.x + (font_scale + spacing) * i, position.y));
         box->draw();
     }
 }

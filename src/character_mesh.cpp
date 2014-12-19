@@ -1,9 +1,9 @@
 #include "character_mesh.h"
 
-const float CharacterMesh::CHARACTER_WIDTH = 16;
-const float CharacterMesh::CHARACTER_HEIGHT = 20;
-const float CharacterMesh::IMAGE_HEIGHT = 256;
-const float CharacterMesh::IMAGE_WIDTH = 256;
+const float CharacterMesh::CHARACTER_WIDTH = 32;
+const float CharacterMesh::CHARACTER_HEIGHT = 40;
+const float CharacterMesh::IMAGE_HEIGHT = 512;
+const float CharacterMesh::IMAGE_WIDTH = 512;
 
 CharacterMesh::CharacterMesh(){
     // Create 2D mesh for framebuffer to draw onto.
