@@ -26,7 +26,7 @@
 
 class TextRenderer {
 public:
-    TextRenderer(GLFWwindow*, std::string);
+    TextRenderer(GLFWwindow*, std::string, GLfloat);
 
     void drawString(glm::vec2, std::string);
 private:

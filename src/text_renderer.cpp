@@ -1,10 +1,10 @@
 #include "text_renderer.h"
 
-TextRenderer::TextRenderer(GLFWwindow* window, std::string font_filename){
+TextRenderer::TextRenderer(GLFWwindow* window, std::string font_filename, GLfloat scale){
     int width, height;
     glfwGetFramebufferSize(window, &width, &height);
 
-    scale = 0.02;
+    this->scale = scale;
 
     GLuint text_vs = ShaderLoader::loadVertexShader("shaders/text.vs");
     GLuint text_fs = ShaderLoader::loadFragmentShader("shaders/text.fs");

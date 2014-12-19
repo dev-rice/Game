@@ -45,7 +45,7 @@ GameView::GameView(GLFWwindow* window, Level* level){
     flat_mesh = NULL;
     delete flat_mesh;
 
-    text = new TextRenderer(window, "res/fonts/inconsolata_font.png");
+    text = new TextRenderer(window, "res/fonts/inconsolata_font.png", 0.05);
 
 
 }
