@@ -45,8 +45,7 @@ GameView::GameView(GLFWwindow* window, Level* level){
     flat_mesh = NULL;
     delete flat_mesh;
 
-    text = new TextRenderer(window, "res/fonts/inconsolata_font.png", 0.05);
-
+    text = new TextRenderer(window, "res/fonts/inconsolata_font.png", 0.015);
 
 }
 
@@ -64,8 +63,7 @@ void GameView::update(){
     level->draw();
     framebuffer_window->draw();
     
-    text->drawString(glm::vec2(-0.9, 0.9), "Video Game.");
-
+    text->drawString(glm::vec2(-0.95, 0.9), "Video Game.");
 
 }
 
