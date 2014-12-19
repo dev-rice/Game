@@ -15,10 +15,7 @@
 #include <vector>
 
 #include "world.h"
-#include "flat_mesh.h"
-#include "flat_drawable.h"
-#include "character_mesh.h"
-#include "character_drawable.h"
+#include "text_renderer.h"
 
 void renderString(CharacterDrawable*, glm::vec2, std::string);
 GLFWwindow* initializeGLFWWindow(int, int, bool);
@@ -77,29 +74,6 @@ int main(int argc, char* argv[]) {
     std::vector<float> all_fps;
     float last_time = glfwGetTime();
 
-
-    //////////////////////////////////////////////////////////////////
-    // Text shit
-
-    GLuint text_vs = ShaderLoader::loadVertexShader("shaders/text.vs");
-    GLuint text_fs = ShaderLoader::loadFragmentShader("shaders/text.fs");
-    GLuint text_shader = ShaderLoader::combineShaderProgram(text_vs, text_fs);
-
-    CharacterMesh* flat_mesh = new CharacterMesh();
-    float x = -0.95;
-    float y = 0.9;
-    CharacterDrawable character_box = CharacterDrawable(flat_mesh, text_shader, 0.02, 0.02 * (width / height), glm::vec2(x, y));
-
-    GLuint character_texture = TextureLoader::loadTextureFromFile("res/fonts/inconsolata_font.png", GL_LINEAR);
-
-    character_box.attachTexture(character_texture);
-    ////////////////////////////////////////////////////////////////// 
-    
-    float delay_time = 0.05f;
-    float last_update_time = glfwGetTime() - delay_time;
-
-    std::string fps_count = "";
-
     // Display loop
     while(!glfwWindowShouldClose(window)) {
         // Swap display/rendering buffers
@@ -118,18 +92,6 @@ int main(int argc, char* argv[]) {
 
         world.update();
 
-        if ((glfwGetTime() - last_update_time) >= delay_time){
-            char buffer[100];
-            sprintf(buffer, "FPS: %.2f", 1.0 / frame_time);
-            fps_count = buffer;
-            last_update_time = glfwGetTime();
-        }
-        
-        renderString(&character_box, glm::vec2(-0.95, 0.95), fps_count);
-
-        // renderString(&character_box, glm::vec2(-0.95, 0.95), "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG.");
-        // renderString(&character_box, glm::vec2(-0.95, 0.85), "the quick brown fox jumps over the lazy dog.");
-
         ////////////////////////////////////////////////////////////////
         // Find the mouse position in FlatDrawable coordinates
         double mouse_x;
@@ -146,9 +108,6 @@ int main(int argc, char* argv[]) {
         ////////////////////////////////////////////////////////////////
 
     }
-
-    delete flat_mesh;
-    flat_mesh = NULL;
 
     float total = 0;
     float min = all_fps[0];
@@ -175,18 +134,7 @@ int main(int argc, char* argv[]) {
     return 0;
 }
 
-void renderString(CharacterDrawable* box, glm::vec2 position, std::string to_render){
-    float font_scale = 0.02;
-    float spacing = 0.1 * font_scale;
-    for (int i = 0; i < to_render.size(); ++i){
-        box->setCharacter(to_render[i]);
-        box->setPosition(glm::vec2(position.x + (font_scale + spacing) * i, position.y));
-        box->draw();
-    }
-}
-
 GLFWwindow* initializeGLFWWindow(int width, int height, bool fullscreen){
-    // glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);

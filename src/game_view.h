@@ -9,6 +9,7 @@
 #include "level.h"
 #include "flat_mesh.h"
 #include "flat_drawable.h"
+#include "text_renderer.h"
 
 class GameView {
 public:
@@ -27,6 +28,8 @@ private:
 
     FlatDrawable* framebuffer_window;
     GLuint basic_shader;
+
+    TextRenderer* text;
 
 };
 

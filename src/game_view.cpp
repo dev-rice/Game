@@ -45,6 +45,9 @@ GameView::GameView(GLFWwindow* window, Level* level){
     flat_mesh = NULL;
     delete flat_mesh;
 
+    text = new TextRenderer(window, "res/fonts/inconsolata_font.png");
+
+
 }
 
 void GameView::update(){
@@ -60,6 +63,9 @@ void GameView::update(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     level->draw();
     framebuffer_window->draw();
+    
+    text->drawString(glm::vec2(-0.9, 0.9), "Video Game.");
+
 
 }
 
