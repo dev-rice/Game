@@ -84,7 +84,7 @@ int main(int argc, char* argv[]) {
     GLuint text_shader = ShaderLoader::combineShaderProgram(text_vs, text_fs);
 
     CharacterMesh* flat_mesh = new CharacterMesh();
-    CharacterDrawable character_box = CharacterDrawable(flat_mesh, text_shader, 0.25, 0.25, glm::vec2(-0.5, 0.5));
+    CharacterDrawable character_box = CharacterDrawable(flat_mesh, text_shader, 0.05, 0.05 * (width / height), glm::vec2(-0.5, 0.5));
 
     GLuint character_texture = TextureLoader::loadTextureFromFile("res/fonts/font_sheet.png", GL_NEAREST);
 
