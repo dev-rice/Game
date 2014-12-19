@@ -20,6 +20,7 @@
 #include "character_mesh.h"
 #include "character_drawable.h"
 
+void renderString(CharacterDrawable*, std::string);
 GLFWwindow* initializeGLFWWindow(int, int, bool);
 
 class Box {
@@ -76,6 +77,7 @@ int main(int argc, char* argv[]) {
     std::vector<float> all_fps;
     float last_time = glfwGetTime();
 
+
     //////////////////////////////////////////////////////////////////
     // Text shit
 
@@ -86,14 +88,18 @@ int main(int argc, char* argv[]) {
     CharacterMesh* flat_mesh = new CharacterMesh();
     float x = -0.95;
     float y = 0.9;
-    CharacterDrawable character_box = CharacterDrawable(flat_mesh, text_shader, 0.02, 0.02 * (width / height), glm::vec2(x, y));
+    CharacterDrawable character_box = CharacterDrawable(flat_mesh, text_shader, 0.01, 0.01 * (width / height), glm::vec2(x, y));
 
-    GLuint character_texture = TextureLoader::loadTextureFromFile("res/fonts/font_sheet.png", GL_NEAREST);
+    GLuint character_texture = TextureLoader::loadTextureFromFile("res/fonts/font_sheet.png", GL_LINEAR);
 
     character_box.attachTexture(character_texture);
     character_box.setCharacter('A');
     ////////////////////////////////////////////////////////////////// 
+    
+    float delay_time = 0.1f;
+    float last_update_time = glfwGetTime() - delay_time;
 
+    std::string fps_count = "";
 
     // Display loop
     while(!glfwWindowShouldClose(window)) {
@@ -126,22 +132,15 @@ int main(int argc, char* argv[]) {
         //     character_box.draw();
         // }
 
-        // I should probably write a function for this
-        character_box.setCharacter('G');
-        character_box.setPosition(glm::vec2(x + 0.04, y));
-        character_box.draw();
+        if ((glfwGetTime() - last_update_time) >= delay_time){
+            char buff[100];
+            sprintf(buff, "FPS: %.2f", 1.0 / frame_time);
+            fps_count = buff;
+            last_update_time = glfwGetTime();
+        }
 
-        character_box.setCharacter('A');
-        character_box.setPosition(glm::vec2(x + 0.08, y));
-        character_box.draw();
-
-        character_box.setCharacter('M');
-        character_box.setPosition(glm::vec2(x + 0.12, y));
-        character_box.draw();
-
-        character_box.setCharacter('E');
-        character_box.setPosition(glm::vec2(x + 0.16, y));
-        character_box.draw();
+        renderString(&character_box, fps_count);
+        
 
 
             
@@ -188,6 +187,16 @@ int main(int argc, char* argv[]) {
 
     // Nothing went wrong!
     return 0;
+}
+
+void renderString(CharacterDrawable* box, std::string to_render){
+    float x = -0.95;
+    float y = 0.9;
+    for (int i = 0; i < to_render.size(); ++i){
+        box->setCharacter(to_render[i]);
+        box->setPosition(glm::vec2(x + 0.02 * i, y));
+        box->draw();
+    }
 }
 
 GLFWwindow* initializeGLFWWindow(int width, int height, bool fullscreen){
