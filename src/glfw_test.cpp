@@ -17,6 +17,7 @@
 #include "world.h"
 #include "flat_mesh.h"
 #include "flat_drawable.h"
+#include "character_mesh.h"
 
 GLFWwindow* initializeGLFWWindow(int, int, bool);
 
@@ -81,10 +82,10 @@ int main(int argc, char* argv[]) {
     GLuint text_fs = ShaderLoader::loadFragmentShader("shaders/text.fs");
     GLuint text_shader = ShaderLoader::combineShaderProgram(text_vs, text_fs);
 
-    FlatMesh* flat_mesh = new FlatMesh();
+    CharacterMesh* flat_mesh = new CharacterMesh();
     FlatDrawable character_box = FlatDrawable(flat_mesh, text_shader, 0.5, 0.5, glm::vec2(-0.5, 0.5));
 
-    GLuint character_texture = TextureLoader::loadTextureFromFile("res/fonts/font_sheet.png", GL_LINEAR);
+    GLuint character_texture = TextureLoader::loadTextureFromFile("res/fonts/font_sheet.png", GL_NEAREST);
 
     character_box.attachTexture(character_texture);
     ////////////////////////////////////////////////////////////////// 

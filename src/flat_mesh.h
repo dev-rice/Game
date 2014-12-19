@@ -31,8 +31,8 @@ public:
     void draw();
     void bindVAO();
     void attachGeometryToShader(GLuint);
-private:
 
+protected:
     GLuint vao;
     GLuint vbo;
 
