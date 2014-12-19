@@ -37,7 +37,7 @@ void FlatDrawable::updateUniformData(){
 
 void FlatDrawable::attachTexture(GLuint texture){
     glUseProgram(shader_program);
-    glUniform1i(glGetUniformLocation(shader_program, "texFramebuffer"), 0);
+    glUniform1i(glGetUniformLocation(shader_program, "base_texture"), 0);
 
     this->texture = texture;
 }

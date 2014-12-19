@@ -33,11 +33,11 @@ GameView::GameView(GLFWwindow* window, Level* level){
     FlatMesh* flat_mesh = new FlatMesh();
     
     // Load framebuffer shader
-    GLuint basic_vs = ShaderLoader::loadVertexShader("shaders/basic.vs");
-    GLuint basic_fs = ShaderLoader::loadFragmentShader("shaders/basic.fs");
-    basic_shader = ShaderLoader::combineShaderProgram(basic_vs, basic_fs);
+    GLuint framebuffer_vs = ShaderLoader::loadVertexShader("shaders/framebuffer.vs");
+    GLuint framebuffer_fs = ShaderLoader::loadFragmentShader("shaders/framebuffer.fs");
+    GLuint framebuffer_shader = ShaderLoader::combineShaderProgram(framebuffer_vs, framebuffer_fs);
 
-    framebuffer_window = new FlatDrawable(flat_mesh, basic_shader, 0.25, 0.25, glm::vec2(0.75, -0.75));
+    framebuffer_window = new FlatDrawable(flat_mesh, framebuffer_shader, 0.25, 0.25, glm::vec2(0.75, -0.75));
 
     // Tell shader to read GL_TEXTURE0
     framebuffer_window->attachTexture(framebuffer_texture);
@@ -61,8 +61,10 @@ void GameView::update(){
     glClearColor(0.0, 0.0, 0.0, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     level->draw();
-    framebuffer_window->draw();
+    // Draw the framebuffer (currently a small window)
+    // framebuffer_window->draw();
     
+    // Draw some text
     text->drawString(glm::vec2(-0.95, 0.9), "Video Game.");
 
 }

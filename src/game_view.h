@@ -27,7 +27,6 @@ private:
     GLuint framebuffer_texture;
 
     FlatDrawable* framebuffer_window;
-    GLuint basic_shader;
 
     TextRenderer* text;
 
