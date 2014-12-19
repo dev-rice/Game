@@ -17,16 +17,13 @@ float rand(vec2 co){
     return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
 }
 
-void main() {
-    vec3 light_color = vec3(1.0, 0.3, 0.1);
-    float light_power = sin(time) * (2.0 * rand(vec2(cos(time), sin(time)))) + 5.0;
+vec4 lightFragment(vec3 light_vector, vec3 light_color, float light_power){
+    float intensity = light_power / (pow(light_vector.x, 2) + pow(light_vector.y, 2) + pow(light_vector.z, 2));
     
-    float intensity = light_power / (pow(light_to_surface.x, 2) + pow(light_to_surface.y, 2) + pow(light_to_surface.z, 2));
-    
-    float cosTheta = dot(normalize(surface_normal), normalize(light_to_surface));
+    float cosTheta = dot(normalize(surface_normal), normalize(light_vector));
     cosTheta = clamp(cosTheta, 0.0, 1.0);
 
-    vec3 reflection = reflect(-normalize(light_to_surface), normalize(surface_normal));
+    vec3 reflection = reflect(-normalize(light_vector), normalize(surface_normal));
     float cosAlpha = clamp(dot(normalize(camera_to_surface), reflection), 0.0, 1.0);
 
     vec4 diffuse = texture(diffuse_texture, Texcoord);
@@ -40,6 +37,15 @@ void main() {
     vec4 specular_component = vec4(specular.rgb * specularity * intensity * pow(cosAlpha,15), specular.w);
 
     vec4 lit_component = vec4(light_color, 1.0) * (diffuse_component + specular_component + ambient_component);
+    return lit_component;
+}
+
+void main() {
+    vec3 light_color = vec3(1.0, 0.3, 0.1);
+    // float light_power = sin(time) * (2.0 * rand(vec2(cos(time), sin(time)))) + 5.0;
+    float light_power = 5.0;
+    
+    vec4 lit_component = lightFragment(light_to_surface, light_color, light_power);
 
     vec4 emissive = texture(emissive_texture, Texcoord);
     vec4 emissive_component = vec4(emissive.rgb, 1.0);

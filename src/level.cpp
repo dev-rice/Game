@@ -20,15 +20,15 @@ Level::Level(GLFWwindow* window, const char* filename){
     camera = new Camera(glm::vec3(0.0f, 2.0f, 4.0f));
     view_matrix = camera->getViewMatrix();
     
-    GLuint doodad_vs = ShaderLoader::loadVertexShader("shaders/doodad.vs");
-    GLuint doodad_fs = ShaderLoader::loadFragmentShader("shaders/doodad.fs");
+    GLuint doodad_vs = ShaderLoader::loadVertexShader("shaders/doodad_point.vs");
+    GLuint doodad_fs = ShaderLoader::loadFragmentShader("shaders/doodad_point.fs");
     doodad_shader = ShaderLoader::combineShaderProgram(doodad_vs, doodad_fs);
 
     GLuint particle_vs = ShaderLoader::loadVertexShader("shaders/particle.vs");
     GLuint particle_fs = ShaderLoader::loadFragmentShader("shaders/particle.fs");
     GLuint particle_shader = ShaderLoader::combineShaderProgram(particle_vs, particle_fs);
    
-    // emitters.push_back(new FireEmitter(particle_shader, glm::vec3(-1.4f, 0.0f, 0.0f), 0.7f));
+    emitters.push_back(new FireEmitter(particle_shader, glm::vec3(-1.4f, 0.0f, 0.0f), 0.7f));
     // emitters.push_back(new SmokeEmitter(particle_shader, glm::vec3(-1.4f, 0.0f, 0.0f), 0.7f));
 
     loadLevel(filename);
