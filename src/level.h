@@ -11,7 +11,6 @@
 #include "mesh.h"
 #include "camera.h"
 #include "shader_loader.h"
-#include "light.h"
 #include "texture_loader.h"
 #include "texture_set.h"
 

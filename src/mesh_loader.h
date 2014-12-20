@@ -15,7 +15,6 @@
 
 #include <vector>
 
-
 class MeshLoader{
 public:
     MeshLoader(const char*);

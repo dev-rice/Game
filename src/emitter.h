@@ -17,11 +17,8 @@
 #include <random>
 #include <math.h>
 
-#include "drawable.h"
 #include "mesh.h"
 #include "camera.h"
-#include "shader_loader.h"
-#include "light.h"
 #include "texture_loader.h"
 #include "texture_set.h"
 #include "particle.h"
@@ -48,7 +45,6 @@ protected:
     bool hasFired;
 
     Mesh* billboard;
-    Drawable* particle;
     TextureSet* texture_set;
 
     GLuint shader_program;

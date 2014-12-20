@@ -16,14 +16,11 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include <stdio.h>
-#include <math.h>
 #include <cstdlib>
 #include <vector>
 #include <algorithm>
 
 #include "mesh_loader.h"
-#include "light.h"
 
 class Mesh {
 public:

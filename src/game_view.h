@@ -4,8 +4,6 @@
 #include "mesh.h"
 #include "drawable.h"
 #include "camera.h"
-#include "texture_set.h"
-#include "light.h"
 #include "level.h"
 #include "flat_mesh.h"
 #include "flat_drawable.h"
