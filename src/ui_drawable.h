@@ -16,8 +16,10 @@ public:
     UIDrawable(FlatMesh*, GLFWwindow*, GLuint, GLuint);
 
     void setPosition(glm::vec2);
-
+    void attachTexture(GLuint);
 private:
+
+    glm::mat3 mesh_projection;
 };
 
 #endif
