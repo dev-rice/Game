@@ -57,11 +57,13 @@ GameView::GameView(GLFWwindow* window, Level* level){
 void GameView::update(){
     handleInputs();
     
-    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-    glClearColor(0.0, 0.0, 0.0, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    level->draw();
+    // Draw to the framebuffer
+    // glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    // glClearColor(0.0, 0.0, 0.0, 1.0f);
+    // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    // level->draw();
 
+    // Draw to the screen
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glClearColor(0.0, 0.0, 0.0, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -70,16 +72,13 @@ void GameView::update(){
     // Draw the framebuffer (currently a small window)
     // framebuffer_window->draw();
     
-    // ////////////////////////////////////////////////////////////////
-    // // Find the mouse position in FlatDrawable coordinates
+    // Find the mouse position in gl coordinates
     double mouse_x;
     double mouse_y;
 
     glfwGetCursorPos(window, &mouse_x, &mouse_y);
 
-    glm::vec3 mouse_position = glm::vec3(mouse_x, mouse_y, 1.0);
-    glm::vec3 gl_mouse_position = mouse_position * glm::inverse(mouse_projection);
-    // ////////////////////////////////////////////////////////////////
+    glm::vec3 gl_mouse_position = glm::vec3(mouse_x, mouse_y, 1.0) * glm::inverse(mouse_projection);
     mouse->setPosition(glm::vec2(gl_mouse_position.x, gl_mouse_position.y));
     mouse->draw();
 
