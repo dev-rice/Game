@@ -18,10 +18,6 @@ public:
     void setPosition(glm::vec2);
 
 private:
-    glm::mat3 mouse_projection;
-    
-    FlatDrawable* ui_element;
-
 };
 
 #endif
