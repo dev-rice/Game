@@ -92,20 +92,7 @@ int main(int argc, char* argv[]) {
 
         world.update();
 
-        ////////////////////////////////////////////////////////////////
-        // Find the mouse position in FlatDrawable coordinates
-        double mouse_x;
-        double mouse_y;
-
-        glm::mat3 projection = glm::mat3( width / 2.0f, 0.0f         , width / 2.0f  ,
-                                          0.0f        , -height / 2.0f, height / 2.0f,
-                                          0.0f        , 0.0f         , 1.0f           );
-
-        glfwGetCursorPos(window, &mouse_x, &mouse_y);
-
-        glm::vec3 mouse_position = glm::vec3(mouse_x, mouse_y, 1.0);
-        glm::vec3 gl_mouse_position = mouse_position * glm::inverse(projection);
-        ////////////////////////////////////////////////////////////////
+        
 
     }
 

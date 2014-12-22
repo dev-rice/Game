@@ -73,6 +73,9 @@ GameView::GameView(GLFWwindow* window, Level* level){
                                   0.0f        , -height / 2.0f, height / 2.0f,
                                   0.0f        , 0.0f         , 1.0f           );
 
+    mesh_offset.x = gl_mesh_size.x;
+    mesh_offset.y = -gl_mesh_size.y;
+
 }
 
 void GameView::update(){
@@ -100,7 +103,7 @@ void GameView::update(){
     glm::vec3 mouse_position = glm::vec3(mouse_x, mouse_y, 1.0);
     glm::vec3 gl_mouse_position = mouse_position * glm::inverse(mouse_projection);
     ////////////////////////////////////////////////////////////////
-    ui_element->setPosition(glm::vec2(gl_mouse_position.x, gl_mouse_position.y));
+    ui_element->setPosition(glm::vec2(gl_mouse_position.x + mesh_offset.x, gl_mouse_position.y + mesh_offset.y));
     ui_element->draw();
 
 }

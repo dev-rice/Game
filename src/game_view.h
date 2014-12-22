@@ -28,6 +28,7 @@ private:
     FlatDrawable* ui_element;
 
     glm::mat3 mouse_projection;
+    glm::vec2 mesh_offset;
 
 };
 
