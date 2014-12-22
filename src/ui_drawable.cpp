@@ -13,12 +13,12 @@ UIDrawable::UIDrawable(FlatMesh* flat_mesh, GLFWwindow* window, GLuint shader_pr
 
 void UIDrawable::attachTexture(GLuint texture){
     glBindTexture(GL_TEXTURE_2D, texture);
-    int w, h;
+    int texture_width, texture_height;
     int miplevel = 0;
-    glGetTexLevelParameteriv(GL_TEXTURE_2D, miplevel, GL_TEXTURE_WIDTH, &w);
-    glGetTexLevelParameteriv(GL_TEXTURE_2D, miplevel, GL_TEXTURE_HEIGHT, &h);
+    glGetTexLevelParameteriv(GL_TEXTURE_2D, miplevel, GL_TEXTURE_WIDTH, &texture_width);
+    glGetTexLevelParameteriv(GL_TEXTURE_2D, miplevel, GL_TEXTURE_HEIGHT, &texture_height);
 
-    glm::vec3 image_size = glm::vec3(w, h, 1.0);
+    glm::vec3 image_size = glm::vec3(texture_width, texture_height, 1.0);
     glm::vec3 gl_mesh_size = image_size * glm::inverse(mesh_projection);
 
     width = gl_mesh_size.x;
