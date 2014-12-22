@@ -8,7 +8,6 @@
 #include "flat_mesh.h"
 #include "flat_drawable.h"
 #include "text_renderer.h"
-#include "debug_info.h"
 
 class GameView {
 public:
@@ -26,6 +25,9 @@ private:
     GLuint framebuffer_texture;
 
     FlatDrawable* framebuffer_window;
+    FlatDrawable* ui_element;
+
+    glm::mat3 mouse_projection;
 
 };
 

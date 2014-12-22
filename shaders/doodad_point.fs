@@ -13,10 +13,6 @@ uniform sampler2D specular_texture;
 uniform sampler2D normal_map;
 uniform sampler2D emissive_texture;
 
-float rand(vec2 co){
-    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
-}
-
 vec4 lightFragment(vec3 light_vector, vec3 light_color, float light_power){
     float intensity = light_power / (pow(light_vector.x, 2) + pow(light_vector.y, 2) + pow(light_vector.z, 2));
     
@@ -42,7 +38,6 @@ vec4 lightFragment(vec3 light_vector, vec3 light_color, float light_power){
 
 void main() {
     vec3 light_color = vec3(1.0, 0.3, 0.1);
-    // float light_power = sin(time) * (2.0 * rand(vec2(cos(time), sin(time)))) + 5.0;
     float light_power = 5.0;
     
     vec4 lit_component = lightFragment(light_to_surface, light_color, light_power);
