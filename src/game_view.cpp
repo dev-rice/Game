@@ -47,7 +47,7 @@ GameView::GameView(GLFWwindow* window, Level* level){
     GLuint ui_shader = ShaderLoader::combineShaderProgram(ui_vs, ui_fs);
     GLuint mouse_texture = TextureLoader::loadTextureFromFile("res/textures/cursor_ui.png", GL_LINEAR);
 
-    mouse = new UIDrawable(window, ui_shader, mouse_texture);
+    mouse = new UIDrawable(flat_mesh, window, ui_shader, mouse_texture);
     mouse_projection = glm::mat3( width / 2.0f, 0.0f         , width / 2.0f  ,
                                   0.0f        , -height / 2.0f, height / 2.0f,
                                   0.0f        , 0.0f         , 1.0f           );
@@ -71,15 +71,15 @@ void GameView::update(){
     
     // ////////////////////////////////////////////////////////////////
     // // Find the mouse position in FlatDrawable coordinates
-    // double mouse_x;
-    // double mouse_y;
+    double mouse_x;
+    double mouse_y;
 
-    // glfwGetCursorPos(window, &mouse_x, &mouse_y);
+    glfwGetCursorPos(window, &mouse_x, &mouse_y);
 
-    // glm::vec3 mouse_position = glm::vec3(mouse_x, mouse_y, 1.0);
-    // glm::vec3 gl_mouse_position = mouse_position * glm::inverse(mouse_projection);
+    glm::vec3 mouse_position = glm::vec3(mouse_x, mouse_y, 1.0);
+    glm::vec3 gl_mouse_position = mouse_position * glm::inverse(mouse_projection);
     // ////////////////////////////////////////////////////////////////
-    // ui_element->setPosition(glm::vec2(gl_mouse_position.x + mesh_offset.x, gl_mouse_position.y + mesh_offset.y));
+    mouse->setPosition(glm::vec2(gl_mouse_position.x, gl_mouse_position.y ));
     mouse->draw();
 
 }

@@ -19,12 +19,13 @@
 
 class FlatDrawable {
 public:
+    FlatDrawable(FlatMesh*, GLuint);
     FlatDrawable(FlatMesh*, GLuint, GLfloat, GLfloat, glm::vec2);
 
     void draw();
     void attachTexture(GLuint);
 
-    void setPosition(glm::vec2 p) {position = p;}
+    virtual void setPosition(glm::vec2 p) {position = p;}
 
 protected:
     virtual void updateUniformData();

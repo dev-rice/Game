@@ -1,5 +1,15 @@
 #include "flat_drawable.h"
 
+FlatDrawable::FlatDrawable(FlatMesh* mesh, GLuint shader_program){
+    this->mesh = mesh;
+    this->shader_program = shader_program;
+    this->width = 1.0f;
+    this->height = 1.0f;
+    this->position = glm::vec2(0.0f, 0.0f);
+
+    this->mesh->attachGeometryToShader(shader_program);
+}
+
 FlatDrawable::FlatDrawable(FlatMesh* mesh, GLuint shader_program, GLfloat width, GLfloat height, glm::vec2 position){
     this->mesh = mesh;
     this->shader_program = shader_program;
