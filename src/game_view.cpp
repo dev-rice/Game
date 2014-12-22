@@ -66,6 +66,7 @@ void GameView::update(){
     glClearColor(0.0, 0.0, 0.0, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     level->draw();
+    
     // Draw the framebuffer (currently a small window)
     // framebuffer_window->draw();
     
@@ -79,7 +80,7 @@ void GameView::update(){
     glm::vec3 mouse_position = glm::vec3(mouse_x, mouse_y, 1.0);
     glm::vec3 gl_mouse_position = mouse_position * glm::inverse(mouse_projection);
     // ////////////////////////////////////////////////////////////////
-    mouse->setPosition(glm::vec2(gl_mouse_position.x, gl_mouse_position.y ));
+    mouse->setPosition(glm::vec2(gl_mouse_position.x, gl_mouse_position.y));
     mouse->draw();
 
 }
