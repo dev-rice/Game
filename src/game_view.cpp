@@ -45,36 +45,12 @@ GameView::GameView(GLFWwindow* window, Level* level){
     GLuint ui_vs = ShaderLoader::loadVertexShader("shaders/ui.vs");
     GLuint ui_fs = ShaderLoader::loadFragmentShader("shaders/ui.fs");
     GLuint ui_shader = ShaderLoader::combineShaderProgram(ui_vs, ui_fs);
-
-    // Scaling math
-    // Goes from opengl coordinates to screen coordinates
-    glm::mat3 projection = glm::mat3( width, 0.0f  , 0.0f,
-                                      0.0f , height, 0.0f,
-                                      0.0f , 0.0f  , 1.0f );
-
     GLuint mouse_texture = TextureLoader::loadTextureFromFile("res/textures/cursor_ui.png", GL_LINEAR);
-    glBindTexture(GL_TEXTURE_2D, mouse_texture);
-    int w, h;
-    int miplevel = 0;
-    glGetTexLevelParameteriv(GL_TEXTURE_2D, miplevel, GL_TEXTURE_WIDTH, &w);
-    glGetTexLevelParameteriv(GL_TEXTURE_2D, miplevel, GL_TEXTURE_HEIGHT, &h);
-    printf("The mouse texture is %d by %d.\n", w, h);
 
-    glm::vec3 image_size = glm::vec3(w, h, 1.0);
-
-    glm::vec3 gl_mesh_size = image_size * glm::inverse(projection);
-    printf("For an image of size %.0f by %.0f.\n", image_size.x, image_size.y);
-    printf("The mesh is size %.2f by %.2f.\n", gl_mesh_size.x, gl_mesh_size.y);
-
-    ui_element = new FlatDrawable(flat_mesh, ui_shader, gl_mesh_size.x, gl_mesh_size.y, glm::vec2(0.0, 0.0));
-    ui_element->attachTexture(mouse_texture);
-
+    mouse = new UIDrawable(window, ui_shader, mouse_texture);
     mouse_projection = glm::mat3( width / 2.0f, 0.0f         , width / 2.0f  ,
                                   0.0f        , -height / 2.0f, height / 2.0f,
                                   0.0f        , 0.0f         , 1.0f           );
-
-    mesh_offset.x = gl_mesh_size.x;
-    mesh_offset.y = -gl_mesh_size.y;
 
 }
 
@@ -93,18 +69,18 @@ void GameView::update(){
     // Draw the framebuffer (currently a small window)
     // framebuffer_window->draw();
     
-    ////////////////////////////////////////////////////////////////
-    // Find the mouse position in FlatDrawable coordinates
-    double mouse_x;
-    double mouse_y;
+    // ////////////////////////////////////////////////////////////////
+    // // Find the mouse position in FlatDrawable coordinates
+    // double mouse_x;
+    // double mouse_y;
 
-    glfwGetCursorPos(window, &mouse_x, &mouse_y);
+    // glfwGetCursorPos(window, &mouse_x, &mouse_y);
 
-    glm::vec3 mouse_position = glm::vec3(mouse_x, mouse_y, 1.0);
-    glm::vec3 gl_mouse_position = mouse_position * glm::inverse(mouse_projection);
-    ////////////////////////////////////////////////////////////////
-    ui_element->setPosition(glm::vec2(gl_mouse_position.x + mesh_offset.x, gl_mouse_position.y + mesh_offset.y));
-    ui_element->draw();
+    // glm::vec3 mouse_position = glm::vec3(mouse_x, mouse_y, 1.0);
+    // glm::vec3 gl_mouse_position = mouse_position * glm::inverse(mouse_projection);
+    // ////////////////////////////////////////////////////////////////
+    // ui_element->setPosition(glm::vec2(gl_mouse_position.x + mesh_offset.x, gl_mouse_position.y + mesh_offset.y));
+    mouse->draw();
 
 }
 
