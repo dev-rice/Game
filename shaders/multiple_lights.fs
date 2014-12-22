@@ -1,12 +1,19 @@
 #version 330
 
-const int num_lights = 2;
+struct Light {
+    vec3 position;
+    vec3 color;
+    float power;
+
+    vec3 light_to_surface;
+};
+
+const int num_lights = 3;
 
 in vec2 Texcoord;
-in vec3 light_to_surface;
 in vec3 surface_normal;
 in vec3 camera_to_surface;
-in vec3 light_vectors[num_lights];
+in Light lights[num_lights];
 
 out vec4 outColor;
 
@@ -45,7 +52,8 @@ void main() {
     
     vec4 lit_component = vec4(0.0, 0.0, 0.0, 0.0);
     for (int i = 0; i < num_lights; ++i){
-        lit_component = lit_component + lightFragment(light_vectors[i], light_color, light_power);
+        Light light = lights[i];
+        lit_component = lit_component + lightFragment(light.light_to_surface, light.color, light.power);
     }
 
     vec4 emissive = texture(emissive_texture, Texcoord);

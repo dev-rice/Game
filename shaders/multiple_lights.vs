@@ -1,16 +1,23 @@
 #version 330
 
-const int num_lights = 2;
+const int num_lights = 3;
+
+struct Light {
+    vec3 position;
+    vec3 color;
+    float power;
+
+    vec3 light_to_surface;
+};
 
 in vec3 position;
 in vec3 normal;
 in vec2 texcoord;
 
 out vec2 Texcoord;
-out vec3 light_to_surface;
 out vec3 surface_normal;
 out vec3 camera_to_surface;
-out vec3 light_vectors[num_lights];
+out Light lights[num_lights];
 
 uniform mat4 model;
 uniform mat4 view;
@@ -28,15 +35,22 @@ void main() {
     gl_Position = proj * view * world_position;
 
     // Point lighting
-    vec3 light_positions[num_lights];
-    light_positions[0] = vec3(-1.5, 0.5, 0.0);
-    light_positions[1] = vec3(-4.5, 5.0, sin(time));
+    lights[0].position = vec3(-1.5, 0.5, 0.0);
+    lights[0].color = vec3(1.0, 0.0, 0.0);
+    lights[0].power = 5.0;
 
-    vec4 light_temp = (view * vec4(light_positions[0], 1.0)) - (view * model * vec4(scaled_position, 1.0));
-    light_to_surface = light_temp.xyz;
+    lights[1].position = vec3(-4.5, 5.0, sin(5*time));
+    lights[1].color = vec3(1.0, 1.0, 1.0);
+    lights[1].power = 25.0;
+
+    lights[2].position = vec3(0.0, 100.0, 0.0);
+    lights[2].color = vec3(1.0, 1.0, 1.0);
+    lights[2].power = 1000.0;
+
 
     for (int i = 0; i < num_lights; ++i){
-        light_vectors[i] = ((view * vec4(light_positions[i], 1.0)) - (view * model * vec4(scaled_position, 1.0))).xyz;
+        vec3 light_vector = ((view * vec4(lights[i].position, 1.0)) - (view * model * vec4(scaled_position, 1.0))).xyz;
+        lights[i].light_to_surface = light_vector;
     }
 
     surface_normal = (view * model * vec4(normal, 0.0)).xyz;
