@@ -52,7 +52,7 @@ GameView::GameView(GLFWwindow* window, Level* level){
                                   0.0f        , -height / 2.0f, height / 2.0f,
                                   0.0f        , 0.0f         , 1.0f           );
 
-    text_renderer = new TextRenderer(window, "res/fonts/inconsolata_bold_font.png", 0.01);
+    text_renderer = new TextRenderer(window, "res/fonts/inconsolata_bold_font.png", 0.0125);
 
     toggle_key_state = false;
     debug_showing = false;
@@ -76,16 +76,6 @@ void GameView::update(){
     // Draw the framebuffer (currently a small window)
     // framebuffer_window->draw();
     
-    if (debug_showing){
-        Camera* camera = level->getCamera();
-        glm::vec3 position = camera->getPosition();
-        
-        char buffer[100];
-        sprintf(buffer, "camera <x, y, z>: %.2f, %.2f, %.2f", position.x, position.y, position.z);
-        std::string to_print = buffer;
-        text_renderer->drawString(glm::vec2(-0.95, 0.9), to_print);  
-    }
-
     // Find the mouse position in gl coordinates
     double mouse_x;
     double mouse_y;
@@ -95,6 +85,16 @@ void GameView::update(){
     glm::vec3 gl_mouse_position = glm::vec3(mouse_x, mouse_y, 1.0) * glm::inverse(mouse_projection);
     mouse->setPosition(glm::vec2(gl_mouse_position.x, gl_mouse_position.y));
     mouse->draw();
+    
+    if (debug_showing){
+        Camera* camera = level->getCamera();
+        glm::vec3 position = camera->getPosition();
+        
+        char buffer[100];
+        sprintf(buffer, "camera <x, y, z>: %.2f, %.2f, %.2f", position.x, position.y, position.z);
+        std::string to_print = buffer;
+        text_renderer->drawString(glm::vec2(-0.95, 0.9), to_print);  
+    }
 
 }
 
