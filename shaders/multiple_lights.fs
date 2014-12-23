@@ -48,11 +48,23 @@ vec4 lightFragment(vec3 light_vector, vec3 light_color, float light_power){
 }
 
 void main() {
-    vec4 lit_component = vec4(0.0, 0.0, 0.0, 0.0);
-    for (int i = 0; i < num_lights; ++i){
-        Light light = lights[i];
-        lit_component = lit_component + lightFragment(light.light_to_surface, light.color, light.power);
-    }
+    // For some reason using a for loop like this makes the video choppy.
+    // The enumeration below behaves fine.
+    // int i = 0;
+    // vec4 lit_component = vec4(0.0, 0.0, 0.0, 0.0);
+    // Light light;
+    // for (i = 0; i < num_lights; ++i){
+    //     Light light = lights[i];
+    //     lit_component = lit_component + lightFragment(light.light_to_surface, light.color, light.power);
+    // }
+
+    // Works fine
+    Light light = lights[0];
+    vec4 lit_component = vec4(0.0, 0.0, 0.0, 0.0) + lightFragment(light.light_to_surface, light.color, light.power);
+    light = lights[1];
+    lit_component = lit_component + lightFragment(light.light_to_surface, light.color, light.power);
+    light = lights[2];
+    lit_component = lit_component + lightFragment(light.light_to_surface, light.color, light.power);
 
     vec4 emissive = texture(emissive_texture, Texcoord);
     vec4 emissive_component = vec4(emissive.rgb, 1.0);
