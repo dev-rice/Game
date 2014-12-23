@@ -22,7 +22,7 @@ public:
     FlatDrawable(FlatMesh*, GLuint);
     FlatDrawable(FlatMesh*, GLuint, GLfloat, GLfloat, glm::vec2);
 
-    void draw();
+    virtual void draw();
     virtual void attachTexture(GLuint);
 
     virtual void setPosition(glm::vec2 p) {position = p;}

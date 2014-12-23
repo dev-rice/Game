@@ -9,6 +9,7 @@
 #include "flat_drawable.h"
 #include "text_renderer.h"
 #include "ui_drawable.h"
+#include "mouse.h"
 
 class GameView {
 public:
@@ -29,7 +30,7 @@ private:
 
     glm::mat3 mouse_projection;
 
-    UIDrawable* mouse;
+    Mouse* mouse;
     std::vector<UIDrawable*> ui_drawables;
 
     TextRenderer* text_renderer;

@@ -38,8 +38,6 @@ GameView::GameView(GLFWwindow* window, Level* level){
     GLuint framebuffer_shader = ShaderLoader::combineShaderProgram(framebuffer_vs, framebuffer_fs);
 
     framebuffer_window = new FlatDrawable(flat_mesh, framebuffer_shader, 0.25, 0.25, glm::vec2(0.75, -0.75));
-
-    // Tell shader to read GL_TEXTURE0
     framebuffer_window->attachTexture(framebuffer_texture);
 
     GLuint ui_vs = ShaderLoader::loadVertexShader("shaders/ui.vs");
@@ -47,10 +45,7 @@ GameView::GameView(GLFWwindow* window, Level* level){
     GLuint ui_shader = ShaderLoader::combineShaderProgram(ui_vs, ui_fs);
     GLuint mouse_texture = TextureLoader::loadTextureFromFile("res/textures/cursor_ui.png", GL_LINEAR);
 
-    mouse = new UIDrawable(flat_mesh, window, ui_shader, mouse_texture);
-    mouse_projection = glm::mat3( width / 2.0f, 0.0f         , width / 2.0f  ,
-                                  0.0f        , -height / 2.0f, height / 2.0f,
-                                  0.0f        , 0.0f         , 1.0f           );
+    mouse = new Mouse(flat_mesh, window, ui_shader, mouse_texture);
 
     text_renderer = new TextRenderer(window, "res/fonts/inconsolata_bold_font.png", 0.01);
 
@@ -81,21 +76,12 @@ void GameView::update(){
         ui_drawables[i]->draw();
     }
 
-    // Find the mouse position in gl coordinates
-    double mouse_x;
-    double mouse_y;
-
-    glfwGetCursorPos(window, &mouse_x, &mouse_y);
-
-    glm::vec3 gl_mouse_position = glm::vec3(mouse_x, mouse_y, 1.0) * glm::inverse(mouse_projection);
-    mouse->setPosition(glm::vec2(gl_mouse_position.x, gl_mouse_position.y));
-    mouse->draw();
-
     if (debug_showing){
         Camera* camera = level->getCamera();
         glm::vec3 position = camera->getPosition();
         glm::vec3 rotation = camera->getRotation();
-
+        glm::vec2 gl_mouse_position = mouse->getPosition();
+        
         char buffer[100];
         std::string to_print;
         
@@ -112,6 +98,9 @@ void GameView::update(){
         text_renderer->drawString(glm::vec2(-0.95, 0.80), to_print);  
 
     }
+
+    // The mouse should draw on top of everything else
+    mouse->draw();
 
 }
 
