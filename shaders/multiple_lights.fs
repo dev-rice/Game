@@ -48,7 +48,7 @@ vec4 lightFragment(vec3 light_vector, vec3 light_color, float light_power){
 }
 
 void main() {
-    // For some reason using a for loop like this makes the video choppy.
+    // For some reason using a for loop like this makes the framerate choppy.
     // The enumeration below behaves fine.
     // int i = 0;
     // vec4 lit_component = vec4(0.0, 0.0, 0.0, 0.0);
