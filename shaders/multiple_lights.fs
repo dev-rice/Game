@@ -58,8 +58,11 @@ void main() {
     // }
 
     // Works fine
-    Light light = lights[0];
-    vec4 lit_component = vec4(0.0, 0.0, 0.0, 0.0) + lightFragment(light.light_to_surface, light.color, light.power);
+    Light light;
+    vec4 lit_component = vec4(0.0, 0.0, 0.0, 0.0);
+    
+    light = lights[0];
+    lit_component = lit_component + lightFragment(light.light_to_surface, light.color, light.power);
     light = lights[1];
     lit_component = lit_component + lightFragment(light.light_to_surface, light.color, light.power);
     light = lights[2];
