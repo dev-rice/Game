@@ -52,7 +52,7 @@ GameView::GameView(GLFWwindow* window, Level* level){
                                   0.0f        , -height / 2.0f, height / 2.0f,
                                   0.0f        , 0.0f         , 1.0f           );
 
-    text_renderer = new TextRenderer(window, "res/fonts/inconsolata_bold_font.png", 0.0125);
+    text_renderer = new TextRenderer(window, "res/fonts/inconsolata_bold_font.png", 0.01);
 
     toggle_key_state = false;
     debug_showing = false;

@@ -23,6 +23,12 @@ uniform sampler2D specular_texture;
 uniform sampler2D normal_map;
 uniform sampler2D emissive_texture;
 
+vec4 diffuse;
+vec4 specular;
+vec4 normal;
+vec4 emissive;
+
+
 vec4 lightFragment(vec3 light_vector, vec3 light_color, float light_power){
     float intensity = light_power / (pow(light_vector.x, 2) + pow(light_vector.y, 2) + pow(light_vector.z, 2));
     
@@ -31,9 +37,6 @@ vec4 lightFragment(vec3 light_vector, vec3 light_color, float light_power){
 
     vec3 reflection = reflect(-normalize(light_vector), normalize(surface_normal));
     float cosAlpha = clamp(dot(normalize(camera_to_surface), reflection), 0.0, 1.0);
-
-    vec4 diffuse = texture(diffuse_texture, Texcoord);
-    vec4 specular = texture(specular_texture, Texcoord);
 
     vec4 ambient_component = vec4(0.1, 0.1, 0.1, 1.0) * diffuse;
 
@@ -47,6 +50,10 @@ vec4 lightFragment(vec3 light_vector, vec3 light_color, float light_power){
 }
 
 void main() {
+    diffuse = texture(diffuse_texture, Texcoord);
+    specular = texture(specular_texture, Texcoord);
+    emissive = texture(emissive_texture, Texcoord);
+    
     // For some reason using a for loop like this makes the framerate choppy.
     // The enumeration below behaves fine.
     // int i = 0;
@@ -68,7 +75,6 @@ void main() {
     light = lights[2];
     lit_component = lit_component + lightFragment(light.light_to_surface, light.color, light.power);
 
-    vec4 emissive = texture(emissive_texture, Texcoord);
     vec4 emissive_component = vec4(emissive.rgb, 1.0);
 
     vec4 texel = mix(lit_component, emissive_component, emissive.a);
