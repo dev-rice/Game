@@ -37,7 +37,7 @@ void main() {
 
     // Point lighting
     lights[0].position = vec3(-1.5, 0.5, 0.0);
-    lights[0].color = vec3(1.0, 0.0, 0.0);
+    lights[0].color = vec3(1.0, 0.3, 0.1);
     lights[0].power = 5.0;
 
     lights[1].position = vec3(-4.5, 5.0, sin(5*time));
