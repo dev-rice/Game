@@ -23,7 +23,6 @@ uniform sampler2D specular_texture;
 uniform sampler2D normal_map;
 uniform sampler2D emissive_texture;
 
-// Not efficient for multiple lights
 vec4 lightFragment(vec3 light_vector, vec3 light_color, float light_power){
     float intensity = light_power / (pow(light_vector.x, 2) + pow(light_vector.y, 2) + pow(light_vector.z, 2));
     
