@@ -30,6 +30,7 @@ private:
     glm::mat3 mouse_projection;
 
     UIDrawable* mouse;
+    std::vector<UIDrawable*> ui_drawables;
 
     TextRenderer* text_renderer;
 

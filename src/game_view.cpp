@@ -56,6 +56,7 @@ GameView::GameView(GLFWwindow* window, Level* level){
 
     toggle_key_state = false;
     debug_showing = false;
+
 }
 
 void GameView::update(){
@@ -76,6 +77,10 @@ void GameView::update(){
     // Draw the framebuffer (currently a small window)
     // framebuffer_window->draw();
     
+    for(int i = 0; i < ui_drawables.size(); ++i){
+        ui_drawables[i]->draw();
+    }
+
     // Find the mouse position in gl coordinates
     double mouse_x;
     double mouse_y;
@@ -85,15 +90,27 @@ void GameView::update(){
     glm::vec3 gl_mouse_position = glm::vec3(mouse_x, mouse_y, 1.0) * glm::inverse(mouse_projection);
     mouse->setPosition(glm::vec2(gl_mouse_position.x, gl_mouse_position.y));
     mouse->draw();
-    
+
     if (debug_showing){
         Camera* camera = level->getCamera();
         glm::vec3 position = camera->getPosition();
-        
+        glm::vec3 rotation = camera->getRotation();
+
         char buffer[100];
-        sprintf(buffer, "camera <x, y, z>: %.2f, %.2f, %.2f", position.x, position.y, position.z);
-        std::string to_print = buffer;
-        text_renderer->drawString(glm::vec2(-0.95, 0.9), to_print);  
+        std::string to_print;
+        
+        sprintf(buffer, "camera position <x, y, z>: %.2f, %.2f, %.2f", position.x, position.y, position.z);
+        to_print = buffer;
+        text_renderer->drawString(glm::vec2(-0.95, 0.9), to_print); 
+
+        sprintf(buffer, "camera rotation <x, y, z>: %.2f, %.2f, %.2f", rotation.x, rotation.y, rotation.z);
+        to_print = buffer;
+        text_renderer->drawString(glm::vec2(-0.95, 0.85), to_print);  
+
+        sprintf(buffer, "mouse <x, y>: %.2f, %.2f", gl_mouse_position.x, gl_mouse_position.y);
+        to_print = buffer;
+        text_renderer->drawString(glm::vec2(-0.95, 0.80), to_print);  
+
     }
 
 }
