@@ -13,7 +13,7 @@ TextRenderer::TextRenderer(GLFWwindow* window, std::string font_filename, GLfloa
     character_mesh = new CharacterMesh();
     character_box = new CharacterDrawable(character_mesh, text_shader, scale, scale * ((float)width / (float)height), glm::vec2());
 
-    GLuint character_texture = TextureLoader::loadTextureFromFile(font_filename.c_str(), GL_LINEAR);
+    GLuint character_texture = TextureLoader::loadTextureFromFile(font_filename.c_str(), GL_NEAREST);
 
     character_box->attachTexture(character_texture);
 

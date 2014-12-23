@@ -31,6 +31,11 @@ private:
 
     UIDrawable* mouse;
 
+    TextRenderer* text_renderer;
+
+    bool toggle_key_state;
+    bool debug_showing;
+
 };
 
 #endif
