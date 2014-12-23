@@ -30,9 +30,10 @@ void main() {
     Texcoord = texcoord;
 
     vec3 scaled_position = position * scale;
-    vec4 world_position = model * vec4(scaled_position, 1.0);
+    vec4 model_position = model * vec4(scaled_position, 1.0);
+    vec4 world_position = view * model_position;
     // Order is important on the multiplication!
-    gl_Position = proj * view * world_position;
+    gl_Position = proj * world_position;
 
     // Point lighting
     lights[0].position = vec3(-1.5, 0.5, 0.0);
@@ -49,11 +50,10 @@ void main() {
 
 
     for (int i = 0; i < num_lights; ++i){
-        vec3 light_vector = ((view * vec4(lights[i].position, 1.0)) - (view * model * vec4(scaled_position, 1.0))).xyz;
+        vec3 light_vector = ((view * vec4(lights[i].position, 1.0)) - (world_position)).xyz;
         lights[i].light_to_surface = light_vector;
     }
 
     surface_normal = (view * model * vec4(normal, 0.0)).xyz;
-
-    camera_to_surface = vec3(0,0,0) - (view * model * vec4(scaled_position, 1.0)).xyz;
+    camera_to_surface = vec3(0,0,0) - (world_position).xyz;
 }

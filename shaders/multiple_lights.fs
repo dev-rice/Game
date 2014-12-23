@@ -23,6 +23,7 @@ uniform sampler2D specular_texture;
 uniform sampler2D normal_map;
 uniform sampler2D emissive_texture;
 
+// Not efficient for multiple lights
 vec4 lightFragment(vec3 light_vector, vec3 light_color, float light_power){
     float intensity = light_power / (pow(light_vector.x, 2) + pow(light_vector.y, 2) + pow(light_vector.z, 2));
     
@@ -47,9 +48,6 @@ vec4 lightFragment(vec3 light_vector, vec3 light_color, float light_power){
 }
 
 void main() {
-    vec3 light_color = vec3(1.0, 0.3, 0.1);
-    float light_power = 10.0;
-    
     vec4 lit_component = vec4(0.0, 0.0, 0.0, 0.0);
     for (int i = 0; i < num_lights; ++i){
         Light light = lights[i];
