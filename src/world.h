@@ -7,6 +7,7 @@
 
 #include "level.h"
 #include "game_view.h"
+#include "debug.h"
 
 class World{
 public:
