@@ -1,0 +1,22 @@
+#ifndef Framebuffer_h
+#define Framebuffer_h
+
+#include "flat_drawable.h"
+#include "shader_loader.h"
+
+class Framebuffer {
+public:
+    Framebuffer();
+    Framebuffer(GLFWwindow*);
+
+    void setAsRenderTarget();
+    void draw();
+private:
+
+    GLuint framebuffer;
+    GLuint framebuffer_texture;
+
+    FlatDrawable* framebuffer_window;
+};
+
+#endif
