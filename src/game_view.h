@@ -10,10 +10,11 @@
 #include "text_renderer.h"
 #include "ui_drawable.h"
 #include "mouse.h"
+#include "framebuffer.h"
 
 class GameView {
 public:
-    
+
     GameView(GLFWwindow*, Level*);
 
     void update();
@@ -23,12 +24,8 @@ private:
     GLFWwindow* window;
     Level* level;
 
-    GLuint framebuffer;
-    GLuint framebuffer_texture;
-
-    FlatDrawable* framebuffer_window;
-
-    glm::mat3 mouse_projection;
+    Framebuffer* screen;
+    Framebuffer* framebuffer;
 
     Mouse* mouse;
     std::vector<UIDrawable*> ui_drawables;
@@ -37,6 +34,7 @@ private:
 
     bool toggle_key_state;
     bool debug_showing;
+
 
 };
 

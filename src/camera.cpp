@@ -70,7 +70,7 @@ glm::mat4 Camera::getViewMatrix(){
     glm::vec3 center = position - glm::vec3(0.0f, 0.0f, 1.0f);
     glm::vec3 up     = local_y;
 
-    // X rotation matrix 
+    // X rotation matrix
     glm::mat3 x_rotation_matrix = glm::mat3( 1.0f, 0.0f      , 0.0f,
                                              0.0f, cos(rotation.x), -sin(rotation.x),
                                              0.0f, sin(rotation.x), cos(rotation.x));
@@ -91,7 +91,7 @@ glm::mat4 Camera::getViewMatrix(){
 
     // Transform the center vector
     center = position - (rotation_matrix * glm::vec3(0.0f, 0.0f, 1.0f));
-    
+
     // Transform the camera axes
     local_x = rotation_matrix * glm::vec3(1.0f, 0.0f, 0.0f);
     local_y = rotation_matrix * glm::vec3(0.0f, 1.0f, 0.0f);

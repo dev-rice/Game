@@ -23,14 +23,14 @@ FlatDrawable::FlatDrawable(FlatMesh* mesh, GLuint shader_program, GLfloat width,
 void FlatDrawable::draw(){
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
-    
+
     glUseProgram(shader_program);
     mesh->bindVAO();
-    
+
     transformation = glm::mat3( width , 0     , position.x,
                                 0     , height, position.y,
                                 0     , 0     , 1           );
-    
+
     glUniformMatrix3fv(glGetUniformLocation(shader_program, "transformation"), 1, GL_FALSE, glm::value_ptr(transformation));
 
     updateUniformData();
@@ -42,7 +42,7 @@ void FlatDrawable::draw(){
 }
 
 void FlatDrawable::updateUniformData(){
-    
+
 }
 
 void FlatDrawable::attachTexture(GLuint texture){
