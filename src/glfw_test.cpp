@@ -25,16 +25,7 @@ void renderEverything(GLFWwindow*);
 void inputConsole();
 GLFWwindow* initializeGLFWWindow(int, int, bool);
 
-class Box {
-   public:
-      double length;   // Length of a box
-      double breadth;  // Breadth of a box
-      double height;   // Height of a box
-};
-
 int main(int argc, char* argv[]) {
-    Box fucking_box;
-
     // Make the randomizer random
     srand(time(NULL));
 
