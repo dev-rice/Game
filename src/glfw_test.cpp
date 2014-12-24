@@ -13,11 +13,13 @@
 #include <random>
 #include <iostream>
 #include <vector>
+#include <thread>         // std::thread
 
 #include "world.h"
 #include "text_renderer.h"
 
-void renderString(CharacterDrawable*, glm::vec2, std::string);
+void renderEverything(GLFWwindow*);
+void inputConsole();
 GLFWwindow* initializeGLFWWindow(int, int, bool);
 
 class Box {
@@ -37,6 +39,7 @@ int main(int argc, char* argv[]) {
     float width;
     float height;
     bool fullscreen;
+    bool interactive = true;
 
     glfwInit();
 
@@ -59,12 +62,34 @@ int main(int argc, char* argv[]) {
         printf("\t\tRun in fullscreen mode\n");
         printf("\t-w <width> <height>\n");
         printf("\t\tRun in windowed mode with width and height\n\n");
+        printf("\t-i\n");
+        printf("\t\tRun in interactive mode\n\n");
         return 1;
     }
 
     // Create the window
     GLFWwindow* window = initializeGLFWWindow(width, height, fullscreen);
 
+    if (interactive){
+        // Spawn a thread to handle user input
+        std::thread input(inputConsole);
+        // Render the scene
+        renderEverything(window);
+        // Ensure the input console is finished.
+        input.join();
+    } else {
+        // Render the scene
+        renderEverything(window);
+    }
+
+    // Kill glfw to end the program
+    glfwTerminate();
+
+    // Nothing went wrong!
+    return 0;
+}
+
+void renderEverything(GLFWwindow* window){
     // Create the world
     World world(window);
 
@@ -79,16 +104,19 @@ int main(int argc, char* argv[]) {
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
             glfwSetWindowShouldClose(window, GL_TRUE);
         }
-
         world.update();
-
     }
+}
 
-    // Shut down GLFW before exiting the program
-    glfwTerminate();
-
-    // Nothing went wrong!
-    return 0;
+void inputConsole(){
+    std::string input;
+    while(input != "quit"){
+        char buffer[128];
+        printf("> ");
+        scanf(" %[^\n]s", buffer);
+        printf("  '%s' is not a recognized command.\n", buffer);
+        input = buffer;
+    }
 }
 
 GLFWwindow* initializeGLFWWindow(int width, int height, bool fullscreen){
