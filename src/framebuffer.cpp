@@ -52,5 +52,8 @@ void Framebuffer::setAsRenderTarget(){
 }
 
 void Framebuffer::draw(){
-    framebuffer_window->draw();
+    // If this is an empty framebuffer then don't draw it
+    if (framebuffer_window != NULL){
+        framebuffer_window->draw();
+    }
 }
