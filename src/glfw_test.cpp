@@ -14,6 +14,9 @@
 #include <iostream>
 #include <vector>
 #include <thread>         // std::thread
+#include <ctype.h>
+#include <stdlib.h>
+#include <unistd.h>
 
 #include "world.h"
 #include "text_renderer.h"
@@ -40,10 +43,34 @@ int main(int argc, char* argv[]) {
     float height;
     bool fullscreen;
     bool interactive = false;
+    char argument;
+
+    while ((argument = getopt(argc, argv, "wfi")) != -1){
+        // printf("Read command line option:\n");
+        // printf("  argument = %c\n", argument);
+        // printf("  optopt   = %c\n", optopt);
+        // printf("  optarg   = %s\n\n", optarg);
+
+        if (argument == 'f'){
+            fullscreen = true;
+        } else if (argument == 'w'){
+            fullscreen = false;
+        } else if (argument == 'i'){
+            interactive = true;
+        } else {
+            printf("\nCommand line options:\n");
+            printf("\t-f\n");
+            printf("\t\tRun in fullscreen mode\n");
+            printf("\t-w <width> <height>\n");
+            printf("\t\tRun in windowed mode with width and height\n\n");
+            printf("\t-i\n");
+            printf("\t\tRun in interactive mode\n\n");
+            return 1;
+        }
+    }
 
     glfwInit();
-
-    if (argc == 2 && std::string(argv[1]) == "-f"){
+    if (fullscreen){
         const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
         width  = mode->width;
@@ -51,22 +78,11 @@ int main(int argc, char* argv[]) {
 
         printf("Loading in fullscreen mode with resolution: %d by %d\n",
             (int)width, (int)height);
-        fullscreen = true;
-    } else if (argc == 4 && std::string(argv[1]) == "-w") {
-        sscanf(argv[2], "%f", &width);
-        sscanf(argv[3], "%f", &height);
+    } else {
+        width = 800;
+        height = 600;
         printf("Loading in windowed mode with resolution: %d by %d\n",
             (int)width, (int)height);
-        fullscreen = false;
-    } else {
-        printf("\nCommand line options:\n");
-        printf("\t-f\n");
-        printf("\t\tRun in fullscreen mode\n");
-        printf("\t-w <width> <height>\n");
-        printf("\t\tRun in windowed mode with width and height\n\n");
-        printf("\t-i\n");
-        printf("\t\tRun in interactive mode\n\n");
-        return 1;
     }
 
     // Create the window
@@ -78,7 +94,7 @@ int main(int argc, char* argv[]) {
         // Render the scene
         renderEverything(window);
         // Ensure the input console is finished.
-        input.join();
+        // input.join();
     } else {
         // Render the scene
         renderEverything(window);
