@@ -74,7 +74,7 @@ int main(int argc, char* argv[]) {
 
     if (interactive){
         // Spawn a thread to handle user input
-        std::thread input(inputConsole, window);
+        std::thread input(inputConsole);
         // Render the scene
         renderEverything(window);
         // Ensure the input console is finished.
