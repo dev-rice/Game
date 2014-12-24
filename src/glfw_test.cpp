@@ -29,7 +29,7 @@ class Box {
 
 int main(int argc, char* argv[]) {
     Box fucking_box;
-    
+
     // Make the randomizer random
     srand(time(NULL));
 
@@ -37,17 +37,14 @@ int main(int argc, char* argv[]) {
     float width;
     float height;
     bool fullscreen;
-    
+
     glfwInit();
 
     if (argc == 2 && std::string(argv[1]) == "-f"){
-        const GLFWvidmode * mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+        const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
         width  = mode->width;
         height = mode->height;
-
-        mode = NULL;
-        delete mode;
 
         printf("Loading in fullscreen mode with resolution: %d by %d\n", (int)width, (int)height);
         fullscreen = true;
@@ -71,14 +68,11 @@ int main(int argc, char* argv[]) {
     // Create the world
     World world(window);
 
-    std::vector<float> all_fps;
-    float last_time = glfwGetTime();
-
     // Display loop
     while(!glfwWindowShouldClose(window)) {
         // Swap display/rendering buffers
         glfwSwapBuffers(window);
-        
+
         // Handle events
         glfwPollEvents();
         // Check to see if escape is pressed. If so, close the window
@@ -86,33 +80,9 @@ int main(int argc, char* argv[]) {
             glfwSetWindowShouldClose(window, GL_TRUE);
         }
 
-        float frame_time = glfwGetTime() - last_time;
-        last_time = glfwGetTime();
-        all_fps.push_back(1.0 / frame_time);
-
         world.update();
 
-        
-
     }
-
-    float total = 0;
-    float min = all_fps[0];
-    float max = all_fps[0];
-
-    for (int i = 0; i < all_fps.size(); ++i){
-        total += all_fps[i];
-        if (all_fps[i] > max){
-            max = all_fps[i];
-        }
-        if (all_fps[i] < min){
-            min = all_fps[i];
-        }
-    }
-    float average = total / all_fps.size();
-    printf("Average FPS: %f\n", average);
-    printf("Minimum FPS: %f\n", min);
-    printf("Maximum FPS: %f\n", max);
 
     // Shut down GLFW before exiting the program
     glfwTerminate();
@@ -128,7 +98,7 @@ GLFWwindow* initializeGLFWWindow(int width, int height, bool fullscreen){
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-    // Set up the MSAA level 
+    // Set up the MSAA level
     glfwWindowHint(GLFW_SAMPLES, 16);
 
     const char* windowTitle = "OpenGL";
@@ -136,13 +106,13 @@ GLFWwindow* initializeGLFWWindow(int width, int height, bool fullscreen){
     GLFWwindow* window;
 
     if (fullscreen){
-        // Fullscreen 
+        // Fullscreen
         window = glfwCreateWindow(width, height, windowTitle, glfwGetPrimaryMonitor(),
             nullptr);
 
     } else {
         // Windowed
-        window = glfwCreateWindow(width, height, windowTitle, nullptr, nullptr); 
+        window = glfwCreateWindow(width, height, windowTitle, nullptr, nullptr);
     }
 
     // Hide the mouse
@@ -162,9 +132,9 @@ GLFWwindow* initializeGLFWWindow(int width, int height, bool fullscreen){
     printf("GLSL version:   %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
     printf("\n");
 
-    // Set up the correct depth rendering 
+    // Set up the correct depth rendering
     glEnable(GL_DEPTH_TEST);
-    
+
     // Describe what constitutes the front face, and enable backface culling
     glFrontFace(GL_CCW);
     glEnable(GL_CULL_FACE);
@@ -176,5 +146,5 @@ GLFWwindow* initializeGLFWWindow(int width, int height, bool fullscreen){
     // Enable MSAA
     glEnable(GL_MULTISAMPLE);
 
-    return window;   
+    return window;
 }
