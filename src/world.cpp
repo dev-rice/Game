@@ -15,9 +15,6 @@ void World::addLevel(const char* filename){
     Level* level = new Level(window, filename);
 
     game_view = new GameView(window, level);
-    
-    level = NULL;
-    delete level;
 
 }
 

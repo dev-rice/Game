@@ -39,7 +39,7 @@ int main(int argc, char* argv[]) {
     float width;
     float height;
     bool fullscreen;
-    bool interactive = true;
+    bool interactive = false;
 
     glfwInit();
 
@@ -49,12 +49,14 @@ int main(int argc, char* argv[]) {
         width  = mode->width;
         height = mode->height;
 
-        printf("Loading in fullscreen mode with resolution: %d by %d\n", (int)width, (int)height);
+        printf("Loading in fullscreen mode with resolution: %d by %d\n",
+            (int)width, (int)height);
         fullscreen = true;
     } else if (argc == 4 && std::string(argv[1]) == "-w") {
         sscanf(argv[2], "%f", &width);
         sscanf(argv[3], "%f", &height);
-        printf("Loading in windowed mode with resolution: %d by %d\n", (int)width, (int)height);
+        printf("Loading in windowed mode with resolution: %d by %d\n",
+            (int)width, (int)height);
         fullscreen = false;
     } else {
         printf("\nCommand line options:\n");
@@ -72,7 +74,7 @@ int main(int argc, char* argv[]) {
 
     if (interactive){
         // Spawn a thread to handle user input
-        std::thread input(inputConsole);
+        std::thread input(inputConsole, window);
         // Render the scene
         renderEverything(window);
         // Ensure the input console is finished.
@@ -135,8 +137,8 @@ GLFWwindow* initializeGLFWWindow(int width, int height, bool fullscreen){
 
     if (fullscreen){
         // Fullscreen
-        window = glfwCreateWindow(width, height, windowTitle, glfwGetPrimaryMonitor(),
-            nullptr);
+        window = glfwCreateWindow(width, height, windowTitle,
+            glfwGetPrimaryMonitor(), nullptr);
 
     } else {
         // Windowed
