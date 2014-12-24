@@ -2,9 +2,7 @@
 
 World::World(GLFWwindow* window){
     this->window = window;
-
     addLevel("res/maps/axefencefire.map");
-
 }
 
 World::~World(){
@@ -12,10 +10,8 @@ World::~World(){
 }
 
 void World::addLevel(const char* filename){
-    Level* level = new Level(window, filename);
-
+    level = new Level(window, filename);
     game_view = new GameView(window, level);
-
 }
 
 void World::update(){

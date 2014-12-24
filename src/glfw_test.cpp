@@ -19,7 +19,7 @@
 #include <unistd.h>
 
 #include "world.h"
-#include "text_renderer.h"
+#include "debug.h"
 
 void renderEverything(GLFWwindow*);
 void inputConsole();
@@ -67,12 +67,12 @@ int main(int argc, char* argv[]) {
         width  = mode->width;
         height = mode->height;
 
-        printf("Loading in fullscreen mode with resolution: %d by %d\n",
+        Debug::print("Loading in fullscreen mode with resolution: %d by %d\n",
             (int)width, (int)height);
     } else {
         width = 800;
         height = 600;
-        printf("Loading in windowed mode with resolution: %d by %d\n",
+        Debug::print("Loading in windowed mode with resolution: %d by %d\n",
             (int)width, (int)height);
     }
 
