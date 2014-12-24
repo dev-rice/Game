@@ -32,11 +32,12 @@ int main(int argc, char* argv[]) {
     // Parse command line arguments
     float width;
     float height;
-    bool fullscreen;
+    bool fullscreen = false;
     bool interactive = false;
+    bool debug = false;
     char argument;
 
-    while ((argument = getopt(argc, argv, "wfi")) != -1){
+    while ((argument = getopt(argc, argv, "wfid")) != -1){
         // printf("Read command line option:\n");
         // printf("  argument = %c\n", argument);
         // printf("  optopt   = %c\n", optopt);
@@ -48,17 +49,24 @@ int main(int argc, char* argv[]) {
             fullscreen = false;
         } else if (argument == 'i'){
             interactive = true;
+        } else if (argument == 'd'){
+            debug = true;
         } else {
             printf("\nCommand line options:\n");
             printf("\t-f\n");
-            printf("\t\tRun in fullscreen mode\n");
+            printf("\t\tRun in fullscreen mode.\n");
             printf("\t-w <width> <height>\n");
-            printf("\t\tRun in windowed mode with width and height\n\n");
+            printf("\t\tRun in windowed mode with width and height.\n");
             printf("\t-i\n");
-            printf("\t\tRun in interactive mode\n\n");
+            printf("\t\tRun in interactive mode.\n");
+            printf("\t-d\n");
+            printf("\t\tShow the debug log.\n\n");
+
             return 1;
         }
     }
+
+    Debug::is_on = debug;
 
     glfwInit();
     if (fullscreen){
@@ -67,12 +75,12 @@ int main(int argc, char* argv[]) {
         width  = mode->width;
         height = mode->height;
 
-        Debug::print("Loading in fullscreen mode with resolution: %d by %d\n",
+        Debug::info("Loading in fullscreen mode with resolution: %d by %d\n",
             (int)width, (int)height);
     } else {
         width = 800;
         height = 600;
-        Debug::print("Loading in windowed mode with resolution: %d by %d\n",
+        Debug::info("Loading in windowed mode with resolution: %d by %d\n",
             (int)width, (int)height);
     }
 
@@ -163,11 +171,10 @@ GLFWwindow* initializeGLFWWindow(int width, int height, bool fullscreen){
     glewInit();
 
     // Print various info about OpenGL
-    printf("\n");
-    printf("Renderer:       %s\n", glGetString(GL_RENDERER));
-    printf("OpenGL version: %s\n", glGetString(GL_VERSION));
-    printf("GLSL version:   %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
-    printf("\n");
+    Debug::info("Renderer:       %s\n", glGetString(GL_RENDERER));
+    Debug::info("OpenGL version: %s\n", glGetString(GL_VERSION));
+    Debug::info("GLSL version:   %s\n",
+        glGetString(GL_SHADING_LANGUAGE_VERSION));
 
     // Set up the correct depth rendering
     glEnable(GL_DEPTH_TEST);
