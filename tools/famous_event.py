@@ -3,8 +3,8 @@ import sys
 
 other_events = ["The Zerg Swarms finally conquer Texas.",
                 "Humans discover Middle Earth.",
-                "The 2048 bit computer is invented."
-                "The second coming of the Christ Jesus occurs. There were no survivors."
+                "The 2048 bit computer is invented.",
+                "The second coming of the Christ Jesus occurs. There were no survivors.",
                 "Octopi, having rode in the evolutionary back seat until now, complete the conquest of space."]
 
 def getListItemsFromList(list_item):
