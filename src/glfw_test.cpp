@@ -13,7 +13,7 @@
 #include <random>
 #include <iostream>
 #include <vector>
-#include <thread>         // std::thread
+// #include <thread>         // std::thread
 #include <ctype.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -89,7 +89,7 @@ int main(int argc, char* argv[]) {
 
     if (interactive){
         // Spawn a thread to handle user input
-        std::thread input(inputConsole);
+        // std::thread input(inputConsole);
         // Render the scene
         renderEverything(window);
         // Ensure the input console is finished.
@@ -144,7 +144,7 @@ GLFWwindow* initializeGLFWWindow(int width, int height, bool fullscreen){
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
     // Set up the MSAA level
-    glfwWindowHint(GLFW_SAMPLES, 16);
+    glfwWindowHint(GLFW_SAMPLES, 8);
 
     const char* windowTitle = "OpenGL";
 
