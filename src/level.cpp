@@ -124,6 +124,18 @@ void Level::loadLevel(const char* filename){
             drawables.push_back(drawable);
 
         }
+
+        if(buffer[0] == 'p'){
+            printf("Found a particle\n");
+        }
+
+        if(buffer[0] == 'h'){
+            printf("Found a heightmap!\n");
+        }
+
+        if(buffer[0] == 'g'){
+            printf("Found a ground texture set!\n");
+        }
     }
 
 
