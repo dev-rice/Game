@@ -1,21 +1,38 @@
 #include "texture_loader.h"
 
+GLuint TextureLoader::pink;
+GLuint TextureLoader::alpha;
+
+bool TextureLoader::loaded_pink;
+bool TextureLoader::loaded_alpha;
+
 GLuint TextureLoader::loadPink(){
-    std::vector<GLfloat> pink_pixel;
-    pink_pixel.push_back(1.0f);
-    pink_pixel.push_back(0.0f);
-    pink_pixel.push_back(1.0f);
-    pink_pixel.push_back(1.0f);
-    return TextureLoader::loadTextureFromPixel(pink_pixel);
+    if (!loaded_pink){
+        std::vector<GLfloat> pink_pixel;
+        pink_pixel.push_back(1.0f);
+        pink_pixel.push_back(0.0f);
+        pink_pixel.push_back(1.0f);
+        pink_pixel.push_back(1.0f);
+
+        TextureLoader::pink = TextureLoader::loadTextureFromPixel(pink_pixel);
+        loaded_pink = true;
+    }
+    return TextureLoader::pink;
 }
 
 GLuint TextureLoader::loadAlpha(){
-    std::vector<GLfloat> alpha_pixel;
-    alpha_pixel.push_back(0.0f);
-    alpha_pixel.push_back(0.0f);
-    alpha_pixel.push_back(0.0f);
-    alpha_pixel.push_back(0.0f);
-    return TextureLoader::loadTextureFromPixel(alpha_pixel);
+    if (!loaded_alpha){
+        std::vector<GLfloat> alpha_pixel;
+        alpha_pixel.push_back(1.0f);
+        alpha_pixel.push_back(0.0f);
+        alpha_pixel.push_back(1.0f);
+        alpha_pixel.push_back(1.0f);
+
+        TextureLoader::alpha = TextureLoader::loadTextureFromPixel(alpha_pixel);
+        loaded_alpha = true;
+    }
+    return TextureLoader::alpha;
+
 }
 
 GLuint TextureLoader::loadTextureFromFile(const char* filename, GLuint filter){
@@ -47,13 +64,13 @@ GLuint TextureLoader::loadTextureFromFile(const char* filename, GLuint filter){
 
 GLuint TextureLoader::loadTextureFromPixel(std::vector<GLfloat> pixel){
     GLuint texture;
-    
+
     // Sets the default texture to be pink, 100% alpha
     glGenTextures(1, &texture);
 
     // Set the active texture
     glBindTexture(GL_TEXTURE_2D, texture);
-    
+
     // Load the image
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA,
                  GL_FLOAT, pixel.data());

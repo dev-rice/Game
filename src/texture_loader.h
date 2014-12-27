@@ -13,6 +13,8 @@
 #include <SOIL.h>
 #include <vector>
 
+#include "debug.h"
+
 class TextureLoader {
 public:
     static void loadDefaults();
@@ -20,11 +22,15 @@ public:
     static GLuint loadPink();
     static GLuint loadAlpha();
 
-    // static GLuint alpha;
-    // static Gluint pink;
-
     static GLuint loadTextureFromFile(const char*, GLuint);
     static GLuint loadTextureFromPixel(std::vector<GLfloat>);
+
+private:
+    static GLuint pink;
+    static GLuint alpha;
+
+    static bool loaded_pink;
+    static bool loaded_alpha;
 
 };
 
