@@ -54,7 +54,7 @@
 # of the ground. Then, a series of 8 pairs of images will follow. These will be in a certain pattern. The first of the
 # pair will be the actual texture to load onto the graphics card and draw on the ground. The second will be the grayscale
 # mask. A white pixel here will result in a fully opaque texture on the ground mesh.
-# These will be denoted by the tags "h" and "g" respectively.
+# These will be denoted by the tags "h" and "g" respectively. (H-> Heightmap, G->ground texture)
 # for example:
 # h heightmap.png
 # g tile_texture_1.png 1_mask.png
