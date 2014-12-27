@@ -23,10 +23,10 @@ GLuint TextureLoader::loadPink(){
 GLuint TextureLoader::loadAlpha(){
     if (!loaded_alpha){
         std::vector<GLfloat> alpha_pixel;
-        alpha_pixel.push_back(1.0f);
         alpha_pixel.push_back(0.0f);
-        alpha_pixel.push_back(1.0f);
-        alpha_pixel.push_back(1.0f);
+        alpha_pixel.push_back(0.0f);
+        alpha_pixel.push_back(0.0f);
+        alpha_pixel.push_back(0.0f);
 
         TextureLoader::alpha = TextureLoader::loadTextureFromPixel(alpha_pixel);
         loaded_alpha = true;
