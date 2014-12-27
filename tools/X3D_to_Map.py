@@ -147,17 +147,7 @@ class ObjectReference:
         return ("d %s %s %s %s %s %f %f %f %f %f %f %f\n" % (name, diff+1, spec+1, norm+1, emit+1, self.x_pos, self.y_pos, self.z_pos, self.scale, attitude, heading, bank))
 
     def getParticleDescriptor(self):
-        if(self.matchedName != ""):
-            try:
-                name = self.StaticUniqueObjectsList.index(self.matchedName)
-            except:
-                name = 0
-        else:
-            name = 0
-
-        # p 3 1.0 1.0 1.0 0.0 1.0 0.0 2.0 3600
-        # TODO tweak default settings
-        return ("p %d %f %f %f 0.0 1.0 0.0 1.0 2.0 3600" % (name, self.x_pos, self.y_pos, self.z_pos))
+        return ("p %s %f %f %f\n" % (self.x3dName[:-5], self.x_pos, self.y_pos, self.z_pos))
 
 class Converter:
     def __init__(self):
