@@ -25,12 +25,18 @@ void main() {
     gl_Position = proj * view * world_position;
 
     // Directional Lighting
-    float light_height = 10.0;
-    float distance_to_light = light_height - world_position.y;
-    vec3 direction_vector = normalize(vec3(1.0, 1.0, 0.0));
-    vec4 light_position = vec4(direction_vector.xyz, 0.0);
-    vec4 light_temp = view * (light_position);
-    light_to_surface = distance_to_light * (light_temp).xyz;
+    // float light_height = 10.0;
+    // float distance_to_light = light_height - world_position.y;
+    // vec3 direction_vector = normalize(vec3(1.0, 1.0, 0.0));
+    // vec4 light_position = vec4(direction_vector.xyz, 0.0);
+    // vec4 light_temp = view * (light_position);
+    // light_to_surface = distance_to_light * (light_temp).xyz;
+
+    // Real directional lighting
+    vec3 direction_vector = vec3(1.0, 1.0, 0.0);
+    direction_vector = normalize(direction_vector);
+    vec4 light_temp = view * vec4(direction_vector, 0.0);
+    light_to_surface = light_temp.xyz;
 
     surface_normal = (view * model * vec4(normal, 0.0)).xyz;
 

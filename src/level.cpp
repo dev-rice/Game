@@ -14,20 +14,20 @@ Level::Level(GLFWwindow* window, const char* filename){
     int width, height;
     glfwGetFramebufferSize(window, &width, &height);
     proj_matrix = glm::perspective(45.0f, (float)width / (float)height, 0.1f, 100.0f);
-    
+
     // camera = new Camera(glm::vec3(0.0f, 20.0f, 20.0f));
     // camera->setRotation(glm::vec3(0.78f, 0.0f, 0.0f));
     camera = new Camera(glm::vec3(0.0f, 2.0f, 4.0f));
     view_matrix = camera->getViewMatrix();
-    
-    GLuint doodad_vs = ShaderLoader::loadVertexShader("shaders/multiple_lights.vs");
-    GLuint doodad_fs = ShaderLoader::loadFragmentShader("shaders/multiple_lights.fs");
+
+    GLuint doodad_vs = ShaderLoader::loadVertexShader("shaders/doodad.vs");
+    GLuint doodad_fs = ShaderLoader::loadFragmentShader("shaders/doodad.fs");
     doodad_shader = ShaderLoader::combineShaderProgram(doodad_vs, doodad_fs);
 
     GLuint particle_vs = ShaderLoader::loadVertexShader("shaders/particle.vs");
     GLuint particle_fs = ShaderLoader::loadFragmentShader("shaders/particle.fs");
     GLuint particle_shader = ShaderLoader::combineShaderProgram(particle_vs, particle_fs);
-   
+
     emitters.push_back(new FireEmitter(particle_shader, glm::vec3(-1.4f, 0.0f, 0.0f), 0.7f));
     // emitters.push_back(new SmokeEmitter(particle_shader, glm::vec3(-1.4f, 0.0f, 0.0f), 0.7f));
 
@@ -45,14 +45,14 @@ void Level::draw(){
         // This is how you move things
         // glm::vec3 position = drawables[i].getPosition();
         // drawables[i].setPosition(position + glm::vec3(-0.01f, 0.0f, 0.0f));
-        
+
         drawables[i]->draw(camera, &proj_matrix);
     }
 
     for(int i(0); i < emitters.size(); ++i){
         emitters[i]->draw(camera, &proj_matrix);
     }
-    
+
 }
 
 void Level::loadLevel(const char* filename){
@@ -69,7 +69,7 @@ void Level::loadLevel(const char* filename){
     if(ifile == NULL){
         printf("Error opening file %s\n", filename);
         return;
-    
+
     }
 
      while(! feof(ifile)){
@@ -93,7 +93,7 @@ void Level::loadLevel(const char* filename){
 
         if(buffer[0] == 't'){
             sscanf(buffer, "%*c %s", texture_filename);
-            
+
             char actual[80] = "";
             strcat(actual, TEXTURE_PATH);
             strcat(actual, texture_filename);
@@ -122,12 +122,7 @@ void Level::loadLevel(const char* filename){
             Doodad* drawable = new Doodad(mesh, doodad_shader, position, rotation, scale);
             drawable->attachTextureSet(texture_set);
             drawables.push_back(drawable);
-            
-            drawable = NULL;
-            mesh = NULL;
-            
-            delete drawable;
-            delete mesh;
+
         }
     }
 
@@ -144,4 +139,3 @@ GLuint Level::getTexture(GLuint index){
 
     return texture;
 }
-
