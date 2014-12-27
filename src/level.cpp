@@ -109,10 +109,10 @@ void Level::loadLevel(const char* filename){
 
             Mesh* mesh = meshes[objectIndex];
 
-            GLuint diffuse = getTexture(0);
+            GLuint diffuse = getTexture(diffIndex);
             GLuint specular = getTexture(specIndex);
             GLuint normal = getTexture(normIndex);
-            GLuint emissive = getTexture(0);
+            GLuint emissive = getTexture(emitIndex);
 
             TextureSet texture_set(diffuse, specular, normal, emissive);
 

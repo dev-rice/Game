@@ -144,7 +144,7 @@ GLFWwindow* initializeGLFWWindow(int width, int height, bool fullscreen){
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
     // Set up the MSAA level
-    glfwWindowHint(GLFW_SAMPLES, 8);
+    glfwWindowHint(GLFW_SAMPLES, 16);
 
     const char* windowTitle = "OpenGL";
 
