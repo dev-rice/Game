@@ -40,20 +40,13 @@ Mesh* Terrain::generateMesh(){
     float u_inc = 1.0 / (float)image_width;
     float v_inc = 1.0 / (float)image_height;
 
-    // Scaling factor for the height map data
-    float amplification = 50.0f;
-
     // Now, we must generate a mesh from the data in the heightmap. We use
     // 1-BASED INDEXING because of the need for an offset
     float map_height;
     glm::vec3 pos;
     for(int y = 0; y < image_height; ++y){
         for(int x = 0; x < image_width; ++x){
-            // Scale the height for now the value is between
-            // 0.0 and 1.0
-            map_height = getHeight(x, y) / 255.0;
-            // Amplify the map height
-            map_height = amplification * map_height;
+            map_height = getHeight(x, y);
 
             // Calculate the vertex position based on the current x, y
             // coordinates, the starting position, and the calculated height
@@ -123,11 +116,20 @@ Mesh* Terrain::generateMesh(){
 }
 
 float Terrain::getHeight(int x, int y){
+    // Scaling factor for the height map data
+    float amplification = 50.0f;
+
+
     int red = image[(y*image_width + x)*4 + 0];
     int grn = image[(y*image_width + x)*4 + 1];
     int blu = image[(y*image_width + x)*4 + 2];
 
-    return float(red + grn + blu)/3.0f;
+    // Scale the height such that the value is between 0.0 and 1.0
+    float map_height = float(red + grn + blu)/(3.0f * 255.0);
+    // Amplify the map height
+    map_height = amplification * map_height;
+
+    return map_height;
 }
 
 void Terrain::attachTextureSet(TextureSet texture_set){
