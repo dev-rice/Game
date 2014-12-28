@@ -2,7 +2,7 @@
 
 World::World(GLFWwindow* window){
     this->window = window;
-    addLevel("res/maps/axefencefire.map");
+    addLevel("res/maps/heightmaptest.map");
 }
 
 World::~World(){

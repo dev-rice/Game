@@ -78,8 +78,8 @@ int main(int argc, char* argv[]) {
         Debug::info("Loading in fullscreen mode with resolution: %d by %d\n",
             (int)width, (int)height);
     } else {
-        width = 800;
-        height = 600;
+        width = 1600;
+        height = 900;
         Debug::info("Loading in windowed mode with resolution: %d by %d\n",
             (int)width, (int)height);
     }

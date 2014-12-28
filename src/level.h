@@ -13,6 +13,7 @@
 #include "shader_loader.h"
 #include "texture_loader.h"
 #include "texture_set.h"
+#include "terrain.h"
 
 #include "emitter.h"
 #include "fire_emitter.h"
@@ -29,15 +30,15 @@ public:
     Level(GLFWwindow*, const char*);
 
     void draw();
-    
+
     Camera* getCamera() {return camera;}
 
 private:
     void loadLevel(const char *);
     GLuint getTexture(GLuint);
-    
+
     GLFWwindow* window;
-    
+
     Camera* camera;
 
     std::vector<GLuint> textures;
