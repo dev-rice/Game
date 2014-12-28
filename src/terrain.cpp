@@ -41,7 +41,7 @@ Mesh* Terrain::generateMesh(){
     float v_inc = 1.0 / (float)image_height;
 
     // Scaling factor for the height map data
-    float amplification = 20.0f;
+    float amplification = 50.0f;
 
     // Now, we must generate a mesh from the data in the heightmap. We use
     // 1-BASED INDEXING because of the need for an offset
