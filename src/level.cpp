@@ -144,13 +144,16 @@ void Level::loadLevel(const char* filename){
 
     Mesh* mesh = new Mesh("res/models/ground.obj");
 
-    GLuint diffuse = TextureLoader::loadTextureFromFile("res/textures/rough_ground.png", GL_LINEAR);
-    GLuint heightmap = TextureLoader::loadTextureFromFile("res/textures/heightmap.png", GL_LINEAR);
+    // disabled for testing
+    // GLuint diffuse = TextureLoader::loadTextureFromFile("res/textures/rough_ground.png", GL_LINEAR);
+    // GLuint heightmap = TextureLoader::loadTextureFromFile("res/textures/heightmap.png", GL_LINEAR);
 
-    TextureSet texture_set(diffuse, heightmap, 0, 0);
-    Drawable* ground = new Terrain(mesh, terrain_shader, glm::vec3(0.0f, 0.0f, 0.0f), 1.0f);
-    ground->attachTextureSet(texture_set);
-    drawables.push_back(ground);
+    // TextureSet texture_set(diffuse, heightmap, 0, 0);
+
+    const char* name = "res/textures/test_heightmap.png";
+    Drawable* ground = new Terrain(mesh, terrain_shader, glm::vec3(0.0f, 0.0f, 0.0f), 1.0f, name);
+    // ground->attachTextureSet(texture_set);
+    // drawables.push_back(ground);
 
 }
 
