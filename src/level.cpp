@@ -143,12 +143,13 @@ void Level::loadLevel(const char* filename){
     GLuint terrain_shader = ShaderLoader::combineShaderProgram(terrain_vs, terrain_fs);
 
 
-    // disabled for testing
-
-    Drawable* ground = new Terrain(doodad_shader, "res/textures/test_heightmap.png");
+    std::string heightmap_filename = "res/textures/heightmap.png";
+    Drawable* ground = new Terrain(doodad_shader, heightmap_filename);
 
     GLuint diffuse = TextureLoader::loadTextureFromFile("res/textures/rough_ground.png", GL_LINEAR);
-    TextureSet texture_set(diffuse, 0, 0, 0);
+    GLuint heightmap = TextureLoader::loadTextureFromFile(heightmap_filename.c_str(), GL_LINEAR);
+
+    TextureSet texture_set(heightmap, 0, 0, 0);
     ground->attachTextureSet(texture_set);
 
     drawables.push_back(ground);

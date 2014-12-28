@@ -13,19 +13,30 @@ Terrain::Terrain(GLuint shader_program, std::string heightmap_filename) : Drawab
         Debug::error("Could not load heightmap \"%s\" into memory.\n", heightmap_filename.c_str());
     }
 
+    // After loading in the heightmap to memory, we can make a terrain mesh
+    // based on the data
     mesh = generateMesh();
 
+    // Once we have a mesh, we can load the drawable data required for this
+    // child class.
     Drawable::load(mesh, shader_program, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f);
 
 }
 
 Mesh* Terrain::generateMesh(){
+    // These two vectors hold the geometry data that will be
+    // used to instantiate the Mesh.
     std::vector<GLfloat> vertices_vector;
     std::vector<GLuint> faces_vector;
 
+    // Starting positions of the mesh
     float start_x = -image_width / 2.0;
     float start_z = -image_height / 2.0;
 
+    // These will map the x, y position on the image
+    // to u, v coordinates for the texture.
+    // TODO: Make this tile instead of load the entire
+    // image over the mesh.
     float u_inc = 1.0 / (float)image_width;
     float v_inc = 1.0 / (float)image_height;
 
@@ -35,10 +46,16 @@ Mesh* Terrain::generateMesh(){
     glm::vec3 pos;
     for(int y = 0; y < image_height; ++y){
         for(int x = 0; x < image_width; ++x){
-            map_height = getHeight(x, y) / 255.0;
+            // Scale the height for now the value is between
+            // 0.0 and 1.0
+            map_height = 10.0 * getHeight(x, y) / 255.0;
+
+            // Calculate the vertex position based on the current x, y
+            // coordinates, the starting position, and the calculated height
             pos = glm::vec3(start_x + x, map_height, start_z + y);
             printf("%f\t", map_height);
-            // Position
+
+            // Position Data
             vertices_vector.push_back(pos.x);
             vertices_vector.push_back(pos.y);
             vertices_vector.push_back(pos.z);
@@ -48,7 +65,7 @@ Mesh* Terrain::generateMesh(){
             vertices_vector.push_back(1.0f);
             vertices_vector.push_back(0.0f);
 
-            // Texcoord
+            // Texture Coordinate Data
             vertices_vector.push_back(u_inc * x);
             vertices_vector.push_back(v_inc * y);
 
@@ -56,16 +73,43 @@ Mesh* Terrain::generateMesh(){
         printf("\n");
     }
 
+    // Generate the face connections in CCW encirclements.
+    // For a set of vertices like:
+    //      0   1   2
+    //      3   4   5
+    //      6   7   8
+    //      9   10  11
+    //
+    // Faces (triangles) are:
+    //      0   3   1
+    //      1   3   4
+    //
+    //      1   4   2
+    //      2   4   5
+    //
+    //      3   6   4
+    //      4   6   7
+    //
+    //      4   7   5
+    //      5   7   8
+    //
+    //      6   9   7
+    //      7   9   10
+    //
+    //      7   10  8
+    //      8   10  11
+
+
     for (int y = 0; y < image_height - 1; ++y){
         for (int x = 0; x < image_width - 1; ++x){
-            int y_index = (y * 4);
+            int y_index = (y * image_width);
             faces_vector.push_back(x + y_index);
-            faces_vector.push_back(x + y_index + 4);
+            faces_vector.push_back(x + y_index + image_width);
             faces_vector.push_back(x + y_index + 1);
 
             faces_vector.push_back(x + y_index + 1);
-            faces_vector.push_back(x + y_index + 4);
-            faces_vector.push_back(x + y_index + 5);
+            faces_vector.push_back(x + y_index + image_width);
+            faces_vector.push_back(x + y_index + image_width + 1);
         }
     }
 
