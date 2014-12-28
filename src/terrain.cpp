@@ -33,22 +33,19 @@ Mesh* Terrain::generateMesh(){
     float start_x = -image_width / 2.0;
     float start_z = -image_height / 2.0;
 
-    // These will map the x, y position on the image
-    // to u, v coordinates for the texture.
-    // TODO: Make this tile instead of load the entire
-    // image over the mesh.
-    float u_inc = 1.0 / (float)image_width;
-    float v_inc = 1.0 / (float)image_height;
-
     // Scaling factor for the height map data
-    float amplification = 50.0f;
+    float amplification = 10.0f;
 
     // Now, we must generate a mesh from the data in the heightmap. We use
-    // 1-BASED INDEXING because of the need for an offset
+    // an offset off one for the last vertice
     float map_height;
     glm::vec3 pos;
-    for(int y = 0; y < image_height; ++y){
-        for(int x = 0; x < image_width; ++x){
+    for(int y = 0; y < image_height-1; ++y){
+        for(int x = 0; x < image_width-1; ++x){
+
+            //######################################################
+            // Upper-left vertice
+            //######################################################
             // Scale the height for now the value is between
             // 0.0 and 1.0
             map_height = getHeight(x, y) / 255.0;
@@ -58,24 +55,76 @@ Mesh* Terrain::generateMesh(){
             // Calculate the vertex position based on the current x, y
             // coordinates, the starting position, and the calculated height
             pos = glm::vec3(start_x + x, map_height, start_z + y);
-            // printf("%f\t", map_height);
 
             // Position Data
             vertices_vector.push_back(pos.x);
             vertices_vector.push_back(pos.y);
             vertices_vector.push_back(pos.z);
-
             // Normal calculations need to be done
             vertices_vector.push_back(0.0f);
             vertices_vector.push_back(1.0f);
             vertices_vector.push_back(0.0f);
-
             // Texture Coordinate Data
-            vertices_vector.push_back(u_inc * x);
-            vertices_vector.push_back(v_inc * y);
+            vertices_vector.push_back(0.0f);
+            vertices_vector.push_back(0.0f);
 
+            //######################################################
+            // Upper-right vertice
+            //######################################################
+            map_height = getHeight(x+1, y) / 255.0;
+            map_height = amplification * map_height;
+            pos = glm::vec3(start_x + x+1, map_height, start_z + y);
+
+            // Position Data
+            vertices_vector.push_back(pos.x);
+            vertices_vector.push_back(pos.y);
+            vertices_vector.push_back(pos.z);
+            // Normal calculations need to be done
+            vertices_vector.push_back(0.0f);
+            vertices_vector.push_back(1.0f);
+            vertices_vector.push_back(0.0f);
+            // Texture Coordinate Data
+            vertices_vector.push_back(1.0f);
+            vertices_vector.push_back(0.0f);
+
+            //######################################################
+            // Bottom-left vertice
+            //######################################################
+            map_height = getHeight(x, y+1) / 255.0;
+            map_height = amplification * map_height;
+            pos = glm::vec3(start_x + x, map_height, start_z + y+1);
+
+            // Position Data
+            vertices_vector.push_back(pos.x);
+            vertices_vector.push_back(pos.y);
+            vertices_vector.push_back(pos.z);
+            // Normal calculations need to be done
+            vertices_vector.push_back(0.0f);
+            vertices_vector.push_back(1.0f);
+            vertices_vector.push_back(0.0f);
+            // Texture Coordinate Data
+            vertices_vector.push_back(0.0f);
+            vertices_vector.push_back(1.0f);
+
+            //######################################################
+            // Bottom-left vertice
+            //######################################################
+            map_height = getHeight(x+1, y+1) / 255.0;
+            map_height = amplification * map_height;
+            pos = glm::vec3(start_x + x+1, map_height, start_z + y+1);
+
+            // Position Data
+            vertices_vector.push_back(pos.x);
+            vertices_vector.push_back(pos.y);
+            vertices_vector.push_back(pos.z);
+            // Normal calculations need to be done
+            vertices_vector.push_back(0.0f);
+            vertices_vector.push_back(1.0f);
+            vertices_vector.push_back(0.0f);
+            // Texture Coordinate Data
+            vertices_vector.push_back(1.0f);
+            vertices_vector.push_back(1.0f);
         }
-        // printf("\n");
     }
 
     // Generate the face connections in CCW encirclements.
@@ -105,17 +154,15 @@ Mesh* Terrain::generateMesh(){
     //      8   10  11
 
 
-    for (int y = 0; y < image_height - 1; ++y){
-        for (int x = 0; x < image_width - 1; ++x){
-            int y_index = (y * image_width);
-            faces_vector.push_back(x + y_index);
-            faces_vector.push_back(x + y_index + image_width);
-            faces_vector.push_back(x + y_index + 1);
+    for (int i = 0; i < vertices_vector.size(); i+=4){
 
-            faces_vector.push_back(x + y_index + 1);
-            faces_vector.push_back(x + y_index + image_width);
-            faces_vector.push_back(x + y_index + image_width + 1);
-        }
+        faces_vector.push_back(i + 2);
+        faces_vector.push_back(i + 1);
+        faces_vector.push_back(i + 0);
+
+        faces_vector.push_back(i + 1);
+        faces_vector.push_back(i + 2);
+        faces_vector.push_back(i + 3);
     }
 
     Mesh* ground = new Mesh(vertices_vector, faces_vector);
