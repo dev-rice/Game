@@ -145,8 +145,7 @@ Mesh* Terrain::generateMesh(){
     //      7   10  8
     //      8   10  11
 
-
-    for (int i = 0; i < vertices_vector.size(); i+=4){
+    for (int i = 0; i < vertices_vector.size() / 8.0f; i+= 4){
         faces_vector.push_back(i + 2);
         faces_vector.push_back(i + 1);
         faces_vector.push_back(i + 0);
@@ -166,7 +165,7 @@ Mesh* Terrain::generateMesh(){
     // normalized). This accounts for weighting the normal more for faces with
     // large areas.
     // The normal vector is the unit vector of the sum of each face normal.
-    /*int number_of_normals = vertices_vector.size() / 8.0f;
+    int number_of_normals = vertices_vector.size() / 8.0f;
     std::vector<glm::vec3> normals(number_of_normals);
 
     GLuint A_index, B_index, C_index;
@@ -202,7 +201,7 @@ Mesh* Terrain::generateMesh(){
         vertices_vector[index + 4] = normal.y;
         vertices_vector[index + 5] = normal.z;
 
-    }*/
+    }
 
     Mesh* ground = new Mesh(vertices_vector, faces_vector);
     return ground;
