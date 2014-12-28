@@ -33,9 +33,6 @@ Mesh* Terrain::generateMesh(){
     float start_x = -image_width / 2.0;
     float start_z = -image_height / 2.0;
 
-    // Scaling factor for the height map data
-    float amplification = 10.0f;
-
     // Now, we must generate a mesh from the data in the heightmap. We use
     // an offset off one for the last vertice
     float map_height;
@@ -48,9 +45,7 @@ Mesh* Terrain::generateMesh(){
             //######################################################
             // Scale the height for now the value is between
             // 0.0 and 1.0
-            map_height = getHeight(x, y) / 255.0;
-            // Amplify the map height
-            map_height = amplification * map_height;
+            map_height = getHeight(x, y);
 
             // Calculate the vertex position based on the current x, y
             // coordinates, the starting position, and the calculated height
@@ -71,8 +66,7 @@ Mesh* Terrain::generateMesh(){
             //######################################################
             // Upper-right vertex
             //######################################################
-            map_height = getHeight(x+1, y) / 255.0;
-            map_height = amplification * map_height;
+            map_height = getHeight(x+1, y);
             pos = glm::vec3(start_x + x+1, map_height, start_z + y);
 
             // Position Data
@@ -90,8 +84,7 @@ Mesh* Terrain::generateMesh(){
             //######################################################
             // Bottom-left vertex
             //######################################################
-            map_height = getHeight(x, y+1) / 255.0;
-            map_height = amplification * map_height;
+            map_height = getHeight(x, y+1);
             pos = glm::vec3(start_x + x, map_height, start_z + y+1);
 
             // Position Data
@@ -109,8 +102,7 @@ Mesh* Terrain::generateMesh(){
             //######################################################
             // Bottom-left vertex
             //######################################################
-            map_height = getHeight(x+1, y+1) / 255.0;
-            map_height = amplification * map_height;
+            map_height = getHeight(x+1, y+1);
             pos = glm::vec3(start_x + x+1, map_height, start_z + y+1);
 
             // Position Data
@@ -155,7 +147,6 @@ Mesh* Terrain::generateMesh(){
 
 
     for (int i = 0; i < vertices_vector.size(); i+=4){
-
         faces_vector.push_back(i + 2);
         faces_vector.push_back(i + 1);
         faces_vector.push_back(i + 0);
