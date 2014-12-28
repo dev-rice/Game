@@ -33,7 +33,9 @@ void main() {
     // light_to_surface = distance_to_light * (light_temp).xyz;
 
     // Real directional lighting
-    vec3 direction_vector = vec3(1.0, 1.0, 0.0);
+    // vec3 direction_vector = vec3(1.0, 1.0, 0.0);
+    vec3 direction_vector = vec3(sin(0.25 * time), cos(0.25 * time), 0.0);
+
     direction_vector = normalize(direction_vector);
     vec4 light_temp = view * vec4(direction_vector, 0.0);
     light_to_surface = light_temp.xyz;
