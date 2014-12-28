@@ -13,7 +13,7 @@ Level::Level(GLFWwindow* window, const char* filename){
 
     int width, height;
     glfwGetFramebufferSize(window, &width, &height);
-    proj_matrix = glm::perspective(45.0f, (float)width / (float)height, 0.1f, 100.0f);
+    proj_matrix = glm::perspective(45.0f, (float)width / (float)height, 0.1f, 500.0f);
 
     // camera = new Camera(glm::vec3(0.0f, 20.0f, 20.0f));
     // camera->setRotation(glm::vec3(0.78f, 0.0f, 0.0f));

@@ -40,6 +40,9 @@ Mesh* Terrain::generateMesh(){
     float u_inc = 1.0 / (float)image_width;
     float v_inc = 1.0 / (float)image_height;
 
+    // Scaling factor for the height map data
+    float amplification = 20.0f;
+
     // Now, we must generate a mesh from the data in the heightmap. We use
     // 1-BASED INDEXING because of the need for an offset
     float map_height;
@@ -48,12 +51,14 @@ Mesh* Terrain::generateMesh(){
         for(int x = 0; x < image_width; ++x){
             // Scale the height for now the value is between
             // 0.0 and 1.0
-            map_height = 10.0 * getHeight(x, y) / 255.0;
+            map_height = getHeight(x, y) / 255.0;
+            // Amplify the map height
+            map_height = amplification * map_height;
 
             // Calculate the vertex position based on the current x, y
             // coordinates, the starting position, and the calculated height
             pos = glm::vec3(start_x + x, map_height, start_z + y);
-            printf("%f\t", map_height);
+            // printf("%f\t", map_height);
 
             // Position Data
             vertices_vector.push_back(pos.x);
@@ -70,7 +75,7 @@ Mesh* Terrain::generateMesh(){
             vertices_vector.push_back(v_inc * y);
 
         }
-        printf("\n");
+        // printf("\n");
     }
 
     // Generate the face connections in CCW encirclements.
