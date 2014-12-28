@@ -111,13 +111,72 @@ Mesh* Terrain::generateMesh(){
         }
     }
 
+    // Normal calculations:
+    //
+    // Calculate a normal for a vertex by taking the cross product of the
+    // two edges.
+    //
+    // For smooth shading, each vertex will have multiple faces attached to it
+    // The resultant normal is the sum of the normals for each face (not
+    // normalized). This accounts for weighting the normal more for faces with
+    // large areas.
+    // The normal vector is the unit vector of the sum of each face normal.
+    int number_of_normals = vertices_vector.size() / 8.0f;
+    std::vector<glm::vec3> normals(number_of_normals);
+
+    GLuint A_index, B_index, C_index;
+    glm::vec3 A, B, C;
+    glm::vec3 current_normal;
+    for (int i = 0; i < faces_vector.size(); i += 3){
+        // The normal is uniform across a face so we can
+        // calculate the normal for the first vertex in
+        // a face and set the others to that.
+        A_index = faces_vector[i];
+        B_index = faces_vector[i + 1];
+        C_index = faces_vector[i + 2];
+
+        A = getVertexPosition(A_index, &vertices_vector);
+        B = getVertexPosition(B_index, &vertices_vector);
+        C = getVertexPosition(C_index, &vertices_vector);
+
+        current_normal = glm::cross((B - A), (C - A));
+
+        normals[A_index] += current_normal;
+        normals[B_index] += current_normal;
+        normals[C_index] += current_normal;
+
+    }
+
+    for (int i = 0; i < normals.size(); ++i){
+        normals[i] = glm::normalize(normals[i]);
+        glm::vec3 normal = normals[i];
+        // Debug::info("%d: <%f, %f, %f>\n", i, normal.x, normal.y, normal.z);
+
+        int index = i * 8;
+        vertices_vector[index + 3] = normal.x;
+        vertices_vector[index + 4] = normal.y;
+        vertices_vector[index + 5] = normal.z;
+
+    }
+
     Mesh* ground = new Mesh(vertices_vector, faces_vector);
     return ground;
 }
 
+glm::vec3 Terrain::getVertexPosition(GLuint index, std::vector<GLfloat>* vertices){
+    glm::vec3 pos;
+    index = index * 8;
+
+    pos.x = vertices->at(index);
+    pos.y = vertices->at(index + 1);
+    pos.z = vertices->at(index + 2);
+
+    return pos;
+}
+
 float Terrain::getHeight(int x, int y){
     // Scaling factor for the height map data
-    float amplification = 50.0f;
+    float amplification = 20.0f;
 
 
     int red = image[(y*image_width + x)*4 + 0];
@@ -133,17 +192,18 @@ float Terrain::getHeight(int x, int y){
 }
 
 void Terrain::attachTextureSet(TextureSet texture_set){
-    // Prepare the locations for textures to load into and give this drawable some textures. These are specific
+    // Prepare the loacations for textures to load into and give this drawable some textures. These are specific
     // to Drawable for now but will later be moved down to the child classes such that they can specify different
     // amounts and types of textures to use.
 
     // When we set this uniform we tell the shader that "diffuse_texture" will be loaded from the 0th texture, and so on.
     // The actual images these numbers point to are specified later in bindTextures().
     glUniform1i(glGetUniformLocation(shader_program, "diffuse_texture"), 0);
-    glUniform1i(glGetUniformLocation(shader_program, "heightmap"), 1);
+    glUniform1i(glGetUniformLocation(shader_program, "specular_texture"), 1);
+    glUniform1i(glGetUniformLocation(shader_program, "normal_map"), 2);
+    glUniform1i(glGetUniformLocation(shader_program, "emissive_texture"), 3);
 
     this->texture_set = new TextureSet(texture_set);
-
 }
 
 void Terrain::bindTextures(){
@@ -156,6 +216,11 @@ void Terrain::bindTextures(){
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, texture_set->specular);
 
+    glActiveTexture(GL_TEXTURE2);
+    glBindTexture(GL_TEXTURE_2D, texture_set->normal);
+
+    glActiveTexture(GL_TEXTURE3);
+    glBindTexture(GL_TEXTURE_2D, texture_set->emissive);
 }
 
 void Terrain::updateUniformData(){

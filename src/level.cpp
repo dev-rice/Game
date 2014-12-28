@@ -149,7 +149,7 @@ void Level::loadLevel(const char* filename){
     GLuint diffuse = TextureLoader::loadTextureFromFile("res/textures/rough_ground.png", GL_LINEAR);
     GLuint heightmap = TextureLoader::loadTextureFromFile(heightmap_filename.c_str(), GL_LINEAR);
 
-    TextureSet texture_set(heightmap, 0, 0, 0);
+    TextureSet texture_set(diffuse, 0, 0, 0);
     ground->attachTextureSet(texture_set);
 
     drawables.push_back(ground);

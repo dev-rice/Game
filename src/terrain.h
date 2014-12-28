@@ -23,6 +23,7 @@ private:
     void updateUniformData();
 
     Mesh* generateMesh();
+    glm::vec3 getVertexPosition(GLuint, std::vector<GLfloat>*);
     float getHeight(int, int);
 
     TextureSet* texture_set;
