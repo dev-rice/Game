@@ -24,7 +24,7 @@ void TextureSet::load(GLuint diff, GLuint spec, GLuint norm, GLuint emit){
             this->normal = alpha;
             this->emissive = emit;
         }
-        
+
     }
     else {
         this->diffuse = diff;

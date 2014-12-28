@@ -5,6 +5,7 @@
 #define Level_h
 
 #include <vector>
+#include <string>
 
 #include "drawable.h"
 #include "doodad.h"

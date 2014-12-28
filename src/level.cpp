@@ -126,15 +126,15 @@ void Level::loadLevel(const char* filename){
         }
 
         if(buffer[0] == 'p'){
-            printf("Found a particle\n");
+            Debug::info("Found a particle\n");
         }
 
         if(buffer[0] == 'h'){
-            printf("Found a heightmap!\n");
+            Debug::info("Found a heightmap!\n");
         }
 
         if(buffer[0] == 'g'){
-            printf("Found a ground texture set!\n");
+            Debug::info("Found a ground texture set!\n");
         }
     }
 
@@ -142,18 +142,16 @@ void Level::loadLevel(const char* filename){
     GLuint terrain_fs = ShaderLoader::loadFragmentShader("shaders/terrain.fs");
     GLuint terrain_shader = ShaderLoader::combineShaderProgram(terrain_vs, terrain_fs);
 
-    Mesh* mesh = new Mesh("res/models/ground.obj");
 
     // disabled for testing
-    // GLuint diffuse = TextureLoader::loadTextureFromFile("res/textures/rough_ground.png", GL_LINEAR);
-    // GLuint heightmap = TextureLoader::loadTextureFromFile("res/textures/heightmap.png", GL_LINEAR);
 
-    // TextureSet texture_set(diffuse, heightmap, 0, 0);
+    Drawable* ground = new Terrain(doodad_shader, "res/textures/test_heightmap.png");
 
-    const char* name = "res/textures/test_heightmap.png";
-    Drawable* ground = new Terrain(mesh, terrain_shader, glm::vec3(0.0f, 0.0f, 0.0f), 1.0f, name);
-    // ground->attachTextureSet(texture_set);
-    // drawables.push_back(ground);
+    GLuint diffuse = TextureLoader::loadTextureFromFile("res/textures/rough_ground.png", GL_LINEAR);
+    TextureSet texture_set(diffuse, 0, 0, 0);
+    ground->attachTextureSet(texture_set);
+
+    drawables.push_back(ground);
 
 }
 
