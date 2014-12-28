@@ -14,7 +14,6 @@
 #include "texture_loader.h"
 #include "texture_set.h"
 
-#include "map.h"
 #include "emitter.h"
 #include "fire_emitter.h"
 #include "snow_emitter.h"
