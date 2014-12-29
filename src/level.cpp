@@ -26,13 +26,9 @@ Level::Level(GLFWwindow* window, const char* filename){
 
     GLuint particle_vs = ShaderLoader::loadVertexShader("shaders/particle.vs");
     GLuint particle_fs = ShaderLoader::loadFragmentShader("shaders/particle.fs");
-    GLuint particle_shader = ShaderLoader::combineShaderProgram(particle_vs, particle_fs);
-
-    emitters.push_back(new FireEmitter(particle_shader, glm::vec3(-1.4f, 0.0f, 0.0f), 0.7f));
-    // emitters.push_back(new SmokeEmitter(particle_shader, glm::vec3(-1.4f, 0.0f, 0.0f), 0.7f));
+    particle_shader = ShaderLoader::combineShaderProgram(particle_vs, particle_fs);
 
     loadLevel(filename);
-
 }
 
 void Level::draw(){
@@ -60,6 +56,7 @@ void Level::loadLevel(const char* filename){
     char buffer[128];
     char object_filename[40];
     char texture_filename[40];
+    char particle_name[10];
     int objectIndex, diffIndex, specIndex, normIndex, emitIndex;
     float x, y, z, scale, x_rot, y_rot, z_rot;
 
@@ -126,7 +123,12 @@ void Level::loadLevel(const char* filename){
         }
 
         if(buffer[0] == 'p'){
-            Debug::info("Found a particle\n");
+            sscanf(buffer, "%*c %s %f %f %f", particle_name, &x, &y, &z);
+            Emitter *e;
+            if(strcmp (particle_name, "fire") == 0){
+                e = new FireEmitter(particle_shader, glm::vec3(x, y, z), 0.7f);
+            }
+            emitters.push_back(e);   
         }
 
         if(buffer[0] == 'h'){

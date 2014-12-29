@@ -48,6 +48,7 @@ private:
     std::vector<Emitter*> emitters;
 
     GLuint doodad_shader;
+    GLuint particle_shader;
 
     glm::mat4 view_matrix;
     glm::mat4 proj_matrix;
