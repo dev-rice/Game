@@ -14,7 +14,7 @@ Terrain::Terrain(GLuint shader_program, std::string heightmap_filename) : Drawab
 
     if(image){
         Debug::info("Loaded heightmap \"%s\" (%d by %d) into memory.\n", heightmap_filename.c_str(),
-            image_width, image_height);
+            image_width, image_height );
     } else {
         Debug::error("Could not load heightmap \"%s\" into memory.\n", heightmap_filename.c_str());
     }
@@ -248,44 +248,6 @@ float Terrain::getHeight(int x, int y){
     map_height = amplification * map_height;
 
     return map_height;
-}
-
-glm::vec3 Terrain::getVertexPosition(GLuint index, std::vector<GLfloat>* vertices){
-    glm::vec3 pos;
-    index = index * 8;
-
-    pos.x = vertices->at(index);
-    pos.y = vertices->at(index + 1);
-    pos.z = vertices->at(index + 2);
-
-    return pos;
-}
-
-Terrain::VertexType Terrain::getVertexType(glm::vec3 vertex){
-    // Starting positions of the mesh
-    float start_x = -image_width / 2.0;
-    float start_z = -image_height / 2.0;
-
-    // bool corner = ((vertex.x == start_x) && (vertex.z == start_z)) ||
-    //               ((vertex.x == start_x) && (vertex.z == -start_z - 1)) ||
-    //               ((vertex.x == -start_x - 1) && (vertex.z == start_z)) ||
-    //               ((vertex.x == -start_x - 1) && (vertex.z == -start_z - 1));
-
-    bool x_edge = (vertex.x == start_x) || (vertex.x == -start_x - 1);
-    bool z_edge = (vertex.z == start_z) || (vertex.z == -start_z - 1);
-    bool corner = x_edge && z_edge;
-
-    // If the vertex is on a corner
-    if (corner) {
-        return Terrain::VertexType::CORNER;
-    } else if (x_edge) {
-        return Terrain::VertexType::X_EDGE;
-    } else if (z_edge) {
-        return Terrain::VertexType::Z_EDGE;
-    } else {
-        return Terrain::VertexType::INTERNAL;
-    }
-
 }
 
 void Terrain::attachTextureSet(TextureSet texture_set){
