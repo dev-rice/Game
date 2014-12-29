@@ -124,11 +124,20 @@ void Level::loadLevel(const char* filename){
 
         if(buffer[0] == 'p'){
             sscanf(buffer, "%*c %s %f %f %f", particle_name, &x, &y, &z);
-            Emitter *e;
-            if(strcmp (particle_name, "fire") == 0){
+            Emitter *e = 0;
+            if(strcmp(particle_name, "fire") == 0){
                 e = new FireEmitter(particle_shader, glm::vec3(x, y, z), 0.7f);
+            } else if (strcmp(particle_name, "snow") == 0){
+                e = new SnowEmitter(particle_shader, glm::vec3(x, y, z));
+            } else if (strcmp(particle_name, "smoke") == 0){
+                e = new SmokeEmitter(particle_shader, glm::vec3(x, y, z), 0.7f);
             }
-            emitters.push_back(e);   
+
+            if(e){
+                emitters.push_back(e);
+            } else {
+                Debug::error("Could not load particle type: %s\n", particle_name);
+            }
         }
 
         if(buffer[0] == 'h'){

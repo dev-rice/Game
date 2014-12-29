@@ -26,6 +26,7 @@ d 3 8 0 0 0 -5.000000 0.150000 -2.000000 0.100000 0.000000 0.000000 0.000000
 
 # Particle definitions (p)
 p fire -1.451524 0.000000 0.000000
+p smoke -1.451524 0.000000 0.000000
 
 # Ground specification - Begin writing here (h, g)
 h heightmap.png
