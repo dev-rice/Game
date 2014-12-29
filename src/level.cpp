@@ -142,6 +142,23 @@ void Level::loadLevel(const char* filename){
 
         if(buffer[0] == 'h'){
             Debug::info("Found a heightmap!\n");
+            char parameter[64];
+            sscanf(buffer, "%*c %s", parameter);
+
+            char heightmap_filename[80] = "";
+            strcat(heightmap_filename, TEXTURE_PATH);
+            strcat(heightmap_filename, parameter);
+
+            std::string heightmap_filename_str(heightmap_filename);
+            Drawable* ground = new Terrain(doodad_shader, heightmap_filename_str);
+
+            GLuint diffuse = TextureLoader::loadTextureFromFile("res/textures/rough_ground.png", GL_LINEAR);
+            GLuint heightmap = TextureLoader::loadTextureFromFile(heightmap_filename, GL_LINEAR);
+
+            TextureSet texture_set(diffuse, 0, 0, 0);
+            ground->attachTextureSet(texture_set);
+
+            drawables.push_back(ground);
         }
 
         if(buffer[0] == 'g'){
@@ -149,16 +166,7 @@ void Level::loadLevel(const char* filename){
         }
     }
 
-    std::string heightmap_filename = "res/textures/heightmap.png";
-    Drawable* ground = new Terrain(doodad_shader, heightmap_filename);
 
-    GLuint diffuse = TextureLoader::loadTextureFromFile("res/textures/rough_ground.png", GL_LINEAR);
-    GLuint heightmap = TextureLoader::loadTextureFromFile(heightmap_filename.c_str(), GL_LINEAR);
-
-    TextureSet texture_set(diffuse, 0, 0, 0);
-    ground->attachTextureSet(texture_set);
-
-    drawables.push_back(ground);
 
 }
 
