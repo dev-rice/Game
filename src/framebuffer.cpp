@@ -34,12 +34,11 @@ Framebuffer::Framebuffer(GLFWwindow* window){
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rboDepthStencil);
 
     // Load framebuffer shader
-    GLuint framebuffer_vs = ShaderLoader::loadVertexShader("shaders/framebuffer.vs");
-    GLuint framebuffer_fs = ShaderLoader::loadFragmentShader("shaders/framebuffer.fs");
+    GLuint framebuffer_vs = ShaderLoader::loadVertexShader("shaders/framebuffer_fxaa.vs");
+    GLuint framebuffer_fs = ShaderLoader::loadFragmentShader("shaders/framebuffer_fxaa.fs");
     GLuint framebuffer_shader = ShaderLoader::combineShaderProgram(framebuffer_vs, framebuffer_fs);
 
-    // Is slow for some reason
-    // framebuffer_window = new FlatDrawable(flat_mesh, framebuffer_shader);
+    // Create the window to draw the framebuffer onto
     framebuffer_window = new FlatDrawable(flat_mesh, framebuffer_shader, 1.0, 1.0, glm::vec2(0.0, 0.0));
     framebuffer_window->attachTexture(framebuffer_texture);
 
@@ -47,7 +46,7 @@ Framebuffer::Framebuffer(GLFWwindow* window){
 
 void Framebuffer::setAsRenderTarget(){
     glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-    glClearColor(0.8, 0.8, 1.0, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 

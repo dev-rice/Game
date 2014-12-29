@@ -144,7 +144,7 @@ GLFWwindow* initializeGLFWWindow(int width, int height, bool fullscreen){
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
     // Set up the MSAA level
-    glfwWindowHint(GLFW_SAMPLES, 16);
+    // glfwWindowHint(GLFW_SAMPLES, 16);
 
     const char* windowTitle = "OpenGL";
 
@@ -188,7 +188,7 @@ GLFWwindow* initializeGLFWWindow(int width, int height, bool fullscreen){
     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 
     // Enable MSAA
-    glEnable(GL_MULTISAMPLE);
+    // glEnable(GL_MULTISAMPLE);
 
     return window;
 }
