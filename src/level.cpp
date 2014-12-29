@@ -149,11 +149,6 @@ void Level::loadLevel(const char* filename){
         }
     }
 
-    GLuint terrain_vs = ShaderLoader::loadVertexShader("shaders/terrain.vs");
-    GLuint terrain_fs = ShaderLoader::loadFragmentShader("shaders/terrain.fs");
-    GLuint terrain_shader = ShaderLoader::combineShaderProgram(terrain_vs, terrain_fs);
-
-
     std::string heightmap_filename = "res/textures/heightmap.png";
     Drawable* ground = new Terrain(doodad_shader, heightmap_filename);
 
