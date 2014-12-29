@@ -1,5 +1,10 @@
 #include "terrain.h"
 
+// From http://www.exploringbinary.com/ten-ways-to-check-if-an-integer-is-a-power-of-two-in-c/
+int isPowerOfTwo (unsigned int x){
+    return ((x != 0) && ((x & (~x + 1)) == x));
+}
+
 Terrain::Terrain(GLuint shader_program, std::string heightmap_filename) : Drawable() {
     // This is where generate the new mesh and override the one passed in by
     // the constructor. This is to save space in the game files, so we don't have a terrain mesh
@@ -8,14 +13,22 @@ Terrain::Terrain(GLuint shader_program, std::string heightmap_filename) : Drawab
     image = SOIL_load_image(heightmap_filename.c_str(), &image_width, &image_height, 0, SOIL_LOAD_RGBA);
 
     if(image){
-        Debug::info("Loaded heightmap \"%s\" into memory.\n", heightmap_filename.c_str());
+        Debug::info("Loaded heightmap \"%s\" (%d by %d) into memory.\n", heightmap_filename.c_str(),
+            image_width, image_height);
     } else {
         Debug::error("Could not load heightmap \"%s\" into memory.\n", heightmap_filename.c_str());
     }
 
+    if(!isPowerOfTwo(image_width) || !isPowerOfTwo(image_height)){
+        Debug::warning("Terrain map size is not base 2. Mesh generation may behave incorrectly.\n");
+    }
+
     // After loading in the heightmap to memory, we can make a terrain mesh
     // based on the data
+    float start_time = glfwGetTime();
     mesh = generateMesh();
+    float delta_time = glfwGetTime() - start_time;
+    Debug::info("Took %f seconds to generate the terrain mesh.\n", delta_time);
 
     // Once we have a mesh, we can load the drawable data required for this
     // child class.
@@ -26,25 +39,26 @@ Terrain::Terrain(GLuint shader_program, std::string heightmap_filename) : Drawab
 Mesh* Terrain::generateMesh(){
     // These two vectors hold the geometry data that will be
     // used to instantiate the Mesh.
-    std::vector<GLfloat> vertices_vector;
+    std::vector<glm::vec3> vertices_vector;
     std::vector<GLuint> faces_vector;
 
     // Starting positions of the mesh
     float start_x = -image_width / 2.0;
     float start_z = -image_height / 2.0;
 
+    // These will map the x, y position on the image
+    // to u, v coordinates for the texture.
+    // TODO: Make this tile instead of load the entire
+    // image over the mesh.
+    float u_inc = 1.0 / (float)image_width;
+    float v_inc = 1.0 / (float)image_height;
+
     // Now, we must generate a mesh from the data in the heightmap. We use
-    // an offset off one for the last vertice
+    // 1-BASED INDEXING because of the need for an offset
     float map_height;
     glm::vec3 pos;
-    for(int y = 0; y < image_height-1; ++y){
-        for(int x = 0; x < image_width-1; ++x){
-
-            //######################################################
-            // Upper-left vertex
-            //######################################################
-            // Scale the height for now the value is between
-            // 0.0 and 1.0
+    for(int y = 0; y < image_height; ++y){
+        for(int x = 0; x < image_width; ++x){
             map_height = getHeight(x, y);
 
             // Calculate the vertex position based on the current x, y
@@ -52,70 +66,7 @@ Mesh* Terrain::generateMesh(){
             pos = glm::vec3(start_x + x, map_height, start_z + y);
 
             // Position Data
-            vertices_vector.push_back(pos.x);
-            vertices_vector.push_back(pos.y);
-            vertices_vector.push_back(pos.z);
-            // Normal calculations need to be done
-            vertices_vector.push_back(0.0f);
-            vertices_vector.push_back(1.0f);
-            vertices_vector.push_back(0.0f);
-            // Texture Coordinate Data
-            vertices_vector.push_back(0.0f);
-            vertices_vector.push_back(0.0f);
-
-            //######################################################
-            // Upper-right vertex
-            //######################################################
-            map_height = getHeight(x+1, y);
-            pos = glm::vec3(start_x + x+1, map_height, start_z + y);
-
-            // Position Data
-            vertices_vector.push_back(pos.x);
-            vertices_vector.push_back(pos.y);
-            vertices_vector.push_back(pos.z);
-            // Normal calculations need to be done
-            vertices_vector.push_back(0.0f);
-            vertices_vector.push_back(1.0f);
-            vertices_vector.push_back(0.0f);
-            // Texture Coordinate Data
-            vertices_vector.push_back(1.0f);
-            vertices_vector.push_back(0.0f);
-
-            //######################################################
-            // Bottom-left vertex
-            //######################################################
-            map_height = getHeight(x, y+1);
-            pos = glm::vec3(start_x + x, map_height, start_z + y+1);
-
-            // Position Data
-            vertices_vector.push_back(pos.x);
-            vertices_vector.push_back(pos.y);
-            vertices_vector.push_back(pos.z);
-            // Normal calculations need to be done
-            vertices_vector.push_back(0.0f);
-            vertices_vector.push_back(1.0f);
-            vertices_vector.push_back(0.0f);
-            // Texture Coordinate Data
-            vertices_vector.push_back(0.0f);
-            vertices_vector.push_back(1.0f);
-
-            //######################################################
-            // Bottom-left vertex
-            //######################################################
-            map_height = getHeight(x+1, y+1);
-            pos = glm::vec3(start_x + x+1, map_height, start_z + y+1);
-
-            // Position Data
-            vertices_vector.push_back(pos.x);
-            vertices_vector.push_back(pos.y);
-            vertices_vector.push_back(pos.z);
-            // Normal calculations need to be done
-            vertices_vector.push_back(0.0f);
-            vertices_vector.push_back(1.0f);
-            vertices_vector.push_back(0.0f);
-            // Texture Coordinate Data
-            vertices_vector.push_back(1.0f);
-            vertices_vector.push_back(1.0f);
+            vertices_vector.push_back(pos);
         }
     }
 
@@ -124,7 +75,6 @@ Mesh* Terrain::generateMesh(){
     //      0   1   2
     //      3   4   5
     //      6   7   8
-    //      9   10  11
     //
     // Faces (triangles) are:
     //      0   3   1
@@ -138,21 +88,18 @@ Mesh* Terrain::generateMesh(){
     //
     //      4   7   5
     //      5   7   8
-    //
-    //      6   9   7
-    //      7   9   10
-    //
-    //      7   10  8
-    //      8   10  11
 
-    for (int i = 0; i < vertices_vector.size() / 8.0f; i+= 4){
-        faces_vector.push_back(i + 2);
-        faces_vector.push_back(i + 1);
-        faces_vector.push_back(i + 0);
+    for (int y = 0; y < image_height - 1; ++y){
+        for (int x = 0; x < image_width - 1; ++x){
+            int y_index = (y * image_width);
+            faces_vector.push_back(x + y_index);
+            faces_vector.push_back(x + y_index + image_width);
+            faces_vector.push_back(x + y_index + 1);
 
-        faces_vector.push_back(i + 1);
-        faces_vector.push_back(i + 2);
-        faces_vector.push_back(i + 3);
+            faces_vector.push_back(x + y_index + 1);
+            faces_vector.push_back(x + y_index + image_width);
+            faces_vector.push_back(x + y_index + image_width + 1);
+        }
     }
 
     // Normal calculations:
@@ -165,46 +112,142 @@ Mesh* Terrain::generateMesh(){
     // normalized). This accounts for weighting the normal more for faces with
     // large areas.
     // The normal vector is the unit vector of the sum of each face normal.
-    int number_of_normals = vertices_vector.size() / 8.0f;
-    std::vector<glm::vec3> normals(number_of_normals);
+    std::vector<glm::vec3> normals(vertices_vector.size());
 
-    GLuint A_index, B_index, C_index;
-    glm::vec3 A, B, C;
+    GLuint a_index, b_index, c_index;
+    glm::vec3 a, b, c;
     glm::vec3 current_normal;
     for (int i = 0; i < faces_vector.size(); i += 3){
         // The normal is uniform across a face so we can
         // calculate the normal for the first vertex in
         // a face and set the others to that.
-        A_index = faces_vector[i];
-        B_index = faces_vector[i + 1];
-        C_index = faces_vector[i + 2];
+        a_index = faces_vector[i];
+        b_index = faces_vector[i + 1];
+        c_index = faces_vector[i + 2];
 
-        A = getVertexPosition(A_index, &vertices_vector);
-        B = getVertexPosition(B_index, &vertices_vector);
-        C = getVertexPosition(C_index, &vertices_vector);
+        a = vertices_vector[a_index];
+        b = vertices_vector[b_index];
+        c = vertices_vector[c_index];
 
-        current_normal = glm::cross((B - A), (C - A));
+        current_normal = glm::cross((b - a), (c - a));
 
-        normals[A_index] += current_normal;
-        normals[B_index] += current_normal;
-        normals[C_index] += current_normal;
+        normals[a_index] += current_normal;
+        normals[b_index] += current_normal;
+        normals[c_index] += current_normal;
 
     }
 
+    // Normalize the normals
     for (int i = 0; i < normals.size(); ++i){
         normals[i] = glm::normalize(normals[i]);
-        glm::vec3 normal = normals[i];
-        // Debug::info("%d: <%f, %f, %f>\n", i, normal.x, normal.y, normal.z);
-
-        int index = i * 8;
-        vertices_vector[index + 3] = normal.x;
-        vertices_vector[index + 4] = normal.y;
-        vertices_vector[index + 5] = normal.z;
-
     }
 
-    Mesh* ground = new Mesh(vertices_vector, faces_vector);
+    // Create the final vertex vector
+    std::vector<GLfloat> vertices;
+    for(int y = 0; y < image_height - 1; ++y){
+        for(int x = 0; x < image_width - 1; ++x){
+
+            int i;
+            glm::vec3 vertex;
+            glm::vec3 normal;
+            // Upper left
+            i = x + ((image_width) * y);
+            vertex = vertices_vector[i];
+            normal = normals[i];
+
+            vertices.push_back(vertex.x);
+            vertices.push_back(vertex.y);
+            vertices.push_back(vertex.z);
+
+            vertices.push_back(normal.x);
+            vertices.push_back(normal.y);
+            vertices.push_back(normal.z);
+
+            vertices.push_back(0.0f);
+            vertices.push_back(0.0f);
+
+            // Upper right
+            i = x + ((image_width) * y) + 1;
+            vertex = vertices_vector[i];
+            normal = normals[i];
+
+            vertices.push_back(vertex.x);
+            vertices.push_back(vertex.y);
+            vertices.push_back(vertex.z);
+
+            vertices.push_back(normal.x);
+            vertices.push_back(normal.y);
+            vertices.push_back(normal.z);
+
+            vertices.push_back(1.0f);
+            vertices.push_back(0.0f);
+
+            // Bottom left
+            i = x + ((image_width) * (y + 1));
+            vertex = vertices_vector[i];
+            normal = normals[i];
+
+            vertices.push_back(vertex.x);
+            vertices.push_back(vertex.y);
+            vertices.push_back(vertex.z);
+
+            vertices.push_back(normal.x);
+            vertices.push_back(normal.y);
+            vertices.push_back(normal.z);
+
+            vertices.push_back(0.0f);
+            vertices.push_back(1.0f);
+
+            // Bottom right
+            i = x + ((image_width) * (y + 1)) + 1;
+            vertex = vertices_vector[i];
+            normal = normals[i];
+
+            vertices.push_back(vertex.x);
+            vertices.push_back(vertex.y);
+            vertices.push_back(vertex.z);
+
+            vertices.push_back(normal.x);
+            vertices.push_back(normal.y);
+            vertices.push_back(normal.z);
+
+            vertices.push_back(1.0f);
+            vertices.push_back(1.0f);
+
+        }
+    }
+
+    // Create the final faces vector
+    std::vector<GLuint> faces;
+    for (int i = 0; i < vertices.size() / 8.0f; i+= 4){
+        faces.push_back(i + 2);
+        faces.push_back(i + 1);
+        faces.push_back(i + 0);
+
+        faces.push_back(i + 1);
+        faces.push_back(i + 2);
+        faces.push_back(i + 3);
+    }
+
+    Mesh* ground = new Mesh(vertices, faces);
     return ground;
+}
+
+float Terrain::getHeight(int x, int y){
+    // Scaling factor for the height map data
+    float amplification = 50.0f;
+
+
+    int red = image[(y*image_width + x)*4 + 0];
+    int grn = image[(y*image_width + x)*4 + 1];
+    int blu = image[(y*image_width + x)*4 + 2];
+
+    // Scale the height such that the value is between 0.0 and 1.0
+    float map_height = float(red + grn + blu)/(3.0f * 255.0);
+    // Amplify the map height
+    map_height = amplification * map_height;
+
+    return map_height;
 }
 
 glm::vec3 Terrain::getVertexPosition(GLuint index, std::vector<GLfloat>* vertices){
@@ -218,21 +261,31 @@ glm::vec3 Terrain::getVertexPosition(GLuint index, std::vector<GLfloat>* vertice
     return pos;
 }
 
-float Terrain::getHeight(int x, int y){
-    // Scaling factor for the height map data
-    float amplification = 20.0f;
+Terrain::VertexType Terrain::getVertexType(glm::vec3 vertex){
+    // Starting positions of the mesh
+    float start_x = -image_width / 2.0;
+    float start_z = -image_height / 2.0;
 
+    // bool corner = ((vertex.x == start_x) && (vertex.z == start_z)) ||
+    //               ((vertex.x == start_x) && (vertex.z == -start_z - 1)) ||
+    //               ((vertex.x == -start_x - 1) && (vertex.z == start_z)) ||
+    //               ((vertex.x == -start_x - 1) && (vertex.z == -start_z - 1));
 
-    int red = image[(y*image_width + x)*4 + 0];
-    int grn = image[(y*image_width + x)*4 + 1];
-    int blu = image[(y*image_width + x)*4 + 2];
+    bool x_edge = (vertex.x == start_x) || (vertex.x == -start_x - 1);
+    bool z_edge = (vertex.z == start_z) || (vertex.z == -start_z - 1);
+    bool corner = x_edge && z_edge;
 
-    // Scale the height such that the value is between 0.0 and 1.0
-    float map_height = float(red + grn + blu)/(3.0f * 255.0);
-    // Amplify the map height
-    map_height = amplification * map_height;
+    // If the vertex is on a corner
+    if (corner) {
+        return Terrain::VertexType::CORNER;
+    } else if (x_edge) {
+        return Terrain::VertexType::X_EDGE;
+    } else if (z_edge) {
+        return Terrain::VertexType::Z_EDGE;
+    } else {
+        return Terrain::VertexType::INTERNAL;
+    }
 
-    return map_height;
 }
 
 void Terrain::attachTextureSet(TextureSet texture_set){
