@@ -141,7 +141,6 @@ void Level::loadLevel(const char* filename){
         }
 
         if(buffer[0] == 'h'){
-            Debug::info("Found a heightmap!\n");
             char parameter[64];
             sscanf(buffer, "%*c %s", parameter);
 
