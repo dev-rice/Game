@@ -12,6 +12,7 @@
 class World{
 public:
     World(GLFWwindow*);
+    World(GLFWwindow*, const char*);
     ~World();
 
     void addLevel(const char*);

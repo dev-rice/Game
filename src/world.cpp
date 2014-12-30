@@ -5,6 +5,11 @@ World::World(GLFWwindow* window){
     addLevel("res/maps/heightmaptest.map");
 }
 
+World::World(GLFWwindow* window, const char* level_filename){
+    this->window = window;
+    addLevel(level_filename);
+}
+
 World::~World(){
 
 }

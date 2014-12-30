@@ -36,8 +36,15 @@ int main(int argc, char* argv[]) {
     bool interactive = false;
     bool debug = false;
     char argument;
+    bool has_map;
+    std::string map_filename;
 
-    while ((argument = getopt(argc, argv, "wfid")) != -1){
+    while ((argument = getopt(argc, argv, "wfidm:")) != -1){
+        // printf("Read command line option:\n");
+        // printf("  argument = %c\n", argument);
+        // printf("  optopt   = %c\n", optopt);
+        // printf("  optarg   = %s\n\n", optarg);
+
         if (argument == 'f'){
             fullscreen = true;
         } else if (argument == 'w'){
@@ -46,6 +53,9 @@ int main(int argc, char* argv[]) {
             interactive = true;
         } else if (argument == 'd'){
             debug = true;
+        } else if (argument == 'm'){
+            has_map = true;
+            map_filename = std::string(optarg);
         } else {
             printf("\nCommand line options:\n");
             printf("\t-f\n");
@@ -56,6 +66,9 @@ int main(int argc, char* argv[]) {
             printf("\t\tRun in interactive mode.\n");
             printf("\t-d\n");
             printf("\t\tShow the debug log.\n\n");
+            printf("\t-m <map_filename>\n");
+            printf("\t\tLoad the world with map <map_filename>.\n\n");
+
             return 1;
         }
     }
@@ -81,28 +94,13 @@ int main(int argc, char* argv[]) {
     // Create the window
     GLFWwindow* window = initializeGLFWWindow(width, height, fullscreen);
 
-    if (interactive){
-        // Spawn a thread to handle user input
-        // std::thread input(inputConsole);
-        // Render the scene
-        renderEverything(window);
-        // Ensure the input console is finished.
-        // input.join();
-    } else {
-        // Render the scene
-        renderEverything(window);
-    }
-
-    // Kill glfw to end the program
-    glfwTerminate();
-
-    // Nothing went wrong!
-    return 0;
-}
-
-void renderEverything(GLFWwindow* window){
+    World* world;
     // Create the world
-    World world(window);
+    if (has_map){
+        world = new World(window, map_filename.c_str());
+    } else {
+        world = new World(window);
+    }
 
     // Display loop
     while(!glfwWindowShouldClose(window)) {
@@ -115,8 +113,14 @@ void renderEverything(GLFWwindow* window){
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
             glfwSetWindowShouldClose(window, GL_TRUE);
         }
-        world.update();
+        world->update();
     }
+
+    // Kill glfw to end the program
+    glfwTerminate();
+
+    // Nothing went wrong!
+    return 0;
 }
 
 void inputConsole(){
