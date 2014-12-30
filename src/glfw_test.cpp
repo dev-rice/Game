@@ -55,8 +55,8 @@ int main(int argc, char* argv[]) {
             printf("\nCommand line options:\n");
             printf("\t-f\n");
             printf("\t\tRun in fullscreen mode.\n");
-            printf("\t-w <width> <height>\n");
-            printf("\t\tRun in windowed mode with width and height.\n");
+            printf("\t-w\n");
+            printf("\t\tRun in windowed mode.\n");
             printf("\t-i\n");
             printf("\t\tRun in interactive mode.\n");
             printf("\t-d\n");

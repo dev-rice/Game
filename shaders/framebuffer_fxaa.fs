@@ -42,7 +42,7 @@ void main() {
     vec4 current_pixel = texture(base_texture, Texcoord);
     float current_luminance = FxaaLuma(current_pixel);
 
-    // Find the luminance of each neighboring pixel. (4x)
+    // Find the luminance of each neighboring pixel.
     vec4 n_pixel = textureOffset(base_texture, Texcoord, ivec2(0, 1));
     vec4 s_pixel = textureOffset(base_texture, Texcoord, ivec2(0, -1));
     vec4 e_pixel = textureOffset(base_texture, Texcoord, ivec2(1, 0));
