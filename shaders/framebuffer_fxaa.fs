@@ -13,7 +13,7 @@ bool FXAA_ON = true;
 
 bool CONTRAST_DEBUG = false;
 bool EDGE_DIRECTION_DEBUG = false;
-bool BLEND_DEBUG = true;
+bool BLEND_DEBUG = false;
 
 // Neighbor contrast tuning
 float FXAA_EDGE_THRESHOLD_MIN = 1.0 / 16.0;
@@ -86,6 +86,7 @@ void main() {
     float sw_luminance = FxaaLuma(sw_pixel);
     float se_luminance = FxaaLuma(se_pixel);
 
+    // 3x3 box filter which will be used to blend into the pixel later
     vec4 pixel_lowpass = n_pixel + w_pixel + current_pixel + e_pixel + s_pixel + nw_pixel + ne_pixel + sw_pixel + se_pixel;
     pixel_lowpass = pixel_lowpass/9.0;
 
