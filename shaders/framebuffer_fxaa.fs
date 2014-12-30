@@ -13,7 +13,7 @@ bool FXAA_ON = true;
 
 bool CONTRAST_DEBUG = false;
 bool EDGE_DIRECTION_DEBUG = false;
-bool BLEND_DEBUG = false;
+bool BLEND_DEBUG = true;
 
 // Neighbor contrast tuning
 float FXAA_EDGE_THRESHOLD_MIN = 1.0 / 16.0;
@@ -74,7 +74,7 @@ void main() {
 
     float range_lowpass = abs(luma_lowpass - current_luminance);
     // float blendL = max(0.0, (range_lowpass / range) - FXAA_SUBPIX_TRIM) * FXAA_SUBPIX;
-    float blendL = max(0.0, (range_lowpass / range)) * FXAA_SUBPIX_TRIM;
+    float blendL = max(0.0, (range_lowpass / range));
     blendL = min(FXAA_SUBPIX_CAP, blendL);
 
     vec4 nw_pixel = textureOffset(base_texture, Texcoord, ivec2(-1,-1));
@@ -117,7 +117,7 @@ void main() {
             }
 
         } else if (BLEND_DEBUG){
-            outColor = vec4(0.0, blendL, blendL, 1.0);
+            outColor = vec4(0.0, blendL, 0.0f, 1.0);
 
         } else {
             outColor = mix(current_pixel, pixel_lowpass, blendL);
