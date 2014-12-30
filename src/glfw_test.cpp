@@ -38,11 +38,6 @@ int main(int argc, char* argv[]) {
     char argument;
 
     while ((argument = getopt(argc, argv, "wfid")) != -1){
-        // printf("Read command line option:\n");
-        // printf("  argument = %c\n", argument);
-        // printf("  optopt   = %c\n", optopt);
-        // printf("  optarg   = %s\n\n", optarg);
-
         if (argument == 'f'){
             fullscreen = true;
         } else if (argument == 'w'){
@@ -61,7 +56,6 @@ int main(int argc, char* argv[]) {
             printf("\t\tRun in interactive mode.\n");
             printf("\t-d\n");
             printf("\t\tShow the debug log.\n\n");
-
             return 1;
         }
     }
