@@ -9,9 +9,8 @@ out vec4 outColor;
 
 uniform sampler2D base_texture;
 
-// Control the debug output
-bool DEBUG = false;
 bool FXAA_ON = true;
+bool DEBUG = false;
 
 // Neighbor contrast tuning
 float FXAA_EDGE_THRESHOLD_MIN = 1.0 / 16.0;
@@ -19,7 +18,8 @@ float FXAA_EDGE_THRESHOLD = 1.0 / 8.0;
 
 // Subpixel contrast tuning
 int FXAA_SUBPIX = 1;
-float FXAA_SUBPIX_TRIM_SCALE = 1.0 / 2.0;
+float FXAA_SUBPIX_TRIM = 1.0 / 2.0;
+float FXAA_SUBPIX_TRIM_SCALE = 1.0;
 float FXAA_SUBPIX_CAP = 3.0 / 4.0;
 
 // End of edge search tuning
@@ -68,16 +68,13 @@ void main() {
 
     //////////////////////////
     // Subpixel Aliasing Test
-    float lumaL = (n_luminance + w_luminance + e_luminance +
-        s_luminance) * 0.25;
+    float luma_lowpass = (n_luminance + w_luminance + e_luminance + s_luminance) / 4.0;
 
-    float rangeL = abs(lumaL - current_luminance);
-    float blendL = max(0.0,
-        (rangeL / range) - FXAA_SUBPIX_TRIM_SCALE) * FXAA_SUBPIX_TRIM_SCALE;
-        blendL = min(FXAA_SUBPIX_CAP, blendL);
+    float range_lowpass = abs(luma_lowpass - current_luminance);
+    float blendL = max(0.0, (range_lowpass / range) - FXAA_SUBPIX) * FXAA_SUBPIX_TRIM;
+    blendL = min(FXAA_SUBPIX_CAP, blendL);
 
-    vec4 pixelL = n_pixel + w_pixel + current_pixel + e_pixel
-        + s_pixel;
+    vec4 pixel_lowpass = n_pixel + w_pixel + current_pixel + e_pixel + s_pixel;
 
     vec4 nw_pixel = textureOffset(base_texture, Texcoord, ivec2(-1,-1));
     vec4 ne_pixel = textureOffset(base_texture, Texcoord, ivec2( 1,-1));
@@ -88,8 +85,8 @@ void main() {
     float sw_luminance = FxaaLuma(sw_pixel);
     float se_luminance = FxaaLuma(se_pixel);
 
-    pixelL += (nw_pixel + ne_pixel + sw_pixel + se_pixel);
-    pixelL = pixelL/9.0;
+    pixel_lowpass += (nw_pixel + ne_pixel + sw_pixel + se_pixel);
+    pixel_lowpass = pixel_lowpass/9.0;
 
     //////////////////////////
     // Vertical/Horizontal Edge Test
@@ -115,7 +112,7 @@ void main() {
                 outColor = vec4(0.0, 0.0, 1.0, 1.0);
             }
         } else {
-            outColor = pixelL;
+            outColor = mix(pixel_lowpass, current_pixel, 0.5);
         }
     } else {
         outColor = current_pixel;
