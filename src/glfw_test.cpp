@@ -119,6 +119,9 @@ int main(int argc, char* argv[]) {
     // Kill glfw to end the program
     glfwTerminate();
 
+    delete world;
+    world = NULL;
+
     // Nothing went wrong!
     return 0;
 }
