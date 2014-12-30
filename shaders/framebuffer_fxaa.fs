@@ -11,6 +11,7 @@ uniform sampler2D base_texture;
 
 // Control the debug output
 bool DEBUG = false;
+bool FXAA_ON = true;
 
 // Neighbor contrast tuning
 float FXAA_EDGE_THRESHOLD_MIN = 1.0 / 16.0;
@@ -106,7 +107,7 @@ void main() {
     // End of edge search
 
 
-    if (is_contrast && DEBUG){
+    if (is_contrast && FXAA_ON){
         if (DEBUG){
             if (horzSpan){
                 outColor = vec4(1.0, 1.0, 0.0, 1.0);
