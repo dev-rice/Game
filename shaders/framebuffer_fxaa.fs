@@ -10,7 +10,7 @@ out vec4 outColor;
 uniform sampler2D base_texture;
 
 // Control the debug output
-bool DEBUG = false;
+bool DEBUG = true;
 
 // Neighbor contrast tuning
 float FXAA_EDGE_THRESHOLD_MIN = 1.0 / 16.0;
