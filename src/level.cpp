@@ -166,8 +166,6 @@ void Level::loadLevel(const char* filename){
         }
     }
 
-
-
 }
 
 GLuint Level::getTexture(GLuint index){
