@@ -9,7 +9,7 @@ out vec4 outColor;
 
 uniform sampler2D base_texture;
 
-bool FXAA_ON = true;
+bool FXAA_ON = false;
 
 bool CONTRAST_DEBUG = false;
 bool EDGE_DIRECTION_DEBUG = false;
