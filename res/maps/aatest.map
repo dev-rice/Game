@@ -13,6 +13,7 @@ t axe_emit.png
 t firepit_diff.png
 t firepit_emit.png
 t castle_tower_diff.png
+t positioned.png
 
 # Object location, rotation, scale, and texture binding (d)
 d 0 1 0 0 0 -5.117056 0.000000 -3.043495 1.000000 -0.000000 2.443460 -0.000000
