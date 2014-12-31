@@ -35,21 +35,24 @@ void main() {
     // Order is important on the multiplication!
     gl_Position = proj * world_position;
 
-    // Point lighting
-    lights[0].position = vec3(-1.5, 0.5, 0.0);
-    lights[0].color = vec3(1.0, 0.3, 0.1);
-    lights[0].power = 5.0;
+    // Real directional lighting
+    lights[0].position = vec3(1.0, 1.0, 0.0);
+    lights[0].color = vec3(1.0, 1.0, 1.0);
+    lights[0].power = 1.0;
+    vec3 direction_vector = normalize(lights[0].position);
+    vec4 light_vector = view * vec4(direction_vector, 0.0);
+    lights[0].light_to_surface = light_vector.xyz;
 
-    lights[1].position = vec3(-4.5, 5.0, sin(5*time));
-    lights[1].color = vec3(1.0, 1.0, 1.0);
-    lights[1].power = 0.0;
+    lights[1].position = vec3(-1.5, 0.5, 0.0);
+    lights[1].color = vec3(1.0, 0.3, 0.1);
+    lights[1].power = 5.0;
 
-    lights[2].position = vec3(0.0, 100.0, 0.0);
+    lights[2].position = vec3(-4.5, 5.0, sin(5*time));
     lights[2].color = vec3(1.0, 1.0, 1.0);
-    lights[2].power = 100.0;
+    lights[2].power = 0.0;
 
-
-    for (int i = 0; i < num_lights; ++i){
+    // The first light is reserved for the directional light
+    for (int i = 1; i < num_lights; ++i){
         vec3 light_vector = ((view * vec4(lights[i].position, 1.0)) - (world_position)).xyz;
         lights[i].light_to_surface = light_vector;
     }
