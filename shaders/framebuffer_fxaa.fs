@@ -125,6 +125,6 @@ void main() {
 
         }
     } else {
-        outColor = mix(current_pixel, pixel_lowpass, blendL);
+        outColor = current_pixel;
     }
 }
