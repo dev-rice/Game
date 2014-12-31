@@ -28,6 +28,11 @@ void GameView::update(){
     // Render the level to the framebuffer
     framebuffer->setAsRenderTarget();
     level->draw();
+    // Draw the framebuffer 3 times here, then once to the screen.
+    // This makes for a total of 4 FXAA passes (4x FXAA).
+    framebuffer->draw();
+    framebuffer->draw();
+    framebuffer->draw();
 
     // Draw the framebuffer
     screen->setAsRenderTarget();
