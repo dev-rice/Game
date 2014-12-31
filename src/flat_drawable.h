@@ -19,7 +19,7 @@
 
 class FlatDrawable {
 public:
-    FlatDrawable(FlatMesh*, GLuint);
+    FlatDrawable(FlatMesh* m, GLuint sh) : FlatDrawable(m, sh, 1.0, 1.0, glm::vec2()){;}
     FlatDrawable(FlatMesh*, GLuint, GLfloat, GLfloat, glm::vec2);
 
     virtual void draw();

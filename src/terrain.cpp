@@ -46,13 +46,6 @@ Mesh* Terrain::generateMesh(){
     float start_x = -image_width / 2.0;
     float start_z = -image_height / 2.0;
 
-    // These will map the x, y position on the image
-    // to u, v coordinates for the texture.
-    // TODO: Make this tile instead of load the entire
-    // image over the mesh.
-    float u_inc = 1.0 / (float)image_width;
-    float v_inc = 1.0 / (float)image_height;
-
     // Now, we must generate a mesh from the data in the heightmap. We use
     // 1-BASED INDEXING because of the need for an offset
     float map_height;

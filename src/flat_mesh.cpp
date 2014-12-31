@@ -13,11 +13,11 @@ FlatMesh::FlatMesh(){
     };
 
     std::vector<GLfloat> vertices(planeVerts, planeVerts + sizeof(planeVerts) / sizeof(GLfloat));
-    
+
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
 
-    glGenBuffers(1, &vbo);   
+    glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), vertices.data(), GL_STATIC_DRAW);
 
@@ -36,7 +36,7 @@ void FlatMesh::attachGeometryToShader(GLuint shader_program){
     if(!already_bound){
         glBindVertexArray(vao);
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        
+
         GLint posAttrib = glGetAttribLocation(shader_program, "position");
         glEnableVertexAttribArray(posAttrib);
         glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE,

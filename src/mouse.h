@@ -13,10 +13,6 @@ public:
 
 private:
 
-
-    double x;
-    double y;
-
     GLFWwindow* window;
     glm::mat3 mouse_projection;
 

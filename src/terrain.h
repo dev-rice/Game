@@ -11,10 +11,6 @@
 class Terrain : public Drawable {
 public:
     Terrain (GLuint, std::string);
-    // Terrain(Mesh*, GLuint);
-    // Terrain(Mesh*, GLuint, glm::vec3, GLfloat);
-    // Terrain(Mesh*, GLuint, glm::vec3, GLfloat, const char*);
-    // Terrain(Mesh*, GLuint, glm::vec3, glm::vec3, GLfloat);
 
     void attachTextureSet(TextureSet);
 

@@ -25,7 +25,6 @@
 
 class Emitter {
 public:
-    Emitter();
     ~Emitter();
     Emitter(GLuint, glm::vec3);
 

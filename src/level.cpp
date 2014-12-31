@@ -152,7 +152,6 @@ void Level::loadLevel(const char* filename){
             Drawable* ground = new Terrain(doodad_shader, heightmap_filename_str);
 
             GLuint diffuse = TextureLoader::loadTextureFromFile("res/textures/ice_diff.png", GL_LINEAR);
-            GLuint heightmap = TextureLoader::loadTextureFromFile(heightmap_filename, GL_LINEAR);
 
             TextureSet texture_set(diffuse, 0, 0, 0);
             ground->attachTextureSet(texture_set);

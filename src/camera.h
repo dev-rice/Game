@@ -13,8 +13,8 @@ const float ROTATE_SENSITIVITY = 0.025;
 
 class Camera {
 public:
-    Camera();
-    Camera(glm::vec3);
+    Camera() : Camera(glm::vec3(), MOVE_SENSITIVITY, ROTATE_SENSITIVITY) {;}
+    Camera(glm::vec3 p) : Camera(p, MOVE_SENSITIVITY, ROTATE_SENSITIVITY) {;}
     Camera(glm::vec3, float, float);
 
     void moveX(int);

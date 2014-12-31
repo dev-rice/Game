@@ -24,7 +24,6 @@
 
 class Mesh {
 public:
-    Mesh() {;}
     Mesh(const char*);
     Mesh(std::vector<GLfloat>, std::vector<GLuint>);
 
