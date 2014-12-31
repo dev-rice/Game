@@ -1,6 +1,9 @@
 #ifndef GameView_h
 #define GameView_h
 
+#include <ctime>
+#include <vector>
+
 #include "mesh.h"
 #include "drawable.h"
 #include "camera.h"
@@ -34,9 +37,7 @@ private:
     TextRenderer* text_renderer;
 
     bool toggle_key_state;
-    bool debug_showing;
-
-
+    bool debug_showing;  
 };
 
 #endif
