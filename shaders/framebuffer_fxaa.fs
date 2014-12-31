@@ -9,11 +9,12 @@ out vec4 outColor;
 
 uniform sampler2D base_texture;
 
+// FXAA Constant definitions
 bool FXAA_ON = true;
 
 bool CONTRAST_DEBUG = false;
 bool EDGE_DIRECTION_DEBUG = false;
-bool BLEND_DEBUG = false;
+bool BLEND_DEBUG = true;
 
 // Neighbor contrast tuning
 float FXAA_EDGE_THRESHOLD_MIN = 1.0 / 16.0;
@@ -28,6 +29,7 @@ float FXAA_SUBPIX_CAP = 3.0 / 4.0;
 int FXAA_SEARCH_STEPS = 4;
 int FXAA_SEARCH_ACCELERATION = 2;
 float FXAA_SEARCH_THRESHOLD = 1.0 / 4.0;
+
 
 float FxaaLuma(vec4 color) {
     // As an optimization, luminance is estimated strictly from Red and Green

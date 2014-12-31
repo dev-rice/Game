@@ -126,7 +126,7 @@ void Level::loadLevel(const char* filename){
             sscanf(buffer, "%*c %s %f %f %f", particle_name, &x, &y, &z);
             Emitter *e = 0;
             if(strcmp(particle_name, "fire") == 0){
-                e = new FireEmitter(particle_shader, glm::vec3(x, y, z), 0.7f);
+                e = new FireEmitter(particle_shader, glm::vec3(x, y, z), 0.6f);
             } else if (strcmp(particle_name, "snow") == 0){
                 e = new SnowEmitter(particle_shader, glm::vec3(x, y, z));
             } else if (strcmp(particle_name, "smoke") == 0){

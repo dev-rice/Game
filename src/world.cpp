@@ -2,7 +2,7 @@
 
 World::World(GLFWwindow* window){
     this->window = window;
-    addLevel("res/maps/heightmaptest.map");
+    addLevel("res/maps/aatest.map");
 }
 
 World::World(GLFWwindow* window, const char* level_filename){
