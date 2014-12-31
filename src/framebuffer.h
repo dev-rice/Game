@@ -3,6 +3,7 @@
 
 #include "flat_drawable.h"
 #include "shader_loader.h"
+#include "profile.h"
 
 class Framebuffer {
 public:

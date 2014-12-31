@@ -20,6 +20,7 @@
 
 #include "world.h"
 #include "debug.h"
+#include "profile.h"
 
 void renderEverything(GLFWwindow*);
 void inputConsole();
@@ -39,7 +40,7 @@ int main(int argc, char* argv[]) {
     bool has_map;
     std::string map_filename;
 
-    while ((argument = getopt(argc, argv, "wfidm:")) != -1){
+    while ((argument = getopt(argc, argv, "wfixdm:")) != -1){
         // printf("Read command line option:\n");
         // printf("  argument = %c\n", argument);
         // printf("  optopt   = %c\n", optopt);
@@ -51,6 +52,8 @@ int main(int argc, char* argv[]) {
             fullscreen = false;
         } else if (argument == 'i'){
             interactive = true;
+        } else if (argument == 'x'){
+            Profile::fxaa = true;
         } else if (argument == 'd'){
             debug = true;
         } else if (argument == 'm'){

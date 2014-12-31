@@ -11,6 +11,7 @@
 #include "ui_drawable.h"
 #include "mouse.h"
 #include "framebuffer.h"
+#include "profile.h"
 
 class GameView {
 public:

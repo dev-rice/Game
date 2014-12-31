@@ -33,10 +33,18 @@ Framebuffer::Framebuffer(GLFWwindow* window){
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rboDepthStencil);
 
+    GLuint framebuffer_vs, framebuffer_fs, framebuffer_shader;
     // Load framebuffer shader
-    GLuint framebuffer_vs = ShaderLoader::loadVertexShader("shaders/framebuffer_fxaa.vs");
-    GLuint framebuffer_fs = ShaderLoader::loadFragmentShader("shaders/framebuffer_fxaa.fs");
-    GLuint framebuffer_shader = ShaderLoader::combineShaderProgram(framebuffer_vs, framebuffer_fs);
+    if (Profile::fxaa){
+        framebuffer_vs = ShaderLoader::loadVertexShader("shaders/framebuffer_fxaa.vs");
+        framebuffer_fs = ShaderLoader::loadFragmentShader("shaders/framebuffer_fxaa.fs");
+        framebuffer_shader = ShaderLoader::combineShaderProgram(framebuffer_vs, framebuffer_fs);
+    } else {
+        framebuffer_vs = ShaderLoader::loadVertexShader("shaders/framebuffer.vs");
+        framebuffer_fs = ShaderLoader::loadFragmentShader("shaders/framebuffer.fs");
+        framebuffer_shader = ShaderLoader::combineShaderProgram(framebuffer_vs, framebuffer_fs);
+    }
+
 
     // Create the window to draw the framebuffer onto
     framebuffer_window = new FlatDrawable(flat_mesh, framebuffer_shader, 1.0, 1.0, glm::vec2(0.0, 0.0));
