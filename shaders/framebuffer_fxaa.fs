@@ -14,7 +14,7 @@ bool FXAA_ON = true;
 
 bool CONTRAST_DEBUG = false;
 bool EDGE_DIRECTION_DEBUG = false;
-bool BLEND_DEBUG = false;
+bool BLEND_DEBUG = true;
 
 // Neighbor contrast tuning
 float FXAA_EDGE_THRESHOLD_MIN = 1.0 / 16.0;
@@ -23,7 +23,7 @@ float FXAA_EDGE_THRESHOLD = 1.0 / 8.0;
 // Subpixel contrast tuning
 int FXAA_SUBPIX = 1;
 float FXAA_SUBPIX_TRIM = 1.0 / 2.0;
-float FXAA_SUBPIX_CAP = 3.0 / 4.0;
+float FXAA_SUBPIX_CAP = 2.0 / 4.0;
 
 // End of edge search tuning
 int FXAA_SEARCH_STEPS = 4;
