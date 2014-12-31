@@ -31,9 +31,9 @@ void GameView::update(){
 
     // Draw the framebuffer 3 times here, then once to the screen.
     // This makes for a total of 4 FXAA passes (4x FXAA).
-    if (Profile::fxaa && !Debug::is_on){
+    if (Profile::fxaa){
         for (int i = 0; i < Profile::fxaa_level - 1; ++i){
-            framebuffer->draw();
+            // framebuffer->draw();
         }
     }
 
