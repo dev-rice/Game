@@ -1,6 +1,9 @@
 #ifndef GameView_h
 #define GameView_h
 
+#include <ctime>
+#include <vector>
+
 #include "mesh.h"
 #include "drawable.h"
 #include "camera.h"
@@ -36,7 +39,8 @@ private:
     bool toggle_key_state;
     bool debug_showing;
 
-
+    std::clock_t start_time;
+    std::clock_t end_time;
 };
 
 #endif
