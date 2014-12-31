@@ -28,3 +28,16 @@ void TextRenderer::drawString(glm::vec2 position, std::string to_draw){
         character_box->draw();
     }
 }
+
+void TextRenderer::print(glm::vec2 position, const char* format, ...){
+    // Some real hacky C shit from
+    // http://stackoverflow.com/questions/5876646/how-to-overload-printf-or-cout
+    char buffer[256];
+    
+    va_list argument_list;
+    va_start(argument_list, format);
+    vsprintf(buffer, format, argument_list);
+    va_end(argument_list);
+
+    drawString(position, std::string(buffer));
+}

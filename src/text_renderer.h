@@ -23,8 +23,10 @@ class TextRenderer {
 public:
     TextRenderer(GLFWwindow*, std::string, GLfloat);
 
-    void drawString(glm::vec2, std::string);
+    void print(glm::vec2, const char*, ...);
 private:
+    void drawString(glm::vec2, std::string);
+    
     CharacterMesh* character_mesh;
     CharacterDrawable* character_box;
 
