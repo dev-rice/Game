@@ -36,7 +36,6 @@ void GameView::update(){
             // framebuffer->draw();
         }
     }
-
     // Draw the framebuffer
     screen->setAsRenderTarget();
     framebuffer->draw();
