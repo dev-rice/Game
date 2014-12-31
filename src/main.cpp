@@ -158,10 +158,15 @@ GLFWwindow* initializeGLFWWindow(int width, int height, bool fullscreen){
         // Fullscreen
         window = glfwCreateWindow(width, height, windowTitle,
             glfwGetPrimaryMonitor(), nullptr);
-
     } else {
         // Windowed
         window = glfwCreateWindow(width, height, windowTitle, nullptr, nullptr);
+    }
+
+    int actual_w, actual_h;
+    glfwGetFramebufferSize(window, &actual_w, &actual_h);
+    if (actual_w != width || actual_h != height){
+        Debug::warning("Actual render size is %d by %d.\n", actual_w, actual_h);
     }
 
     // Hide the mouse
