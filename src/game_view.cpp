@@ -29,11 +29,12 @@ void GameView::update(){
     framebuffer->setAsRenderTarget();
     level->draw();
 
-    // Draw the framebuffer 3 times here, then once to the screen.
-    // This makes for a total of 4 FXAA passes (4x FXAA).
+    // Draw the framebuffer N - 1 times (the last pass is drawn to the screen).
+    // This is how many times the fxaa shader samples the image.
+    // A good number is 4, 8 looks blurry, 1 doesn't do much.
     if (Profile::fxaa){
         for (int i = 0; i < Profile::fxaa_level - 1; ++i){
-            // framebuffer->draw();
+            framebuffer->draw();
         }
     }
     // Draw the framebuffer

@@ -40,7 +40,7 @@ int main(int argc, char* argv[]) {
     bool has_map;
     std::string map_filename;
 
-    while ((argument = getopt(argc, argv, "wfixdm:")) != -1){
+    while ((argument = getopt(argc, argv, "wfidm:x:")) != -1){
         // printf("Read command line option:\n");
         // printf("  argument = %c\n", argument);
         // printf("  optopt   = %c\n", optopt);
@@ -54,6 +54,8 @@ int main(int argc, char* argv[]) {
             interactive = true;
         } else if (argument == 'x'){
             Profile::fxaa = true;
+            std::string fxaa_level_str(optarg);
+            Profile::fxaa_level = std::stoi(fxaa_level_str);
         } else if (argument == 'd'){
             debug = true;
         } else if (argument == 'm'){
@@ -71,6 +73,8 @@ int main(int argc, char* argv[]) {
             printf("\t\tShow the debug log.\n\n");
             printf("\t-m <map_filename>\n");
             printf("\t\tLoad the world with map <map_filename>.\n\n");
+            printf("\t-x <level>\n");
+            printf("\t\tTurn on FXAA with level <level>.\n\n");
 
             return 1;
         }
