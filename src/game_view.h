@@ -37,10 +37,7 @@ private:
     TextRenderer* text_renderer;
 
     bool toggle_key_state;
-    bool debug_showing;
-
-    std::clock_t start_time;
-    std::clock_t end_time;
+    bool debug_showing;  
 };
 
 #endif

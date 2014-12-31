@@ -67,15 +67,6 @@ void GameView::update(){
         sprintf(buffer, "mouse <x, y>: %.2f, %.2f", gl_mouse_position.x, gl_mouse_position.y);
         to_print = buffer;
         text_renderer->drawString(glm::vec2(-0.95, 0.80), to_print);
-
-        // Framerate stuff
-        start_time = std::clock() - end_time;
-
-        sprintf(buffer, "current framerate: %.2f", 0.01f*float(start_time));
-        to_print = buffer;
-        text_renderer->drawString(glm::vec2(-0.95, 0.75), to_print);
-
-        end_time = std::clock();
     }
 
     // The mouse draws on top of everything else
