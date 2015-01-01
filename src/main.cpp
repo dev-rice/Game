@@ -32,6 +32,7 @@
 #include "shader_loader.h"
 #include "texture_set.h"
 #include "framebuffer.h"
+#include "shadowbuffer.h"
 
 void renderEverything(GLFWwindow*);
 void inputConsole();
@@ -120,17 +121,24 @@ int main(int argc, char* argv[]) {
     //     world = new World(window);
     // }
     Framebuffer* screen = new Framebuffer();
+    Framebuffer* shadowbuffer = new Shadowbuffer();
 
     Mesh* castle_mesh = new Mesh("res/models/castle_tower.obj");
+    Mesh* fence_mesh = new Mesh("res/models/fence.obj");
 
-    GLuint doodad_vs = ShaderLoader::loadVertexShader("shaders/shadow.vs");
-    GLuint doodad_fs = ShaderLoader::loadFragmentShader("shaders/shadow.fs");
-    GLuint doodad_shader = ShaderLoader::combineShaderProgram(doodad_vs, doodad_fs);
+    GLuint shadow_vs = ShaderLoader::loadVertexShader("shaders/shadow.vs");
+    GLuint shadow_fs = ShaderLoader::loadFragmentShader("shaders/shadow.fs");
+    GLuint shadow_shader = ShaderLoader::combineShaderProgram(shadow_vs, shadow_fs);
 
-    Drawable* castle = new Doodad(castle_mesh, doodad_shader);
+    Drawable* castle = new Doodad(castle_mesh, shadow_shader);
     GLuint diffuse = TextureLoader::loadTextureFromFile("res/textures/castle_tower_diff.png", GL_LINEAR);
     TextureSet textures(diffuse, 0, 0, 0);
     castle->attachTextureSet(textures);
+
+    Drawable* fence = new Doodad(fence_mesh, shadow_shader, glm::vec3(0.0, 2.0, 4.0), glm::vec3(0.0f, 0.7f, 0.0f), 1.0f);
+    diffuse = TextureLoader::loadTextureFromFile("res/textures/fence_diff.png", GL_LINEAR);
+    textures = TextureSet(diffuse, 0, 0, 0);
+    fence->attachTextureSet(textures);
 
     glm::vec3 lightInvDir = glm::vec3(0.5f,2,2);
     glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10,10,-10,10,-10,20);
@@ -149,6 +157,7 @@ int main(int argc, char* argv[]) {
         }
         screen->setAsRenderTarget();
         castle->draw(&depthViewMatrix, &depthProjectionMatrix);
+        fence->draw(&depthViewMatrix, &depthProjectionMatrix);
         // world->update();
     }
 
