@@ -38,6 +38,7 @@ public:
     glm::vec3 getPosition() {return position;}
     glm::vec3 getRotation() {return rotation;}
     GLfloat getScale() {return scale;}
+    GLuint getShader() {return shader_program;}
 
 protected:
     void load(Mesh*, GLuint, glm::vec3, glm::vec3, GLfloat);

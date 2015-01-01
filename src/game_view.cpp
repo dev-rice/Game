@@ -27,7 +27,7 @@ void GameView::update(){
 
     // Render the level to the framebuffer
     framebuffer->setAsRenderTarget();
-    level->draw();
+    level->drawShadowMap();
 
     // Draw the framebuffer N - 1 times (the last pass is drawn to the screen).
     // This is how many times the fxaa shader samples the image.

@@ -30,11 +30,11 @@ Level::Level(GLFWwindow* window, const char* filename){
 
     GLuint shadow_vs = ShaderLoader::loadVertexShader("shaders/shadow.vs");
     GLuint shadow_fs = ShaderLoader::loadFragmentShader("shaders/shadow.fs");
-    GLuint shadow_shader = ShaderLoader::combineShaderProgram(shadow_vs, shadow_fs);
+    shadow_shader = ShaderLoader::combineShaderProgram(shadow_vs, shadow_fs);
 
     glm::vec3 lightInvDir = glm::vec3(0.5f, 2.0f, 2.0f);
-    glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10,10,-10,10,-10,20);
-    glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir, glm::vec3(0,0,0), glm::vec3(0,1,0));
+    depth_view = glm::lookAt(lightInvDir, glm::vec3(0,0,0), glm::vec3(0,1,0));
+    depth_proj = glm::ortho<float>(-10,10,-10,10,-10,20);
 
     loadLevel(filename);
 }
@@ -57,6 +57,15 @@ void Level::draw(){
         emitters[i]->draw(camera, &proj_matrix);
     }
 
+}
+
+void Level::drawShadowMap(){
+    for (int i = 0; i < drawables.size(); ++i){
+        GLuint current_shader = drawables[i]->getShader();
+        drawables[i]->setShader(shadow_shader);
+        drawables[i]->draw(&depth_view, &depth_proj);
+        drawables[i]->setShader(current_shader);
+    }
 }
 
 void Level::loadLevel(const char* filename){
