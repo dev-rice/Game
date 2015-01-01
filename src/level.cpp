@@ -32,9 +32,10 @@ Level::Level(GLFWwindow* window, const char* filename){
     GLuint shadow_fs = ShaderLoader::loadFragmentShader("shaders/shadow.fs");
     shadow_shader = ShaderLoader::combineShaderProgram(shadow_vs, shadow_fs);
 
-    glm::vec3 lightInvDir = glm::vec3(0.5f, 2.0f, 2.0f);
-    depth_view = glm::lookAt(lightInvDir, glm::vec3(0,0,0), glm::vec3(0,1,0));
-    depth_proj = glm::ortho<float>(-10,10,-10,10,-10,20);
+    glm::vec3 light_direction = glm::vec3(-1.0f, 1.0f, 0.0f);
+    depth_view = glm::lookAt(light_direction, glm::vec3(0,0,0), glm::vec3(0,1,0));
+    // Size of the box to render
+    depth_proj = glm::ortho<float>(-50,50,-50,50,-50,50);
 
     loadLevel(filename);
 }
