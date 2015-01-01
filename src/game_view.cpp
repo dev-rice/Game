@@ -27,12 +27,12 @@ void GameView::update(){
     handleInputs();
 
     // Render the shadow map into the shadow buffer
-    shadowbuffer->setAsRenderTarget();
-    // level->drawShadowMap();
+    // shadowbuffer->setAsRenderTarget();
 
     // Render the level to the framebuffer
     framebuffer->setAsRenderTarget();
-    level->draw();
+    level->drawShadowMap();
+    // level->draw();
 
     // Draw the framebuffer N - 1 times (the last pass is drawn to the screen).
     // This is how many times the fxaa shader samples the image.
