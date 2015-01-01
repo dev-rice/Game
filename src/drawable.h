@@ -33,6 +33,7 @@ public:
     void setPosition(glm::vec3 p) {position = p;}
     void setRotation(glm::vec3 r) {rotation = r;}
     void setScale(GLfloat s) {scale = s;}
+    void setShader(GLuint);
 
     glm::vec3 getPosition() {return position;}
     glm::vec3 getRotation() {return rotation;}

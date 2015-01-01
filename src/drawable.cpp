@@ -26,9 +26,13 @@ void Drawable::load(Mesh* mesh, GLuint shader_program, glm::vec3 position, glm::
 
     // Set the shader program and load the geometry data
     // from the mesh onto it.
+    setShader(shader_program);
+
+}
+
+void Drawable::setShader(GLuint shader_program){
     this->shader_program = shader_program;
     this->mesh->attachGeometryToShader(shader_program);
-
 }
 
 void Drawable::draw(Camera* camera, glm::mat4* proj_matrix){

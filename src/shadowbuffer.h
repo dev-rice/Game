@@ -5,7 +5,7 @@
 
 class Shadowbuffer : public Framebuffer {
 public:
-    Shadowbuffer();
+    Shadowbuffer(int, int);
 };
 
 #endif
