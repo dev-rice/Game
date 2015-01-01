@@ -15,6 +15,7 @@
 #include "mouse.h"
 #include "framebuffer.h"
 #include "profile.h"
+#include "shadowbuffer.h"
 
 class GameView {
 public:
@@ -30,6 +31,7 @@ private:
 
     Framebuffer* screen;
     Framebuffer* framebuffer;
+    Shadowbuffer* shadowbuffer;
 
     Mouse* mouse;
     std::vector<UIDrawable*> ui_drawables;
@@ -37,7 +39,7 @@ private:
     TextRenderer* text_renderer;
 
     bool toggle_key_state;
-    bool debug_showing;  
+    bool debug_showing;
 };
 
 #endif

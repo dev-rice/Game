@@ -6,6 +6,7 @@ GameView::GameView(GLFWwindow* window, Level* level){
 
     screen = new Framebuffer();
     framebuffer = new Framebuffer(window);
+    shadowbuffer = new Shadowbuffer(1024, 1024);
 
     FlatMesh* flat_mesh = new FlatMesh();
 
@@ -25,9 +26,13 @@ GameView::GameView(GLFWwindow* window, Level* level){
 void GameView::update(){
     handleInputs();
 
+    // Render the shadow map into the shadow buffer
+    shadowbuffer->setAsRenderTarget();
+    // level->drawShadowMap();
+
     // Render the level to the framebuffer
     framebuffer->setAsRenderTarget();
-    level->drawShadowMap();
+    level->draw();
 
     // Draw the framebuffer N - 1 times (the last pass is drawn to the screen).
     // This is how many times the fxaa shader samples the image.
