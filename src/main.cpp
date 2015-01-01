@@ -155,9 +155,12 @@ int main(int argc, char* argv[]) {
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
             glfwSetWindowShouldClose(window, GL_TRUE);
         }
-        screen->setAsRenderTarget();
+        shadow->setAsRenderTarget();
         castle->draw(&depthViewMatrix, &depthProjectionMatrix);
         fence->draw(&depthViewMatrix, &depthProjectionMatrix);
+
+        screen->setAsRenderTarget();
+        shadow->draw();
         // world->update();
     }
 
