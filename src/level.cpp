@@ -28,6 +28,14 @@ Level::Level(GLFWwindow* window, const char* filename){
     GLuint particle_fs = ShaderLoader::loadFragmentShader("shaders/particle.fs");
     particle_shader = ShaderLoader::combineShaderProgram(particle_vs, particle_fs);
 
+    GLuint shadow_vs = ShaderLoader::loadVertexShader("shaders/shadow.vs");
+    GLuint shadow_fs = ShaderLoader::loadFragmentShader("shaders/shadow.fs");
+    GLuint shadow_shader = ShaderLoader::combineShaderProgram(shadow_vs, shadow_fs);
+
+    glm::vec3 lightInvDir = glm::vec3(0.5f, 2.0f, 2.0f);
+    glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10,10,-10,10,-10,20);
+    glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir, glm::vec3(0,0,0), glm::vec3(0,1,0));
+
     loadLevel(filename);
 }
 

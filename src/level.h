@@ -31,6 +31,7 @@ public:
     Level(GLFWwindow*, const char*);
 
     void draw();
+    void drawShadowMap();
 
     Camera* getCamera() {return camera;}
 

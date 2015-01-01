@@ -113,45 +113,13 @@ int main(int argc, char* argv[]) {
     // Create the window
     GLFWwindow* window = initializeGLFWWindow(width, height, fullscreen);
 
-    // // Create the world
-    // World* world;
-    // if (has_map){
-    //     world = new World(window, map_filename.c_str());
-    // } else {
-    //     world = new World(window);
-    // }
-    Framebuffer* screen = new Framebuffer();
-    Framebuffer* scene = new Framebuffer(window);
-    Framebuffer* shadowbuffer = new Shadowbuffer(2048, 2048);
-
-    Mesh* castle_mesh = new Mesh("res/models/castle_tower.obj");
-    Mesh* fence_mesh = new Mesh("res/models/fence.obj");
-
-    GLuint shadow_vs = ShaderLoader::loadVertexShader("shaders/shadow.vs");
-    GLuint shadow_fs = ShaderLoader::loadFragmentShader("shaders/shadow.fs");
-    GLuint shadow_shader = ShaderLoader::combineShaderProgram(shadow_vs, shadow_fs);
-
-    GLuint doodad_vs = ShaderLoader::loadVertexShader("shaders/doodad.vs");
-    GLuint doodad_fs = ShaderLoader::loadFragmentShader("shaders/doodad.fs");
-    GLuint doodad_shader = ShaderLoader::combineShaderProgram(doodad_vs, doodad_fs);
-
-    Drawable* castle = new Doodad(castle_mesh, shadow_shader);
-    GLuint diffuse = TextureLoader::loadTextureFromFile("res/textures/castle_tower_diff.png", GL_LINEAR);
-    TextureSet textures(diffuse, 0, 0, 0);
-    castle->attachTextureSet(textures);
-
-    Drawable* fence = new Doodad(fence_mesh, shadow_shader, glm::vec3(0.0, 2.0, 4.0), glm::vec3(0.0f, 0.7f, 0.0f), 1.0f);
-    diffuse = TextureLoader::loadTextureFromFile("res/textures/fence_diff.png", GL_LINEAR);
-    textures = TextureSet(diffuse, 0, 0, 0);
-    fence->attachTextureSet(textures);
-
-    glm::vec3 lightInvDir = glm::vec3(0.5f, 2.0f, 2.0f);
-    glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10,10,-10,10,-10,20);
-    glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir, glm::vec3(0,0,0), glm::vec3(0,1,0));
-
-    glm::mat4 proj_matrix = glm::perspective(45.0f, width / height, 0.1f, 500.0f);
-
-    Camera* camera = new Camera();
+    // Create the world
+    World* world;
+    if (has_map){
+        world = new World(window, map_filename.c_str());
+    } else {
+        world = new World(window);
+    }
 
     // Display loop
     while(!glfwWindowShouldClose(window)) {
@@ -164,29 +132,14 @@ int main(int argc, char* argv[]) {
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
             glfwSetWindowShouldClose(window, GL_TRUE);
         }
-        shadowbuffer->setAsRenderTarget();
-        castle->setShader(shadow_shader);
-        fence->setShader(shadow_shader);
-        castle->draw(&depthViewMatrix, &depthProjectionMatrix);
-        fence->draw(&depthViewMatrix, &depthProjectionMatrix);
-
-        scene->setAsRenderTarget();
-        // castle->setShader(doodad_shader);
-        // fence->setShader(doodad_shader);
-        // castle->draw(camera, &proj_matrix);
-        // fence->draw(camera, &proj_matrix);
-
-        screen->setAsRenderTarget();
-        scene->draw();
-        shadowbuffer->draw();
-        // world->update();
+        world->update();
     }
 
     // Kill glfw to end the program
     glfwTerminate();
 
-    // delete world;
-    // world = NULL;
+    delete world;
+    world = NULL;
 
     // Nothing went wrong!
     return 0;
