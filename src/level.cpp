@@ -62,9 +62,13 @@ void Level::draw(){
 
 void Level::drawShadowMap(){
     for (int i = 0; i < drawables.size(); ++i){
+        // Save the shader this drawable is currently using
         GLuint current_shader = drawables[i]->getShader();
+        // Set the drawable to render with the shadow shader
         drawables[i]->setShader(shadow_shader);
+        // Draw the drawable from the light's perspective
         drawables[i]->draw(&depth_view, &depth_proj);
+        // Reset the drawable's shader to what it was before
         drawables[i]->setShader(current_shader);
     }
 }
