@@ -26,6 +26,8 @@ public:
     Drawable(Mesh*, GLuint, glm::vec3, glm::vec3, GLfloat);
 
     void draw(Camera*, glm::mat4*);
+    void draw(glm::mat4*, glm::mat4*);
+
     virtual void attachTextureSet(TextureSet) = 0;
 
     void setPosition(glm::vec3 p) {position = p;}
@@ -51,7 +53,7 @@ protected:
 
     glm::vec3 position;
     glm::vec3 rotation;
-    
+
     glm::mat4 model_matrix;
 
     TextureSet* texture_set;

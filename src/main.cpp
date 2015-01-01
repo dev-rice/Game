@@ -8,6 +8,11 @@
 // #elif defined __gnu_linux__
 #endif
 
+#define GLM_FORCE_RADIANS
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 #include <stdio.h>
 #include <cstdlib>
 #include <random>
@@ -21,6 +26,12 @@
 #include "world.h"
 #include "debug.h"
 #include "profile.h"
+#include "mesh.h"
+#include "drawable.h"
+#include "texture_loader.h"
+#include "shader_loader.h"
+#include "texture_set.h"
+#include "framebuffer.h"
 
 void renderEverything(GLFWwindow*);
 void inputConsole();
@@ -101,13 +112,29 @@ int main(int argc, char* argv[]) {
     // Create the window
     GLFWwindow* window = initializeGLFWWindow(width, height, fullscreen);
 
-    // Create the world
-    World* world;
-    if (has_map){
-        world = new World(window, map_filename.c_str());
-    } else {
-        world = new World(window);
-    }
+    // // Create the world
+    // World* world;
+    // if (has_map){
+    //     world = new World(window, map_filename.c_str());
+    // } else {
+    //     world = new World(window);
+    // }
+    Framebuffer* screen = new Framebuffer();
+
+    Mesh* castle_mesh = new Mesh("res/models/castle_tower.obj");
+
+    GLuint doodad_vs = ShaderLoader::loadVertexShader("shaders/shadow.vs");
+    GLuint doodad_fs = ShaderLoader::loadFragmentShader("shaders/shadow.fs");
+    GLuint doodad_shader = ShaderLoader::combineShaderProgram(doodad_vs, doodad_fs);
+
+    Drawable* castle = new Doodad(castle_mesh, doodad_shader);
+    GLuint diffuse = TextureLoader::loadTextureFromFile("res/textures/castle_tower_diff.png", GL_LINEAR);
+    TextureSet textures(diffuse, 0, 0, 0);
+    castle->attachTextureSet(textures);
+
+    glm::vec3 lightInvDir = glm::vec3(0.5f,2,2);
+    glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10,10,-10,10,-10,20);
+    glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir, glm::vec3(0,0,0), glm::vec3(0,1,0));
 
     // Display loop
     while(!glfwWindowShouldClose(window)) {
@@ -120,14 +147,16 @@ int main(int argc, char* argv[]) {
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
             glfwSetWindowShouldClose(window, GL_TRUE);
         }
-        world->update();
+        screen->setAsRenderTarget();
+        castle->draw(&depthViewMatrix, &depthProjectionMatrix);
+        // world->update();
     }
 
     // Kill glfw to end the program
     glfwTerminate();
 
-    delete world;
-    world = NULL;
+    // delete world;
+    // world = NULL;
 
     // Nothing went wrong!
     return 0;
