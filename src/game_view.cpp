@@ -104,40 +104,41 @@ void GameView::handleInputs(){
     glm::vec2 gl_mouse_position = mouse->getPosition();
 
     // Mouse scrolling the screen
-
     // LEFT
-    if(camera->getPosition().x >= -1.0 * level->getMapWidth()/2 + 70){
-        if(gl_mouse_position.x < -0.95){
-            camera->moveGlobalX(-10);
-        } else if(gl_mouse_position.x < -0.85){
-            camera->moveGlobalX(-5);
+    if(mouse_count == 0){
+        if(camera->getPosition().x >= -1.0 * level->getMapWidth()/2 + 70){
+            if(gl_mouse_position.x < -0.95){
+                camera->moveGlobalX(-10);
+            } else if(gl_mouse_position.x < -0.85){
+                camera->moveGlobalX(-5);
+            }
         }
-    }
 
-    // RIGHT
-    if(camera->getPosition().x <= 1.0 * level->getMapWidth()/2 - 70){
-        if(gl_mouse_position.x > 0.95){
-            camera->moveGlobalX(10);
-        } else if (gl_mouse_position.x > 0.85){
-            camera->moveGlobalX(5);
+        // RIGHT
+        if(camera->getPosition().x <= 1.0 * level->getMapWidth()/2 - 70){
+            if(gl_mouse_position.x > 0.95){
+                camera->moveGlobalX(10);
+            } else if (gl_mouse_position.x > 0.85){
+                camera->moveGlobalX(5);
+            }
         }
-    }
 
-    // DOWN
-    if(camera->getPosition().z <= 1.0 * level->getMapHeight()/2 - 3){        
-        if(gl_mouse_position.y < -0.95){
-            camera->moveGlobalZ(10);
-        } else if(gl_mouse_position.y < -0.85){
-            camera->moveGlobalZ(5);
+        // DOWN
+        if(camera->getPosition().z <= 1.0 * level->getMapHeight()/2 - 3){        
+            if(gl_mouse_position.y < -0.95){
+                camera->moveGlobalZ(10);
+            } else if(gl_mouse_position.y < -0.85){
+                camera->moveGlobalZ(5);
+            }
         }
-    }
 
-    // UP                                                          . Compensating for the camera angle
-    if(camera->getPosition().z >= -1.0 * level->getMapHeight()/2 + 70){   
-        if(gl_mouse_position.y > 0.95){
-            camera->moveGlobalZ(-10);
-        } else if (gl_mouse_position.y > 0.85){
-            camera->moveGlobalZ(-5);
+        // UP                                                          . Compensating for the camera angle
+        if(camera->getPosition().z >= -1.0 * level->getMapHeight()/2 + 70){   
+            if(gl_mouse_position.y > 0.95){
+                camera->moveGlobalZ(-10);
+            } else if (gl_mouse_position.y > 0.85){
+                camera->moveGlobalZ(-5);
+            }
         }
     }
 
