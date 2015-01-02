@@ -103,12 +103,12 @@ void GameView::handleInputs(){
         glfwSetWindowShouldClose(glfw_window, GL_TRUE);
     }
 
-    if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT)){
+    if(glfwGetMouseButton(glfw_window, GLFW_MOUSE_BUTTON_LEFT)){
         // Left mouse button
         // printf("Clicked left mouse button\n");
     }
 
-    if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT)){
+    if(glfwGetMouseButton(glfw_window, GLFW_MOUSE_BUTTON_RIGHT)){
         // Right mouse button
         // printf("Clicked right mouse button\n");
     }
