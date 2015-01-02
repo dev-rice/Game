@@ -67,7 +67,7 @@ void GameView::update(){
         ui_drawables[i]->draw();
     }
     // draw selection rectangle here
-    if(mouse_count > 61){
+    if(mouse_count > 1){
         // draw from initial_left_click_position to final_left_click_position
         selection_box->setCoordinates(initial_left_click_position, final_left_click_position);
         selection_box->draw();
@@ -103,18 +103,33 @@ void GameView::handleInputs(){
     glfwPollEvents();
 
     glm::vec2 gl_mouse_position = mouse->getPosition();
-    if(gl_mouse_position.x < -0.9){
+    
+    // Mouse scrolling the screen
+    if(gl_mouse_position.x < -0.95){
+        camera->moveGlobalX(-10);
+    } else if(gl_mouse_position.x < -0.85){
         camera->moveGlobalX(-5);
-    } else if (gl_mouse_position.x > 0.9){
+    }
+
+    if(gl_mouse_position.x > 0.95){
+        camera->moveGlobalX(10);
+    } else if (gl_mouse_position.x > 0.85){
         camera->moveGlobalX(5);
     }
 
-    if(gl_mouse_position.y < -0.9){
+    if(gl_mouse_position.y < -0.95){
+        camera->moveGlobalZ(10);
+    } else if(gl_mouse_position.y < -0.85){
         camera->moveGlobalZ(5);
-    } else if (gl_mouse_position.y > 0.9){
+    } 
+
+    if(gl_mouse_position.y > 0.95){
+        camera->moveGlobalZ(-10);
+    } else if (gl_mouse_position.y > 0.85){
         camera->moveGlobalZ(-5);
     }
 
+    // Closing the window
     if (glfwGetKey(glfw_window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
         glfwSetWindowShouldClose(glfw_window, GL_TRUE);
     }
