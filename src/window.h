@@ -15,11 +15,15 @@ public:
 
     GLFWwindow* getGLFWWindow(){ return window;}
 
+    int getWidth(){return width;}
+    int getHeight(){return height;}
+
 private:
     GLFWwindow* initializeGLFWWindow(int, int, bool);
 
     GLFWwindow* window;
-
+    int width;
+    int height;
 };
 
 #endif

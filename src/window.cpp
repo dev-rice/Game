@@ -1,6 +1,8 @@
 #include "window.h"
 
 Window::Window(int width, int height, bool fullscreen){
+    this->width = width;
+    this->height = height;
     window = initializeGLFWWindow(width, height, fullscreen);
 }
 
