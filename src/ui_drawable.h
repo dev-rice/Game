@@ -10,10 +10,11 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "flat_drawable.h"
+#include "window.h"
 
 class UIDrawable : public FlatDrawable {
 public:
-    UIDrawable(FlatMesh*, GLFWwindow*, GLuint, GLuint);
+    UIDrawable(FlatMesh*, Window*, GLuint, GLuint);
 
     void setPosition(glm::vec2);
     void attachTexture(GLuint);
