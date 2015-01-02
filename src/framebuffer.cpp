@@ -4,7 +4,7 @@ Framebuffer::Framebuffer(){
     framebuffer = 0;
 }
 
-Framebuffer::Framebuffer(GLFWwindow* window){
+Framebuffer::Framebuffer(Window* window){
     // Create a mesh for framebuffer to draw on
     FlatMesh* flat_mesh = new FlatMesh();
 
@@ -15,8 +15,9 @@ Framebuffer::Framebuffer(GLFWwindow* window){
     glGenTextures(1, &framebuffer_texture);
     glBindTexture(GL_TEXTURE_2D, framebuffer_texture);
 
-    int width, height;
-    glfwGetFramebufferSize(window, &width, &height);
+    int width = window->getWidth();
+    int height = window->getHeight();
+
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB,
         GL_UNSIGNED_BYTE, NULL);
 

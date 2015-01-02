@@ -6,7 +6,7 @@ GameView::GameView(Window* window, Level* level){
     this->level = level;
 
     screen = new Framebuffer();
-    framebuffer = new Framebuffer(glfw_window);
+    framebuffer = new Framebuffer(window);
     shadowbuffer = new Shadowbuffer(1024, 1024);
 
     FlatMesh* flat_mesh = new FlatMesh();

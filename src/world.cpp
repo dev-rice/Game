@@ -4,7 +4,6 @@ World::World(Window* window) : World(window, "res/maps/aatest.map"){}
 
 World::World(Window* window, const char* level_filename){
     this->window = window;
-    this->glfw_window = window->getGLFWWindow();
     addLevel(level_filename);
 }
 

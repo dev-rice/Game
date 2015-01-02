@@ -22,7 +22,6 @@ public:
 
 private:
     Window* window;
-    GLFWwindow* glfw_window;
     GameView* game_view;
     Level* level;
 };

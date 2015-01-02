@@ -4,11 +4,12 @@
 #include "flat_drawable.h"
 #include "shader_loader.h"
 #include "profile.h"
+#include "window.h"
 
 class Framebuffer {
 public:
     Framebuffer();
-    Framebuffer(GLFWwindow*);
+    Framebuffer(Window*);
 
     void setAsRenderTarget();
     void draw();
