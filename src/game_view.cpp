@@ -71,46 +71,60 @@ void GameView::handleInputs(){
 
     glfwPollEvents();
 
-    // Camera controls
-    // Movement
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS){
-        camera->moveZ(-1);
-    }
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS){
-        camera->moveZ(1);
-    }
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS){
-        camera->moveX(1);
-    }
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS){
-        camera->moveX(-1);
-    }
-    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS){
-        camera->moveY(-1);
-    }
-    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS){
-        camera->moveY(1);
+    glm::vec2 gl_mouse_position = mouse->getPosition();
+    if(gl_mouse_position.x < -0.9){
+        camera->moveX(-5);
+    } else if (gl_mouse_position.x > 0.9){
+        camera->moveX(5);
     }
 
+    if(gl_mouse_position.y < -0.9){
+        camera->moveGlobalZ(5);
+    } else if (gl_mouse_position.y > 0.9){
+        camera->moveGlobalZ(-5);
+    }
+
+
+    // Camera controls
+    // Movement
+    // if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS){
+    //     camera->moveZ(-1);
+    // }
+    // if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS){
+    //     camera->moveZ(1);
+    // }
+    // if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS){
+    //     camera->moveX(1);
+    // }
+    // if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS){
+    //     camera->moveX(-1);
+    // }
+    // if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS){
+    //     camera->moveY(-1);
+    // }
+    // if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS){
+    //     camera->moveY(1);
+    // }
+
     // Rotation
-    if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS){
-        camera->rotateY(1);
-    }
-    if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS){
-        camera->rotateY(-1);
-    }
-    if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS){
-        camera->rotateX(1);
-    }
-    if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS){
-        camera->rotateX(-1);
-    }
-    if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS){
-        camera->rotateZ(1);
-    }
-    if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS){
-        camera->rotateZ(-1);
-    }
+    // if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS){
+    //     camera->rotateY(1);
+    // }
+    // if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS){
+    //     camera->rotateY(-1);
+    // }
+    // if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS){
+    //     camera->rotateX(1);
+    // }
+    // if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS){
+    //     camera->rotateX(-1);
+    // }
+    // if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS){
+    //     camera->rotateZ(1);
+    // }
+    // if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS){
+    //     camera->rotateZ(-1);
+    // }
 
     // Handle the debug toggle key
     if ((glfwGetKey(window, GLFW_KEY_TAB) == GLFW_PRESS) && (!toggle_key_state)){

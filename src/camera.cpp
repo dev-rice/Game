@@ -27,6 +27,10 @@ void Camera::moveZ(int direction){
     position += move_sensitivity * direction * local_z;
 }
 
+void Camera::moveGlobalZ(int direction){
+    position.z += move_sensitivity * direction;
+}
+
 void Camera::rotateX(int direction){
     rotation.x += rotate_sensitivity * direction;
 }

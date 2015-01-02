@@ -11,12 +11,12 @@ Mouse::Mouse(FlatMesh* flat_mesh, GLFWwindow* window, GLuint shader_program, GLu
     mouse_projection = glm::mat3( window_width / 2.0f, 0.0f, window_width / 2.0f,
                                   0.0f, -window_height / 2.0f, window_height / 2.0f,
                                   0.0f, 0.0f, 1.0f           );
-
 }
 
 glm::vec2 Mouse::getPosition(){
     double x;
     double y;
+    printf("Mouse position: %f, %f\n", x, y);
     glfwGetCursorPos(window, &x, &y);
 
     glm::vec3 gl_mouse_position = glm::vec3(x, y, 1.0) * glm::inverse(mouse_projection);

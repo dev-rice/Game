@@ -15,9 +15,9 @@ Level::Level(GLFWwindow* window, const char* filename){
     glfwGetFramebufferSize(window, &width, &height);
     proj_matrix = glm::perspective(45.0f, (float)width / (float)height, 0.1f, 500.0f);
 
-    // camera = new Camera(glm::vec3(0.0f, 20.0f, 20.0f));
-    // camera->setRotation(glm::vec3(0.78f, 0.0f, 0.0f));
-    camera = new Camera(glm::vec3(0.0f, 2.0f, 4.0f));
+    camera = new Camera(glm::vec3(0.0f, 40.0f, 40.0f));
+    camera->setRotation(glm::vec3(0.78f, 0.0f, 0.0f));
+    // camera = new Camera(glm::vec3(0.0f, 2.0f, 4.0f));
     view_matrix = camera->getViewMatrix();
 
     doodad_shader = ShaderLoader::loadShaderProgram("shaders/multiple_lights.vs",

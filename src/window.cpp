@@ -27,6 +27,9 @@ GLFWwindow* Window::initializeGLFWWindow(int width, int height, bool fullscreen)
         window = glfwCreateWindow(width, height, windowTitle, nullptr, nullptr);
     }
 
+    // Set the cursor in the middle
+    // glfwSetCursorPos(window, width/2, height/2);
+
     int actual_w, actual_h;
     glfwGetFramebufferSize(window, &actual_w, &actual_h);
     if (actual_w != width || actual_h != height){
