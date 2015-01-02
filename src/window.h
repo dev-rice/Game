@@ -13,7 +13,9 @@ class Window{
 public:
     Window(int, int, bool);
 
-    GLFWwindow* getGLFWWindow(){ return window;}
+    GLFWwindow* getGLFWWindow(){ return glfw_window;}
+
+    void swapBuffers();
 
     int getWidth(){return width;}
     int getHeight(){return height;}
@@ -21,7 +23,7 @@ public:
 private:
     GLFWwindow* initializeGLFWWindow(int, int, bool);
 
-    GLFWwindow* window;
+    GLFWwindow* glfw_window;
     int width;
     int height;
 };

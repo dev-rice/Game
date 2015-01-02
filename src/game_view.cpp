@@ -28,7 +28,7 @@ GameView::GameView(Window* window, Level* level){
 void GameView::update(){
     float start_time = glfwGetTime();
     // Swap display/rendering buffers
-    glfwSwapBuffers(glfw_window);
+    window->swapBuffers();
 
     handleInputs();
 

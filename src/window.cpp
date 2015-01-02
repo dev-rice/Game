@@ -3,7 +3,11 @@
 Window::Window(int width, int height, bool fullscreen){
     this->width = width;
     this->height = height;
-    window = initializeGLFWWindow(width, height, fullscreen);
+    glfw_window = initializeGLFWWindow(width, height, fullscreen);
+}
+
+void Window::swapBuffers(){
+    glfwSwapBuffers(glfw_window);
 }
 
 GLFWwindow* Window::initializeGLFWWindow(int width, int height, bool fullscreen){
