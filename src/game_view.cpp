@@ -13,11 +13,10 @@ GameView::GameView(Window* window, Level* level){
 
     GLuint ui_shader = ShaderLoader::loadShaderProgram("shaders/ui.vs",
         "shaders/ui.fs");
+    GLuint mousebox_shader = ShaderLoader::loadShaderProgram("shaders/mousebox.vs",
+        "shaders/mousebox.fs");
     GLuint mouse_texture = TextureLoader::loadTextureFromFile(
         "res/textures/cursor_ui.png", GL_LINEAR);
-    GLuint box_texture = TextureLoader::loadTextureFromFile(
-        "res/textures/axe_diff.png", GL_LINEAR);
-
 
     mouse = new Mouse(flat_mesh, window, ui_shader, mouse_texture);
 
@@ -25,8 +24,7 @@ GameView::GameView(Window* window, Level* level){
         "res/fonts/inconsolata_bold_font.png", 0.01);
 
     // Creation of selection box
-                                                           // Change this to a custom selection box shader later for outline
-    selection_box = new UIDrawable(new FlatMesh(), window, ui_shader, box_texture);
+    selection_box = new UIDrawable(new FlatMesh(), window, mousebox_shader, 0);
     selection_box->setPosition(glm::vec2(0.0f, 0.0f));
 
     toggle_key_state = false;
@@ -103,7 +101,7 @@ void GameView::handleInputs(){
     glfwPollEvents();
 
     glm::vec2 gl_mouse_position = mouse->getPosition();
-    
+
     // Mouse scrolling the screen
     if(gl_mouse_position.x < -0.95){
         camera->moveGlobalX(-10);
@@ -121,7 +119,7 @@ void GameView::handleInputs(){
         camera->moveGlobalZ(10);
     } else if(gl_mouse_position.y < -0.85){
         camera->moveGlobalZ(5);
-    } 
+    }
 
     if(gl_mouse_position.y > 0.95){
         camera->moveGlobalZ(-10);
@@ -137,7 +135,7 @@ void GameView::handleInputs(){
     if(glfwGetMouseButton(glfw_window, GLFW_MOUSE_BUTTON_LEFT)){
         // Left mouse button
         if(mouse_count == 0){
-            initial_left_click_position = gl_mouse_position;   
+            initial_left_click_position = gl_mouse_position;
         } else {
             final_left_click_position = gl_mouse_position;
         }
@@ -149,7 +147,7 @@ void GameView::handleInputs(){
 
     if(glfwGetMouseButton(glfw_window, GLFW_MOUSE_BUTTON_RIGHT)){
         // Right mouse button
-        printf("Clicked right mouse button\n");
+        // printf("Clicked right mouse button\n");
     }
 
     // Camera controls
