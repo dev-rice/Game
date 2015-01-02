@@ -33,8 +33,8 @@ GLFWwindow* Window::initializeGLFWWindow(int width, int height, bool fullscreen)
     glfwGetFramebufferSize(window, &actual_w, &actual_h);
     if (actual_w != width || actual_h != height){
         Debug::warning("Actual render size is %d by %d.\n", actual_w, actual_h);
-        width = actual_w;
-        height = actual_h;
+        this->width = actual_w;
+        this->height = actual_h;
     }
 
     // Hide the mouse
