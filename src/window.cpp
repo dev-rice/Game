@@ -11,9 +11,6 @@ GLFWwindow* Window::initializeGLFWWindow(int width, int height, bool fullscreen)
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-    // Set up the MSAA level
-    // glfwWindowHint(GLFW_SAMPLES, 16);
-
     const char* windowTitle = "OpenGL";
 
     GLFWwindow* window;
@@ -42,6 +39,7 @@ GLFWwindow* Window::initializeGLFWWindow(int width, int height, bool fullscreen)
     // Create the OpenGL context in the window
     glfwMakeContextCurrent(window);
 
+
     // Set up GLEW so that we can use abstracted OpenGL functions
     glewExperimental = GL_TRUE;
     glewInit();
@@ -63,8 +61,8 @@ GLFWwindow* Window::initializeGLFWWindow(int width, int height, bool fullscreen)
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 
-    // Enable MSAA
-    // glEnable(GL_MULTISAMPLE);
+    // Turn off vsync
+    // glfwSwapInterval(0);
 
     return window;
 }

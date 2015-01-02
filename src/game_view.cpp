@@ -22,6 +22,10 @@ GameView::GameView(GLFWwindow* window, Level* level){
 }
 
 void GameView::update(){
+    float start_time = glfwGetTime();
+    // Swap display/rendering buffers
+    glfwSwapBuffers(window);
+
     handleInputs();
 
     // Render the shadow map into the shadow buffer
@@ -49,6 +53,8 @@ void GameView::update(){
         ui_drawables[i]->draw();
     }
 
+    float frame_time = glfwGetTime() - start_time;
+
     // Draw the debug information
     if (debug_showing){
         Camera* camera = level->getCamera();
@@ -56,6 +62,7 @@ void GameView::update(){
         glm::vec3 rotation = camera->getRotation();
         glm::vec2 gl_mouse_position = mouse->getPosition();
 
+        text_renderer->print(glm::vec2(-0.95, 0.95), "fps: %.2f", 1.0 / frame_time);
         text_renderer->print(glm::vec2(-0.95, 0.9), "camera position <x, y, z>: %.2f, %.2f, %.2f", position.x, position.y, position.z);
         text_renderer->print(glm::vec2(-0.95, 0.85), "camera rotation <x, y, z>: %.2f, %.2f, %.2f", rotation.x, rotation.y, rotation.z);
         text_renderer->print(glm::vec2(-0.95, 0.80), "mouse <x, y>: %.2f, %.2f", gl_mouse_position.x, gl_mouse_position.y);
