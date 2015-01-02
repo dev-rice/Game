@@ -4,14 +4,21 @@
 # converts *.x3d scenes to the custom *.map files
 #
 # Map file Specification
+#
+# First, the camera coordinates
+# This single line begins with a "c" tag, for camera
+# This is in the format: 
+# c x, y position
+# for example
+# c 0.0 0.0
 # 
-# First, the list of unique objects in the scene
+# Next, the list of unique objects in the scene
 # These start with the "m" tag, for mesh
 # These are found assuming they are .obj files
 # For example:
 # m cube.obj
 #
-# Secondly, the list of unique textures in the scene
+# Then the list of unique textures in the scene
 # These start with the "t" tag, for texture
 # These are found assuming the following format
 # - If it is a diffuse map, (object name)_diff.png
@@ -293,7 +300,11 @@ class Converter:
 
         ofile = open(self.outputFileName, "w")
 
-        ofile.write("# Converted .map file\n\n# Included Meshes (m)\n")
+        ofile.write("# Converted .map file\n\n")
+
+        ofile.write("# Camera declaration\nc 0.0f, 0.0\n")
+
+        ofile.write("\n# Included Meshes (m)\n")
 
         for element in UniqueObjectsList:
             ofile.write("m %s\n" % element)

@@ -29,6 +29,7 @@ public:
     void moveGlobalY(int);
     void moveGlobalZ(int);
 
+    void setPosition(glm::vec3);
     void setRotation(glm::vec3);
 
     void print();
