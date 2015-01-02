@@ -1,6 +1,8 @@
 #include "window.h"
 
 Window::Window(int width, int height, bool fullscreen){
+    this->width = width;
+    this->height = height;
     window = initializeGLFWWindow(width, height, fullscreen);
 }
 
@@ -25,7 +27,7 @@ GLFWwindow* Window::initializeGLFWWindow(int width, int height, bool fullscreen)
     }
 
     // Set the cursor in the middle
-    // glfwSetCursorPos(window, width/2, height/2);
+    glfwSetCursorPos(window, width/2, height/2);
 
     int actual_w, actual_h;
     glfwGetFramebufferSize(window, &actual_w, &actual_h);

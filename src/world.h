@@ -8,11 +8,12 @@
 #include "level.h"
 #include "game_view.h"
 #include "debug.h"
+#include "window.h"
 
 class World{
 public:
-    World(GLFWwindow*);
-    World(GLFWwindow*, const char*);
+    World(Window*);
+    World(Window*, const char*);
     ~World();
 
     void addLevel(const char*);
@@ -20,7 +21,8 @@ public:
     void handleInputs();
 
 private:
-    GLFWwindow* window;
+    Window* window;
+    GLFWwindow* glfw_window;
     GameView* game_view;
     Level* level;
 };

@@ -8,17 +8,18 @@ Level::~Level(){
     #warning Deletion needs to be properly implemented
 }
 
-Level::Level(GLFWwindow* window, const char* filename){
+Level::Level(Window* window, const char* filename){
     this->window = window;
 
-    int width, height;
-    glfwGetFramebufferSize(window, &width, &height);
-    proj_matrix = glm::perspective(45.0f, (float)width / (float)height, 0.1f, 500.0f);
+    int width  = window->getWidth();
+    int height = window->getHeight();
+
+    proj_matrix = glm::perspective(45.0f, (float)width / (float)height, 0.1f,
+        500.0f);
 
     camera = new Camera(glm::vec3(0.0f, 10.0f, 10.0f));
     camera->setRotation(glm::vec3(0.78f, 0.0f, 0.0f));
     // camera = new Camera(glm::vec3(0.0f, 2.0f, 4.0f));
-    view_matrix = camera->getViewMatrix();
 
     doodad_shader = ShaderLoader::loadShaderProgram("shaders/multiple_lights.vs",
         "shaders/multiple_lights.fs");
@@ -30,7 +31,8 @@ Level::Level(GLFWwindow* window, const char* filename){
         "shaders/shadow.fs");
 
     glm::vec3 light_direction = glm::vec3(-1.0f, 1.0f, 0.0f);
-    depth_view = glm::lookAt(light_direction, glm::vec3(0,0,0), glm::vec3(0,1,0));
+    depth_view = glm::lookAt(light_direction, glm::vec3(0,0,0),
+        glm::vec3(0,1,0));
     // Size of the box to render (tailored to fit current map).
     depth_proj = glm::ortho<float>(-50,50,-50, 50,-20,20);
 
@@ -115,13 +117,16 @@ void Level::loadLevel(const char* filename){
             strcat(actual, texture_filename);
 
             //  Add this texture to the texture container
-            GLuint texture = TextureLoader::loadTextureFromFile(actual, GL_LINEAR);
+            GLuint texture = TextureLoader::loadTextureFromFile(actual,
+                GL_LINEAR);
             textures.push_back(texture);
 
         }
 
         if(buffer[0] == 'd'){
-            sscanf(buffer, "%*c %d %d %d %d %d %f %f %f %f %f %f %f", &objectIndex, &diffIndex, &specIndex, &normIndex, &emitIndex, &x, &y, &z, &scale, &x_rot, &y_rot, &z_rot);
+            sscanf(buffer, "%*c %d %d %d %d %d %f %f %f %f %f %f %f",
+                &objectIndex, &diffIndex, &specIndex, &normIndex, &emitIndex,
+                &x, &y, &z, &scale, &x_rot, &y_rot, &z_rot);
 
             Mesh* mesh = meshes[objectIndex];
 
@@ -135,7 +140,8 @@ void Level::loadLevel(const char* filename){
             glm::vec3 position = glm::vec3(x, y, z);
             glm::vec3 rotation = glm::vec3(x_rot, y_rot, z_rot);
 
-            Doodad* drawable = new Doodad(mesh, doodad_shader, position, rotation, scale);
+            Doodad* drawable = new Doodad(mesh, doodad_shader, position,
+                rotation, scale);
             drawable->attachTextureSet(texture_set);
             drawables.push_back(drawable);
 
@@ -155,7 +161,8 @@ void Level::loadLevel(const char* filename){
             if(e){
                 emitters.push_back(e);
             } else {
-                Debug::error("Could not load particle type: %s\n", particle_name);
+                Debug::error("Could not load particle type: %s\n",
+                    particle_name);
             }
         }
 
@@ -168,9 +175,11 @@ void Level::loadLevel(const char* filename){
             strcat(heightmap_filename, parameter);
 
             std::string heightmap_filename_str(heightmap_filename);
-            Drawable* ground = new Terrain(doodad_shader, heightmap_filename_str);
+            Drawable* ground = new Terrain(doodad_shader,
+                heightmap_filename_str);
 
-            GLuint diffuse = TextureLoader::loadTextureFromFile("res/textures/ice_diff.png", GL_LINEAR);
+            GLuint diffuse = TextureLoader::loadTextureFromFile(
+                "res/textures/ice_diff.png", GL_LINEAR);
 
             TextureSet texture_set(diffuse, 0, 0, 0);
             ground->attachTextureSet(texture_set);

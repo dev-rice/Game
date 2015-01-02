@@ -21,6 +21,8 @@
 #include "snow_emitter.h"
 #include "smoke_emitter.h"
 
+#include "window.h"
+
 static const char* MODEL_PATH = "res/models/";
 static const char* TEXTURE_PATH = "res/textures/";
 
@@ -28,7 +30,7 @@ static const char* TEXTURE_PATH = "res/textures/";
 class Level{
 public:
     ~Level();
-    Level(GLFWwindow*, const char*);
+    Level(Window*, const char*);
 
     void draw();
     void drawShadowMap();
@@ -39,7 +41,7 @@ private:
     void loadLevel(const char *);
     GLuint getTexture(GLuint);
 
-    GLFWwindow* window;
+    Window* window;
 
     Camera* camera;
 

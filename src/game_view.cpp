@@ -10,12 +10,15 @@ GameView::GameView(GLFWwindow* window, Level* level){
 
     FlatMesh* flat_mesh = new FlatMesh();
 
-    GLuint ui_shader = ShaderLoader::loadShaderProgram("shaders/ui.vs", "shaders/ui.fs");
-    GLuint mouse_texture = TextureLoader::loadTextureFromFile("res/textures/cursor_ui.png", GL_LINEAR);
+    GLuint ui_shader = ShaderLoader::loadShaderProgram("shaders/ui.vs",
+        "shaders/ui.fs");
+    GLuint mouse_texture = TextureLoader::loadTextureFromFile(
+        "res/textures/cursor_ui.png", GL_LINEAR);
 
     mouse = new Mouse(flat_mesh, window, ui_shader, mouse_texture);
 
-    text_renderer = new TextRenderer(window, "res/fonts/inconsolata_bold_font.png", 0.01);
+    text_renderer = new TextRenderer(window,
+        "res/fonts/inconsolata_bold_font.png", 0.01);
 
     toggle_key_state = false;
     debug_showing = false;
@@ -62,10 +65,14 @@ void GameView::update(){
         glm::vec3 rotation = camera->getRotation();
         glm::vec2 gl_mouse_position = mouse->getPosition();
 
-        text_renderer->print(glm::vec2(-0.95, 0.95), "fps: %.2f", 1.0 / frame_time);
-        text_renderer->print(glm::vec2(-0.95, 0.9), "camera position <x, y, z>: %.2f, %.2f, %.2f", position.x, position.y, position.z);
-        text_renderer->print(glm::vec2(-0.95, 0.85), "camera rotation <x, y, z>: %.2f, %.2f, %.2f", rotation.x, rotation.y, rotation.z);
-        text_renderer->print(glm::vec2(-0.95, 0.80), "mouse <x, y>: %.2f, %.2f", gl_mouse_position.x, gl_mouse_position.y);
+        text_renderer->print(glm::vec2(-0.95, 0.95), "fps: %.2f",
+            1.0 / frame_time);
+        text_renderer->print(glm::vec2(-0.95, 0.9), "camera position <x, y, z>:"
+            "%.2f, %.2f, %.2f", position.x, position.y, position.z);
+        text_renderer->print(glm::vec2(-0.95, 0.85), "camera rotation <x, y, z>:"
+            "%.2f, %.2f, %.2f", rotation.x, rotation.y, rotation.z);
+        text_renderer->print(glm::vec2(-0.95, 0.80), "mouse <x, y>: %.2f, %.2f",
+            gl_mouse_position.x, gl_mouse_position.y);
     }
 
     // The mouse draws on top of everything else

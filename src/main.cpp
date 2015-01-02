@@ -104,15 +104,15 @@ int main(int argc, char* argv[]) {
     }
 
     // Create the window
-    Window window = Window(width, height, fullscreen);
-    GLFWwindow* glfw_window = window.getGLFWWindow();
+    Window* window = new Window(width, height, fullscreen);
+    GLFWwindow* glfw_window = window->getGLFWWindow();
 
     // Create the world
     World* world;
     if (has_map){
-        world = new World(glfw_window, map_filename.c_str());
+        world = new World(window, map_filename.c_str());
     } else {
-        world = new World(glfw_window);
+        world = new World(window);
     }
 
 
