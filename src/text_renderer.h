@@ -18,15 +18,16 @@
 #include "character_mesh.h"
 #include "shader_loader.h"
 #include "texture_loader.h"
+#include "window.h"
 
 class TextRenderer {
 public:
-    TextRenderer(GLFWwindow*, std::string, GLfloat);
+    TextRenderer(Window*, std::string, GLfloat);
 
     void print(glm::vec2, const char*, ...);
 private:
     void drawString(glm::vec2, std::string);
-    
+
     CharacterMesh* character_mesh;
     CharacterDrawable* character_box;
 

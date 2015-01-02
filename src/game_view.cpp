@@ -18,7 +18,7 @@ GameView::GameView(Window* window, Level* level){
 
     mouse = new Mouse(flat_mesh, window, ui_shader, mouse_texture);
 
-    text_renderer = new TextRenderer(glfw_window,
+    text_renderer = new TextRenderer(window,
         "res/fonts/inconsolata_bold_font.png", 0.01);
 
     toggle_key_state = false;
