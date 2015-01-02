@@ -1,6 +1,6 @@
 #include "mouse.h"
 
-Mouse::Mouse(FlatMesh* flat_mesh, GLFWwindow* window, GLuint shader_program, GLuint texture) 
+Mouse::Mouse(FlatMesh* flat_mesh, GLFWwindow* window, GLuint shader_program, GLuint texture)
         : UIDrawable(flat_mesh, window, shader_program, texture) {
 
     this->window = window;
@@ -26,6 +26,6 @@ glm::vec2 Mouse::getPosition(){
 void Mouse::draw(){
     // Eww
     setPosition(getPosition());
-    
+
     UIDrawable::draw();
 }
