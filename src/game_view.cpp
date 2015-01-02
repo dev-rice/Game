@@ -15,11 +15,19 @@ GameView::GameView(Window* window, Level* level){
         "shaders/ui.fs");
     GLuint mouse_texture = TextureLoader::loadTextureFromFile(
         "res/textures/cursor_ui.png", GL_LINEAR);
+    GLuint box_texture = TextureLoader::loadTextureFromFile(
+        "res/textures/axe_diff.png", GL_LINEAR);
+
 
     mouse = new Mouse(flat_mesh, window, ui_shader, mouse_texture);
 
     text_renderer = new TextRenderer(window,
         "res/fonts/inconsolata_bold_font.png", 0.01);
+
+    // Creation of selection box
+                                                           // Change this to a custom selection box shader later for outline
+    selection_box = new UIDrawable(new FlatMesh(), window, ui_shader, box_texture);
+    selection_box->setPosition(glm::vec2(0.0f, 0.0f));
 
     toggle_key_state = false;
     debug_showing = false;
@@ -58,6 +66,12 @@ void GameView::update(){
     for(int i = 0; i < ui_drawables.size(); ++i){
         ui_drawables[i]->draw();
     }
+    // draw selection rectangle here
+    if(mouse_count > 61){
+        // draw from initial_left_click_position to final_left_click_position
+        selection_box->setCoordinates(initial_left_click_position, final_left_click_position);
+        selection_box->draw();
+    }
 
     float frame_time = glfwGetTime() - start_time;
 
@@ -76,11 +90,6 @@ void GameView::update(){
             "%.2f, %.2f, %.2f", rotation.x, rotation.y, rotation.z);
         text_renderer->print(glm::vec2(-0.95, 0.80), "mouse <x, y>: %.2f, %.2f",
             gl_mouse_position.x, gl_mouse_position.y);
-    }
-
-    // draw selection rectangle here
-    if(mouse_count > 0){
-        // draw from initial_left_click_position to final_left_click_position
     }
 
     // The mouse draws on top of everything else

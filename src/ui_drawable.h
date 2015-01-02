@@ -18,6 +18,8 @@ public:
 
     void setPosition(glm::vec2);
     void attachTexture(GLuint);
+
+    void setCoordinates(glm::vec2, glm::vec2);
 private:
 
     glm::mat3 mesh_projection;

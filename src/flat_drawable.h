@@ -26,6 +26,7 @@ public:
     virtual void attachTexture(GLuint);
 
     virtual void setPosition(glm::vec2 p) {position = p;}
+    virtual void setCoordinates(glm::vec2, glm::vec2){;}
 
 protected:
     virtual void updateUniformData();
