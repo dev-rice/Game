@@ -14,31 +14,54 @@ void TextureSet::load(GLuint diff, GLuint spec, GLuint norm, GLuint emit){
 
     if (diff == 0){
         if (emit == 0){
-            this->diffuse = pink;
-            this->specular = pink;
-            this->normal = pink;
-            this->emissive = pink;
+            this->diffuse_set.push_back(pink);
+            this->specular_set.push_back(pink);
+            this->normal_set.push_back(pink);
+            this->emissive_set.push_back(pink);
         } else {
-            this->diffuse = alpha;
-            this->specular = alpha;
-            this->normal = alpha;
-            this->emissive = emit;
+            this->diffuse_set.push_back(alpha);
+            this->specular_set.push_back(alpha);
+            this->normal_set.push_back(alpha);
+            this->emissive_set.push_back(emit);
         }
 
     }
     else {
-        this->diffuse = diff;
-        this->specular = spec;
-        this->normal = norm;
-        this->emissive = emit;
+        this->diffuse_set.push_back(diff);
+        
         if (spec == 0){
-            this->specular = alpha;
+            this->specular_set.push_back(alpha);
+        } else {
+            this->specular_set.push_back(spec);
         }
+
         if (norm == 0){
-            this->normal = alpha;
+            this->normal_set.push_back(alpha);
+        } else {
+            this->normal_set.push_back(norm);
         }
-        if (emissive == 0){
-            this->emissive = alpha;
+
+        if (emit == 0){
+            this->emissive_set.push_back(alpha);
+        } else {
+            this->emissive_set.push_back(emit);
         }
+        
     }
+}
+
+GLuint TextureSet::getDiffuse(){
+    return diffuse_set[0];
+}
+
+GLuint TextureSet::getSpecular(){
+    return specular_set[0];
+}
+
+GLuint TextureSet::getNormal(){
+    return normal_set[0];
+}
+
+GLuint TextureSet::getEmissive(){
+    return emissive_set[0];
 }

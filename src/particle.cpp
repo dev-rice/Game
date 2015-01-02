@@ -39,7 +39,7 @@ void Particle::bindTextures(){
     // correspond to the uniforms set in attachTextureSet(). This is where we actually 
     // tell the graphics card which textures to use.
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture_set->emissive);
+    glBindTexture(GL_TEXTURE_2D, texture_set->getEmissive());
 }
 
 void Particle::attachTextureSet(TextureSet texture_set){

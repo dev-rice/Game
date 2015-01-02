@@ -263,16 +263,16 @@ void Terrain::bindTextures(){
     // correspond to the uniforms set in attachTextureSet(). This is where we actually
     // tell the graphics card which textures to use.
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture_set->diffuse);
+    glBindTexture(GL_TEXTURE_2D, texture_set->getDiffuse());
 
     glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, texture_set->specular);
+    glBindTexture(GL_TEXTURE_2D, texture_set->getSpecular());
 
     glActiveTexture(GL_TEXTURE2);
-    glBindTexture(GL_TEXTURE_2D, texture_set->normal);
+    glBindTexture(GL_TEXTURE_2D, texture_set->getNormal());
 
     glActiveTexture(GL_TEXTURE3);
-    glBindTexture(GL_TEXTURE_2D, texture_set->emissive);
+    glBindTexture(GL_TEXTURE_2D, texture_set->getEmissive());
 }
 
 void Terrain::updateUniformData(){

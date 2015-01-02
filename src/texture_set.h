@@ -17,14 +17,20 @@ class TextureSet {
 public:
     TextureSet();
     TextureSet(GLuint, GLuint, GLuint, GLuint);
+  
+    GLuint getDiffuse();
+    GLuint getSpecular();
+    GLuint getNormal();
+    GLuint getEmissive();
 
-    GLuint diffuse;
-    GLuint specular;
-    GLuint normal;
-    GLuint emissive;
+    void load(GLuint, GLuint, GLuint, GLuint);
 
 private:
-    void load(GLuint, GLuint, GLuint, GLuint);
+
+    std::vector<GLuint> diffuse_set;
+    std::vector<GLuint> specular_set;
+    std::vector<GLuint> normal_set;
+    std::vector<GLuint> emissive_set;  
 };
 
 #endif
