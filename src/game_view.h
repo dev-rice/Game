@@ -27,6 +27,11 @@ public:
 private:
     void handleInputs();
 
+    // Mouse controls
+    int mouse_count;
+    glm::vec2 initial_left_click_position;
+    glm::vec2 final_left_click_position;
+
     Window* window;
     GLFWwindow* glfw_window;
 

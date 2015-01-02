@@ -23,6 +23,8 @@ GameView::GameView(Window* window, Level* level){
 
     toggle_key_state = false;
     debug_showing = false;
+
+    mouse_count = 0;
 }
 
 void GameView::update(){
@@ -76,6 +78,11 @@ void GameView::update(){
             gl_mouse_position.x, gl_mouse_position.y);
     }
 
+    // draw selection rectangle here
+    if(mouse_count > 0){
+        // draw from initial_left_click_position to final_left_click_position
+    }
+
     // The mouse draws on top of everything else
     mouse->draw();
 
@@ -105,12 +112,20 @@ void GameView::handleInputs(){
 
     if(glfwGetMouseButton(glfw_window, GLFW_MOUSE_BUTTON_LEFT)){
         // Left mouse button
-        // printf("Clicked left mouse button\n");
+        if(mouse_count == 0){
+            initial_left_click_position = gl_mouse_position;   
+        } else {
+            final_left_click_position = gl_mouse_position;
+        }
+        mouse_count++;
+    } else if(mouse_count != 0){
+        mouse_count = 0;
+        // printf("Box from (%f, %f) to (%f, %f)\n", initial_right_click_position.x, initial_right_click_position.y, final_right_click_position.x, final_right_click_position.y);
     }
 
     if(glfwGetMouseButton(glfw_window, GLFW_MOUSE_BUTTON_RIGHT)){
         // Right mouse button
-        // printf("Clicked right mouse button\n");
+        printf("Clicked right mouse button\n");
     }
 
     // Camera controls
