@@ -3,10 +3,10 @@
 GLuint ShaderLoader::loadVertexShader(std::string filename){
     // Create the vertex shader
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-    
+
     std::string source = GLSLParse(filename);
     const char* vertex_source = source.c_str();
-    
+
     glShaderSource(vertex_shader, 1, &vertex_source, NULL);
 
     // Compile it
@@ -21,17 +21,17 @@ GLuint ShaderLoader::loadVertexShader(std::string filename){
     }
 
     return vertex_shader;
-} 
+}
 
 GLuint ShaderLoader::loadFragmentShader(std::string filename){
  // Create the fragment shader
     GLuint fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-    
+
     std::string source = GLSLParse(filename);
     const char* fragment_source = source.c_str();
-    
+
     glShaderSource(fragment_shader, 1, &fragment_source, NULL);
-    
+
     // Compile it
     glCompileShader(fragment_shader);
 
@@ -67,6 +67,13 @@ GLuint ShaderLoader::combineShaderProgram(GLuint vertex_shader, GLuint fragment_
     return shader_program;
 }
 
+GLuint ShaderLoader::loadShaderProgram(std::string vertex, std::string fragment) {
+    GLuint vertex_shader = ShaderLoader::loadVertexShader(vertex);
+    GLuint fragment_shader = ShaderLoader::loadFragmentShader(fragment);
+    GLuint shader_program = ShaderLoader::combineShaderProgram(vertex_shader, fragment_shader);
+    return shader_program;
+}
+
 std::string ShaderLoader::GLSLParse(std::string filename){
     // Open the file in read mode
     const char* filename_temp = filename.c_str();
@@ -82,19 +89,19 @@ std::string ShaderLoader::GLSLParse(std::string filename){
     char* contents = new char[size_of_file + 1];
     // // We need to rewind so that we read from the top again
     rewind(file);
-    
-    // // Scan through the file and add each character 
-    // // to the array. 
+
+    // // Scan through the file and add each character
+    // // to the array.
     int index = 0;
     char current_char;
     while((current_char = fgetc(file)) != EOF){
         contents[index] = current_char;
         index++;
-    }    
+    }
 
     // // Close the file
     fclose(file);
-    
+
     // Add the null terminator
     contents[size_of_file] = 0;
 

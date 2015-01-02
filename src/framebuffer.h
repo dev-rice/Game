@@ -12,7 +12,7 @@ public:
 
     void setAsRenderTarget();
     void draw();
-private:
+protected:
 
     GLuint framebuffer;
     GLuint framebuffer_texture;

@@ -20,13 +20,19 @@ Level::Level(GLFWwindow* window, const char* filename){
     camera = new Camera(glm::vec3(0.0f, 2.0f, 4.0f));
     view_matrix = camera->getViewMatrix();
 
-    GLuint doodad_vs = ShaderLoader::loadVertexShader("shaders/multiple_lights.vs");
-    GLuint doodad_fs = ShaderLoader::loadFragmentShader("shaders/multiple_lights.fs");
-    doodad_shader = ShaderLoader::combineShaderProgram(doodad_vs, doodad_fs);
+    doodad_shader = ShaderLoader::loadShaderProgram("shaders/multiple_lights.vs",
+        "shaders/multiple_lights.fs");
 
-    GLuint particle_vs = ShaderLoader::loadVertexShader("shaders/particle.vs");
-    GLuint particle_fs = ShaderLoader::loadFragmentShader("shaders/particle.fs");
-    particle_shader = ShaderLoader::combineShaderProgram(particle_vs, particle_fs);
+    particle_shader = ShaderLoader::loadShaderProgram("shaders/particle.vs",
+        "shaders/particle.fs");
+
+    shadow_shader = ShaderLoader::loadShaderProgram("shaders/shadow.vs",
+        "shaders/shadow.fs");
+
+    glm::vec3 light_direction = glm::vec3(-1.0f, 1.0f, 0.0f);
+    depth_view = glm::lookAt(light_direction, glm::vec3(0,0,0), glm::vec3(0,1,0));
+    // Size of the box to render (tailored to fit current map).
+    depth_proj = glm::ortho<float>(-50,50,-50, 50,-20,20);
 
     loadLevel(filename);
 }
@@ -49,6 +55,19 @@ void Level::draw(){
         emitters[i]->draw(camera, &proj_matrix);
     }
 
+}
+
+void Level::drawShadowMap(){
+    for (int i = 0; i < drawables.size(); ++i){
+        // Save the shader this drawable is currently using
+        GLuint current_shader = drawables[i]->getShader();
+        // Set the drawable to render with the shadow shader
+        drawables[i]->setShader(shadow_shader);
+        // Draw the drawable from the light's perspective
+        drawables[i]->draw(&depth_view, &depth_proj);
+        // Reset the drawable's shader to what it was before
+        drawables[i]->setShader(current_shader);
+    }
 }
 
 void Level::loadLevel(const char* filename){

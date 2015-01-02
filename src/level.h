@@ -31,6 +31,7 @@ public:
     Level(GLFWwindow*, const char*);
 
     void draw();
+    void drawShadowMap();
 
     Camera* getCamera() {return camera;}
 
@@ -49,9 +50,13 @@ private:
 
     GLuint doodad_shader;
     GLuint particle_shader;
+    GLuint shadow_shader;
 
     glm::mat4 view_matrix;
     glm::mat4 proj_matrix;
+
+    glm::mat4 depth_view;
+    glm::mat4 depth_proj;
 
 };
 

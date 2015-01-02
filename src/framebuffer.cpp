@@ -17,34 +17,34 @@ Framebuffer::Framebuffer(GLFWwindow* window){
 
     int width, height;
     glfwGetFramebufferSize(window, &width, &height);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB,
+        GL_UNSIGNED_BYTE, NULL);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     //  Bind framebuffer and link texture to it
     glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, framebuffer_texture, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
+        framebuffer_texture, 0);
 
     // Add the depth buffer to the framebuffer
     GLuint rboDepthStencil;
     glGenRenderbuffers(1, &rboDepthStencil);
     glBindRenderbuffer(GL_RENDERBUFFER, rboDepthStencil);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rboDepthStencil);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT,
+        GL_RENDERBUFFER, rboDepthStencil);
 
     GLuint framebuffer_vs, framebuffer_fs, framebuffer_shader;
     // Load framebuffer shader
     if (Profile::fxaa){
-        framebuffer_vs = ShaderLoader::loadVertexShader("shaders/framebuffer_fxaa.vs");
-        framebuffer_fs = ShaderLoader::loadFragmentShader("shaders/framebuffer_fxaa.fs");
-        framebuffer_shader = ShaderLoader::combineShaderProgram(framebuffer_vs, framebuffer_fs);
+        framebuffer_shader = ShaderLoader::loadShaderProgram("shaders/framebuffer_fxaa.vs",
+            "shaders/framebuffer_fxaa.fs");
     } else {
-        framebuffer_vs = ShaderLoader::loadVertexShader("shaders/framebuffer.vs");
-        framebuffer_fs = ShaderLoader::loadFragmentShader("shaders/framebuffer.fs");
-        framebuffer_shader = ShaderLoader::combineShaderProgram(framebuffer_vs, framebuffer_fs);
+        framebuffer_shader = ShaderLoader::loadShaderProgram("shaders/framebuffer.vs",
+            "shaders/framebuffer.fs");
     }
-
 
     // Create the window to draw the framebuffer onto
     framebuffer_window = new FlatDrawable(flat_mesh, framebuffer_shader, 1.0, 1.0, glm::vec2(0.0, 0.0));

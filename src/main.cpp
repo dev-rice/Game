@@ -8,6 +8,11 @@
 // #elif defined __gnu_linux__
 #endif
 
+#define GLM_FORCE_RADIANS
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 #include <stdio.h>
 #include <cstdlib>
 #include <random>
@@ -21,6 +26,10 @@
 #include "debug.h"
 #include "profile.h"
 #include "window.h"
+
+void renderEverything(GLFWwindow*);
+void inputConsole();
+GLFWwindow* initializeGLFWWindow(int, int, bool);
 
 int main(int argc, char* argv[]) {
     // Make the randomizer random
@@ -124,6 +133,9 @@ int main(int argc, char* argv[]) {
 
     delete world;
     world = NULL;
+
+    // Add a line break before going back to the terminal prompt.
+    printf("\n");
 
     // Nothing went wrong!
     return 0;

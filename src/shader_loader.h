@@ -17,6 +17,7 @@ public:
     static GLuint loadVertexShader(std::string);
     static GLuint loadFragmentShader(std::string);
     static GLuint combineShaderProgram(GLuint, GLuint);
+    static GLuint loadShaderProgram(std::string, std::string);
 
 private:
     static std::string GLSLParse(std::string);

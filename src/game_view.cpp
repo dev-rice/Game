@@ -6,12 +6,11 @@ GameView::GameView(GLFWwindow* window, Level* level){
 
     screen = new Framebuffer();
     framebuffer = new Framebuffer(window);
+    shadowbuffer = new Shadowbuffer(1024, 1024);
 
     FlatMesh* flat_mesh = new FlatMesh();
 
-    GLuint ui_vs = ShaderLoader::loadVertexShader("shaders/ui.vs");
-    GLuint ui_fs = ShaderLoader::loadFragmentShader("shaders/ui.fs");
-    GLuint ui_shader = ShaderLoader::combineShaderProgram(ui_vs, ui_fs);
+    GLuint ui_shader = ShaderLoader::loadShaderProgram("shaders/ui.vs", "shaders/ui.fs");
     GLuint mouse_texture = TextureLoader::loadTextureFromFile("res/textures/cursor_ui.png", GL_LINEAR);
 
     mouse = new Mouse(flat_mesh, window, ui_shader, mouse_texture);
@@ -25,8 +24,12 @@ GameView::GameView(GLFWwindow* window, Level* level){
 void GameView::update(){
     handleInputs();
 
+    // Render the shadow map into the shadow buffer
+    // shadowbuffer->setAsRenderTarget();
+
     // Render the level to the framebuffer
     framebuffer->setAsRenderTarget();
+    // level->drawShadowMap();
     level->draw();
 
     // Draw the framebuffer N - 1 times (the last pass is drawn to the screen).
