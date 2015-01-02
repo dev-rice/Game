@@ -13,7 +13,7 @@ void Debug::info(const char* input, ...){
     }
 
     char buffer[256];
-    sprintf(buffer, "%s[INFO]%s %s", Debug::INFO, Debug::NORMAL, input);
+    sprintf(buffer, "%s[info]%s %s", Debug::INFO, Debug::NORMAL, input);
     input = buffer;
 
     va_list argument_list;
@@ -28,7 +28,7 @@ void Debug::error(const char* input, ...){
     }
 
     char buffer[256];
-    sprintf(buffer, "%s[ERROR]%s %s", Debug::ERROR, Debug::NORMAL, input);
+    sprintf(buffer, "%s[error]%s %s", Debug::ERROR, Debug::NORMAL, input);
     input = buffer;
 
     va_list argument_list;
@@ -43,7 +43,7 @@ void Debug::warning(const char* input, ...){
     }
 
     char buffer[256];
-    sprintf(buffer, "%s[WARNING]%s %s", Debug::WARNING, Debug::NORMAL, input);
+    sprintf(buffer, "%s[warning]%s %s", Debug::WARNING, Debug::NORMAL, input);
     input = buffer;
 
     va_list argument_list;

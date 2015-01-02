@@ -141,6 +141,9 @@ int main(int argc, char* argv[]) {
     delete world;
     world = NULL;
 
+    // Add a line break before going back to the terminal prompt.
+    printf("\n");
+
     // Nothing went wrong!
     return 0;
 }

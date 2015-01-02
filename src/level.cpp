@@ -20,17 +20,14 @@ Level::Level(GLFWwindow* window, const char* filename){
     camera = new Camera(glm::vec3(0.0f, 2.0f, 4.0f));
     view_matrix = camera->getViewMatrix();
 
-    GLuint doodad_vs = ShaderLoader::loadVertexShader("shaders/multiple_lights.vs");
-    GLuint doodad_fs = ShaderLoader::loadFragmentShader("shaders/multiple_lights.fs");
-    doodad_shader = ShaderLoader::combineShaderProgram(doodad_vs, doodad_fs);
+    doodad_shader = ShaderLoader::loadShaderProgram("shaders/multiple_lights.vs",
+        "shaders/multiple_lights.fs");
 
-    GLuint particle_vs = ShaderLoader::loadVertexShader("shaders/particle.vs");
-    GLuint particle_fs = ShaderLoader::loadFragmentShader("shaders/particle.fs");
-    particle_shader = ShaderLoader::combineShaderProgram(particle_vs, particle_fs);
+    particle_shader = ShaderLoader::loadShaderProgram("shaders/particle.vs",
+        "shaders/particle.fs");
 
-    GLuint shadow_vs = ShaderLoader::loadVertexShader("shaders/shadow.vs");
-    GLuint shadow_fs = ShaderLoader::loadFragmentShader("shaders/shadow.fs");
-    shadow_shader = ShaderLoader::combineShaderProgram(shadow_vs, shadow_fs);
+    shadow_shader = ShaderLoader::loadShaderProgram("shaders/shadow.vs",
+        "shaders/shadow.fs");
 
     glm::vec3 light_direction = glm::vec3(-1.0f, 1.0f, 0.0f);
     depth_view = glm::lookAt(light_direction, glm::vec3(0,0,0), glm::vec3(0,1,0));

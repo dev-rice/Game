@@ -24,9 +24,8 @@ Shadowbuffer::Shadowbuffer(int width, int height){
 
     GLuint framebuffer_vs, framebuffer_fs, framebuffer_shader;
     // Load framebuffer shader
-    framebuffer_vs = ShaderLoader::loadVertexShader("shaders/framebuffer.vs");
-    framebuffer_fs = ShaderLoader::loadFragmentShader("shaders/framebuffer.fs");
-    framebuffer_shader = ShaderLoader::combineShaderProgram(framebuffer_vs, framebuffer_fs);
+    framebuffer_shader = ShaderLoader::loadShaderProgram("shaders/framebuffer.vs",
+        "shaders/framebuffer.fs");
 
     // Create the window to draw the framebuffer onto
     framebuffer_window = new FlatDrawable(flat_mesh, framebuffer_shader, 1.0, 1.0, glm::vec2(0.0, 0.0));

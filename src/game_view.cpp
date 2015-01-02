@@ -10,9 +10,7 @@ GameView::GameView(GLFWwindow* window, Level* level){
 
     FlatMesh* flat_mesh = new FlatMesh();
 
-    GLuint ui_vs = ShaderLoader::loadVertexShader("shaders/ui.vs");
-    GLuint ui_fs = ShaderLoader::loadFragmentShader("shaders/ui.fs");
-    GLuint ui_shader = ShaderLoader::combineShaderProgram(ui_vs, ui_fs);
+    GLuint ui_shader = ShaderLoader::loadShaderProgram("shaders/ui.vs", "shaders/ui.fs");
     GLuint mouse_texture = TextureLoader::loadTextureFromFile("res/textures/cursor_ui.png", GL_LINEAR);
 
     mouse = new Mouse(flat_mesh, window, ui_shader, mouse_texture);
@@ -31,8 +29,8 @@ void GameView::update(){
 
     // Render the level to the framebuffer
     framebuffer->setAsRenderTarget();
-    level->drawShadowMap();
-    // level->draw();
+    // level->drawShadowMap();
+    level->draw();
 
     // Draw the framebuffer N - 1 times (the last pass is drawn to the screen).
     // This is how many times the fxaa shader samples the image.
