@@ -84,6 +84,9 @@ void GameView::handleInputs(){
         camera->moveGlobalZ(-5);
     }
 
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
+        glfwSetWindowShouldClose(window, GL_TRUE);
+    }
 
     // Camera controls
     // Movement

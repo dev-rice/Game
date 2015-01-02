@@ -119,13 +119,6 @@ int main(int argc, char* argv[]) {
     while(!glfwWindowShouldClose(glfw_window)) {
         // Swap display/rendering buffers
         glfwSwapBuffers(glfw_window);
-
-        // Handle events
-        glfwPollEvents();
-        // Check to see if escape is pressed. If so, close the glfw_window
-        if (glfwGetKey(glfw_window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
-            glfwSetWindowShouldClose(glfw_window, GL_TRUE);
-        }
         world->update();
     }
 
