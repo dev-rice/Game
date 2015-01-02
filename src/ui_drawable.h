@@ -16,12 +16,15 @@ class UIDrawable : public FlatDrawable {
 public:
     UIDrawable(FlatMesh*, Window*, GLuint, GLuint);
 
+    void draw();
     void setPosition(glm::vec2);
     void attachTexture(GLuint);
 
+    void setOutline(bool o) {outline = o;}
+
     void setCoordinates(glm::vec2, glm::vec2);
 private:
-
+    bool outline;
     glm::mat3 mesh_projection;
 };
 

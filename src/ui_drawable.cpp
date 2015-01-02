@@ -31,9 +31,18 @@ void UIDrawable::setPosition(glm::vec2 position){
     this->position = glm::vec2(position.x + width, position.y - height);
 }
 
+void UIDrawable::draw(){
+    FlatDrawable::draw();
+
+    if (outline){
+        glUniform1i(glGetUniformLocation(shader_program, "is_outline"), true);
+        mesh->drawOutline();
+        glUniform1i(glGetUniformLocation(shader_program, "is_outline"), false);
+    }
+}
+
 void UIDrawable::setCoordinates(glm::vec2 start, glm::vec2 end){
     this->width = (end.x - start.x)/2;
     this->height = (end.y - start.y)/2;
     this->position = glm::vec2(start.x + width, start.y + height);
 }
-

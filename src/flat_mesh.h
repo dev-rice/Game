@@ -20,6 +20,7 @@ public:
     FlatMesh();
 
     void draw();
+    void drawOutline();
     void bindVAO();
     void attachGeometryToShader(GLuint);
 

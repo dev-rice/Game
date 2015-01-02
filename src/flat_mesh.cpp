@@ -27,6 +27,10 @@ void FlatMesh::draw(){
     glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
+void FlatMesh::drawOutline(){
+    glDrawArrays(GL_LINE_LOOP, 0, 6);
+}
+
 void FlatMesh::bindVAO(){
     glBindVertexArray(vao);
 }

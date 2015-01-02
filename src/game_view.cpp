@@ -25,6 +25,7 @@ GameView::GameView(Window* window, Level* level){
 
     // Creation of selection box
     selection_box = new UIDrawable(new FlatMesh(), window, mousebox_shader, 0);
+    selection_box->setOutline(true);
     selection_box->setPosition(glm::vec2(0.0f, 0.0f));
 
     toggle_key_state = false;
