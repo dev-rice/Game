@@ -61,8 +61,7 @@ void Particle::enablePhysics(float elasticity){
     this->elasticity = elasticity;
 }
 
-void Particle::draw(Camera* camera, glm::mat4* proj_matrix){
-    // float time = glfwGetTime();
+void Particle::update(){
     if(age < lifespan){
         age++;
 
@@ -113,11 +112,13 @@ void Particle::draw(Camera* camera, glm::mat4* proj_matrix){
 
         position += velocity;
         
-        // Exaggerated planar rotation.
         plane_rotation += rotationSpeed;
+    }
+}
 
+void Particle::draw(Camera* camera, glm::mat4* proj_matrix){
+    if(age < lifespan){
         Drawable::draw(camera, proj_matrix);
-
     }
 }
 

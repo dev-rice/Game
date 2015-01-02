@@ -41,7 +41,7 @@ void FireEmitter::prepareParticles(Camera* camera){
         
         // Particle recycling!
         // Weird that the pointer must be explicitly set to 0, but crashes without this
-        Particle* ptr; 
+        Particle* ptr = 0; 
         if(particles.size() < maxParticles){
             ptr = new Particle(billboard, shader_program);
             ptr->attachTextureSet(*texture_set);

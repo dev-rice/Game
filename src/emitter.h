@@ -14,7 +14,9 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <deque>
+#include <ctime>
 #include <random>
+#include <algorithm>
 #include <math.h>
 
 #include "mesh.h"
@@ -33,6 +35,8 @@ public:
     void makeShotgun();
 protected:
     virtual void prepareParticles(Camera*);
+
+    float old_time;
 
     int maxParticles;
     int density;

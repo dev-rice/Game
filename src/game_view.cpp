@@ -97,12 +97,12 @@ void GameView::handleInputs(){
 
     if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT)){
         // Left mouse button
-        printf("Clicked left mouse button\n");
+        // printf("Clicked left mouse button\n");
     }
 
     if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT)){
         // Right mouse button
-        printf("Clicked right mouse button\n");
+        // printf("Clicked right mouse button\n");
     }
 
     // Camera controls
