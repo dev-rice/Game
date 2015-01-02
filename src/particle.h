@@ -23,6 +23,7 @@ public:
     // ~Particle();
     
     void setInitialValues(glm::vec3, glm::vec3, glm::vec3, float, int, ScalingOption, FadingOption);
+    void update();
     void draw(Camera*, glm::mat4*);
     bool isDead();
     void enablePhysics(float);

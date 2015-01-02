@@ -26,7 +26,6 @@ Emitter::Emitter(GLuint shader_program, glm::vec3 position){
     this->hasFired = false;
 
     this->shader_program = shader_program;
-
 }
 
 Emitter::~Emitter(){
@@ -55,10 +54,22 @@ void Emitter::setParticleDensity(int density){
 }
 
 void Emitter::draw(Camera* camera, glm::mat4* proj_matrix){
+    float new_time = glfwGetTime() - old_time; 
+    int frames = int((new_time*60.0f)) + 1;
+    frames = std::max(frames, 0);
+    
+    for(int j = 0; j < frames; ++j){
+        for(int i = 0; i < particles.size(); ++i){
+            particles[i]->update();
+        }
+    }
+
     prepareParticles(camera);
-    for (int i = 0; i < particles.size(); ++i){
+    for(int i = 0; i < particles.size(); ++i){
         particles[i]->draw(camera, proj_matrix);
     }
+
+    old_time = glfwGetTime();
 }
 
 void Emitter::makeShotgun(){
@@ -69,10 +80,10 @@ void Emitter::makeShotgun(){
 
 void Emitter::prepareParticles(Camera* camera){
 
+    // Shotgun stuff
     if(hasFired && isShotgun){
         return;
     }
-
     hasFired = true;
 
     for(int i(0); i < density; ++i){

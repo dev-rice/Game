@@ -88,9 +88,9 @@ void GameView::handleInputs(){
 
     glm::vec2 gl_mouse_position = mouse->getPosition();
     if(gl_mouse_position.x < -0.9){
-        camera->moveX(-5);
+        camera->moveGlobalX(-5);
     } else if (gl_mouse_position.x > 0.9){
-        camera->moveX(5);
+        camera->moveGlobalX(5);
     }
 
     if(gl_mouse_position.y < -0.9){
@@ -101,6 +101,16 @@ void GameView::handleInputs(){
 
     if (glfwGetKey(glfw_window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
         glfwSetWindowShouldClose(glfw_window, GL_TRUE);
+    }
+
+    if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT)){
+        // Left mouse button
+        // printf("Clicked left mouse button\n");
+    }
+
+    if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT)){
+        // Right mouse button
+        // printf("Clicked right mouse button\n");
     }
 
     // Camera controls
