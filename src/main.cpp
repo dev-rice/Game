@@ -115,10 +115,9 @@ int main(int argc, char* argv[]) {
         world = new World(glfw_window);
     }
 
+
     // Display loop
     while(!glfwWindowShouldClose(glfw_window)) {
-        // Swap display/rendering buffers
-        glfwSwapBuffers(glfw_window);
         world->update();
     }
 
