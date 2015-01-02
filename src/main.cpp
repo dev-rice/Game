@@ -104,26 +104,27 @@ int main(int argc, char* argv[]) {
     }
 
     // Create the window
-    GLFWwindow* window = Window::initializeGLFWWindow(width, height, fullscreen);
+    Window window = Window(width, height, fullscreen);
+    GLFWwindow* glfw_window = window.getGLFWWindow();
 
     // Create the world
     World* world;
     if (has_map){
-        world = new World(window, map_filename.c_str());
+        world = new World(glfw_window, map_filename.c_str());
     } else {
-        world = new World(window);
+        world = new World(glfw_window);
     }
 
     // Display loop
-    while(!glfwWindowShouldClose(window)) {
+    while(!glfwWindowShouldClose(glfw_window)) {
         // Swap display/rendering buffers
-        glfwSwapBuffers(window);
+        glfwSwapBuffers(glfw_window);
 
         // Handle events
         glfwPollEvents();
-        // Check to see if escape is pressed. If so, close the window
-        if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
-            glfwSetWindowShouldClose(window, GL_TRUE);
+        // Check to see if escape is pressed. If so, close the glfw_window
+        if (glfwGetKey(glfw_window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
+            glfwSetWindowShouldClose(glfw_window, GL_TRUE);
         }
         world->update();
     }

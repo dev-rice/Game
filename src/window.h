@@ -11,9 +11,15 @@
 
 class Window{
 public:
-    static GLFWwindow* initializeGLFWWindow(int, int, bool);
+    Window(int, int, bool);
+
+    GLFWwindow* getGLFWWindow(){ return window;}
 
 private:
+    GLFWwindow* initializeGLFWWindow(int, int, bool);
+
+    GLFWwindow* window;
+
 };
 
 #endif

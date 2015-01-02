@@ -1,5 +1,9 @@
 #include "window.h"
 
+Window::Window(int width, int height, bool fullscreen){
+    window = initializeGLFWWindow(width, height, fullscreen);
+}
+
 GLFWwindow* Window::initializeGLFWWindow(int width, int height, bool fullscreen){
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
