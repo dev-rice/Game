@@ -2,10 +2,11 @@
 #define Mouse_h
 
 #include "ui_drawable.h"
+#include "window.h"
 
 class Mouse : public UIDrawable {
 public:
-    Mouse(FlatMesh*, GLFWwindow*, GLuint, GLuint);
+    Mouse(FlatMesh*, Window*, GLuint, GLuint);
 
     void draw();
 
@@ -13,7 +14,7 @@ public:
 
 private:
 
-    GLFWwindow* window;
+    GLFWwindow* glfw_window;
     glm::mat3 mouse_projection;
 
 };

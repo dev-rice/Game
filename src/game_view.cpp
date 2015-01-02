@@ -16,7 +16,7 @@ GameView::GameView(Window* window, Level* level){
     GLuint mouse_texture = TextureLoader::loadTextureFromFile(
         "res/textures/cursor_ui.png", GL_LINEAR);
 
-    mouse = new Mouse(flat_mesh, glfw_window, ui_shader, mouse_texture);
+    mouse = new Mouse(flat_mesh, window, ui_shader, mouse_texture);
 
     text_renderer = new TextRenderer(glfw_window,
         "res/fonts/inconsolata_bold_font.png", 0.01);
