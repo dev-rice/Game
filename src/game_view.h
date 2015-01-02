@@ -16,17 +16,20 @@
 #include "framebuffer.h"
 #include "profile.h"
 #include "shadowbuffer.h"
+#include "window.h"
 
 class GameView {
 public:
 
-    GameView(GLFWwindow*, Level*);
+    GameView(Window*, Level*);
 
     void update();
 private:
     void handleInputs();
 
-    GLFWwindow* window;
+    Window* window;
+    GLFWwindow* glfw_window;
+
     Level* level;
 
     Framebuffer* screen;

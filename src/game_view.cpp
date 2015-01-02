@@ -1,11 +1,12 @@
 #include "game_view.h"
 
-GameView::GameView(GLFWwindow* window, Level* level){
+GameView::GameView(Window* window, Level* level){
     this->window = window;
+    this->glfw_window = window->getGLFWWindow();
     this->level = level;
 
     screen = new Framebuffer();
-    framebuffer = new Framebuffer(window);
+    framebuffer = new Framebuffer(glfw_window);
     shadowbuffer = new Shadowbuffer(1024, 1024);
 
     FlatMesh* flat_mesh = new FlatMesh();
@@ -15,9 +16,9 @@ GameView::GameView(GLFWwindow* window, Level* level){
     GLuint mouse_texture = TextureLoader::loadTextureFromFile(
         "res/textures/cursor_ui.png", GL_LINEAR);
 
-    mouse = new Mouse(flat_mesh, window, ui_shader, mouse_texture);
+    mouse = new Mouse(flat_mesh, glfw_window, ui_shader, mouse_texture);
 
-    text_renderer = new TextRenderer(window,
+    text_renderer = new TextRenderer(glfw_window,
         "res/fonts/inconsolata_bold_font.png", 0.01);
 
     toggle_key_state = false;
@@ -27,7 +28,7 @@ GameView::GameView(GLFWwindow* window, Level* level){
 void GameView::update(){
     float start_time = glfwGetTime();
     // Swap display/rendering buffers
-    glfwSwapBuffers(window);
+    glfwSwapBuffers(glfw_window);
 
     handleInputs();
 
@@ -98,57 +99,57 @@ void GameView::handleInputs(){
         camera->moveGlobalZ(-5);
     }
 
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
-        glfwSetWindowShouldClose(window, GL_TRUE);
+    if (glfwGetKey(glfw_window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
+        glfwSetWindowShouldClose(glfw_window, GL_TRUE);
     }
 
     // Camera controls
     // Movement
-    // if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS){
+    // if (glfwGetKey(glfw_window, GLFW_KEY_W) == GLFW_PRESS){
     //     camera->moveZ(-1);
     // }
-    // if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS){
+    // if (glfwGetKey(glfw_window, GLFW_KEY_S) == GLFW_PRESS){
     //     camera->moveZ(1);
     // }
-    // if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS){
+    // if (glfwGetKey(glfw_window, GLFW_KEY_D) == GLFW_PRESS){
     //     camera->moveX(1);
     // }
-    // if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS){
+    // if (glfwGetKey(glfw_window, GLFW_KEY_A) == GLFW_PRESS){
     //     camera->moveX(-1);
     // }
-    // if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS){
+    // if (glfwGetKey(glfw_window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS){
     //     camera->moveY(-1);
     // }
-    // if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS){
+    // if (glfwGetKey(glfw_window, GLFW_KEY_SPACE) == GLFW_PRESS){
     //     camera->moveY(1);
     // }
 
     // Rotation
-    // if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS){
+    // if (glfwGetKey(glfw_window, GLFW_KEY_Q) == GLFW_PRESS){
     //     camera->rotateY(1);
     // }
-    // if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS){
+    // if (glfwGetKey(glfw_window, GLFW_KEY_E) == GLFW_PRESS){
     //     camera->rotateY(-1);
     // }
-    // if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS){
+    // if (glfwGetKey(glfw_window, GLFW_KEY_R) == GLFW_PRESS){
     //     camera->rotateX(1);
     // }
-    // if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS){
+    // if (glfwGetKey(glfw_window, GLFW_KEY_F) == GLFW_PRESS){
     //     camera->rotateX(-1);
     // }
-    // if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS){
+    // if (glfwGetKey(glfw_window, GLFW_KEY_Z) == GLFW_PRESS){
     //     camera->rotateZ(1);
     // }
-    // if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS){
+    // if (glfwGetKey(glfw_window, GLFW_KEY_C) == GLFW_PRESS){
     //     camera->rotateZ(-1);
     // }
 
     // Handle the debug toggle key
-    if ((glfwGetKey(window, GLFW_KEY_TAB) == GLFW_PRESS) && (!toggle_key_state)){
+    if ((glfwGetKey(glfw_window, GLFW_KEY_TAB) == GLFW_PRESS) && (!toggle_key_state)){
         toggle_key_state = true;
         debug_showing = !debug_showing;
     }
-    if (glfwGetKey(window, GLFW_KEY_TAB) == GLFW_RELEASE){
+    if (glfwGetKey(glfw_window, GLFW_KEY_TAB) == GLFW_RELEASE){
         toggle_key_state = false;
     }
 

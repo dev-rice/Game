@@ -15,7 +15,7 @@ World::~World(){
 void World::addLevel(const char* filename){
     Debug::info("Setting the world level to '%s'\n", filename);
     level = new Level(window, filename);
-    game_view = new GameView(glfw_window, level);
+    game_view = new GameView(window, level);
 }
 
 void World::update(){
