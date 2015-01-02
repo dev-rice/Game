@@ -104,29 +104,38 @@ void GameView::handleInputs(){
     glm::vec2 gl_mouse_position = mouse->getPosition();
 
     // Mouse scrolling the screen
+
+    // LEFT
     if(gl_mouse_position.x < -0.95){
         camera->moveGlobalX(-10);
     } else if(gl_mouse_position.x < -0.85){
         camera->moveGlobalX(-5);
     }
 
+    // RIGHT
     if(gl_mouse_position.x > 0.95){
         camera->moveGlobalX(10);
     } else if (gl_mouse_position.x > 0.85){
         camera->moveGlobalX(5);
     }
 
-    if(gl_mouse_position.y < -0.95){
-        camera->moveGlobalZ(10);
-    } else if(gl_mouse_position.y < -0.85){
-        camera->moveGlobalZ(5);
+    if(camera->getPosition().z <= 1.0 * level->getMapHeight()/2 - 3){
+        // DOWN
+        if(gl_mouse_position.y < -0.95){
+            camera->moveGlobalZ(10);
+        } else if(gl_mouse_position.y < -0.85){
+            camera->moveGlobalZ(5);
+        }
     }
 
-    if(gl_mouse_position.y > 0.95){
-        camera->moveGlobalZ(-10);
-    } else if (gl_mouse_position.y > 0.85){
-        camera->moveGlobalZ(-5);
-    }
+    // if(camera->getPosition().z >= 10.0 /*Multiply by level size here!*/){
+        // UP
+        if(gl_mouse_position.y > 0.95){
+            camera->moveGlobalZ(-10);
+        } else if (gl_mouse_position.y > 0.85){
+            camera->moveGlobalZ(-5);
+        }
+    // }
 
     // Closing the window
     if (glfwGetKey(glfw_window, GLFW_KEY_ESCAPE) == GLFW_PRESS){

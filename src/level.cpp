@@ -18,7 +18,7 @@ Level::Level(Window* window, const char* filename){
         500.0f);
 
     camera = new Camera(glm::vec3(0.0f, 40.0f, 40.0f));
-    camera->setRotation(glm::vec3(0.78f, 0.0f, 0.0f));
+    camera->setRotation(glm::vec3(1.04f, 0.0f, 0.0f));
     // camera = new Camera(glm::vec3(0.0f, 2.0f, 4.0f));
 
     doodad_shader = ShaderLoader::loadShaderProgram("shaders/multiple_lights.vs",
@@ -180,7 +180,7 @@ void Level::loadLevel(const char* filename){
             strcat(heightmap_filename, parameter);
 
             std::string heightmap_filename_str(heightmap_filename);
-            Drawable* ground = new Terrain(doodad_shader,
+            ground = new Terrain(doodad_shader,
                 heightmap_filename_str);
 
             GLuint diffuse = TextureLoader::loadTextureFromFile(
@@ -189,7 +189,7 @@ void Level::loadLevel(const char* filename){
             TextureSet texture_set(diffuse, 0, 0, 0);
             ground->attachTextureSet(texture_set);
 
-            drawables.push_back(ground);
+            drawables.push_back((Drawable*) ground);
         }
 
         if(buffer[0] == 'g'){
@@ -208,4 +208,12 @@ GLuint Level::getTexture(GLuint index){
     }
 
     return texture;
+}
+
+int Level::getMapHeight(){
+    return ground->getHeight();
+}
+
+int Level::getMapWidth(){
+    return ground->getWidth();
 }

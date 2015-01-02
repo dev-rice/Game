@@ -228,7 +228,7 @@ Mesh* Terrain::generateMesh(){
 
 float Terrain::getHeight(int x, int y){
     // Scaling factor for the height map data
-    float amplification = 50.0f;
+    float amplification = 10.0f;
 
 
     int red = image[(y*image_width + x)*4 + 0];
@@ -283,4 +283,12 @@ void Terrain::updateUniformData(){
     // Tell the shader the current time
     glUniform1f(glGetUniformLocation(shader_program, "time"), (float)glfwGetTime());
 
+}
+
+int Terrain::getHeight(){
+    return this->image_height;
+}
+
+int Terrain::getWidth(){
+    return this->image_width;
 }

@@ -35,6 +35,9 @@ public:
     void draw();
     void drawShadowMap();
 
+    int getMapHeight();
+    int getMapWidth();
+
     Camera* getCamera() {return camera;}
 
 private:
@@ -42,6 +45,8 @@ private:
     GLuint getTexture(GLuint);
 
     Window* window;
+
+    Terrain *ground;
 
     Camera* camera;
 
