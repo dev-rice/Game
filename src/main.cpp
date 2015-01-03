@@ -24,7 +24,6 @@
 
 #include "world.h"
 #include "debug.h"
-#include "profile.h"
 #include "window.h"
 
 void renderEverything(GLFWwindow*);
@@ -36,16 +35,21 @@ int main(int argc, char* argv[]) {
     srand(time(NULL));
 
     // Parse command line arguments
-    float width;
-    float height;
-    bool fullscreen = false;
+    int fxaa_level = 0;
+
+    float width  = 0;
+    float height = 0;
+
+    bool fullscreen  = false;
     bool interactive = false;
-    bool debug = false;
+    bool debug   = false;
+    bool has_map = false;
+    bool vsync   = false;
     char argument;
-    bool has_map;
+
     std::string map_filename;
 
-    while ((argument = getopt(argc, argv, "wfidm:x:")) != -1){
+    while ((argument = getopt(argc, argv, "wvfidm:x:")) != -1){
         // printf("Read command line option:\n");
         // printf("  argument = %c\n", argument);
         // printf("  optopt   = %c\n", optopt);
@@ -58,14 +62,15 @@ int main(int argc, char* argv[]) {
         } else if (argument == 'i'){
             interactive = true;
         } else if (argument == 'x'){
-            Profile::fxaa = true;
             std::string fxaa_level_str(optarg);
-            Profile::fxaa_level = std::stoi(fxaa_level_str);
+            fxaa_level = std::stoi(fxaa_level_str);
         } else if (argument == 'd'){
             debug = true;
         } else if (argument == 'm'){
             has_map = true;
             map_filename = std::string(optarg);
+        } else if (argument == 'v'){
+            vsync = true;
         } else {
             printf("\nCommand line options:\n");
             printf("\t-f\n");
@@ -80,6 +85,8 @@ int main(int argc, char* argv[]) {
             printf("\t\tLoad the world with map <map_filename>.\n\n");
             printf("\t-x <level>\n");
             printf("\t\tTurn on FXAA with level <level>.\n\n");
+            printf("\t-v \n");
+            printf("\t\tTurn on Verticl Sync.\n\n");
 
             return 1;
         }
@@ -105,6 +112,8 @@ int main(int argc, char* argv[]) {
 
     // Create the window
     Window* window = new Window(width, height, fullscreen);
+    window->setVsync(vsync);
+    window->setFxaaLevel(fxaa_level);
     GLFWwindow* glfw_window = window->getGLFWWindow();
 
     // Create the world

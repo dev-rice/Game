@@ -39,7 +39,7 @@ Framebuffer::Framebuffer(Window* window){
 
     GLuint framebuffer_vs, framebuffer_fs, framebuffer_shader;
     // Load framebuffer shader
-    if (Profile::fxaa){
+    if (window->getFxaaLevel()){
         framebuffer_shader = ShaderLoader::loadShaderProgram("shaders/framebuffer_fxaa.vs",
             "shaders/framebuffer_fxaa.fs");
     } else {

@@ -57,11 +57,13 @@ void GameView::update(){
     // Draw the framebuffer N - 1 times (the last pass is drawn to the screen).
     // This is how many times the fxaa shader samples the image.
     // A good number is 4, 8 looks blurry, 1 doesn't do much.
-    if (Profile::fxaa){
-        for (int i = 0; i < Profile::fxaa_level - 1; ++i){
+    int fxaa_level = window->getFxaaLevel();
+    if (fxaa_level){
+        for (int i = 0; i < fxaa_level - 1; ++i){
             framebuffer->draw();
         }
     }
+
     // Draw the framebuffer
     screen->setAsRenderTarget();
     framebuffer->draw();
@@ -147,7 +149,7 @@ void GameView::handleInputs(){
             }
         }
 
-        // UP                                                          . Compensating for the camera angle
+        // UP                            . Compensating for the camera angle
         if(camera->getPosition().z >= -1.0 * level->getMapHeight()/2 + 70){
             if(gl_mouse_position.y > 0.95){
                 camera->moveGlobalZ(-10);
@@ -200,7 +202,6 @@ void GameView::handleInputs(){
         mouse_count++;
     } else if(mouse_count != 0){
         mouse_count = 0;
-        // printf("Box from (%f, %f) to (%f, %f)\n", initial_right_click_position.x, initial_right_click_position.y, final_right_click_position.x, final_right_click_position.y);
     }
 
     if(glfwGetMouseButton(glfw_window, GLFW_MOUSE_BUTTON_RIGHT)){

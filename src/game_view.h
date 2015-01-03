@@ -14,7 +14,6 @@
 #include "ui_drawable.h"
 #include "mouse.h"
 #include "framebuffer.h"
-#include "profile.h"
 #include "shadowbuffer.h"
 #include "window.h"
 
