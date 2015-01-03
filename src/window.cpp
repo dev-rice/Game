@@ -10,6 +10,14 @@ void Window::swapBuffers(){
     glfwSwapBuffers(glfw_window);
 }
 
+void Window::setVsync(bool value){
+    if (value){
+        glfwSwapInterval(1);
+    } else {
+        glfwSwapInterval(0);
+    }
+}
+
 GLFWwindow* Window::initializeGLFWWindow(int width, int height, bool fullscreen){
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
@@ -70,7 +78,6 @@ GLFWwindow* Window::initializeGLFWWindow(int width, int height, bool fullscreen)
     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 
     // Turn off vsync
-    // glfwSwapInterval(0);
 
     return window;
 }

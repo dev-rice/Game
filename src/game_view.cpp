@@ -32,9 +32,14 @@ GameView::GameView(Window* window, Level* level){
     debug_showing = false;
 
     mouse_count = 0;
+
+    frame_count = 0;
+    average_frame_time = 0.0f;
 }
 
 void GameView::update(){
+    ++frame_count;
+
     float start_time = glfwGetTime();
     // Swap display/rendering buffers
     window->swapBuffers();
@@ -52,11 +57,13 @@ void GameView::update(){
     // Draw the framebuffer N - 1 times (the last pass is drawn to the screen).
     // This is how many times the fxaa shader samples the image.
     // A good number is 4, 8 looks blurry, 1 doesn't do much.
-    if (Profile::fxaa){
-        for (int i = 0; i < Profile::fxaa_level - 1; ++i){
+    int fxaa_level = window->getFxaaLevel();
+    if (fxaa_level){
+        for (int i = 0; i < fxaa_level - 1; ++i){
             framebuffer->draw();
         }
     }
+
     // Draw the framebuffer
     screen->setAsRenderTarget();
     framebuffer->draw();
@@ -74,6 +81,11 @@ void GameView::update(){
 
     float frame_time = glfwGetTime() - start_time;
 
+    // Calculate the moving average of the frame time
+    average_frame_time = (average_frame_time *
+        (float)(frame_count-1)/(float)frame_count)
+        + (frame_time / (float)frame_count);
+
     // Draw the debug information
     if (debug_showing){
         Camera* camera = level->getCamera();
@@ -83,11 +95,13 @@ void GameView::update(){
 
         text_renderer->print(glm::vec2(-0.95, 0.95), "fps: %.2f",
             1.0 / frame_time);
-        text_renderer->print(glm::vec2(-0.95, 0.9), "camera position <x, y, z>:"
+        text_renderer->print(glm::vec2(-0.95, 0.9), "average frame time: %.5f s",
+            average_frame_time);
+        text_renderer->print(glm::vec2(-0.95, 0.85), "camera position <x, y, z>:"
             "%.2f, %.2f, %.2f", position.x, position.y, position.z);
-        text_renderer->print(glm::vec2(-0.95, 0.85), "camera rotation <x, y, z>:"
+        text_renderer->print(glm::vec2(-0.95, 0.8), "camera rotation <x, y, z>:"
             "%.2f, %.2f, %.2f", rotation.x, rotation.y, rotation.z);
-        text_renderer->print(glm::vec2(-0.95, 0.80), "mouse <x, y>: %.2f, %.2f",
+        text_renderer->print(glm::vec2(-0.95, 0.75), "mouse <x, y>: %.2f, %.2f",
             gl_mouse_position.x, gl_mouse_position.y);
     }
 
@@ -103,7 +117,7 @@ void GameView::handleInputs(){
 
     glm::vec2 gl_mouse_position = mouse->getPosition();
 
-    // Mouse scrolling the screen  
+    // Mouse scrolling the screen
     if(mouse_count == 0){
 
         mouse->setCursorSprite(Mouse::cursorType::CURSOR);
@@ -127,7 +141,7 @@ void GameView::handleInputs(){
         }
 
         // DOWN
-        if(camera->getPosition().z <= 1.0 * level->getMapHeight()/2 - 3){        
+        if(camera->getPosition().z <= 1.0 * level->getMapHeight()/2 - 3){
             if(gl_mouse_position.y < -0.95){
                 camera->moveGlobalZ(10);
             } else if(gl_mouse_position.y < -0.85){
@@ -135,8 +149,8 @@ void GameView::handleInputs(){
             }
         }
 
-        // UP                                                          . Compensating for the camera angle
-        if(camera->getPosition().z >= -1.0 * level->getMapHeight()/2 + 70){   
+        // UP                            . Compensating for the camera angle
+        if(camera->getPosition().z >= -1.0 * level->getMapHeight()/2 + 70){
             if(gl_mouse_position.y > 0.95){
                 camera->moveGlobalZ(-10);
             } else if (gl_mouse_position.y > 0.85){
@@ -188,7 +202,6 @@ void GameView::handleInputs(){
         mouse_count++;
     } else if(mouse_count != 0){
         mouse_count = 0;
-        // printf("Box from (%f, %f) to (%f, %f)\n", initial_right_click_position.x, initial_right_click_position.y, final_right_click_position.x, final_right_click_position.y);
     }
 
     if(glfwGetMouseButton(glfw_window, GLFW_MOUSE_BUTTON_RIGHT)){

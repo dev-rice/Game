@@ -14,7 +14,6 @@
 #include "ui_drawable.h"
 #include "mouse.h"
 #include "framebuffer.h"
-#include "profile.h"
 #include "shadowbuffer.h"
 #include "window.h"
 
@@ -49,6 +48,10 @@ private:
 
     bool toggle_key_state;
     bool debug_showing;
+
+    // Move this to some fps/graphics debug class
+    int frame_count;
+    float average_frame_time;
 };
 
 #endif
