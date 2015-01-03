@@ -55,14 +55,23 @@ void Mouse::setCursorSprite(cursorType cursor_type){
 
 void Mouse::draw(){
     attachTexture(mouse_sprites[ static_cast<int>(current_type) ]);
+    glm::vec2 current_position = getPosition();
 
-
-    // Eww
-    setPosition(getPosition());
-
-    // if(current_type == DOWN){
-    //     printf("SHIT!\n");
-    // }
+    // Position the cursor specially for certain cursors
+    // mostly because down, right, up_right, down_right, and down_left run out of the screen
+    // also selection needs to be moved to the center
+    if(current_type == cursorType::DOWN || current_type == cursorType::DOWN_LEFT){
+        setPosition(current_position + glm::vec2(0.0, 2*height));
+    } else if(current_type == cursorType::RIGHT || current_type == cursorType::UP_RIGHT){
+        setPosition(current_position + glm::vec2(-2*width, 0.0));
+    } else if(current_type == cursorType::DOWN_RIGHT){
+        setPosition(current_position + glm::vec2(-2*width, 2*height));
+    } else if(current_type == cursorType::SELECTION){
+        setPosition(current_position + glm::vec2(-1*width, height));
+    } else {
+        // Ewww
+        setPosition(current_position);
+    }
 
     UIDrawable::draw();
 }
