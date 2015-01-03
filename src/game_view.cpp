@@ -15,9 +15,9 @@ GameView::GameView(Window* window, Level* level){
         "shaders/ui.fs");
     GLuint mousebox_shader = ShaderLoader::loadShaderProgram("shaders/mousebox.vs",
         "shaders/mousebox.fs");
+
     GLuint mouse_texture = TextureLoader::loadTextureFromFile(
         "res/textures/cursor_ui.png", GL_LINEAR);
-
     mouse = new Mouse(flat_mesh, window, ui_shader, mouse_texture);
 
     text_renderer = new TextRenderer(window,
@@ -103,9 +103,12 @@ void GameView::handleInputs(){
 
     glm::vec2 gl_mouse_position = mouse->getPosition();
 
-    // Mouse scrolling the screen
-    // LEFT
+    // Mouse scrolling the screen  
     if(mouse_count == 0){
+
+        mouse->setCursorSprite(Mouse::cursorType::CURSOR);
+
+        // LEFT
         if(camera->getPosition().x >= -1.0 * level->getMapWidth()/2 + 70){
             if(gl_mouse_position.x < -0.95){
                 camera->moveGlobalX(-10);
@@ -140,6 +143,33 @@ void GameView::handleInputs(){
                 camera->moveGlobalZ(-5);
             }
         }
+
+        // Changing the mouse cursor based on scrolling
+        if(gl_mouse_position.x < -0.85){
+            mouse->setCursorSprite(Mouse::cursorType::LEFT);
+        }
+        if(gl_mouse_position.x > 0.85){
+            mouse->setCursorSprite(Mouse::cursorType::RIGHT);
+        }
+        if(gl_mouse_position.y > 0.85){
+            mouse->setCursorSprite(Mouse::cursorType::UP);
+        }
+        if(gl_mouse_position.y < -0.85){
+            mouse->setCursorSprite(Mouse::cursorType::DOWN);
+        }
+
+        if(gl_mouse_position.x < -0.85 && gl_mouse_position.y < -0.85){
+            mouse->setCursorSprite(Mouse::cursorType::DOWN_LEFT);
+        }
+        if(gl_mouse_position.x > 0.85 && gl_mouse_position.y < -0.85){
+            mouse->setCursorSprite(Mouse::cursorType::DOWN_RIGHT);
+        }
+        if(gl_mouse_position.x < -0.85 && gl_mouse_position.y > 0.85){
+            mouse->setCursorSprite(Mouse::cursorType::UP_LEFT);
+        }
+        if(gl_mouse_position.x > 0.85 && gl_mouse_position.y > 0.85){
+            mouse->setCursorSprite(Mouse::cursorType::UP_RIGHT);
+        }
     }
 
     // Closing the window
@@ -153,6 +183,7 @@ void GameView::handleInputs(){
             initial_left_click_position = gl_mouse_position;
         } else {
             final_left_click_position = gl_mouse_position;
+            mouse->setCursorSprite(Mouse::cursorType::SELECTION);
         }
         mouse_count++;
     } else if(mouse_count != 0){
@@ -164,6 +195,8 @@ void GameView::handleInputs(){
         // Right mouse button
         // printf("Clicked right mouse button\n");
     }
+
+
 
     // Camera controls
     // Movement
