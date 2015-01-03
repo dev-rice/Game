@@ -36,36 +36,10 @@ void Drawable::setShader(GLuint shader_program){
 }
 
 void Drawable::draw(Camera* camera, glm::mat4* proj_matrix){
-    glEnable(GL_CULL_FACE);
-    glEnable(GL_DEPTH_TEST);
-
-    glUseProgram(shader_program);
-
-    // Bind the Mesh's VAO. This lets us put transformations and textures on
-    // top of the geometry.
-    mesh->bindVAO();
-
     // Get the current view matrix from the camera.
     glm::mat4 view_matrix = camera->getViewMatrix();
 
-    // We need to update the model matrix to account for any rotations
-    // or translations that have occured since the last draw call.
-    updateModelMatrix();
-
-    // Update the current model, view, and projection matrices in the shader. These are standard for all
-    // Drawables so they should always be updated in draw. Child specific data is updated in updateUniformData().
-    glUniformMatrix4fv(glGetUniformLocation(shader_program, "model"), 1, GL_FALSE, glm::value_ptr(model_matrix));
-    glUniformMatrix4fv(glGetUniformLocation(shader_program, "view"), 1, GL_FALSE, glm::value_ptr(view_matrix));
-    glUniformMatrix4fv(glGetUniformLocation(shader_program, "proj"), 1, GL_FALSE, glm::value_ptr(*proj_matrix));
-
-    // Update other shader data
-    updateUniformData();
-
-    // Make sure to use this Drawable's textures
-    bindTextures();
-
-    // Draw the geometry
-    mesh->draw();
+    draw(&view_matrix, proj_matrix);
 }
 
 void Drawable::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix){
@@ -77,9 +51,6 @@ void Drawable::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix){
     // Bind the Mesh's VAO. This lets us put transformations and textures on
     // top of the geometry.
     mesh->bindVAO();
-
-    // Get the current view matrix from the camera.
-    // glm::mat4 view_matrix = camera->getViewMatrix();
 
     // We need to update the model matrix to account for any rotations
     // or translations that have occured since the last draw call.
