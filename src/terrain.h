@@ -12,7 +12,7 @@ class Terrain : public Drawable {
 public:
     Terrain (GLuint, std::string);
 
-    void attachTextureSet(TextureSet);
+    void attachTextureSet(TextureSet*);
 
     int getHeight();
     int getWidth();

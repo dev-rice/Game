@@ -44,7 +44,7 @@ void FireEmitter::prepareParticles(Camera* camera){
         Particle* ptr = 0; 
         if(particles.size() < maxParticles){
             ptr = new Particle(billboard, shader_program);
-            ptr->attachTextureSet(*texture_set);
+            ptr->attachTextureSet(texture_set);
         } 
         if(particles.size() > 0 && particles[0]->isDead()){
             ptr = particles[0];

@@ -42,7 +42,7 @@ void Particle::bindTextures(){
     glBindTexture(GL_TEXTURE_2D, texture_set->getEmissive());
 }
 
-void Particle::attachTextureSet(TextureSet texture_set){
+void Particle::attachTextureSet(TextureSet* texture_set){
     // Prepare the loacations for textures to load into and give this drawable some textures. These are specific 
     // to Drawable for now but will later be moved down to the child classes such that they can specify different
     // amounts and types of textures to use.
@@ -51,7 +51,7 @@ void Particle::attachTextureSet(TextureSet texture_set){
     // The actual images these numbers point to are specified later in bindTextures().
     glUniform1i(glGetUniformLocation(shader_program, "emissive_texture"), 0);
 
-    this->texture_set = new TextureSet(texture_set);
+    this->texture_set = texture_set;
 }
 
 void Particle::enablePhysics(float elasticity){

@@ -27,7 +27,7 @@ public:
     void draw(Camera*, glm::mat4*);
     bool isDead();
     void enablePhysics(float);
-    virtual void attachTextureSet(TextureSet);
+    virtual void attachTextureSet(TextureSet*);
 
 private:  
     void updateUniformData();

@@ -28,7 +28,7 @@ public:
     void draw(Camera*, glm::mat4*);
     void draw(glm::mat4*, glm::mat4*);
 
-    virtual void attachTextureSet(TextureSet) = 0;
+    virtual void attachTextureSet(TextureSet*) = 0;
 
     void setPosition(glm::vec3 p) {position = p;}
     void setRotation(glm::vec3 r) {rotation = r;}
