@@ -49,6 +49,9 @@ private:
 
     bool toggle_key_state;
     bool debug_showing;
+
+    int frame_count;
+    float average_frame_time;
 };
 
 #endif
