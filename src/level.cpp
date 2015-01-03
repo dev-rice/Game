@@ -161,8 +161,7 @@ void Level::loadLevel(const char* filename){
             GLuint emissive = getTexture(emitIndex);
 
             texture_set->load(diffuse, specular, normal, emissive);
-
-
+            texture_set->setCyclic(60);
         }
 
         if(buffer[0] == 'p'){
