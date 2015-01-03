@@ -6,11 +6,11 @@
 # Map file Specification
 #
 # First, the camera coordinates
-# This single line begins with a "c" tag, for camera
+# This single line begins with a "v" tag, for camera
 # This is in the format: 
-# c x, y position
+# v x, y position
 # for example
-# c 0.0 0.0
+# v 0.0 0.0
 # 
 # Next, the list of unique objects in the scene
 # These start with the "m" tag, for mesh
@@ -45,6 +45,12 @@
 # For example:
 # d 0 1 2 0 0 0.0 0.0 0.0 1.0 0.0 0.0 0.0
 #
+# Next is the field that denotes additional textures to be loaded as animated or layered textures
+# Theses are denoted with the "c" tag, for cyclic textures. They will consist of a tag, then the
+# indices of the texture references in the "DIFF SPEC NORM EMIT" pattern
+# For example:
+# c 3 0 0 0
+#
 # After that is the particle points. These are denoted with a "p" tag. Within the X3D file, 
 # particles are denoted by being one of the pre-programmed particles, such as
 #   - Snow
@@ -52,7 +58,7 @@
 #   - Smoke
 #   - etc.
 # Following this will be the x, y, and z positions.
-# Fore example:
+# For example:
 # p fire 0.0 0.0 4.3
 #
 # This next section detailing the ground MUST be handwritten by the user!

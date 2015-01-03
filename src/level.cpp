@@ -96,7 +96,7 @@ void Level::loadLevel(const char* filename){
             break;
         }
 
-        if(buffer[0] == 'c'){
+        if(buffer[0] == 'v'){
             sscanf(buffer, "%*c %f %f", &x, &z);
             camera->setPosition(camera->getPosition() + glm::vec3(x, 0.0, z));
         }
@@ -140,15 +140,28 @@ void Level::loadLevel(const char* filename){
             GLuint normal = getTexture(normIndex);
             GLuint emissive = getTexture(emitIndex);
 
-            TextureSet texture_set(diffuse, specular, normal, emissive);
+            texture_set = new TextureSet(diffuse, specular, normal, emissive);
 
             glm::vec3 position = glm::vec3(x, y, z);
             glm::vec3 rotation = glm::vec3(x_rot, y_rot, z_rot);
 
             Doodad* drawable = new Doodad(mesh, doodad_shader, position,
                 rotation, scale);
-            drawable->attachTextureSet(texture_set);
+            // drawable->attachTextureSet(texture_set);
             drawables.push_back(drawable);
+
+        }
+
+        if(buffer[0] == 'c'){
+            sscanf(buffer, "%*c %d %d %d %d",  &diffIndex, &specIndex, &normIndex, &emitIndex);
+
+            GLuint diffuse = getTexture(diffIndex);
+            GLuint specular = getTexture(specIndex);
+            GLuint normal = getTexture(normIndex);
+            GLuint emissive = getTexture(emitIndex);
+
+            texture_set->load(diffuse, specular, normal, emissive);
+
 
         }
 

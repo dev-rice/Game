@@ -1,7 +1,7 @@
 # Converted .map file
 
 # Camera declaration
-c 0.0 0.0
+v 0.0 0.0
 
 # Included Meshes (m)
 m fence.obj

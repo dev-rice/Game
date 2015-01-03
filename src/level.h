@@ -44,6 +44,8 @@ private:
     void loadLevel(const char *);
     GLuint getTexture(GLuint);
 
+    TextureSet* texture_set;
+
     Window* window;
 
     Terrain *ground;
