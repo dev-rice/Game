@@ -64,7 +64,7 @@ GLFWwindow* Window::initializeGLFWWindow(int width, int height, bool fullscreen)
     Debug::info("Renderer:       %s\n", glGetString(GL_RENDERER));
     Debug::info("OpenGL version: %s\n", glGetString(GL_VERSION));
     Debug::info("GLSL version:   %s\n",
-    glGetString(GL_SHADING_LANGUAGE_VERSION));
+        glGetString(GL_SHADING_LANGUAGE_VERSION));
 
     // Set up the correct depth rendering
     glEnable(GL_DEPTH_TEST);
