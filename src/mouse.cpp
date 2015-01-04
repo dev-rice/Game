@@ -48,9 +48,7 @@ glm::vec2 Mouse::getPosition(){
 }
 
 void Mouse::setCursorSprite(cursorType cursor_type){
-    if(cursor_type != current_type){
-        current_type = cursor_type;
-    }
+    current_type = cursor_type;
 }
 
 void Mouse::draw(){
