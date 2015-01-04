@@ -1,0 +1,26 @@
+<layout>
+    <dimensions>
+        <x> centered </x>
+        <y> centered </y>
+        <width> 500 </width>
+        <height> 500 </height>
+    </dimensions>
+
+    <corner_sprites>
+        <upper_right> corner_upper_right.png </upper_right>
+        <upper_left> corner_upper_left.png </upper_left>
+        <lower_right> corner_lower_right.png </lower_right>
+        <lower_left> corner_lower_left.png </lower_left>
+    </corner_sprites>
+
+    <edge_sprites>
+        <right> edge_right.png </right>
+        <down> edge_down.png </down>
+        <left> edge_left.png </left>
+        <top> edge_top.png </top>
+    </edge_sprites>
+            
+    <elements>
+    </elements>
+
+</layout>
