@@ -90,6 +90,7 @@ void main() {
     if (texel.a < 0.5){
         discard;
     }
+    texel = diffuse;
     // outColor = texel;
 
     if (DEBUG_SHADOW){

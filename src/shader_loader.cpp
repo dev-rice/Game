@@ -53,11 +53,11 @@ GLuint ShaderLoader::combineShaderProgram(GLuint vertex_shader, GLuint fragment_
     glAttachShader(shader_program, vertex_shader);
     glAttachShader(shader_program, fragment_shader);
 
-    // Tell the fragment shader to use something??
-    glBindFragDataLocation(shader_program, 0, "outColor");
-
     // Put the shader on the graphics card.
     glLinkProgram(shader_program);
+
+    // Tell the fragment shader to use something??
+    glBindFragDataLocation(shader_program, 0, "outColor");
 
     // Free up the space from the vetex and fragment shader because
     // they have been combined into the shader program.
