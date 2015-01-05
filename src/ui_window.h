@@ -7,10 +7,13 @@
 #include "flat_drawable.h"
 #include "window.h"
 #include "ui_drawable.h"
+#include "texture_loader.h"
 
 class UIWindow : public UIDrawable {
 public:
-    UIWindow(FlatMesh*, Window*, GLuint, GLuint);
+    UIWindow(FlatMesh*, Window*, GLuint);
+
+    void setDimensions(int, int);
 
 private:
 };

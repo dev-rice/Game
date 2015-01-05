@@ -23,7 +23,7 @@ public:
     void setOutline(bool o) {outline = o;}
 
     void setCoordinates(glm::vec2, glm::vec2);
-private:
+protected:
     bool outline;
     glm::mat3 mesh_projection;
 };

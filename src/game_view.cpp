@@ -23,10 +23,15 @@ GameView::GameView(Window* window, Level* level){
     text_renderer = new TextRenderer(window,
         "res/fonts/inconsolata_bold_font.png", 0.01);
 
+    // Creation of test UIWindow
+    UIWindow* w = new UIWindow(new FlatMesh(), window, ui_shader);
+    w->setPosition(glm::vec2(0.0f, 0.0f));
+    w->setDimensions(200, 200);
+    ui_drawables.push_back(w);
+
     // Creation of selection box
     selection_box = new UIDrawable(new FlatMesh(), window, mousebox_shader, 0);
     selection_box->setOutline(true);
-    selection_box->setPosition(glm::vec2(0.0f, 0.0f));
 
     toggle_key_state = false;
     debug_showing = false;

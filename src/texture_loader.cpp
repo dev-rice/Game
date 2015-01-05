@@ -2,9 +2,11 @@
 
 GLuint TextureLoader::pink;
 GLuint TextureLoader::alpha;
+GLuint TextureLoader::gray;
 
 bool TextureLoader::loaded_pink;
 bool TextureLoader::loaded_alpha;
+bool TextureLoader::loaded_gray;
 
 GLuint TextureLoader::loadPink(){
     if (!loaded_pink){
@@ -32,6 +34,21 @@ GLuint TextureLoader::loadAlpha(){
         loaded_alpha = true;
     }
     return TextureLoader::alpha;
+
+}
+
+GLuint TextureLoader::loadGray(){
+    if (!loaded_gray){
+        std::vector<GLfloat> gray_pixel;
+        gray_pixel.push_back(0.2941f);
+        gray_pixel.push_back(0.2941f);
+        gray_pixel.push_back(0.2941f);
+        gray_pixel.push_back(1.0f);
+
+        TextureLoader::gray = TextureLoader::loadTextureFromPixel(gray_pixel);
+        loaded_gray = true;
+    }
+    return TextureLoader::gray;
 
 }
 
