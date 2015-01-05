@@ -40,6 +40,14 @@ void UIWindow::loadFromXML(const char* filepath){
 
     Debug::info("Parsed XML layout file '%s'\n", filepath);
 
+    int width = atoi(doc.first_node("layout")->first_node("dimensions")->first_node("width")->value());
+    int height = atoi(doc.first_node("layout")->first_node("dimensions")->first_node("height")->value());
+
+    setDimensions(width, height);
+
+    // setPosition(glm::vec2(-1.0f, 1.0f));
+
+
 }
 
 void UIWindow::setDimensions(int new_width, int new_height){
