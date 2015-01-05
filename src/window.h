@@ -16,13 +16,13 @@ public:
     GLFWwindow* getGLFWWindow(){ return glfw_window;}
 
     void swapBuffers();
+    void close();
 
     void setVsync(bool);
     void setFxaaLevel(int l) {fxaa_level = l;}
 
     int getWidth(){return width;}
     int getHeight(){return height;}
-
     int getFxaaLevel(){return fxaa_level;}
 
 private:

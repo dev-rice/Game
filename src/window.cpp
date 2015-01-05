@@ -10,6 +10,10 @@ void Window::swapBuffers(){
     glfwSwapBuffers(glfw_window);
 }
 
+void Window::close(){
+    glfwTerminate();
+}
+
 void Window::setVsync(bool value){
     if (value){
         glfwSwapInterval(1);

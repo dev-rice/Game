@@ -26,10 +26,6 @@
 #include "debug.h"
 #include "window.h"
 
-void renderEverything(GLFWwindow*);
-void inputConsole();
-GLFWwindow* initializeGLFWWindow(int, int, bool);
-
 int main(int argc, char* argv[]) {
     // Make the randomizer random
     srand(time(NULL));
@@ -130,8 +126,8 @@ int main(int argc, char* argv[]) {
         world->update();
     }
 
-    // Kill glfw to end the program
-    glfwTerminate();
+    // Close the window
+    window->close();
 
     delete world;
     world = NULL;
