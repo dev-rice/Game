@@ -12,6 +12,8 @@ Mouse::Mouse(FlatMesh* flat_mesh, Window* window, GLuint shader_program, GLuint 
                                   0.0f, -window_height / 2.0f, window_height / 2.0f,
                                   0.0f, 0.0f, 1.0f           );
 
+    #warning standardize this shit!
+
     // CURSOR, SELECTION, COMMAND, UP, RIGHT, DOWN, LEFT, UP_LEFT, UP_RIGHT, DOWN_RIGHT, DOWN_LEFT
     GLuint selection = TextureLoader::loadTextureFromFile("res/textures/cursor_select_ui.png", GL_LINEAR);
     GLuint command = TextureLoader::loadTextureFromFile("res/textures/cursor_select_ui.png", GL_LINEAR);

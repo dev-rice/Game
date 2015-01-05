@@ -27,7 +27,7 @@ void UIWindow::loadFromXML(const char* filepath){
     while(! feof(ifile)){
         if(fgets(lil_buffer, 128, ifile) == NULL){
             // Can't read into buffer
-            break;
+            return;
         }
 
         for(int i = 0; lil_buffer[i] != '\0'; ++i, ++count){
@@ -92,6 +92,18 @@ void UIWindow::loadFromXML(const char* filepath){
     right->setDimensions(16, height);
     right->setPosition(glm::vec2(x_position + 2*((width-9)/float(window_width)), y_position));
     sub_elements.push_back(right);
+
+    char* down_filepath = doc.first_node("layout")->first_node("edge_sprites")->first_node("down")->value();
+    UIImage* down = new UIImage(new FlatMesh(), game_window, shader_program, TextureLoader::loadTextureFromFile(down_filepath, GL_NEAREST));
+    down->setDimensions(width, 16);
+    down->setPosition(glm::vec2(x_position, y_position - 2*((height-9)/float(window_height))));
+    sub_elements.push_back(down);
+
+    char* left_filepath = doc.first_node("layout")->first_node("edge_sprites")->first_node("left")->value();
+    UIImage* left = new UIImage(new FlatMesh(), game_window, shader_program, TextureLoader::loadTextureFromFile(left_filepath, GL_NEAREST));
+    left->setDimensions(16, height);
+    left->setPosition(glm::vec2(x_position - 2*(7/float(window_width)), y_position));
+    sub_elements.push_back(left);
 
     // setting corners up
     char* upper_left_filepath = doc.first_node("layout")->first_node("corner_sprites")->first_node("upper_left")->value();
