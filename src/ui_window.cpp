@@ -9,8 +9,6 @@ UIWindow::UIWindow(FlatMesh* flat_mesh, Window* window, GLuint shader_program) :
 }
 
 void UIWindow::loadFromXML(const char* filepath){
-    #warning Deallocate all this
-
     // 1 kb buffer size for now
     char big_buffer[1024];
     char lil_buffer[128];
@@ -43,13 +41,17 @@ void UIWindow::loadFromXML(const char* filepath){
 
     Debug::info("Parsed XML layout file '%s'\n", filepath);
 
-    // Sizing the ui window
+    //##########################################
+    // Sizing the UI Window
+    //##########################################
     int width = atoi(doc.first_node("layout")->first_node("dimensions")->first_node("width")->value());
     int height = atoi(doc.first_node("layout")->first_node("dimensions")->first_node("height")->value());
 
     setDimensions(width, height);
 
-    // Positioning the ui window
+    //##########################################
+    // Positioning the UI Window
+    //##########################################
     int x_pos_int = 0;
     int y_pos_int = 0;
 
@@ -80,53 +82,62 @@ void UIWindow::loadFromXML(const char* filepath){
 
     setPosition(glm::vec2(x_position, y_position));
 
-    // setting edges up
-    char* up_filepath = doc.first_node("layout")->first_node("edge_sprites")->first_node("up")->value();
-    UIImage* up = new UIImage(new FlatMesh(), game_window, shader_program, TextureLoader::loadTextureFromFile(up_filepath, GL_NEAREST));
-    up->setDimensions(width, 16);
-    up->setPosition(glm::vec2(x_position, y_position + 2*(7/float(window_height))));
+    //##########################################
+    // Creating and Positioning Edges
+    //##########################################
+    int edge_size = 18;
+    int edge_offset_one = 8;
+    int edge_offeset_two = 10;
+
+    char* temp_filepath = doc.first_node("layout")->first_node("edge_sprites")->first_node("up")->value();
+    UIImage* up = new UIImage(new FlatMesh(), game_window, shader_program, TextureLoader::loadTextureFromFile(temp_filepath, GL_NEAREST));
+    up->setDimensions(width, edge_size);
+    up->setPosition(glm::vec2(x_position, y_position + 2*(edge_offset_one/float(window_height))));
     sub_elements.push_back(up);
 
-    char* right_filepath = doc.first_node("layout")->first_node("edge_sprites")->first_node("right")->value();
-    UIImage* right = new UIImage(new FlatMesh(), game_window, shader_program, TextureLoader::loadTextureFromFile(right_filepath, GL_NEAREST));
-    right->setDimensions(16, height);
-    right->setPosition(glm::vec2(x_position + 2*((width-9)/float(window_width)), y_position));
+    temp_filepath = doc.first_node("layout")->first_node("edge_sprites")->first_node("right")->value();
+    UIImage* right = new UIImage(new FlatMesh(), game_window, shader_program, TextureLoader::loadTextureFromFile(temp_filepath, GL_NEAREST));
+    right->setDimensions(edge_size, height);
+    right->setPosition(glm::vec2(x_position + 2*((width-edge_offeset_two)/float(window_width)), y_position));
     sub_elements.push_back(right);
 
-    char* down_filepath = doc.first_node("layout")->first_node("edge_sprites")->first_node("down")->value();
-    UIImage* down = new UIImage(new FlatMesh(), game_window, shader_program, TextureLoader::loadTextureFromFile(down_filepath, GL_NEAREST));
-    down->setDimensions(width, 16);
-    down->setPosition(glm::vec2(x_position, y_position - 2*((height-9)/float(window_height))));
+    temp_filepath = doc.first_node("layout")->first_node("edge_sprites")->first_node("down")->value();
+    UIImage* down = new UIImage(new FlatMesh(), game_window, shader_program, TextureLoader::loadTextureFromFile(temp_filepath, GL_NEAREST));
+    down->setDimensions(width, edge_size);
+    down->setPosition(glm::vec2(x_position, y_position - 2*((height-edge_offeset_two)/float(window_height))));
     sub_elements.push_back(down);
 
-    char* left_filepath = doc.first_node("layout")->first_node("edge_sprites")->first_node("left")->value();
-    UIImage* left = new UIImage(new FlatMesh(), game_window, shader_program, TextureLoader::loadTextureFromFile(left_filepath, GL_NEAREST));
-    left->setDimensions(16, height);
-    left->setPosition(glm::vec2(x_position - 2*(7/float(window_width)), y_position));
+    temp_filepath = doc.first_node("layout")->first_node("edge_sprites")->first_node("left")->value();
+    UIImage* left = new UIImage(new FlatMesh(), game_window, shader_program, TextureLoader::loadTextureFromFile(temp_filepath, GL_NEAREST));
+    left->setDimensions(edge_size, height);
+    left->setPosition(glm::vec2(x_position - 2*(edge_offset_one/float(window_width)), y_position));
     sub_elements.push_back(left);
 
-    // setting corners up
-    char* upper_left_filepath = doc.first_node("layout")->first_node("corner_sprites")->first_node("upper_left")->value();
-    UIImage* up_left = new UIImage(new FlatMesh(), game_window, shader_program, TextureLoader::loadTextureFromFile(upper_left_filepath, GL_NEAREST));
-    up_left->setPosition(glm::vec2(x_position - 2*(16/float(window_width)), y_position + 2*(16/float(window_height))));
+    //##########################################
+    // Creating and Positioning Corners
+    //##########################################
+    int corner_offset_one = 17;
+    int corner_offset_two = 45;
+
+    temp_filepath = doc.first_node("layout")->first_node("corner_sprites")->first_node("upper_left")->value();
+    UIImage* up_left = new UIImage(new FlatMesh(), game_window, shader_program, TextureLoader::loadTextureFromFile(temp_filepath, GL_NEAREST));
+    up_left->setPosition(glm::vec2(x_position - 2*(corner_offset_one/float(window_width)), y_position + 2*(corner_offset_one/float(window_height))));
     sub_elements.push_back(up_left);
 
-    char* upper_right_filepath = doc.first_node("layout")->first_node("corner_sprites")->first_node("upper_right")->value();
-    UIImage* up_right = new UIImage(new FlatMesh(), game_window, shader_program, TextureLoader::loadTextureFromFile(upper_right_filepath, GL_NEAREST));
-    up_right->setPosition(glm::vec2(x_position + 2*((width-44)/float(window_width)), y_position + 2*(16/float(window_height))));
+    temp_filepath = doc.first_node("layout")->first_node("corner_sprites")->first_node("upper_right")->value();
+    UIImage* up_right = new UIImage(new FlatMesh(), game_window, shader_program, TextureLoader::loadTextureFromFile(temp_filepath, GL_NEAREST));
+    up_right->setPosition(glm::vec2(x_position + 2*((width-corner_offset_two)/float(window_width)), y_position + 2*(corner_offset_one/float(window_height))));
     sub_elements.push_back(up_right);
 
-    char* lower_right_filepath = doc.first_node("layout")->first_node("corner_sprites")->first_node("lower_right")->value();
-    UIImage* down_right = new UIImage(new FlatMesh(), game_window, shader_program, TextureLoader::loadTextureFromFile(lower_right_filepath, GL_NEAREST));
-    down_right->setPosition(glm::vec2(x_position + 2*((width-44)/float(window_width)), y_position - 2*((height-44)/float(window_height))));
+    temp_filepath = doc.first_node("layout")->first_node("corner_sprites")->first_node("lower_right")->value();
+    UIImage* down_right = new UIImage(new FlatMesh(), game_window, shader_program, TextureLoader::loadTextureFromFile(temp_filepath, GL_NEAREST));
+    down_right->setPosition(glm::vec2(x_position + 2*((width-corner_offset_two)/float(window_width)), y_position - 2*((height-corner_offset_two)/float(window_height))));
     sub_elements.push_back(down_right);
 
-    char* lower_rleft_filepath = doc.first_node("layout")->first_node("corner_sprites")->first_node("lower_left")->value();
-    UIImage* down_left = new UIImage(new FlatMesh(), game_window, shader_program, TextureLoader::loadTextureFromFile(lower_rleft_filepath, GL_NEAREST));
-    down_left->setPosition(glm::vec2(x_position - 2*(16/float(window_width)), y_position - 2*((height-44)/float(window_height))));
+    temp_filepath = doc.first_node("layout")->first_node("corner_sprites")->first_node("lower_left")->value();
+    UIImage* down_left = new UIImage(new FlatMesh(), game_window, shader_program, TextureLoader::loadTextureFromFile(temp_filepath, GL_NEAREST));
+    down_left->setPosition(glm::vec2(x_position - 2*(corner_offset_one/float(window_width)), y_position - 2*((height-corner_offset_two)/float(window_height))));
     sub_elements.push_back(down_left);
-
-
 
 }
 
