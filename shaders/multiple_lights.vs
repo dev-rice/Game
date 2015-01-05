@@ -18,6 +18,7 @@ out vec2 Texcoord;
 out vec3 surface_normal;
 out vec3 camera_to_surface;
 out Light lights[num_lights];
+out vec4 shadow_coord;
 
 uniform mat4 model;
 uniform mat4 view;
@@ -25,6 +26,10 @@ uniform mat4 proj;
 
 uniform float time;
 uniform float scale;
+
+uniform mat4 depth_view;
+uniform mat4 depth_proj;
+
 
 void main() {
     Texcoord = texcoord;
@@ -59,4 +64,14 @@ void main() {
 
     surface_normal = (view * model * vec4(normal, 0.0)).xyz;
     camera_to_surface = vec3(0,0,0) - (world_position).xyz;
+
+    // Shadow shtuff
+    mat4 bias_matrix = mat4( 0.5, 0.0, 0.0, 0.0,
+                             0.0, 0.5, 0.0, 0.0,
+                             0.0, 0.0, 0.5, 0.0,
+                             0.5, 0.5, 0.5, 1.0 );
+    mat4 depth_matrix = depth_proj * depth_view * model;
+    depth_matrix = bias_matrix * depth_matrix;
+    shadow_coord = depth_matrix * vec4(scaled_position, 1.0);
+
 }

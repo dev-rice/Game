@@ -8,6 +8,7 @@ GameView::GameView(Window* window, Level* level){
     screen = new Framebuffer();
     framebuffer = new Framebuffer(window);
     shadowbuffer = new Shadowbuffer(1024, 1024);
+    level->shadow_map = shadowbuffer->getTexture();
 
     FlatMesh* flat_mesh = new FlatMesh();
 

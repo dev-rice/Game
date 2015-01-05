@@ -12,6 +12,7 @@ public:
 
     void setAsRenderTarget();
     void draw();
+    GLuint getTexture() {return framebuffer_texture;}
 protected:
 
     GLuint framebuffer;

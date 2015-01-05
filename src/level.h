@@ -40,6 +40,8 @@ public:
 
     Camera* getCamera() {return camera;}
 
+    GLuint shadow_map;
+
 private:
     void loadLevel(const char *);
     GLuint getTexture(GLuint);

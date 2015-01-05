@@ -40,6 +40,10 @@ public:
     GLfloat getScale() {return scale;}
     GLuint getShader() {return shader_program;}
 
+    GLuint shadow_map;
+    glm::mat4 depth_view;
+    glm::mat4 depth_proj;
+
 protected:
     void load(Mesh*, GLuint, glm::vec3, glm::vec3, GLfloat);
     void updateModelMatrix();
