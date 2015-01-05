@@ -1,6 +1,6 @@
 #include "shadowbuffer.h"
 
-Shadowbuffer::Shadowbuffer(int width, int height){
+Shadowbuffer::Shadowbuffer(Window* window, int width, int height){
     // Create a mesh for framebuffer to draw on
     FlatMesh* flat_mesh = new FlatMesh();
 
@@ -28,6 +28,7 @@ Shadowbuffer::Shadowbuffer(int width, int height){
         "shaders/framebuffer.fs");
 
     // Create the window to draw the framebuffer onto
-    framebuffer_window = new FlatDrawable(flat_mesh, framebuffer_shader, 1.0, 1.0, glm::vec2(0.0, 0.0));
-    framebuffer_window->attachTexture(framebuffer_texture);
+    framebuffer_window = new UIDrawable(flat_mesh, window, framebuffer_shader,
+        framebuffer_texture);
+    framebuffer_window->setPosition(glm::vec2(0.25, 0.25));
 }

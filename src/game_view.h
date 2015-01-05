@@ -39,7 +39,7 @@ private:
 
     Framebuffer* screen;
     Framebuffer* framebuffer;
-    Shadowbuffer* shadowbuffer;
+    Framebuffer* shadowbuffer;
 
     Mouse* mouse;
     UIDrawable* selection_box;

@@ -30,6 +30,7 @@ vec4 specular;
 vec4 normal;
 vec4 emissive;
 
+const bool DEBUG_SHADOW = true;
 
 vec4 lightFragment(vec3 light_vector, vec3 light_color, float light_power){
     float intensity = light_power / (pow(light_vector.x, 2) + pow(light_vector.y, 2) + pow(light_vector.z, 2));
@@ -40,14 +41,13 @@ vec4 lightFragment(vec3 light_vector, vec3 light_color, float light_power){
     vec3 reflection = reflect(-normalize(light_vector), normalize(surface_normal));
     float cosAlpha = clamp(dot(normalize(camera_to_surface), reflection), 0.0, 1.0);
 
-    vec4 ambient_component = vec4(0.1, 0.1, 0.1, 1.0) * diffuse;
 
     vec4 diffuse_component = vec4(diffuse.rgb * intensity * cosTheta, diffuse.w);
 
     float specularity = specular.w;
     vec4 specular_component = vec4(specular.rgb * specularity * intensity * pow(cosAlpha,15), specular.w);
 
-    vec4 lit_component = vec4(light_color, 1.0) * (diffuse_component + specular_component + ambient_component);
+    vec4 lit_component = vec4(light_color, 1.0) * (diffuse_component + specular_component);
     return lit_component;
 }
 
@@ -77,17 +77,26 @@ void main() {
     light = lights[2];
     lit_component = lit_component + lightFragment(light.light_to_surface, light.color, light.power);
 
+    vec4 ambient_component = vec4(0.1, 0.1, 0.1, 1.0) * diffuse;
     vec4 emissive_component = vec4(emissive.rgb, 1.0);
 
     float visibility = 1.0;
-    if ( texture( shadow_map, shadow_coord.xy ).z  <  shadow_coord.z){
+    if ( texture( shadow_map, shadow_coord.xy).z  <  shadow_coord.z){
         visibility = 0.5;
     }
 
-    vec4 texel = mix(lit_component, emissive_component, emissive.a);
+    vec4 texel = mix(lit_component + ambient_component, emissive_component, emissive.a);
     if (texel.a < 0.5){
         discard;
     }
-    outColor = vec4(shadow_coord.z * texel.rgb, texel.a);
-    // outColor = texture(shadow_map, shadow_coord.xy);
+    outColor = texel;
+
+    if (DEBUG_SHADOW){
+        outColor = vec4(visibility * texel.rgb, texel.a);
+        // outColor = vec4(shadow_coord.z * texel.rgb, texel.a);
+        // outColor = vec4(0.0, 0.0, texture(shadow_map, shadow_coord.xy).r, 1.0);
+        // outColor = texture(shadow_map, shadow_coord.xy);
+
+    }
+
 }
