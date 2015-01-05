@@ -101,14 +101,14 @@ void UIWindow::loadFromXML(const char* filepath){
 
     char* left_filepath = doc.first_node("layout")->first_node("edge_sprites")->first_node("left")->value();
     UIImage* left = new UIImage(new FlatMesh(), game_window, shader_program, TextureLoader::loadTextureFromFile(left_filepath, GL_NEAREST));
-    left->setDimensions(16, height);
-    left->setPosition(glm::vec2(x_position - 2*(7/float(window_width)), y_position));
+    left->setDimensions(18, height);
+    left->setPosition(glm::vec2(x_position - 2*(8/float(window_width)), y_position));
     sub_elements.push_back(left);
 
     // setting corners up
     char* upper_left_filepath = doc.first_node("layout")->first_node("corner_sprites")->first_node("upper_left")->value();
     UIImage* up_left = new UIImage(new FlatMesh(), game_window, shader_program, TextureLoader::loadTextureFromFile(upper_left_filepath, GL_NEAREST));
-    up_left->setPosition(glm::vec2(x_position - 2*(16/float(window_width)), y_position + 2*(16/float(window_height))));
+    up_left->setPosition(glm::vec2(x_position - 2*(17/float(window_width)), y_position + 2*(17/float(window_height))));
     sub_elements.push_back(up_left);
 
     char* upper_right_filepath = doc.first_node("layout")->first_node("corner_sprites")->first_node("upper_right")->value();
