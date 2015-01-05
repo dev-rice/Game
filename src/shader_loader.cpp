@@ -54,7 +54,7 @@ GLuint ShaderLoader::combineShaderProgram(GLuint vertex_shader, GLuint fragment_
     glAttachShader(shader_program, fragment_shader);
 
     // Tell the fragment shader to use something??
-    // glBindFragDataLocation(shader_program, 0, "outColor");
+    glBindFragDataLocation(shader_program, 0, "outColor");
 
     // Put the shader on the graphics card.
     glLinkProgram(shader_program);

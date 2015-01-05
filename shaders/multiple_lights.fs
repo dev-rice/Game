@@ -90,7 +90,7 @@ void main() {
     if (texel.a < 0.5){
         discard;
     }
-    outColor = texel;
+    // outColor = texel;
 
     if (DEBUG_SHADOW){
         outColor = vec4(visibility * texel.rgb, texel.a);
