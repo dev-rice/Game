@@ -4,7 +4,8 @@
 #include "ui_window.h"
 
 UIWindow::UIWindow(FlatMesh* flat_mesh, Window* window, GLuint shader_program) : UIDrawable(flat_mesh, window, shader_program, TextureLoader::loadGray()){
-    
+    this->game_window = window;
+    this->shader_program = shader_program;
 }
 
 void UIWindow::loadFromXML(const char* filepath){
@@ -47,18 +48,24 @@ void UIWindow::loadFromXML(const char* filepath){
     setDimensions(width, height);
 
     // Positioning the ui window
+    int x_pos_int = 0;
+    int y_pos_int = 0;
+
     float x_position = 0;
     float y_position = 0;
 
     char* x_position_string = doc.first_node("layout")->first_node("dimensions")->first_node("x")->value();
     char* y_position_string = doc.first_node("layout")->first_node("dimensions")->first_node("y")->value();
 
+    x_pos_int = atoi(x_position_string);
+    y_pos_int = atoi(y_position_string);
+
     if(strcmp(x_position_string, "left") == 0){
         x_position = -1.0f;  
     } else if(strcmp(x_position_string, "centered") == 0){
         x_position = -1.0f * width/float(window_width);
     } else {
-        x_position = 2.0f*(float(atoi(x_position_string))/float(window_width)) -1.0f;
+        x_position = 2.0f*(float(x_pos_int)/float(window_width)) -1.0f;
     }
 
     if(strcmp(y_position_string, "top") == 0){
@@ -66,11 +73,30 @@ void UIWindow::loadFromXML(const char* filepath){
     } else if(strcmp(y_position_string, "centered") == 0){
         y_position = height/float(window_height);
     } else {
-        y_position = -2.0f*(float(atoi(y_position_string))/float(window_height)) + 1.0f;
+        y_position = -2.0f*(float(y_pos_int)/float(window_height)) + 1.0f;
     }
 
     setPosition(glm::vec2(x_position, y_position));
 
+    // setting edges up
+
+    // setting corners up
+    char* upper_left_filepath = doc.first_node("layout")->first_node("corner_sprites")->first_node("upper_left")->value();
+    printf("Filepath: %s", upper_left_filepath);
+    UIImage* up_left = new UIImage(new FlatMesh(), game_window, shader_program, TextureLoader::loadTextureFromFile(upper_left_filepath, GL_LINEAR));
+    up_left->setPosition(glm::vec2(x_position - 2*(16/float(window_width)), y_position + 2*(16/float(window_height))));
+    sub_elements.push_back(up_left);
+
+
+
+}
+
+void UIWindow::draw(){
+    FlatDrawable::draw();
+
+    for(int i = 0; i < sub_elements.size(); ++i){
+        sub_elements[i]->draw();
+    }
 
 }
 

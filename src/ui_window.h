@@ -4,6 +4,7 @@
 #ifndef UIWindow_h
 #define UIWindow_h
 
+#include <vector>
 #include <cstdio> // NULL
 #include <stdio.h>
 
@@ -14,6 +15,7 @@
 #include "window.h"
 #include "ui_drawable.h"
 #include "texture_loader.h"
+#include "ui_image.h"
 
 class UIWindow : public UIDrawable {
 public:
@@ -21,9 +23,14 @@ public:
 
     void loadFromXML(const char*);
 
-protected:
-    void setDimensions(int, int);
+    void draw();
 
+protected:
+    std::vector<UIDrawable*> sub_elements;
+
+    void setDimensions(int, int);
+    Window* game_window;
+    GLuint shader_program;
 };
 
 #endif
