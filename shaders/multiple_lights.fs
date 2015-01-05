@@ -80,8 +80,9 @@ void main() {
     vec4 ambient_component = vec4(0.1, 0.1, 0.1, 1.0) * diffuse;
     vec4 emissive_component = vec4(emissive.rgb, 1.0);
 
+    float bias = 0.005;
     float visibility = 1.0;
-    if ( texture( shadow_map, shadow_coord.xy).z  <  shadow_coord.z){
+    if ( texture( shadow_map, shadow_coord.xy).z  <  shadow_coord.z - bias){
         visibility = 0.5;
     }
 
