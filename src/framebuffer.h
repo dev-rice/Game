@@ -10,8 +10,8 @@ public:
     Framebuffer();
     Framebuffer(Window*);
 
-    void setAsRenderTarget();
-    void draw();
+    virtual void setAsRenderTarget();
+    virtual void draw();
     GLuint getTexture() {return framebuffer_texture;}
 protected:
 

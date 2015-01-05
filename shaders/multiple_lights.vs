@@ -41,7 +41,7 @@ void main() {
     gl_Position = proj * world_position;
 
     // Real directional lighting
-    lights[0].position = vec3(-1.0, 1.0, 0.0);
+    lights[0].position = vec3(-1.0, 1.0, 0.5);
     lights[0].color = vec3(1.0, 1.0, 1.0);
     lights[0].power = 1.0;
     vec3 direction_vector = normalize(lights[0].position);
