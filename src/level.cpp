@@ -82,10 +82,10 @@ void Level::loadLevel(const char* filename){
     float x, y, z, scale, x_rot, y_rot, z_rot;
 
     FILE * ifile;
-     ifile = fopen(filename, "r");
+    ifile = fopen(filename, "r");
 
     if(ifile == NULL){
-        printf("Error opening file %s\n", filename);
+        Debug::error("Error opening file %s\n", filename);
         return;
 
     }
@@ -210,6 +210,7 @@ void Level::loadLevel(const char* filename){
         }
     }
 
+    fclose(ifile);
 }
 
 GLuint Level::getTexture(GLuint index){
