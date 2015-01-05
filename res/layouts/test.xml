@@ -3,7 +3,7 @@
         <x>centered</x>
         <y>centered</y>
         <width>1000</width>
-        <height>500</height>
+        <height>700</height>
     </dimensions>
 
     <corner_sprites>
@@ -14,10 +14,10 @@
     </corner_sprites>
 
     <edge_sprites>
-        <right> edge_right.png </right>
-        <down> edge_down.png </down>
-        <left> edge_left.png </left>
-        <top> edge_top.png </top>
+        <right>res/textures/edge_right.png</right>
+        <down>res/textures/edge_down.png</down>
+        <left>res/textures/edge_left.png</left>
+        <up>res/textures/edge_up.png</up>
     </edge_sprites>
             
     <elements>

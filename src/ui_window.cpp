@@ -81,6 +81,12 @@ void UIWindow::loadFromXML(const char* filepath){
     setPosition(glm::vec2(x_position, y_position));
 
     // setting edges up
+    char* up_filepath = doc.first_node("layout")->first_node("edge_sprites")->first_node("up")->value();
+    UIImage* up = new UIImage(new FlatMesh(), game_window, shader_program, TextureLoader::loadTextureFromFile(up_filepath, GL_NEAREST));
+    up->setDimensions(width, 16);
+    up->setPosition(glm::vec2(x_position, y_position + 2*(7/float(window_height))));
+    sub_elements.push_back(up);
+
 
     // setting corners up
     char* upper_left_filepath = doc.first_node("layout")->first_node("corner_sprites")->first_node("upper_left")->value();
