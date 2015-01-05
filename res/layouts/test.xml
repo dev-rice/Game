@@ -1,9 +1,9 @@
 <layout>
     <dimensions>
-        <x> centered </x>
-        <y> centered </y>
-        <width> 500 </width>
-        <height> 500 </height>
+        <x>centered</x>
+        <y>centered</y>
+        <width>500</width>
+        <height>500</height>
     </dimensions>
 
     <corner_sprites>

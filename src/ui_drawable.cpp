@@ -1,8 +1,8 @@
 #include "ui_drawable.h"
 
 UIDrawable::UIDrawable(FlatMesh* flat_mesh, Window* window, GLuint shader_program, GLuint texture) : FlatDrawable(flat_mesh, shader_program){
-    int window_width = window->getWidth();
-    int window_height = window->getHeight();
+    window_width = window->getWidth();
+    window_height = window->getHeight();
 
     mesh_projection = glm::mat3( window_width, 0.0f  , 0.0f,
                                       0.0f , window_height, 0.0f,

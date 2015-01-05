@@ -40,12 +40,36 @@ void UIWindow::loadFromXML(const char* filepath){
 
     Debug::info("Parsed XML layout file '%s'\n", filepath);
 
+    // Sizing the ui window
     int width = atoi(doc.first_node("layout")->first_node("dimensions")->first_node("width")->value());
     int height = atoi(doc.first_node("layout")->first_node("dimensions")->first_node("height")->value());
 
     setDimensions(width, height);
 
-    // setPosition(glm::vec2(-1.0f, 1.0f));
+    // Positioning the ui window
+    float x_position = 0;
+    float y_position = 0;
+
+    char* x_position_string = doc.first_node("layout")->first_node("dimensions")->first_node("x")->value();
+    char* y_position_string = doc.first_node("layout")->first_node("dimensions")->first_node("y")->value();
+
+    if(strcmp(x_position_string, "left") == 0){
+        x_position = -1.0f;  
+    } else if(strcmp(x_position_string, "centered") == 0){
+        x_position = -1.0f * width/float(window_width);
+    } else {
+        x_position = 2.0f*(float(atoi(x_position_string))/float(window_width)) -1.0f;
+    }
+
+    if(strcmp(y_position_string, "top") == 0){
+        y_position = 1.0f;  
+    } else if(strcmp(y_position_string, "centered") == 0){
+        y_position = height/float(window_height);
+    } else {
+        y_position = -2.0f*(float(atoi(y_position_string))/float(window_height)) + 1.0f;
+    }
+
+    setPosition(glm::vec2(x_position, y_position));
 
 
 }

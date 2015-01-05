@@ -24,6 +24,10 @@ public:
 
     void setCoordinates(glm::vec2, glm::vec2);
 protected:
+
+    int window_width;
+    int window_height;
+
     bool outline;
     glm::mat3 mesh_projection;
 };
