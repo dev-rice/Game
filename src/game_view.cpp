@@ -17,7 +17,7 @@ GameView::GameView(Window* window, Level* level){
         "shaders/mousebox.fs");
 
     GLuint mouse_texture = TextureLoader::loadTextureFromFile(
-        "res/textures/cursor_ui.png", GL_LINEAR);
+        "res/textures/cursor_ui.png", GL_NEAREST);
     mouse = new Mouse(flat_mesh, window, ui_shader, mouse_texture);
 
     text_renderer = new TextRenderer(window,
