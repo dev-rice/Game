@@ -70,6 +70,7 @@ void main() {
                              0.0, 0.5, 0.0, 0.0,
                              0.0, 0.0, 0.5, 0.0,
                              0.5, 0.5, 0.5, 1.0 );
+
     mat4 depth_matrix = depth_proj * depth_view * model;
     depth_matrix = bias_matrix * depth_matrix;
     shadow_coord = depth_matrix * vec4(scaled_position, 1.0);

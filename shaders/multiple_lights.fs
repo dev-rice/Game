@@ -88,6 +88,6 @@ void main() {
     if (texel.a < 0.5){
         discard;
     }
-    // outColor = vec4(visibility * texel.rgb, texel.a);
-    outColor = texture(shadow_map, texcoord);
+    outColor = vec4(shadow_coord.z * texel.rgb, texel.a);
+    // outColor = texture(shadow_map, shadow_coord.xy);
 }
