@@ -2,8 +2,8 @@
     <dimensions>
         <x>centered</x>
         <y>centered</y>
-        <width>1000</width>
-        <height>700</height>
+        <width>500</width>
+        <height>300</height>
     </dimensions>
 
     <corner_sprites>
