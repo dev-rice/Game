@@ -17,7 +17,8 @@ GLuint ShaderLoader::loadVertexShader(std::string filename){
     if (status != GL_TRUE){
         char info_log[512];
         glGetShaderInfoLog(vertex_shader, 512, NULL, info_log);
-        printf("Error compiling the vertex shader:\n%s\n", info_log);
+        printf("Error compiling the vertex shader '%s':\n%s\n", filename.c_str(),
+            info_log);
     }
 
     return vertex_shader;
@@ -40,7 +41,8 @@ GLuint ShaderLoader::loadFragmentShader(std::string filename){
     if (status != GL_TRUE){
         char info_log[512];
         glGetShaderInfoLog(fragment_shader, 512, NULL, info_log);
-        printf("Error compiling the fragment shader:\n%s\n", info_log);
+        printf("Error compiling the fragment shader '%s':\n%s\n", filename.c_str(),
+            info_log);
     }
 
     return fragment_shader;

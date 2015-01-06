@@ -45,7 +45,7 @@ Shadowbuffer::Shadowbuffer(Window* window, int width, int height){
     }
 
     // Create the window to draw the framebuffer onto
-    framebuffer_window = new FlatDrawable(flat_mesh, framebuffer_shader, 1.0, 1.0, glm::vec2(0.0, 0.0));
+    framebuffer_window = new FlatDrawable(flat_mesh, framebuffer_shader, 0.25, 0.25, glm::vec2(0.75, -0.75));
     framebuffer_window->attachTexture(framebuffer_texture);
 }
 

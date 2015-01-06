@@ -10,9 +10,9 @@ struct Light {
     vec3 light_to_surface;
 };
 
-in vec3 position;
-in vec3 normal;
-in vec2 texcoord;
+layout(location=1) in vec3 position;
+layout(location=2) in vec3 normal;
+layout(location=3) in vec2 texcoord;
 
 out vec2 Texcoord;
 out vec3 surface_normal;

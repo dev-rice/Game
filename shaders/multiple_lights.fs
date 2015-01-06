@@ -30,7 +30,7 @@ vec4 specular;
 vec4 normal;
 vec4 emissive;
 
-const bool DEBUG_SHADOW = true;
+const bool SHADOW = true;
 
 vec4 lightFragment(vec3 light_vector, vec3 light_color, float light_power){
     float intensity = light_power / (pow(light_vector.x, 2) + pow(light_vector.y, 2) + pow(light_vector.z, 2));
@@ -56,22 +56,22 @@ void main() {
     specular = texture(specular_texture, Texcoord);
     emissive = texture(emissive_texture, Texcoord);
 
-    // For some reason using a for loop like this makes the framerate choppy.
-    // The enumeration below behaves fine.
-    // int i = 0;
-    // vec4 lit_component = vec4(0.0, 0.0, 0.0, 0.0);
-    // Light light;
-    // for (i = 0; i < num_lights; ++i){
-    //     Light light = lights[i];
-    //     lit_component = lit_component + lightFragment(light.light_to_surface, light.color, light.power);
-    // }
+    // Shadows
+    float bias = 0.005;
+    float visibility = 1.0;
+    if ( texture( shadow_map, shadow_coord.xy).z  <=  shadow_coord.z - bias){
+        visibility = 0.5;
+    }
 
     // Works fine
     Light light;
     vec4 lit_component = vec4(0.0, 0.0, 0.0, 0.0);
 
+    // Direction light
     light = lights[0];
-    lit_component = lit_component + lightFragment(light.light_to_surface, light.color, light.power);
+    lit_component = lit_component + visibility * lightFragment(light.light_to_surface, light.color, light.power);
+
+    // Other lights
     light = lights[1];
     lit_component = lit_component + lightFragment(light.light_to_surface, light.color, light.power);
     light = lights[2];
@@ -80,25 +80,10 @@ void main() {
     vec4 ambient_component = vec4(0.1, 0.1, 0.1, 1.0) * diffuse;
     vec4 emissive_component = vec4(emissive.rgb, 1.0);
 
-    float bias = 0.005;
-    float visibility = 1.0;
-    if ( texture( shadow_map, shadow_coord.xy).z  <  shadow_coord.z - bias){
-        visibility = 0.5;
-    }
-
     vec4 texel = mix(lit_component + ambient_component, emissive_component, emissive.a);
     if (texel.a < 0.5){
         discard;
     }
-    texel = diffuse;
-    // outColor = texel;
 
-    if (DEBUG_SHADOW){
-        outColor = vec4(visibility * texel.rgb, texel.a);
-        // outColor = vec4(shadow_coord.z * texel.rgb, texel.a);
-        // outColor = vec4(0.0, 0.0, texture(shadow_map, shadow_coord.xy).r, 1.0);
-        // outColor = texture(shadow_map, shadow_coord.xy);
-
-    }
-
+    outColor = texel;
 }

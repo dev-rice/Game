@@ -21,6 +21,7 @@
 #include <algorithm>
 
 #include "mesh_loader.h"
+#include "debug.h"
 
 class Mesh {
 public:
