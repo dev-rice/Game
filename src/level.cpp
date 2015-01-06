@@ -32,12 +32,12 @@ Level::Level(Window* window, const char* filename){
 
     shadowbuffer = new Shadowbuffer(window, 1.0);
 
-    glm::vec3 light_direction = glm::vec3(-1.0f, 1.0f, 0.0f);
+    glm::vec3 light_direction = glm::vec3(-1.0f, 1.0f, 0.5f);
     depth_view = glm::lookAt(light_direction, glm::vec3(0,0,0),
         glm::vec3(0,1,0));
     // Size of the box to render (tailored to fit current map).
     // depth_proj = glm::ortho<float>(-50,50,-50, 50,-20,20);
-    depth_proj = glm::ortho<float>(-10,10,-10, 10,-10,10);
+    depth_proj = glm::ortho<float>(-10,10,-10, 10,-50,50);
 
 
     loadLevel(filename);
