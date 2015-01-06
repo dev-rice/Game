@@ -6,7 +6,7 @@
 
 class Shadowbuffer : public Framebuffer {
 public:
-    Shadowbuffer(Window*, int, int);
+    Shadowbuffer(Window*, float);
 
     void setAsRenderTarget();
     void draw();

@@ -2,9 +2,13 @@
 
 Framebuffer::Framebuffer(){
     framebuffer = 0;
+    width = 1650;
+    height = 1050;
 }
 
 Framebuffer::Framebuffer(Window* window){
+    this->window = window;
+
     // Create a mesh for framebuffer to draw on
     FlatMesh* flat_mesh = new FlatMesh();
 
@@ -15,8 +19,8 @@ Framebuffer::Framebuffer(Window* window){
     glGenTextures(1, &framebuffer_texture);
     glBindTexture(GL_TEXTURE_2D, framebuffer_texture);
 
-    int width = window->getWidth();
-    int height = window->getHeight();
+    width = window->getWidth();
+    height = window->getHeight();
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB,
         GL_UNSIGNED_BYTE, NULL);
@@ -54,8 +58,11 @@ Framebuffer::Framebuffer(Window* window){
 
 void Framebuffer::setAsRenderTarget(){
     glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    glViewport(0, 0, width, height);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+
 }
 
 void Framebuffer::draw(){

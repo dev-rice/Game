@@ -30,24 +30,26 @@ vec4 specular;
 vec4 normal;
 vec4 emissive;
 
-const bool SHADOW = true;
-
 vec4 lightFragment(vec3 light_vector, vec3 light_color, float light_power){
-    float intensity = light_power / (pow(light_vector.x, 2) + pow(light_vector.y, 2) + pow(light_vector.z, 2));
+    float intensity = light_power / (pow(light_vector.x, 2) + pow(light_vector.y,
+         2) + pow(light_vector.z, 2));
 
     float cosTheta = dot(normalize(surface_normal), normalize(light_vector));
     cosTheta = clamp(cosTheta, 0.0, 1.0);
 
     vec3 reflection = reflect(-normalize(light_vector), normalize(surface_normal));
-    float cosAlpha = clamp(dot(normalize(camera_to_surface), reflection), 0.0, 1.0);
+    float cosAlpha = clamp(dot(normalize(camera_to_surface), reflection),
+        0.0, 1.0);
 
 
     vec4 diffuse_component = vec4(diffuse.rgb * intensity * cosTheta, diffuse.w);
 
     float specularity = specular.w;
-    vec4 specular_component = vec4(specular.rgb * specularity * intensity * pow(cosAlpha,15), specular.w);
+    vec4 specular_component = vec4(specular.rgb * specularity * intensity *
+        pow(cosAlpha,15), specular.w);
 
-    vec4 lit_component = vec4(light_color, 1.0) * (diffuse_component + specular_component);
+    vec4 lit_component = vec4(light_color, 1.0) *
+        (diffuse_component + specular_component);
     return lit_component;
 }
 
@@ -64,7 +66,7 @@ void main() {
     float light_depth = shadow_texture.z;
     float current_depth = shadow_coord.z - bias;
     if (light_depth  <=  current_depth){
-        visibility = 0.5;
+        visibility = 0.2;
     } else {
         visibility = 1.0;
     }
@@ -75,21 +77,25 @@ void main() {
 
     // Direction light
     light = lights[0];
-    lit_component = lit_component + visibility * lightFragment(light.light_to_surface, light.color, light.power);
+    lit_component = lit_component + visibility *
+        lightFragment(light.light_to_surface, light.color, light.power);
 
     // Other lights
     light = lights[1];
-    lit_component = lit_component + lightFragment(light.light_to_surface, light.color, light.power);
+    lit_component = lit_component +
+        lightFragment(light.light_to_surface, light.color, light.power);
     light = lights[2];
-    lit_component = lit_component + lightFragment(light.light_to_surface, light.color, light.power);
+    lit_component = lit_component +
+        lightFragment(light.light_to_surface, light.color, light.power);
 
     vec4 ambient_component = vec4(0.1, 0.1, 0.1, 1.0) * diffuse;
     vec4 emissive_component = vec4(emissive.rgb, 1.0);
 
-    vec4 texel = mix(lit_component + ambient_component, emissive_component, emissive.a);
+    vec4 texel = mix(lit_component + ambient_component, emissive_component,
+        emissive.a);
+
     if (texel.a < 0.5){
         discard;
     }
-
     outColor = texel;
 }

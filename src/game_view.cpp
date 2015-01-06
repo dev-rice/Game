@@ -7,7 +7,7 @@ GameView::GameView(Window* window, Level* level){
 
     screen = new Framebuffer();
     framebuffer = new Framebuffer(window);
-    shadowbuffer = new Shadowbuffer(window, 2048, 2048);
+    shadowbuffer = new Shadowbuffer(window, 4.0);
     level->shadow_map = shadowbuffer->getTexture();
 
     FlatMesh* flat_mesh = new FlatMesh();
@@ -72,7 +72,7 @@ void GameView::update(){
     // Draw the framebuffer
     screen->setAsRenderTarget();
     framebuffer->draw();
-    shadowbuffer->draw();
+    // shadowbuffer->draw();
 
     // Draw all of the ui elements on top of the level
     for(int i = 0; i < ui_drawables.size(); ++i){

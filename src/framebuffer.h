@@ -19,6 +19,10 @@ protected:
     GLuint framebuffer_texture;
 
     FlatDrawable* framebuffer_window;
+    Window* window;
+
+    int width;
+    int height;
 };
 
 #endif
