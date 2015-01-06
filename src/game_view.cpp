@@ -5,9 +5,8 @@ GameView::GameView(Window* window, Level* level){
     this->glfw_window = window->getGLFWWindow();
     this->level = level;
 
-    screen = new Framebuffer();
+    screen = new Screenbuffer(window);
     framebuffer = new Framebuffer(window);
-    shadowbuffer = new Shadowbuffer(1024, 1024);
 
     FlatMesh* flat_mesh = new FlatMesh();
 
@@ -26,7 +25,7 @@ GameView::GameView(Window* window, Level* level){
     // Creation of test UIWindow
     UIWindow* w = new UIWindow(new FlatMesh(), window, ui_shader);
     w->loadFromXML("res/layouts/test.xml");
-    ui_drawables.push_back(w);
+    // ui_drawables.push_back(w);
 
     // Creation of selection box
     selection_box = new UIDrawable(new FlatMesh(), window, mousebox_shader, 0);
@@ -51,11 +50,11 @@ void GameView::update(){
     handleInputs();
 
     // Render the shadow map into the shadow buffer
-    // shadowbuffer->setAsRenderTarget();
+    level->getShadowbuffer()->setAsRenderTarget();
+    level->drawShadowMap();
 
     // Render the level to the framebuffer
     framebuffer->setAsRenderTarget();
-    // level->drawShadowMap();
     level->draw();
 
     // Draw the framebuffer N - 1 times (the last pass is drawn to the screen).
@@ -217,44 +216,44 @@ void GameView::handleInputs(){
 
     // Camera controls
     // Movement
-    // if (glfwGetKey(glfw_window, GLFW_KEY_W) == GLFW_PRESS){
-    //     camera->moveZ(-1);
-    // }
-    // if (glfwGetKey(glfw_window, GLFW_KEY_S) == GLFW_PRESS){
-    //     camera->moveZ(1);
-    // }
-    // if (glfwGetKey(glfw_window, GLFW_KEY_D) == GLFW_PRESS){
-    //     camera->moveX(1);
-    // }
-    // if (glfwGetKey(glfw_window, GLFW_KEY_A) == GLFW_PRESS){
-    //     camera->moveX(-1);
-    // }
-    // if (glfwGetKey(glfw_window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS){
-    //     camera->moveY(-1);
-    // }
-    // if (glfwGetKey(glfw_window, GLFW_KEY_SPACE) == GLFW_PRESS){
-    //     camera->moveY(1);
-    // }
+    if (glfwGetKey(glfw_window, GLFW_KEY_W) == GLFW_PRESS){
+        camera->moveZ(-1);
+    }
+    if (glfwGetKey(glfw_window, GLFW_KEY_S) == GLFW_PRESS){
+        camera->moveZ(1);
+    }
+    if (glfwGetKey(glfw_window, GLFW_KEY_D) == GLFW_PRESS){
+        camera->moveX(1);
+    }
+    if (glfwGetKey(glfw_window, GLFW_KEY_A) == GLFW_PRESS){
+        camera->moveX(-1);
+    }
+    if (glfwGetKey(glfw_window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS){
+        camera->moveY(-1);
+    }
+    if (glfwGetKey(glfw_window, GLFW_KEY_SPACE) == GLFW_PRESS){
+        camera->moveY(1);
+    }
 
     // Rotation
-    // if (glfwGetKey(glfw_window, GLFW_KEY_Q) == GLFW_PRESS){
-    //     camera->rotateY(1);
-    // }
-    // if (glfwGetKey(glfw_window, GLFW_KEY_E) == GLFW_PRESS){
-    //     camera->rotateY(-1);
-    // }
-    // if (glfwGetKey(glfw_window, GLFW_KEY_R) == GLFW_PRESS){
-    //     camera->rotateX(1);
-    // }
-    // if (glfwGetKey(glfw_window, GLFW_KEY_F) == GLFW_PRESS){
-    //     camera->rotateX(-1);
-    // }
-    // if (glfwGetKey(glfw_window, GLFW_KEY_Z) == GLFW_PRESS){
-    //     camera->rotateZ(1);
-    // }
-    // if (glfwGetKey(glfw_window, GLFW_KEY_C) == GLFW_PRESS){
-    //     camera->rotateZ(-1);
-    // }
+    if (glfwGetKey(glfw_window, GLFW_KEY_Q) == GLFW_PRESS){
+        camera->rotateY(1);
+    }
+    if (glfwGetKey(glfw_window, GLFW_KEY_E) == GLFW_PRESS){
+        camera->rotateY(-1);
+    }
+    if (glfwGetKey(glfw_window, GLFW_KEY_R) == GLFW_PRESS){
+        camera->rotateX(1);
+    }
+    if (glfwGetKey(glfw_window, GLFW_KEY_F) == GLFW_PRESS){
+        camera->rotateX(-1);
+    }
+    if (glfwGetKey(glfw_window, GLFW_KEY_Z) == GLFW_PRESS){
+        camera->rotateZ(1);
+    }
+    if (glfwGetKey(glfw_window, GLFW_KEY_C) == GLFW_PRESS){
+        camera->rotateZ(-1);
+    }
 
     // Handle the debug toggle key
     if ((glfwGetKey(glfw_window, GLFW_KEY_TAB) == GLFW_PRESS) && (!toggle_key_state)){

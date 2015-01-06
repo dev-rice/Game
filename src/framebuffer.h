@@ -7,17 +7,22 @@
 
 class Framebuffer {
 public:
-    Framebuffer();
+    Framebuffer() {;}
     Framebuffer(Window*);
 
-    void setAsRenderTarget();
-    void draw();
+    virtual void setAsRenderTarget();
+    virtual void draw();
+    GLuint getTexture() {return framebuffer_texture;}
 protected:
 
     GLuint framebuffer;
     GLuint framebuffer_texture;
 
     FlatDrawable* framebuffer_window;
+    Window* window;
+
+    int width;
+    int height;
 };
 
 #endif

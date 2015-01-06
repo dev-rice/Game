@@ -3,7 +3,7 @@
 //      From a top level perspective the Mesh holds geometry data: vertices and faces. This data
 //      can either be passed in as std::vectors in the constructor or loaded from a .obj file. The
 //      VAO is not complete without having an associated shader. Before using the mesh you must specify
-//      which shader you will be using so that it knows the geometry data. Ultimately when using this object, 
+//      which shader you will be using so that it knows the geometry data. Ultimately when using this object,
 //      you will get a VAO back. This VAO can then be bound such that you can attach uniform data and textures
 //      to the shader at a higher level.
 
@@ -38,15 +38,15 @@ void Mesh::loadMeshData(std::vector<GLfloat> vertices, std::vector<GLuint> eleme
 
     // We need to know how many faces to draw later on.
     num_faces = elements.size();
-    
-    // Create our Vertex Array Object (VAO) which will hold our vertex and element data. 
+
+    // Create our Vertex Array Object (VAO) which will hold our vertex and element data.
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
 
     GLuint ebo;
 
     // Store all of the vertex data in a Vertex Buffer Object (VBO)
-    glGenBuffers(1, &vbo);   
+    glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), vertices.data(), GL_STATIC_DRAW);
 
@@ -68,22 +68,21 @@ void Mesh::draw(){
 }
 
 void Mesh::attachGeometryToShader(GLuint shader_program){
-    // As soon as you've bound a certain VAO, every time you call glVertexAttribPointer, 
-    // that information will be stored in that VAO. This makes switching between different vertex data 
-    // and vertex formats as easy as binding a different VAO.    
+    // As soon as you've bound a certain VAO, every time you call glVertexAttribPointer,
+    // that information will be stored in that VAO. This makes switching between different vertex data
+    // and vertex formats as easy as binding a different VAO.
     glUseProgram(shader_program);
 
-    // Because binding the geometry to the shader multiple times on the same vao causes problems, we 
+    // Because binding the geometry to the shader multiple times on the same vao causes problems, we
     // check we have already bound the data.
     bool already_bound = std::find(bound_shaders.begin(), bound_shaders.end(), shader_program) != bound_shaders.end();
 
     // If this shader does not already have the data, bind it.
     if(!already_bound){
-        
         glBindVertexArray(vao);
         // Bind the VBO to ensure the correct vertex data gets pushed to the shader.
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        
+
         // Get the reference to the "position" attribute defined in
         // the vertex shader
         GLint posAttrib = glGetAttribLocation(shader_program, "position");
@@ -94,6 +93,7 @@ void Mesh::attachGeometryToShader(GLuint shader_program){
                                8*sizeof(float), 0);
 
         GLint normalAttrib = glGetAttribLocation(shader_program, "normal");
+
         glEnableVertexAttribArray(normalAttrib);
         // Load the normal pointer from our vertex spec with width 8. The normal values
         // start at index 2. Tell it to load 3 values.
@@ -103,13 +103,14 @@ void Mesh::attachGeometryToShader(GLuint shader_program){
         // Link the texture coordinates to the shader.
         GLint texAttrib = glGetAttribLocation(shader_program, "texcoord");
         glEnableVertexAttribArray(texAttrib);
-        // Load the texture attributes from our vertex spec with width 8. The texture 
+        // Load the texture attributes from our vertex spec with width 8. The texture
         // values start at index 8. Tell it to load 2 values.
         glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE,
                                8*sizeof(float), (void*)(6*sizeof(float)));
 
         // Keep track of which shaders we have already bound data to
         bound_shaders.push_back(shader_program);
+
     }
-    
+
 }

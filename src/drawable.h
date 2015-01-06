@@ -35,6 +35,8 @@ public:
     void setScale(GLfloat s) {scale = s;}
     void setShader(GLuint);
 
+    void setupShadows(GLuint, glm::mat4, glm::mat4);
+
     glm::vec3 getPosition() {return position;}
     glm::vec3 getRotation() {return rotation;}
     GLfloat getScale() {return scale;}
@@ -59,6 +61,10 @@ protected:
     glm::mat4 model_matrix;
 
     TextureSet* texture_set;
+
+    GLuint shadow_map;
+    glm::mat4 depth_view;
+    glm::mat4 depth_proj;
 };
 
 #endif

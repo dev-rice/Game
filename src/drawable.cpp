@@ -35,6 +35,12 @@ void Drawable::setShader(GLuint shader_program){
     this->mesh->attachGeometryToShader(shader_program);
 }
 
+void Drawable::setupShadows(GLuint shadow_map, glm::mat4 depth_view, glm::mat4 depth_proj){
+    this->shadow_map = shadow_map;
+    this->depth_view = depth_view;
+    this->depth_proj = depth_proj;
+}
+
 void Drawable::draw(Camera* camera, glm::mat4* proj_matrix){
     // Get the current view matrix from the camera.
     glm::mat4 view_matrix = camera->getViewMatrix();

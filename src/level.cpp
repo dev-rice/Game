@@ -21,8 +21,8 @@ Level::Level(Window* window, const char* filename){
     camera->setRotation(glm::vec3(1.04f, 0.0f, 0.0f));
     // camera = new Camera(glm::vec3(0.0f, 2.0f, 4.0f));
 
-    doodad_shader = ShaderLoader::loadShaderProgram("shaders/multiple_lights.vs",
-        "shaders/multiple_lights.fs");
+    doodad_shader = ShaderLoader::loadShaderProgram("shaders/doodad.vs",
+        "shaders/doodad.fs");
 
     particle_shader = ShaderLoader::loadShaderProgram("shaders/particle.vs",
         "shaders/particle.fs");
@@ -30,11 +30,15 @@ Level::Level(Window* window, const char* filename){
     shadow_shader = ShaderLoader::loadShaderProgram("shaders/shadow.vs",
         "shaders/shadow.fs");
 
-    glm::vec3 light_direction = glm::vec3(-1.0f, 1.0f, 0.0f);
+    shadowbuffer = new Shadowbuffer(window, 1.0);
+
+    glm::vec3 light_direction = glm::vec3(-1.0f, 1.0f, 0.5f);
     depth_view = glm::lookAt(light_direction, glm::vec3(0,0,0),
         glm::vec3(0,1,0));
     // Size of the box to render (tailored to fit current map).
-    depth_proj = glm::ortho<float>(-50,50,-50, 50,-20,20);
+    // depth_proj = glm::ortho<float>(-50,50,-50, 50,-20,20);
+    depth_proj = glm::ortho<float>(-10,10,-10, 10,-50,50);
+
 
     loadLevel(filename);
 }
@@ -148,6 +152,8 @@ void Level::loadLevel(const char* filename){
             Doodad* drawable = new Doodad(mesh, doodad_shader, position,
                 rotation, scale);
             drawable->attachTextureSet(texture_set);
+            drawable->setupShadows(shadowbuffer->getTexture(), depth_view, depth_proj);
+
             drawables.push_back(drawable);
 
         }

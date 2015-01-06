@@ -53,11 +53,15 @@ GLFWwindow* Window::initializeGLFWWindow(int width, int height, bool fullscreen)
         this->height = actual_h;
     }
 
+
     // Hide the mouse
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
     // Create the OpenGL context in the window
     glfwMakeContextCurrent(window);
+
+    // Sets the gl render resolution to the requested window resolution
+    // glViewport(0, 0, width, height);
 
 
     // Set up GLEW so that we can use abstracted OpenGL functions

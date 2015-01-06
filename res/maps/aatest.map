@@ -27,4 +27,5 @@ d 3 6 0 0 0 -0.134555 0.000000 5.574090 1.723211 -0.000000 -3.141592 -0.000001
 p fire -1.400000 0.000000 0.000000
 
 # Ground specification - Begin writing here (h, g)
-h simple_heightmap.png
+# h simple_heightmap.png
+h flat.png
