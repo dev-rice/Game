@@ -152,12 +152,9 @@ void Level::loadLevel(const char* filename){
             Doodad* drawable = new Doodad(mesh, doodad_shader, position,
                 rotation, scale);
             drawable->attachTextureSet(texture_set);
-            drawable->shadow_map = shadowbuffer->getTexture();
-            drawable->depth_view = depth_view;
-            drawable->depth_proj = depth_proj;
+            drawable->setupShadows(shadowbuffer->getTexture(), depth_view, depth_proj);
 
             drawables.push_back(drawable);
-
 
         }
 
