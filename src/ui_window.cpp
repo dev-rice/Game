@@ -44,10 +44,17 @@ void UIWindow::loadFromXML(const char* filepath){
     //##########################################
     // Sizing the UI Window
     //##########################################
-    int width = atoi(doc.first_node("layout")->first_node("dimensions")->first_node("width")->value());
-    int height = atoi(doc.first_node("layout")->first_node("dimensions")->first_node("height")->value());
+    bool width_and_height_constrained = false;
+    int width = 0;
+    int height = 0;
 
-    setDimensions(width, height);
+    if(doc.first_node("layout")->first_node("constraints")->first_node("width") != NULL && doc.first_node("layout")->first_node("constraints")->first_node("height") != NULL){
+        width = atoi(doc.first_node("layout")->first_node("constraints")->first_node("width")->value());
+        height = atoi(doc.first_node("layout")->first_node("constraints")->first_node("height")->value());
+
+        setDimensions(width, height);
+        width_and_height_constrained = true;
+    }
 
     //##########################################
     // Positioning the UI Window
@@ -55,32 +62,40 @@ void UIWindow::loadFromXML(const char* filepath){
     int x_pos_int = 0;
     int y_pos_int = 0;
 
-    float x_position = 0;
-    float y_position = 0;
+    char* x_anchor = doc.first_node("layout")->first_node("constraints")->first_node("x")->first_node("anchor")->value();
+    char* y_anchor = doc.first_node("layout")->first_node("constraints")->first_node("y")->first_node("anchor")->value();
 
-    char* x_position_string = doc.first_node("layout")->first_node("dimensions")->first_node("x")->value();
-    char* y_position_string = doc.first_node("layout")->first_node("dimensions")->first_node("y")->value();
+    int x_offset = atoi(doc.first_node("layout")->first_node("constraints")->first_node("y")->first_node("offset")->value());
+    int y_offset = atoi(doc.first_node("layout")->first_node("constraints")->first_node("y")->first_node("offset")->value());
 
-    x_pos_int = atoi(x_position_string);
-    y_pos_int = atoi(y_position_string);
+    x_pos_int = parseXConstraint(x_offset, x_anchor);
+    y_pos_int = parseYConstraint(y_offset, y_anchor);
 
-    if(strcmp(x_position_string, "left") == 0){
-        x_position = -1.0f;  
-    } else if(strcmp(x_position_string, "centered") == 0){
-        x_position = -1.0f * width/float(window_width);
-    } else {
-        x_position = 2.0f*(float(x_pos_int)/float(window_width)) -1.0f;
+    setX(x_pos_int);
+    setY(y_pos_int);
+
+    float x_position = 2.0f*(float(x_pos_int)/float(window_width)) -1.0f;
+    float y_position = -2.0f*(float(y_pos_int)/float(window_height)) + 1.0f;
+
+    if(!width_and_height_constrained){
+        int x2_pos_int = 0;
+        int y2_pos_int = 0;
+
+        char* x2_anchor = doc.first_node("layout")->first_node("constraints")->first_node("x")->next_sibling("x")->first_node("anchor")->value();
+        char* y2_anchor = doc.first_node("layout")->first_node("constraints")->first_node("y")->next_sibling("y")->first_node("anchor")->value();
+
+        int x2_offset = atoi(doc.first_node("layout")->first_node("constraints")->first_node("x")->next_sibling("x")->first_node("offset")->value());
+        int y2_offset = atoi(doc.first_node("layout")->first_node("constraints")->first_node("y")->next_sibling("y")->first_node("offset")->value());
+
+        x2_pos_int = parseXConstraint(x2_offset, x2_anchor);
+        y2_pos_int = parseYConstraint(y2_offset, y2_anchor);
+
+        width = x2_pos_int-x_pos_int;
+        height = y2_pos_int-y_pos_int;
+        setDimensions(width, height);
+        setX(x_pos_int);
+        setY(y_pos_int);
     }
-
-    if(strcmp(y_position_string, "top") == 0){
-        y_position = 1.0f;  
-    } else if(strcmp(y_position_string, "centered") == 0){
-        y_position = height/float(window_height);
-    } else {
-        y_position = -2.0f*(float(y_pos_int)/float(window_height)) + 1.0f;
-    }
-
-    setPosition(glm::vec2(x_position, y_position));
 
     //##########################################
     // Creating and Positioning Edges
@@ -148,6 +163,38 @@ void UIWindow::draw(){
         sub_elements[i]->draw();
     }
 
+}
+
+int UIWindow::parseXConstraint(int offset, char* anchor){
+    if(strcmp(anchor, "left") == 0){
+        return offset;  
+    } else if(strcmp(anchor, "centered") == 0){
+        return window_width/2 - width/2 + offset;
+    } else if(strcmp(anchor, "right") == 0){
+        return window_width + offset;
+    } else if(strcmp(anchor, "none") == 0){
+        return offset;
+    }
+}
+
+int UIWindow::parseYConstraint(int offset, char* anchor){
+    if(strcmp(anchor, "up") == 0){
+        return offset;  
+    } else if(strcmp(anchor, "centered") == 0){
+        return window_height/2 - height/2 + offset;
+    } else if(strcmp(anchor, "down") == 0){
+        return window_height + offset;
+    } else if(strcmp(anchor, "none") == 0){
+        return offset;
+    }
+}
+
+void UIWindow::setX(int new_x){
+    position.x = 2.0f*(float(new_x)/float(window_width)) -1.0f + width;
+}
+
+void UIWindow::setY(int new_y){
+    position.y = -2.0f*(float(new_y)/float(window_height)) + 1.0f - height;
 }
 
 void UIWindow::setDimensions(int new_width, int new_height){

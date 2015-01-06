@@ -28,6 +28,11 @@ public:
 protected:
     std::vector<UIDrawable*> sub_elements;
 
+    int parseXConstraint(int, char*);
+    int parseYConstraint(int, char*);
+
+    void setX(int);
+    void setY(int);
     void setDimensions(int, int);
     Window* game_window;
     GLuint shader_program;

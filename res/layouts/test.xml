@@ -1,10 +1,22 @@
 <layout>
-    <dimensions>
-        <x>centered</x>
-        <y>centered</y>
-        <width>1000</width>
-        <height>600</height>
-    </dimensions>
+    <constraints>
+        <x>
+            <anchor>left</anchor>
+            <offset>300</offset>
+        </x>
+        <y>
+            <anchor>up</anchor>
+            <offset>300</offset>
+        </y>
+        <x>
+            <anchor>right</anchor>
+            <offset>-300</offset>
+        </x>
+        <y>
+            <anchor>down</anchor>
+            <offset>-300</offset>
+        </y>
+    </constraints>
 
     <corner_sprites>
         <upper_right>res/textures/corner_up_right.png</upper_right>
