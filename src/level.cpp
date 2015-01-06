@@ -30,6 +30,8 @@ Level::Level(Window* window, const char* filename){
     shadow_shader = ShaderLoader::loadShaderProgram("shaders/shadow.vs",
         "shaders/shadow.fs");
 
+    shadowbuffer = new Shadowbuffer(window, 1.0);
+
     glm::vec3 light_direction = glm::vec3(-1.0f, 1.0f, 0.0f);
     depth_view = glm::lookAt(light_direction, glm::vec3(0,0,0),
         glm::vec3(0,1,0));
@@ -63,8 +65,6 @@ void Level::draw(){
 
 void Level::drawShadowMap(){
     for (int i = 0; i < drawables.size(); ++i){
-        drawables[i]->shadow_map = shadow_map;
-
         // Save the shader this drawable is currently using
         GLuint current_shader = drawables[i]->getShader();
         // Set the drawable to render with the shadow shader
@@ -152,6 +152,7 @@ void Level::loadLevel(const char* filename){
             Doodad* drawable = new Doodad(mesh, doodad_shader, position,
                 rotation, scale);
             drawable->attachTextureSet(texture_set);
+            drawable->shadow_map = shadowbuffer->getTexture();
             drawable->depth_view = depth_view;
             drawable->depth_proj = depth_proj;
 

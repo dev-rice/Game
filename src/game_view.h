@@ -38,9 +38,9 @@ private:
 
     Level* level;
 
-    Framebuffer* screen;
+    Screenbuffer* screen;
     Framebuffer* framebuffer;
-    Framebuffer* shadowbuffer;
+    Shadowbuffer* shadowbuffer;
 
     Mouse* mouse;
     UIDrawable* selection_box;

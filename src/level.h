@@ -21,6 +21,7 @@
 #include "snow_emitter.h"
 #include "smoke_emitter.h"
 
+#include "shadowbuffer.h"
 #include "window.h"
 
 static const char* MODEL_PATH = "res/models/";
@@ -39,8 +40,7 @@ public:
     int getMapWidth();
 
     Camera* getCamera() {return camera;}
-
-    GLuint shadow_map;
+    Shadowbuffer* getShadowbuffer(){return shadowbuffer;}    
 
 private:
     void loadLevel(const char *);
@@ -68,6 +68,9 @@ private:
 
     glm::mat4 depth_view;
     glm::mat4 depth_proj;
+
+    Shadowbuffer* shadowbuffer;
+
 
 };
 
