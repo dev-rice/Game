@@ -37,7 +37,7 @@ Level::Level(Window* window, const char* filename){
         glm::vec3(0,1,0));
     // Size of the box to render (tailored to fit current map).
     // depth_proj = glm::ortho<float>(-50,50,-50, 50,-20,20);
-    depth_proj = glm::ortho<float>(-10,10,-10, 10,-50,50);
+    depth_proj = glm::ortho<float>(-10,10,-10, 10,-20,20);
 
 
     loadLevel(filename);
