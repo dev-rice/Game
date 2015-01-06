@@ -21,8 +21,8 @@ Level::Level(Window* window, const char* filename){
     camera->setRotation(glm::vec3(1.04f, 0.0f, 0.0f));
     // camera = new Camera(glm::vec3(0.0f, 2.0f, 4.0f));
 
-    doodad_shader = ShaderLoader::loadShaderProgram("shaders/multiple_lights.vs",
-        "shaders/multiple_lights.fs");
+    doodad_shader = ShaderLoader::loadShaderProgram("shaders/doodad.vs",
+        "shaders/doodad.fs");
 
     particle_shader = ShaderLoader::loadShaderProgram("shaders/particle.vs",
         "shaders/particle.fs");

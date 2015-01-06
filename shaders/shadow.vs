@@ -1,9 +1,9 @@
 #version 330 core
 
 // Input vertex data, different for all executions of this shader.
-in vec3 position;
-in vec3 normal;
-in vec2 texcoord;
+layout (location=1) in vec3 position;
+layout (location=2) in vec3 normal;
+layout (location=3) in vec2 texcoord;
 
 // Values that stay constant for the whole mesh.
 uniform mat4 model;

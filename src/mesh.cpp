@@ -79,8 +79,6 @@ void Mesh::attachGeometryToShader(GLuint shader_program){
 
     // If this shader does not already have the data, bind it.
     if(!already_bound){
-        Debug::info("Attaching geometry for %d to shader %d\n", vao,
-            shader_program);
         glBindVertexArray(vao);
         // Bind the VBO to ensure the correct vertex data gets pushed to the shader.
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -88,7 +86,6 @@ void Mesh::attachGeometryToShader(GLuint shader_program){
         // Get the reference to the "position" attribute defined in
         // the vertex shader
         GLint posAttrib = glGetAttribLocation(shader_program, "position");
-        Debug::info("Mesh posAttrib: %d\n", posAttrib);
         glEnableVertexAttribArray(posAttrib);
         // Load the position attributes from our vertex spec with width 8. The position
         // values start at index 0. Tell it to load 3 values.
@@ -96,7 +93,6 @@ void Mesh::attachGeometryToShader(GLuint shader_program){
                                8*sizeof(float), 0);
 
         GLint normalAttrib = glGetAttribLocation(shader_program, "normal");
-        Debug::info("Mesh normalAttrib: %d\n", posAttrib);
 
         glEnableVertexAttribArray(normalAttrib);
         // Load the normal pointer from our vertex spec with width 8. The normal values
@@ -106,7 +102,6 @@ void Mesh::attachGeometryToShader(GLuint shader_program){
 
         // Link the texture coordinates to the shader.
         GLint texAttrib = glGetAttribLocation(shader_program, "texcoord");
-        Debug::info("Mesh texAttrib: %d\n", posAttrib);
         glEnableVertexAttribArray(texAttrib);
         // Load the texture attributes from our vertex spec with width 8. The texture
         // values start at index 8. Tell it to load 2 values.
