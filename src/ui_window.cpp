@@ -169,7 +169,7 @@ int UIWindow::parseXConstraint(int offset, char* anchor){
     if(strcmp(anchor, "left") == 0){
         return offset;  
     } else if(strcmp(anchor, "centered") == 0){
-        return window_width/2 - width/2 + offset;
+        return window_width/2 - (width*window_width/2) + offset;
     } else if(strcmp(anchor, "right") == 0){
         return window_width + offset;
     } else if(strcmp(anchor, "none") == 0){
@@ -181,7 +181,7 @@ int UIWindow::parseYConstraint(int offset, char* anchor){
     if(strcmp(anchor, "up") == 0){
         return offset;  
     } else if(strcmp(anchor, "centered") == 0){
-        return window_height/2 - height/2 + offset;
+        return window_height/2 - (height*window_height/2) + offset;
     } else if(strcmp(anchor, "down") == 0){
         return window_height + offset;
     } else if(strcmp(anchor, "none") == 0){

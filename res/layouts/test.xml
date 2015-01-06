@@ -1,21 +1,15 @@
 <layout>
     <constraints>
         <x>
-            <anchor>left</anchor>
-            <offset>300</offset>
+            <anchor>centered</anchor>
+            <offset>0</offset>
         </x>
         <y>
-            <anchor>up</anchor>
-            <offset>300</offset>
+            <anchor>centered</anchor>
+            <offset>0</offset>
         </y>
-        <x>
-            <anchor>right</anchor>
-            <offset>-300</offset>
-        </x>
-        <y>
-            <anchor>down</anchor>
-            <offset>-300</offset>
-        </y>
+        <width>400</width>
+        <height>600</height>
     </constraints>
 
     <corner_sprites>
