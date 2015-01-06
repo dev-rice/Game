@@ -58,9 +58,15 @@ void main() {
 
     // Shadows
     float bias = 0.005;
-    float visibility = 1.0;
-    if ( texture( shadow_map, shadow_coord.xy).z  <=  shadow_coord.z - bias){
+    float visibility;
+
+    vec4 shadow_texture = texture(shadow_map, shadow_coord.xy);
+    float light_depth = shadow_texture.z;
+    float current_depth = shadow_coord.z - bias;
+    if (light_depth  <=  current_depth){
         visibility = 0.5;
+    } else {
+        visibility = 1.0;
     }
 
     // Works fine
