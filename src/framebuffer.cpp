@@ -1,11 +1,5 @@
 #include "framebuffer.h"
 
-Framebuffer::Framebuffer(){
-    framebuffer = 0;
-    width = 1650;
-    height = 1050;
-}
-
 Framebuffer::Framebuffer(Window* window){
     this->window = window;
 

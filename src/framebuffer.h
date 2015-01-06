@@ -7,7 +7,7 @@
 
 class Framebuffer {
 public:
-    Framebuffer();
+    Framebuffer() {;}
     Framebuffer(Window*);
 
     virtual void setAsRenderTarget();
