@@ -62,12 +62,15 @@ void main() {
     float bias = 0.005;
     float visibility;
 
+    float angle = dot(normalize(surface_normal),
+        normalize(lights[0].light_to_surface));
+
     vec4 shadow_texture = texture(shadow_map, shadow_coord.xy);
     bool in_shadow_map = (shadow_coord.x >= 0.0) && (shadow_coord.x <= 1.0) &&
         (shadow_coord.y >= 0.0) && (shadow_coord.y <= 1.0);
     float light_depth = shadow_texture.z;
     float current_depth = shadow_coord.z - bias;
-    if ((light_depth  <=  current_depth) && in_shadow_map){
+    if ((light_depth  <=  current_depth) && in_shadow_map && (angle > 0.2)){
         visibility = 0.2;
     } else {
         visibility = 1.0;

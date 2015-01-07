@@ -25,7 +25,7 @@ GameView::GameView(Window* window, Level* level){
     // Creation of test UIWindow
     UIWindow* w = new UIWindow(new FlatMesh(), window, ui_shader);
     w->loadFromXML("res/layouts/test.xml");
-    ui_drawables.push_back(w);
+    // ui_drawables.push_back(w);
 
     // Creation of selection box
     selection_box = new UIDrawable(new FlatMesh(), window, mousebox_shader, 0);
