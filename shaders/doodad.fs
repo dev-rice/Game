@@ -55,17 +55,13 @@ vec4 lightFragment(vec3 light_vector, vec3 light_color, float light_power){
     return lit_component;
 }
 
-void main() {
-    diffuse = texture(diffuse_texture, Texcoord);
-    specular = texture(specular_texture, Texcoord);
-    emissive = texture(emissive_texture, Texcoord);
-
+float getShadowFactor(){
     // Shadows
     float bias = 0.005;
     float visibility;
 
     float angle = dot(normalize(surface_normal),
-        normalize(lights[0].light_to_surface));
+    normalize(lights[0].light_to_surface));
 
     vec4 n_pixel  = textureOffset(shadow_map, shadow_coord.xy, ivec2(0, 1));
     vec4 s_pixel  = textureOffset(shadow_map, shadow_coord.xy, ivec2(0, -1));
@@ -80,11 +76,10 @@ void main() {
     vec4 blurred_pixel = (n_pixel + s_pixel + e_pixel + w_pixel + nw_pixel +
         ne_pixel + sw_pixel + se_pixel + middle_pixel) / 9.0;
 
-
     vec4 shadow_texture = blurred_pixel;
 
     bool in_shadow_map = (shadow_coord.x >= 0.0) && (shadow_coord.x <= 1.0) &&
-        (shadow_coord.y >= 0.0) && (shadow_coord.y <= 1.0) || SHADOW_DEBUG;
+    (shadow_coord.y >= 0.0) && (shadow_coord.y <= 1.0) || SHADOW_DEBUG;
     float light_depth = shadow_texture.z;
     float current_depth = shadow_coord.z - bias;
     if ((light_depth  <=  current_depth) && in_shadow_map && (angle > 0.2)){
@@ -92,6 +87,16 @@ void main() {
     } else {
         visibility = 1.0;
     }
+
+    return visibility;
+}
+
+void main() {
+    diffuse = texture(diffuse_texture, Texcoord);
+    specular = texture(specular_texture, Texcoord);
+    emissive = texture(emissive_texture, Texcoord);
+
+    float visibility = getShadowFactor();
 
     // Works fine
     Light light;
