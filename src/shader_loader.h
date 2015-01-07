@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include <string>
+#include <map>
 
 class ShaderLoader {
 public:
@@ -18,9 +19,12 @@ public:
     static GLuint loadFragmentShader(std::string);
     static GLuint combineShaderProgram(GLuint, GLuint);
     static GLuint loadShaderProgram(std::string, std::string);
+    static std::string getShaderName(GLuint);
 
 private:
     static std::string GLSLParse(std::string);
+
+    static std::map<GLuint, std::string> shaders;
 
 };
 

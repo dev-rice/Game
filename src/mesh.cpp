@@ -111,6 +111,22 @@ void Mesh::attachGeometryToShader(GLuint shader_program){
         // Keep track of which shaders we have already bound data to
         bound_shaders.push_back(shader_program);
 
+        std::string shader_name = ShaderLoader::getShaderName(shader_program);
+
+        if (posAttrib == -1){
+            Debug::error("Position attribute for VAO %d and shader '%s' was not set.\n", vao,
+                shader_name.c_str());
+        }
+        if (normalAttrib == -1){
+            Debug::error("Normal attribute for VAO %d and shader '%s' was not set.\n", vao,
+                shader_name.c_str());
+        }
+        if (texAttrib == -1){
+            Debug::error("Texture coordinate attribute for VAO %d and shader '%s' was not set,\n", vao,
+                shader_name.c_str());
+        }
+
+
     }
 
 }

@@ -167,7 +167,7 @@ void UIWindow::draw(){
 
 int UIWindow::parseXConstraint(int offset, char* anchor){
     if(strcmp(anchor, "left") == 0){
-        return offset;  
+        return offset;
     } else if(strcmp(anchor, "centered") == 0){
         return window_width/2 - (width*window_width/2) + offset;
     } else if(strcmp(anchor, "right") == 0){
@@ -175,11 +175,12 @@ int UIWindow::parseXConstraint(int offset, char* anchor){
     } else if(strcmp(anchor, "none") == 0){
         return offset;
     }
+    return -1;
 }
 
 int UIWindow::parseYConstraint(int offset, char* anchor){
     if(strcmp(anchor, "up") == 0){
-        return offset;  
+        return offset;
     } else if(strcmp(anchor, "centered") == 0){
         return window_height/2 - (height*window_height/2) + offset;
     } else if(strcmp(anchor, "down") == 0){
@@ -187,6 +188,7 @@ int UIWindow::parseYConstraint(int offset, char* anchor){
     } else if(strcmp(anchor, "none") == 0){
         return offset;
     }
+    return -1;
 }
 
 void UIWindow::setX(int new_x){
@@ -203,4 +205,4 @@ void UIWindow::setDimensions(int new_width, int new_height){
 
     width = gl_mesh_size.x;
     height = gl_mesh_size.y;
-}   
+}

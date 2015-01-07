@@ -1,5 +1,7 @@
 #include "shader_loader.h"
 
+std::map<GLuint, std::string> ShaderLoader::shaders;
+
 GLuint ShaderLoader::loadVertexShader(std::string filename){
     // Create the vertex shader
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
@@ -73,7 +75,14 @@ GLuint ShaderLoader::loadShaderProgram(std::string vertex, std::string fragment)
     GLuint vertex_shader = ShaderLoader::loadVertexShader(vertex);
     GLuint fragment_shader = ShaderLoader::loadFragmentShader(fragment);
     GLuint shader_program = ShaderLoader::combineShaderProgram(vertex_shader, fragment_shader);
+
+    ShaderLoader::shaders[shader_program] = vertex;
+
     return shader_program;
+}
+
+std::string ShaderLoader::getShaderName(GLuint shader_id){
+    return ShaderLoader::shaders[shader_id];
 }
 
 std::string ShaderLoader::GLSLParse(std::string filename){

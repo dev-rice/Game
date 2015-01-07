@@ -19,7 +19,9 @@
 #include <cstdlib>
 #include <vector>
 #include <algorithm>
+#include <string>
 
+#include "shader_loader.h"
 #include "mesh_loader.h"
 #include "debug.h"
 
