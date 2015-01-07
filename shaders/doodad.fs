@@ -30,7 +30,7 @@ vec4 specular;
 vec4 normal;
 vec4 emissive;
 
-const bool SHADOW_DEBUG = true;
+const bool SHADOW_DEBUG = false;
 
 vec4 lightFragment(vec3 light_vector, vec3 light_color, float light_power){
     float intensity = light_power / (pow(light_vector.x, 2) + pow(light_vector.y,
