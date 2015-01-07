@@ -265,4 +265,15 @@ void GameView::handleInputs(){
         toggle_key_state = false;
     }
 
+    // Reset the average frame time calculations
+    if (glfwGetKey(glfw_window, GLFW_KEY_T) == GLFW_PRESS){
+        frame_count = 1;
+        average_frame_time = 0.0f;
+    }
+
+    //Print the screen
+    if (glfwGetKey(glfw_window, GLFW_KEY_P) == GLFW_PRESS){
+        window->takeScreenshot();
+    }
+
 }

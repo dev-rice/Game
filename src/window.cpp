@@ -1,8 +1,8 @@
 #include "window.h"
 
 Window::Window(int width, int height, bool fullscreen){
-    this->width = width;
-    this->height = height;
+    this->requested_width = width;
+    this->requested_height = height;
     glfw_window = initializeGLFWWindow(width, height, fullscreen);
 }
 
@@ -20,6 +20,21 @@ void Window::setVsync(bool value){
     } else {
         glfwSwapInterval(0);
     }
+}
+
+void Window::takeScreenshot(){
+    time_t     now = time(0);
+    struct tm  tstruct;
+    char       buf[80];
+    tstruct = *localtime(&now);
+    // Visit http://en.cppreference.com/w/cpp/chrono/c/strftime
+    // for more information about date/time format
+    strftime(buf, sizeof(buf), "%Y_%m_%d-%H_%M_%S", &tstruct);
+
+    std::string filename = "screenshot_" + std::string(buf) + ".bmp";
+
+    int save_result = SOIL_save_screenshot(filename.c_str(), SOIL_SAVE_TYPE_BMP,
+        0, 0, requested_width, requested_height);
 }
 
 GLFWwindow* Window::initializeGLFWWindow(int width, int height, bool fullscreen){
@@ -49,10 +64,11 @@ GLFWwindow* Window::initializeGLFWWindow(int width, int height, bool fullscreen)
     glfwGetFramebufferSize(window, &actual_w, &actual_h);
     if (actual_w != width || actual_h != height){
         Debug::warning("Actual render size is %d by %d.\n", actual_w, actual_h);
-        this->width = actual_w;
-        this->height = actual_h;
+
     }
 
+    this->width = actual_w;
+    this->height = actual_h;
 
     // Hide the mouse
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);

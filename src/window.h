@@ -7,6 +7,10 @@
     #include <OpenGL/OpenGL.h>
 #endif
 
+#include <SOIL.h>
+#include <ctime>
+#include <string>
+
 #include "debug.h"
 
 class Window{
@@ -21,6 +25,8 @@ public:
     void setVsync(bool);
     void setFxaaLevel(int l) {fxaa_level = l;}
 
+    void takeScreenshot();
+
     int getWidth(){return width;}
     int getHeight(){return height;}
     int getFxaaLevel(){return fxaa_level;}
@@ -31,6 +37,9 @@ private:
     GLFWwindow* glfw_window;
     int width;
     int height;
+
+    int requested_width;
+    int requested_height;
 
     int fxaa_level;
 };

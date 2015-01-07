@@ -17,9 +17,9 @@ Level::Level(Window* window, const char* filename){
     proj_matrix = glm::perspective(45.0f, (float)width / (float)height, 0.1f,
         500.0f);
 
-    camera = new Camera(glm::vec3(0.0f, 40.0f, 40.0f));
-    camera->setRotation(glm::vec3(1.04f, 0.0f, 0.0f));
-    // camera = new Camera(glm::vec3(0.0f, 2.0f, 4.0f));
+    // camera = new Camera(glm::vec3(0.0f, 40.0f, 40.0f));
+    // camera->setRotation(glm::vec3(1.04f, 0.0f, 0.0f));
+    camera = new Camera(glm::vec3(0.0f, 2.0f, 4.0f), glm::vec3(1.04, 0.0, 0.0));
 
     doodad_shader = ShaderLoader::loadShaderProgram("shaders/doodad.vs",
         "shaders/doodad.fs");
@@ -49,13 +49,13 @@ void Level::draw(){
     view_matrix = camera->getViewMatrix();
 
     // Draw all the drawables
-    for (int i = 0; i < drawables.size(); ++i){
-        // This is how you move things
-        // glm::vec3 position = drawables[i].getPosition();
-        // drawables[i].setPosition(position + glm::vec3(-0.01f, 0.0f, 0.0f));
-
-        drawables[i]->draw(camera, &proj_matrix);
-    }
+    // for (int i = 0; i < drawables.size(); ++i){
+    //     // This is how you move things
+    //     // glm::vec3 position = drawables[i].getPosition();
+    //     // drawables[i].setPosition(position + glm::vec3(-0.01f, 0.0f, 0.0f));
+    //
+    //     drawables[i]->draw(camera, &proj_matrix);
+    // }
 
     for(int i(0); i < emitters.size(); ++i){
         emitters[i]->draw(camera, &proj_matrix);
