@@ -30,6 +30,8 @@ vec4 specular;
 vec4 normal;
 vec4 emissive;
 
+const bool SHADOW_DEBUG = true;
+
 vec4 lightFragment(vec3 light_vector, vec3 light_color, float light_power){
     float intensity = light_power / (pow(light_vector.x, 2) + pow(light_vector.y,
          2) + pow(light_vector.z, 2));
@@ -65,9 +67,24 @@ void main() {
     float angle = dot(normalize(surface_normal),
         normalize(lights[0].light_to_surface));
 
-    vec4 shadow_texture = texture(shadow_map, shadow_coord.xy);
+    vec4 n_pixel  = textureOffset(shadow_map, shadow_coord.xy, ivec2(0, 1));
+    vec4 s_pixel  = textureOffset(shadow_map, shadow_coord.xy, ivec2(0, -1));
+    vec4 e_pixel  = textureOffset(shadow_map, shadow_coord.xy, ivec2(1, 0));
+    vec4 w_pixel  = textureOffset(shadow_map, shadow_coord.xy, ivec2(-1, 0));
+    vec4 nw_pixel = textureOffset(shadow_map, shadow_coord.xy, ivec2(-1,-1));
+    vec4 ne_pixel = textureOffset(shadow_map, shadow_coord.xy, ivec2( 1,-1));
+    vec4 sw_pixel = textureOffset(shadow_map, shadow_coord.xy, ivec2(-1, 1));
+    vec4 se_pixel = textureOffset(shadow_map, shadow_coord.xy, ivec2( 1, 1));
+    vec4 middle_pixel = texture(shadow_map, shadow_coord.xy);
+
+    vec4 blurred_pixel = (n_pixel + s_pixel + e_pixel + w_pixel + nw_pixel +
+        ne_pixel + sw_pixel + se_pixel + middle_pixel) / 9.0;
+
+
+    vec4 shadow_texture = blurred_pixel;
+
     bool in_shadow_map = (shadow_coord.x >= 0.0) && (shadow_coord.x <= 1.0) &&
-        (shadow_coord.y >= 0.0) && (shadow_coord.y <= 1.0);
+        (shadow_coord.y >= 0.0) && (shadow_coord.y <= 1.0) || SHADOW_DEBUG;
     float light_depth = shadow_texture.z;
     float current_depth = shadow_coord.z - bias;
     if ((light_depth  <=  current_depth) && in_shadow_map && (angle > 0.2)){
