@@ -4,12 +4,12 @@
 #include "level.h"
 
 Level::~Level(){
-    printf("Calling the Level destructor.");
+    Debug::info("Calling the Level destructor.");
     #warning Deletion needs to be properly implemented
 }
 
-Level::Level(Window* window, const char* filename){
-    this->window = window;
+Level::Level(const char* filename){
+    this->window = Window::getInstance();
 
     int width  = window->getWidth();
     int height = window->getHeight();

@@ -1,7 +1,7 @@
 #include "game_view.h"
 
-GameView::GameView(Window* window, Level* level){
-    this->window = window;
+GameView::GameView(Level* level){
+    this->window = Window::getInstance();
     this->glfw_window = window->getGLFWWindow();
     this->level = level;
 

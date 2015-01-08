@@ -31,7 +31,7 @@ static const char* TEXTURE_PATH = "res/textures/";
 class Level{
 public:
     ~Level();
-    Level(Window*, const char*);
+    Level(const char*);
 
     void draw();
     void drawShadowMap();
@@ -40,7 +40,7 @@ public:
     int getMapWidth();
 
     Camera* getCamera() {return camera;}
-    Shadowbuffer* getShadowbuffer(){return shadowbuffer;}    
+    Shadowbuffer* getShadowbuffer(){return shadowbuffer;}
 
 private:
     void loadLevel(const char *);

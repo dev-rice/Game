@@ -45,7 +45,6 @@ private:
 
     int fxaa_level;
 
-
     static Window* instance;
     Window();
 
