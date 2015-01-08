@@ -12,6 +12,8 @@ Mouse::Mouse(FlatMesh* flat_mesh, Window* window, GLuint shader_program, GLuint 
                                   0.0f, -window_height / 2.0f, window_height / 2.0f,
                                   0.0f, 0.0f, 1.0f           );
 
+    inv_mouse_projection = glm::inverse(mouse_projection);
+
     #warning standardize this shit!
 
     // CURSOR, SELECTION, COMMAND, UP, RIGHT, DOWN, LEFT, UP_LEFT, UP_RIGHT, DOWN_RIGHT, DOWN_LEFT
@@ -25,7 +27,7 @@ Mouse::Mouse(FlatMesh* flat_mesh, Window* window, GLuint shader_program, GLuint 
     GLuint up_right = TextureLoader::loadTextureFromFile("res/textures/cursor_scroll_up_right_ui.png", GL_LINEAR);
     GLuint down_right = TextureLoader::loadTextureFromFile("res/textures/cursor_scroll_down_right_ui.png", GL_LINEAR);
     GLuint down_left = TextureLoader::loadTextureFromFile("res/textures/cursor_scroll_down_left_ui.png", GL_LINEAR);
-    
+
     mouse_sprites.push_back(texture);
     mouse_sprites.push_back(selection);
     mouse_sprites.push_back(command);
@@ -44,7 +46,7 @@ glm::vec2 Mouse::getPosition(){
     double y;
     glfwGetCursorPos(glfw_window, &x, &y);
 
-    glm::vec3 gl_mouse_position = glm::vec3(x, y, 1.0) * glm::inverse(mouse_projection);
+    glm::vec3 gl_mouse_position = glm::vec3(x, y, 1.0) * inv_mouse_projection;
 
     return glm::vec2(gl_mouse_position.x, gl_mouse_position.y);
 }

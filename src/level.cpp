@@ -49,13 +49,13 @@ void Level::draw(){
     view_matrix = camera->getViewMatrix();
 
     // Draw all the drawables
-    // for (int i = 0; i < drawables.size(); ++i){
-    //     // This is how you move things
-    //     // glm::vec3 position = drawables[i].getPosition();
-    //     // drawables[i].setPosition(position + glm::vec3(-0.01f, 0.0f, 0.0f));
-    //
-    //     drawables[i]->draw(camera, &proj_matrix);
-    // }
+    for (int i = 0; i < drawables.size(); ++i){
+        // This is how you move things
+        // glm::vec3 position = drawables[i].getPosition();
+        // drawables[i].setPosition(position + glm::vec3(-0.01f, 0.0f, 0.0f));
+
+        drawables[i]->draw(camera, &proj_matrix);
+    }
 
     for(int i(0); i < emitters.size(); ++i){
         emitters[i]->draw(camera, &proj_matrix);

@@ -26,6 +26,7 @@ private:
 
     GLFWwindow* glfw_window;
     glm::mat3 mouse_projection;
+    glm::mat3 inv_mouse_projection;
 };
 
 #endif
