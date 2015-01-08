@@ -1,12 +1,12 @@
 #include "mouse.h"
 
-Mouse::Mouse(FlatMesh* flat_mesh, Window* window, GLuint shader_program, GLuint texture)
-        : UIDrawable(flat_mesh, window, shader_program, texture) {
+Mouse::Mouse(FlatMesh* flat_mesh, GLuint shader_program, GLuint texture)
+        : UIDrawable(flat_mesh, shader_program, texture) {
 
-    this->glfw_window = window->getGLFWWindow();
+    this->glfw_window = Window::getInstance()->getGLFWWindow();
 
-    int window_width = window->getWidth();
-    int window_height = window->getHeight();
+    int window_width = Window::getInstance()->getWidth();
+    int window_height = Window::getInstance()->getHeight();
 
     mouse_projection = glm::mat3( window_width / 2.0f, 0.0f, window_width / 2.0f,
                                   0.0f, -window_height / 2.0f, window_height / 2.0f,

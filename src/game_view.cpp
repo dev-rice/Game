@@ -17,13 +17,13 @@ GameView::GameView(Level* level){
 
     GLuint mouse_texture = TextureLoader::loadTextureFromFile(
         "res/textures/cursor_ui.png", GL_NEAREST);
-    mouse = new Mouse(flat_mesh, window, ui_shader, mouse_texture);
+    mouse = new Mouse(flat_mesh, ui_shader, mouse_texture);
 
     text_renderer = new TextRenderer(window,
         "res/fonts/inconsolata_bold_font.png", 0.01);
 
     // Creation of selection box
-    selection_box = new UIDrawable(new FlatMesh(), window, mousebox_shader, 0);
+    selection_box = new UIDrawable(new FlatMesh(), mousebox_shader, 0);
     selection_box->setOutline(true);
 
     toggle_key_state = false;
