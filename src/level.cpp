@@ -30,7 +30,7 @@ Level::Level(const char* filename){
     shadow_shader = ShaderLoader::loadShaderProgram("shaders/shadow.vs",
         "shaders/shadow.fs");
 
-    shadowbuffer = new Shadowbuffer(window, 1.0);
+    shadowbuffer = new Shadowbuffer(1.0);
 
     glm::vec3 light_direction = glm::vec3(-1.0f, 1.0f, 0.5f);
     depth_view = glm::lookAt(light_direction, glm::vec3(0,0,0),

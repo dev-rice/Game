@@ -22,7 +22,7 @@
 
 class TextRenderer {
 public:
-    TextRenderer(Window*, std::string, GLfloat);
+    TextRenderer(std::string, GLfloat);
 
     void print(glm::vec2, const char*, ...);
 private:

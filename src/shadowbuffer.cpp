@@ -1,6 +1,6 @@
 #include "shadowbuffer.h"
 
-Shadowbuffer::Shadowbuffer(Window* window, float up_sample){
+Shadowbuffer::Shadowbuffer(float up_sample){
     // Create a mesh for framebuffer to draw on
     FlatMesh* flat_mesh = new FlatMesh();
 
@@ -11,8 +11,8 @@ Shadowbuffer::Shadowbuffer(Window* window, float up_sample){
     glGenTextures(1, &framebuffer_texture);
     glBindTexture(GL_TEXTURE_2D, framebuffer_texture);
 
-    this->width = up_sample * window->getWidth();
-    this->height = up_sample * window->getHeight();
+    this->width = up_sample * Window::getInstance()->getWidth();
+    this->height = up_sample * Window::getInstance()->getHeight();
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, this->width, this->height, 0, GL_RGB,
         GL_UNSIGNED_BYTE, NULL);
@@ -37,7 +37,7 @@ Shadowbuffer::Shadowbuffer(Window* window, float up_sample){
 
     GLuint framebuffer_vs, framebuffer_fs, framebuffer_shader;
     // Load framebuffer shader
-    if (window->getFxaaLevel()){
+    if (Window::getInstance()->getFxaaLevel()){
         framebuffer_shader = ShaderLoader::loadShaderProgram("shaders/framebuffer_fxaa.vs",
         "shaders/framebuffer_fxaa.fs");
     } else {
