@@ -1,4 +1,6 @@
 <layout>
+    <type>ui_window</type>
+
     <constraints>
         <x>
             <anchor>centered</anchor>
@@ -9,24 +11,60 @@
             <offset>0</offset>
         </y>
         <width>400</width>
-        <height>600</height>
+        <height>400</height>
     </constraints>
 
     <corner_sprites>
-        <upper_right>res/textures/corner_up_right.png</upper_right>
-        <upper_left>res/textures/corner_up_left.png</upper_left>
-        <lower_right>res/textures/corner_down_right.png</lower_right>
-        <lower_left>res/textures/corner_down_left.png</lower_left>
+        <upper_right>
+            <texture>res/textures/corner_up_right.png</texture>
+            <x_offset>34</x_offset>
+            <y_offset>12</y_offset>
+        </upper_right>
+        <upper_left>
+            <texture>res/textures/corner_up_left.png</texture>
+            <x_offset>34</x_offset>
+            <y_offset>12</y_offset>
+        </upper_left>
+        <lower_right>
+            <texture>res/textures/corner_down_right.png</texture>
+            <x_offset>34</x_offset>
+            <y_offset>12</y_offset>
+        </lower_right>
+        <upper_left>
+            <texture>res/textures/corner_up_left.png</texture>
+            <x_offset>34</x_offset>
+            <y_offset>12</y_offset>
+        </upper_left>
     </corner_sprites>
 
     <edge_sprites>
-        <right>res/textures/edge_right.png</right>
-        <down>res/textures/edge_down.png</down>
-        <left>res/textures/edge_left.png</left>
-        <up>res/textures/edge_up.png</up>
+        <right>
+            <texture>res/textures/edge_right.png</texture>
+            <x_offset>34</x_offset>
+            <y_offset>12</y_offset>
+        </right>
+        <down>
+            <texture>res/textures/edge_down.png</texture>
+            <x_offset>34</x_offset>
+            <y_offset>12</y_offset>
+        </down>
+        <left>
+            <texture>res/textures/edge_left.png</texture>
+            <x_offset>34</x_offset>
+            <y_offset>12</y_offset>
+        </left>
+        <up>
+            <texture>res/textures/edge_up.png</texture>
+            <x_offset>34</x_offset>
+            <y_offset>12</y_offset>
+        </up>
     </edge_sprites>
             
-    <elements>
-    </elements>
+    <subelements>
+        <ui_radio_button>
+            <layout_filepath>res/layouts/radiotest.xml</layout_filepath>
+            <use_parent_coordinates>yes</use_parent_coordinates>
+        </ui_radio_button>
+    </subelements>
 
 </layout>

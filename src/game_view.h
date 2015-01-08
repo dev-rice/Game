@@ -17,7 +17,6 @@
 #include "shadowbuffer.h"
 #include "screenbuffer.h"
 #include "window.h"
-#include "ui_window.h"
 
 class GameView {
 public:
