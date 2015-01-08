@@ -1,8 +1,8 @@
 #include "text_renderer.h"
 
-TextRenderer::TextRenderer(Window* window, std::string font_filename, GLfloat scale){
-    int width = window->getWidth();
-    int height = window->getHeight();
+TextRenderer::TextRenderer(std::string font_filename, GLfloat scale){
+    int width = Window::getInstance()->getWidth();
+    int height = Window::getInstance()->getHeight();
 
     this->scale = scale;
 
@@ -16,7 +16,6 @@ TextRenderer::TextRenderer(Window* window, std::string font_filename, GLfloat sc
     GLuint character_texture = TextureLoader::loadTextureFromFile(font_filename.c_str(), GL_LINEAR);
 
     character_box->attachTexture(character_texture);
-
 
 }
 

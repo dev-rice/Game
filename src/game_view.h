@@ -22,7 +22,7 @@
 class GameView {
 public:
 
-    GameView(Window*, Level*);
+    GameView(Level*);
 
     void update();
 private:

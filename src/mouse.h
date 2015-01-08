@@ -11,7 +11,7 @@ class Mouse : public UIDrawable {
 public:
     enum class cursorType { CURSOR, SELECTION, COMMAND, UP, RIGHT, DOWN, LEFT, UP_LEFT, UP_RIGHT, DOWN_RIGHT, DOWN_LEFT};
 
-    Mouse(FlatMesh*, Window*, GLuint, GLuint);
+    Mouse(FlatMesh*, GLuint, GLuint);
 
     void draw();
     void setCursorSprite(cursorType);

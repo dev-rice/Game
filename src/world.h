@@ -12,8 +12,8 @@
 
 class World{
 public:
-    World(Window*);
-    World(Window*, const char*);
+    World();
+    World(const char*);
     ~World();
 
     void addLevel(const char*);

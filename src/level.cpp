@@ -4,12 +4,12 @@
 #include "level.h"
 
 Level::~Level(){
-    printf("Calling the Level destructor.");
+    Debug::info("Calling the Level destructor.");
     #warning Deletion needs to be properly implemented
 }
 
-Level::Level(Window* window, const char* filename){
-    this->window = window;
+Level::Level(const char* filename){
+    this->window = Window::getInstance();
 
     int width  = window->getWidth();
     int height = window->getHeight();
@@ -30,7 +30,7 @@ Level::Level(Window* window, const char* filename){
     shadow_shader = ShaderLoader::loadShaderProgram("shaders/shadow.vs",
         "shaders/shadow.fs");
 
-    shadowbuffer = new Shadowbuffer(window, 1.0);
+    shadowbuffer = new Shadowbuffer(1.0);
 
     glm::vec3 light_direction = glm::vec3(-1.0f, 1.0f, 0.5f);
     depth_view = glm::lookAt(light_direction, glm::vec3(0,0,0),
