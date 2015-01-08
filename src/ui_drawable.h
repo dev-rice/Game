@@ -28,6 +28,12 @@ protected:
     int window_width;
     int window_height;
 
+    int width_pixels;
+    int height_pixels;
+
+    int x_pixels;
+    int y_pixels;
+
     bool outline;
     glm::mat3 mesh_projection;
 };
