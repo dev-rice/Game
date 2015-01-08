@@ -1,7 +1,7 @@
 #include "screenbuffer.h"
 
-Screenbuffer::Screenbuffer(Window* window){
+Screenbuffer::Screenbuffer(){
     framebuffer = 0;
-    width = window->getWidth();
-    height = window->getHeight();
+    width = Window::getInstance()->getWidth();
+    height = Window::getInstance()->getHeight();
 }

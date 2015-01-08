@@ -5,8 +5,8 @@ GameView::GameView(Level* level){
     this->glfw_window = window->getGLFWWindow();
     this->level = level;
 
-    screen = new Screenbuffer(window);
-    framebuffer = new Framebuffer(window);
+    screen = new Screenbuffer();
+    framebuffer = new Framebuffer();
 
     FlatMesh* flat_mesh = new FlatMesh();
 

@@ -1,7 +1,7 @@
 #include "framebuffer.h"
 
-Framebuffer::Framebuffer(Window* window){
-    this->window = window;
+Framebuffer::Framebuffer(){
+    this->window = Window::getInstance();
 
     // Create a mesh for framebuffer to draw on
     FlatMesh* flat_mesh = new FlatMesh();

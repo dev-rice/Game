@@ -6,7 +6,7 @@
 
 class Screenbuffer : public Framebuffer {
 public:
-    Screenbuffer(Window*);
+    Screenbuffer();
 };
 
 #endif
