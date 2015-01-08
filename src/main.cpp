@@ -106,18 +106,24 @@ int main(int argc, char* argv[]) {
             (int)width, (int)height);
     }
 
+    Window* window = Window::getInstance();
+
     // Create the window
-    Window* window = new Window(width, height, fullscreen);
+    window->setWidth(width);
+    window->setHeight(height);
+    window->setFullscreen(fullscreen);
     window->setVsync(vsync);
     window->setFxaaLevel(fxaa_level);
+    window->initializeWindow();
+
     GLFWwindow* glfw_window = window->getGLFWWindow();
 
     // Create the world
     World* world;
     if (has_map){
-        world = new World(window, map_filename.c_str());
+        world = new World(map_filename.c_str());
     } else {
-        world = new World(window);
+        world = new World();
     }
 
 

@@ -1,9 +1,9 @@
 #include "world.h"
 
-World::World(Window* window) : World(window, "res/maps/aatest.map"){}
+World::World() : World("res/maps/aatest.map"){}
 
-World::World(Window* window, const char* level_filename){
-    this->window = window;
+World::World(const char* level_filename){
+    this->window = Window::getInstance();
     addLevel(level_filename);
 }
 

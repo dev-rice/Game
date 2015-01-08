@@ -15,33 +15,40 @@
 
 class Window{
 public:
-    Window(int, int, bool);
-
-    GLFWwindow* getGLFWWindow(){ return glfw_window;}
-
+    void initializeWindow();
     void swapBuffers();
     void close();
+    void takeScreenshot();
 
+    void setWidth(int w) { width = w;}
+    void setHeight(int h) { height = h;}
+    void setFullscreen(bool f) {fullscreen = f;}
     void setVsync(bool);
     void setFxaaLevel(int l) {fxaa_level = l;}
-
-    void takeScreenshot();
 
     int getWidth(){return width;}
     int getHeight(){return height;}
     int getFxaaLevel(){return fxaa_level;}
+    GLFWwindow* getGLFWWindow(){ return glfw_window;}
+
+    static Window* getInstance();
 
 private:
-    GLFWwindow* initializeGLFWWindow(int, int, bool);
 
     GLFWwindow* glfw_window;
     int width;
     int height;
+    bool fullscreen;
 
     int requested_width;
     int requested_height;
 
     int fxaa_level;
+
+
+    static Window* instance;
+    Window();
+
 };
 
 #endif

@@ -1,9 +1,9 @@
 #include "window.h"
 
-Window::Window(int width, int height, bool fullscreen){
-    this->requested_width = width;
-    this->requested_height = height;
-    glfw_window = initializeGLFWWindow(width, height, fullscreen);
+Window* Window::instance;
+
+Window::Window(){
+
 }
 
 void Window::swapBuffers(){
@@ -37,7 +37,17 @@ void Window::takeScreenshot(){
         0, 0, requested_width, requested_height);
 }
 
-GLFWwindow* Window::initializeGLFWWindow(int width, int height, bool fullscreen){
+Window* Window::getInstance(){
+    if(instance){
+        return instance;
+    } else {
+        instance = new Window();
+        return instance;
+    }
+
+}
+
+void Window::initializeWindow(){
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -101,7 +111,5 @@ GLFWwindow* Window::initializeGLFWWindow(int width, int height, bool fullscreen)
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 
-    // Turn off vsync
-
-    return window;
+    glfw_window = window;
 }
