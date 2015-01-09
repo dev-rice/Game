@@ -71,6 +71,7 @@ GLuint TextureLoader::loadTextureFromFile(const char* filename, GLuint filter){
     // Do nearest interpolation for scaling the image up and down.
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 4.0f);
     // Mipmaps increase efficiency or something
     glGenerateMipmap(GL_TEXTURE_2D);
     SOIL_free_image_data(image);
