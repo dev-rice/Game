@@ -10,12 +10,10 @@ Mouse::Mouse(GLuint shader_program, GLuint texture)
 
     inv_mouse_projection = glm::inverse(mouse_projection);
 
-    #warning standardize this shit!
-
     // CURSOR, SELECTION, COMMAND, UP, RIGHT, DOWN, LEFT, UP_LEFT, UP_RIGHT, DOWN_RIGHT, DOWN_LEFT
     GLuint selection = TextureLoader::loadTextureFromFile("res/textures/cursor_select_ui.png", GL_NEAREST);
     GLuint command = TextureLoader::loadTextureFromFile("res/textures/cursor_select_ui.png", GL_NEAREST);
-    GLuint up = TextureLoader::loadTextureFromFile("res/textures/cursor_scroll_top_ui.png", GL_NEAREST);
+    GLuint up = TextureLoader::loadTextureFromFile("res/textures/cursor_scroll_up_ui.png", GL_NEAREST);
     GLuint right = TextureLoader::loadTextureFromFile("res/textures/cursor_scroll_right_ui.png", GL_NEAREST);
     GLuint down = TextureLoader::loadTextureFromFile("res/textures/cursor_scroll_down_ui.png", GL_NEAREST);
     GLuint left = TextureLoader::loadTextureFromFile("res/textures/cursor_scroll_left_ui.png", GL_NEAREST);

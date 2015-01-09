@@ -3,67 +3,29 @@
 
     <constraints>
         <x>
-            <anchor>left</anchor>
-            <offset>40</offset>
+            <anchor>centered</anchor>
+            <offset>-250</offset>
         </x>
         <y>
-            <anchor>up</anchor>
-            <offset>40</offset>
+            <anchor>centered</anchor>
+            <offset>-250</offset>
         </y>
-        <x2>
-            <anchor>right</anchor>
-            <offset>-40</offset>
-        </x2>
-        <y2>
-            <anchor>down</anchor>
-            <offset>-40</offset>
-        </y2>
+        <width>500</width>
+        <height>500</height>
     </constraints>
 
     <corner_sprites>
-        <upper_right>
-            <texture>res/textures/corner_up_right.png</texture>
-            <x_offset>34</x_offset>
-            <y_offset>12</y_offset>
-        </upper_right>
-        <upper_left>
-            <texture>res/textures/corner_up_left.png</texture>
-            <x_offset>34</x_offset>
-            <y_offset>12</y_offset>
-        </upper_left>
-        <lower_right>
-            <texture>res/textures/corner_down_right.png</texture>
-            <x_offset>34</x_offset>
-            <y_offset>12</y_offset>
-        </lower_right>
-        <upper_left>
-            <texture>res/textures/corner_up_left.png</texture>
-            <x_offset>34</x_offset>
-            <y_offset>12</y_offset>
-        </upper_left>
+        <upper_right>res/textures/corner_up_right.png</upper_right>
+        <upper_left>res/textures/corner_up_left.png</upper_left>
+        <lower_right>res/textures/corner_down_right.png</lower_right>
+        <upper_left>res/textures/corner_up_left.png</upper_left>
     </corner_sprites>
 
     <edge_sprites>
-        <right>
-            <texture>res/textures/edge_right.png</texture>
-            <x_offset>34</x_offset>
-            <y_offset>12</y_offset>
-        </right>
-        <down>
-            <texture>res/textures/edge_down.png</texture>
-            <x_offset>34</x_offset>
-            <y_offset>12</y_offset>
-        </down>
-        <left>
-            <texture>res/textures/edge_left.png</texture>
-            <x_offset>34</x_offset>
-            <y_offset>12</y_offset>
-        </left>
-        <up>
-            <texture>res/textures/edge_up.png</texture>
-            <x_offset>34</x_offset>
-            <y_offset>12</y_offset>
-        </up>
+        <right>res/textures/edge_right.png</right>
+        <down>res/textures/edge_down.png</down>
+        <left>res/textures/edge_left.png</left>
+        <up>res/textures/edge_up.png</up>
     </edge_sprites>
             
     <subelements>
