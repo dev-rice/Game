@@ -32,8 +32,12 @@ public:
     void setCoordinates(glm::vec2, glm::vec2);
 
     virtual void loadFromXML(std::string){;}
-
 protected:
+    
+    void parseConstraints(pugi::xml_node);
+    int parseAnchor(const char*, bool);
+
+    bool XOR(bool, bool);
 
     void updateDimensions();
 

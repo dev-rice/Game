@@ -21,24 +21,30 @@ void UIWindow::loadFromXML(std::string filepath){
         return;
     }
 
-    pugi::xml_node node = layout_node.child("type");
-    // printf("%s", node.name());
-    while(true){
-        printf("%s\n", node.name());
+    pugi::xml_node constraints_node = layout_node.child("constraints");
+    pugi::xml_node corner_sprites_node = layout_node.child("corner_sprites");
+    pugi::xml_node edge_sprites_node = layout_node.child("edge_sprites");
+    pugi::xml_node subelements_node = layout_node.child("subelements");
 
-        node = node.next_sibling();
+    // Position and Sizing the Window
+    parseConstraints(constraints_node);
+    
 
-        if(!node){
-            break;
-        }
+    for (pugi::xml_node_iterator it = subelements_node.begin(); it != subelements_node.end(); ++it){
+         printf("Named subelement: %s\n", it->name());
     }
+
+    // Convert all pixel coords into screen
+    updateDimensions();
+    setGLPosition(getGLPosition());
 }
 
 void UIWindow::draw(){
 
-    updateDimensions();
+    
 
     FlatDrawable::draw();
 
     // rememeber to draw sub elements!
 }
+

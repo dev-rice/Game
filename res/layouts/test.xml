@@ -3,12 +3,12 @@
 
     <constraints>
         <x>
-            <anchor>centered</anchor>
-            <offset>0</offset>
+            <anchor>left</anchor>
+            <offset>20</offset>
         </x>
         <y>
-            <anchor>centered</anchor>
-            <offset>0</offset>
+            <anchor>up</anchor>
+            <offset>20</offset>
         </y>
         <width>400</width>
         <height>400</height>
