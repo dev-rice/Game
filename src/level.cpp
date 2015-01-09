@@ -202,18 +202,23 @@ void Level::loadLevel(const char* filename){
 
         if(buffer[0] == 'h'){
             char parameter[64];
-            sscanf(buffer, "%*c %s", parameter);
+            char ground_texture[64];
+            sscanf(buffer, "%*c %s %s", parameter, ground_texture);
 
             char heightmap_filename[80] = "";
             strcat(heightmap_filename, TEXTURE_PATH);
             strcat(heightmap_filename, parameter);
 
+            char ground_filename[80] = "";
+            strcat(ground_filename, TEXTURE_PATH);
+            strcat(ground_filename, ground_texture);
+
             std::string heightmap_filename_str(heightmap_filename);
-            ground = new Terrain(doodad_shader,
-                heightmap_filename_str);
+
+            ground = new Terrain(doodad_shader, heightmap_filename_str);
 
             GLuint diffuse = TextureLoader::loadTextureFromFile(
-                "res/textures/ice_diff.png", GL_LINEAR);
+                ground_filename, GL_LINEAR);
 
             texture_set = new TextureSet(diffuse, 0, 0, 0);
             ground->attachTextureSet(texture_set);
