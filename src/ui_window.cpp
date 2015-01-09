@@ -4,8 +4,7 @@
 #include "ui_window.h"
 
 UIWindow::UIWindow(GLuint shader_program) : UIDrawable(shader_program, TextureLoader::loadGray()){
-    width_pixels = 500;
-    height_pixels = 500;
+    
 }
 
 void UIWindow::loadFromXML(std::string filepath){

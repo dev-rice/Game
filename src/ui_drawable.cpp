@@ -81,6 +81,22 @@ void UIDrawable::parseConstraints(pugi::xml_node constraints_node){
         int y_offset = atoi(constraints_node.child("y").child_value("offset"));
         y_pixels = parseAnchor(y_anchor, false) + y_offset;
 
+        if(has_width){
+            width_pixels = atoi(constraints_node.child_value("width"));
+        } else {
+            const char* x2_anchor = constraints_node.child("x2").child_value("anchor");
+            int x2_offset = atoi(constraints_node.child("x2").child_value("offset"));
+            width_pixels = (parseAnchor(x2_anchor, true) + x2_offset) - x_pixels;
+        }
+
+        if(has_height){
+            height_pixels = atoi(constraints_node.child_value("height"));
+        } else {
+            const char* y2_anchor = constraints_node.child("y2").child_value("anchor");
+            int y2_offset = atoi(constraints_node.child("y2").child_value("offset"));
+            height_pixels = (parseAnchor(y2_anchor, false) + y2_offset) - y_pixels;
+        }
+
     } else {
         Debug::error("Incorrect constraints:\n [%d] X position\n [%d] Y position\n [%d] Width\n [%d] Height\n [%d] X2 position\n [%d] Y2 position\n", 
             has_x_position, has_y_position, has_width, has_height, has_x2_position, has_y2_position);

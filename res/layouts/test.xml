@@ -4,14 +4,20 @@
     <constraints>
         <x>
             <anchor>left</anchor>
-            <offset>20</offset>
+            <offset>40</offset>
         </x>
         <y>
             <anchor>up</anchor>
-            <offset>20</offset>
+            <offset>40</offset>
         </y>
-        <width>400</width>
-        <height>400</height>
+        <x2>
+            <anchor>right</anchor>
+            <offset>-40</offset>
+        </x2>
+        <y2>
+            <anchor>down</anchor>
+            <offset>-40</offset>
+        </y2>
     </constraints>
 
     <corner_sprites>
