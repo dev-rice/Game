@@ -29,5 +29,4 @@ p smoke -1.400000 0.000000 0.000000
 p snow 0.000000 0.000000 0.000000
 
 # Ground specification - Begin writing here (h, g)
-# h simple_heightmap.png
-h flat.png
+h simple_heightmap.png ice_diff.png

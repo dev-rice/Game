@@ -29,5 +29,5 @@ p fire -1.451524 0.000000 0.000000
 p smoke -1.451524 0.000000 0.000000
 
 # Ground specification - Begin writing here (h, g)
-h heightmap.png
+h heightmap.png rough_ground.png
 g texture1.png mask1.png
