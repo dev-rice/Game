@@ -17,10 +17,11 @@ UIDrawable::UIDrawable(GLuint shader_program, GLuint texture) : FlatDrawable(sha
 void UIDrawable::attachTexture(GLuint texture){
     glBindTexture(GL_TEXTURE_2D, texture);
     int miplevel = 0;
-    glGetTexLevelParameteriv(GL_TEXTURE_2D, miplevel, GL_TEXTURE_WIDTH, &width_pixels);
-    glGetTexLevelParameteriv(GL_TEXTURE_2D, miplevel, GL_TEXTURE_HEIGHT, &height_pixels);
+    int w, h;
+    glGetTexLevelParameteriv(GL_TEXTURE_2D, miplevel, GL_TEXTURE_WIDTH, &w);
+    glGetTexLevelParameteriv(GL_TEXTURE_2D, miplevel, GL_TEXTURE_HEIGHT, &h);
 
-    glm::vec3 image_size = glm::vec3(width_pixels, height_pixels, 1.0);
+    glm::vec3 image_size = glm::vec3(w, h, 1.0);
     glm::vec3 gl_mesh_size = image_size * inv_mesh_projection;
 
     width = gl_mesh_size.x;
@@ -35,11 +36,6 @@ glm::vec2 UIDrawable::getGLPosition(){
 
 void UIDrawable::setGLPosition(glm::vec2 position){
     this->position = glm::vec2(position.x + width, position.y - height);
-}
-
-void UIDrawable::setDimensions(int new_width, int new_height){
-    width = (float(new_width)/float(window_width));
-    height = (float(new_height)/float(window_height));
 }
 
 void UIDrawable::draw(){

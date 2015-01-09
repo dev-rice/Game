@@ -24,8 +24,6 @@ public:
 
     void setGLPosition(glm::vec2);
 
-    void setDimensions(int, int);
-
     void setOutline(bool o) {outline = o;}
 
     void setCoordinates(glm::vec2, glm::vec2);

@@ -16,6 +16,8 @@ public:
     UIWindow(GLuint);
 
     void loadFromXML(std::string);
+
+    void draw();
 private:
 };
 
