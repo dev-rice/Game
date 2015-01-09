@@ -13,16 +13,16 @@ Mouse::Mouse(GLuint shader_program, GLuint texture)
     #warning standardize this shit!
 
     // CURSOR, SELECTION, COMMAND, UP, RIGHT, DOWN, LEFT, UP_LEFT, UP_RIGHT, DOWN_RIGHT, DOWN_LEFT
-    GLuint selection = TextureLoader::loadTextureFromFile("res/textures/cursor_select_ui.png", GL_LINEAR);
-    GLuint command = TextureLoader::loadTextureFromFile("res/textures/cursor_select_ui.png", GL_LINEAR);
-    GLuint up = TextureLoader::loadTextureFromFile("res/textures/cursor_scroll_top_ui.png", GL_LINEAR);
-    GLuint right = TextureLoader::loadTextureFromFile("res/textures/cursor_scroll_right_ui.png", GL_LINEAR);
-    GLuint down = TextureLoader::loadTextureFromFile("res/textures/cursor_scroll_down_ui.png", GL_LINEAR);
-    GLuint left = TextureLoader::loadTextureFromFile("res/textures/cursor_scroll_left_ui.png", GL_LINEAR);
-    GLuint up_left = TextureLoader::loadTextureFromFile("res/textures/cursor_scroll_up_left_ui.png", GL_LINEAR);
-    GLuint up_right = TextureLoader::loadTextureFromFile("res/textures/cursor_scroll_up_right_ui.png", GL_LINEAR);
-    GLuint down_right = TextureLoader::loadTextureFromFile("res/textures/cursor_scroll_down_right_ui.png", GL_LINEAR);
-    GLuint down_left = TextureLoader::loadTextureFromFile("res/textures/cursor_scroll_down_left_ui.png", GL_LINEAR);
+    GLuint selection = TextureLoader::loadTextureFromFile("res/textures/cursor_select_ui.png", GL_NEAREST);
+    GLuint command = TextureLoader::loadTextureFromFile("res/textures/cursor_select_ui.png", GL_NEAREST);
+    GLuint up = TextureLoader::loadTextureFromFile("res/textures/cursor_scroll_top_ui.png", GL_NEAREST);
+    GLuint right = TextureLoader::loadTextureFromFile("res/textures/cursor_scroll_right_ui.png", GL_NEAREST);
+    GLuint down = TextureLoader::loadTextureFromFile("res/textures/cursor_scroll_down_ui.png", GL_NEAREST);
+    GLuint left = TextureLoader::loadTextureFromFile("res/textures/cursor_scroll_left_ui.png", GL_NEAREST);
+    GLuint up_left = TextureLoader::loadTextureFromFile("res/textures/cursor_scroll_up_left_ui.png", GL_NEAREST);
+    GLuint up_right = TextureLoader::loadTextureFromFile("res/textures/cursor_scroll_up_right_ui.png", GL_NEAREST);
+    GLuint down_right = TextureLoader::loadTextureFromFile("res/textures/cursor_scroll_down_right_ui.png", GL_NEAREST);
+    GLuint down_left = TextureLoader::loadTextureFromFile("res/textures/cursor_scroll_down_left_ui.png", GL_NEAREST);
 
     mouse_sprites.push_back(texture);
     mouse_sprites.push_back(selection);

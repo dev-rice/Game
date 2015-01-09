@@ -37,6 +37,11 @@ void UIDrawable::setGLPosition(glm::vec2 position){
     this->position = glm::vec2(position.x + width, position.y - height);
 }
 
+void UIDrawable::setDimensions(int new_width, int new_height){
+    width = (float(new_width)/float(window_width));
+    height = (float(new_height)/float(window_height));
+}
+
 void UIDrawable::draw(){
     FlatDrawable::draw();
 

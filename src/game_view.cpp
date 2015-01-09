@@ -23,6 +23,11 @@ GameView::GameView(Level* level){
     selection_box = new UIDrawable(mousebox_shader, 0);
     selection_box->setOutline(true);
 
+    // Creation of a test ui
+    UIWindow* w = new UIWindow(ui_shader);
+    w->loadFromXML("res/layouts/test.xml");
+    ui_drawables.push_back(w);
+
     toggle_key_state = false;
     debug_showing = false;
 
