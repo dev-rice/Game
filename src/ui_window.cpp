@@ -13,9 +13,8 @@ void UIWindow::loadFromXML(std::string filepath){
 }
 
 void UIWindow::draw(){
-    // update width and height. Move this to a helper
-    width = (float(width_pixels)/float(window_width));
-    height = (float(height_pixels)/float(window_height));
+
+    updateDimensions();
 
     FlatDrawable::draw();
 
