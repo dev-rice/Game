@@ -17,10 +17,11 @@ UIDrawable::UIDrawable(GLuint shader_program, GLuint texture) : FlatDrawable(sha
 void UIDrawable::attachTexture(GLuint texture){
     glBindTexture(GL_TEXTURE_2D, texture);
     int miplevel = 0;
-    glGetTexLevelParameteriv(GL_TEXTURE_2D, miplevel, GL_TEXTURE_WIDTH, &width_pixels);
-    glGetTexLevelParameteriv(GL_TEXTURE_2D, miplevel, GL_TEXTURE_HEIGHT, &height_pixels);
+    int w, h;
+    glGetTexLevelParameteriv(GL_TEXTURE_2D, miplevel, GL_TEXTURE_WIDTH, &w);
+    glGetTexLevelParameteriv(GL_TEXTURE_2D, miplevel, GL_TEXTURE_HEIGHT, &h);
 
-    glm::vec3 image_size = glm::vec3(width_pixels, height_pixels, 1.0);
+    glm::vec3 image_size = glm::vec3(w, h, 1.0);
     glm::vec3 gl_mesh_size = image_size * inv_mesh_projection;
 
     width = gl_mesh_size.x;
@@ -51,4 +52,11 @@ void UIDrawable::setCoordinates(glm::vec2 start, glm::vec2 end){
     this->width = (end.x - start.x)/2;
     this->height = (end.y - start.y)/2;
     this->position = glm::vec2(start.x + width, start.y + height);
+}
+
+void UIDrawable::updateDimensions(){
+    // Don't use me for things that WON'T change scale
+    // like mice, etc
+    width = (float(width_pixels)/float(window_width));
+    height = (float(height_pixels)/float(window_height));
 }

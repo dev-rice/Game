@@ -4,6 +4,8 @@
 #ifndef UIWindow_h
 #define UIWindow_h
 
+#include <string>   // std::string
+
 #include "texture_loader.h"
 #include "flat_drawable.h"
 #include "window.h"
@@ -12,6 +14,10 @@
 class UIWindow : public UIDrawable {
 public:
     UIWindow(GLuint);
+
+    void loadFromXML(std::string);
+
+    void draw();
 private:
 };
 

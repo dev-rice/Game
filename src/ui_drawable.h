@@ -8,6 +8,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <string>
 
 #include "flat_drawable.h"
 #include "window.h"
@@ -27,7 +28,11 @@ public:
 
     void setCoordinates(glm::vec2, glm::vec2);
 
+    virtual void loadFromXML(std::string){;}
+
 protected:
+
+    void updateDimensions();
 
     int window_width;
     int window_height;
