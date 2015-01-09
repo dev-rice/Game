@@ -52,7 +52,7 @@ void Level::draw(){
         // glm::vec3 position = drawables[i].getPosition();
         // drawables[i].setPosition(position + glm::vec3(-0.01f, 0.0f, 0.0f));
 
-        drawables[i]->draw(camera, &proj_matrix);
+        drawables[i]->draw(&view_matrix, &proj_matrix);
     }
 
     for(int i(0); i < emitters.size(); ++i){
