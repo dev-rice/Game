@@ -20,9 +20,12 @@ out vec3 camera_to_surface;
 out Light lights[num_lights];
 out vec4 shadow_coord;
 
+layout(std140) uniform GlobalMatrices {
+    mat4 proj;
+    mat4 view;
+};
+
 uniform mat4 model;
-uniform mat4 view;
-uniform mat4 proj;
 
 uniform float time;
 uniform float scale;

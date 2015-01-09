@@ -24,7 +24,7 @@ public:
 
     void setInitialValues(glm::vec3, glm::vec3, glm::vec3, float, int, ScalingOption, FadingOption);
     void update();
-    void draw(glm::mat4*, glm::mat4*);
+    void draw();
     bool isDead();
     void enablePhysics(float);
     virtual void attachTextureSet(TextureSet*);

@@ -6,9 +6,12 @@ in vec2 texcoord;
 
 out vec2 Texcoord;
 
+layout(std140) uniform GlobalMatrices {
+    mat4 proj;
+    mat4 view;
+};
+
 uniform mat4 model;
-uniform mat4 view;
-uniform mat4 proj;
 
 uniform float time;
 uniform float scale;

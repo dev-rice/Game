@@ -53,7 +53,7 @@ void Emitter::setParticleDensity(int density){
     this->density = density;
 }
 
-void Emitter::draw(Camera* camera, glm::mat4* proj_matrix){
+void Emitter::draw(Camera* camera){
     float new_time = glfwGetTime() - old_time;
     int frames = int((new_time*60.0f)) + 1;
     frames = std::max(frames, 0);
@@ -68,7 +68,7 @@ void Emitter::draw(Camera* camera, glm::mat4* proj_matrix){
 
     prepareParticles(camera);
     for(int i = 0; i < particles.size(); ++i){
-        particles[i]->draw(&view_matrix, proj_matrix);
+        particles[i]->draw();
     }
 
     old_time = glfwGetTime();

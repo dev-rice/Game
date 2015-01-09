@@ -38,13 +38,22 @@ Level::Level(const char* filename){
     // depth_proj = glm::ortho<float>(-50,50,-50, 50,-20,20);
     depth_proj = glm::ortho<float>(-10,10,-10, 10,-20,20);
 
+    // Create the uniform buffer object.
+    glGenBuffers(1, &ubo);
+    glBindBuffer(GL_UNIFORM_BUFFER, ubo);
+    glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::mat4) * 2, NULL, GL_STREAM_DRAW);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+    glBindBufferRange(GL_UNIFORM_BUFFER, 1, ubo, 0, sizeof(glm::mat4) * 2);
+
     loadLevel(filename);
+
 }
 
 void Level::draw(){
     // Update the view matrix based on the current
     // camera location / position
     view_matrix = camera->getViewMatrix();
+    updateGlobalUniforms(&view_matrix, &proj_matrix);
 
     // Draw all the drawables
     for (int i = 0; i < drawables.size(); ++i){
@@ -52,26 +61,42 @@ void Level::draw(){
         // glm::vec3 position = drawables[i].getPosition();
         // drawables[i].setPosition(position + glm::vec3(-0.01f, 0.0f, 0.0f));
 
-        drawables[i]->draw(&view_matrix, &proj_matrix);
+        drawables[i]->draw();
     }
 
     for(int i(0); i < emitters.size(); ++i){
-        emitters[i]->draw(camera, &proj_matrix);
+        emitters[i]->draw(camera);
     }
 
 }
 
 void Level::drawShadowMap(){
+    updateGlobalUniforms(&depth_view, &depth_proj);
+
     for (int i = 0; i < drawables.size(); ++i){
         // Save the shader this drawable is currently using
         GLuint current_shader = drawables[i]->getShader();
         // Set the drawable to render with the shadow shader
         drawables[i]->setShader(shadow_shader);
         // Draw the drawable from the light's perspective
-        drawables[i]->draw(&depth_view, &depth_proj);
+        drawables[i]->draw();
         // Reset the drawable's shader to what it was before
         drawables[i]->setShader(current_shader);
     }
+}
+
+void Level::updateGlobalUniforms(glm::mat4* view, glm::mat4* proj){
+    // view_matrix = camera->getViewMatrix();
+
+    // Put the data in the UBO.
+    glBindBuffer(GL_UNIFORM_BUFFER, ubo);
+    glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4),
+        glm::value_ptr(*proj));
+    glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4),
+        glm::value_ptr(*view));
+
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
 }
 
 void Level::loadLevel(const char* filename){

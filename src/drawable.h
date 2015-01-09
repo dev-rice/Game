@@ -17,6 +17,7 @@
 #include "mesh.h"
 #include "camera.h"
 #include "texture_set.h"
+#include "shader_loader.h"
 
 class Drawable {
 public:
@@ -25,8 +26,7 @@ public:
     Drawable(Mesh*, GLuint, glm::vec3, GLfloat);
     Drawable(Mesh*, GLuint, glm::vec3, glm::vec3, GLfloat);
 
-    void draw(Camera*, glm::mat4*);
-    void draw(glm::mat4*, glm::mat4*);
+    void draw();
 
     virtual void attachTextureSet(TextureSet*) = 0;
 

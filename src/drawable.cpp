@@ -33,6 +33,11 @@ void Drawable::load(Mesh* mesh, GLuint shader_program, glm::vec3 position, glm::
 void Drawable::setShader(GLuint shader_program){
     this->shader_program = shader_program;
     this->mesh->attachGeometryToShader(shader_program);
+
+    GLint global_matrix_location = glGetUniformBlockIndex(shader_program, "GlobalMatrices");
+    // Debug::info("Matrix location is %d on %s.\n", global_matrix_location,
+        // ShaderLoader::getShaderName(shader_program).c_str());
+    glUniformBlockBinding(shader_program, global_matrix_location, 1);
 }
 
 void Drawable::setupShadows(GLuint shadow_map, glm::mat4 depth_view, glm::mat4 depth_proj){
@@ -41,14 +46,7 @@ void Drawable::setupShadows(GLuint shadow_map, glm::mat4 depth_view, glm::mat4 d
     this->depth_proj = depth_proj;
 }
 
-void Drawable::draw(Camera* camera, glm::mat4* proj_matrix){
-    // Get the current view matrix from the camera.
-    glm::mat4 view_matrix = camera->getViewMatrix();
-
-    draw(&view_matrix, proj_matrix);
-}
-
-void Drawable::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix){
+void Drawable::draw(){
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
 
@@ -65,8 +63,6 @@ void Drawable::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix){
     // Update the current model, view, and projection matrices in the shader. These are standard for all
     // Drawables so they should always be updated in draw. Child specific data is updated in updateUniformData().
     glUniformMatrix4fv(glGetUniformLocation(shader_program, "model"), 1, GL_FALSE, glm::value_ptr(model_matrix));
-    glUniformMatrix4fv(glGetUniformLocation(shader_program, "view"), 1, GL_FALSE, glm::value_ptr(*view_matrix));
-    glUniformMatrix4fv(glGetUniformLocation(shader_program, "proj"), 1, GL_FALSE, glm::value_ptr(*proj_matrix));
 
     // Update other shader data
     updateUniformData();

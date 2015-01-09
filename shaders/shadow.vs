@@ -6,9 +6,13 @@ layout (location=2) in vec3 normal;
 layout (location=3) in vec2 texcoord;
 
 // Values that stay constant for the whole mesh.
+
+layout(std140) uniform GlobalMatrices {
+    mat4 proj;
+    mat4 view;
+};
+
 uniform mat4 model;
-uniform mat4 view;
-uniform mat4 proj;
 uniform float scale;
 
 void main(){
