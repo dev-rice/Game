@@ -16,8 +16,6 @@ public:
     void draw();
     void setCursorSprite(cursorType);
 
-    glm::vec2 getPosition();
-
 private:
 
     cursorType current_type;

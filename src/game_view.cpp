@@ -86,7 +86,7 @@ void GameView::update(){
         Camera* camera = level->getCamera();
         glm::vec3 position = camera->getPosition();
         glm::vec3 rotation = camera->getRotation();
-        glm::vec2 gl_mouse_position = mouse->getPosition();
+        glm::vec2 gl_mouse_position = mouse->getGLPosition();
 
         text_renderer->print(glm::vec2(-0.95, 0.95), "fps: %.2f",
             1.0 / frame_time);
@@ -110,7 +110,7 @@ void GameView::handleInputs(){
 
     glfwPollEvents();
 
-    glm::vec2 gl_mouse_position = mouse->getPosition();
+    glm::vec2 gl_mouse_position = mouse->getGLPosition();
 
     // Mouse scrolling the screen
     if(mouse_count == 0){

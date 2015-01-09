@@ -8,10 +8,6 @@ Mouse::Mouse(GLuint shader_program, GLuint texture)
     int window_width = Window::getInstance()->getWidth();
     int window_height = Window::getInstance()->getHeight();
 
-    mouse_projection = glm::mat3( window_width / 2.0f, 0.0f, window_width / 2.0f,
-                                  0.0f, -window_height / 2.0f, window_height / 2.0f,
-                                  0.0f, 0.0f, 1.0f           );
-
     inv_mouse_projection = glm::inverse(mouse_projection);
 
     #warning standardize this shit!
@@ -41,38 +37,35 @@ Mouse::Mouse(GLuint shader_program, GLuint texture)
     mouse_sprites.push_back(down_left);
 }
 
-glm::vec2 Mouse::getPosition(){
-    double x;
-    double y;
-    glfwGetCursorPos(glfw_window, &x, &y);
-
-    glm::vec3 gl_mouse_position = glm::vec3(x, y, 1.0) * inv_mouse_projection;
-
-    return glm::vec2(gl_mouse_position.x, gl_mouse_position.y);
-}
-
 void Mouse::setCursorSprite(cursorType cursor_type){
-    current_type = cursor_type;
+    this->current_type = cursor_type;
 }
 
 void Mouse::draw(){
     attachTexture(mouse_sprites[ static_cast<int>(current_type) ]);
-    glm::vec2 current_position = getPosition();
+
+    double x;
+    double y;
+    glfwGetCursorPos(glfw_window, &x, &y);
+
+    x_pixels = int(x);
+    y_pixels = int(y);
+
+    glm::vec2 current_position = getGLPosition();
 
     // Position the cursor specially for certain cursors
     // mostly because down, right, up_right, down_right, and down_left run out of the screen
     // also selection needs to be moved to the center
     if(current_type == cursorType::DOWN || current_type == cursorType::DOWN_LEFT){
-        setPosition(current_position + glm::vec2(0.0, 2*height));
+        setGLPosition(current_position + glm::vec2(0.0, 2*height));
     } else if(current_type == cursorType::RIGHT || current_type == cursorType::UP_RIGHT){
-        setPosition(current_position + glm::vec2(-2*width, 0.0));
+        setGLPosition(current_position + glm::vec2(-2*width, 0.0));
     } else if(current_type == cursorType::DOWN_RIGHT){
-        setPosition(current_position + glm::vec2(-2*width, 2*height));
+        setGLPosition(current_position + glm::vec2(-2*width, 2*height));
     } else if(current_type == cursorType::SELECTION){
-        setPosition(current_position + glm::vec2(-1*width, height));
+        setGLPosition(current_position + glm::vec2(-1*width, height));
     } else {
-        // Ewww
-        setPosition(current_position);
+        setGLPosition(current_position);
     }
 
     UIDrawable::draw();

@@ -17,12 +17,16 @@ public:
     UIDrawable(GLuint, GLuint);
 
     void draw();
-    void setPosition(glm::vec2);
     void attachTexture(GLuint);
+
+    glm::vec2 getGLPosition();
+
+    void setGLPosition(glm::vec2);
 
     void setOutline(bool o) {outline = o;}
 
     void setCoordinates(glm::vec2, glm::vec2);
+
 protected:
 
     int window_width;
@@ -35,7 +39,7 @@ protected:
     int y_pixels;
 
     bool outline;
-    glm::mat3 mesh_projection;
+    glm::mat3 inv_mesh_projection;
 };
 
 #endif
