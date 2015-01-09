@@ -9,7 +9,7 @@
 
 #include "drawable.h"
 #include "camera.h"
-#include "mesh.h" 
+#include "mesh.h"
 
 class Particle : public Drawable {
 public:
@@ -21,15 +21,15 @@ public:
     Particle(Mesh*, GLuint, glm::vec3, glm::vec3, GLfloat);
 
     // ~Particle();
-    
+
     void setInitialValues(glm::vec3, glm::vec3, glm::vec3, float, int, ScalingOption, FadingOption);
     void update();
-    void draw(Camera*, glm::mat4*);
+    void draw(glm::mat4*, glm::mat4*);
     bool isDead();
     void enablePhysics(float);
     virtual void attachTextureSet(TextureSet*);
 
-private:  
+private:
     void updateUniformData();
     void bindTextures();
 

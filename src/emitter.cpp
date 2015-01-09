@@ -14,7 +14,7 @@ Emitter::Emitter(GLuint shader_program, glm::vec3 position){
     std::vector<GLuint> planeFacesVector(planeFaces, planeFaces + sizeof(planeFaces) / sizeof(GLuint));
 
     billboard = new Mesh(planeVertsVector, planeFacesVector);
-    
+
     GLuint emit = TextureLoader::loadTextureFromFile("res/textures/part_snow.png", GL_LINEAR);
     texture_set = new TextureSet(0, 0, 0, emit);
 
@@ -44,7 +44,7 @@ Emitter::~Emitter(){
 
 void Emitter::setParticleDensity(int density){
     // If the user does not explicitly set the density
-    // using this function (thus creating different, 
+    // using this function (thus creating different,
     // custom particle behavior), the emitter will
     // generate the density that will look best as per
     // the lifespan and the total number of particles
@@ -54,10 +54,12 @@ void Emitter::setParticleDensity(int density){
 }
 
 void Emitter::draw(Camera* camera, glm::mat4* proj_matrix){
-    float new_time = glfwGetTime() - old_time; 
+    float new_time = glfwGetTime() - old_time;
     int frames = int((new_time*60.0f)) + 1;
     frames = std::max(frames, 0);
-    
+
+    glm::mat4 view_matrix = camera->getViewMatrix();
+
     for(int j = 0; j < frames; ++j){
         for(int i = 0; i < particles.size(); ++i){
             particles[i]->update();
@@ -66,7 +68,7 @@ void Emitter::draw(Camera* camera, glm::mat4* proj_matrix){
 
     prepareParticles(camera);
     for(int i = 0; i < particles.size(); ++i){
-        particles[i]->draw(camera, proj_matrix);
+        particles[i]->draw(&view_matrix, proj_matrix);
     }
 
     old_time = glfwGetTime();
@@ -97,21 +99,21 @@ void Emitter::prepareParticles(Camera* camera){
         // position+=camera->getPosition();
         glm::vec3 velocity(0.0f, 0.01f+(0.01f*rand3), 0.0f);
         glm::vec3 acceleration(0.0f, 0.0f, 0.0f);
-       
-        // Random wind interaction for snow particles. 
+
+        // Random wind interaction for snow particles.
         // if (rand() % 1000){
         //     velocity += glm::vec3(0.001 * (rand() % 5), - abs(0.0005 * (rand() % 5)), 0.001 * (rand() % 5));
         // }
 
         float rotation = 0.0f;
-        
+
         // Particle recycling!
         // Weird that the pointer must be explicitly set to 0, but crashes without this
-        Particle* ptr = 0; 
+        Particle* ptr = 0;
         if(particles.size() < maxParticles){
             ptr = new Particle(billboard, shader_program);
             ptr->attachTextureSet(texture_set);
-        } 
+        }
         if(particles.size() > 0 && particles[0]->isDead()){
             ptr = particles[0];
             particles.pop_front();

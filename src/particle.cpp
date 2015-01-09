@@ -117,9 +117,9 @@ void Particle::update(){
     }
 }
 
-void Particle::draw(Camera* camera, glm::mat4* proj_matrix){
+void Particle::draw(glm::mat4* view_matrix, glm::mat4* proj_matrix){
     if(age < lifespan){
-        Drawable::draw(camera, proj_matrix);
+        Drawable::draw(view_matrix, proj_matrix);
     }
 }
 

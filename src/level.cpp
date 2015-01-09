@@ -38,7 +38,6 @@ Level::Level(const char* filename){
     // depth_proj = glm::ortho<float>(-50,50,-50, 50,-20,20);
     depth_proj = glm::ortho<float>(-10,10,-10, 10,-20,20);
 
-
     loadLevel(filename);
 }
 
