@@ -10,8 +10,11 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <string>
 
+#include "pugixml.hpp"
+
 #include "flat_drawable.h"
 #include "window.h"
+
 
 class UIDrawable : public FlatDrawable {
 public:
