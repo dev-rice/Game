@@ -17,9 +17,8 @@ Level::Level(const char* filename){
     proj_matrix = glm::perspective(45.0f, (float)width / (float)height, 0.1f,
         500.0f);
 
-    // camera = new Camera(glm::vec3(0.0f, 40.0f, 40.0f));
-    // camera->setRotation(glm::vec3(1.04f, 0.0f, 0.0f));
-    camera = new Camera(glm::vec3(0.0f, 2.0f, 4.0f), glm::vec3(1.04, 0.0, 0.0));
+    camera = new Camera(glm::vec3(0.0f, 40.0f, 40.0f), glm::vec3(1.04f, 0.0f, 0.0f));
+    // camera = new Camera(glm::vec3(0.0f, 2.0f, 4.0f), glm::vec3(1.04, 0.0, 0.0));
 
     doodad_shader = ShaderLoader::loadShaderProgram("shaders/doodad.vs",
         "shaders/doodad.fs");

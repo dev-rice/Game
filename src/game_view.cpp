@@ -265,7 +265,7 @@ void GameView::handleInputs(){
 
     //Print the screen
     if (glfwGetKey(glfw_window, GLFW_KEY_P) == GLFW_PRESS){
-        window->takeScreenshot();
+        Window::getInstance()->takeScreenshot();
     }
 
 }

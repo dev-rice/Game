@@ -1,6 +1,6 @@
 #include "camera.h"
 
-Camera::Camera(glm::vec3 position, glm::vec3 rotations, float move_sensitivity, float rotate_sensitivity){
+Camera::Camera(glm::vec3 position, glm::vec3 rotation, float move_sensitivity, float rotate_sensitivity){
     this->position = position;
     this->rotation = rotation;
 

@@ -35,6 +35,12 @@ void Window::takeScreenshot(){
 
     int save_result = SOIL_save_screenshot(filename.c_str(), SOIL_SAVE_TYPE_BMP,
         0, 0, requested_width, requested_height);
+
+    if (save_result){
+        Debug::info("Took screenshot %s.\n", filename.c_str());
+    } else {
+        Debug::error("Error saving screenshot %s.\n", filename.c_str());
+    }
 }
 
 Window* Window::getInstance(){

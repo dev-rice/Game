@@ -135,7 +135,7 @@ void Particle::updateUniformData(){
     glUniform1f(glGetUniformLocation(shader_program, "plane_rotation"), (float)plane_rotation);
 
     // Tell the shader the current time
-    glUniform1f(glGetUniformLocation(shader_program, "time"), (float)glfwGetTime());
+    // glUniform1f(glGetUniformLocation(shader_program, "time"), (float)glfwGetTime());
 
 }
 
