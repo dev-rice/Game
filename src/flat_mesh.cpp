@@ -1,5 +1,16 @@
 #include "flat_mesh.h"
 
+FlatMesh* FlatMesh::instance;
+
+FlatMesh* FlatMesh::getInstance(){
+    if(instance){
+        return instance;
+    } else {
+        instance = new FlatMesh();
+        return instance;
+    }
+}
+
 FlatMesh::FlatMesh(){
     // Create 2D mesh for framebuffer to draw onto.
     GLfloat planeVerts[] = {

@@ -17,7 +17,7 @@
 
 class FlatMesh {
 public:
-    FlatMesh();
+    static FlatMesh* getInstance();
 
     void draw();
     void drawOutline();
@@ -29,6 +29,9 @@ protected:
     GLuint vbo;
 
     std::vector<GLuint> bound_shaders;
+
+    FlatMesh();
+    static FlatMesh* instance;
 
 };
 

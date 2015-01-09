@@ -1,7 +1,7 @@
 #include "flat_drawable.h"
 
-FlatDrawable::FlatDrawable(FlatMesh* mesh, GLuint shader_program, GLfloat width, GLfloat height, glm::vec2 position){
-    this->mesh = mesh;
+FlatDrawable::FlatDrawable(GLuint shader_program, GLfloat width, GLfloat height, glm::vec2 position){
+    this->mesh = FlatMesh::getInstance();
     this->shader_program = shader_program;
     this->width = width;
     this->height = height;

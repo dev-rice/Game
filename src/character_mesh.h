@@ -5,12 +5,18 @@
 
 class CharacterMesh : public FlatMesh {
 public:
-    CharacterMesh();
+
+    static CharacterMesh* getInstance();
 
     static const float CHARACTER_WIDTH;
     static const float CHARACTER_HEIGHT;
     static const float IMAGE_HEIGHT;
     static const float IMAGE_WIDTH;
+
+private:
+
+    CharacterMesh();
+    static CharacterMesh* instance;
 };
 
 #endif

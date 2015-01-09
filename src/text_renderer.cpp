@@ -9,8 +9,7 @@ TextRenderer::TextRenderer(std::string font_filename, GLfloat scale){
     GLuint text_shader = ShaderLoader::loadShaderProgram("shaders/text.vs",
         "shaders/text.fs");
 
-    character_mesh = new CharacterMesh();
-    character_box = new CharacterDrawable(character_mesh, text_shader, scale,
+    character_box = new CharacterDrawable(text_shader, scale,
         scale * ((float)width / (float)height), glm::vec2());
 
     GLuint character_texture = TextureLoader::loadTextureFromFile(font_filename.c_str(), GL_LINEAR);

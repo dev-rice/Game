@@ -1,8 +1,9 @@
 #include "character_drawable.h"
 
-CharacterDrawable::CharacterDrawable(FlatMesh* mesh, GLuint shader_program, GLfloat width, GLfloat height, glm::vec2 position)
-    :FlatDrawable(mesh, shader_program, width, height, position) {
-
+CharacterDrawable::CharacterDrawable(GLuint shader_program, GLfloat width, GLfloat height, glm::vec2 position)
+    :FlatDrawable(shader_program, width, height, position) {
+        mesh = CharacterMesh::getInstance();
+        this->mesh->attachGeometryToShader(shader_program);
         uv_offset = glm::vec2();
 }
 

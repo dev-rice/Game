@@ -19,8 +19,8 @@
 
 class FlatDrawable {
 public:
-    FlatDrawable(FlatMesh* m, GLuint sh) : FlatDrawable(m, sh, 1.0, 1.0, glm::vec2()){;}
-    FlatDrawable(FlatMesh*, GLuint, GLfloat, GLfloat, glm::vec2);
+    FlatDrawable(GLuint sh) : FlatDrawable(sh, 1.0, 1.0, glm::vec2()){;}
+    FlatDrawable(GLuint, GLfloat, GLfloat, glm::vec2);
 
     virtual void draw();
     virtual void attachTexture(GLuint);

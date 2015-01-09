@@ -1,7 +1,7 @@
 #include "mouse.h"
 
-Mouse::Mouse(FlatMesh* flat_mesh, GLuint shader_program, GLuint texture)
-        : UIDrawable(flat_mesh, shader_program, texture) {
+Mouse::Mouse(GLuint shader_program, GLuint texture)
+        : UIDrawable(shader_program, texture) {
 
     this->glfw_window = Window::getInstance()->getGLFWWindow();
 

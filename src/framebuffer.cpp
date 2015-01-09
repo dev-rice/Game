@@ -3,9 +3,6 @@
 Framebuffer::Framebuffer(){
     this->window = Window::getInstance();
 
-    // Create a mesh for framebuffer to draw on
-    FlatMesh* flat_mesh = new FlatMesh();
-
     // Create frame buffer
     glGenFramebuffers(1, &framebuffer);
 
@@ -45,7 +42,7 @@ Framebuffer::Framebuffer(){
     }
 
     // Create the window to draw the framebuffer onto
-    framebuffer_window = new FlatDrawable(flat_mesh, framebuffer_shader, 1.0, 1.0, glm::vec2(0.0, 0.0));
+    framebuffer_window = new FlatDrawable(framebuffer_shader, 1.0, 1.0, glm::vec2(0.0, 0.0));
     framebuffer_window->attachTexture(framebuffer_texture);
 
 }

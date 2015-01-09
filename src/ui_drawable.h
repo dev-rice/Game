@@ -14,7 +14,7 @@
 
 class UIDrawable : public FlatDrawable {
 public:
-    UIDrawable(FlatMesh*, GLuint, GLuint);
+    UIDrawable(GLuint, GLuint);
 
     void draw();
     void setPosition(glm::vec2);

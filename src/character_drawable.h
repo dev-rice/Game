@@ -8,7 +8,7 @@
 
 class CharacterDrawable : public FlatDrawable {
 public:
-    CharacterDrawable(FlatMesh*, GLuint, GLfloat, GLfloat, glm::vec2);
+    CharacterDrawable(GLuint, GLfloat, GLfloat, glm::vec2);
 
     void setCharacter(char);
 private:

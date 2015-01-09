@@ -1,6 +1,6 @@
 #include "ui_drawable.h"
 
-UIDrawable::UIDrawable(FlatMesh* flat_mesh, GLuint shader_program, GLuint texture) : FlatDrawable(flat_mesh, shader_program){
+UIDrawable::UIDrawable(GLuint shader_program, GLuint texture) : FlatDrawable(shader_program){
     window_width = Window::getInstance()->getWidth();
     window_height = Window::getInstance()->getHeight();
 

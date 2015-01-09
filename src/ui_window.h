@@ -11,7 +11,7 @@
 
 class UIWindow : public UIDrawable {
 public:
-    UIWindow(FlatMesh*, GLuint);
+    UIWindow(GLuint);
 private:
 };
 
