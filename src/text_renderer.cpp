@@ -17,7 +17,6 @@ TextRenderer::TextRenderer(std::string font_filename, GLint point){
 }
 
 void TextRenderer::drawString(int x, int y, std::string to_draw){
-    float spacing = 0.1;
     character_box->setPixelPosition(x, y);
     for (int i = 0; i < to_draw.size(); ++i){
         character_box->setCharacter(to_draw[i]);

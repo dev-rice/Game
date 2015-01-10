@@ -27,7 +27,7 @@
         <left>res/textures/edge_left.png</left>
         <up>res/textures/edge_up.png</up>
     </edge_sprites>
-            
+
     <subelements>
         <ui_radiobutton>
             <layout_filepath>res/layouts/radiotest.xml</layout_filepath>

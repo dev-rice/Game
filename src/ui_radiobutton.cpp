@@ -27,7 +27,7 @@ void UIRadioButton::loadFromXML(std::string filepath){
     functionName = layout_node.child_value("function");
 
     // Parse radiobutton text
-    text_renderer = new TextRenderer("res/fonts/inconsolata_bold_font.png", 12);
+    text_renderer = new TextRenderer("res/fonts/inconsolata_bold_font.png", 20);
     radio_text = layout_node.child_value("text");
 
     // Parse constraints

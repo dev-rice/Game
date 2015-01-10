@@ -24,7 +24,7 @@ void CharacterDrawable::setPixelPosition(int x, int y){
 }
 
 void CharacterDrawable::moveToNext(){
-    x_pixels += width_pixels - 4;
+    x_pixels += width_pixels - CharacterMesh::PADDING;
     setGLPosition(getGLPosition());
 
 }

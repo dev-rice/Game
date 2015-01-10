@@ -12,6 +12,7 @@ public:
     static const float CHARACTER_HEIGHT;
     static const float IMAGE_HEIGHT;
     static const float IMAGE_WIDTH;
+    static const float PADDING;
 
 private:
 

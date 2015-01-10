@@ -6,6 +6,7 @@ const float CharacterMesh::CHARACTER_WIDTH = 32;
 const float CharacterMesh::CHARACTER_HEIGHT = 40;
 const float CharacterMesh::IMAGE_HEIGHT = 512;
 const float CharacterMesh::IMAGE_WIDTH = 512;
+const float CharacterMesh::PADDING = 8;
 
 CharacterMesh* CharacterMesh::getInstance(){
     if(instance){
