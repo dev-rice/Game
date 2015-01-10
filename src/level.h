@@ -35,7 +35,7 @@ public:
 
     void draw();
     void drawShadowMap();
-    void updateGlobalUniforms(glm::mat4&, glm::mat4&);
+    void updateGlobalUniforms();
 
     int getMapHeight();
     int getMapWidth();
@@ -72,7 +72,8 @@ private:
 
     Shadowbuffer* shadowbuffer;
 
-    GLuint ubo;
+    GLuint camera_ubo;
+    GLuint shadow_ubo;
 
 };
 

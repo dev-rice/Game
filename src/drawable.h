@@ -35,8 +35,6 @@ public:
     void setScale(GLfloat s) {scale = s;}
     void setShader(GLuint);
 
-    void setupShadows(GLuint, glm::mat4, glm::mat4);
-
     glm::vec3 getPosition() {return position;}
     glm::vec3 getRotation() {return rotation;}
     GLfloat getScale() {return scale;}

@@ -34,16 +34,13 @@ void Drawable::setShader(GLuint shader_program){
     this->shader_program = shader_program;
     this->mesh->attachGeometryToShader(shader_program);
 
+    #warning Global uniform bindings should only ever be called once for each shader
     GLint global_matrix_location = glGetUniformBlockIndex(shader_program, "GlobalMatrices");
-    // Debug::info("Matrix location is %d on %s.\n", global_matrix_location,
-        // ShaderLoader::getShaderName(shader_program).c_str());
     glUniformBlockBinding(shader_program, global_matrix_location, 1);
-}
 
-void Drawable::setupShadows(GLuint shadow_map, glm::mat4 depth_view, glm::mat4 depth_proj){
-    this->shadow_map = shadow_map;
-    this->depth_view = depth_view;
-    this->depth_proj = depth_proj;
+    GLint shadow_matrix_location = glGetUniformBlockIndex(shader_program, "ShadowMatrices");
+    glUniformBlockBinding(shader_program, shadow_matrix_location, 2);
+
 }
 
 void Drawable::draw(){

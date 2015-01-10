@@ -7,8 +7,8 @@ in vec2 texcoord;
 out vec2 Texcoord;
 
 layout(std140) uniform GlobalMatrices {
-    mat4 proj;
     mat4 view;
+    mat4 proj;
 };
 
 uniform mat4 model;

@@ -54,7 +54,4 @@ void Doodad::updateUniformData(){
     // Tell the shader the current time
     // glUniform1f(glGetUniformLocation(shader_program, "time"), (float)glfwGetTime());
 
-    glUniformMatrix4fv(glGetUniformLocation(shader_program, "depth_view"), 1, GL_FALSE, glm::value_ptr(depth_view));
-    glUniformMatrix4fv(glGetUniformLocation(shader_program, "depth_proj"), 1, GL_FALSE, glm::value_ptr(depth_proj));
-
 }
