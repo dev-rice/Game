@@ -62,7 +62,7 @@ void UIDrawable::updateDimensions(){
 }
 
 void UIDrawable::parseConstraints(pugi::xml_node constraints_node){
-    
+
     bool has_x_position = constraints_node.child("x");
     bool has_y_position = constraints_node.child("y");
     bool has_width = constraints_node.child("width");
@@ -92,13 +92,13 @@ void UIDrawable::parseConstraints(pugi::xml_node constraints_node){
         const char* x_anchor = constraints_node.child("x").child_value("anchor");
         int x_offset = atoi(constraints_node.child("x").child_value("offset"));
         x_pixels = parseAnchor(x_anchor, true) + x_offset;
-        
+
         const char* y_anchor = constraints_node.child("y").child_value("anchor");
         int y_offset = atoi(constraints_node.child("y").child_value("offset"));
         y_pixels = parseAnchor(y_anchor, false) + y_offset;
 
     } else {
-        Debug::error("Incorrect constraints:\n [%d] X position\n [%d] Y position\n [%d] Width\n [%d] Height\n [%d] X2 position\n [%d] Y2 position\n", 
+        Debug::error("Incorrect constraints:\n [%d] X position\n [%d] Y position\n [%d] Width\n [%d] Height\n [%d] X2 position\n [%d] Y2 position\n",
             has_x_position, has_y_position, has_width, has_height, has_x2_position, has_y2_position);
     }
 }
@@ -140,4 +140,3 @@ void UIDrawable::setPixelCoordinates(int new_x, int new_y, int new_x2, int new_y
 bool UIDrawable::constraintsAreValid(bool x, bool y, bool w, bool h, bool x2, bool y2){
     return (x && y && XOR(w, x2) && XOR(h, y2));
 }
-

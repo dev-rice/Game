@@ -16,7 +16,7 @@ GameView::GameView(Level* level){
     // Unnecessary, but good to do
     Mouse::getInstance();
 
-    text_renderer = new TextRenderer("res/fonts/inconsolata_bold_font.png", 0.01);
+    text_renderer = new TextRenderer("res/fonts/inconsolata_bold_font.png", 20);
 
     // Creation of selection box
     selection_box = new UIDrawable(mousebox_shader, 0);
@@ -101,15 +101,15 @@ void GameView::update(){
         glm::vec3 rotation = camera->getRotation();
         glm::vec2 gl_mouse_position = Mouse::getInstance()->getGLPosition();
 
-        text_renderer->print(glm::vec2(-0.95, 0.95), "fps: %.2f",
+        text_renderer->print(10, 10, "fps: %.2f",
             1.0 / frame_time);
-        text_renderer->print(glm::vec2(-0.95, 0.9), "average frame time: %.5f s",
+        text_renderer->print(10, 40, "average frame time: %.5f s",
             average_frame_time);
-        text_renderer->print(glm::vec2(-0.95, 0.85), "camera position <x, y, z>:"
+        text_renderer->print(10, 70, "camera position <x, y, z>:"
             "%.2f, %.2f, %.2f", position.x, position.y, position.z);
-        text_renderer->print(glm::vec2(-0.95, 0.8), "camera rotation <x, y, z>:"
+        text_renderer->print(10, 100, "camera rotation <x, y, z>:"
             "%.2f, %.2f, %.2f", rotation.x, rotation.y, rotation.z);
-        text_renderer->print(glm::vec2(-0.95, 0.75), "mouse <x, y>: %.2f, %.2f",
+        text_renderer->print(10, 130, "mouse <x, y>: %.2f, %.2f",
             gl_mouse_position.x, gl_mouse_position.y);
     }
 

@@ -1,10 +1,32 @@
 #include "character_drawable.h"
 
-CharacterDrawable::CharacterDrawable(GLuint shader_program, GLfloat width, GLfloat height, glm::vec2 position)
-    :FlatDrawable(shader_program, width, height, position) {
+CharacterDrawable::CharacterDrawable(GLuint shader_program, GLuint texture, GLint point)
+    :UIDrawable(shader_program, texture) {
         mesh = CharacterMesh::getInstance();
         this->mesh->attachGeometryToShader(shader_program);
         uv_offset = glm::vec2();
+
+        height_pixels = point;
+        width_pixels = point * (CharacterMesh::CHARACTER_WIDTH / CharacterMesh::CHARACTER_HEIGHT);
+
+        Debug::info("Character dimensions for %d pt font = %d by %d.\n", point,
+            height_pixels, width_pixels);
+
+        updateDimensions();
+        setGLPosition(getGLPosition());
+}
+
+void CharacterDrawable::setPixelPosition(int x, int y){
+    x_pixels = x;
+    y_pixels = y;
+
+    setGLPosition(getGLPosition());
+}
+
+void CharacterDrawable::moveToNext(){
+    x_pixels += width_pixels - 4;
+    setGLPosition(getGLPosition());
+
 }
 
 void CharacterDrawable::setCharacter(char to_render){

@@ -22,16 +22,16 @@
 
 class TextRenderer {
 public:
-    TextRenderer(std::string, GLfloat);
+    TextRenderer(std::string, GLint);
 
-    void print(glm::vec2, const char*, ...);
+    void print(int, int, const char*, ...);
 private:
-    void drawString(glm::vec2, std::string);
+    void drawString(int, int, std::string);
 
     CharacterMesh* character_mesh;
     CharacterDrawable* character_box;
 
-    GLfloat scale;
+    GLfloat point;
 };
 
 #endif

@@ -35,7 +35,7 @@ public:
     virtual void loadFromXML(std::string){;}
 protected:
     GLuint shader;
-    
+
     void parseConstraints(pugi::xml_node);
     virtual bool constraintsAreValid(bool, bool, bool, bool, bool, bool);
     int parseAnchor(const char*, bool);

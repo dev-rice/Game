@@ -6,7 +6,7 @@
 UIRadioButton::UIRadioButton(GLuint shader_program) : UIDrawable(shader_program, TextureLoader::loadPink()){
     this->shader = shader_program;
     this->has_clicked = false;
-}   
+}
 
 void UIRadioButton::loadFromXML(std::string filepath){
     pugi::xml_document doc;
@@ -27,7 +27,7 @@ void UIRadioButton::loadFromXML(std::string filepath){
     functionName = layout_node.child_value("function");
 
     // Parse radiobutton text
-    text_renderer = new TextRenderer("res/fonts/inconsolata_bold_font.png", 0.01);
+    text_renderer = new TextRenderer("res/fonts/inconsolata_bold_font.png", 12);
     radio_text = layout_node.child_value("text");
 
     // Parse constraints
@@ -64,10 +64,10 @@ void UIRadioButton::draw(){
 
     currentIcon->draw();
 
-    text_renderer->print(position, "%s", radio_text.c_str());
+    text_renderer->print(x_pixels, y_pixels, "%s", radio_text.c_str());
 
     glm::vec2 gl_mouse_position = Mouse::getInstance()->getGLPosition();
-    if(gl_mouse_position.x < position.x + width && 
+    if(gl_mouse_position.x < position.x + width &&
         gl_mouse_position.x > position.x - width &&
         gl_mouse_position.y < position.y + height &&
         gl_mouse_position.y > position.y - height){

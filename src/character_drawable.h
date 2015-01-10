@@ -5,12 +5,15 @@
 
 #include "flat_drawable.h"
 #include "character_mesh.h"
+#include "ui_drawable.h"
 
-class CharacterDrawable : public FlatDrawable {
+class CharacterDrawable : public UIDrawable {
 public:
-    CharacterDrawable(GLuint, GLfloat, GLfloat, glm::vec2);
+    CharacterDrawable(GLuint, GLuint, GLint);
 
     void setCharacter(char);
+    void setPixelPosition(int, int);
+    void moveToNext();
 private:
     void updateUniformData();
 
