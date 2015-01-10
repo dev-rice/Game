@@ -48,7 +48,7 @@ void UIDrawable::draw(){
     }
 }
 
-void UIDrawable::setCoordinates(glm::vec2 start, glm::vec2 end){
+void UIDrawable::setGLCoordinates(glm::vec2 start, glm::vec2 end){
     this->width = (end.x - start.x)/2;
     this->height = (end.y - start.y)/2;
     this->position = glm::vec2(start.x + width, start.y + height);
@@ -125,5 +125,15 @@ int UIDrawable::parseAnchor(const char* anchor, bool is_x){
     }
 
     return 0; // Error
+}
+
+void UIDrawable::setPixelCoordinates(int new_x, int new_y, int new_x2, int new_y2){
+    x_pixels = new_x;
+    y_pixels = new_y;
+    width_pixels = new_x2 - new_x;
+    height_pixels = new_y2 - new_y;
+
+    updateDimensions();
+    setGLPosition(getGLPosition());
 }
 

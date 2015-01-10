@@ -15,10 +15,10 @@
     </constraints>
 
     <corner_sprites>
-        <upper_right>res/textures/corner_up_right.png</upper_right>
-        <upper_left>res/textures/corner_up_left.png</upper_left>
-        <lower_right>res/textures/corner_down_right.png</lower_right>
-        <upper_left>res/textures/corner_up_left.png</upper_left>
+        <up_right>res/textures/corner_up_right.png</up_right>
+        <up_left>res/textures/corner_up_left.png</up_left>
+        <down_right>res/textures/corner_down_right.png</down_right>
+        <down_left>res/textures/corner_down_left.png</down_left>
     </corner_sprites>
 
     <edge_sprites>

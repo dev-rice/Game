@@ -25,14 +25,14 @@ public:
 
     glm::vec2 getGLPosition();
 
+    void setPixelCoordinates(int, int, int, int);
     void setGLPosition(glm::vec2);
-
     void setOutline(bool o) {outline = o;}
-
-    void setCoordinates(glm::vec2, glm::vec2);
+    void setGLCoordinates(glm::vec2, glm::vec2);
 
     virtual void loadFromXML(std::string){;}
 protected:
+    GLuint shader;
     
     void parseConstraints(pugi::xml_node);
     int parseAnchor(const char*, bool);

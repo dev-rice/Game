@@ -75,7 +75,7 @@ void GameView::update(){
     // draw selection rectangle here
     if(mouse_count > 1){
         // draw from initial_left_click_position to final_left_click_position
-        selection_box->setCoordinates(initial_left_click_position, final_left_click_position);
+        selection_box->setGLCoordinates(initial_left_click_position, final_left_click_position);
         selection_box->draw();
     }
 

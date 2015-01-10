@@ -5,11 +5,11 @@
 #define UIWindow_h
 
 #include <string>   // std::string
+#include <vector>   // std::vector
 
 #include "texture_loader.h"
-#include "flat_drawable.h"
-#include "window.h"
 #include "ui_drawable.h"
+#include "ui_image.h"
 
 class UIWindow : public UIDrawable {
 public:
@@ -19,6 +19,7 @@ public:
 
     void draw();
 private:
+    std::vector<UIDrawable*> subelements;
 };
 
 #endif
