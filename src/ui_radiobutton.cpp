@@ -82,6 +82,9 @@ bool UIRadioButton::constraintsAreValid(bool x, bool y, bool w, bool h, bool x2,
 }
 
 void UIRadioButton::toggleRadioButton(){
+    
+    FunctionHelper::getInstance()->runFunction("testFunction");
+
     radioButtonOn = !radioButtonOn;
 
     if(radioButtonOn){

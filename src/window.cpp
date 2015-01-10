@@ -50,7 +50,6 @@ Window* Window::getInstance(){
         instance = new Window();
         return instance;
     }
-
 }
 
 void Window::initializeWindow(){

@@ -14,6 +14,7 @@
 
 #include "pugixml.hpp" // PUGI xml library
 
+#include "function_helper.h"
 #include "flat_drawable.h"
 #include "window.h"
 
