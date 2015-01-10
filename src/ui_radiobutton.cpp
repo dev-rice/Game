@@ -5,7 +5,7 @@
 
 UIRadioButton::UIRadioButton(GLuint shader_program) : UIDrawable(shader_program, TextureLoader::loadPink()){
     this->shader = shader_program;
-    this->mouse_count = 0;
+    this->has_clicked = false;
 }   
 
 void UIRadioButton::loadFromXML(std::string filepath){
@@ -24,10 +24,10 @@ void UIRadioButton::loadFromXML(std::string filepath){
     pugi::xml_node constraints_node = layout_node.child("constraints");
 
     // Parse constraints
-    parseConstraints(constraints_node);
-
     width_pixels = 80;
     height_pixels = 28;
+
+    parseConstraints(constraints_node);
 
     // Set the initial value of the radio button
     radioButtonOn = (strcmp(layout_node.child("constraints").child_value("mode"), "on") == 0);
@@ -66,11 +66,12 @@ void UIRadioButton::draw(){
         // FlatDrawable::draw();
         hoverIcon->draw();
 
-        if(glfwGetMouseButton(Window::getInstance()->getGLFWWindow(), GLFW_MOUSE_BUTTON_LEFT)){
-            mouse_count++;
-        } else if(mouse_count > 0){
+        bool clicking = glfwGetMouseButton(Window::getInstance()->getGLFWWindow(), GLFW_MOUSE_BUTTON_LEFT);
+        if(clicking && !has_clicked){
             toggleRadioButton();
-            mouse_count = 0;  
+            has_clicked = true;
+        } else if(!clicking){
+            has_clicked = false;
         }
     }
 

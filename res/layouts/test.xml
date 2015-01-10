@@ -4,11 +4,11 @@
     <constraints>
         <x>
             <anchor>centered</anchor>
-            <offset>-250</offset>
+            <offset>0</offset>
         </x>
         <y>
             <anchor>centered</anchor>
-            <offset>-250</offset>
+            <offset>0</offset>
         </y>
         <width>500</width>
         <height>500</height>
