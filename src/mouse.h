@@ -3,20 +3,24 @@
 
 #include <vector>
 
+#include "shader_loader.h"
 #include "texture_loader.h"
 #include "ui_drawable.h"
 #include "window.h"
 
 class Mouse : public UIDrawable {
 public:
-    enum class cursorType { CURSOR, SELECTION, COMMAND, UP, RIGHT, DOWN, LEFT, UP_LEFT, UP_RIGHT, DOWN_RIGHT, DOWN_LEFT};
+    static Mouse* getInstance();
 
-    Mouse(GLuint, GLuint);
+    enum class cursorType { CURSOR, SELECTION, COMMAND, UP, RIGHT, DOWN, LEFT, UP_LEFT, UP_RIGHT, DOWN_RIGHT, DOWN_LEFT};
 
     void draw();
     void setCursorSprite(cursorType);
 
 private:
+
+    static Mouse* instance;
+    Mouse();
 
     cursorType current_type;
 
