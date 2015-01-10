@@ -62,13 +62,13 @@ void UIWindow::loadFromXML(std::string filepath){
     GLuint down_left_corner_sprite = TextureLoader::loadTextureFromFile(corner_sprites_node.child_value("down_left"), GL_NEAREST);
     u = new UIImage(shader, down_left_corner_sprite, x_pixels - 17, y_pixels + height_pixels - 45, 62, 62);
     subelements.push_back(u);
-    
+
 
     for (pugi::xml_node_iterator it = subelements_node.begin(); it != subelements_node.end(); ++it){
          // printf("Named subelement: %s\n", it->name());
 
         UIDrawable* ui_element;
-        
+
         if(strcmp(it->name(), "ui_radiobutton") == 0){
             ui_element = new UIRadioButton(shader);
             ui_element->loadFromXML(it->child_value("layout_filepath"));
@@ -95,4 +95,8 @@ void UIWindow::draw(){
 
 void UIWindow::show(){
     is_showing = true;
+}
+
+void UIWindow::hide(){
+    is_showing = false;
 }

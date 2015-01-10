@@ -23,13 +23,19 @@ GameView::GameView(Level* level){
     selection_box->setOutline(true);
 
     // Creation of a test ui
-    UIWindow* w = new UIWindow(ui_shader);
-    w->loadFromXML("res/layouts/test.xml");
-    w->show();
-    ui_drawables.push_back(w);
+    // For toggling the view state, the menu is better off for now as a pointer
+    // independent of ui_drawables.
+    // We should probably come up with a window manager class that keeps a list
+    // of the currently showing UIWindows. This will be good for UIWindows with
+    // sub windows.
+    menu = new UIWindow(ui_shader);
+    menu->loadFromXML("res/layouts/test.xml");
+    menu->show();
 
     toggle_key_state = false;
     debug_showing = false;
+
+    menu_key_state = false;
 
     mouse_count = 0;
 
@@ -67,13 +73,13 @@ void GameView::update(){
     // Draw the framebuffer
     screen->setAsRenderTarget();
     framebuffer->draw();
-    level->getShadowbuffer()->draw();
-
 
     // Draw all of the ui elements on top of the level
     for(int i = 0; i < ui_drawables.size(); ++i){
         ui_drawables[i]->draw();
     }
+    menu->draw();
+
     // draw selection rectangle here
     if(mouse_count > 1 && !Mouse::getInstance()->isHovering()){
         // draw from initial_left_click_position to final_left_click_position
@@ -262,6 +268,19 @@ void GameView::handleInputs(){
     }
     if (glfwGetKey(glfw_window, GLFW_KEY_TAB) == GLFW_RELEASE){
         toggle_key_state = false;
+    }
+
+    // Handle the menu toggle key
+    if ((glfwGetKey(glfw_window, GLFW_KEY_F10) == GLFW_PRESS) && (!menu_key_state)){
+        menu_key_state = true;
+        if (menu->isShowing()){
+            menu->hide();
+        } else {
+            menu->show();
+        }
+    }
+    if (glfwGetKey(glfw_window, GLFW_KEY_F10) == GLFW_RELEASE){
+        menu_key_state = false;
     }
 
     // Reset the average frame time calculations

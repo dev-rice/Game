@@ -17,6 +17,9 @@ public:
 
     void draw();
     void show();
+    void hide();
+
+    bool isShowing() {return is_showing;}
 private:
     bool is_showing;
 

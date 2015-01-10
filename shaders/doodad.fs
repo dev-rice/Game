@@ -61,7 +61,7 @@ float getShadowFactor(){
     float visibility;
 
     float angle = dot(normalize(surface_normal),
-    normalize(lights[0].light_to_surface));
+        normalize(lights[0].light_to_surface));
 
     vec4 n_pixel  = textureOffset(shadow_map, shadow_coord.xy, ivec2(0, 1));
     vec4 s_pixel  = textureOffset(shadow_map, shadow_coord.xy, ivec2(0, -1));
