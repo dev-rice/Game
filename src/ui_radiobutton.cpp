@@ -23,6 +23,13 @@ void UIRadioButton::loadFromXML(std::string filepath){
 
     pugi::xml_node constraints_node = layout_node.child("constraints");
 
+    // Parse function
+    functionName = layout_node.child_value("function");
+
+    // Parse radiobutton text
+    text_renderer = new TextRenderer("res/fonts/inconsolata_bold_font.png", 0.01);
+    radio_text = layout_node.child_value("text");
+
     // Parse constraints
     width_pixels = 80;
     height_pixels = 28;
@@ -57,6 +64,8 @@ void UIRadioButton::draw(){
 
     currentIcon->draw();
 
+    text_renderer->print(position, "%s", radio_text.c_str());
+
     glm::vec2 gl_mouse_position = Mouse::getInstance()->getGLPosition();
     if(gl_mouse_position.x < position.x + width && 
         gl_mouse_position.x > position.x - width &&
@@ -82,8 +91,8 @@ bool UIRadioButton::constraintsAreValid(bool x, bool y, bool w, bool h, bool x2,
 }
 
 void UIRadioButton::toggleRadioButton(){
-    
-    FunctionHelper::getInstance()->runFunction("testFunction");
+
+    FunctionHelper::getInstance()->runFunction(functionName);
 
     radioButtonOn = !radioButtonOn;
 

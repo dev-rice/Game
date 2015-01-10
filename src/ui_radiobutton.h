@@ -9,6 +9,7 @@
 #include "ui_image.h"
 #include "window.h"
 #include "mouse.h"
+#include "text_renderer.h"
 
 class UIRadioButton : public UIDrawable {
 public:
@@ -18,6 +19,8 @@ public:
 
 
 private:
+    std::string functionName;
+
     bool constraintsAreValid(bool, bool, bool, bool, bool, bool);
 
     void toggleRadioButton();
@@ -29,7 +32,9 @@ private:
     UIImage* off_icon_image;
     UIImage* hoverIcon;
     UIImage* currentIcon;
-    // Text shit
+    
+    TextRenderer* text_renderer;
+    std::string radio_text;
 };
 
 #endif
