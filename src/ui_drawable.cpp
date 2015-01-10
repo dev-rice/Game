@@ -137,7 +137,7 @@ void UIDrawable::setPixelCoordinates(int new_x, int new_y, int new_x2, int new_y
     setGLPosition(getGLPosition());
 }
 
-bool UIDrawable::constraintsAreValid(bool x, bool y, bool w, bool h, bool x2, bool x2){
+bool UIDrawable::constraintsAreValid(bool x, bool y, bool w, bool h, bool x2, bool y2){
     return (x && y && XOR(w, x2) && XOR(h, y2));
 }
 
