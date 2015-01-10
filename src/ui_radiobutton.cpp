@@ -52,14 +52,22 @@ void UIRadioButton::loadFromXML(std::string filepath){
 
 void UIRadioButton::draw(){
 
-    FlatDrawable::draw();
+    
 
-    if(glfwGetMouseButton(Window::getInstance()->getGLFWWindow(), GLFW_MOUSE_BUTTON_LEFT)){
-        mouse_count++;
-    } 
-    else if(mouse_count > 0){
-        toggleRadioButton();
-        mouse_count = 0;  
+    glm::vec2 gl_mouse_position = Mouse::getInstance()->getGLPosition();
+    if(gl_mouse_position.x < position.x + width && 
+        gl_mouse_position.x > position.x - width &&
+        gl_mouse_position.y < position.y + height &&
+        gl_mouse_position.y > position.y - height){
+
+        FlatDrawable::draw();
+
+        if(glfwGetMouseButton(Window::getInstance()->getGLFWWindow(), GLFW_MOUSE_BUTTON_LEFT)){
+            mouse_count++;
+        } else if(mouse_count > 0){
+            toggleRadioButton();
+            mouse_count = 0;  
+        }
     }
 
     currentIcon->draw();
