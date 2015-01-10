@@ -1,7 +1,20 @@
 #include "mouse.h"
 
-Mouse::Mouse(GLuint shader_program, GLuint texture)
-        : UIDrawable(shader_program, texture) {
+Mouse* Mouse::instance;
+
+Mouse* Mouse::getInstance(){
+    if(instance){
+        return instance;
+    } else {
+        instance = new Mouse();
+        return instance;
+    }
+
+}
+
+Mouse::Mouse()
+        : UIDrawable(ShaderLoader::loadShaderProgram("shaders/ui.vs","shaders/ui.fs"),
+         TextureLoader::loadTextureFromFile("res/textures/cursor_ui.png", GL_NEAREST)) {
 
     this->glfw_window = Window::getInstance()->getGLFWWindow();
 

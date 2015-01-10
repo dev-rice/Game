@@ -42,7 +42,6 @@ private:
     Framebuffer* framebuffer;
     Shadowbuffer* shadowbuffer;
 
-    Mouse* mouse;
     UIDrawable* selection_box;
     std::vector<UIDrawable*> ui_drawables;
 

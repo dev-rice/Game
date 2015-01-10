@@ -13,9 +13,8 @@ GameView::GameView(Level* level){
     GLuint mousebox_shader = ShaderLoader::loadShaderProgram("shaders/mousebox.vs",
         "shaders/mousebox.fs");
 
-    GLuint mouse_texture = TextureLoader::loadTextureFromFile(
-        "res/textures/cursor_ui.png", GL_NEAREST);
-    mouse = new Mouse(ui_shader, mouse_texture);
+    // Unnecessary, but good to do
+    Mouse::getInstance();
 
     text_renderer = new TextRenderer("res/fonts/inconsolata_bold_font.png", 0.01);
 
@@ -91,7 +90,7 @@ void GameView::update(){
         Camera* camera = level->getCamera();
         glm::vec3 position = camera->getPosition();
         glm::vec3 rotation = camera->getRotation();
-        glm::vec2 gl_mouse_position = mouse->getGLPosition();
+        glm::vec2 gl_mouse_position = Mouse::getInstance()->getGLPosition();
 
         text_renderer->print(glm::vec2(-0.95, 0.95), "fps: %.2f",
             1.0 / frame_time);
@@ -106,7 +105,7 @@ void GameView::update(){
     }
 
     // The mouse draws on top of everything else
-    mouse->draw();
+    Mouse::getInstance()->draw();
 
 }
 
@@ -115,12 +114,12 @@ void GameView::handleInputs(){
 
     glfwPollEvents();
 
-    glm::vec2 gl_mouse_position = mouse->getGLPosition();
+    glm::vec2 gl_mouse_position = Mouse::getInstance()->getGLPosition();
 
     // Mouse scrolling the screen
     if(mouse_count == 0){
 
-        mouse->setCursorSprite(Mouse::cursorType::CURSOR);
+        Mouse::getInstance()->setCursorSprite(Mouse::cursorType::CURSOR);
 
         // LEFT
         if(camera->getPosition().x >= -1.0 * level->getMapWidth()/2 + 70){
@@ -160,29 +159,29 @@ void GameView::handleInputs(){
 
         // Changing the mouse cursor based on scrolling
         if(gl_mouse_position.x < -0.85){
-            mouse->setCursorSprite(Mouse::cursorType::LEFT);
+            Mouse::getInstance()->setCursorSprite(Mouse::cursorType::LEFT);
         }
         if(gl_mouse_position.x > 0.85){
-            mouse->setCursorSprite(Mouse::cursorType::RIGHT);
+            Mouse::getInstance()->setCursorSprite(Mouse::cursorType::RIGHT);
         }
         if(gl_mouse_position.y > 0.85){
-            mouse->setCursorSprite(Mouse::cursorType::UP);
+            Mouse::getInstance()->setCursorSprite(Mouse::cursorType::UP);
         }
         if(gl_mouse_position.y < -0.85){
-            mouse->setCursorSprite(Mouse::cursorType::DOWN);
+            Mouse::getInstance()->setCursorSprite(Mouse::cursorType::DOWN);
         }
 
         if(gl_mouse_position.x < -0.85 && gl_mouse_position.y < -0.85){
-            mouse->setCursorSprite(Mouse::cursorType::DOWN_LEFT);
+            Mouse::getInstance()->setCursorSprite(Mouse::cursorType::DOWN_LEFT);
         }
         if(gl_mouse_position.x > 0.85 && gl_mouse_position.y < -0.85){
-            mouse->setCursorSprite(Mouse::cursorType::DOWN_RIGHT);
+            Mouse::getInstance()->setCursorSprite(Mouse::cursorType::DOWN_RIGHT);
         }
         if(gl_mouse_position.x < -0.85 && gl_mouse_position.y > 0.85){
-            mouse->setCursorSprite(Mouse::cursorType::UP_LEFT);
+            Mouse::getInstance()->setCursorSprite(Mouse::cursorType::UP_LEFT);
         }
         if(gl_mouse_position.x > 0.85 && gl_mouse_position.y > 0.85){
-            mouse->setCursorSprite(Mouse::cursorType::UP_RIGHT);
+            Mouse::getInstance()->setCursorSprite(Mouse::cursorType::UP_RIGHT);
         }
     }
 
@@ -197,7 +196,7 @@ void GameView::handleInputs(){
             initial_left_click_position = gl_mouse_position;
         } else {
             final_left_click_position = gl_mouse_position;
-            mouse->setCursorSprite(Mouse::cursorType::SELECTION);
+            Mouse::getInstance()->setCursorSprite(Mouse::cursorType::SELECTION);
         }
         mouse_count++;
     } else if(mouse_count != 0){
