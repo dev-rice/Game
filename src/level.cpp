@@ -39,11 +39,19 @@ Level::Level(const char* filename){
     depth_proj = glm::ortho<float>(-10,10,-10, 10,-20,20);
 
     // Create the uniform buffer object.
-    glGenBuffers(1, &ubo);
-    glBindBuffer(GL_UNIFORM_BUFFER, ubo);
+    glGenBuffers(1, &camera_ubo);
+    glBindBuffer(GL_UNIFORM_BUFFER, camera_ubo);
     glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::mat4) * 2, NULL, GL_STREAM_DRAW);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
-    glBindBufferRange(GL_UNIFORM_BUFFER, 1, ubo, 0, sizeof(glm::mat4) * 2);
+
+    // Create the uniform buffer object.
+    glGenBuffers(1, &shadow_ubo);
+    glBindBuffer(GL_UNIFORM_BUFFER, shadow_ubo);
+    glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::mat4) * 2, NULL, GL_STREAM_DRAW);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+    glBindBufferRange(GL_UNIFORM_BUFFER, 1, camera_ubo, 0, sizeof(glm::mat4) * 2);
+    glBindBufferRange(GL_UNIFORM_BUFFER, 2, shadow_ubo, 0, sizeof(glm::mat4) * 2);
 
     loadLevel(filename);
 
@@ -53,17 +61,14 @@ void Level::draw(){
     // Update the view matrix based on the current
     // camera location / position
     view_matrix = camera->getViewMatrix();
-    updateGlobalUniforms(view_matrix, proj_matrix);
+    updateGlobalUniforms();
 
     // Draw all the drawables
     for (int i = 0; i < drawables.size(); ++i){
-        // This is how you move things
-        // glm::vec3 position = drawables[i].getPosition();
-        // drawables[i].setPosition(position + glm::vec3(-0.01f, 0.0f, 0.0f));
-
         drawables[i]->draw();
     }
 
+    // Draw all the particle emitters
     for(int i(0); i < emitters.size(); ++i){
         emitters[i]->draw(camera);
     }
@@ -71,7 +76,7 @@ void Level::draw(){
 }
 
 void Level::drawShadowMap(){
-    updateGlobalUniforms(depth_view, depth_proj);
+    updateGlobalUniforms();
 
     for (int i = 0; i < drawables.size(); ++i){
         // Save the shader this drawable is currently using
@@ -85,20 +90,27 @@ void Level::drawShadowMap(){
     }
 }
 
-void Level::updateGlobalUniforms(glm::mat4& view, glm::mat4& proj){
-    // view_matrix = camera->getViewMatrix();
+void Level::updateGlobalUniforms(){
+    view_matrix = camera->getViewMatrix();
 
     // Attach the shadow texture to location 4
     glActiveTexture(GL_TEXTURE4);
     glBindTexture(GL_TEXTURE_2D, shadowbuffer->getTexture());
 
     // Put the data in the UBO.
-    glBindBuffer(GL_UNIFORM_BUFFER, ubo);
+    glBindBuffer(GL_UNIFORM_BUFFER, camera_ubo);
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4),
-        glm::value_ptr(proj));
+        glm::value_ptr(view_matrix));
     glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4),
-        glm::value_ptr(view));
+        glm::value_ptr(proj_matrix));
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
+
+    glBindBuffer(GL_UNIFORM_BUFFER, shadow_ubo);
+    glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4),
+        glm::value_ptr(depth_view));
+    glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4),
+        glm::value_ptr(depth_proj));
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 }
@@ -179,7 +191,6 @@ void Level::loadLevel(const char* filename){
             Doodad* drawable = new Doodad(mesh, doodad_shader, position,
                 rotation, scale);
             drawable->attachTextureSet(texture_set);
-            drawable->setupShadows(shadowbuffer->getTexture(), depth_view, depth_proj);
 
             drawables.push_back(drawable);
 

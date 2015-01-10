@@ -67,6 +67,8 @@ void GameView::update(){
     // Draw the framebuffer
     screen->setAsRenderTarget();
     framebuffer->draw();
+    level->getShadowbuffer()->draw();
+
 
     // Draw all of the ui elements on top of the level
     for(int i = 0; i < ui_drawables.size(); ++i){

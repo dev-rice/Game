@@ -21,18 +21,19 @@ out Light lights[num_lights];
 out vec4 shadow_coord;
 
 layout(std140) uniform GlobalMatrices {
-    mat4 proj;
     mat4 view;
+    mat4 proj;
+};
+
+layout(std140) uniform ShadowMatrices {
+    mat4 depth_view;
+    mat4 depth_proj;
 };
 
 uniform mat4 model;
 
 uniform float time;
 uniform float scale;
-
-uniform mat4 depth_view;
-uniform mat4 depth_proj;
-
 
 void main() {
     Texcoord = texcoord;
