@@ -62,27 +62,31 @@ void UIRadioButton::loadFromXML(std::string filepath){
 
 void UIRadioButton::draw(){
 
-    // Draws pink bounding box. Useful for debugging
-    // FlatDrawable::draw();
+    // A check to see if the radio button has been created properly
+    if(currentIcon){
 
-    currentIcon->draw();
+        // Draws pink bounding box. Useful for debugging
+        // FlatDrawable::draw();
 
-    text_renderer->print(x_pixels+16, y_pixels, "%s", radio_text.c_str());
+        currentIcon->draw();
 
-    glm::vec2 gl_mouse_position = Mouse::getInstance()->getGLPosition();
-    if(gl_mouse_position.x < position.x + width &&
-        gl_mouse_position.x > position.x - width &&
-        gl_mouse_position.y < position.y + height &&
-        gl_mouse_position.y > position.y - height){
-        
-        hoverIcon->draw();
+        text_renderer->print(x_pixels+16, y_pixels, "%s", radio_text.c_str());
 
-        bool clicking = glfwGetMouseButton(Window::getInstance()->getGLFWWindow(), GLFW_MOUSE_BUTTON_LEFT);
-        if(clicking && !has_clicked){
-            toggleRadioButton();
-            has_clicked = true;
-        } else if(!clicking){
-            has_clicked = false;
+        glm::vec2 gl_mouse_position = Mouse::getInstance()->getGLPosition();
+        if(gl_mouse_position.x < position.x + width &&
+            gl_mouse_position.x > position.x - width &&
+            gl_mouse_position.y < position.y + height &&
+            gl_mouse_position.y > position.y - height){
+            
+            hoverIcon->draw();
+
+            bool clicking = glfwGetMouseButton(Window::getInstance()->getGLFWWindow(), GLFW_MOUSE_BUTTON_LEFT);
+            if(clicking && !has_clicked){
+                toggleRadioButton();
+                has_clicked = true;
+            } else if(!clicking){
+                has_clicked = false;
+            }
         }
     }
 
