@@ -44,9 +44,6 @@ void Doodad::bindTextures(){
     glActiveTexture(GL_TEXTURE3);
     glBindTexture(GL_TEXTURE_2D, texture_set->getEmissive());
 
-    glActiveTexture(GL_TEXTURE4);
-    glBindTexture(GL_TEXTURE_2D, shadow_map);
-
 }
 
 void Doodad::updateUniformData(){

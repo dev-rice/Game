@@ -53,7 +53,7 @@ void Level::draw(){
     // Update the view matrix based on the current
     // camera location / position
     view_matrix = camera->getViewMatrix();
-    updateGlobalUniforms(&view_matrix, &proj_matrix);
+    updateGlobalUniforms(view_matrix, proj_matrix);
 
     // Draw all the drawables
     for (int i = 0; i < drawables.size(); ++i){
@@ -71,7 +71,7 @@ void Level::draw(){
 }
 
 void Level::drawShadowMap(){
-    updateGlobalUniforms(&depth_view, &depth_proj);
+    updateGlobalUniforms(depth_view, depth_proj);
 
     for (int i = 0; i < drawables.size(); ++i){
         // Save the shader this drawable is currently using
@@ -85,15 +85,19 @@ void Level::drawShadowMap(){
     }
 }
 
-void Level::updateGlobalUniforms(glm::mat4* view, glm::mat4* proj){
+void Level::updateGlobalUniforms(glm::mat4& view, glm::mat4& proj){
     // view_matrix = camera->getViewMatrix();
+
+    // Attach the shadow texture to location 4
+    glActiveTexture(GL_TEXTURE4);
+    glBindTexture(GL_TEXTURE_2D, shadowbuffer->getTexture());
 
     // Put the data in the UBO.
     glBindBuffer(GL_UNIFORM_BUFFER, ubo);
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4),
-        glm::value_ptr(*proj));
+        glm::value_ptr(proj));
     glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4),
-        glm::value_ptr(*view));
+        glm::value_ptr(view));
 
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
