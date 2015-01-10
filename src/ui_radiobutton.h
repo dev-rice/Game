@@ -23,10 +23,11 @@ private:
     void toggleRadioButton();
 
     bool radioButtonOn;
-    bool mouse_count;
+    int mouse_count;
 
     UIImage* on_icon_image;
     UIImage* off_icon_image;
+    UIImage* hoverIcon;
     UIImage* currentIcon;
     // Text shit
 };

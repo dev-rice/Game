@@ -16,8 +16,11 @@ public:
 
     void draw();
     void setCursorSprite(cursorType);
-
+    void setHovering();
+    bool isHovering();
 private:
+
+    bool hovering;
 
     static Mouse* instance;
     Mouse();

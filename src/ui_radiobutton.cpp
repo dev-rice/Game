@@ -32,12 +32,15 @@ void UIRadioButton::loadFromXML(std::string filepath){
     // Set the initial value of the radio button
     radioButtonOn = (strcmp(layout_node.child("constraints").child_value("mode"), "on") == 0);
 
-    // Create and position the button icon
+    // Create and position the button icon and hover highlight
     GLuint on_icon = TextureLoader::loadTextureFromFile("res/textures/radio_on.png", GL_NEAREST);
     on_icon_image = new UIImage(shader, on_icon, x_pixels, y_pixels, 28, 28);
 
     GLuint off_icon = TextureLoader::loadTextureFromFile("res/textures/radio_off.png", GL_NEAREST);
     off_icon_image = new UIImage(shader, off_icon, x_pixels, y_pixels, 28, 28);
+
+    GLuint hover = TextureLoader::loadTextureFromFile("res/textures/radio_hover.png", GL_NEAREST);
+    hoverIcon = new UIImage(shader, hover, x_pixels, y_pixels, 28, 28);
 
     if(radioButtonOn){
         currentIcon = on_icon_image;
@@ -52,7 +55,7 @@ void UIRadioButton::loadFromXML(std::string filepath){
 
 void UIRadioButton::draw(){
 
-    
+    currentIcon->draw();
 
     glm::vec2 gl_mouse_position = Mouse::getInstance()->getGLPosition();
     if(gl_mouse_position.x < position.x + width && 
@@ -60,7 +63,8 @@ void UIRadioButton::draw(){
         gl_mouse_position.y < position.y + height &&
         gl_mouse_position.y > position.y - height){
 
-        FlatDrawable::draw();
+        // FlatDrawable::draw();
+        hoverIcon->draw();
 
         if(glfwGetMouseButton(Window::getInstance()->getGLFWWindow(), GLFW_MOUSE_BUTTON_LEFT)){
             mouse_count++;
@@ -69,8 +73,6 @@ void UIRadioButton::draw(){
             mouse_count = 0;  
         }
     }
-
-    currentIcon->draw();
 
 }
 

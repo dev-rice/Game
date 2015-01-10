@@ -46,6 +46,8 @@ Mouse::Mouse()
     mouse_sprites.push_back(up_right);
     mouse_sprites.push_back(down_right);
     mouse_sprites.push_back(down_left);
+
+    hovering = false;
 }
 
 void Mouse::setCursorSprite(cursorType cursor_type){
@@ -53,8 +55,6 @@ void Mouse::setCursorSprite(cursorType cursor_type){
 }
 
 void Mouse::draw(){
-    attachTexture(mouse_sprites[ static_cast<int>(current_type) ]);
-
     double x;
     double y;
     glfwGetCursorPos(glfw_window, &x, &y);
@@ -67,17 +67,34 @@ void Mouse::draw(){
     // Position the cursor specially for certain cursors
     // mostly because down, right, up_right, down_right, and down_left run out of the screen
     // also selection needs to be moved to the center
-    if(current_type == cursorType::DOWN || current_type == cursorType::DOWN_LEFT){
-        setGLPosition(current_position + glm::vec2(0.0, 2*height));
-    } else if(current_type == cursorType::RIGHT || current_type == cursorType::UP_RIGHT){
-        setGLPosition(current_position + glm::vec2(-2*width, 0.0));
-    } else if(current_type == cursorType::DOWN_RIGHT){
-        setGLPosition(current_position + glm::vec2(-2*width, 2*height));
-    } else if(current_type == cursorType::SELECTION){
-        setGLPosition(current_position + glm::vec2(-1*width, height));
+    if(!hovering){
+        if(current_type == cursorType::DOWN || current_type == cursorType::DOWN_LEFT){
+            setGLPosition(current_position + glm::vec2(0.0, 2*height));
+        } else if(current_type == cursorType::RIGHT || current_type == cursorType::UP_RIGHT){
+            setGLPosition(current_position + glm::vec2(-2*width, 0.0));
+        } else if(current_type == cursorType::DOWN_RIGHT){
+            setGLPosition(current_position + glm::vec2(-2*width, 2*height));
+        } else if(current_type == cursorType::SELECTION){
+            setGLPosition(current_position + glm::vec2(-1*width, height));
+        } else {
+            setGLPosition(current_position);
+        }
     } else {
         setGLPosition(current_position);
+        current_type = cursorType::CURSOR;
     }
 
+    attachTexture(mouse_sprites[ static_cast<int>(current_type) ]);
+
     UIDrawable::draw();
+
+    hovering = false;
+}
+
+void Mouse::setHovering(){
+    hovering = true;
+}
+
+bool Mouse::isHovering(){
+    return hovering;
 }

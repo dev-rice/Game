@@ -16,7 +16,10 @@ public:
     void loadFromXML(std::string);
 
     void draw();
+    void show();
 private:
+    bool is_showing;
+
     std::vector<UIDrawable*> subelements;
 };
 

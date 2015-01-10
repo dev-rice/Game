@@ -25,6 +25,7 @@ GameView::GameView(Level* level){
     // Creation of a test ui
     UIWindow* w = new UIWindow(ui_shader);
     w->loadFromXML("res/layouts/test.xml");
+    w->show();
     ui_drawables.push_back(w);
 
     toggle_key_state = false;
@@ -74,7 +75,7 @@ void GameView::update(){
         ui_drawables[i]->draw();
     }
     // draw selection rectangle here
-    if(mouse_count > 1){
+    if(mouse_count > 1 && !Mouse::getInstance()->isHovering()){
         // draw from initial_left_click_position to final_left_click_position
         selection_box->setGLCoordinates(initial_left_click_position, final_left_click_position);
         selection_box->draw();

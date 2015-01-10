@@ -5,6 +5,7 @@
 
 UIWindow::UIWindow(GLuint shader_program) : UIDrawable(shader_program, TextureLoader::loadGray()){
     this->shader = shader_program;
+    is_showing = false;
 }
 
 void UIWindow::loadFromXML(std::string filepath){
@@ -81,11 +82,17 @@ void UIWindow::loadFromXML(std::string filepath){
 }
 
 void UIWindow::draw(){
+    if(is_showing){
+        Mouse::getInstance()->setHovering();
 
-    FlatDrawable::draw();
+        FlatDrawable::draw();
 
-    for(int i(0); i < subelements.size(); ++i){
-        subelements[i]->draw();
+        for(int i(0); i < subelements.size(); ++i){
+            subelements[i]->draw();
+        }
     }
 }
 
+void UIWindow::show(){
+    is_showing = true;
+}
