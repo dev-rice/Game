@@ -71,7 +71,7 @@ void UIDrawable::parseConstraints(pugi::xml_node constraints_node){
     bool has_y2_position = constraints_node.child("y2");
 
     // Must have x and y position. Then, must have x2 OR width but not both, and y2 OR height but not both
-    if(has_x_position && has_y_position && XOR(has_width, has_x2_position) && XOR(has_height, has_y2_position)){
+    if(constraintsAreValid(has_x_position, has_y_position, has_width, has_height, has_x2_position, has_y2_position)){
         
         const char* x_anchor = constraints_node.child("x").child_value("anchor");
         int x_offset = atoi(constraints_node.child("x").child_value("offset"));
@@ -135,5 +135,9 @@ void UIDrawable::setPixelCoordinates(int new_x, int new_y, int new_x2, int new_y
 
     updateDimensions();
     setGLPosition(getGLPosition());
+}
+
+bool UIDrawable::constraintsAreValid(bool x, bool y, bool w, bool h, bool x2, bool x2){
+    return (x && y && XOR(w, x2) && XOR(h, y2));
 }
 

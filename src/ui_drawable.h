@@ -35,6 +35,7 @@ protected:
     GLuint shader;
     
     void parseConstraints(pugi::xml_node);
+    bool constraintsAreValid(bool, bool, bool, bool, bool, bool);
     int parseAnchor(const char*, bool);
 
     bool XOR(bool, bool);
