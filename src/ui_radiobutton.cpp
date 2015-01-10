@@ -5,6 +5,7 @@
 
 UIRadioButton::UIRadioButton(GLuint shader_program) : UIDrawable(shader_program, TextureLoader::loadPink()){
     this->shader = shader_program;
+    this->mouse_count = 0;
 }   
 
 void UIRadioButton::loadFromXML(std::string filepath){
@@ -53,10 +54,28 @@ void UIRadioButton::draw(){
 
     FlatDrawable::draw();
 
+    if(glfwGetMouseButton(Window::getInstance()->getGLFWWindow(), GLFW_MOUSE_BUTTON_LEFT)){
+        mouse_count++;
+    } 
+    else if(mouse_count > 0){
+        toggleRadioButton();
+        mouse_count = 0;  
+    }
+
     currentIcon->draw();
 
 }
 
 bool UIRadioButton::constraintsAreValid(bool x, bool y, bool w, bool h, bool x2, bool y2){
     return (x && y);
+}
+
+void UIRadioButton::toggleRadioButton(){
+    radioButtonOn = !radioButtonOn;
+
+    if(radioButtonOn){
+        currentIcon = on_icon_image;
+    } else {
+        currentIcon = off_icon_image;
+    }
 }
