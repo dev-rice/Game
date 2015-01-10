@@ -27,11 +27,11 @@ void UIRadioButton::loadFromXML(std::string filepath){
     functionName = layout_node.child_value("function");
 
     // Parse radiobutton text
-    text_renderer = new TextRenderer("res/fonts/inconsolata_bold_font.png", 20);
+    text_renderer = new TextRenderer("res/fonts/inconsolata_bold_font.png", 28);
     radio_text = layout_node.child_value("text");
 
     // Parse constraints
-    width_pixels = 80;
+    width_pixels = radio_text.length()*16 + 16;
     height_pixels = 28;
 
     parseConstraints(constraints_node);
@@ -62,17 +62,19 @@ void UIRadioButton::loadFromXML(std::string filepath){
 
 void UIRadioButton::draw(){
 
+    // Draws pink bounding box. Useful for debugging
+    // FlatDrawable::draw();
+
     currentIcon->draw();
 
-    text_renderer->print(x_pixels, y_pixels, "%s", radio_text.c_str());
+    text_renderer->print(x_pixels+16, y_pixels, "%s", radio_text.c_str());
 
     glm::vec2 gl_mouse_position = Mouse::getInstance()->getGLPosition();
     if(gl_mouse_position.x < position.x + width &&
         gl_mouse_position.x > position.x - width &&
         gl_mouse_position.y < position.y + height &&
         gl_mouse_position.y > position.y - height){
-
-        // FlatDrawable::draw();
+        
         hoverIcon->draw();
 
         bool clicking = glfwGetMouseButton(Window::getInstance()->getGLFWWindow(), GLFW_MOUSE_BUTTON_LEFT);
