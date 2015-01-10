@@ -29,10 +29,9 @@
     </edge_sprites>
             
     <subelements>
-        <ui_radio_button>
+        <ui_radiobutton>
             <layout_filepath>res/layouts/radiotest.xml</layout_filepath>
-            <use_parent_coordinates>yes</use_parent_coordinates>
-        </ui_radio_button>
+        </ui_radiobutton>
     </subelements>
 
 </layout>

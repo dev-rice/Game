@@ -64,7 +64,15 @@ void UIWindow::loadFromXML(std::string filepath){
     
 
     for (pugi::xml_node_iterator it = subelements_node.begin(); it != subelements_node.end(); ++it){
-         printf("Named subelement: %s\n", it->name());
+         // printf("Named subelement: %s\n", it->name());
+
+        UIDrawable* ui_element;
+        
+        if(strcmp(it->name(), "ui_radiobutton") == 0){
+            ui_element = new UIRadioButton(shader);
+            ui_element->loadFromXML(it->child_value("layout_filepath"));
+            subelements.push_back(ui_element);
+        }
     }
 
     // Convert all pixel coords into screen

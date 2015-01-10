@@ -4,14 +4,16 @@
     <constraints>
         <x>
             <anchor>centered</anchor>
-            <offset>-250</offset>
+            <offset>-40</offset>
         </x>
         <y>
             <anchor>centered</anchor>
-            <offset>-250</offset>
+            <offset>100</offset>
         </y>
     </constraints>
 
-
+    <text>Radio Button</text>
+    <mode>off</mode>
+    <function>toggleOption</function>
 
 </layout>

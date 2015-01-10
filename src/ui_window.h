@@ -4,12 +4,10 @@
 #ifndef UIWindow_h
 #define UIWindow_h
 
-#include <string>   // std::string
-#include <vector>   // std::vector
-
 #include "texture_loader.h"
 #include "ui_drawable.h"
 #include "ui_image.h"
+#include "ui_radiobutton.h"
 
 class UIWindow : public UIDrawable {
 public:

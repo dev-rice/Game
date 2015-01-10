@@ -8,13 +8,14 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <string>
 
-#include "pugixml.hpp"
+#include <string>   // std::string
+#include <vector>   // std::vector
+
+#include "pugixml.hpp" // PUGI xml library
 
 #include "flat_drawable.h"
 #include "window.h"
-
 
 class UIDrawable : public FlatDrawable {
 public:
@@ -35,7 +36,7 @@ protected:
     GLuint shader;
     
     void parseConstraints(pugi::xml_node);
-    bool constraintsAreValid(bool, bool, bool, bool, bool, bool);
+    virtual bool constraintsAreValid(bool, bool, bool, bool, bool, bool);
     int parseAnchor(const char*, bool);
 
     bool XOR(bool, bool);
