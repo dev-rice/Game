@@ -59,8 +59,8 @@ void Mouse::draw(){
     double y;
     glfwGetCursorPos(glfw_window, &x, &y);
 
-    x_pixels = int(x);
-    y_pixels = int(y);
+    x_pixels = int(x) - 1;
+    y_pixels = int(y) - 1;
 
     glm::vec2 current_position = getGLPosition();
 
