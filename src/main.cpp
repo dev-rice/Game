@@ -112,12 +112,13 @@ int main(int argc, char* argv[]) {
     window->setWidth(width);
     window->setHeight(height);
     window->setFullscreen(fullscreen);
-    window->setVsync(vsync);
-    window->setFxaaLevel(fxaa_level);
     window->initializeWindow();
 
-    GLFWwindow* glfw_window = window->getGLFWWindow();
+    window->setVsync(vsync);
+    window->setFxaaLevel(fxaa_level);
 
+    GLFWwindow* glfw_window = Window::getInstance()->getGLFWWindow();
+    
     // Create the world
     World* world;
     if (has_map){
