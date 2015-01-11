@@ -33,7 +33,7 @@ GameView::GameView(Level* level){
     menu->show();
 
     toggle_key_state = false;
-    debug_showing = false;
+    debug_showing = Debug::is_on;
 
     menu_key_state = false;
 
