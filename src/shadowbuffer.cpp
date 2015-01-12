@@ -36,7 +36,7 @@ Shadowbuffer::Shadowbuffer(float up_sample){
     // Load framebuffer shader
     if (Window::getInstance()->getFxaaLevel()){
         framebuffer_shader = ShaderLoader::loadShaderProgram("shaders/framebuffer_fxaa.vs",
-        "shaders/framebuffer_fxaa.fs");
+        "shaders/aa.fs");
     } else {
         framebuffer_shader = ShaderLoader::loadShaderProgram("shaders/framebuffer.vs",
         "shaders/framebuffer.fs");
