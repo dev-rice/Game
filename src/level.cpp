@@ -60,7 +60,6 @@ Level::Level(const char* filename){
 void Level::draw(){
     // Update the view matrix based on the current
     // camera location / position
-    view_matrix = camera->getViewMatrix();
     updateGlobalUniforms();
 
     // Draw all the drawables
