@@ -30,7 +30,7 @@ GameView::GameView(Level* level){
     // sub windows.
     menu = new UIWindow(ui_shader);
     menu->loadFromXML("res/layouts/test.xml");
-    menu->show();
+    menu->hide();
 
     toggle_key_state = false;
     debug_showing = Debug::is_on;
