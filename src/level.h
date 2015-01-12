@@ -79,6 +79,8 @@ private:
     GLuint camera_ubo;
     GLuint shadow_ubo;
 
+    Drawable* mouse_plane;
+
 };
 
 #endif

@@ -11,10 +11,12 @@ layout(std140) uniform GlobalMatrices {
 
 uniform mat4 model;
 
+uniform float scale;
+
 void main(){
     // Supress some warnings for unused variables
     vec3 n = normal;
     vec2 t = texcoord;
 
-    gl_Position = proj * inverse(view) * vec4(position, 1.0);
+    gl_Position = proj * view * model * vec4(scale * position, 1.0);
 }

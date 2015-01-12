@@ -55,6 +55,32 @@ Level::Level(const char* filename){
 
     loadLevel(filename);
 
+
+    // Create the ground plane visualization
+    GLfloat planeVerts[] = {-1.0f,  1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+                             1.0f,  1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+                            -1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+                             1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,};
+
+    GLuint  planeFaces[] = {2, 1, 0, 1, 2, 3};
+
+    std::vector<GLfloat> planeVertsVector(planeVerts, planeVerts + sizeof(planeVerts) / sizeof(GLfloat));
+    std::vector<GLuint> planeFacesVector(planeFaces, planeFaces + sizeof(planeFaces) / sizeof(GLuint));
+
+    Mesh* billboard = new Mesh(planeVertsVector, planeFacesVector);
+
+    GLuint drawable_shader = ShaderLoader::loadShaderProgram("shaders/drawable.vs",
+        "shaders/drawable.fs");
+
+    mouse_plane = new Doodad(billboard, drawable_shader);
+
+    TextureSet* a = new TextureSet(0, 0, 0, 0);
+    mouse_plane->attachTextureSet(a);
+
+    mouse_plane->setScale(50.0);
+    mouse_plane->setPosition(glm::vec3(0.0f, 0.01f, 0.0f));
+    mouse_plane->setRotation(glm::vec3(-M_PI / 2.0f, 0.0f, 0.0f));
+
 }
 
 void Level::draw(){
@@ -76,8 +102,6 @@ void Level::draw(){
         glm::vec4(world_mouse, 0.0));
     world_mouse = glm::normalize(world_mouse);
 
-    drawables[5]->setPosition(world_mouse);
-
     // Draw all the drawables
     for (int i = 0; i < drawables.size(); ++i){
         drawables[i]->draw();
@@ -87,6 +111,8 @@ void Level::draw(){
     for(int i(0); i < emitters.size(); ++i){
         emitters[i]->draw(camera);
     }
+
+    mouse_plane->draw();
 
 }
 
