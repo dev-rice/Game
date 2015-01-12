@@ -62,6 +62,22 @@ void Level::draw(){
     // camera location / position
     updateGlobalUniforms();
 
+    // Get the mmouse gl coordinates. This is in NDC coordinates
+    glm::vec2 gl_mouse = Mouse::getInstance()->getGLPosition();
+
+    // The projection matrix maps from a pyramidal frustrum to a cube (NDC)
+    // So multiplying NDC coordinates by the inverse of the projection should
+    // Give us a vector in world space.
+    // Calculating the mouse vector
+    glm::vec3 world_mouse = glm::vec3(glm::inverse(proj_matrix) *
+        glm::vec4(gl_mouse, -1.0, 1.0));
+    world_mouse.z = -1.0;
+    world_mouse = glm::vec3(glm::inverse(camera->getViewMatrix()) *
+        glm::vec4(world_mouse, 0.0));
+    world_mouse = glm::normalize(world_mouse);
+
+    drawables[5]->setPosition(world_mouse);
+
     // Draw all the drawables
     for (int i = 0; i < drawables.size(); ++i){
         drawables[i]->draw();

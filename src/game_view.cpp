@@ -99,18 +99,32 @@ void GameView::update(){
         Camera* camera = level->getCamera();
         glm::vec3 position = camera->getPosition();
         glm::vec3 rotation = camera->getRotation();
-        glm::vec2 gl_mouse_position = Mouse::getInstance()->getGLPosition();
+        glm::vec2 gl_mouse = Mouse::getInstance()->getGLPosition();
 
-        text_renderer->print(10, 10, "fps: %.2f",
+
+        glm::mat4 view_matrix = camera->getViewMatrix();
+        glm::mat4 proj_matrix = level->getProjection();
+        
+        // Calculating the mouse vector
+        glm::vec3 world_mouse = glm::vec3(glm::inverse(proj_matrix) *
+            glm::vec4(gl_mouse, -1.0, 1.0));
+        world_mouse.z = -1.0;
+        world_mouse = glm::vec3(glm::inverse(camera->getViewMatrix()) *
+            glm::vec4(world_mouse, 0.0));
+        world_mouse = glm::normalize(world_mouse);
+
+        text_renderer->print(10, 20, "fps: %.2f",
             1.0 / frame_time);
         text_renderer->print(10, 40, "average frame time: %.5f s",
             average_frame_time);
-        text_renderer->print(10, 70, "camera position <x, y, z>:"
+        text_renderer->print(10, 60, "camera position <x, y, z>:"
             "%.2f, %.2f, %.2f", position.x, position.y, position.z);
-        text_renderer->print(10, 100, "camera rotation <x, y, z>:"
+        text_renderer->print(10, 80, "camera rotation <x, y, z>:"
             "%.2f, %.2f, %.2f", rotation.x, rotation.y, rotation.z);
-        text_renderer->print(10, 130, "mouse <x, y>: %.2f, %.2f",
-            gl_mouse_position.x, gl_mouse_position.y);
+        text_renderer->print(10, 100, "mouse <x, y>: %.2f, %.2f",
+            gl_mouse.x, gl_mouse.y);
+        text_renderer->print(10, 120, "mouse vector <x, y, z>: %.2f, %.2f, %.2f",
+            world_mouse.x, world_mouse.y, world_mouse.z);
     }
 
     // The mouse draws on top of everything else
