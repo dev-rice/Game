@@ -72,14 +72,11 @@ Level::Level(const char* filename){
     GLuint drawable_shader = ShaderLoader::loadShaderProgram("shaders/drawable.vs",
         "shaders/drawable.fs");
 
-    mouse_plane = new Doodad(billboard, drawable_shader);
+    mouse_plane = new Terrain(drawable_shader, "res/textures/flat.png");
 
     TextureSet* a = new TextureSet(0, 0, 0, 0);
     mouse_plane->attachTextureSet(a);
-
-    mouse_plane->setScale(50.0);
-    mouse_plane->setPosition(glm::vec3(0.0f, 0.01f, 0.0f));
-    mouse_plane->setRotation(glm::vec3(-M_PI / 2.0f, 0.0f, 0.0f));
+    mouse_plane->setPosition(glm::vec3(0.0, 0.1, 0.0));
 
 }
 
