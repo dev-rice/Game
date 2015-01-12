@@ -10,8 +10,8 @@ out vec4 outColor;
 uniform sampler2D base_texture;
 
 // Neighbor contrast tuning
-float THRESHOLD = 0.9;
-float MIXAMOUNT = 0.25;
+float THRESHOLD = 0.125;
+float MIXAMOUNT = 0.3;
 
 
 float FxaaLuma(vec4 color) {
