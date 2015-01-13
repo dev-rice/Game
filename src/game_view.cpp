@@ -89,11 +89,17 @@ void GameView::update(){
     }
     menu->draw();
 
-    // draw selection rectangle here
-    if(mouse_count > 1 && !Mouse::getInstance()->isHovering()){
+    // draw selection rectangle here and change the cursor based on amount of dragging
+    bool dragged_x = fabs(initial_left_click_position.x - final_left_click_position.x) > 0.05;
+    bool dragged_y = fabs(initial_left_click_position.y - final_left_click_position.y) > 0.05;
+
+    if(mouse_count > 1 && !Mouse::getInstance()->isHovering() && (dragged_x || dragged_y)){
         // draw from initial_left_click_position to final_left_click_position
+        Mouse::getInstance()->setCursorSprite(Mouse::cursorType::SELECTION);
         selection_box->setGLCoordinates(initial_left_click_position, final_left_click_position);
         selection_box->draw();
+    } else {
+        Mouse::getInstance()->setCursorSprite(Mouse::cursorType::CURSOR); 
     }
 
     float frame_time = glfwGetTime() - start_time;
@@ -242,7 +248,6 @@ void GameView::handleInputs(){
             initial_left_click_position = gl_mouse_position;
         } else {
             final_left_click_position = gl_mouse_position;
-            Mouse::getInstance()->setCursorSprite(Mouse::cursorType::SELECTION);
         }
         mouse_count++;
     } else if(mouse_count != 0){
