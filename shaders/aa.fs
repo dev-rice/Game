@@ -10,7 +10,7 @@ out vec4 outColor;
 uniform sampler2D base_texture;
 
 // Neighbor contrast tuning
-float THRESHOLD = 0.125;
+float THRESHOLD = 0.9;
 float MIXAMOUNT = 0.3;
 
 
@@ -49,44 +49,48 @@ void main() {
     bool alias_vertical   = (vertical_luma_diff > THRESHOLD)   && (vertical_luma_diff   < current_luminance)  ;
 
     // Debugging edges
-    // if(alias_r_diagonal || alias_l_diagonal || alias_horizontal || alias_vertical){
-    //     outColor = vec4(1.0, 0.0, 0.0, 1.0);
-    // } else {
-    //     outColor = current_pixel;
+    if(alias_r_diagonal || alias_l_diagonal || alias_horizontal || alias_vertical){
+        outColor = vec4(1.0, 0.0, 0.0, 1.0);
+    } else {
+        outColor = current_pixel;
+    }
+
+    // outColor = current_pixel;
+
+    // vec4 color = current_pixel;
+    //
+    // if(alias_r_diagonal){
+    //     if(FxaaLuma(ne_pixel) > FxaaLuma(sw_pixel)){
+    //         color = mix(color, sw_pixel, MIXAMOUNT);
+    //     } else {
+    //         color = mix(color, ne_pixel, MIXAMOUNT);
+    //     }
     // }
+    //
+    // if(alias_l_diagonal){
+    //     if(FxaaLuma(nw_pixel) > FxaaLuma(se_pixel)){
+    //         color = mix(color, se_pixel, MIXAMOUNT);
+    //     } else {
+    //         color = mix(color, nw_pixel, MIXAMOUNT);
+    //     }
+    // }
+    //
+    // if(alias_horizontal){
+    //     if(FxaaLuma(e_pixel) > FxaaLuma(w_pixel)){
+    //         color = mix(color, w_pixel, MIXAMOUNT);
+    //     } else {
+    //         color = mix(color, e_pixel, MIXAMOUNT);
+    //     }
+    // }
+    //
+    // if(alias_vertical){
+    //     if(FxaaLuma(n_pixel) > FxaaLuma(s_pixel)){
+    //         color = mix(color, s_pixel, MIXAMOUNT);
+    //     } else {
+    //         color = mix(color, n_pixel, MIXAMOUNT);
+    //     }
+    // }
+    //
+    // outColor = color;
 
-    outColor = current_pixel;
-
-    if(alias_r_diagonal){
-        if(FxaaLuma(ne_pixel) > FxaaLuma(sw_pixel)){
-            outColor = mix(outColor, sw_pixel, MIXAMOUNT);
-        } else {
-            outColor = mix(outColor, ne_pixel, MIXAMOUNT);
-        }
-    }
-
-    if(alias_l_diagonal){
-        if(FxaaLuma(nw_pixel) > FxaaLuma(se_pixel)){
-            outColor = mix(outColor, se_pixel, MIXAMOUNT);
-        } else {
-            outColor = mix(outColor, nw_pixel, MIXAMOUNT);
-        }
-    }
-
-    if(alias_horizontal){
-        if(FxaaLuma(e_pixel) > FxaaLuma(w_pixel)){
-            outColor = mix(outColor, w_pixel, MIXAMOUNT);
-        } else {
-            outColor = mix(outColor, e_pixel, MIXAMOUNT);
-        }
-    }
-
-    if(alias_vertical){
-        if(FxaaLuma(n_pixel) > FxaaLuma(s_pixel)){
-            outColor = mix(outColor, s_pixel, MIXAMOUNT);
-        } else {
-            outColor = mix(outColor, n_pixel, MIXAMOUNT);
-        }
-    }
-    
 }

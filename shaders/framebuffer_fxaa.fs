@@ -18,7 +18,7 @@ bool BLEND_DEBUG = false;
 
 // Neighbor contrast tuning
 float FXAA_EDGE_THRESHOLD_MIN = 1.0 / 8.0;
-float FXAA_EDGE_THRESHOLD = 1.0 / 4.0;
+float FXAA_EDGE_THRESHOLD = 1.0 / 2.0;
 
 // Subpixel contrast tuning
 int FXAA_SUBPIX = 1;
