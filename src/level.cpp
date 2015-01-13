@@ -50,39 +50,10 @@ Level::Level(const char* filename){
     glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::mat4) * 2, NULL, GL_STREAM_DRAW);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
-    glGenBuffers(1, &mouse_ubo);
-    glBindBuffer(GL_UNIFORM_BUFFER, mouse_ubo);
-    glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::vec3), NULL, GL_STREAM_DRAW);
-    glBindBuffer(GL_UNIFORM_BUFFER, 0);
-
     glBindBufferRange(GL_UNIFORM_BUFFER, 1, camera_ubo, 0, sizeof(glm::mat4) * 2);
     glBindBufferRange(GL_UNIFORM_BUFFER, 2, shadow_ubo, 0, sizeof(glm::mat4) * 2);
-    glBindBufferRange(GL_UNIFORM_BUFFER, 3, mouse_ubo, 0, sizeof(glm::vec3));
 
     loadLevel(filename);
-
-
-    // Create the ground plane visualization
-    GLfloat planeVerts[] = {-1.0f,  1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
-                             1.0f,  1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-                            -1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
-                             1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,};
-
-    GLuint  planeFaces[] = {2, 1, 0, 1, 2, 3};
-
-    std::vector<GLfloat> planeVertsVector(planeVerts, planeVerts + sizeof(planeVerts) / sizeof(GLfloat));
-    std::vector<GLuint> planeFacesVector(planeFaces, planeFaces + sizeof(planeFaces) / sizeof(GLuint));
-
-    Mesh* billboard = new Mesh(planeVertsVector, planeFacesVector);
-
-    GLuint drawable_shader = ShaderLoader::loadShaderProgram("shaders/drawable.vs",
-        "shaders/drawable.fs");
-
-    mouse_plane = new Terrain(drawable_shader, "res/textures/flat.png");
-
-    TextureSet* a = new TextureSet(0, 0, 0, 0);
-    mouse_plane->attachTextureSet(a);
-    mouse_plane->setPosition(glm::vec3(0.0, 0.1, 0.0));
 
 }
 
@@ -90,36 +61,6 @@ void Level::draw(){
     // Update the view matrix based on the current
     // camera location / position
     updateGlobalUniforms();
-
-    // Get the mmouse gl coordinates. This is in NDC coordinates
-    glm::vec2 gl_mouse = Mouse::getInstance()->getGLPosition();
-
-    // The projection matrix maps from a pyramidal frustrum to a cube (NDC)
-    // So multiplying NDC coordinates by the inverse of the projection should
-    // Give us a vector in world space.
-    // Calculating the mouse vector
-    glm::vec3 world_mouse = glm::vec3(glm::inverse(proj_matrix) *
-        glm::vec4(gl_mouse, -1.0, 1.0));
-    world_mouse.z = -1.0;
-    world_mouse = glm::vec3(glm::inverse(camera->getViewMatrix()) *
-        glm::vec4(world_mouse, 0.0));
-    world_mouse = glm::normalize(world_mouse);
-
-    // To find the point on the plane of clicking (defined by mouse_plane);
-    glm::vec3 p0 = mouse_plane->getPosition();
-    glm::vec3 l = world_mouse;
-    glm::vec3 l0 = camera->getPosition();
-    glm::vec3 n = glm::vec3(0.0, 1.0, 0.0);
-
-    float d = glm::dot((p0 - l0), n) / glm::dot(l, n);
-
-    glm::vec3 mouse_point = d * l + l0;
-
-    glBindBuffer(GL_UNIFORM_BUFFER, mouse_ubo);
-    glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::vec3),
-        glm::value_ptr(mouse_point));
-    glBindBuffer(GL_UNIFORM_BUFFER, 0);
-
 
     // Draw all the drawables
     for (int i = 0; i < drawables.size(); ++i){
@@ -130,8 +71,6 @@ void Level::draw(){
     for(int i(0); i < emitters.size(); ++i){
         emitters[i]->draw(camera);
     }
-
-    mouse_plane->draw();
 
 }
 

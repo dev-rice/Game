@@ -56,6 +56,8 @@ private:
     // Move this to some fps/graphics debug class
     int frame_count;
     float average_frame_time;
+
+    GLuint mouse_ubo;
 };
 
 #endif
