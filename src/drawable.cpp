@@ -41,6 +41,9 @@ void Drawable::setShader(GLuint shader_program){
     GLint shadow_matrix_location = glGetUniformBlockIndex(shader_program, "ShadowMatrices");
     glUniformBlockBinding(shader_program, shadow_matrix_location, 2);
 
+    GLint mouse_point_location = glGetUniformBlockIndex(shader_program, "Mouse");
+    glUniformBlockBinding(shader_program, mouse_point_location, 3);
+
 }
 
 void Drawable::draw(){

@@ -24,6 +24,8 @@
 #include "shadowbuffer.h"
 #include "window.h"
 
+#include "mouse.h"
+
 static const char* MODEL_PATH = "res/models/";
 static const char* TEXTURE_PATH = "res/textures/";
 
@@ -39,6 +41,8 @@ public:
 
     int getMapHeight();
     int getMapWidth();
+    glm::mat4 getProjection() {return proj_matrix;}
+
 
     Camera* getCamera() {return camera;}
     Shadowbuffer* getShadowbuffer(){return shadowbuffer;}
@@ -74,6 +78,8 @@ private:
 
     GLuint camera_ubo;
     GLuint shadow_ubo;
+
+    Drawable* mouse_plane;
 
 };
 
