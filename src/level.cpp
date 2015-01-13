@@ -50,8 +50,14 @@ Level::Level(const char* filename){
     glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::mat4) * 2, NULL, GL_STREAM_DRAW);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
+    glGenBuffers(1, &mouse_ubo);
+    glBindBuffer(GL_UNIFORM_BUFFER, mouse_ubo);
+    glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::vec3), NULL, GL_STREAM_DRAW);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
     glBindBufferRange(GL_UNIFORM_BUFFER, 1, camera_ubo, 0, sizeof(glm::mat4) * 2);
     glBindBufferRange(GL_UNIFORM_BUFFER, 2, shadow_ubo, 0, sizeof(glm::mat4) * 2);
+    glBindBufferRange(GL_UNIFORM_BUFFER, 3, mouse_ubo, 0, sizeof(glm::vec3));
 
     loadLevel(filename);
 
@@ -98,6 +104,22 @@ void Level::draw(){
     world_mouse = glm::vec3(glm::inverse(camera->getViewMatrix()) *
         glm::vec4(world_mouse, 0.0));
     world_mouse = glm::normalize(world_mouse);
+
+    // To find the point on the plane of clicking (defined by mouse_plane);
+    glm::vec3 p0 = mouse_plane->getPosition();
+    glm::vec3 l = world_mouse;
+    glm::vec3 l0 = camera->getPosition();
+    glm::vec3 n = glm::vec3(0.0, 1.0, 0.0);
+
+    float d = glm::dot((p0 - l0), n) / glm::dot(l, n);
+
+    glm::vec3 mouse_point = d * l + l0;
+
+    glBindBuffer(GL_UNIFORM_BUFFER, mouse_ubo);
+    glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::vec3),
+        glm::value_ptr(mouse_point));
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
 
     // Draw all the drawables
     for (int i = 0; i < drawables.size(); ++i){

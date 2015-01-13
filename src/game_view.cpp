@@ -104,7 +104,7 @@ void GameView::update(){
 
         glm::mat4 view_matrix = camera->getViewMatrix();
         glm::mat4 proj_matrix = level->getProjection();
-        
+
         // Calculating the mouse vector
         glm::vec3 world_mouse = glm::vec3(glm::inverse(proj_matrix) *
             glm::vec4(gl_mouse, -1.0, 1.0));
@@ -112,6 +112,16 @@ void GameView::update(){
         world_mouse = glm::vec3(glm::inverse(camera->getViewMatrix()) *
             glm::vec4(world_mouse, 0.0));
         world_mouse = glm::normalize(world_mouse);
+
+        // To find the point on the plane of clicking (defined by mouse_plane);
+        glm::vec3 p0 = glm::vec3(0.0, 0.1, 0.0);
+        glm::vec3 l = world_mouse;
+        glm::vec3 l0 = camera->getPosition();
+        glm::vec3 n = glm::vec3(0.0, 1.0, 0.0);
+
+        float d = glm::dot((p0 - l0), n) / glm::dot(l, n);
+
+        glm::vec3 mouse_point = d * l + l0;
 
         text_renderer->print(10, 20, "fps: %.2f",
             1.0 / frame_time);
@@ -125,6 +135,9 @@ void GameView::update(){
             gl_mouse.x, gl_mouse.y);
         text_renderer->print(10, 120, "mouse vector <x, y, z>: %.2f, %.2f, %.2f",
             world_mouse.x, world_mouse.y, world_mouse.z);
+        text_renderer->print(10, 140, "mouse_point <x, y, z>: %.2f, %.2f, %.2f",
+            mouse_point.x, mouse_point.y, mouse_point.z);
+
     }
 
     // The mouse draws on top of everything else
