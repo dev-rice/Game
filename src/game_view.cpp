@@ -99,7 +99,7 @@ void GameView::update(){
         selection_box->setGLCoordinates(initial_left_click_position, final_left_click_position);
         selection_box->draw();
     } else {
-        Mouse::getInstance()->setCursorSprite(Mouse::cursorType::CURSOR); 
+        Mouse::getInstance()->setCursorSprite(Mouse::cursorType::CURSOR);
     }
 
     float frame_time = glfwGetTime() - start_time;
@@ -130,30 +130,15 @@ void GameView::update(){
     }
 
     // Calculating the mouse vector
-    glm::mat4 view_matrix = level->getCamera()->getViewMatrix();
+    Camera* camera = level->getCamera();
     glm::mat4 proj_matrix = level->getProjection();
 
-    glm::vec2 gl_mouse = Mouse::getInstance()->getGLPosition();
-    glm::vec3 world_mouse = glm::vec3(glm::inverse(proj_matrix) *
-        glm::vec4(gl_mouse, -1.0, 1.0));
-    world_mouse.z = -1.0;
-    world_mouse = glm::vec3(glm::inverse(view_matrix) *
-        glm::vec4(world_mouse, 0.0));
-    world_mouse = glm::normalize(world_mouse);
-
-    // To find the point on the plane of clicking (defined by mouse_plane);
-    glm::vec3 p0 = glm::vec3(0.0, 0.1, 0.0);
-    glm::vec3 l = world_mouse;
-    glm::vec3 l0 = level->getCamera()->getPosition();
-    glm::vec3 n = glm::vec3(0.0, 1.0, 0.0);
-
-    float d = glm::dot((p0 - l0), n) / glm::dot(l, n);
-
-    glm::vec3 mouse_point = d * l + l0;
+    glm::vec3 mouse_point = Mouse::getInstance()->getWorldPosition(camera,
+        proj_matrix);
 
     glBindBuffer(GL_UNIFORM_BUFFER, mouse_ubo);
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::vec3),
-    glm::value_ptr(mouse_point));
+        glm::value_ptr(mouse_point));
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
     // The mouse draws on top of everything else

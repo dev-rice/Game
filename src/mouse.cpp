@@ -98,3 +98,28 @@ void Mouse::setHovering(){
 bool Mouse::isHovering(){
     return hovering;
 }
+
+glm::vec3 Mouse::getWorldPosition(Camera* camera, glm::mat4& proj){
+    glm::mat4 view = camera->getViewMatrix();
+
+    glm::vec2 gl_mouse = Mouse::getInstance()->getGLPosition();
+    glm::vec3 world_mouse = glm::vec3(glm::inverse(proj) *
+    glm::vec4(gl_mouse, -1.0, 1.0));
+    world_mouse.z = -1.0;
+    world_mouse = glm::vec3(glm::inverse(view) *
+    glm::vec4(world_mouse, 0.0));
+    world_mouse = glm::normalize(world_mouse);
+
+    // To find the point on the plane of clicking (defined by mouse_plane)
+    // From http://en.wikipedia.org/wiki/Line%E2%80%93plane_intersection
+    glm::vec3 p0 = glm::vec3(0.0, 0.1, 0.0);
+    glm::vec3 l = world_mouse;
+    glm::vec3 l0 = camera->getPosition();
+    glm::vec3 n = glm::vec3(0.0, 1.0, 0.0);
+
+    float d = glm::dot((p0 - l0), n) / glm::dot(l, n);
+
+    glm::vec3 mouse_point = d * l + l0;
+
+    return mouse_point;
+}

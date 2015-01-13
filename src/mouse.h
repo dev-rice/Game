@@ -7,6 +7,7 @@
 #include "texture_loader.h"
 #include "ui_drawable.h"
 #include "window.h"
+#include "camera.h"
 
 class Mouse : public UIDrawable {
 public:
@@ -18,6 +19,8 @@ public:
     void setCursorSprite(cursorType);
     void setHovering();
     bool isHovering();
+
+    glm::vec3 getWorldPosition(Camera*, glm::mat4&);
 private:
 
     bool hovering;
