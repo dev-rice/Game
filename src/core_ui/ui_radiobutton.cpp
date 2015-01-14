@@ -82,6 +82,7 @@ void UIRadioButton::draw(){
 
             bool clicking = glfwGetMouseButton(Window::getInstance()->getGLFWWindow(), GLFW_MOUSE_BUTTON_LEFT);
             if(clicking && !has_clicked){
+                onClick();
                 toggleRadioButton();
                 has_clicked = true;
             } else if(!clicking){

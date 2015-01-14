@@ -25,6 +25,9 @@ private:
 
     void toggleRadioButton();
 
+    // Extensible for child classes
+    virtual void onClick(){;}
+
     bool radioButtonOn;
     bool has_clicked;
 
