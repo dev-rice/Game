@@ -5,7 +5,7 @@
 
 #include "flat_drawable.h"
 #include "character_mesh.h"
-#include "ui_drawable.h"
+#include "core_ui/ui_drawable.h"
 
 class CharacterDrawable : public UIDrawable {
 public:

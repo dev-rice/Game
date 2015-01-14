@@ -11,13 +11,13 @@
 #include "flat_mesh.h"
 #include "flat_drawable.h"
 #include "text_renderer.h"
-#include "ui_drawable.h"
+#include "core_ui/ui_drawable.h"
 #include "mouse.h"
 #include "framebuffer.h"
 #include "shadowbuffer.h"
 #include "screenbuffer.h"
 #include "window.h"
-#include "ui_window.h"
+#include "core_ui/ui_window.h"
 
 class GameView {
 public:

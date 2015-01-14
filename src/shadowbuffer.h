@@ -2,7 +2,7 @@
 #define Shadowbuffer_h
 
 #include "framebuffer.h"
-#include "ui_drawable.h"
+#include "core_ui/ui_window.h"
 
 class Shadowbuffer : public Framebuffer {
 public:
