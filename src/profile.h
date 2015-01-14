@@ -4,9 +4,10 @@
 #ifndef Profile_h
 #define Profile_h
 
-#include <tuple>  
+#include <tuple>
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include "debug.h"
 #include "window.h"
@@ -22,7 +23,7 @@ public:
 
 	void toggleVsync();
 
-private:	
+private:
 	int fxaa_level;
 	bool vsync_on;
 	bool windowed_on;
