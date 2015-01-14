@@ -8,6 +8,7 @@
 #include <map>
 
 #include "debug.h"
+#include "profile.h"
 
 class FunctionHelper;
 typedef void (FunctionHelper::*function)();

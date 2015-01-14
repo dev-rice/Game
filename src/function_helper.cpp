@@ -30,5 +30,5 @@ void FunctionHelper::runFunction(std::string function_name){
 }
 
 void FunctionHelper::testFunction(){
-    printf("GOT HERE FROM FUNCTION HELPER!!!!\n");
+    Profile::getInstance()->toggleVsync();
 }

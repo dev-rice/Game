@@ -9,6 +9,7 @@
 #include <string.h>
 
 #include "debug.h"
+#include "window.h"
 
 class Profile {
 public:
@@ -18,6 +19,8 @@ public:
 	bool getVsync();
 	bool getWindowed();
 	// Resolution TODO
+
+	void toggleVsync();
 
 private:	
 	int fxaa_level;

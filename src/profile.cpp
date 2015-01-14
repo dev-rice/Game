@@ -26,6 +26,12 @@ bool Profile::getVsync(){
 	return vsync_on;
 }
 
+void Profile::toggleVsync(){
+	vsync_on = !vsync_on;
+	Window::getInstance()->setVsync(vsync_on);
+}
+
+
 bool Profile::getWindowed(){
 	return windowed_on;
 }
