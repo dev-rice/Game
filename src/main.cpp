@@ -24,6 +24,7 @@
 
 #include "world.h"
 #include "debug.h"
+#include "profile.h"
 #include "window.h"
 
 int main(int argc, char* argv[]) {
@@ -31,16 +32,19 @@ int main(int argc, char* argv[]) {
     srand(time(NULL));
 
     // Parse command line arguments
-    int fxaa_level = 0;
+    int fxaa_level = Profile::getInstance()->getFxaaLevel();
 
     float width  = 0;
     float height = 0;
 
-    bool fullscreen  = false;
+    bool fullscreen  = Profile::getInstance()->getWindowed();
     bool interactive = false;
     bool debug   = false;
     bool has_map = false;
-    bool vsync   = false;
+    bool vsync   = Profile::getInstance()->getVsync();
+    if(vsync){
+        printf("N'SYNC... No, wait, VSYNC!\n");
+    }
     char argument;
 
     std::string map_filename;
