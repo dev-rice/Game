@@ -3,7 +3,7 @@
 
     <constraints>
         <x>
-            <anchor>centered</anchor>
+            <anchor>left</anchor>
             <offset>0</offset>
         </x>
         <y>

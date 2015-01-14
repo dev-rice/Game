@@ -108,20 +108,46 @@ bool UIDrawable::XOR(bool a, bool b){
 }
 
 int UIDrawable::parseAnchor(const char* anchor, bool is_x){
-    if(strcmp(anchor, "left") == 0 || strcmp(anchor, "up") == 0){
-        return 0;
-    }
-    if(strcmp(anchor, "centered") == 0){
-        if(is_x){
-            return window_width/2 - width_pixels/2;
+    if(!parent){
+        // Parent is the screen
+
+        if(strcmp(anchor, "left") == 0 || strcmp(anchor, "up") == 0){
+            return 0;
         }
-        return window_height/2 - height_pixels/2;
-    }
-    if(strcmp(anchor, "right") == 0 || strcmp(anchor, "down") == 0){
-        if(is_x){
-            return window_width;
+        if(strcmp(anchor, "centered") == 0){
+            if(is_x){
+                return window_width/2 - width_pixels/2;
+            }
+            return window_height/2 - height_pixels/2;
         }
-        return window_height;
+        if(strcmp(anchor, "right") == 0 || strcmp(anchor, "down") == 0){
+            if(is_x){
+                return window_width;
+            }
+            return window_height;
+        }
+    } else {
+        // Parent is the container class
+
+        if(strcmp(anchor, "left") == 0 || strcmp(anchor, "up") == 0){
+            if(anchor[0] == 'l'){
+                return parent->getXPixels();
+            } else {
+                return parent->getYPixels();
+            }
+        }
+        if(strcmp(anchor, "centered") == 0){
+            if(is_x){
+                return parent->getWidthPixels()/2 - width_pixels/2;
+            }
+            return parent->getHeightPixels()/2 - height_pixels/2;
+        }
+        if(strcmp(anchor, "right") == 0 || strcmp(anchor, "down") == 0){
+            if(is_x){
+                return parent->getXPixels() + parent->getWidthPixels();
+            }
+            return parent->getYPixels() + parent->getHeightPixels();
+        }
     }
 
     return 0; // Error
@@ -139,4 +165,8 @@ void UIDrawable::setPixelCoordinates(int new_x, int new_y, int new_x2, int new_y
 
 bool UIDrawable::constraintsAreValid(bool x, bool y, bool w, bool h, bool x2, bool y2){
     return (x && y && XOR(w, x2) && XOR(h, y2));
+}
+
+void UIDrawable::setParent(UIDrawable * parent){
+    this->parent = parent; 
 }

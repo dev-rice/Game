@@ -69,11 +69,14 @@ void UIWindow::loadFromXML(std::string filepath){
 
         UIDrawable* ui_element;
 
+
         if(strcmp(it->name(), "ui_radiobutton") == 0){
             ui_element = new UIRadioButton(shader);
-            ui_element->loadFromXML(it->child_value("layout_filepath"));
-            subelements.push_back(ui_element);
         }
+        
+        ui_element->setParent(this);
+        ui_element->loadFromXML(it->child_value("layout_filepath"));
+        subelements.push_back(ui_element);
     }
 
     // Convert all pixel coords into screen

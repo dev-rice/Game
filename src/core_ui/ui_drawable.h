@@ -32,6 +32,13 @@ public:
     void setOutline(bool o) {outline = o;}
     void setGLCoordinates(glm::vec2, glm::vec2);
 
+    void setParent(UIDrawable*);
+
+    int getXPixels(){ return x_pixels;}
+    int getYPixels(){ return y_pixels;}
+    int getWidthPixels(){ return width_pixels;}
+    int getHeightPixels(){ return height_pixels;}
+
     virtual void loadFromXML(std::string){;}
 protected:
     GLuint shader;
@@ -55,6 +62,8 @@ protected:
 
     bool outline;
     glm::mat3 inv_mesh_projection;
+
+    UIDrawable* parent;
 };
 
 #endif

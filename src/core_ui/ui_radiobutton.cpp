@@ -37,7 +37,7 @@ void UIRadioButton::loadFromXML(std::string filepath){
     parseConstraints(constraints_node);
 
     // Set the initial value of the radio button
-    radioButtonOn = (strcmp(layout_node.child("constraints").child_value("mode"), "on") == 0);
+    radioButtonOn = (strcmp(layout_node.child_value("mode"), "on") == 0);
 
     // Create and position the button icon and hover highlight
     GLuint on_icon = TextureLoader::loadTextureFromFile("res/textures/radio_on.png", GL_NEAREST);

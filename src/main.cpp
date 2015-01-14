@@ -42,9 +42,6 @@ int main(int argc, char* argv[]) {
     bool debug   = false;
     bool has_map = false;
     bool vsync   = Profile::getInstance()->getVsync();
-    if(vsync){
-        printf("N'SYNC... No, wait, VSYNC!\n");
-    }
     char argument;
 
     std::string map_filename;
