@@ -68,8 +68,10 @@ void Profile::loadSettings(){
         	} else if(strcmp(keyword, "windowed") == 0){
         		windowed_on = (strcmp(value, "true") == 0);
         	} else if(strcmp(keyword, "resolution") == 0){
-        		resolution = atoi(value);
-        	}
+        		// TODO implement resolution system
+        	} else if(strcmp(keyword, "texturedetail") == 0){
+                // TODO implement texture detail system
+            }
         }
     }
 }

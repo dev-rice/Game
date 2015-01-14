@@ -101,4 +101,5 @@ t.walkDirectoryAndDetectResources("../res/fonts")
 t.walkDirectoryAndDetectResources("../res/textures")
 
 t.compareTextures()
+print("")
 t.compareModels()
