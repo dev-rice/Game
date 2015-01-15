@@ -36,6 +36,12 @@ private:
 
     TextureSet* texture_set;
 
+    GLuint width;
+    GLuint depth;
+
+    std::vector<glm::vec3> vertices;
+    std::vector<glm::vec3> normals;
+
 };
 
 #endif
