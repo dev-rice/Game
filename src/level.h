@@ -39,7 +39,7 @@ public:
     void drawShadowMap();
     void updateGlobalUniforms();
 
-    int getMapHeight();
+    int getMapDepth();
     int getMapWidth();
     glm::mat4 getProjection() {return proj_matrix;}
 

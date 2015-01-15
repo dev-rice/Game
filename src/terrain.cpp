@@ -46,8 +46,7 @@ Mesh* Terrain::generateMesh(){
     float start_x = -image_width / 2.0;
     float start_z = -image_height / 2.0;
 
-    // Now, we must generate a mesh from the data in the heightmap. We use
-    // 1-BASED INDEXING because of the need for an offset
+    // Now, we must generate a mesh from the data in the heightmap.
     float map_height;
     glm::vec3 pos;
     for(int y = 0; y < image_height; ++y){
@@ -135,8 +134,11 @@ Mesh* Terrain::generateMesh(){
         normals[i] = glm::normalize(normals[i]);
     }
 
-    // Create the final vertex vector
-    std::vector<GLfloat> vertices;
+    // Create the map that will be used by level and other things for
+    // accessing geometry data from C++.
+
+    // Create the final vertex vector that will be used by OpenGL
+    std::vector<GLfloat> texture_repeated_vertices;
     for(int y = 0; y < image_height - 1; ++y){
         for(int x = 0; x < image_width - 1; ++x){
 
@@ -148,71 +150,71 @@ Mesh* Terrain::generateMesh(){
             vertex = vertices_vector[i];
             normal = normals[i];
 
-            vertices.push_back(vertex.x);
-            vertices.push_back(vertex.y);
-            vertices.push_back(vertex.z);
+            texture_repeated_vertices.push_back(vertex.x);
+            texture_repeated_vertices.push_back(vertex.y);
+            texture_repeated_vertices.push_back(vertex.z);
 
-            vertices.push_back(normal.x);
-            vertices.push_back(normal.y);
-            vertices.push_back(normal.z);
+            texture_repeated_vertices.push_back(normal.x);
+            texture_repeated_vertices.push_back(normal.y);
+            texture_repeated_vertices.push_back(normal.z);
 
-            vertices.push_back(0.0f);
-            vertices.push_back(0.0f);
+            texture_repeated_vertices.push_back(0.0f);
+            texture_repeated_vertices.push_back(0.0f);
 
             // Upper right
             i = x + ((image_width) * y) + 1;
             vertex = vertices_vector[i];
             normal = normals[i];
 
-            vertices.push_back(vertex.x);
-            vertices.push_back(vertex.y);
-            vertices.push_back(vertex.z);
+            texture_repeated_vertices.push_back(vertex.x);
+            texture_repeated_vertices.push_back(vertex.y);
+            texture_repeated_vertices.push_back(vertex.z);
 
-            vertices.push_back(normal.x);
-            vertices.push_back(normal.y);
-            vertices.push_back(normal.z);
+            texture_repeated_vertices.push_back(normal.x);
+            texture_repeated_vertices.push_back(normal.y);
+            texture_repeated_vertices.push_back(normal.z);
 
-            vertices.push_back(1.0f);
-            vertices.push_back(0.0f);
+            texture_repeated_vertices.push_back(1.0f);
+            texture_repeated_vertices.push_back(0.0f);
 
             // Bottom left
             i = x + ((image_width) * (y + 1));
             vertex = vertices_vector[i];
             normal = normals[i];
 
-            vertices.push_back(vertex.x);
-            vertices.push_back(vertex.y);
-            vertices.push_back(vertex.z);
+            texture_repeated_vertices.push_back(vertex.x);
+            texture_repeated_vertices.push_back(vertex.y);
+            texture_repeated_vertices.push_back(vertex.z);
 
-            vertices.push_back(normal.x);
-            vertices.push_back(normal.y);
-            vertices.push_back(normal.z);
+            texture_repeated_vertices.push_back(normal.x);
+            texture_repeated_vertices.push_back(normal.y);
+            texture_repeated_vertices.push_back(normal.z);
 
-            vertices.push_back(0.0f);
-            vertices.push_back(1.0f);
+            texture_repeated_vertices.push_back(0.0f);
+            texture_repeated_vertices.push_back(1.0f);
 
             // Bottom right
             i = x + ((image_width) * (y + 1)) + 1;
             vertex = vertices_vector[i];
             normal = normals[i];
 
-            vertices.push_back(vertex.x);
-            vertices.push_back(vertex.y);
-            vertices.push_back(vertex.z);
+            texture_repeated_vertices.push_back(vertex.x);
+            texture_repeated_vertices.push_back(vertex.y);
+            texture_repeated_vertices.push_back(vertex.z);
 
-            vertices.push_back(normal.x);
-            vertices.push_back(normal.y);
-            vertices.push_back(normal.z);
+            texture_repeated_vertices.push_back(normal.x);
+            texture_repeated_vertices.push_back(normal.y);
+            texture_repeated_vertices.push_back(normal.z);
 
-            vertices.push_back(1.0f);
-            vertices.push_back(1.0f);
+            texture_repeated_vertices.push_back(1.0f);
+            texture_repeated_vertices.push_back(1.0f);
 
         }
     }
 
     // Create the final faces vector
     std::vector<GLuint> faces;
-    for (int i = 0; i < vertices.size() / 8.0f; i+= 4){
+    for (int i = 0; i < texture_repeated_vertices.size() / 8.0f; i+= 4){
         faces.push_back(i + 2);
         faces.push_back(i + 1);
         faces.push_back(i + 0);
@@ -222,7 +224,7 @@ Mesh* Terrain::generateMesh(){
         faces.push_back(i + 3);
     }
 
-    Mesh* ground = new Mesh(vertices, faces);
+    Mesh* ground = new Mesh(texture_repeated_vertices, faces);
     return ground;
 }
 
@@ -285,7 +287,7 @@ void Terrain::updateUniformData(){
 
 }
 
-int Terrain::getHeight(){
+int Terrain::getDepth(){
     return this->image_height;
 }
 

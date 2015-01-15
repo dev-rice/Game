@@ -177,7 +177,7 @@ void GameView::handleInputs(){
         }
 
         // DOWN
-        if(camera->getPosition().z <= 1.0 * level->getMapHeight()/2 - 3){
+        if(camera->getPosition().z <= 1.0 * level->getMapDepth()/2 - 3){
             if(gl_mouse_position.y < -0.95){
                 camera->moveGlobalZ(10);
             } else if(gl_mouse_position.y < -0.85){
@@ -186,7 +186,7 @@ void GameView::handleInputs(){
         }
 
         // UP                            . Compensating for the camera angle
-        if(camera->getPosition().z >= -1.0 * level->getMapHeight()/2 + 70){
+        if(camera->getPosition().z >= -1.0 * level->getMapDepth()/2 + 70){
             if(gl_mouse_position.y > 0.95){
                 camera->moveGlobalZ(-10);
             } else if (gl_mouse_position.y > 0.85){

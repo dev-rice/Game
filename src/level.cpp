@@ -272,8 +272,8 @@ GLuint Level::getTexture(GLuint index){
     return texture;
 }
 
-int Level::getMapHeight(){
-    return ground->getHeight();
+int Level::getMapDepth(){
+    return ground->getDepth();
 }
 
 int Level::getMapWidth(){

@@ -14,7 +14,7 @@ public:
 
     void attachTextureSet(TextureSet*);
 
-    int getHeight();
+    int getDepth();
     int getWidth();
 
 private:
