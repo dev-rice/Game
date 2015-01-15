@@ -16,8 +16,17 @@ public:
     UIButton(GLuint);
     void loadFromXML(std::string);
     void draw();
-    
-private:  
+
+protected:  
+
+    bool constraintsAreValid(bool, bool, bool, bool, bool, bool);
+
+    std::string functionName;
+
+    TextRenderer* text_renderer;
+    std::string button_text;
+
+    UIImage* button_image;
 };
 
 #endif

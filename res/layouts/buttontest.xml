@@ -12,7 +12,7 @@
         </y>
     </constraints>
 
-    <text>Toggle Vsync</text>
+    <text>OK</text>
     <function>testFunction</function>
 
 </layout>
