@@ -12,6 +12,8 @@ UIDrawable::UIDrawable(GLuint shader_program, GLuint texture) : FlatDrawable(sha
 
     attachTexture(texture);
 
+    parent = NULL;
+
 }
 
 void UIDrawable::attachTexture(GLuint texture){
@@ -168,5 +170,5 @@ bool UIDrawable::constraintsAreValid(bool x, bool y, bool w, bool h, bool x2, bo
 }
 
 void UIDrawable::setParent(UIDrawable * parent){
-    this->parent = parent; 
+    this->parent = parent;
 }
