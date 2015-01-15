@@ -1,5 +1,5 @@
 <layout>
-    <type>ui_radiobutton</type>
+    <type>ui_button</type>
 
     <constraints>
         <x>
@@ -13,7 +13,6 @@
     </constraints>
 
     <text>Toggle Vsync</text>
-    <mode>on</mode>
     <function>testFunction</function>
 
 </layout>

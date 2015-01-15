@@ -14,6 +14,7 @@ UIDrawable::UIDrawable(GLuint shader_program, GLuint texture) : FlatDrawable(sha
 
     parent = NULL;
 
+    this->didLoad();
 }
 
 void UIDrawable::attachTexture(GLuint texture){
@@ -171,4 +172,8 @@ bool UIDrawable::constraintsAreValid(bool x, bool y, bool w, bool h, bool x2, bo
 
 void UIDrawable::setParent(UIDrawable * parent){
     this->parent = parent;
+}
+
+void UIDrawable::receiveNotification(UIDrawable* fromChild){
+
 }

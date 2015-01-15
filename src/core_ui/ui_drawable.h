@@ -40,11 +40,15 @@ public:
     int getHeightPixels(){ return height_pixels;}
 
     virtual void loadFromXML(std::string){;}
+    virtual void receiveNotification(UIDrawable*);
+
 protected:
     GLuint shader;
 
     void parseConstraints(pugi::xml_node);
     virtual bool constraintsAreValid(bool, bool, bool, bool, bool, bool);
+    virtual void didLoad(){;};
+
     int parseAnchor(const char*, bool);
 
     bool XOR(bool, bool);

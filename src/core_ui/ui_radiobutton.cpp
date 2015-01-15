@@ -82,8 +82,16 @@ void UIRadioButton::draw(){
 
             bool clicking = glfwGetMouseButton(Window::getInstance()->getGLFWWindow(), GLFW_MOUSE_BUTTON_LEFT);
             if(clicking && !has_clicked){
+
+                // Run the extended execution of a potential child class
                 onClick();
+
+                // Alert the parent of the notification
+                parent->receiveNotification(this);
+
+                // Toggle the button
                 toggleRadioButton();
+
                 has_clicked = true;
             } else if(!clicking){
                 has_clicked = false;
