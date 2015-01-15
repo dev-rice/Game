@@ -1,5 +1,18 @@
 #include "terrain.h"
 
+// Terrain dimensions:
+//
+//            height
+//            _|_
+//        ---|   |-----------
+//       /  /     \        /   d
+//      /  |       |      /   e
+//     /                 /   p
+//    /                 /   t
+//   /                 /   h
+//   ------------------
+//        width
+
 // From http://www.exploringbinary.com/ten-ways-to-check-if-an-integer-is-a-power-of-two-in-c/
 int isPowerOfTwo (unsigned int x){
     return ((x != 0) && ((x & (~x + 1)) == x));
@@ -44,11 +57,11 @@ Terrain::Terrain(GLuint shader_program, std::string heightmap_filename) : Drawab
 }
 
 int Terrain::getDepth(){
-    return 512;
+    return scale * depth;
 }
 
 int Terrain::getWidth(){
-    return 512;
+    return scale * width;
 }
 
 GLfloat getHeight(GLfloat x, GLfloat y){
@@ -68,12 +81,14 @@ glm::vec3 getNormal(GLfloat x, GLfloat y){
 Mesh* Terrain::generateMesh(Heightmap& heightmap){
     // These two vectors hold the geometry data that will be
     // used to instantiate the Mesh.
-    std::vector<glm::vec3> vertices_vector;
     std::vector<GLuint> faces_vector;
 
     // Starting positions of the mesh
     float start_x = -heightmap.width / 2.0;
     float start_z = -heightmap.height / 2.0;
+
+    width = heightmap.width;
+    depth = heightmap.height;
 
     // Now, we must generate a mesh from the data in the heightmap.
     float map_height;
@@ -87,7 +102,7 @@ Mesh* Terrain::generateMesh(Heightmap& heightmap){
             pos = glm::vec3(start_x + x, map_height, start_z + y);
 
             // Position Data
-            vertices_vector.push_back(pos);
+            vertices.push_back(pos);
         }
     }
 
@@ -133,7 +148,7 @@ Mesh* Terrain::generateMesh(Heightmap& heightmap){
     // normalized). This accounts for weighting the normal more for faces with
     // large areas.
     // The normal vector is the unit vector of the sum of each face normal.
-    std::vector<glm::vec3> normals(vertices_vector.size());
+    normals = std::vector<glm::vec3>(vertices.size());
 
     GLuint a_index, b_index, c_index;
     glm::vec3 a, b, c;
@@ -146,9 +161,9 @@ Mesh* Terrain::generateMesh(Heightmap& heightmap){
         b_index = faces_vector[i + 1];
         c_index = faces_vector[i + 2];
 
-        a = vertices_vector[a_index];
-        b = vertices_vector[b_index];
-        c = vertices_vector[c_index];
+        a = vertices[a_index];
+        b = vertices[b_index];
+        c = vertices[c_index];
 
         current_normal = glm::cross((b - a), (c - a));
 
@@ -176,7 +191,7 @@ Mesh* Terrain::generateMesh(Heightmap& heightmap){
             glm::vec3 normal;
             // Upper left
             i = x + ((heightmap.width) * y);
-            vertex = vertices_vector[i];
+            vertex = vertices[i];
             normal = normals[i];
 
             texture_repeated_vertices.push_back(vertex.x);
@@ -192,7 +207,7 @@ Mesh* Terrain::generateMesh(Heightmap& heightmap){
 
             // Upper right
             i = x + ((heightmap.width) * y) + 1;
-            vertex = vertices_vector[i];
+            vertex = vertices[i];
             normal = normals[i];
 
             texture_repeated_vertices.push_back(vertex.x);
@@ -208,7 +223,7 @@ Mesh* Terrain::generateMesh(Heightmap& heightmap){
 
             // Bottom left
             i = x + ((heightmap.width) * (y + 1));
-            vertex = vertices_vector[i];
+            vertex = vertices[i];
             normal = normals[i];
 
             texture_repeated_vertices.push_back(vertex.x);
@@ -224,7 +239,7 @@ Mesh* Terrain::generateMesh(Heightmap& heightmap){
 
             // Bottom right
             i = x + ((heightmap.width) * (y + 1)) + 1;
-            vertex = vertices_vector[i];
+            vertex = vertices[i];
             normal = normals[i];
 
             texture_repeated_vertices.push_back(vertex.x);
