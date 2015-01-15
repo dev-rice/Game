@@ -18,7 +18,7 @@ public:
     void draw();
 
 
-private:
+protected:
     std::string functionName;
 
     bool constraintsAreValid(bool, bool, bool, bool, bool, bool);

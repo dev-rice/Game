@@ -8,6 +8,7 @@
 #include "ui_drawable.h"
 #include "ui_image.h"
 #include "ui_radiobutton.h"
+#include "ui_button.h"
 
 class UIWindow : public UIDrawable {
 public:
