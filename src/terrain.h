@@ -8,6 +8,12 @@
 #include "mesh.h"
 #include "drawable.h"
 
+struct Heightmap {
+    unsigned char* image;
+    int width;
+    int height;
+};
+
 class Terrain : public Drawable {
 public:
     Terrain (GLuint, std::string);
@@ -22,12 +28,10 @@ private:
     void bindTextures();
     void updateUniformData();
 
-    Mesh* generateMesh();
-    float getHeight(int, int);
+    Mesh* generateMesh(Heightmap&);
+    float getHeight(Heightmap&, int, int);
 
     TextureSet* texture_set;
-    unsigned char* image;
-    int image_width, image_height;
 
 };
 

@@ -10,25 +10,32 @@ Terrain::Terrain(GLuint shader_program, std::string heightmap_filename) : Drawab
     // the constructor. This is to save space in the game files, so we don't have a terrain mesh
 
     // First, we load the actual image data, and post to debug
-    image = SOIL_load_image(heightmap_filename.c_str(), &image_width, &image_height, 0, SOIL_LOAD_RGBA);
+    struct Heightmap heightmap;
+    heightmap.image = SOIL_load_image(heightmap_filename.c_str(),
+        &(heightmap.width), &(heightmap.height), 0, SOIL_LOAD_RGBA);
 
-    if(image){
-        Debug::info("Loaded heightmap \"%s\" (%d by %d) into memory.\n", heightmap_filename.c_str(),
-            image_width, image_height );
+    if(heightmap.image){
+        Debug::info("Loaded heightmap \"%s\" (%d by %d) into memory.\n",
+            heightmap_filename.c_str(), heightmap.width,
+            heightmap.height );
     } else {
-        Debug::error("Could not load heightmap \"%s\" into memory.\n", heightmap_filename.c_str());
+        Debug::error("Could not load heightmap \"%s\" into memory.\n",
+            heightmap_filename.c_str());
     }
 
-    if(!isPowerOfTwo(image_width) || !isPowerOfTwo(image_height)){
-        Debug::warning("Terrain map size is not base 2. Mesh generation may behave incorrectly.\n");
+    if(!isPowerOfTwo(heightmap.width) || !isPowerOfTwo(heightmap.height)){
+        Debug::warning("Terrain map size is not base 2."
+            " Mesh generation may behave incorrectly.\n");
     }
 
     // After loading in the heightmap to memory, we can make a terrain mesh
     // based on the data
     float start_time = glfwGetTime();
-    mesh = generateMesh();
+    mesh = generateMesh(heightmap);
     float delta_time = glfwGetTime() - start_time;
     Debug::info("Took %f seconds to generate the terrain mesh.\n", delta_time);
+
+    SOIL_free_image_data(heightmap.image);
 
     // Once we have a mesh, we can load the drawable data required for this
     // child class.
@@ -36,22 +43,22 @@ Terrain::Terrain(GLuint shader_program, std::string heightmap_filename) : Drawab
 
 }
 
-Mesh* Terrain::generateMesh(){
+Mesh* Terrain::generateMesh(Heightmap& heightmap){
     // These two vectors hold the geometry data that will be
     // used to instantiate the Mesh.
     std::vector<glm::vec3> vertices_vector;
     std::vector<GLuint> faces_vector;
 
     // Starting positions of the mesh
-    float start_x = -image_width / 2.0;
-    float start_z = -image_height / 2.0;
+    float start_x = -heightmap.width / 2.0;
+    float start_z = -heightmap.height / 2.0;
 
     // Now, we must generate a mesh from the data in the heightmap.
     float map_height;
     glm::vec3 pos;
-    for(int y = 0; y < image_height; ++y){
-        for(int x = 0; x < image_width; ++x){
-            map_height = getHeight(x, y);
+    for(int y = 0; y < heightmap.height; ++y){
+        for(int x = 0; x < heightmap.width; ++x){
+            map_height = getHeight(heightmap, x, y);
 
             // Calculate the vertex position based on the current x, y
             // coordinates, the starting position, and the calculated height
@@ -81,16 +88,16 @@ Mesh* Terrain::generateMesh(){
     //      4   7   5
     //      5   7   8
 
-    for (int y = 0; y < image_height - 1; ++y){
-        for (int x = 0; x < image_width - 1; ++x){
-            int y_index = (y * image_width);
+    for (int y = 0; y < heightmap.height - 1; ++y){
+        for (int x = 0; x < heightmap.width - 1; ++x){
+            int y_index = (y * heightmap.width);
             faces_vector.push_back(x + y_index);
-            faces_vector.push_back(x + y_index + image_width);
+            faces_vector.push_back(x + y_index + heightmap.width);
             faces_vector.push_back(x + y_index + 1);
 
             faces_vector.push_back(x + y_index + 1);
-            faces_vector.push_back(x + y_index + image_width);
-            faces_vector.push_back(x + y_index + image_width + 1);
+            faces_vector.push_back(x + y_index + heightmap.width);
+            faces_vector.push_back(x + y_index + heightmap.width + 1);
         }
     }
 
@@ -139,14 +146,14 @@ Mesh* Terrain::generateMesh(){
 
     // Create the final vertex vector that will be used by OpenGL
     std::vector<GLfloat> texture_repeated_vertices;
-    for(int y = 0; y < image_height - 1; ++y){
-        for(int x = 0; x < image_width - 1; ++x){
+    for(int y = 0; y < heightmap.height - 1; ++y){
+        for(int x = 0; x < heightmap.width - 1; ++x){
 
             int i;
             glm::vec3 vertex;
             glm::vec3 normal;
             // Upper left
-            i = x + ((image_width) * y);
+            i = x + ((heightmap.width) * y);
             vertex = vertices_vector[i];
             normal = normals[i];
 
@@ -162,7 +169,7 @@ Mesh* Terrain::generateMesh(){
             texture_repeated_vertices.push_back(0.0f);
 
             // Upper right
-            i = x + ((image_width) * y) + 1;
+            i = x + ((heightmap.width) * y) + 1;
             vertex = vertices_vector[i];
             normal = normals[i];
 
@@ -178,7 +185,7 @@ Mesh* Terrain::generateMesh(){
             texture_repeated_vertices.push_back(0.0f);
 
             // Bottom left
-            i = x + ((image_width) * (y + 1));
+            i = x + ((heightmap.width) * (y + 1));
             vertex = vertices_vector[i];
             normal = normals[i];
 
@@ -194,7 +201,7 @@ Mesh* Terrain::generateMesh(){
             texture_repeated_vertices.push_back(1.0f);
 
             // Bottom right
-            i = x + ((image_width) * (y + 1)) + 1;
+            i = x + ((heightmap.width) * (y + 1)) + 1;
             vertex = vertices_vector[i];
             normal = normals[i];
 
@@ -228,14 +235,14 @@ Mesh* Terrain::generateMesh(){
     return ground;
 }
 
-float Terrain::getHeight(int x, int y){
+float Terrain::getHeight(Heightmap& heightmap, int x, int y){
     // Scaling factor for the height map data
     float amplification = 10.0f;
 
 
-    int red = image[(y*image_width + x)*4 + 0];
-    int grn = image[(y*image_width + x)*4 + 1];
-    int blu = image[(y*image_width + x)*4 + 2];
+    int red = heightmap.image[(y*heightmap.width + x)*4 + 0];
+    int grn = heightmap.image[(y*heightmap.width + x)*4 + 1];
+    int blu = heightmap.image[(y*heightmap.width + x)*4 + 2];
 
     // Scale the height such that the value is between 0.0 and 1.0
     float map_height = float(red + grn + blu)/(3.0f * 255.0);
@@ -288,9 +295,9 @@ void Terrain::updateUniformData(){
 }
 
 int Terrain::getDepth(){
-    return this->image_height;
+    return 512;
 }
 
 int Terrain::getWidth(){
-    return this->image_width;
+    return 512;
 }
