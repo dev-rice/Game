@@ -29,7 +29,7 @@ private:
     void updateUniformData();
 
     Mesh* generateMesh(Heightmap&);
-    float getHeight(Heightmap&, int, int);
+    float getMapHeight(Heightmap&, int, int);
 
     TextureSet* texture_set;
 

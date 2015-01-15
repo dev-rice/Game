@@ -16,8 +16,7 @@ Terrain::Terrain(GLuint shader_program, std::string heightmap_filename) : Drawab
 
     if(heightmap.image){
         Debug::info("Loaded heightmap \"%s\" (%d by %d) into memory.\n",
-            heightmap_filename.c_str(), heightmap.width,
-            heightmap.height );
+            heightmap_filename.c_str(), heightmap.width, heightmap.height );
     } else {
         Debug::error("Could not load heightmap \"%s\" into memory.\n",
             heightmap_filename.c_str());
@@ -39,7 +38,8 @@ Terrain::Terrain(GLuint shader_program, std::string heightmap_filename) : Drawab
 
     // Once we have a mesh, we can load the drawable data required for this
     // child class.
-    Drawable::load(mesh, shader_program, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f);
+    Drawable::load(mesh, shader_program, glm::vec3(0.0f, 0.0f, 0.0f),
+        glm::vec3(0.0f, 0.0f, 0.0f), 1.0f);
 
 }
 
@@ -58,7 +58,7 @@ Mesh* Terrain::generateMesh(Heightmap& heightmap){
     glm::vec3 pos;
     for(int y = 0; y < heightmap.height; ++y){
         for(int x = 0; x < heightmap.width; ++x){
-            map_height = getHeight(heightmap, x, y);
+            map_height = getMapHeight(heightmap, x, y);
 
             // Calculate the vertex position based on the current x, y
             // coordinates, the starting position, and the calculated height
@@ -235,7 +235,7 @@ Mesh* Terrain::generateMesh(Heightmap& heightmap){
     return ground;
 }
 
-float Terrain::getHeight(Heightmap& heightmap, int x, int y){
+float Terrain::getMapHeight(Heightmap& heightmap, int x, int y){
     // Scaling factor for the height map data
     float amplification = 10.0f;
 
