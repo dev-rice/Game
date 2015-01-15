@@ -4,7 +4,6 @@
 #include "ui_radiobutton.h"
 
 UIRadioButton::UIRadioButton(GLuint shader_program) : UIDrawable(shader_program, TextureLoader::loadPink()){
-    this->shader = shader_program;
     this->has_clicked = false;
 }
 

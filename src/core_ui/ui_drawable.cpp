@@ -15,6 +15,7 @@ UIDrawable::UIDrawable(GLuint shader_program, GLuint texture) : FlatDrawable(sha
     parent = NULL;
 
     this->didLoad();
+    this->shader = shader_program;
 }
 
 void UIDrawable::attachTexture(GLuint texture){
@@ -141,9 +142,9 @@ int UIDrawable::parseAnchor(const char* anchor, bool is_x){
         }
         if(strcmp(anchor, "centered") == 0){
             if(is_x){
-                return parent->getWidthPixels()/2 - width_pixels/2;
+                return parent->getXPixels() + parent->getWidthPixels()/2 - width_pixels/2;
             }
-            return parent->getHeightPixels()/2 - height_pixels/2;
+            return parent->getYPixels() + parent->getHeightPixels()/2 - height_pixels/2;
         }
         if(strcmp(anchor, "right") == 0 || strcmp(anchor, "down") == 0){
             if(is_x){
