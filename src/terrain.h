@@ -16,7 +16,9 @@ struct Heightmap {
 
 class Terrain : public Drawable {
 public:
-    Terrain (GLuint, std::string);
+    Terrain (GLuint s, std::string h) : Terrain(s, h, 10.0f) {;}
+    Terrain (GLuint, std::string, float);
+
 
     void attachTextureSet(TextureSet*);
 
@@ -34,13 +36,22 @@ private:
     Mesh* generateMesh(Heightmap&);
     float getMapHeight(Heightmap&, int, int);
 
+    int getIndex(int, int);
+
     TextureSet* texture_set;
 
     GLuint width;
     GLuint depth;
 
+    float start_x;
+    float start_z;
+
+    float amplification;
+
     std::vector<glm::vec3> vertices;
     std::vector<glm::vec3> normals;
+
+
 
 };
 

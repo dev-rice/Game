@@ -134,10 +134,14 @@ void GameView::update(){
     glm::vec3 mouse_point = Mouse::getInstance()->getWorldPosition(camera,
         proj_matrix);
 
+    Terrain* terrain = level->getTerrain();
+    mouse_point.y = terrain->getHeight(mouse_point.x, mouse_point.z);
+
     glBindBuffer(GL_UNIFORM_BUFFER, mouse_ubo);
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::vec3),
         glm::value_ptr(mouse_point));
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
 
     // The mouse draws on top of everything else
     Mouse::getInstance()->draw();

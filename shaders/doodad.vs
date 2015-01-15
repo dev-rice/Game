@@ -60,7 +60,7 @@ void main() {
     lights[1].color = vec3(1.0, 0.3, 0.1);
     lights[1].power = 5.0;
 
-    lights[2].position = vec3(mouse_point.x, 5.0, mouse_point.z);
+    lights[2].position = vec3(mouse_point.x, mouse_point.y + 1.0, mouse_point.z);
     lights[2].color = vec3(0.0, 1.0, 0.0);
     lights[2].power = 10.0;
 

@@ -18,9 +18,12 @@ int isPowerOfTwo (unsigned int x){
     return ((x != 0) && ((x & (~x + 1)) == x));
 }
 
-Terrain::Terrain(GLuint shader_program, std::string heightmap_filename) : Drawable() {
+Terrain::Terrain(GLuint shader_program, std::string heightmap_filename, float amplification)
+    : Drawable() {
     // This is where generate the new mesh and override the one passed in by
     // the constructor. This is to save space in the game files, so we don't have a terrain mesh
+
+    this->amplification = amplification;
 
     // First, we load the actual image data, and post to debug
     struct Heightmap heightmap;
@@ -64,18 +67,43 @@ int Terrain::getWidth(){
     return scale * width;
 }
 
-GLfloat getHeight(GLfloat x, GLfloat y){
-    // Returns the map height for a specified x and y position.
+GLfloat Terrain::getHeight(GLfloat x, GLfloat z){
+    // Returns the map height for a specified x and z position.
     // This will be useful for moving units around the terrain.
-    return 0.0f;
+
+    // Just do an integer conversion to get the vertex index.
+    // Later this should be interpolated using the normal.
+    int x_pos = x;
+    int z_pos = z;
+
+    // Offset the positions by the starting positions of the mesh
+    x_pos = x_pos - start_x;
+    z_pos = z_pos - start_z;
+
+    // Calculate the index of the current point in the vertex array.
+    int i = x_pos + ((width) * z_pos);
+
+    return vertices[i].y;
 }
 
-glm::vec3 getNormal(GLfloat x, GLfloat y){
+glm::vec3 Terrain::getNormal(GLfloat x_pos, GLfloat z_pos){
     // Returns the normal vector at the specified x and y position.
     // This is good for knowing how a unit can move across a segment
     // of terrain. For example, if the normal is too steep, the unit
     // won't be able to move on that segment.
-    return glm::vec3(0.0f, 1.0f, 0.0f);
+    // Just do an integer conversion to get the vertex index.
+    // Later this should be interpolated using the normal.
+    int x = x_pos;
+    int z = z_pos;
+
+    // Offset the positions by the starting positions of the mesh
+    x = x - start_x;
+    z = z - start_z;
+
+    // Calculate the index of the current point in the vertex array.
+    int i = getIndex(x, z);
+
+    return normals[i];
 }
 
 Mesh* Terrain::generateMesh(Heightmap& heightmap){
@@ -84,8 +112,8 @@ Mesh* Terrain::generateMesh(Heightmap& heightmap){
     std::vector<GLuint> faces_vector;
 
     // Starting positions of the mesh
-    float start_x = -heightmap.width / 2.0;
-    float start_z = -heightmap.height / 2.0;
+    start_x = -heightmap.width / 2.0;
+    start_z = -heightmap.height / 2.0;
 
     width = heightmap.width;
     depth = heightmap.height;
@@ -190,7 +218,7 @@ Mesh* Terrain::generateMesh(Heightmap& heightmap){
             glm::vec3 vertex;
             glm::vec3 normal;
             // Upper left
-            i = x + ((heightmap.width) * y);
+            i = getIndex(x, y);
             vertex = vertices[i];
             normal = normals[i];
 
@@ -206,7 +234,7 @@ Mesh* Terrain::generateMesh(Heightmap& heightmap){
             texture_repeated_vertices.push_back(0.0f);
 
             // Upper right
-            i = x + ((heightmap.width) * y) + 1;
+            i = getIndex(x+1, y);
             vertex = vertices[i];
             normal = normals[i];
 
@@ -222,7 +250,7 @@ Mesh* Terrain::generateMesh(Heightmap& heightmap){
             texture_repeated_vertices.push_back(0.0f);
 
             // Bottom left
-            i = x + ((heightmap.width) * (y + 1));
+            i = getIndex(x, y+1);
             vertex = vertices[i];
             normal = normals[i];
 
@@ -238,7 +266,7 @@ Mesh* Terrain::generateMesh(Heightmap& heightmap){
             texture_repeated_vertices.push_back(1.0f);
 
             // Bottom right
-            i = x + ((heightmap.width) * (y + 1)) + 1;
+            i = getIndex(x+1, y+1);
             vertex = vertices[i];
             normal = normals[i];
 
@@ -274,9 +302,6 @@ Mesh* Terrain::generateMesh(Heightmap& heightmap){
 
 float Terrain::getMapHeight(Heightmap& heightmap, int x, int y){
     // Scaling factor for the height map data
-    float amplification = 10.0f;
-
-
     int red = heightmap.image[(y*heightmap.width + x)*4 + 0];
     int grn = heightmap.image[(y*heightmap.width + x)*4 + 1];
     int blu = heightmap.image[(y*heightmap.width + x)*4 + 2];
@@ -289,13 +314,14 @@ float Terrain::getMapHeight(Heightmap& heightmap, int x, int y){
     return map_height;
 }
 
-void Terrain::attachTextureSet(TextureSet* texture_set){
-    // Prepare the loacations for textures to load into and give this drawable some textures. These are specific
-    // to Drawable for now but will later be moved down to the child classes such that they can specify different
-    // amounts and types of textures to use.
+int Terrain::getIndex(int x, int y){
+    // For a given x,y coordinate this will return the
+    // index for that element in our linear arrays: vertices,
+    // and normals.
+    return x + ((width) * y);
+}
 
-    // When we set this uniform we tell the shader that "diffuse_texture" will be loaded from the 0th texture, and so on.
-    // The actual images these numbers point to are specified later in bindTextures().
+void Terrain::attachTextureSet(TextureSet* texture_set){
     glUniform1i(glGetUniformLocation(shader_program, "diffuse_texture"), 0);
     glUniform1i(glGetUniformLocation(shader_program, "specular_texture"), 1);
     glUniform1i(glGetUniformLocation(shader_program, "normal_map"), 2);
@@ -305,9 +331,6 @@ void Terrain::attachTextureSet(TextureSet* texture_set){
 }
 
 void Terrain::bindTextures(){
-    // Put each texture into the correct location for this Drawable. GL_TEXTURE0-3
-    // correspond to the uniforms set in attachTextureSet(). This is where we actually
-    // tell the graphics card which textures to use.
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture_set->getDiffuse());
 
@@ -327,6 +350,7 @@ void Terrain::updateUniformData(){
     glUniform1f(glGetUniformLocation(shader_program, "scale"), scale);
 
     // Tell the shader the current time
-    glUniform1f(glGetUniformLocation(shader_program, "time"), (float)glfwGetTime());
+    glUniform1f(glGetUniformLocation(shader_program, "time"),
+        (float)glfwGetTime());
 
 }

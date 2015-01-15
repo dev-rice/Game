@@ -41,6 +41,7 @@ public:
 
     int getMapDepth();
     int getMapWidth();
+    Terrain* getTerrain() {return ground;}
     glm::mat4 getProjection() {return proj_matrix;}
 
 
