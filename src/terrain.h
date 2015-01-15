@@ -23,6 +23,9 @@ public:
     int getDepth();
     int getWidth();
 
+    GLfloat getHeight(GLfloat, GLfloat);
+    glm::vec3 getNormal(GLfloat, GLfloat);
+
 private:
 
     void bindTextures();

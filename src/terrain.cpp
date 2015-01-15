@@ -43,6 +43,28 @@ Terrain::Terrain(GLuint shader_program, std::string heightmap_filename) : Drawab
 
 }
 
+int Terrain::getDepth(){
+    return 512;
+}
+
+int Terrain::getWidth(){
+    return 512;
+}
+
+GLfloat getHeight(GLfloat x, GLfloat y){
+    // Returns the map height for a specified x and y position.
+    // This will be useful for moving units around the terrain.
+    return 0.0f;
+}
+
+glm::vec3 getNormal(GLfloat x, GLfloat y){
+    // Returns the normal vector at the specified x and y position.
+    // This is good for knowing how a unit can move across a segment
+    // of terrain. For example, if the normal is too steep, the unit
+    // won't be able to move on that segment.
+    return glm::vec3(0.0f, 1.0f, 0.0f);
+}
+
 Mesh* Terrain::generateMesh(Heightmap& heightmap){
     // These two vectors hold the geometry data that will be
     // used to instantiate the Mesh.
@@ -292,12 +314,4 @@ void Terrain::updateUniformData(){
     // Tell the shader the current time
     glUniform1f(glGetUniformLocation(shader_program, "time"), (float)glfwGetTime());
 
-}
-
-int Terrain::getDepth(){
-    return 512;
-}
-
-int Terrain::getWidth(){
-    return 512;
 }
