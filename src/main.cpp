@@ -34,10 +34,10 @@ int main(int argc, char* argv[]) {
     // Parse command line arguments
     int fxaa_level = Profile::getInstance()->getFxaaLevel();
 
-    float width  = 0;
-    float height = 0;
+    float width  = Profile::getInstance()->getWindowWidth();
+    float height = Profile::getInstance()->getWindowHeight();
 
-    bool fullscreen  = Profile::getInstance()->getWindowed();
+    bool fullscreen  = !Profile::getInstance()->getWindowed();
     bool interactive = false;
     bool debug   = false;
     bool has_map = false;
@@ -101,8 +101,6 @@ int main(int argc, char* argv[]) {
         Debug::info("Loading in fullscreen mode with resolution: %d by %d\n",
             (int)width, (int)height);
     } else {
-        width = 1600;
-        height = 900;
         Debug::info("Loading in windowed mode with resolution: %d by %d\n",
             (int)width, (int)height);
     }

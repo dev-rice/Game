@@ -15,6 +15,17 @@ Profile* Profile::getInstance(){
 }
 
 Profile::Profile(){
+
+    // Setup the resolutions
+    resolution_map[0] = std::make_tuple( 800,  600);
+    resolution_map[1] = std::make_tuple(1080,  768);
+    resolution_map[2] = std::make_tuple(1920, 1080);
+    resolution_map[3] = std::make_tuple(1920, 1200);
+    resolution_map[4] = std::make_tuple(2560, 1440);
+    resolution_map[5] = std::make_tuple(2560, 1600);
+    resolution_map[6] = std::make_tuple(3840, 2160);
+    resolution_map[7] = std::make_tuple(5120, 2880);
+
 	loadSettings();
 }
 
@@ -68,7 +79,11 @@ void Profile::loadSettings(){
         	} else if(strcmp(keyword, "windowed") == 0){
         		windowed_on = (strcmp(value, "true") == 0);
         	} else if(strcmp(keyword, "resolution") == 0){
-        		// TODO implement resolution system
+                resolution_index = atoi(value);
+                if(resolution_map.count(resolution_index) == 0){
+                    // Warning: this does not notify the user
+                    resolution_index = 0;
+                }
         	} else if(strcmp(keyword, "texturedetail") == 0){
                 // TODO implement texture detail system
             }
@@ -103,4 +118,12 @@ std::tuple<char*, char*> Profile::split(char* str, char key){
 	sub_str_2[str_2_count-1] = 0;
 
 	return std::make_tuple(sub_str_1, sub_str_2);
+}
+
+int Profile::getWindowHeight(){
+    return std::get<1>(resolution_map[resolution_index]);
+}
+
+int Profile::getWindowWidth(){
+    return std::get<0>(resolution_map[resolution_index]);
 }

@@ -5,6 +5,7 @@
 #define Profile_h
 
 #include <tuple>
+#include <map>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -19,7 +20,8 @@ public:
 	int getFxaaLevel();
 	bool getVsync();
 	bool getWindowed();
-	// Resolution TODO
+	int getWindowHeight();
+	int getWindowWidth();
 
 	void toggleVsync();
 
@@ -27,7 +29,8 @@ private:
 	int fxaa_level;
 	bool vsync_on;
 	bool windowed_on;
-	int resolution;
+	int resolution_index;
+	std::map<int, std::tuple<int, int>> resolution_map;
 
 	static Profile* instance;
 	Profile();
