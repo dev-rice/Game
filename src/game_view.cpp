@@ -98,8 +98,6 @@ void GameView::update(){
         Mouse::getInstance()->setCursorSprite(Mouse::cursorType::SELECTION);
         selection_box->setGLCoordinates(initial_left_click_position, final_left_click_position);
         selection_box->draw();
-    } else {
-        Mouse::getInstance()->setCursorSprite(Mouse::cursorType::CURSOR);
     }
 
     float frame_time = glfwGetTime() - start_time;
