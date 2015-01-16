@@ -21,7 +21,7 @@ void UIButton::loadFromXML(std::string filepath){
     }
 
     pugi::xml_node constraints_node = layout_node.child("constraints");
-
+    
     // Parse function
     functionName = layout_node.child_value("function");
 
