@@ -179,17 +179,19 @@ void Level::loadLevel(const char* filename){
 
             GLuint diffuse = getTexture(diffIndex);
             GLuint specular = getTexture(specIndex);
-            GLuint normal = getTexture(normIndex);
             GLuint emissive = getTexture(emitIndex);
-
-            texture_set = new TextureSet(diffuse, specular, normal, emissive);
+            GLuint normal = getTexture(normIndex);
 
             glm::vec3 position = glm::vec3(x, y, z);
             glm::vec3 rotation = glm::vec3(x_rot, y_rot, z_rot);
 
             Doodad* drawable = new Doodad(mesh, doodad_shader, position,
                 rotation, scale);
-            drawable->attachTextureSet(texture_set);
+            drawable->setDiffuse(diffuse);
+            drawable->setSpecular(specular);
+            drawable->setEmissive(emissive);
+            drawable->setNormal(normal);
+
 
             drawables.push_back(drawable);
 
@@ -231,12 +233,10 @@ void Level::loadLevel(const char* filename){
 
             ground = new Terrain(doodad_shader, heightmap_filename_str);
 
-            GLuint diffuse = TextureLoader::loadTextureFromFile(
-                ground_filename, GL_LINEAR);
+            GLuint diffuse = TextureLoader::loadTextureFromFile(ground_filename,
+                GL_LINEAR);
 
-            texture_set = new TextureSet(diffuse, 0, 0, 0);
-            ground->attachTextureSet(texture_set);
-
+            ground->setDiffuse(diffuse);
             drawables.push_back((Drawable*) ground);
         }
 

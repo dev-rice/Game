@@ -12,9 +12,7 @@ public:
 
     void attachTextureSet(TextureSet*);
 
-
 private:
-    void bindTextures();
     void updateUniformData();
 
 };

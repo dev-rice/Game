@@ -83,7 +83,8 @@ GLfloat Terrain::getHeight(GLfloat x_pos, GLfloat z_pos){
     // Calculate the index of the current point in the vertex array.
     int i = getIndex(x, z);
 
-    return vertices[i].y;
+    return 0.0f;
+    // return vertices[i].y;
 }
 
 glm::vec3 Terrain::getNormal(GLfloat x_pos, GLfloat z_pos){
@@ -322,26 +323,7 @@ int Terrain::getIndex(int x, int y){
 }
 
 void Terrain::attachTextureSet(TextureSet* texture_set){
-    glUniform1i(glGetUniformLocation(shader_program, "diffuse_texture"), 0);
-    glUniform1i(glGetUniformLocation(shader_program, "specular_texture"), 1);
-    glUniform1i(glGetUniformLocation(shader_program, "normal_map"), 2);
-    glUniform1i(glGetUniformLocation(shader_program, "emissive_texture"), 3);
-
     this->texture_set = texture_set;
-}
-
-void Terrain::bindTextures(){
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture_set->getDiffuse());
-
-    glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, texture_set->getSpecular());
-
-    glActiveTexture(GL_TEXTURE2);
-    glBindTexture(GL_TEXTURE_2D, texture_set->getNormal());
-
-    glActiveTexture(GL_TEXTURE3);
-    glBindTexture(GL_TEXTURE_2D, texture_set->getEmissive());
 }
 
 void Terrain::updateUniformData(){

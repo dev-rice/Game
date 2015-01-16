@@ -19,31 +19,8 @@ void Doodad::attachTextureSet(TextureSet* texture_set){
 
     // When we set this uniform we tell the shader that "diffuse_texture" will be loaded from the 0th texture, and so on.
     // The actual images these numbers point to are specified later in bindTextures().
-    glUniform1i(glGetUniformLocation(shader_program, "diffuse_texture"), 0);
-    glUniform1i(glGetUniformLocation(shader_program, "specular_texture"), 1);
-    glUniform1i(glGetUniformLocation(shader_program, "normal_map"), 2);
-    glUniform1i(glGetUniformLocation(shader_program, "emissive_texture"), 3);
-    glUniform1i(glGetUniformLocation(shader_program, "shadow_map"), 4);
 
     this->texture_set = texture_set;
-}
-
-void Doodad::bindTextures(){
-    // Put each texture into the correct location for this Drawable. GL_TEXTURE0-3
-    // correspond to the uniforms set in attachTextureSet(). This is where we actually
-    // tell the graphics card which textures to use.
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture_set->getDiffuse());
-
-    glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, texture_set->getSpecular());
-
-    glActiveTexture(GL_TEXTURE2);
-    glBindTexture(GL_TEXTURE_2D, texture_set->getNormal());
-
-    glActiveTexture(GL_TEXTURE3);
-    glBindTexture(GL_TEXTURE_2D, texture_set->getEmissive());
-
 }
 
 void Doodad::updateUniformData(){

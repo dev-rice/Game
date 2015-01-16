@@ -30,7 +30,6 @@ public:
 
 private:
 
-    void bindTextures();
     void updateUniformData();
 
     Mesh* generateMesh(Heightmap&);

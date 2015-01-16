@@ -24,6 +24,20 @@ void Drawable::load(Mesh* mesh, GLuint shader_program, glm::vec3 position, glm::
     this->mesh = mesh;
     this->scale = scale;
 
+    // Setup the textures
+    // Get the default textures for the drawable.
+    GLuint pink = TextureLoader::loadPink();
+    GLuint alpha = TextureLoader::loadAlpha();
+
+    // Setup the drawable such that if no textures
+    // are attached later, then it will be bright pink
+    this->diffuse = alpha;
+    this->specular = alpha;
+    this->emissive = pink;
+    this->normal = alpha;
+    this->gloss = alpha;
+
+
     // Set the shader program and load the geometry data
     // from the mesh onto it.
     setShader(shader_program);
@@ -43,6 +57,69 @@ void Drawable::setShader(GLuint shader_program){
 
     GLint mouse_point_location = glGetUniformBlockIndex(shader_program, "Mouse");
     glUniformBlockBinding(shader_program, mouse_point_location, 3);
+
+    // Try to set the texture locations
+    glUniform1i(glGetUniformLocation(shader_program, "diffuse_texture"), 0);
+    glUniform1i(glGetUniformLocation(shader_program, "specular_texture"), 1);
+    glUniform1i(glGetUniformLocation(shader_program, "emissive_texture"), 2);
+    glUniform1i(glGetUniformLocation(shader_program, "normal_map"), 3);
+    glUniform1i(glGetUniformLocation(shader_program, "shadow_map"), 4);
+
+
+}
+
+void Drawable::setDiffuse(GLuint diffuse) {
+    if (diffuse != 0){
+        if (emissive == TextureLoader::loadPink()){
+            // If this diffuse is being set right after instantiation
+            // then the pink emissive would still override. So if the
+            // emissive is pink, set it to alpha.
+            this->emissive = TextureLoader::loadAlpha();
+        }
+        this->diffuse = diffuse;
+    } else {
+        this->diffuse = TextureLoader::loadAlpha();
+    }
+}
+
+void Drawable::setSpecular(GLuint specular) {
+    if (specular != 0){
+        this->specular = specular;
+    } else {
+        this->specular = TextureLoader::loadAlpha();
+    }
+}
+void Drawable::setEmissive(GLuint emissive) {
+    if (emissive != 0){
+        this->emissive = emissive;
+    } else {
+        this->emissive = TextureLoader::loadAlpha();
+    }
+}
+void Drawable::setNormal(GLuint normal) {
+    if (normal != 0){
+        this->normal = normal;
+    } else {
+        this->normal = TextureLoader::loadAlpha();
+    }
+}
+
+
+void Drawable::bindTextures(){
+    // Put each texture into the correct location for this Drawable. GL_TEXTURE0-3
+    // correspond to the uniforms set in attachTextureSet(). This is where we actually
+    // tell the graphics card which textures to use.
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, diffuse);
+
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, specular);
+
+    glActiveTexture(GL_TEXTURE2);
+    glBindTexture(GL_TEXTURE_2D, emissive);
+
+    glActiveTexture(GL_TEXTURE3);
+    glBindTexture(GL_TEXTURE_2D, normal);
 
 }
 

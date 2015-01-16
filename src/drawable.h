@@ -35,6 +35,11 @@ public:
     void setScale(GLfloat s) {scale = s;}
     void setShader(GLuint);
 
+    void setDiffuse(GLuint d);
+    void setSpecular(GLuint s);
+    void setEmissive(GLuint e);
+    void setNormal(GLuint n);
+
     glm::vec3 getPosition() {return position;}
     glm::vec3 getRotation() {return rotation;}
     GLfloat getScale() {return scale;}
@@ -44,7 +49,7 @@ protected:
     void load(Mesh*, GLuint, glm::vec3, glm::vec3, GLfloat);
     void updateModelMatrix();
 
-    virtual void bindTextures() = 0;
+    virtual void bindTextures();
     virtual void updateUniformData() = 0;
 
     Mesh* mesh;
@@ -63,6 +68,12 @@ protected:
     GLuint shadow_map;
     glm::mat4 depth_view;
     glm::mat4 depth_proj;
+
+    GLuint diffuse;
+    GLuint specular;
+    GLuint emissive;
+    GLuint normal;
+    GLuint gloss;
 };
 
 #endif
