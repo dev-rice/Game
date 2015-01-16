@@ -3,10 +3,6 @@
 
 #include "ui_radiobutton.h"
 
-UIImage* UIRadioButton::on_icon_image;
-UIImage* UIRadioButton::off_icon_image;
-UIImage* UIRadioButton::hoverIcon;
-
 UIRadioButton::UIRadioButton(GLuint shader_program) : UIDrawable(shader_program, TextureLoader::loadPink()){
     this->has_clicked = false;
 }
@@ -43,16 +39,14 @@ void UIRadioButton::loadFromXML(std::string filepath){
     radioButtonOn = (strcmp(layout_node.child_value("mode"), "on") == 0);
 
     // Create and position the button icon and hover highlight
-    if(!on_icon_image){
-        GLuint on_icon = TextureLoader::loadTextureFromFile("res/textures/radio_on.png", GL_NEAREST);
-        on_icon_image = new UIImage(shader, on_icon, x_pixels, y_pixels, 28, 28);
+    GLuint on_icon = TextureLoader::loadTextureFromFile("res/textures/radio_on.png", GL_NEAREST);
+    on_icon_image = new UIImage(shader, on_icon, x_pixels, y_pixels, 28, 28);
 
-        GLuint off_icon = TextureLoader::loadTextureFromFile("res/textures/radio_off.png", GL_NEAREST);
-        off_icon_image = new UIImage(shader, off_icon, x_pixels, y_pixels, 28, 28);
+    GLuint off_icon = TextureLoader::loadTextureFromFile("res/textures/radio_off.png", GL_NEAREST);
+    off_icon_image = new UIImage(shader, off_icon, x_pixels, y_pixels, 28, 28);
 
-        GLuint hover = TextureLoader::loadTextureFromFile("res/textures/radio_hover.png", GL_NEAREST);
-        hoverIcon = new UIImage(shader, hover, x_pixels, y_pixels, 28, 28);
-    }
+    GLuint hover = TextureLoader::loadTextureFromFile("res/textures/radio_hover.png", GL_NEAREST);
+    hoverIcon = new UIImage(shader, hover, x_pixels, y_pixels, 28, 28);
 
     if(radioButtonOn){
         currentIcon = on_icon_image;

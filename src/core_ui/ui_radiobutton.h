@@ -31,9 +31,9 @@ protected:
     bool radioButtonOn;
     bool has_clicked;
 
-    static UIImage* on_icon_image;
-    static UIImage* off_icon_image;
-    static UIImage* hoverIcon;
+    UIImage* on_icon_image;
+    UIImage* off_icon_image;
+    UIImage* hoverIcon;
     UIImage* currentIcon;
 
     TextRenderer* text_renderer;

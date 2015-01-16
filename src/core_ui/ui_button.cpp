@@ -3,10 +3,6 @@
 
 #include "ui_button.h"
 
-UIImage* UIButton::center_image;
-UIImage* UIButton::left_image;
-UIImage* UIButton::right_image;
-
 UIButton::UIButton(GLuint shader_program) : UIDrawable(shader_program, TextureLoader::loadPink()){
 
 }
@@ -39,16 +35,14 @@ void UIButton::loadFromXML(std::string filepath){
     parseConstraints(constraints_node);
 
     // Add in decorative images
-    if(!center_image){
-        GLuint center = TextureLoader::loadTextureFromFile("res/textures/button_center.png", GL_NEAREST);
-        center_image = new UIImage(shader, center, x_pixels + 15, y_pixels, width_pixels - 30, 32);
+    GLuint center = TextureLoader::loadTextureFromFile("res/textures/button_center.png", GL_NEAREST);
+    center_image = new UIImage(shader, center, x_pixels + 15, y_pixels, width_pixels - 30, 32);
 
-        GLuint left = TextureLoader::loadTextureFromFile("res/textures/button_left.png", GL_NEAREST);
-        left_image = new UIImage(shader, left, x_pixels - 1, y_pixels, 17, 32);
+    GLuint left = TextureLoader::loadTextureFromFile("res/textures/button_left.png", GL_NEAREST);
+    left_image = new UIImage(shader, left, x_pixels - 1, y_pixels, 17, 32);
 
-        GLuint right = TextureLoader::loadTextureFromFile("res/textures/button_right.png", GL_NEAREST);
-        right_image = new UIImage(shader, right, x_pixels + width_pixels - 16, y_pixels, 17, 32);
-    }
+    GLuint right = TextureLoader::loadTextureFromFile("res/textures/button_right.png", GL_NEAREST);
+    right_image = new UIImage(shader, right, x_pixels + width_pixels - 16, y_pixels, 17, 32);
 
 
     // Convert all pixel coords into screen
@@ -64,9 +58,10 @@ void UIButton::draw(){
 
     // A check to see if the radio button has been created properly
     if(center_image){
+
         // Draws pink bounding box. Useful for debugging
         // FlatDrawable::draw();
-
+        
         center_image->draw();
         left_image->draw();
         right_image->draw();

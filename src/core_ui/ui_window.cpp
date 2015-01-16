@@ -3,16 +3,6 @@
 
 #include "ui_window.h"
 
-UIImage* UIWindow::up_edge_image;
-UIImage* UIWindow::right_edge_image;
-UIImage* UIWindow::left_edge_image;
-UIImage* UIWindow::down_edge_image;
-
-UIImage* UIWindow::up_left_corner_image;
-UIImage* UIWindow::up_right_corner_image;
-UIImage* UIWindow::down_left_corner_image;
-UIImage* UIWindow::down_right_corner_image;
-
 UIWindow::UIWindow(GLuint shader_program) : UIDrawable(shader_program, TextureLoader::loadGray()){
     this->shader = shader_program;
     is_showing = false;
