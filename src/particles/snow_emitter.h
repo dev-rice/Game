@@ -5,7 +5,7 @@
 
 #include <glm/glm.hpp>
 
-#include "emitter.h"
+#include "particles/emitter.h"
 #include "camera.h"
 
 class SnowEmitter : public Emitter {

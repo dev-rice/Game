@@ -1,8 +1,8 @@
 COMPILER := g++
 
-OPTIONS := 
+OPTIONS :=
 
-SRCDIR := src
+SRCDIR := ./src
 SRCEXT := cpp
 SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
 
@@ -19,12 +19,12 @@ mac:
 	@ ./tools/buildcount.sh
 	@ rm -f res/models/*.mtl
 
-	@ $(COMPILER) $(OPTIONS) -std=c++11 $(SOURCES) -o $(BINARY_OUTPUT) $(FRAMEWORKS) $(MAC_LIBRARIES)
+	@ $(COMPILER) $(OPTIONS) -std=c++11 $(SOURCES) -o $(BINARY_OUTPUT) $(FRAMEWORKS) $(MAC_LIBRARIES) -I$(SRCDIR)
 linux:
 	@ ./tools/buildcount.sh
 	@ rm -f res/models/*.mtl
 
-	@ $(COMPILER) $(OPTIONS) -std=c++11 $(SOURCES) -o $(BINARY_OUTPUT) $(LINUX_LIBRARIES)
+	@ $(COMPILER) $(OPTIONS) -std=c++11 $(SOURCES) -o $(BINARY_OUTPUT) $(LINUX_LIBRARIES) -I$(SRCDIR)
 
 discard:
 	@ git clean -df

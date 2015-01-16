@@ -16,10 +16,10 @@
 #include "texture_set.h"
 #include "terrain.h"
 
-#include "emitter.h"
-#include "fire_emitter.h"
-#include "snow_emitter.h"
-#include "smoke_emitter.h"
+#include "particles/emitter.h"
+#include "particles/fire_emitter.h"
+#include "particles/snow_emitter.h"
+#include "particles/smoke_emitter.h"
 
 #include "shadowbuffer.h"
 #include "window.h"
