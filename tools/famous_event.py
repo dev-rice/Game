@@ -7,8 +7,10 @@ other_events = ["The Zerg Swarms finally conquer Texas.",
                 "The second coming of the Christ Jesus occurs. There were no survivors.",
                 "Octopi, having rode in the evolutionary back seat until now, complete the conquest of space.",
                 "Abraham Lincoln is resurrected.",
-                "Colorodo invades Poland.",
-                "Saturn is lost forever to a passing wormhole.",]
+                "Colorado invades Poland.",
+                "Saturn is lost forever to a passing wormhole.",
+                "Nuclear winter ends. Cockroaches rule the planet.",
+                "Half-Life 3 is released"]
 
 def getListItemsFromList(list_item):
     list_items = list_item.findAll('li')
