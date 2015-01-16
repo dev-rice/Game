@@ -67,21 +67,21 @@ int Terrain::getWidth(){
     return scale * width;
 }
 
-GLfloat Terrain::getHeight(GLfloat x, GLfloat z){
+GLfloat Terrain::getHeight(GLfloat x_pos, GLfloat z_pos){
     // Returns the map height for a specified x and z position.
     // This will be useful for moving units around the terrain.
 
     // Just do an integer conversion to get the vertex index.
     // Later this should be interpolated using the normal.
-    int x_pos = x;
-    int z_pos = z;
+    int x = x_pos;
+    int z = z_pos;
 
     // Offset the positions by the starting positions of the mesh
-    x_pos = x_pos - start_x;
-    z_pos = z_pos - start_z;
+    x = x - start_x;
+    z = z - start_z;
 
     // Calculate the index of the current point in the vertex array.
-    int i = x_pos + ((width) * z_pos);
+    int i = getIndex(x, z);
 
     return vertices[i].y;
 }
