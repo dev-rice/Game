@@ -25,6 +25,16 @@ private:
     bool is_showing;
 
     std::vector<UIDrawable*> subelements;
+
+    static UIImage* up_edge_image;
+    static UIImage* right_edge_image;
+    static UIImage* left_edge_image;
+    static UIImage* down_edge_image;
+    
+    static UIImage* up_left_corner_image;
+    static UIImage* up_right_corner_image;
+    static UIImage* down_left_corner_image;
+    static UIImage* down_right_corner_image;
 };
 
 #endif
