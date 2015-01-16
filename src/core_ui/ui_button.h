@@ -26,7 +26,9 @@ protected:
     TextRenderer* text_renderer;
     std::string button_text;
 
-    UIImage* button_image;
+    UIImage* center_image;
+    UIImage* left_image;
+    UIImage* right_image;
 };
 
 #endif

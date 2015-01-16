@@ -8,8 +8,9 @@
         </x>
         <y>
             <anchor>centered</anchor>
-            <offset>100</offset>
+            <offset>0</offset>
         </y>
+        <width>100</width>
     </constraints>
 
     <text>OK</text>
