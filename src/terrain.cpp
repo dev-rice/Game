@@ -83,8 +83,11 @@ GLfloat Terrain::getHeight(GLfloat x_pos, GLfloat z_pos){
     // Calculate the index of the current point in the vertex array.
     int i = getIndex(x, z);
 
-    return 0.0f;
-    // return vertices[i].y;
+    if (i < 0 || i > vertices.size() - 1){
+        return 0.0f;
+    } else {
+        return vertices[i].y;        
+    }
 }
 
 glm::vec3 Terrain::getNormal(GLfloat x_pos, GLfloat z_pos){
