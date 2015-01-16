@@ -27,11 +27,9 @@ public:
     void draw();
     bool isDead();
     void enablePhysics(float);
-    virtual void attachTextureSet(TextureSet*);
 
 private:
     void updateUniformData();
-    void bindTextures();
 
     glm::vec3 velocity;
     glm::vec3 acceleration;

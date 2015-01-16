@@ -20,8 +20,6 @@ public:
     Terrain (GLuint, std::string, float);
 
 
-    void attachTextureSet(TextureSet*);
-
     int getDepth();
     int getWidth();
 
@@ -36,8 +34,6 @@ private:
     float getMapHeight(Heightmap&, int, int);
 
     int getIndex(int, int);
-
-    TextureSet* texture_set;
 
     GLuint width;
     GLuint depth;

@@ -5,8 +5,7 @@
 
 SnowEmitter::SnowEmitter(GLuint shader_program, glm::vec3 position) : Emitter(shader_program, position){
     // Hardcoded snow particle texture
-    GLuint emit = TextureLoader::loadTextureFromFile("res/textures/snow_part.png", GL_LINEAR);
-    texture_set = new TextureSet(0, 0, 0, emit);
+    particle_texture = TextureLoader::loadTextureFromFile("res/textures/snow_part.png", GL_LINEAR);
 
     // Hardcoded density, maximum, and lifespan
     this->maxParticles = 1000;
@@ -33,14 +32,14 @@ void SnowEmitter::prepareParticles(Camera* camera){
 
         glm::vec3 velocity(random3, -0.02, 0.0f);
         glm::vec3 acceleration(0.0f, 0.0f, 0.0f);
-        
+
         // Particle recycling!
         // Weird that the pointer must be explicitly set to 0, but crashes without this
-        Particle* ptr = 0; 
+        Particle* ptr = 0;
         if(particles.size() < maxParticles){
             ptr = new Particle(billboard, shader_program);
-            ptr->attachTextureSet(texture_set);
-        } 
+            ptr->setEmissive(particle_texture);
+        }
         if(particles.size() > 0 && particles[0]->isDead()){
             ptr = particles[0];
             particles.pop_front();

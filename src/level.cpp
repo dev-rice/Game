@@ -192,7 +192,6 @@ void Level::loadLevel(const char* filename){
             drawable->setEmissive(emissive);
             drawable->setNormal(normal);
 
-
             drawables.push_back(drawable);
 
         }
@@ -245,17 +244,6 @@ void Level::loadLevel(const char* filename){
             Debug::info("Found a ground texture set!\n");
         }
 
-        if(buffer[0] == 'c'){
-            sscanf(buffer, "%*c %d %d %d %d",  &diffIndex, &specIndex, &normIndex, &emitIndex);
-
-            GLuint diffuse = getTexture(diffIndex);
-            GLuint specular = getTexture(specIndex);
-            GLuint normal = getTexture(normIndex);
-            GLuint emissive = getTexture(emitIndex);
-
-            texture_set->load(diffuse, specular, normal, emissive);
-            texture_set->makeCyclic(60);
-        }
     }
 
     fclose(ifile);

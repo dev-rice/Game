@@ -15,8 +15,7 @@ Emitter::Emitter(GLuint shader_program, glm::vec3 position){
 
     billboard = new Mesh(planeVertsVector, planeFacesVector);
 
-    GLuint emit = TextureLoader::loadTextureFromFile("res/textures/part_snow.png", GL_LINEAR);
-    texture_set = new TextureSet(0, 0, 0, emit);
+    particle_texture = TextureLoader::loadTextureFromFile("res/textures/part_snow.png", GL_LINEAR);
 
     this->maxParticles = 200;
     this->lifespan = 100;
@@ -31,9 +30,7 @@ Emitter::Emitter(GLuint shader_program, glm::vec3 position){
 Emitter::~Emitter(){
     // Deallocation is good!
     delete billboard;
-    delete texture_set;
 
-    texture_set = NULL;
     billboard = NULL;
 
     for(int i(0); i < particles.size(); ++i){
@@ -112,7 +109,7 @@ void Emitter::prepareParticles(Camera* camera){
         Particle* ptr = 0;
         if(particles.size() < maxParticles){
             ptr = new Particle(billboard, shader_program);
-            ptr->attachTextureSet(texture_set);
+            ptr->setEmissive(particle_texture);
         }
         if(particles.size() > 0 && particles[0]->isDead()){
             ptr = particles[0];

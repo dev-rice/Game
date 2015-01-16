@@ -35,26 +35,6 @@ void Particle::setInitialValues(glm::vec3 position, glm::vec3 velocity, glm::vec
     physicsEnabled = false;
 }
 
-void Particle::bindTextures(){
-    // Put each texture into the correct location for this Drawable. GL_TEXTURE0-3
-    // correspond to the uniforms set in attachTextureSet(). This is where we actually
-    // tell the graphics card which textures to use.
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture_set->getEmissive());
-}
-
-void Particle::attachTextureSet(TextureSet* texture_set){
-    // Prepare the loacations for textures to load into and give this drawable some textures. These are specific
-    // to Drawable for now but will later be moved down to the child classes such that they can specify different
-    // amounts and types of textures to use.
-
-    // When we set this uniform we tell the shader that "diffuse_texture" will be loaded from the 0th texture, and so on.
-    // The actual images these numbers point to are specified later in bindTextures().
-    glUniform1i(glGetUniformLocation(shader_program, "emissive_texture"), 0);
-
-    this->texture_set = texture_set;
-}
-
 void Particle::enablePhysics(float elasticity){
     // We will probably need a pointer to the map for the height so
     // it will bounce realistically

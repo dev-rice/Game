@@ -28,8 +28,6 @@ public:
 
     void draw();
 
-    virtual void attachTextureSet(TextureSet*) = 0;
-
     void setPosition(glm::vec3 p) {position = p;}
     void setRotation(glm::vec3 r) {rotation = r;}
     void setScale(GLfloat s) {scale = s;}
@@ -62,12 +60,6 @@ protected:
     glm::vec3 rotation;
 
     glm::mat4 model_matrix;
-
-    TextureSet* texture_set;
-
-    GLuint shadow_map;
-    glm::mat4 depth_view;
-    glm::mat4 depth_proj;
 
     GLuint diffuse;
     GLuint specular;

@@ -52,13 +52,10 @@ private:
     void loadLevel(const char *);
     GLuint getTexture(GLuint);
 
-    TextureSet* texture_set;
-
     Window* window;
+    Camera* camera;
 
     Terrain *ground;
-
-    Camera* camera;
 
     std::vector<GLuint> textures;
     std::vector<Mesh*> meshes;
@@ -79,8 +76,6 @@ private:
 
     GLuint camera_ubo;
     GLuint shadow_ubo;
-
-    Drawable* mouse_plane;
 
 };
 

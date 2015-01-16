@@ -86,7 +86,7 @@ GLfloat Terrain::getHeight(GLfloat x_pos, GLfloat z_pos){
     if (i < 0 || i > vertices.size() - 1){
         return 0.0f;
     } else {
-        return vertices[i].y;        
+        return vertices[i].y;
     }
 }
 
@@ -325,17 +325,9 @@ int Terrain::getIndex(int x, int y){
     return x + ((width) * y);
 }
 
-void Terrain::attachTextureSet(TextureSet* texture_set){
-    this->texture_set = texture_set;
-}
-
 void Terrain::updateUniformData(){
     // Set the scale, this is not really going to be a thing, probably
     // ^ It's definitely a thing
     glUniform1f(glGetUniformLocation(shader_program, "scale"), scale);
-
-    // Tell the shader the current time
-    glUniform1f(glGetUniformLocation(shader_program, "time"),
-        (float)glfwGetTime());
 
 }

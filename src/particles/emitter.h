@@ -49,7 +49,7 @@ protected:
     bool hasFired;
 
     Mesh* billboard;
-    TextureSet* texture_set;
+    GLuint particle_texture;
 
     GLuint shader_program;
 

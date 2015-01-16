@@ -10,8 +10,7 @@ FireEmitter::FireEmitter(GLuint shader_program, glm::vec3 position, float radius
     this->radius = radius;
 
     // Hardcoded fire particle texture
-    GLuint emit = TextureLoader::loadTextureFromFile("res/textures/fire_part.png", GL_LINEAR);
-    texture_set = new TextureSet(0, 0, 0, emit);
+    particle_texture = TextureLoader::loadTextureFromFile("res/textures/fire_part.png", GL_LINEAR);
 
     // Hardcoded density, maximum, and lifespan
     this->maxParticles = 200;
@@ -38,14 +37,14 @@ void FireEmitter::prepareParticles(Camera* camera){
 
         glm::vec3 velocity(0.0f, randomVelocity, 0.0f);
         glm::vec3 acceleration(0.0f, 0.0f, 0.0f);
-        
+
         // Particle recycling!
         // Weird that the pointer must be explicitly set to 0, but crashes without this
-        Particle* ptr = 0; 
+        Particle* ptr = 0;
         if(particles.size() < maxParticles){
             ptr = new Particle(billboard, shader_program);
-            ptr->attachTextureSet(texture_set);
-        } 
+            ptr->setEmissive(particle_texture);
+        }
         if(particles.size() > 0 && particles[0]->isDead()){
             ptr = particles[0];
             particles.pop_front();
