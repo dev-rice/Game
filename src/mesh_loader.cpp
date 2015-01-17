@@ -160,9 +160,10 @@ void MeshLoader::loadMeshFromFile(const char* fileName){
     for (int i = 0; i < final_tris.size(); i += 3){
         std::vector<glm::vec3> points;
         std::vector<glm::vec2> uvs;
-
+        Debug::info("Face %d: \n", i / 3);
         for (int j = 0; j < 3; ++j){
             int vertex_index = final_tris[i + j] * 8;
+
             glm::vec3 p = glm::vec3(final_verts[vertex_index],
                 final_verts[vertex_index + 1], final_verts[vertex_index + 2]);
             glm::vec2 uv = glm::vec2(final_verts[vertex_index + 6],
@@ -171,14 +172,34 @@ void MeshLoader::loadMeshFromFile(const char* fileName){
             uvs.push_back(uv);
         }
 
-        Debug::info("Face %d: \n", i);
         Debug::info("  points: \n");
         Debug::info("    (%.4f, %.4f, %.4f)\n", points[0].x, points[0].y, points[0].z);
         Debug::info("    (%.4f, %.4f, %.4f)\n", points[1].x, points[1].y, points[1].z);
         Debug::info("    (%.4f, %.4f, %.4f)\n", points[2].x, points[2].y, points[2].z);
         Debug::info("  uvs: \n");
         Debug::info("    (%.4f, %.4f)\n", uvs[0].x, uvs[0].y);
-        Debug::info("    (%.4f, %.4f)\n", uvs[0].x, uvs[0].y);
+        Debug::info("    (%.4f, %.4f)\n", uvs[1].x, uvs[1].y);
+        Debug::info("    (%.4f, %.4f)\n", uvs[2].x, uvs[2].y);
+
+        glm::vec3 p10 = points[1] - points[0];
+        glm::vec3 p20 = points[2] - points[0];
+
+        float u10 = uvs[1].x - uvs[0].x;
+        float u20 = uvs[2].x - uvs[0].x;
+        float v10 = uvs[1].y - uvs[0].y;
+        float v20 = uvs[2].y - uvs[0].y;
+
+        glm::vec3 tangent = (p20 - (v20/v10) * p10) / (u20 - (v20 * u10)/v10);
+        tangent = glm::normalize(tangent);
+        glm::vec3 bitangent = (p10 - u10 * tangent) / v10;
+        bitangent = glm::normalize(bitangent);
+
+        Debug::info("  calculated:\n");
+        Debug::info("    tangent   = (%.4f, %.4f, %.4f)\n", tangent.x,
+            tangent.y, tangent.z);
+        Debug::info("    bitangent = (%.4f, %.4f, %.4f)\n", bitangent.x,
+            bitangent.y, bitangent.z);
+
 
     }
 
