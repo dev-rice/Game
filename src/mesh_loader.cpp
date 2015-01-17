@@ -235,7 +235,7 @@ void MeshLoader::loadMeshFromFile(const char* fileName){
             vertices[index + 11] = bitangent.z;
             vertices[index + 12] = uv.x;
             vertices[index + 13] = uv.y;
-
+        }
     }
 
 }
