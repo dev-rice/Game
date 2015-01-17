@@ -82,7 +82,7 @@ void main() {
 
     // The first light is reserved for the directional light
     for (int i = 1; i < num_lights; ++i){
-        vec3 light_vector = ((vec4(lights[i].position, 1.0)) -
+        vec3 light_vector = (view * (vec4(lights[i].position, 1.0)) -
             (world_position)).xyz;
         lights[i].light_to_surface = light_vector;
     }
