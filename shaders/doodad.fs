@@ -101,8 +101,8 @@ void main() {
     specular = texture(specular_texture, Texcoord);
     emissive = texture(emissive_texture, Texcoord);
 
-    map_surface_normal = (texture(normal_map, Texcoord) * 2 - vec4(1, 1, 1, 0)).rgb;
-    // map_surface_normal = surface_normal;
+    // map_surface_normal = (texture(normal_map, Texcoord) * 2 - vec4(1, 1, 1, 0)).rgb;
+    map_surface_normal = surface_normal;
 
     float visibility;
     if (SHADOWS){
@@ -116,9 +116,9 @@ void main() {
     vec4 lit_component = vec4(0.0, 0.0, 0.0, 0.0);
 
     // Direction light
-    // light = lights[0];
-    // lit_component = lit_component + visibility *
-    //     lightFragment(light.light_to_surface, light.color, light.power);
+    light = lights[0];
+    lit_component = lit_component + visibility *
+        lightFragment(light.light_to_surface, light.color, light.power);
 
     // Other lights
     light = lights[1];

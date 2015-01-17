@@ -77,10 +77,9 @@ void main() {
     lights[0].power = 1.0;
     vec3 direction_vector = normalize(lights[0].position);
     vec4 light_vector = view * vec4(direction_vector, 0.0);
-    light_vector = normalize(normal_basis * light_vector);
     lights[0].light_to_surface = light_vector.xyz;
 
-    lights[1].position = vec3(-1.5, 0.5, 0.0);
+    lights[1].position = vec3(-1.415, 0.5, 0.0);
     lights[1].color = vec3(1.0, 0.3, 0.1);
     lights[1].power = 5.0;
 
@@ -90,7 +89,7 @@ void main() {
 
     // The first light is reserved for the directional light
     for (int i = 1; i < num_lights; ++i){
-        vec3 light_vector = (normal_basis * (view * (vec4(lights[i].position, 1.0)) -
+        vec3 light_vector = ((view * (vec4(lights[i].position, 1.0)) -
             (world_position))).xyz;
 
         lights[i].light_to_surface = light_vector;

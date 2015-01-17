@@ -140,15 +140,15 @@ void MeshLoader::loadMeshFromFile(const char* fileName){
     //         point.
     //      4. Calculate the Tangent by
     //
-    //                    P20 - (V20/V10) * P10
+    //                    P10 * V20 - P20 * V10
     //            T =  ----------------------------
-    //                   U20 - (V20 * U10)/(V10)
+    //                    U10 * V20 - U20 * V10
     //
     //      5. And the Bitangent by
     //
-    //                   P10 - (U10) * T
-    //            B =   -----------------
-    //                         V10
+    //                    P20 * U10 - P10 * U20
+    //            T =  ----------------------------
+    //                    U10 * V20 - U20 * V10
     //
     //      6. Add these into all vertices on the face
 
@@ -166,7 +166,6 @@ void MeshLoader::loadMeshFromFile(const char* fileName){
         std::vector<glm::vec3> normals;
         std::vector<glm::vec2> uvs;
 
-        // Debug::info("Face %d: \n", i / 3);
         for (int j = 0; j < 3; ++j){
             int index = final_tris[i + j] * 8;
 
@@ -181,15 +180,6 @@ void MeshLoader::loadMeshFromFile(const char* fileName){
             normals.push_back(n);
             uvs.push_back(uv);
         }
-
-        // Debug::info("  points: \n");
-        // Debug::info("    0: (%.4f, %.4f, %.4f)\n", points[0].x, points[0].y, points[0].z);
-        // Debug::info("    1: (%.4f, %.4f, %.4f)\n", points[1].x, points[1].y, points[1].z);
-        // Debug::info("    2: (%.4f, %.4f, %.4f)\n", points[2].x, points[2].y, points[2].z);
-        // Debug::info("  uvs: \n");
-        // Debug::info("    0: (%.4f, %.4f)\n", uvs[0].x, uvs[0].y);
-        // Debug::info("    1: (%.4f, %.4f)\n", uvs[1].x, uvs[1].y);
-        // Debug::info("    2: (%.4f, %.4f)\n", uvs[2].x, uvs[2].y);
 
         glm::vec3 p10 = points[1] - points[0];
         glm::vec3 p20 = points[2] - points[0];
@@ -208,13 +198,6 @@ void MeshLoader::loadMeshFromFile(const char* fileName){
         tangent = glm::normalize(tangent);
         bitangent = glm::normalize(bitangent);
 
-        // Debug::info("  calculated:\n");
-        // Debug::info("    tangent   = (%.4f, %.4f, %.4f)\n", tangent.x,
-        //     tangent.y, tangent.z);
-        // Debug::info("    bitangent = (%.4f, %.4f, %.4f)\n", bitangent.x,
-        //     bitangent.y, bitangent.z);
-        // Debug::info("\n");
-
         // Actually set this data in the vertex array
         for (int j = 0; j < 3; ++j){
             int index = final_tris[i + j] * 14;
@@ -224,23 +207,6 @@ void MeshLoader::loadMeshFromFile(const char* fileName){
             glm::vec2 uv = uvs[j];
 
             normal = normalize(normal);
-
-            // A dot B = AB * cos(theta)
-            GLfloat normal_tangent_angle = acos(glm::dot(normal, tangent));
-                normal_tangent_angle = glm::degrees(normal_tangent_angle);
-            GLfloat normal_bitangent_angle = acos(glm::dot(normal, bitangent));
-                normal_bitangent_angle = glm::degrees(normal_bitangent_angle);
-            GLfloat tangent_bitangent_angle = acos(glm::dot(tangent, bitangent));
-                tangent_bitangent_angle = glm::degrees(tangent_bitangent_angle);
-
-            Debug::info("Normal check:\n");
-            Debug::info("  angle between N and T = %.2f\n",
-                normal_tangent_angle);
-            Debug::info("  angle between N and B = %.2f\n",
-                normal_bitangent_angle);
-            Debug::info("  angle between T and B = %.2f\n",
-                tangent_bitangent_angle);
-
 
             // Shitty Shitty Shit Shit code
             vertices[index]      = point.x;
@@ -264,14 +230,6 @@ void MeshLoader::loadMeshFromFile(const char* fileName){
         delta_time, fileName);
 
     final_verts = vertices;
-
-    // for (int i = 0; i < vertices.size(); i += 14){
-    //     Debug::info("%.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f"
-    //         " %.2f %.2f %.2f\n", vertices[i], vertices[i], vertices[i+1],
-    //         vertices[i+2], vertices[i+3], vertices[i+4], vertices[i+5],
-    //         vertices[i+6], vertices[i+7], vertices[i+8], vertices[i+9],
-    //         vertices[i+10], vertices[i+11], vertices[i+12], vertices[i+13]);
-    // }
 
 }
 
