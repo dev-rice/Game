@@ -33,7 +33,7 @@ vec4 emissive;
 
 vec3 map_surface_normal;
 
-const bool SHADOW_DEBUG = false;
+const bool SHADOWS = false;
 
 vec4 lightFragment(vec3 light_vector, vec3 light_color, float light_power){
     float intensity = light_power / (pow(light_vector.x, 2) + pow(light_vector.y,
@@ -82,7 +82,7 @@ float getShadowFactor(){
     vec4 shadow_texture = blurred_pixel;
 
     bool in_shadow_map = (shadow_coord.x >= 0.0) && (shadow_coord.x <= 1.0) &&
-    (shadow_coord.y >= 0.0) && (shadow_coord.y <= 1.0) || SHADOW_DEBUG;
+    (shadow_coord.y >= 0.0) && (shadow_coord.y <= 1.0);
     float light_depth = shadow_texture.z;
     float current_depth = shadow_coord.z - bias;
     if ((light_depth  <=  current_depth) && in_shadow_map && (angle > 0.2)){
@@ -99,11 +99,16 @@ void main() {
     specular = texture(specular_texture, Texcoord);
     emissive = texture(emissive_texture, Texcoord);
 
-    map_surface_normal = (transpose(normal_basis) *
-        (texture(normal_map, Texcoord) * 2 - vec4(1, 1, 1, 0))).rgb;
-    // map_surface_normal = surface_normal;
+    // map_surface_normal = (texture(normal_map, Texcoord) * 2 - vec4(1, 1, 1, 0)).rgb;
+    // map_surface_normal = (transpose(normal_basis) * vec4(map_surface_normal, 1.0)).rgb;
+    map_surface_normal = surface_normal;
 
-    float visibility = getShadowFactor();
+    float visibility;
+    if (SHADOWS){
+        visibility = getShadowFactor();
+    } else{
+        visibility = 1.0;
+    }
 
     // Works fine
     Light light;

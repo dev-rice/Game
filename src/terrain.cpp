@@ -181,10 +181,12 @@ Mesh* Terrain::generateMesh(Heightmap& heightmap){
     // large areas.
     // The normal vector is the unit vector of the sum of each face normal.
     normals = std::vector<glm::vec3>(vertices.size());
+    std::vector<glm::vec3> tangents = std::vector<glm::vec3>(vertices.size());
+    std::vector<glm::vec3> bitangents = std::vector<glm::vec3>(vertices.size());
 
     GLuint a_index, b_index, c_index;
     glm::vec3 a, b, c;
-    glm::vec3 current_normal;
+    glm::vec3 current_normal, current_tangent, current_bitangent;
     for (int i = 0; i < faces_vector.size(); i += 3){
         // The normal is uniform across a face so we can
         // calculate the normal for the first vertex in
@@ -198,16 +200,29 @@ Mesh* Terrain::generateMesh(Heightmap& heightmap){
         c = vertices[c_index];
 
         current_normal = glm::cross((b - a), (c - a));
+        current_tangent = c - a;
+        current_bitangent = b - a;
 
         normals[a_index] += current_normal;
         normals[b_index] += current_normal;
         normals[c_index] += current_normal;
+
+        tangents[a_index] += current_tangent;
+        tangents[b_index] += current_tangent;
+        tangents[c_index] += current_tangent;
+
+        bitangents[a_index] += current_bitangent;
+        bitangents[b_index] += current_bitangent;
+        bitangents[c_index] += current_bitangent;
+
 
     }
 
     // Normalize the normals
     for (int i = 0; i < normals.size(); ++i){
         normals[i] = glm::normalize(normals[i]);
+        tangents[i] = glm::normalize(tangents[i]);
+        bitangents[i] = glm::normalize(bitangents[i]);
     }
 
     // Create the map that will be used by level and other things for
@@ -221,10 +236,15 @@ Mesh* Terrain::generateMesh(Heightmap& heightmap){
             int i;
             glm::vec3 vertex;
             glm::vec3 normal;
+            glm::vec3 tangent;
+            glm::vec3 bitangent;
+
             // Upper left
             i = getIndex(x, y);
             vertex = vertices[i];
             normal = normals[i];
+            tangent = tangents[i];
+            bitangent = bitangents[i];
 
             texture_repeated_vertices.push_back(vertex.x);
             texture_repeated_vertices.push_back(vertex.y);
@@ -234,13 +254,13 @@ Mesh* Terrain::generateMesh(Heightmap& heightmap){
             texture_repeated_vertices.push_back(normal.y);
             texture_repeated_vertices.push_back(normal.z);
 
-            texture_repeated_vertices.push_back(0.0f);
-            texture_repeated_vertices.push_back(0.0f);
-            texture_repeated_vertices.push_back(0.0f);
+            texture_repeated_vertices.push_back(tangent.x);
+            texture_repeated_vertices.push_back(tangent.y);
+            texture_repeated_vertices.push_back(tangent.z);
 
-            texture_repeated_vertices.push_back(0.0f);
-            texture_repeated_vertices.push_back(0.0f);
-            texture_repeated_vertices.push_back(0.0f);
+            texture_repeated_vertices.push_back(bitangent.x);
+            texture_repeated_vertices.push_back(bitangent.y);
+            texture_repeated_vertices.push_back(bitangent.z);
 
             texture_repeated_vertices.push_back(0.0f);
             texture_repeated_vertices.push_back(0.0f);
@@ -249,6 +269,8 @@ Mesh* Terrain::generateMesh(Heightmap& heightmap){
             i = getIndex(x+1, y);
             vertex = vertices[i];
             normal = normals[i];
+            tangent = tangents[i];
+            bitangent = bitangents[i];
 
             texture_repeated_vertices.push_back(vertex.x);
             texture_repeated_vertices.push_back(vertex.y);
@@ -258,13 +280,13 @@ Mesh* Terrain::generateMesh(Heightmap& heightmap){
             texture_repeated_vertices.push_back(normal.y);
             texture_repeated_vertices.push_back(normal.z);
 
-            texture_repeated_vertices.push_back(0.0f);
-            texture_repeated_vertices.push_back(0.0f);
-            texture_repeated_vertices.push_back(0.0f);
+            texture_repeated_vertices.push_back(tangent.x);
+            texture_repeated_vertices.push_back(tangent.y);
+            texture_repeated_vertices.push_back(tangent.z);
 
-            texture_repeated_vertices.push_back(0.0f);
-            texture_repeated_vertices.push_back(0.0f);
-            texture_repeated_vertices.push_back(0.0f);
+            texture_repeated_vertices.push_back(bitangent.x);
+            texture_repeated_vertices.push_back(bitangent.y);
+            texture_repeated_vertices.push_back(bitangent.z);
 
             texture_repeated_vertices.push_back(1.0f);
             texture_repeated_vertices.push_back(0.0f);
@@ -273,6 +295,8 @@ Mesh* Terrain::generateMesh(Heightmap& heightmap){
             i = getIndex(x, y+1);
             vertex = vertices[i];
             normal = normals[i];
+            tangent = tangents[i];
+            bitangent = bitangents[i];
 
             texture_repeated_vertices.push_back(vertex.x);
             texture_repeated_vertices.push_back(vertex.y);
@@ -282,13 +306,13 @@ Mesh* Terrain::generateMesh(Heightmap& heightmap){
             texture_repeated_vertices.push_back(normal.y);
             texture_repeated_vertices.push_back(normal.z);
 
-            texture_repeated_vertices.push_back(0.0f);
-            texture_repeated_vertices.push_back(0.0f);
-            texture_repeated_vertices.push_back(0.0f);
+            texture_repeated_vertices.push_back(tangent.x);
+            texture_repeated_vertices.push_back(tangent.y);
+            texture_repeated_vertices.push_back(tangent.z);
 
-            texture_repeated_vertices.push_back(0.0f);
-            texture_repeated_vertices.push_back(0.0f);
-            texture_repeated_vertices.push_back(0.0f);
+            texture_repeated_vertices.push_back(bitangent.x);
+            texture_repeated_vertices.push_back(bitangent.y);
+            texture_repeated_vertices.push_back(bitangent.z);
 
             texture_repeated_vertices.push_back(0.0f);
             texture_repeated_vertices.push_back(1.0f);
@@ -297,6 +321,8 @@ Mesh* Terrain::generateMesh(Heightmap& heightmap){
             i = getIndex(x+1, y+1);
             vertex = vertices[i];
             normal = normals[i];
+            tangent = tangents[i];
+            bitangent = bitangents[i];
 
             texture_repeated_vertices.push_back(vertex.x);
             texture_repeated_vertices.push_back(vertex.y);
@@ -306,13 +332,13 @@ Mesh* Terrain::generateMesh(Heightmap& heightmap){
             texture_repeated_vertices.push_back(normal.y);
             texture_repeated_vertices.push_back(normal.z);
 
-            texture_repeated_vertices.push_back(0.0f);
-            texture_repeated_vertices.push_back(0.0f);
-            texture_repeated_vertices.push_back(0.0f);
+            texture_repeated_vertices.push_back(tangent.x);
+            texture_repeated_vertices.push_back(tangent.y);
+            texture_repeated_vertices.push_back(tangent.z);
 
-            texture_repeated_vertices.push_back(0.0f);
-            texture_repeated_vertices.push_back(0.0f);
-            texture_repeated_vertices.push_back(0.0f);
+            texture_repeated_vertices.push_back(bitangent.x);
+            texture_repeated_vertices.push_back(bitangent.y);
+            texture_repeated_vertices.push_back(bitangent.z);
 
             texture_repeated_vertices.push_back(1.0f);
             texture_repeated_vertices.push_back(1.0f);
