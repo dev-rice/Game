@@ -173,13 +173,13 @@ void MeshLoader::loadMeshFromFile(const char* fileName){
         }
 
         Debug::info("  points: \n");
-        Debug::info("    (%.4f, %.4f, %.4f)\n", points[0].x, points[0].y, points[0].z);
-        Debug::info("    (%.4f, %.4f, %.4f)\n", points[1].x, points[1].y, points[1].z);
-        Debug::info("    (%.4f, %.4f, %.4f)\n", points[2].x, points[2].y, points[2].z);
+        Debug::info("    0: (%.4f, %.4f, %.4f)\n", points[0].x, points[0].y, points[0].z);
+        Debug::info("    1: (%.4f, %.4f, %.4f)\n", points[1].x, points[1].y, points[1].z);
+        Debug::info("    2: (%.4f, %.4f, %.4f)\n", points[2].x, points[2].y, points[2].z);
         Debug::info("  uvs: \n");
-        Debug::info("    (%.4f, %.4f)\n", uvs[0].x, uvs[0].y);
-        Debug::info("    (%.4f, %.4f)\n", uvs[1].x, uvs[1].y);
-        Debug::info("    (%.4f, %.4f)\n", uvs[2].x, uvs[2].y);
+        Debug::info("    0: (%.4f, %.4f)\n", uvs[0].x, uvs[0].y);
+        Debug::info("    1: (%.4f, %.4f)\n", uvs[1].x, uvs[1].y);
+        Debug::info("    2: (%.4f, %.4f)\n", uvs[2].x, uvs[2].y);
 
         glm::vec3 p10 = points[1] - points[0];
         glm::vec3 p20 = points[2] - points[0];
@@ -189,12 +189,21 @@ void MeshLoader::loadMeshFromFile(const char* fileName){
         float v10 = uvs[1].y - uvs[0].y;
         float v20 = uvs[2].y - uvs[0].y;
 
-        glm::vec3 tangent = (p20 - (v20/v10) * p10) / (u20 - (v20 * u10)/v10);
+        // Need to check for edge cases because this math
+        // breaks if ((u10 * v20) - (v10 * u20)) = 0
+        float divisor = 1.0f / (u10 * v20 - v10 * u20);
+        glm::vec3 tangent = (p10 * v20 - p20 * v10) * divisor;
+        glm::vec3 bitangent = (p20 * u10 - p10 * u20) * divisor;
+
         tangent = glm::normalize(tangent);
-        glm::vec3 bitangent = (p10 - u10 * tangent) / v10;
         bitangent = glm::normalize(bitangent);
 
         Debug::info("  calculated:\n");
+        Debug::info("    u10 = %.4f\n", u10);
+        Debug::info("    u20 = %.4f\n", u20);
+        Debug::info("    v10 = %.4f\n", v10);
+        Debug::info("    v20 = %.4f\n", v20);
+
         Debug::info("    tangent   = (%.4f, %.4f, %.4f)\n", tangent.x,
             tangent.y, tangent.z);
         Debug::info("    bitangent = (%.4f, %.4f, %.4f)\n", bitangent.x,
