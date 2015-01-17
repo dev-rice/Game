@@ -101,8 +101,8 @@ void main() {
     specular = texture(specular_texture, Texcoord);
     emissive = texture(emissive_texture, Texcoord);
 
-    // map_surface_normal = (texture(normal_map, Texcoord) * 2 - vec4(1, 1, 1, 0)).rgb;
-    map_surface_normal = surface_normal;
+    map_surface_normal = (texture(normal_map, Texcoord) * 2 - vec4(1, 1, 1, 0)).rgb;
+    // map_surface_normal = surface_normal;
 
     float visibility;
     if (SHADOWS){

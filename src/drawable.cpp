@@ -28,13 +28,14 @@ void Drawable::load(Mesh* mesh, GLuint shader_program, glm::vec3 position, glm::
     // Get the default textures for the drawable.
     GLuint pink = TextureLoader::loadPink();
     GLuint alpha = TextureLoader::loadAlpha();
+    GLuint blue = TextureLoader::loadBlue();
 
     // Setup the drawable such that if no textures
     // are attached later, then it will be bright pink
     this->diffuse = alpha;
     this->specular = alpha;
     this->emissive = pink;
-    this->normal = alpha;
+    this->normal = blue;
     this->gloss = alpha;
 
 

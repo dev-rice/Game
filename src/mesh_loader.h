@@ -13,17 +13,25 @@
 // #elif defined __gnu_linux__
 #endif
 
+#define GLM_FORCE_RADIANS
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 #include <vector>
+#include <cmath>
+
+#include "debug.h"
 
 class MeshLoader{
 public:
     MeshLoader(const char*);
-    
+
     std::vector<GLfloat> getVertexArray();
     std::vector<GLuint>  getFaceArray();
-    
+
 private:
-    
+
     void loadMeshFromFile(const char*);
 
     std::vector<GLuint> final_tris;

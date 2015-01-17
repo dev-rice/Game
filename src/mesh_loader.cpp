@@ -25,6 +25,10 @@ void MeshLoader::loadMeshFromFile(const char* fileName){
     std::vector<GLuint> tris2D;
     std::vector<GLuint> norms3D;
 
+    std::vector<glm::vec3> tangents;
+    std::vector<glm::vec3> bitangents;
+
+
     int triCount = 0;
 
     char buffer[128];
@@ -35,7 +39,7 @@ void MeshLoader::loadMeshFromFile(const char* fileName){
     if(ifile == NULL){
         printf("Error opening file %s\n", fileName);
         return;
-    
+
     }
 
     while(! feof(ifile)){
@@ -74,7 +78,6 @@ void MeshLoader::loadMeshFromFile(const char* fileName){
             norms3D.push_back((GLuint)tempG);
             norms3D.push_back((GLuint)tempH);
             norms3D.push_back((GLuint)tempI);
-
             triCount++;
         }
     }
@@ -103,13 +106,13 @@ void MeshLoader::loadMeshFromFile(const char* fileName){
                 tempX = verts3D[ (tuple[0]-1)*3+0 ];
                 tempY = verts3D[ (tuple[0]-1)*3+1 ];
                 tempZ = verts3D[ (tuple[0]-1)*3+2 ];
-                
+
                 // Acessing 3D normal vertices indicated by the connection list
                 GLuint something = norms3D[i*3 + j];
                 GLfloat tempVN1 = verts_norm[(something - 1)*3 +0 ];
                 GLfloat tempVN2 = verts_norm[ (something - 1)*3 +1 ];
                 GLfloat tempVN3 = verts_norm[(something - 1)*3 +2  ];
-                
+
                 // Acessing 2D vertices indicated by the connection list
                 GLfloat tempX2 = verts2D[ (tuple[1]-1)*2+0 ];
                 GLfloat tempY2 = verts2D[ (tuple[1]-1)*2+1 ];
@@ -122,25 +125,126 @@ void MeshLoader::loadMeshFromFile(const char* fileName){
                 final_verts.push_back(tempVN3);
                 final_verts.push_back(tempX2);
                 final_verts.push_back(tempY2);
-            }   
-            final_tris.push_back(mappedEdgeLoops[tuple]-1);     
+            }
+            final_tris.push_back(mappedEdgeLoops[tuple]-1);
         }
     }
+
+    // Define the basis of the space that each vertex is at for
+    // normal mapping.
+    // For each face:
+    //      1. The first point is P0, second is P1, third is P2
+    //      2. Find P10 and P20 which are vectors defining the edges
+    //      3. Find U10, U20, V10, and V20 which are scalars that
+    //         represent the change in texture coordinates for each
+    //         point.
+    //      4. Calculate the Tangent by
+    //
+    //                    P10 * V20 - P20 * V10
+    //            T =  ----------------------------
+    //                    U10 * V20 - U20 * V10
+    //
+    //      5. And the Bitangent by
+    //
+    //                    P20 * U10 - P10 * U20
+    //            T =  ----------------------------
+    //                    U10 * V20 - U20 * V10
+    //
+    //      6. Add these into all vertices on the face
+
+    // Ideally the tangent and bitangent would be already written to
+    // the object file. For now, this will suffice.
+    // The following is not the most eficient way to implement this
+    // because it requires creating a new vertex vector and a bunch of
+    // other stuff that was done already.
+    int num_vertices = final_verts.size() / 8;
+    std::vector<GLfloat> vertices = std::vector<GLfloat>(num_vertices * 14);
+
+    float start_time = glfwGetTime();
+    for (int i = 0; i < final_tris.size(); i += 3){
+        std::vector<glm::vec3> points;
+        std::vector<glm::vec3> normals;
+        std::vector<glm::vec2> uvs;
+
+        for (int j = 0; j < 3; ++j){
+            int index = final_tris[i + j] * 8;
+
+            glm::vec3 p = glm::vec3(final_verts[index],
+                final_verts[index + 1], final_verts[index + 2]);
+            glm::vec3 n = glm::vec3(final_verts[index + 3],
+                final_verts[index + 4], final_verts[index + 5]);
+            glm::vec2 uv = glm::vec2(final_verts[index + 6],
+                final_verts[index + 7]);
+
+            points.push_back(p);
+            normals.push_back(n);
+            uvs.push_back(uv);
+        }
+
+        glm::vec3 p10 = points[1] - points[0];
+        glm::vec3 p20 = points[2] - points[0];
+
+        float u10 = uvs[1].x - uvs[0].x;
+        float u20 = uvs[2].x - uvs[0].x;
+        float v10 = uvs[1].y - uvs[0].y;
+        float v20 = uvs[2].y - uvs[0].y;
+
+        // Need to check for edge cases because this math
+        // breaks if ((u10 * v20) - (v10 * u20)) = 0
+        float divisor = 1.0f / (u10 * v20 - v10 * u20);
+        glm::vec3 tangent = (p10 * v20 - p20 * v10) * divisor;
+        glm::vec3 bitangent = (p20 * u10 - p10 * u20) * divisor;
+
+        tangent = glm::normalize(tangent);
+        bitangent = glm::normalize(bitangent);
+
+        // Actually set this data in the vertex array
+        for (int j = 0; j < 3; ++j){
+            int index = final_tris[i + j] * 14;
+
+            glm::vec3 point = points[j];
+            glm::vec3 normal = normals[j];
+            glm::vec2 uv = uvs[j];
+
+            normal = normalize(normal);
+
+            // Shitty Shitty Shit Shit code
+            vertices[index]      = point.x;
+            vertices[index + 1]  = point.y;
+            vertices[index + 2]  = point.z;
+            vertices[index + 3]  = normal.x;
+            vertices[index + 4]  = normal.y;
+            vertices[index + 5]  = normal.z;
+            vertices[index + 6]  = tangent.x;
+            vertices[index + 7]  = tangent.y;
+            vertices[index + 8]  = tangent.z;
+            vertices[index + 9]  = bitangent.x;
+            vertices[index + 10] = bitangent.y;
+            vertices[index + 11] = bitangent.z;
+            vertices[index + 12] = uv.x;
+            vertices[index + 13] = uv.y;
+        }
+    }
+    float delta_time = glfwGetTime() - start_time;
+    Debug::info("Took %f seconds to do the basis calculations for %s.\n",
+        delta_time, fileName);
+
+    final_verts = vertices;
 
 }
 
 std::vector<GLfloat> MeshLoader::getVertexArray(){
-    GLfloat* vertices = new GLfloat[final_verts.size()];
-    for (int i = 0; i < final_verts.size(); ++i){
-        vertices[i] = final_verts[i];
-    }
+    // GLfloat* vertices = new GLfloat[final_verts.size()];
+    // for (int i = 0; i < final_verts.size(); ++i){
+    //     vertices[i] = final_verts[i];
+    // }
     return final_verts;
 }
 
 std::vector<GLuint> MeshLoader::getFaceArray(){
-    GLuint* faces = new GLuint[final_tris.size()];
-    for (int i = 0; i < final_tris.size(); ++i){
-        faces[i] = final_tris[i];
-    }
+    // GLuint* faces = new GLuint[final_tris.size()];
+    // for (int i = 0; i < final_tris.size(); ++i){
+    //     faces[i] = final_tris[i];
+    // }
     return final_tris;
 }

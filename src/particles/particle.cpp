@@ -3,7 +3,7 @@
 
 #include "particle.h"
 #include "texture_loader.h"
-#include "texture_set.h"
+
 
 Particle::Particle(Mesh* mesh, GLuint shader_program) : Drawable(mesh, shader_program){
 
