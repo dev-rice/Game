@@ -11,7 +11,7 @@ Run
 
 ```sudo apt-get install libglew-dev libglm-dev libglfw3-dev curl```
 
-```curl http://www.lonesock.net/files/soil.zip```
+```wget http://www.lonesock.net/files/soil.zip```
 
 cd Into the SOIL directory and type
 
