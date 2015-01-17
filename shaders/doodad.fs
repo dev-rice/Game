@@ -15,7 +15,9 @@ in vec3 surface_normal;
 in vec3 camera_to_surface;
 in Light lights[num_lights];
 in vec4 shadow_coord;
-in mat4 normal_basis;
+in vec3 Tangent;
+in vec3 Bitangent;
+in vec3 Normal;
 
 out vec4 outColor;
 
@@ -99,9 +101,8 @@ void main() {
     specular = texture(specular_texture, Texcoord);
     emissive = texture(emissive_texture, Texcoord);
 
-    // map_surface_normal = (texture(normal_map, Texcoord) * 2 - vec4(1, 1, 1, 0)).rgb;
-    // map_surface_normal = (transpose(normal_basis) * vec4(map_surface_normal, 1.0)).rgb;
-    map_surface_normal = surface_normal;
+    map_surface_normal = (texture(normal_map, Texcoord) * 2 - vec4(1, 1, 1, 0)).rgb;
+    // map_surface_normal = surface_normal;
 
     float visibility;
     if (SHADOWS){
@@ -137,5 +138,5 @@ void main() {
         discard;
     }
     outColor = texel;
-    // outColor = vec4(map_surface_normal, 1.0);
+    // outColor = vec4(Normal, 1.0);
 }

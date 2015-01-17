@@ -21,7 +21,10 @@ out vec3 surface_normal;
 out vec3 camera_to_surface;
 out Light lights[num_lights];
 out vec4 shadow_coord;
-out mat4 normal_basis;
+out vec3 Tangent;
+out vec3 Bitangent;
+out vec3 Normal;
+
 
 layout(std140) uniform GlobalMatrices {
     mat4 view;
@@ -45,17 +48,21 @@ uniform float scale;
 void main() {
     Texcoord = texcoord;
 
-    vec4 normal_world = view * (model * vec4(normal, 1.0));
+    Tangent = tangent;
+    Bitangent = bitangent;
+    Normal = normal;
+
+    vec4 normal_world = view * (model * vec4(normal, 0.0));
     normal_world.w = 0.0;
-    vec4 tangent_world = view * (model * vec4(tangent, 1.0));
+    vec4 tangent_world = view * (model * vec4(tangent, 0.0));
     tangent_world.w = 0.0;
-    vec4 bitangent_world = view * (model * vec4(bitangent, 1.0));
+    vec4 bitangent_world = view * (model * vec4(bitangent, 0.0));
     bitangent_world.w = 0.0;
 
-    normal_basis = mat4(tangent_world,
-                        bitangent_world,
-                        normal_world,
-                        0, 0, 0  , 1);
+    mat4 normal_basis = mat4(tangent_world,
+                             bitangent_world,
+                             normal_world,
+                             0, 0, 0  , 1);
     normal_basis = transpose(normal_basis);
 
     vec3 scaled_position = position * scale;
@@ -70,6 +77,7 @@ void main() {
     lights[0].power = 1.0;
     vec3 direction_vector = normalize(lights[0].position);
     vec4 light_vector = view * vec4(direction_vector, 0.0);
+    light_vector = normalize(normal_basis * light_vector);
     lights[0].light_to_surface = light_vector.xyz;
 
     lights[1].position = vec3(-1.5, 0.5, 0.0);
@@ -84,6 +92,7 @@ void main() {
     for (int i = 1; i < num_lights; ++i){
         vec3 light_vector = (view * (vec4(lights[i].position, 1.0)) -
             (world_position)).xyz;
+
         lights[i].light_to_surface = light_vector;
     }
 
