@@ -155,19 +155,27 @@ void MeshLoader::loadMeshFromFile(const char* fileName){
     // Ideally the tangent and bitangent would be already written to
     // the object file. For now, this will suffice.
     // The following is not the most eficient way to implement this
-    // because it requires creating a new vertex vector.
-    std::vector<GLfloat> vertices;
+    // because it requires creating a new vertex vector and a bunch of
+    // other stuff that was done already.
+    int num_vertices = final_verts.size() / 8;
+    std::vector<GLfloat> vertices = std::vector<GLfloat>(num_vertices * 14);
+
     for (int i = 0; i < final_tris.size(); i += 3){
         std::vector<glm::vec3> points;
+        std::vector<glm::vec3> normals;
         std::vector<glm::vec2> uvs;
+
         Debug::info("Face %d: \n", i / 3);
         for (int j = 0; j < 3; ++j){
-            int vertex_index = final_tris[i + j] * 8;
+            int index = final_tris[i + j] * 8;
 
-            glm::vec3 p = glm::vec3(final_verts[vertex_index],
-                final_verts[vertex_index + 1], final_verts[vertex_index + 2]);
-            glm::vec2 uv = glm::vec2(final_verts[vertex_index + 6],
-                final_verts[vertex_index + 7]);
+            glm::vec3 p = glm::vec3(final_verts[index],
+                final_verts[index + 1], final_verts[index + 2]);
+            glm::vec3 n = glm::vec3(final_verts[index + 3],
+                final_verts[index + 4], final_verts[index + 5]);
+            glm::vec2 uv = glm::vec2(final_verts[index + 6],
+                final_verts[index + 7]);
+
             points.push_back(p);
             uvs.push_back(uv);
         }
@@ -199,16 +207,34 @@ void MeshLoader::loadMeshFromFile(const char* fileName){
         bitangent = glm::normalize(bitangent);
 
         Debug::info("  calculated:\n");
-        Debug::info("    u10 = %.4f\n", u10);
-        Debug::info("    u20 = %.4f\n", u20);
-        Debug::info("    v10 = %.4f\n", v10);
-        Debug::info("    v20 = %.4f\n", v20);
-
         Debug::info("    tangent   = (%.4f, %.4f, %.4f)\n", tangent.x,
             tangent.y, tangent.z);
         Debug::info("    bitangent = (%.4f, %.4f, %.4f)\n", bitangent.x,
             bitangent.y, bitangent.z);
         Debug::info("\n");
+
+        // Actually set this data in the vertex array
+        for (int j = 0; j < 3; ++j){
+            int index = final_tris[i + j];
+            glm::vec3 point = points[j];
+            glm::vec3 normal = normals[j];
+            glm::vec2 uv = uvs[j];
+
+            // Shitty Shitty Shit Shit code
+            vertices[index]      = point.x;
+            vertices[index + 1]  = point.y;
+            vertices[index + 2]  = point.z;
+            vertices[index + 3]  = normal.x;
+            vertices[index + 4]  = normal.y;
+            vertices[index + 5]  = normal.z;
+            vertices[index + 6]  = tangent.x;
+            vertices[index + 7]  = tangent.y;
+            vertices[index + 8]  = tangent.z;
+            vertices[index + 9]  = bitangent.x;
+            vertices[index + 10] = bitangent.y;
+            vertices[index + 11] = bitangent.z;
+            vertices[index + 12] = uv.x;
+            vertices[index + 13] = uv.y;
 
     }
 
