@@ -160,12 +160,13 @@ void MeshLoader::loadMeshFromFile(const char* fileName){
     int num_vertices = final_verts.size() / 8;
     std::vector<GLfloat> vertices = std::vector<GLfloat>(num_vertices * 14);
 
+    float start_time = glfwGetTime();
     for (int i = 0; i < final_tris.size(); i += 3){
         std::vector<glm::vec3> points;
         std::vector<glm::vec3> normals;
         std::vector<glm::vec2> uvs;
 
-        Debug::info("Face %d: \n", i / 3);
+        // Debug::info("Face %d: \n", i / 3);
         for (int j = 0; j < 3; ++j){
             int index = final_tris[i + j] * 8;
 
@@ -177,17 +178,18 @@ void MeshLoader::loadMeshFromFile(const char* fileName){
                 final_verts[index + 7]);
 
             points.push_back(p);
+            normals.push_back(n);
             uvs.push_back(uv);
         }
 
-        Debug::info("  points: \n");
-        Debug::info("    0: (%.4f, %.4f, %.4f)\n", points[0].x, points[0].y, points[0].z);
-        Debug::info("    1: (%.4f, %.4f, %.4f)\n", points[1].x, points[1].y, points[1].z);
-        Debug::info("    2: (%.4f, %.4f, %.4f)\n", points[2].x, points[2].y, points[2].z);
-        Debug::info("  uvs: \n");
-        Debug::info("    0: (%.4f, %.4f)\n", uvs[0].x, uvs[0].y);
-        Debug::info("    1: (%.4f, %.4f)\n", uvs[1].x, uvs[1].y);
-        Debug::info("    2: (%.4f, %.4f)\n", uvs[2].x, uvs[2].y);
+        // Debug::info("  points: \n");
+        // Debug::info("    0: (%.4f, %.4f, %.4f)\n", points[0].x, points[0].y, points[0].z);
+        // Debug::info("    1: (%.4f, %.4f, %.4f)\n", points[1].x, points[1].y, points[1].z);
+        // Debug::info("    2: (%.4f, %.4f, %.4f)\n", points[2].x, points[2].y, points[2].z);
+        // Debug::info("  uvs: \n");
+        // Debug::info("    0: (%.4f, %.4f)\n", uvs[0].x, uvs[0].y);
+        // Debug::info("    1: (%.4f, %.4f)\n", uvs[1].x, uvs[1].y);
+        // Debug::info("    2: (%.4f, %.4f)\n", uvs[2].x, uvs[2].y);
 
         glm::vec3 p10 = points[1] - points[0];
         glm::vec3 p20 = points[2] - points[0];
@@ -206,19 +208,21 @@ void MeshLoader::loadMeshFromFile(const char* fileName){
         tangent = glm::normalize(tangent);
         bitangent = glm::normalize(bitangent);
 
-        Debug::info("  calculated:\n");
-        Debug::info("    tangent   = (%.4f, %.4f, %.4f)\n", tangent.x,
-            tangent.y, tangent.z);
-        Debug::info("    bitangent = (%.4f, %.4f, %.4f)\n", bitangent.x,
-            bitangent.y, bitangent.z);
-        Debug::info("\n");
+        // Debug::info("  calculated:\n");
+        // Debug::info("    tangent   = (%.4f, %.4f, %.4f)\n", tangent.x,
+        //     tangent.y, tangent.z);
+        // Debug::info("    bitangent = (%.4f, %.4f, %.4f)\n", bitangent.x,
+        //     bitangent.y, bitangent.z);
+        // Debug::info("\n");
 
         // Actually set this data in the vertex array
         for (int j = 0; j < 3; ++j){
-            int index = final_tris[i + j];
+            int index = final_tris[i + j] * 14;
+
             glm::vec3 point = points[j];
             glm::vec3 normal = normals[j];
             glm::vec2 uv = uvs[j];
+
 
             // Shitty Shitty Shit Shit code
             vertices[index]      = point.x;
@@ -237,6 +241,17 @@ void MeshLoader::loadMeshFromFile(const char* fileName){
             vertices[index + 13] = uv.y;
         }
     }
+    float delta_time = glfwGetTime() - start_time;
+    Debug::info("Took %f seconds to do the basis calculations for %s.\n",
+        delta_time, fileName);
+
+    // for (int i = 0; i < vertices.size(); i += 14){
+    //     Debug::info("%.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f"
+    //         " %.2f %.2f %.2f\n", vertices[i], vertices[i], vertices[i+1],
+    //         vertices[i+2], vertices[i+3], vertices[i+4], vertices[i+5],
+    //         vertices[i+6], vertices[i+7], vertices[i+8], vertices[i+9],
+    //         vertices[i+10], vertices[i+11], vertices[i+12], vertices[i+13]);
+    // }
 
 }
 

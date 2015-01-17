@@ -9,9 +9,6 @@ CharacterDrawable::CharacterDrawable(GLuint shader_program, GLuint texture, GLin
         height_pixels = point;
         width_pixels = point * (CharacterMesh::CHARACTER_WIDTH / CharacterMesh::CHARACTER_HEIGHT);
 
-        Debug::info("Character dimensions for %d pt font = %d by %d.\n", point,
-            height_pixels, width_pixels);
-
         updateDimensions();
         setGLPosition(getGLPosition());
 }
