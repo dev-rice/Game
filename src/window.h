@@ -20,6 +20,9 @@ public:
     void close();
     void takeScreenshot();
 
+    void requestClose() {should_close = true;}
+    bool shouldClose() {return should_close;}
+
     void setWidth(int w) { width = w;}
     void setHeight(int h) { height = h;}
     void setFullscreen(bool f) {fullscreen = f;}
@@ -44,6 +47,8 @@ private:
     int requested_height;
 
     int fxaa_level;
+
+    bool should_close;
 
     static Window* instance;
     Window();

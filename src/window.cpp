@@ -3,7 +3,7 @@
 Window* Window::instance;
 
 Window::Window(){
-
+    should_close = false;
 }
 
 void Window::swapBuffers(){

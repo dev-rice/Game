@@ -117,7 +117,7 @@ int main(int argc, char* argv[]) {
     window->setFxaaLevel(fxaa_level);
 
     GLFWwindow* glfw_window = Window::getInstance()->getGLFWWindow();
-    
+
     // Create the world
     World* world;
     if (has_map){
@@ -128,7 +128,7 @@ int main(int argc, char* argv[]) {
 
 
     // Display loop
-    while(!glfwWindowShouldClose(glfw_window)) {
+    while(!window->shouldClose()) {
         world->update();
     }
 

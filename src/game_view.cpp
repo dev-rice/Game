@@ -226,7 +226,7 @@ void GameView::handleInputs(){
 
     // Closing the window
     if (glfwGetKey(glfw_window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
-        glfwSetWindowShouldClose(glfw_window, GL_TRUE);
+        window->requestClose();
     }
 
     if(glfwGetMouseButton(glfw_window, GLFW_MOUSE_BUTTON_LEFT)){
