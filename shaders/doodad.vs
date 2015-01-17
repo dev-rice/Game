@@ -63,7 +63,7 @@ void main() {
                              bitangent_world,
                              normal_world,
                              0, 0, 0  , 1);
-    normal_basis = transpose(normal_basis);
+    normal_basis = inverse(normal_basis);
 
     vec3 scaled_position = position * scale;
     vec4 model_position = model * vec4(scaled_position, 1.0);
@@ -90,8 +90,8 @@ void main() {
 
     // The first light is reserved for the directional light
     for (int i = 1; i < num_lights; ++i){
-        vec3 light_vector = (view * (vec4(lights[i].position, 1.0)) -
-            (world_position)).xyz;
+        vec3 light_vector = (normal_basis * (view * (vec4(lights[i].position, 1.0)) -
+            (world_position))).xyz;
 
         lights[i].light_to_surface = light_vector;
     }
