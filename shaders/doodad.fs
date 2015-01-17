@@ -35,7 +35,7 @@ vec4 emissive;
 
 vec3 map_surface_normal;
 
-const bool SHADOWS = true;
+const bool SHADOWS = false;
 
 vec4 lightFragment(vec3 light_vector, vec3 light_color, float light_power){
     float intensity = light_power / (pow(light_vector.x, 2) + pow(light_vector.y,
@@ -116,9 +116,9 @@ void main() {
     vec4 lit_component = vec4(0.0, 0.0, 0.0, 0.0);
 
     // Direction light
-    light = lights[0];
-    lit_component = lit_component + visibility *
-        lightFragment(light.light_to_surface, light.color, light.power);
+    // light = lights[0];
+    // lit_component = lit_component + visibility *
+    //     lightFragment(light.light_to_surface, light.color, light.power);
 
     // Other lights
     light = lights[1];

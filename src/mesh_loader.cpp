@@ -223,6 +223,24 @@ void MeshLoader::loadMeshFromFile(const char* fileName){
             glm::vec3 normal = normals[j];
             glm::vec2 uv = uvs[j];
 
+            normal = normalize(normal);
+
+            // A dot B = AB * cos(theta)
+            GLfloat normal_tangent_angle = acos(glm::dot(normal, tangent));
+                normal_tangent_angle = glm::degrees(normal_tangent_angle);
+            GLfloat normal_bitangent_angle = acos(glm::dot(normal, bitangent));
+                normal_bitangent_angle = glm::degrees(normal_bitangent_angle);
+            GLfloat tangent_bitangent_angle = acos(glm::dot(tangent, bitangent));
+                tangent_bitangent_angle = glm::degrees(tangent_bitangent_angle);
+
+            Debug::info("Normal check:\n");
+            Debug::info("  angle between N and T = %.2f\n",
+                normal_tangent_angle);
+            Debug::info("  angle between N and B = %.2f\n",
+                normal_bitangent_angle);
+            Debug::info("  angle between T and B = %.2f\n",
+                tangent_bitangent_angle);
+
 
             // Shitty Shitty Shit Shit code
             vertices[index]      = point.x;
