@@ -25,6 +25,10 @@ void MeshLoader::loadMeshFromFile(const char* fileName){
     std::vector<GLuint> tris2D;
     std::vector<GLuint> norms3D;
 
+    std::vector<glm::vec3> tangents;
+    std::vector<glm::vec3> bitangents;
+
+
     int triCount = 0;
 
     char buffer[128];
@@ -74,7 +78,6 @@ void MeshLoader::loadMeshFromFile(const char* fileName){
             norms3D.push_back((GLuint)tempG);
             norms3D.push_back((GLuint)tempH);
             norms3D.push_back((GLuint)tempI);
-
             triCount++;
         }
     }
@@ -127,7 +130,57 @@ void MeshLoader::loadMeshFromFile(const char* fileName){
         }
     }
 
+    // Define the basis of the space that each vertex is at for
+    // normal mapping.
+    // For each face:
+    //      1. The first point is P0, second is P1, third is P2
+    //      2. Find P10 and P20 which are vectors defining the edges
+    //      3. Find U10, U20, V10, and V20 which are scalars that
+    //         represent the change in texture coordinates for each
+    //         point.
+    //      4. Calculate the Tangent by
+    //
+    //                    P20 - (V20/V10) * P10
+    //            T =  ----------------------------
+    //                   U20 - (V20 * U10)/(V10)
+    //
+    //      5. And the Bitangent by
+    //
+    //                   P10 - (U10) * T
+    //            B =   -----------------
+    //                         V10
+    //
+    //      6. Add these into all vertices on the face
 
+    // Ideally the tangent and bitangent would be already written to
+    // the object file. For now, this will suffice.
+    // The following is not the most eficient way to implement this
+    // because it requires creating a new vertex vector.
+    std::vector<GLfloat> vertices;
+    for (int i = 0; i < final_tris.size(); i += 3){
+        std::vector<glm::vec3> points;
+        std::vector<glm::vec2> uvs;
+
+        for (int j = 0; j < 3; ++j){
+            int vertex_index = final_tris[i + j] * 8;
+            glm::vec3 p = glm::vec3(final_verts[vertex_index],
+                final_verts[vertex_index + 1], final_verts[vertex_index + 2]);
+            glm::vec2 uv = glm::vec2(final_verts[vertex_index + 6],
+                final_verts[vertex_index + 7]);
+            points.push_back(p);
+            uvs.push_back(uv);
+        }
+
+        Debug::info("Face %d: \n", i);
+        Debug::info("  points: \n");
+        Debug::info("    (%.4f, %.4f, %.4f)\n", points[0].x, points[0].y, points[0].z);
+        Debug::info("    (%.4f, %.4f, %.4f)\n", points[1].x, points[1].y, points[1].z);
+        Debug::info("    (%.4f, %.4f, %.4f)\n", points[2].x, points[2].y, points[2].z);
+        Debug::info("  uvs: \n");
+        Debug::info("    (%.4f, %.4f)\n", uvs[0].x, uvs[0].y);
+        Debug::info("    (%.4f, %.4f)\n", uvs[0].x, uvs[0].y);
+
+    }
 
 }
 
