@@ -15,6 +15,7 @@ in vec3 surface_normal;
 in vec3 camera_to_surface;
 in Light lights[num_lights];
 in vec4 shadow_coord;
+in mat4 normal_basis;
 
 out vec4 outColor;
 
@@ -30,16 +31,18 @@ vec4 specular;
 vec4 normal;
 vec4 emissive;
 
+vec3 map_surface_normal;
+
 const bool SHADOW_DEBUG = false;
 
 vec4 lightFragment(vec3 light_vector, vec3 light_color, float light_power){
     float intensity = light_power / (pow(light_vector.x, 2) + pow(light_vector.y,
          2) + pow(light_vector.z, 2));
 
-    float cosTheta = dot(normalize(surface_normal), normalize(light_vector));
+    float cosTheta = dot(normalize(map_surface_normal), normalize(light_vector));
     cosTheta = clamp(cosTheta, 0.0, 1.0);
 
-    vec3 reflection = reflect(-normalize(light_vector), normalize(surface_normal));
+    vec3 reflection = reflect(-normalize(light_vector), normalize(map_surface_normal));
     float cosAlpha = clamp(dot(normalize(camera_to_surface), reflection),
         0.0, 1.0);
 
@@ -60,7 +63,7 @@ float getShadowFactor(){
     float bias = 0.005;
     float visibility;
 
-    float angle = dot(normalize(surface_normal),
+    float angle = dot(normalize(map_surface_normal),
         normalize(lights[0].light_to_surface));
 
     vec4 n_pixel  = textureOffset(shadow_map, shadow_coord.xy, ivec2(0, 1));
@@ -96,6 +99,10 @@ void main() {
     specular = texture(specular_texture, Texcoord);
     emissive = texture(emissive_texture, Texcoord);
 
+    map_surface_normal = (transpose(normal_basis) *
+        (texture(normal_map, Texcoord) * 2 - vec4(1, 1, 1, 0))).rgb;
+    // map_surface_normal = surface_normal;
+
     float visibility = getShadowFactor();
 
     // Works fine
@@ -125,4 +132,5 @@ void main() {
         discard;
     }
     outColor = texel;
+    // outColor = vec4(map_surface_normal, 1.0);
 }

@@ -3,10 +3,12 @@
 GLuint TextureLoader::pink;
 GLuint TextureLoader::alpha;
 GLuint TextureLoader::gray;
+GLuint TextureLoader::blue;
 
 bool TextureLoader::loaded_pink;
 bool TextureLoader::loaded_alpha;
 bool TextureLoader::loaded_gray;
+bool TextureLoader::loaded_blue;
 
 GLuint TextureLoader::loadPink(){
     if (!loaded_pink){
@@ -50,6 +52,20 @@ GLuint TextureLoader::loadGray(){
     }
     return TextureLoader::gray;
 
+}
+
+GLuint TextureLoader::loadBlue(){
+    if (!loaded_blue){
+        std::vector<GLfloat> blue_pixel;
+        blue_pixel.push_back(0.5f);
+        blue_pixel.push_back(0.5f);
+        blue_pixel.push_back(1.0);
+        blue_pixel.push_back(1.0f);
+
+        TextureLoader::blue = TextureLoader::loadTextureFromPixel(blue_pixel);
+        loaded_blue = true;
+    }
+    return TextureLoader::blue;
 }
 
 GLuint TextureLoader::loadTextureFromFile(const char* filename, GLuint filter){

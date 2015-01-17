@@ -236,6 +236,14 @@ Mesh* Terrain::generateMesh(Heightmap& heightmap){
 
             texture_repeated_vertices.push_back(0.0f);
             texture_repeated_vertices.push_back(0.0f);
+            texture_repeated_vertices.push_back(0.0f);
+
+            texture_repeated_vertices.push_back(0.0f);
+            texture_repeated_vertices.push_back(0.0f);
+            texture_repeated_vertices.push_back(0.0f);
+
+            texture_repeated_vertices.push_back(0.0f);
+            texture_repeated_vertices.push_back(0.0f);
 
             // Upper right
             i = getIndex(x+1, y);
@@ -249,6 +257,14 @@ Mesh* Terrain::generateMesh(Heightmap& heightmap){
             texture_repeated_vertices.push_back(normal.x);
             texture_repeated_vertices.push_back(normal.y);
             texture_repeated_vertices.push_back(normal.z);
+
+            texture_repeated_vertices.push_back(0.0f);
+            texture_repeated_vertices.push_back(0.0f);
+            texture_repeated_vertices.push_back(0.0f);
+
+            texture_repeated_vertices.push_back(0.0f);
+            texture_repeated_vertices.push_back(0.0f);
+            texture_repeated_vertices.push_back(0.0f);
 
             texture_repeated_vertices.push_back(1.0f);
             texture_repeated_vertices.push_back(0.0f);
@@ -267,6 +283,14 @@ Mesh* Terrain::generateMesh(Heightmap& heightmap){
             texture_repeated_vertices.push_back(normal.z);
 
             texture_repeated_vertices.push_back(0.0f);
+            texture_repeated_vertices.push_back(0.0f);
+            texture_repeated_vertices.push_back(0.0f);
+
+            texture_repeated_vertices.push_back(0.0f);
+            texture_repeated_vertices.push_back(0.0f);
+            texture_repeated_vertices.push_back(0.0f);
+
+            texture_repeated_vertices.push_back(0.0f);
             texture_repeated_vertices.push_back(1.0f);
 
             // Bottom right
@@ -282,6 +306,14 @@ Mesh* Terrain::generateMesh(Heightmap& heightmap){
             texture_repeated_vertices.push_back(normal.y);
             texture_repeated_vertices.push_back(normal.z);
 
+            texture_repeated_vertices.push_back(0.0f);
+            texture_repeated_vertices.push_back(0.0f);
+            texture_repeated_vertices.push_back(0.0f);
+
+            texture_repeated_vertices.push_back(0.0f);
+            texture_repeated_vertices.push_back(0.0f);
+            texture_repeated_vertices.push_back(0.0f);
+
             texture_repeated_vertices.push_back(1.0f);
             texture_repeated_vertices.push_back(1.0f);
 
@@ -290,7 +322,7 @@ Mesh* Terrain::generateMesh(Heightmap& heightmap){
 
     // Create the final faces vector
     std::vector<GLuint> faces;
-    for (int i = 0; i < texture_repeated_vertices.size() / 8.0f; i+= 4){
+    for (int i = 0; i < texture_repeated_vertices.size() / 14.0f; i+= 4){
         faces.push_back(i + 2);
         faces.push_back(i + 1);
         faces.push_back(i + 0);

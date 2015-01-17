@@ -90,15 +90,24 @@ void Mesh::attachGeometryToShader(GLuint shader_program){
         // Load the position attributes from our vertex spec with width 8. The position
         // values start at index 0. Tell it to load 3 values.
         glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE,
-                               8*sizeof(float), 0);
+                               14*sizeof(float), 0);
 
         GLint normalAttrib = glGetAttribLocation(shader_program, "normal");
-
         glEnableVertexAttribArray(normalAttrib);
         // Load the normal pointer from our vertex spec with width 8. The normal values
         // start at index 2. Tell it to load 3 values.
         glVertexAttribPointer(normalAttrib, 3, GL_FLOAT, GL_FALSE,
-                               8*sizeof(float), (void*)(3*sizeof(float)));
+                               14*sizeof(float), (void*)(3*sizeof(float)));
+
+        GLint tangent_attrib = glGetAttribLocation(shader_program, "tangent");
+        glEnableVertexAttribArray(tangent_attrib);
+        glVertexAttribPointer(tangent_attrib, 3, GL_FLOAT, GL_FALSE,
+        14*sizeof(float), (void*)(6*sizeof(float)));
+
+        GLint bitangent_attrib = glGetAttribLocation(shader_program, "bitangent");
+        glEnableVertexAttribArray(bitangent_attrib);
+        glVertexAttribPointer(bitangent_attrib, 3, GL_FLOAT, GL_FALSE,
+        14*sizeof(float), (void*)(9*sizeof(float)));
 
         // Link the texture coordinates to the shader.
         GLint texAttrib = glGetAttribLocation(shader_program, "texcoord");
@@ -106,7 +115,7 @@ void Mesh::attachGeometryToShader(GLuint shader_program){
         // Load the texture attributes from our vertex spec with width 8. The texture
         // values start at index 8. Tell it to load 2 values.
         glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE,
-                               8*sizeof(float), (void*)(6*sizeof(float)));
+                               14*sizeof(float), (void*)(12*sizeof(float)));
 
         // Keep track of which shaders we have already bound data to
         bound_shaders.push_back(shader_program);

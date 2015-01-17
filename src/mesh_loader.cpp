@@ -245,6 +245,8 @@ void MeshLoader::loadMeshFromFile(const char* fileName){
     Debug::info("Took %f seconds to do the basis calculations for %s.\n",
         delta_time, fileName);
 
+    final_verts = vertices;
+
     // for (int i = 0; i < vertices.size(); i += 14){
     //     Debug::info("%.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f"
     //         " %.2f %.2f %.2f\n", vertices[i], vertices[i], vertices[i+1],

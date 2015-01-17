@@ -12,13 +12,16 @@ struct Light {
 
 layout(location=1) in vec3 position;
 layout(location=2) in vec3 normal;
-layout(location=3) in vec2 texcoord;
+layout(location=3) in vec3 tangent;
+layout(location=4) in vec3 bitangent;
+layout(location=5) in vec2 texcoord;
 
 out vec2 Texcoord;
 out vec3 surface_normal;
 out vec3 camera_to_surface;
 out Light lights[num_lights];
 out vec4 shadow_coord;
+out mat4 normal_basis;
 
 layout(std140) uniform GlobalMatrices {
     mat4 view;
@@ -41,6 +44,18 @@ uniform float scale;
 
 void main() {
     Texcoord = texcoord;
+
+    vec4 normal_world = view * (model * vec4(normal, 1.0));
+    normal_world.z = 0.0;
+    vec4 tangent_world = view * (model * vec4(tangent, 1.0));
+    tangent_world.z = 0.0;
+    vec4 bitangent_world = view * (model * vec4(bitangent, 1.0));
+    bitangent_world.z = 0.0;
+
+    normal_basis = mat4(normal   , 0,
+                        tangent  , 0,
+                        bitangent, 0,
+                        0, 0, 0  , 1);
 
     vec3 scaled_position = position * scale;
     vec4 model_position = model * vec4(scaled_position, 1.0);
