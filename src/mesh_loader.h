@@ -15,15 +15,17 @@
 
 #include <vector>
 
+#include "debug.h"
+
 class MeshLoader{
 public:
     MeshLoader(const char*);
-    
+
     std::vector<GLfloat> getVertexArray();
     std::vector<GLuint>  getFaceArray();
-    
+
 private:
-    
+
     void loadMeshFromFile(const char*);
 
     std::vector<GLuint> final_tris;

@@ -13,7 +13,7 @@
 #include "camera.h"
 #include "shader_loader.h"
 #include "texture_loader.h"
-#include "texture_set.h"
+
 #include "terrain.h"
 
 #include "particles/emitter.h"

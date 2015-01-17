@@ -35,7 +35,7 @@ void MeshLoader::loadMeshFromFile(const char* fileName){
     if(ifile == NULL){
         printf("Error opening file %s\n", fileName);
         return;
-    
+
     }
 
     while(! feof(ifile)){
@@ -103,13 +103,13 @@ void MeshLoader::loadMeshFromFile(const char* fileName){
                 tempX = verts3D[ (tuple[0]-1)*3+0 ];
                 tempY = verts3D[ (tuple[0]-1)*3+1 ];
                 tempZ = verts3D[ (tuple[0]-1)*3+2 ];
-                
+
                 // Acessing 3D normal vertices indicated by the connection list
                 GLuint something = norms3D[i*3 + j];
                 GLfloat tempVN1 = verts_norm[(something - 1)*3 +0 ];
                 GLfloat tempVN2 = verts_norm[ (something - 1)*3 +1 ];
                 GLfloat tempVN3 = verts_norm[(something - 1)*3 +2  ];
-                
+
                 // Acessing 2D vertices indicated by the connection list
                 GLfloat tempX2 = verts2D[ (tuple[1]-1)*2+0 ];
                 GLfloat tempY2 = verts2D[ (tuple[1]-1)*2+1 ];
@@ -122,25 +122,27 @@ void MeshLoader::loadMeshFromFile(const char* fileName){
                 final_verts.push_back(tempVN3);
                 final_verts.push_back(tempX2);
                 final_verts.push_back(tempY2);
-            }   
-            final_tris.push_back(mappedEdgeLoops[tuple]-1);     
+            }
+            final_tris.push_back(mappedEdgeLoops[tuple]-1);
         }
     }
+
+
 
 }
 
 std::vector<GLfloat> MeshLoader::getVertexArray(){
-    GLfloat* vertices = new GLfloat[final_verts.size()];
-    for (int i = 0; i < final_verts.size(); ++i){
-        vertices[i] = final_verts[i];
-    }
+    // GLfloat* vertices = new GLfloat[final_verts.size()];
+    // for (int i = 0; i < final_verts.size(); ++i){
+    //     vertices[i] = final_verts[i];
+    // }
     return final_verts;
 }
 
 std::vector<GLuint> MeshLoader::getFaceArray(){
-    GLuint* faces = new GLuint[final_tris.size()];
-    for (int i = 0; i < final_tris.size(); ++i){
-        faces[i] = final_tris[i];
-    }
+    // GLuint* faces = new GLuint[final_tris.size()];
+    // for (int i = 0; i < final_tris.size(); ++i){
+    //     faces[i] = final_tris[i];
+    // }
     return final_tris;
 }
