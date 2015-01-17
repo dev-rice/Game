@@ -199,7 +199,7 @@ void MeshLoader::loadMeshFromFile(const char* fileName){
             tangent.y, tangent.z);
         Debug::info("    bitangent = (%.4f, %.4f, %.4f)\n", bitangent.x,
             bitangent.y, bitangent.z);
-
+        Debug::info("\n");
 
     }
 
