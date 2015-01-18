@@ -206,7 +206,7 @@ void MeshLoader::loadMeshFromFile(const char* fileName){
             glm::vec3 normal = normals[j];
             glm::vec2 uv = uvs[j];
 
-            normal = normalize(normal);
+            normal = glm::normalize(normal);
 
             // Shitty Shitty Shit Shit code
             vertices[index]      = point.x;

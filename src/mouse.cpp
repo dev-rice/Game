@@ -14,7 +14,7 @@ Mouse* Mouse::getInstance(){
 
 Mouse::Mouse()
         : UIDrawable(ShaderLoader::loadShaderProgram("shaders/ui.vs","shaders/ui.fs"),
-         TextureLoader::loadTextureFromFile("res/textures/cursor_ui.png", GL_NEAREST)) {
+         TextureLoader::loadTextureFromFile("res/textures/cursor_ui.png", GL_LINEAR)) {
 
     this->glfw_window = Window::getInstance()->getGLFWWindow();
 
@@ -48,6 +48,8 @@ Mouse::Mouse()
     mouse_sprites.push_back(down_left);
 
     hovering = false;
+
+
 }
 
 void Mouse::setCursorSprite(cursorType cursor_type){
@@ -85,6 +87,10 @@ void Mouse::draw(){
     }
 
     attachTexture(mouse_sprites[ static_cast<int>(current_type) ]);
+
+    width_pixels = 66;
+    height_pixels = 66;
+    updateDimensions();
 
     UIDrawable::draw();
 

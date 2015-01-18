@@ -59,8 +59,7 @@ void UIDrawable::setGLCoordinates(glm::vec2 start, glm::vec2 end){
 }
 
 void UIDrawable::updateDimensions(){
-    // Don't use me for things that WON'T change scale
-    // like mice, etc
+    // Use me for things that scale
     width = (float(width_pixels)/float(window_width));
     height = (float(height_pixels)/float(window_height));
 }
