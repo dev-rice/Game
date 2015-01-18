@@ -7,11 +7,11 @@
 #
 # First, the camera coordinates
 # This single line begins with a "v" tag, for camera
-# This is in the format: 
+# This is in the format:
 # v x, y position
 # for example
 # v 0.0 0.0
-# 
+#
 # Next, the list of unique objects in the scene
 # These start with the "m" tag, for mesh
 # These are found assuming they are .obj files
@@ -51,7 +51,7 @@
 # For example:
 # c 3 0 0 0
 #
-# After that is the particle points. These are denoted with a "p" tag. Within the X3D file, 
+# After that is the particle points. These are denoted with a "p" tag. Within the X3D file,
 # particles are denoted by being one of the pre-programmed particles, such as
 #   - Snow
 #   - Fire
@@ -150,11 +150,38 @@ class ObjectReference:
         z = self.z_rot
         angle = self.angle
 
-        # This is not be fuckity
+        print "Rotation around <%.2f, %.2f, %.2f> = %.2f for %s" % (x, y, z, angle, self.matchedName)
+
+        # Solving this for the euler angles
+        kx = x
+        ky = y
+        kz = z
+        ct = cos(angle)
+        st = sin(angle)
+        vt = 1 - ct
+
+        r = [ [kx*kx*vt + ct, kx*ky*vt - kz*st, kx*kz*vt + ky*st],\
+              [kx*ky*vt + kz*st, ky*ky*vt + ct, ky*kz*vt - kx*st],\
+              [kx*kz*vt - ky*st, ky*kz*vt + kx*st, kz*kz*vt + ct] ]
+
+        y_rotation = atan2(-r[2][0], sqrt(pow(r[0][0], 2) + pow(r[1][0], 2)))
+        cy = cos(y_rotation)
+        z_rotation = atan2(r[1][0] / cy, r[0][0] / cy)
+        x_rotation = atan2(r[2][1] / cy, r[2][2] / cy)
+
+        print "  Calculated angles old: %.2f, %.2f, %.2f" % (x_rotation, y_rotation, z_rotation)
+
+        # This is be fuckity
         heading = atan2(y * sin(angle)- x * z * (1 - cos(angle)) , 1 - (y*y + z*z ) * (1 - cos(angle)))
         attitude = asin(x * y * (1 - cos(angle)) + z * sin(angle))
         bank = atan2(x * sin(angle)-y * z * (1 - cos(angle)) , 1 - (x*x + z*z) * (1 - cos(angle)))
         bank = bank + 1.57079632679
+
+        print "  Calculated angles old: %.2f, %.2f, %.2f\n" % (attitude, heading, bank)
+
+        attitude = x_rotation + pi / 2.0
+        heading = y_rotation
+        bank = z_rotation
 
         # Add 1 to texture for one-based indexing
         return ("d %s %s %s %s %s %f %f %f %f %f %f %f\n" % (name, diff+1, spec+1, norm+1, emit+1, self.x_pos, self.y_pos, self.z_pos, self.scale, attitude, heading, bank))
@@ -176,7 +203,7 @@ class Converter:
             self.attachObjects()
         if(self.searchForTextures):
             self.attachTextures()
-        self.writeToFile()      
+        self.writeToFile()
 
     def parseArguments(self, arguments):
         if(len(arguments)>5 or len(arguments)<4):
