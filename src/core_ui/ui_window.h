@@ -31,10 +31,30 @@ private:
     static UIImage* left_edge_image;
     static UIImage* down_edge_image;
 
+    int up_edge_offset_x;
+    int right_edge_offset_x;
+    int left_edge_offset_x;
+    int down_edge_offset_x;
+
+    int up_edge_offset_y;
+    int right_edge_offset_y;
+    int left_edge_offset_y;
+    int down_edge_offset_y;
+
     static UIImage* up_left_corner_image;
     static UIImage* up_right_corner_image;
     static UIImage* down_left_corner_image;
     static UIImage* down_right_corner_image;
+
+    int up_left_corner_offset_x;
+    int up_right_corner_offset_x;
+    int down_left_corner_offset_x;
+    int down_right_corner_offset_x;
+
+    int up_left_corner_offset_y;
+    int up_right_corner_offset_y;
+    int down_left_corner_offset_y;
+    int down_right_corner_offset_y;
 };
 
 #endif

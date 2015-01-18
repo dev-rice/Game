@@ -15,17 +15,49 @@
     </constraints>
 
     <corner_sprites>
-        <up_right>res/textures/corner_up_right.png</up_right>
-        <up_left>res/textures/corner_up_left.png</up_left>
-        <down_right>res/textures/corner_down_right.png</down_right>
-        <down_left>res/textures/corner_down_left.png</down_left>
+        <up_right>
+            <image_path>res/textures/corner_up_right.png</image_path>
+            <x_offset>0</x_offset>
+            <y_offset>0</y_offset>
+        </up_right>
+        <up_left>
+            <image_path>res/textures/corner_up_left.png</image_path>
+            <x_offset>0</x_offset>
+            <y_offset>0</y_offset>
+        </up_left>
+        <down_right>
+            <image_path>res/textures/corner_down_right.png</image_path>
+            <x_offset>0</x_offset>
+            <y_offset>0</y_offset>
+        </down_right>
+        <down_left>
+            <image_path>res/textures/corner_down_left.png</image_path>
+            <x_offset>0</x_offset>
+            <y_offset>0</y_offset>
+        </down_left>
     </corner_sprites>
 
     <edge_sprites>
-        <right>res/textures/edge_right.png</right>
-        <down>res/textures/edge_down.png</down>
-        <left>res/textures/edge_left.png</left>
-        <up>res/textures/edge_up.png</up>
+        <right>
+            <image_path>res/textures/edge_right.png</image_path>
+            <x_offset>0</x_offset>
+            <y_offset>0</y_offset>
+        </right>
+        <down>
+            <image_path>res/textures/edge_down.png</image_path>
+            <x_offset>0</x_offset>
+            <y_offset>0</y_offset>
+        </down>
+        <left>
+            <image_path>res/textures/edge_left.png</image_path>
+            <x_offset>0</x_offset>
+            <y_offset>0</y_offset>
+        </left>
+        <up>
+            <image_path>res/textures/edge_up.png</image_path>
+            <x_offset>0</x_offset>
+            <y_offset>0</y_offset>
+        </up>
     </edge_sprites>
 
     <subelements>

@@ -51,45 +51,58 @@ void UIWindow::loadFromXML(std::string filepath){
 
     // Creating the edges
     if(up_edge_image == NULL){
-        GLuint up_edge_sprite = TextureLoader::loadTextureFromFile(edge_sprites_node.child_value("up"), GL_NEAREST);
-        up_edge_image = new UIImage(shader, up_edge_sprite);
+        up_edge_image = new UIImage(shader, TextureLoader::loadTextureFromFile(edge_sprites_node.child("up").child_value("image_path"), GL_NEAREST));
     }
 
     if(down_edge_image == NULL){
-        GLuint down_edge_sprite = TextureLoader::loadTextureFromFile(edge_sprites_node.child_value("down"), GL_NEAREST);
-        down_edge_image = new UIImage(shader, down_edge_sprite);
+        down_edge_image = new UIImage(shader, TextureLoader::loadTextureFromFile(edge_sprites_node.child("down").child_value("image_path"), GL_NEAREST));
     }
 
     if(right_edge_image == NULL){
-        GLuint right_edge_sprite = TextureLoader::loadTextureFromFile(edge_sprites_node.child_value("right"), GL_NEAREST);
-        right_edge_image = new UIImage(shader, right_edge_sprite);
+        right_edge_image = new UIImage(shader, TextureLoader::loadTextureFromFile(edge_sprites_node.child("right").child_value("image_path"), GL_NEAREST));
     }
 
     if(left_edge_image == NULL){
-        GLuint left_edge_sprite = TextureLoader::loadTextureFromFile(edge_sprites_node.child_value("left"), GL_NEAREST);
-        left_edge_image = new UIImage(shader, left_edge_sprite);
+        left_edge_image = new UIImage(shader, TextureLoader::loadTextureFromFile(edge_sprites_node.child("left").child_value("image_path"), GL_NEAREST));
     }
 
     // Creating and Positioning the corners
     if(up_left_corner_image == NULL){
-        GLuint up_left_corner_sprite = TextureLoader::loadTextureFromFile(corner_sprites_node.child_value("up_left"), GL_NEAREST);
-        up_left_corner_image = new UIImage(shader, up_left_corner_sprite);
+        up_left_corner_image = new UIImage(shader, TextureLoader::loadTextureFromFile(corner_sprites_node.child("up_left").child_value("image_path"), GL_NEAREST));
     }
 
     if(up_right_corner_image == NULL){
-        GLuint up_right_corner_sprite = TextureLoader::loadTextureFromFile(corner_sprites_node.child_value("up_right"), GL_NEAREST);
-        up_right_corner_image = new UIImage(shader, up_right_corner_sprite);
+        up_right_corner_image = new UIImage(shader, TextureLoader::loadTextureFromFile(corner_sprites_node.child("up_right").child_value("image_path"), GL_NEAREST));
     }
 
     if(down_right_corner_image == NULL){
-        GLuint down_right_corner_sprite = TextureLoader::loadTextureFromFile(corner_sprites_node.child_value("down_right"), GL_NEAREST);
-        down_right_corner_image = new UIImage(shader, down_right_corner_sprite);
+        down_right_corner_image = new UIImage(shader, TextureLoader::loadTextureFromFile(corner_sprites_node.child("down_right").child_value("image_path"), GL_NEAREST));
     }
 
     if(down_left_corner_image == NULL){
-        GLuint down_left_corner_sprite = TextureLoader::loadTextureFromFile(corner_sprites_node.child_value("down_left"), GL_NEAREST);
-        down_left_corner_image = new UIImage(shader, down_left_corner_sprite);
+        down_left_corner_image = new UIImage(shader, TextureLoader::loadTextureFromFile(corner_sprites_node.child("down_left").child_value("image_path"), GL_NEAREST));
     }
+
+    // setting up the offsets
+    // up_edge_offset_x;
+    // right_edge_offset_x;
+    // left_edge_offset_x;
+    // down_edge_offset_x;
+
+    // up_edge_offset_y;
+    // right_edge_offset_y;
+    // left_edge_offset_y;
+    // down_edge_offset_y;
+
+    // up_left_corner_offset_x;
+    // up_right_corner_offset_x;
+    // down_left_corner_offset_x;
+    // down_right_corner_offset_x;
+
+    // up_left_corner_offset_y;
+    // up_right_corner_offset_y;
+    // down_left_corner_offset_y;
+    // down_right_corner_offset_y;
 
 
     for (pugi::xml_node_iterator it = subelements_node.begin(); it != subelements_node.end(); ++it){
