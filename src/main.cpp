@@ -28,6 +28,8 @@
 #include "window.h"
 
 int main(int argc, char* argv[]) {
+    
+
     // Make the randomizer random
     srand(time(NULL));
 
@@ -91,6 +93,10 @@ int main(int argc, char* argv[]) {
 
     Debug::is_on = debug;
 
+
+    const char* glfw_version = glfwGetVersionString();
+    Debug::info("GLFW Version: %s\n", glfw_version);
+
     glfwInit();
     if (fullscreen){
         const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
@@ -118,8 +124,7 @@ int main(int argc, char* argv[]) {
 
     GLFWwindow* glfw_window = Window::getInstance()->getGLFWWindow();
 
-    const char* glfw_version = glfwGetVersionString();
-    Debug::info("GLFW Version: %s\n", glfw_version);
+    
 
     // Create the world
     World* world;
