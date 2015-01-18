@@ -7,11 +7,11 @@
 #
 # First, the camera coordinates
 # This single line begins with a "v" tag, for camera
-# This is in the format: 
+# This is in the format:
 # v x, y position
 # for example
 # v 0.0 0.0
-# 
+#
 # Next, the list of unique objects in the scene
 # These start with the "m" tag, for mesh
 # These are found assuming they are .obj files
@@ -51,7 +51,7 @@
 # For example:
 # c 3 0 0 0
 #
-# After that is the particle points. These are denoted with a "p" tag. Within the X3D file, 
+# After that is the particle points. These are denoted with a "p" tag. Within the X3D file,
 # particles are denoted by being one of the pre-programmed particles, such as
 #   - Snow
 #   - Fire
@@ -150,11 +150,53 @@ class ObjectReference:
         z = self.z_rot
         angle = self.angle
 
-        # This is not be fuckity
+        print "Rotation around <%.2f, %.2f, %.2f> = %.2f for %s" % (x, y, z, angle, self.matchedName)
+
+        # Solving this for the euler angles
+        kx = x
+        ky = y
+        kz = z
+        ct = cos(angle)
+        st = sin(angle)
+        vt = 1 - ct
+
+        u = kx
+        v = ky
+        w = kz
+
+        # r = [ [kx*kx*vt + ct, kx*ky*vt - kz*st, kx*kz*vt + ky*st],\
+        #       [kx*ky*vt + kz*st, ky*ky*vt + ct, ky*kz*vt - kx*st],\
+        #       [kx*kz*vt - ky*st, ky*kz*vt + kx*st, kz*kz*vt + ct] ]
+
+        r = [ [],\
+              [0, u*u + (v*v + w*w)*ct, u*v*vt - w*st, u*w*vt + v*st],\
+              [0, u*v*vt + w*st, v*v + (u*u + w*w)*ct, v*w*vt - u*st],\
+              [0, u*w*vt - v*st, v*w*vt + u*st, w*w + (u*u + v*v)*ct] ]
+
+        x_rotation = atan2(r[3][2], r[3][3])
+        y_rotation = atan2(-r[3][1], sqrt(pow(r[3][2], 2) + pow(r[3][3], 2)))
+        z_rotation = atan2(r[2][1], r[1][1])
+
+        print "  Calculated angles new: %.2f, %.2f, %.2f" % (x_rotation, y_rotation, z_rotation)
+
+        if (x_rotation > pi or x_rotation < -pi):
+            print "Error with x rotation"
+        if (y_rotation > pi / 2.0 or y_rotation < -pi / 2.0):
+            print "Error with y rotation"
+        if (z_rotation > pi or z_rotation < -pi):
+            print "Error with z rotation"
+
+        # This is be fuckity
         heading = atan2(y * sin(angle)- x * z * (1 - cos(angle)) , 1 - (y*y + z*z ) * (1 - cos(angle)))
         attitude = asin(x * y * (1 - cos(angle)) + z * sin(angle))
         bank = atan2(x * sin(angle)-y * z * (1 - cos(angle)) , 1 - (x*x + z*z) * (1 - cos(angle)))
         bank = bank + 1.57079632679
+
+        print "  Calculated angles old: %.2f, %.2f, %.2f\n" % (attitude, heading, bank)
+
+        attitude = x_rotation + pi / 2.0
+        heading = y_rotation
+        bank = z_rotation
 
         # Add 1 to texture for one-based indexing
         return ("d %s %s %s %s %s %f %f %f %f %f %f %f\n" % (name, diff+1, spec+1, norm+1, emit+1, self.x_pos, self.y_pos, self.z_pos, self.scale, attitude, heading, bank))
@@ -176,7 +218,7 @@ class Converter:
             self.attachObjects()
         if(self.searchForTextures):
             self.attachTextures()
-        self.writeToFile()      
+        self.writeToFile()
 
     def parseArguments(self, arguments):
         if(len(arguments)>5 or len(arguments)<4):
