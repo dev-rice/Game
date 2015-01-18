@@ -160,16 +160,31 @@ class ObjectReference:
         st = sin(angle)
         vt = 1 - ct
 
-        r = [ [kx*kx*vt + ct, kx*ky*vt - kz*st, kx*kz*vt + ky*st],\
-              [kx*ky*vt + kz*st, ky*ky*vt + ct, ky*kz*vt - kx*st],\
-              [kx*kz*vt - ky*st, ky*kz*vt + kx*st, kz*kz*vt + ct] ]
+        u = kx
+        v = ky
+        w = kz
 
-        y_rotation = atan2(-r[2][0], sqrt(pow(r[0][0], 2) + pow(r[1][0], 2)))
-        cy = cos(y_rotation)
-        z_rotation = atan2(r[1][0] / cy, r[0][0] / cy)
-        x_rotation = atan2(r[2][1] / cy, r[2][2] / cy)
+        # r = [ [kx*kx*vt + ct, kx*ky*vt - kz*st, kx*kz*vt + ky*st],\
+        #       [kx*ky*vt + kz*st, ky*ky*vt + ct, ky*kz*vt - kx*st],\
+        #       [kx*kz*vt - ky*st, ky*kz*vt + kx*st, kz*kz*vt + ct] ]
 
-        print "  Calculated angles old: %.2f, %.2f, %.2f" % (x_rotation, y_rotation, z_rotation)
+        r = [ [],\
+              [0, u*u + (v*v + w*w)*ct, u*v*vt - w*st, u*w*vt + v*st],\
+              [0, u*v*vt + w*st, v*v + (u*u + w*w)*ct, v*w*vt - u*st],\
+              [0, u*w*vt - v*st, v*w*vt + u*st, w*w + (u*u + v*v)*ct] ]
+
+        x_rotation = atan2(r[3][2], r[3][3])
+        y_rotation = atan2(-r[3][1], sqrt(pow(r[3][2], 2) + pow(r[3][3], 2)))
+        z_rotation = atan2(r[2][1], r[1][1])
+
+        print "  Calculated angles new: %.2f, %.2f, %.2f" % (x_rotation, y_rotation, z_rotation)
+
+        if (x_rotation > pi or x_rotation < -pi):
+            print "Error with x rotation"
+        if (y_rotation > pi / 2.0 or y_rotation < -pi / 2.0):
+            print "Error with y rotation"
+        if (z_rotation > pi or z_rotation < -pi):
+            print "Error with z rotation"
 
         # This is be fuckity
         heading = atan2(y * sin(angle)- x * z * (1 - cos(angle)) , 1 - (y*y + z*z ) * (1 - cos(angle)))
