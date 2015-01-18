@@ -118,6 +118,9 @@ int main(int argc, char* argv[]) {
 
     GLFWwindow* glfw_window = Window::getInstance()->getGLFWWindow();
 
+    const char* glfw_version = glfwGetVersionString();
+    Debug::info("GLFW Version: %s\n", glfw_version);
+
     // Create the world
     World* world;
     if (has_map){
