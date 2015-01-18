@@ -41,6 +41,16 @@ private:
     int left_edge_offset_y;
     int down_edge_offset_y;
 
+    int up_edge_width;
+    int right_edge_width;
+    int left_edge_width;
+    int down_edge_width;
+
+    int up_edge_height;
+    int right_edge_height;
+    int left_edge_height;
+    int down_edge_height;
+
     static UIImage* up_left_corner_image;
     static UIImage* up_right_corner_image;
     static UIImage* down_left_corner_image;
@@ -55,6 +65,16 @@ private:
     int up_right_corner_offset_y;
     int down_left_corner_offset_y;
     int down_right_corner_offset_y;
+
+    int up_left_corner_width;
+    int up_right_corner_width;
+    int down_left_corner_width;
+    int down_right_corner_width;
+
+    int up_left_corner_height;
+    int up_right_corner_height;
+    int down_left_corner_height;
+    int down_right_corner_height;
 };
 
 #endif

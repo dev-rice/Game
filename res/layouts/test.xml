@@ -19,21 +19,29 @@
             <image_path>res/textures/corner_up_right.png</image_path>
             <x_offset>0</x_offset>
             <y_offset>0</y_offset>
+            <width>0</width>
+            <height>0</height>
         </up_right>
         <up_left>
             <image_path>res/textures/corner_up_left.png</image_path>
             <x_offset>0</x_offset>
             <y_offset>0</y_offset>
+            <width>0</width>
+            <height>0</height>
         </up_left>
         <down_right>
             <image_path>res/textures/corner_down_right.png</image_path>
             <x_offset>0</x_offset>
             <y_offset>0</y_offset>
+            <width>0</width>
+            <height>0</height>
         </down_right>
         <down_left>
             <image_path>res/textures/corner_down_left.png</image_path>
             <x_offset>0</x_offset>
             <y_offset>0</y_offset>
+            <width>0</width>
+            <height>0</height>
         </down_left>
     </corner_sprites>
 
@@ -42,21 +50,29 @@
             <image_path>res/textures/edge_right.png</image_path>
             <x_offset>0</x_offset>
             <y_offset>0</y_offset>
+            <width>0</width>
+            <height>0</height>
         </right>
         <down>
             <image_path>res/textures/edge_down.png</image_path>
             <x_offset>0</x_offset>
             <y_offset>0</y_offset>
+            <width>0</width>
+            <height>0</height>
         </down>
         <left>
             <image_path>res/textures/edge_left.png</image_path>
             <x_offset>0</x_offset>
             <y_offset>0</y_offset>
+            <width>0</width>
+            <height>0</height>
         </left>
         <up>
             <image_path>res/textures/edge_up.png</image_path>
             <x_offset>0</x_offset>
             <y_offset>0</y_offset>
+            <width>0</width>
+            <height>0</height>
         </up>
     </edge_sprites>
 
