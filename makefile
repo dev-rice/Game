@@ -26,6 +26,16 @@ linux:
 
 	@ $(COMPILER) $(OPTIONS) -std=c++11 $(SOURCES) -o $(BINARY_OUTPUT) $(LINUX_LIBRARIES) -I$(SRCDIR)
 
+configure-linux:
+	@ sudo apt-get install libglew-dev libglm-dev libglfw3-dev curl
+	@ wget http://www.lonesock.net/files/soil.zip
+	@ unzip soil.zip -d soil
+	@ rm soil.zip
+	@ rm soil/Simple\ OpenGL\ Image\ Library/lib/libSOIL.a
+	@ mkdir soil/Simple\ OpenGL\ Image\ Library/projects/makefile/obj
+	@ cd soil/Simple\ OpenGL\ Image\ Library/projects/makefile && make && sudo make install
+	@ rm -r soil
+
 discard:
 	@ git clean -df
 	@ git checkout -- .
