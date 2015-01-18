@@ -25,7 +25,7 @@ linux:
 	@ ./tools/buildcount.sh
 	@ rm -f res/models/*.mtl
 
-	@ $(COMPILER) $(OPTIONS) -std=c++11 $(SOURCES) -o $(BINARY_OUTPUT) $(LINUX_LIBRARIES_ALT) -I$(SRCDIR)
+	@ $(COMPILER) $(OPTIONS) -std=c++11 $(SOURCES) -o $(BINARY_OUTPUT) $(LINUX_LIBRARIES) -I$(SRCDIR)
 
 configure-linux:
 	@ sudo apt-get install libglew-dev libglm-dev libglfw3-dev curl
