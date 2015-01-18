@@ -3,9 +3,29 @@
 
 #include "ui_window.h"
 
+UIImage* UIWindow::up_edge_image;
+UIImage* UIWindow::right_edge_image;
+UIImage* UIWindow::left_edge_image;
+UIImage* UIWindow::down_edge_image;
+
+UIImage* UIWindow::up_left_corner_image;
+UIImage* UIWindow::up_right_corner_image;
+UIImage* UIWindow::down_left_corner_image;
+UIImage* UIWindow::down_right_corner_image;
+
 UIWindow::UIWindow(GLuint shader_program) : UIDrawable(shader_program, TextureLoader::loadGray()){
     this->shader = shader_program;
     is_showing = false;
+
+    up_edge_image = 0;
+    right_edge_image = 0;
+    left_edge_image = 0;
+    down_edge_image = 0;
+
+    up_left_corner_image = 0;
+    up_right_corner_image = 0;
+    down_left_corner_image = 0;
+    down_right_corner_image = 0;
 }
 
 void UIWindow::loadFromXML(std::string filepath){
@@ -29,31 +49,47 @@ void UIWindow::loadFromXML(std::string filepath){
     // Position and Sizing the Window
     parseConstraints(constraints_node);
 
-    // Creating, Positioning, and Stretching the edges
-    GLuint up_edge_sprite = TextureLoader::loadTextureFromFile(edge_sprites_node.child_value("up"), GL_NEAREST);
-    up_edge_image = new UIImage(shader, up_edge_sprite, x_pixels, y_pixels - 8, width_pixels, 18);
+    // Creating the edges
+    if(up_edge_image == NULL){
+        GLuint up_edge_sprite = TextureLoader::loadTextureFromFile(edge_sprites_node.child_value("up"), GL_NEAREST);
+        up_edge_image = new UIImage(shader, up_edge_sprite);
+    }
 
-    GLuint down_edge_sprite = TextureLoader::loadTextureFromFile(edge_sprites_node.child_value("down"), GL_NEAREST);
-    down_edge_image = new UIImage(shader, down_edge_sprite, x_pixels, y_pixels + height_pixels - 10, width_pixels, 18);
+    if(down_edge_image == NULL){
+        GLuint down_edge_sprite = TextureLoader::loadTextureFromFile(edge_sprites_node.child_value("down"), GL_NEAREST);
+        down_edge_image = new UIImage(shader, down_edge_sprite);
+    }
 
-    GLuint right_edge_sprite = TextureLoader::loadTextureFromFile(edge_sprites_node.child_value("right"), GL_NEAREST);
-    right_edge_image = new UIImage(shader, right_edge_sprite, x_pixels + width_pixels - 10, y_pixels, 18, height_pixels);
+    if(right_edge_image == NULL){
+        GLuint right_edge_sprite = TextureLoader::loadTextureFromFile(edge_sprites_node.child_value("right"), GL_NEAREST);
+        right_edge_image = new UIImage(shader, right_edge_sprite);
+    }
 
-    GLuint left_edge_sprite = TextureLoader::loadTextureFromFile(edge_sprites_node.child_value("left"), GL_NEAREST);
-    left_edge_image = new UIImage(shader, left_edge_sprite, x_pixels - 8, y_pixels, 18, height_pixels);
+    if(left_edge_image == NULL){
+        GLuint left_edge_sprite = TextureLoader::loadTextureFromFile(edge_sprites_node.child_value("left"), GL_NEAREST);
+        left_edge_image = new UIImage(shader, left_edge_sprite);
+    }
 
     // Creating and Positioning the corners
-    GLuint up_left_corner_sprite = TextureLoader::loadTextureFromFile(corner_sprites_node.child_value("up_left"), GL_NEAREST);
-    up_left_corner_image = new UIImage(shader, up_left_corner_sprite, x_pixels - 17, y_pixels - 17, 62, 62);
+    if(up_left_corner_image == NULL){
+        GLuint up_left_corner_sprite = TextureLoader::loadTextureFromFile(corner_sprites_node.child_value("up_left"), GL_NEAREST);
+        up_left_corner_image = new UIImage(shader, up_left_corner_sprite);
+    }
 
-    GLuint up_right_corner_sprite = TextureLoader::loadTextureFromFile(corner_sprites_node.child_value("up_right"), GL_NEAREST);
-    up_right_corner_image = new UIImage(shader, up_right_corner_sprite, x_pixels + width_pixels - 45, y_pixels - 17, 62, 62);
+    if(up_right_corner_image == NULL){
+        GLuint up_right_corner_sprite = TextureLoader::loadTextureFromFile(corner_sprites_node.child_value("up_right"), GL_NEAREST);
+        up_right_corner_image = new UIImage(shader, up_right_corner_sprite);
+    }
 
-    GLuint down_right_corner_sprite = TextureLoader::loadTextureFromFile(corner_sprites_node.child_value("down_right"), GL_NEAREST);
-    down_right_corner_image = new UIImage(shader, down_right_corner_sprite, x_pixels + width_pixels - 45, y_pixels + height_pixels - 45, 62, 62);
+    if(down_right_corner_image == NULL){
+        GLuint down_right_corner_sprite = TextureLoader::loadTextureFromFile(corner_sprites_node.child_value("down_right"), GL_NEAREST);
+        down_right_corner_image = new UIImage(shader, down_right_corner_sprite);
+    }
 
-    GLuint down_left_corner_sprite = TextureLoader::loadTextureFromFile(corner_sprites_node.child_value("down_left"), GL_NEAREST);
-    down_left_corner_image = new UIImage(shader, down_left_corner_sprite, x_pixels - 17, y_pixels + height_pixels - 45, 62, 62);
+    if(down_left_corner_image == NULL){
+        GLuint down_left_corner_sprite = TextureLoader::loadTextureFromFile(corner_sprites_node.child_value("down_left"), GL_NEAREST);
+        down_left_corner_image = new UIImage(shader, down_left_corner_sprite);
+    }
 
 
     for (pugi::xml_node_iterator it = subelements_node.begin(); it != subelements_node.end(); ++it){
@@ -86,10 +122,20 @@ void UIWindow::draw(){
 
         FlatDrawable::draw();
 
+        up_edge_image->setPositionAndDimensions(x_pixels, y_pixels - 8, width_pixels, 18);
+        right_edge_image->setPositionAndDimensions(x_pixels + width_pixels - 10, y_pixels, 18, height_pixels);
+        left_edge_image->setPositionAndDimensions(x_pixels - 8, y_pixels, 18, height_pixels);
+        down_edge_image->setPositionAndDimensions(x_pixels, y_pixels + height_pixels - 10, width_pixels, 18);
+
         up_edge_image->draw();
         right_edge_image->draw();
         left_edge_image->draw();
         down_edge_image->draw();
+
+        up_left_corner_image->setPositionAndDimensions(x_pixels - 17, y_pixels - 17, 62, 62);
+        up_right_corner_image->setPositionAndDimensions(x_pixels + width_pixels - 45, y_pixels - 17, 62, 62);
+        down_left_corner_image->setPositionAndDimensions(x_pixels - 17, y_pixels + height_pixels - 45, 62, 62);
+        down_right_corner_image->setPositionAndDimensions(x_pixels + width_pixels - 45, y_pixels + height_pixels - 45, 62, 62);
 
         up_left_corner_image->draw();
         up_right_corner_image->draw();

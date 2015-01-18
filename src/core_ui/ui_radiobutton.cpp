@@ -40,13 +40,13 @@ void UIRadioButton::loadFromXML(std::string filepath){
 
     // Create and position the button icon and hover highlight
     GLuint on_icon = TextureLoader::loadTextureFromFile("res/textures/radio_on.png", GL_NEAREST);
-    on_icon_image = new UIImage(shader, on_icon, x_pixels, y_pixels, 28, 28);
+    // on_icon_image = new UIImage(shader, on_icon, x_pixels, y_pixels, 28, 28);
 
     GLuint off_icon = TextureLoader::loadTextureFromFile("res/textures/radio_off.png", GL_NEAREST);
-    off_icon_image = new UIImage(shader, off_icon, x_pixels, y_pixels, 28, 28);
+    // off_icon_image = new UIImage(shader, off_icon, x_pixels, y_pixels, 28, 28);
 
     GLuint hover = TextureLoader::loadTextureFromFile("res/textures/radio_hover.png", GL_NEAREST);
-    hoverIcon = new UIImage(shader, hover, x_pixels, y_pixels, 28, 28);
+    // hoverIcon = new UIImage(shader, hover, x_pixels, y_pixels, 28, 28);
 
     if(radioButtonOn){
         currentIcon = on_icon_image;
@@ -67,7 +67,7 @@ void UIRadioButton::draw(){
         // Draws pink bounding box. Useful for debugging
         // FlatDrawable::draw();
 
-        currentIcon->draw();
+        // currentIcon->draw();
 
         text_renderer->print(x_pixels+16, y_pixels, "%s", radio_text.c_str());
 
@@ -77,7 +77,7 @@ void UIRadioButton::draw(){
             gl_mouse_position.y < position.y + height &&
             gl_mouse_position.y > position.y - height){
             
-            hoverIcon->draw();
+            // hoverIcon->draw();
 
             bool clicking = glfwGetMouseButton(Window::getInstance()->getGLFWWindow(), GLFW_MOUSE_BUTTON_LEFT);
             if(clicking && !has_clicked){

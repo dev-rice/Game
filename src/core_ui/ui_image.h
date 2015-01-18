@@ -8,8 +8,10 @@
 
 class UIImage : public UIDrawable {
 public:
-    UIImage(GLuint shader_program, GLuint texture, int x, int y, int width, int height) : UIDrawable(shader_program, texture){
-        setPixelCoordinates(x, y, x+width, y+height);
+    UIImage(GLuint shader_program, GLuint texture) : UIDrawable(shader_program, texture){
+    }
+    void setPositionAndDimensions(int x, int y, int width, int height){
+    	 setPixelCoordinates(x, y, x+width, y+height);
     }
 private:
 };
