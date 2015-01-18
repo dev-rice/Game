@@ -167,5 +167,6 @@ void Drawable::updateModelMatrix(){
     rotation_matrix = glm::rotate(rotation_matrix, rotation.y, y_axis);
     rotation_matrix = glm::rotate(rotation_matrix, rotation.z, z_axis);
 
+    model_matrix = rotation_matrix;
     model_matrix = translation_matrix * rotation_matrix;
 }

@@ -35,3 +35,8 @@ d 0 1 2 0 0 -3.940373 0.068830 -4.155382 0.085235 2.148646 0.240235 -1.874295
 # Particle definitions (p)
 
 # Ground specification - Begin writing here (h, g)
+# Particle definitions (p)
+p fire -1.400000 0.000000 0.000000
+
+# Ground specification - Begin writing here (h, g)
+h simple_heightmap.png rough_ground.png
