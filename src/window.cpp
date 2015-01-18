@@ -53,7 +53,9 @@ Window* Window::getInstance(){
 }
 
 void Window::initializeWindow(){
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    Debug::info("Creating window.\n");
+
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
@@ -63,13 +65,21 @@ void Window::initializeWindow(){
 
     GLFWwindow* window;
 
+    Debug::info("Set all window hints correctly.\n");
     if (fullscreen){
         // Fullscreen
         window = glfwCreateWindow(width, height, windowTitle,
-        glfwGetPrimaryMonitor(), nullptr);
+            glfwGetPrimaryMonitor(), nullptr);
     } else {
         // Windowed
         window = glfwCreateWindow(width, height, windowTitle, nullptr, nullptr);
+    }
+
+    if (!window){
+        Debug::error("GLFW window did not get created correctly.\n");
+        glfwTerminate();
+    } else {
+        Debug::info("Created GLFW window.\n");
     }
 
     // Set the cursor in the middle

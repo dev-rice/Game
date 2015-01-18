@@ -27,8 +27,12 @@
 #include "profile.h"
 #include "window.h"
 
+void error_callback(int error, const char* description){
+    Debug::error("GLFW Error %d: %s\n", error, description);
+}
+
 int main(int argc, char* argv[]) {
-    
+
 
     // Make the randomizer random
     srand(time(NULL));
@@ -96,8 +100,15 @@ int main(int argc, char* argv[]) {
 
     const char* glfw_version = glfwGetVersionString();
     Debug::info("GLFW Version: %s\n", glfw_version);
+    if( !glfwInit() ) {
+        Debug::error("Failed to initialize GLFW\n");
+        return -1;
+    } else {
+        Debug::info("GLFW initialized successfully.\n");
+    }
 
-    glfwInit();
+    glfwSetErrorCallback(error_callback);
+
     if (fullscreen){
         const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
@@ -117,14 +128,10 @@ int main(int argc, char* argv[]) {
     window->setWidth(width);
     window->setHeight(height);
     window->setFullscreen(fullscreen);
-    window->initializeWindow();
-
     window->setVsync(vsync);
     window->setFxaaLevel(fxaa_level);
 
-    GLFWwindow* glfw_window = Window::getInstance()->getGLFWWindow();
-
-    
+    window->initializeWindow();
 
     // Create the world
     World* world;
@@ -133,7 +140,6 @@ int main(int argc, char* argv[]) {
     } else {
         world = new World();
     }
-
 
     // Display loop
     while(!window->shouldClose()) {
