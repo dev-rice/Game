@@ -103,10 +103,8 @@ int main(int argc, char* argv[]) {
     if( !glfwInit() ) {
         Debug::error("Failed to initialize GLFW\n");
         return -1;
-    } else {
-        Debug::info("GLFW initialized successfully.\n");
     }
-
+    
     glfwSetErrorCallback(error_callback);
 
     if (fullscreen){
@@ -128,10 +126,11 @@ int main(int argc, char* argv[]) {
     window->setWidth(width);
     window->setHeight(height);
     window->setFullscreen(fullscreen);
+    window->initializeWindow();
+
     window->setVsync(vsync);
     window->setFxaaLevel(fxaa_level);
 
-    window->initializeWindow();
 
     // Create the world
     World* world;
