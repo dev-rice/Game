@@ -162,11 +162,34 @@ void Drawable::updateModelMatrix(){
     glm::vec3 z_axis = glm::vec3(0.0f, 0.0f, 1.0f);
 
     // Rotate the model about each axis.
-    glm::mat4 rotation_matrix;
-    rotation_matrix = glm::rotate(rotation_matrix, rotation.x, x_axis);
-    rotation_matrix = glm::rotate(rotation_matrix, rotation.y, y_axis);
-    rotation_matrix = glm::rotate(rotation_matrix, rotation.z, z_axis);
+    float cx = cos(rotation.x);
+    float sx = sin(rotation.x);
 
-    model_matrix = rotation_matrix;
+    float cy = cos(rotation.y);
+    float sy = sin(rotation.y);
+
+    float cz = cos(rotation.z);
+    float sz = sin(rotation.z);
+
+    glm::mat4 rotation_z = glm::mat4( cz, -sz, 0, 0,
+                                      sz,  cz, 0, 0,
+                                      0 ,  0 , 1, 0,
+                                      0 ,  0 , 0, 1);
+
+    glm::mat4 rotation_x = glm::mat4( 1, 0 ,  0 , 0,
+                                      0, cx, -sx, 0,
+                                      0, sx,  cx, 0,
+                                      0, 0 ,  0 , 1);
+
+    glm::mat4 rotation_y = glm::mat4(  cy,  0, sy, 0,
+                                       0 ,  1,  0 , 0,
+                                       -sy,  0,  cy, 0,
+                                       0 ,  0,  0 , 1);
+
+    glm::mat4 rotation_matrix = glm::mat4();
+    rotation_matrix = rotation_matrix * rotation_y;
+    rotation_matrix = rotation_matrix * rotation_z;
+    rotation_matrix = rotation_matrix * rotation_x;
+
     model_matrix = translation_matrix * rotation_matrix;
 }

@@ -187,19 +187,12 @@ class ObjectReference:
             print "Error with z rotation"
 
         # This is be fuckity
-        heading = atan2(y * sin(angle)- x * z * (1 - cos(angle)) , 1 - (y*y + z*z ) * (1 - cos(angle)))
-        attitude = asin(x * y * (1 - cos(angle)) + z * sin(angle))
-        bank = atan2(x * sin(angle)-y * z * (1 - cos(angle)) , 1 - (x*x + z*z) * (1 - cos(angle)))
-        bank = bank + 1.57079632679
-
-        print "  Calculated angles old: %.2f, %.2f, %.2f\n" % (attitude, heading, bank)
-
-        attitude = x_rotation + pi / 2.0
-        heading = y_rotation
-        bank = z_rotation
+        x_rotation = asin(x * y * (1 - cos(angle)) + z * sin(angle))
+        y_rotation = atan2(y * sin(angle)- x * z * (1 - cos(angle)) , 1 - (y*y + z*z ) * (1 - cos(angle)))
+        z_rotation = atan2(x * sin(angle)-y * z * (1 - cos(angle)) , 1 - (x*x + z*z) * (1 - cos(angle))) + pi / 2
 
         # Add 1 to texture for one-based indexing
-        return ("d %s %s %s %s %s %f %f %f %f %f %f %f\n" % (name, diff+1, spec+1, norm+1, emit+1, self.x_pos, self.y_pos, self.z_pos, self.scale, attitude, heading, bank))
+        return ("d %s %s %s %s %s %f %f %f %f %f %f %f\n" % (name, diff+1, spec+1, norm+1, emit+1, self.x_pos, self.y_pos, self.z_pos, self.scale, x_rotation, y_rotation, z_rotation))
 
     def getParticleDescriptor(self):
         return ("p %s %f %f %f\n" % (self.x3dName[:-5], self.x_pos, self.y_pos, self.z_pos))
