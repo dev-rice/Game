@@ -15,7 +15,7 @@ Emitter::Emitter(GLuint shader_program, glm::vec3 position){
 
     billboard = new Mesh(planeVertsVector, planeFacesVector);
 
-    particle_texture = TextureLoader::loadTextureFromFile("res/textures/part_snow.png", GL_LINEAR);
+    particle_texture = TextureLoader::loadTextureFromFile("res/textures/snow_part.png", GL_LINEAR);
 
     this->maxParticles = 200;
     this->lifespan = 100;

@@ -60,7 +60,7 @@ class Tracker:
         for texture in self.StaticScrapedUniqueTexturesList:
             scraped_texture_list.append(texture[0])
             if texture[0] not in self.StaticDetectedUniqueTexturesList:
-                self.printError("Texture '%s' found in '%s' was not found." % (texture[0], texture[1]))
+                self.printError("Texture '%s' found in '%s' doesn't exist anywhere." % (texture[0], texture[1]))
 
         print("")
 
@@ -74,7 +74,7 @@ class Tracker:
         for model in self.StaticScrapedUniqueModelsList:
             scraped_Model_list.append(model[0])
             if model[0] not in self.StaticDetectedUniqueModelsList:
-                self.printError("Model '%s' found in '%s' was not found." % (model[0], model[1]))
+                self.printError("Model '%s' found in '%s' doesn't exist anywhere." % (model[0], model[1]))
 
         print("")
 
