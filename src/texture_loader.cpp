@@ -42,9 +42,9 @@ GLuint TextureLoader::loadAlpha(){
 GLuint TextureLoader::loadGray(){
     if (!loaded_gray){
         std::vector<GLfloat> gray_pixel;
-        gray_pixel.push_back(0.2941f);
-        gray_pixel.push_back(0.2941f);
-        gray_pixel.push_back(0.2941f);
+        gray_pixel.push_back(0.433f);
+        gray_pixel.push_back(0.433f);
+        gray_pixel.push_back(0.433f);
         gray_pixel.push_back(1.0f);
 
         TextureLoader::gray = TextureLoader::loadTextureFromPixel(gray_pixel);

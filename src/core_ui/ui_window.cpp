@@ -115,10 +115,10 @@ void UIWindow::draw(){
 
         FlatDrawable::draw();
 
-        up_edge_image->setPositionAndDimensions(x_pixels, y_pixels - edge_inner_offset, width_pixels, edge_thickness);
-        right_edge_image->setPositionAndDimensions(x_pixels + width_pixels - edge_outer_offset, y_pixels, edge_thickness, height_pixels);
-        left_edge_image->setPositionAndDimensions(x_pixels - edge_inner_offset, y_pixels, edge_thickness, height_pixels);
-        down_edge_image->setPositionAndDimensions(x_pixels, y_pixels + height_pixels - edge_outer_offset, width_pixels, edge_thickness);
+        up_edge_image->setPositionAndDimensions(x_pixels + corner_inner_offset, y_pixels - edge_inner_offset, width_pixels - corner_width, edge_thickness);
+        right_edge_image->setPositionAndDimensions(x_pixels + width_pixels - edge_outer_offset, y_pixels + corner_outer_offset, edge_thickness, height_pixels - corner_height);
+        left_edge_image->setPositionAndDimensions(x_pixels - edge_inner_offset, y_pixels + corner_outer_offset, edge_thickness, height_pixels - corner_height);
+        down_edge_image->setPositionAndDimensions(x_pixels + corner_inner_offset, y_pixels + height_pixels - edge_outer_offset, width_pixels - corner_width, edge_thickness);
 
         up_edge_image->draw();
         right_edge_image->draw();
