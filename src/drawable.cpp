@@ -93,6 +93,8 @@ void Drawable::setSpecular(GLuint specular) {
 void Drawable::setEmissive(GLuint emissive) {
     if (emissive != 0){
         this->emissive = emissive;
+    } else if (diffuse == TextureLoader::loadAlpha()) {
+        this->emissive = TextureLoader::loadPink();
     } else {
         this->emissive = TextureLoader::loadAlpha();
     }
