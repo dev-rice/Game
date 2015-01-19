@@ -47,7 +47,7 @@ protected:
 
     void parseConstraints(pugi::xml_node);
     virtual bool constraintsAreValid(bool, bool, bool, bool, bool, bool);
-    virtual void didLoad(){;};
+    virtual void didLoadXML(){;}
 
     int parseAnchor(const char*, bool);
 

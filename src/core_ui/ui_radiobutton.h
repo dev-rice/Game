@@ -31,10 +31,13 @@ protected:
     bool radioButtonOn;
     bool has_clicked;
 
-    UIImage* on_icon_image;
-    UIImage* off_icon_image;
-    UIImage* hoverIcon;
-    UIImage* currentIcon;
+    int icon_width;
+    int icon_height;
+
+    static UIImage* on_icon;
+    static UIImage* off_icon;
+    static UIImage* hover_icon;
+    UIImage* current_icon;
 
     TextRenderer* text_renderer;
     std::string radio_text;

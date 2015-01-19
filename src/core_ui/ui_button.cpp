@@ -48,6 +48,8 @@ void UIButton::loadFromXML(std::string filepath){
     // Convert all pixel coords into screen
     updateDimensions();
     setGLPosition(getGLPosition());
+
+    didLoadXML();
 }   
 
 bool UIButton::constraintsAreValid(bool x, bool y, bool w, bool h, bool x2, bool y2){

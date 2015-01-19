@@ -13,7 +13,16 @@
     </constraints>
 
     <text>Toggle Vsync</text>
+    <font>res/fonts/inconsolata_bold_font.png</font>
     <mode>on</mode>
     <function>testFunction</function>
+
+    <sprites>
+        <width>28</width>
+        <height>28</height>
+        <on_icon>res/textures/radio_on.png</on_icon>
+        <off_icon>res/textures/radio_off.png</off_icon>
+        <hover_icon>res/textures/radio_hover.png</hover_icon>
+    </sprites>
 
 </layout>

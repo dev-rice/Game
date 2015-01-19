@@ -14,7 +14,6 @@ UIDrawable::UIDrawable(GLuint shader_program, GLuint texture) : FlatDrawable(sha
 
     parent = NULL;
 
-    this->didLoad();
     this->shader = shader_program;
 }
 
