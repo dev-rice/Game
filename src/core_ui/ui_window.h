@@ -26,15 +26,24 @@ private:
 
     std::vector<UIDrawable*> subelements;
 
-    UIImage* up_edge_image;
-    UIImage* right_edge_image;
-    UIImage* left_edge_image;
-    UIImage* down_edge_image;
+    static UIImage* up_edge_image;
+    static UIImage* right_edge_image;
+    static UIImage* left_edge_image;
+    static UIImage* down_edge_image;
 
-    UIImage* up_left_corner_image;
-    UIImage* up_right_corner_image;
-    UIImage* down_left_corner_image;
-    UIImage* down_right_corner_image;
+    int edge_inner_offset;
+    int edge_outer_offset;
+    int edge_thickness;
+
+    static UIImage* up_left_corner_image;
+    static UIImage* up_right_corner_image;
+    static UIImage* down_left_corner_image;
+    static UIImage* down_right_corner_image;
+
+    int corner_inner_offset;
+    int corner_outer_offset;
+    int corner_width;
+    int corner_height;
 };
 
 #endif

@@ -15,6 +15,10 @@
     </constraints>
 
     <corner_sprites>
+        <outer_offset>45</outer_offset>
+        <inner_offset>17</inner_offset>
+        <width>62</width>
+        <height>62</height>
         <up_right>res/textures/corner_up_right.png</up_right>
         <up_left>res/textures/corner_up_left.png</up_left>
         <down_right>res/textures/corner_down_right.png</down_right>
@@ -22,6 +26,9 @@
     </corner_sprites>
 
     <edge_sprites>
+        <outer_offset>10</outer_offset>
+        <inner_offset>8</inner_offset>
+        <thickness>18</thickness>
         <right>res/textures/edge_right.png</right>
         <down>res/textures/edge_down.png</down>
         <left>res/textures/edge_left.png</left>
