@@ -189,7 +189,7 @@ class ObjectReference:
         # This is be fuckity
         x_rotation = asin(x * y * (1 - cos(angle)) + z * sin(angle))
         y_rotation = atan2(y * sin(angle)- x * z * (1 - cos(angle)) , 1 - (y*y + z*z ) * (1 - cos(angle)))
-        z_rotation = atan2(x * sin(angle)-y * z * (1 - cos(angle)) , 1 - (x*x + z*z) * (1 - cos(angle))) + pi / 2
+        z_rotation = atan2(x * sin(angle)-y * z * (1 - cos(angle)) , 1 - (x*x + z*z) * (1 - cos(angle))) + pi / 2.0
 
         # Add 1 to texture for one-based indexing
         return ("d %s %s %s %s %s %f %f %f %f %f %f %f\n" % (name, diff+1, spec+1, norm+1, emit+1, self.x_pos, self.y_pos, self.z_pos, self.scale, x_rotation, y_rotation, z_rotation))

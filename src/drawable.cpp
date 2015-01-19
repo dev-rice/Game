@@ -181,15 +181,15 @@ void Drawable::updateModelMatrix(){
                                       0, sx,  cx, 0,
                                       0, 0 ,  0 , 1);
 
-    glm::mat4 rotation_y = glm::mat4(  cy,  0, sy, 0,
+    glm::mat4 rotation_y = glm::mat4(  cy,  0, -sy, 0,
                                        0 ,  1,  0 , 0,
-                                       -sy,  0,  cy, 0,
+                                       sy,  0,  cy, 0,
                                        0 ,  0,  0 , 1);
 
     glm::mat4 rotation_matrix = glm::mat4();
+    rotation_matrix = rotation_matrix * rotation_x;
     rotation_matrix = rotation_matrix * rotation_y;
     rotation_matrix = rotation_matrix * rotation_z;
-    rotation_matrix = rotation_matrix * rotation_x;
 
     model_matrix = translation_matrix * rotation_matrix;
 }
