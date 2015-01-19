@@ -13,6 +13,9 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/quaternion.hpp>
+
+#include <cmath>
 
 #include "mesh.h"
 #include "camera.h"
@@ -28,6 +31,14 @@ public:
     Drawable(Mesh*, GLuint, glm::vec3, glm::vec3, GLfloat);
 
     void draw();
+
+    void rotateLocalEuler(GLfloat x, GLfloat y, GLfloat z);
+    void rotateLocalEuler(glm::vec3 rotation);
+
+    void rotateGlobalEuler(GLfloat x, GLfloat y, GLfloat z);
+    void rotateGlobalEuler(glm::vec3 rotation);
+
+    void rotateAxisAngle(glm::vec3 axis, GLfloat angle);
 
     void setPosition(glm::vec3 p) {position = p;}
     void setRotation(glm::vec3 r) {rotation = r;}
@@ -61,6 +72,8 @@ protected:
     glm::vec3 rotation;
 
     glm::mat4 model_matrix;
+
+    glm::mat4 rotation_matrix;
 
     GLuint diffuse;
     GLuint specular;

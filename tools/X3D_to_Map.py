@@ -152,47 +152,13 @@ class ObjectReference:
 
         print "Rotation around <%.2f, %.2f, %.2f> = %.2f for %s" % (x, y, z, angle, self.matchedName)
 
-        # Solving this for the euler angles
-        kx = x
-        ky = y
-        kz = z
-        ct = cos(angle)
-        st = sin(angle)
-        vt = 1 - ct
-
-        u = kx
-        v = ky
-        w = kz
-
-        # r = [ [kx*kx*vt + ct, kx*ky*vt - kz*st, kx*kz*vt + ky*st],\
-        #       [kx*ky*vt + kz*st, ky*ky*vt + ct, ky*kz*vt - kx*st],\
-        #       [kx*kz*vt - ky*st, ky*kz*vt + kx*st, kz*kz*vt + ct] ]
-
-        r = [ [],\
-              [0, u*u + (v*v + w*w)*ct, u*v*vt - w*st, u*w*vt + v*st],\
-              [0, u*v*vt + w*st, v*v + (u*u + w*w)*ct, v*w*vt - u*st],\
-              [0, u*w*vt - v*st, v*w*vt + u*st, w*w + (u*u + v*v)*ct] ]
-
-        x_rotation = atan2(r[3][2], r[3][3])
-        y_rotation = atan2(-r[3][1], sqrt(pow(r[3][2], 2) + pow(r[3][3], 2)))
-        z_rotation = atan2(r[2][1], r[1][1])
-
-        print "  Calculated angles new: %.2f, %.2f, %.2f" % (x_rotation, y_rotation, z_rotation)
-
-        if (x_rotation > pi or x_rotation < -pi):
-            print "Error with x rotation"
-        if (y_rotation > pi / 2.0 or y_rotation < -pi / 2.0):
-            print "Error with y rotation"
-        if (z_rotation > pi or z_rotation < -pi):
-            print "Error with z rotation"
-
         # This is be fuckity
         x_rotation = asin(x * y * (1 - cos(angle)) + z * sin(angle))
         y_rotation = atan2(y * sin(angle)- x * z * (1 - cos(angle)) , 1 - (y*y + z*z ) * (1 - cos(angle)))
         z_rotation = atan2(x * sin(angle)-y * z * (1 - cos(angle)) , 1 - (x*x + z*z) * (1 - cos(angle))) + pi / 2.0
 
         # Add 1 to texture for one-based indexing
-        return ("d %s %s %s %s %s %f %f %f %f %f %f %f\n" % (name, diff+1, spec+1, norm+1, emit+1, self.x_pos, self.y_pos, self.z_pos, self.scale, x_rotation, y_rotation, z_rotation))
+        return ("d %s %s %s %s %s %f %f %f %f %f %f %f %f\n" % (name, diff+1, spec+1, norm+1, emit+1, self.x_pos, self.y_pos, self.z_pos, self.scale, x, y, z, angle))
 
     def getParticleDescriptor(self):
         return ("p %s %f %f %f\n" % (self.x3dName[:-5], self.x_pos, self.y_pos, self.z_pos))

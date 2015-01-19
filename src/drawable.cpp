@@ -152,24 +152,16 @@ void Drawable::draw(){
     mesh->draw();
 }
 
-void Drawable::updateModelMatrix(){
-    // Creates the model matrix from the Drawables position and rotation.
-    glm::mat4 translation_matrix = glm::translate(glm::mat4(), position);
-
-    // Axes on which to preform the rotations.
-    glm::vec3 x_axis = glm::vec3(1.0f, 0.0f, 0.0f);
-    glm::vec3 y_axis = glm::vec3(0.0f, 1.0f, 0.0f);
-    glm::vec3 z_axis = glm::vec3(0.0f, 0.0f, 1.0f);
-
+void Drawable::rotateLocalEuler(GLfloat x, GLfloat y, GLfloat z){
     // Rotate the model about each axis.
-    float cx = cos(rotation.x);
-    float sx = sin(rotation.x);
+    float cx = cos(x);
+    float sx = sin(x);
 
-    float cy = cos(rotation.y);
-    float sy = sin(rotation.y);
+    float cy = cos(y);
+    float sy = sin(y);
 
-    float cz = cos(rotation.z);
-    float sz = sin(rotation.z);
+    float cz = cos(z);
+    float sz = sin(z);
 
     glm::mat4 rotation_z = glm::mat4( cz, -sz, 0, 0,
                                       sz,  cz, 0, 0,
@@ -186,10 +178,42 @@ void Drawable::updateModelMatrix(){
                                        sy,  0,  cy, 0,
                                        0 ,  0,  0 , 1);
 
-    glm::mat4 rotation_matrix = glm::mat4();
     rotation_matrix = rotation_x * rotation_matrix;
     rotation_matrix = rotation_y * rotation_matrix;
     rotation_matrix = rotation_z * rotation_matrix;
+}
+
+void Drawable::rotateLocalEuler(glm::vec3 rotation){
+    Drawable::rotateLocalEuler(rotation.x, rotation.y, rotation.z);
+}
+
+void Drawable::rotateGlobalEuler(GLfloat x, GLfloat y, GLfloat z){
+
+    // Axes on which to preform the rotations.
+    glm::vec3 x_axis = glm::vec3(1.0f, 0.0f, 0.0f);
+    glm::vec3 y_axis = glm::vec3(0.0f, 1.0f, 0.0f);
+    glm::vec3 z_axis = glm::vec3(0.0f, 0.0f, 1.0f);
+
+    // Rotate the model about each axis.
+    rotation_matrix = glm::rotate(rotation_matrix, x, x_axis);
+    rotation_matrix = glm::rotate(rotation_matrix, y, y_axis);
+    rotation_matrix = glm::rotate(rotation_matrix, z, z_axis);
+
+}
+
+void Drawable::rotateGlobalEuler(glm::vec3 rotation){
+    Drawable::rotateGlobalEuler(rotation.x, rotation.y, rotation.z);
+}
+
+void Drawable::rotateAxisAngle(glm::vec3 axis, GLfloat angle){
+    glm::quat quaternion =  glm::angleAxis(angle, axis);
+    rotation_matrix = glm::toMat4(quaternion);
+    Drawable::rotateGlobalEuler(M_PI / 2.0f, 0.0, 0.0);
+}
+
+void Drawable::updateModelMatrix(){
+    // Creates the model matrix from the Drawables position and rotation.
+    glm::mat4 translation_matrix = glm::translate(glm::mat4(), position);
 
     model_matrix = rotation_matrix;
     model_matrix = translation_matrix * model_matrix;
