@@ -13,10 +13,6 @@ Particle::Particle(Mesh* mesh, GLuint shader_program, glm::vec3 position, GLfloa
 
 }
 
-Particle::Particle(Mesh* mesh, GLuint shader_program, glm::vec3 position, glm::vec3 rotation, GLfloat scale): Drawable(mesh, shader_program, position, rotation, scale) {
-
-}
-
 void Particle::setInitialValues(glm::vec3 position, glm::vec3 velocity, glm::vec3 acceleration, float rotationSpeed, int lifespan, ScalingOption scaleWithAge, FadingOption alphaWithAge){
     this->position = position;
     this->velocity = velocity;

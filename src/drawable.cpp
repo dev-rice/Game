@@ -5,22 +5,16 @@
 #include "drawable.h"
 
 Drawable::Drawable(Mesh* mesh, GLuint shader_program){
-    load(mesh, shader_program, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f);
+    load(mesh, shader_program, glm::vec3(0.0f, 0.0f, 0.0f), 1.0f);
 }
 
 Drawable::Drawable(Mesh* mesh, GLuint shader_program, glm::vec3 position, GLfloat scale) {
-    load(mesh, shader_program, position, glm::vec3(0.0f, 0.0f, 0.0f), scale);
+    load(mesh, shader_program, position, scale);
 }
 
-Drawable::Drawable(Mesh* mesh, GLuint shader_program, glm::vec3 position, glm::vec3 rotation, GLfloat scale) {
-    load(mesh, shader_program, position, rotation, scale);
-
-}
-
-void Drawable::load(Mesh* mesh, GLuint shader_program, glm::vec3 position, glm::vec3 rotation, GLfloat scale) {
+void Drawable::load(Mesh* mesh, GLuint shader_program, glm::vec3 position, GLfloat scale) {
     // Set the position, rotation, scale, and mesh pointer
     this->position = position;
-    this->rotation = rotation;
     this->mesh = mesh;
     this->scale = scale;
 
