@@ -31,50 +31,19 @@ private:
     static UIImage* left_edge_image;
     static UIImage* down_edge_image;
 
-    int up_edge_offset_x;
-    int right_edge_offset_x;
-    int left_edge_offset_x;
-    int down_edge_offset_x;
-
-    int up_edge_offset_y;
-    int right_edge_offset_y;
-    int left_edge_offset_y;
-    int down_edge_offset_y;
-
-    int up_edge_width;
-    int right_edge_width;
-    int left_edge_width;
-    int down_edge_width;
-
-    int up_edge_height;
-    int right_edge_height;
-    int left_edge_height;
-    int down_edge_height;
+    int edge_inner_offset;
+    int edge_outer_offset;
+    int edge_thickness;
 
     static UIImage* up_left_corner_image;
     static UIImage* up_right_corner_image;
     static UIImage* down_left_corner_image;
     static UIImage* down_right_corner_image;
 
-    int up_left_corner_offset_x;
-    int up_right_corner_offset_x;
-    int down_left_corner_offset_x;
-    int down_right_corner_offset_x;
-
-    int up_left_corner_offset_y;
-    int up_right_corner_offset_y;
-    int down_left_corner_offset_y;
-    int down_right_corner_offset_y;
-
-    int up_left_corner_width;
-    int up_right_corner_width;
-    int down_left_corner_width;
-    int down_right_corner_width;
-
-    int up_left_corner_height;
-    int up_right_corner_height;
-    int down_left_corner_height;
-    int down_right_corner_height;
+    int corner_inner_offset;
+    int corner_outer_offset;
+    int corner_width;
+    int corner_height;
 };
 
 #endif
