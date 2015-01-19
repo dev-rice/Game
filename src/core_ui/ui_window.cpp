@@ -16,16 +16,6 @@ UIImage* UIWindow::down_right_corner_image;
 UIWindow::UIWindow(GLuint shader_program) : UIDrawable(shader_program, TextureLoader::loadGray()){
     this->shader = shader_program;
     is_showing = false;
-
-    up_edge_image = 0;
-    right_edge_image = 0;
-    left_edge_image = 0;
-    down_edge_image = 0;
-
-    up_left_corner_image = 0;
-    up_right_corner_image = 0;
-    down_left_corner_image = 0;
-    down_right_corner_image = 0;
 }
 
 void UIWindow::loadFromXML(std::string filepath){
@@ -115,6 +105,8 @@ void UIWindow::loadFromXML(std::string filepath){
     // Convert all pixel coords into screen
     updateDimensions();
     setGLPosition(getGLPosition());
+
+    didLoadXML();
 }
 
 void UIWindow::draw(){

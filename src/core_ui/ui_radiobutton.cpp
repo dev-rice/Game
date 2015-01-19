@@ -3,6 +3,10 @@
 
 #include "ui_radiobutton.h"
 
+UIImage* UIRadioButton::on_icon;
+UIImage* UIRadioButton::off_icon;
+UIImage* UIRadioButton::hover_icon;
+
 UIRadioButton::UIRadioButton(GLuint shader_program) : UIDrawable(shader_program, TextureLoader::loadPink()){
     this->has_clicked = false;
 }
@@ -21,12 +25,13 @@ void UIRadioButton::loadFromXML(std::string filepath){
     }
 
     pugi::xml_node constraints_node = layout_node.child("constraints");
+    pugi::xml_node sprites_node = layout_node.child("sprites");
 
     // Parse function
     functionName = layout_node.child_value("function");
 
     // Parse radiobutton text
-    text_renderer = new TextRenderer("res/fonts/inconsolata_bold_font.png", 28);
+    text_renderer = new TextRenderer(layout_node.child_value("font"), 28);
     radio_text = layout_node.child_value("text");
 
     // Parse constraints
@@ -39,35 +44,44 @@ void UIRadioButton::loadFromXML(std::string filepath){
     radioButtonOn = (strcmp(layout_node.child_value("mode"), "on") == 0);
 
     // Create and position the button icon and hover highlight
-    GLuint on_icon = TextureLoader::loadTextureFromFile("res/textures/radio_on.png", GL_NEAREST);
-    // on_icon_image = new UIImage(shader, on_icon, x_pixels, y_pixels, 28, 28);
+    if(on_icon == NULL){
+        on_icon = new UIImage(shader, TextureLoader::loadTextureFromFile(sprites_node.child_value("on_icon"), GL_NEAREST));
+    }
 
-    GLuint off_icon = TextureLoader::loadTextureFromFile("res/textures/radio_off.png", GL_NEAREST);
-    // off_icon_image = new UIImage(shader, off_icon, x_pixels, y_pixels, 28, 28);
+    if(off_icon == NULL){
+        off_icon = new UIImage(shader, TextureLoader::loadTextureFromFile(sprites_node.child_value("off_icon"), GL_NEAREST));
+    }
 
-    GLuint hover = TextureLoader::loadTextureFromFile("res/textures/radio_hover.png", GL_NEAREST);
-    // hoverIcon = new UIImage(shader, hover, x_pixels, y_pixels, 28, 28);
+    if(hover_icon == NULL){
+        hover_icon = new UIImage(shader, TextureLoader::loadTextureFromFile(sprites_node.child_value("hover_icon"), GL_NEAREST));
+    }
+
+    icon_width = atoi(sprites_node.child_value("width"));
+    icon_height = atoi(sprites_node.child_value("height"));
 
     if(radioButtonOn){
-        currentIcon = on_icon_image;
+        current_icon = on_icon;
     } else {
-        currentIcon = off_icon_image;
+        current_icon = off_icon;
     }
 
     // Convert all pixel coords into screen
     updateDimensions();
     setGLPosition(getGLPosition());
+
+    didLoadXML();
 }
 
 void UIRadioButton::draw(){
 
     // A check to see if the radio button has been created properly
-    if(currentIcon){
+    if(current_icon){
 
         // Draws pink bounding box. Useful for debugging
         // FlatDrawable::draw();
 
-        // currentIcon->draw();
+        current_icon->setPositionAndDimensions(x_pixels, y_pixels, icon_width, icon_height);
+        current_icon->draw();
 
         text_renderer->print(x_pixels+16, y_pixels, "%s", radio_text.c_str());
 
@@ -77,7 +91,8 @@ void UIRadioButton::draw(){
             gl_mouse_position.y < position.y + height &&
             gl_mouse_position.y > position.y - height){
             
-            // hoverIcon->draw();
+            hover_icon->setPositionAndDimensions(x_pixels, y_pixels, icon_width, icon_height);
+            hover_icon->draw();
 
             bool clicking = glfwGetMouseButton(Window::getInstance()->getGLFWWindow(), GLFW_MOUSE_BUTTON_LEFT);
             if(clicking && !has_clicked){
@@ -111,8 +126,8 @@ void UIRadioButton::toggleRadioButton(){
     radioButtonOn = !radioButtonOn;
 
     if(radioButtonOn){
-        currentIcon = on_icon_image;
+        current_icon = on_icon;
     } else {
-        currentIcon = off_icon_image;
+        current_icon = off_icon;
     }
 }
