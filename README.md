@@ -23,3 +23,7 @@ type ```mkdir obj```
 
 run ``` make && sudo make install```
 
+OR
+
+run the make command ```make configure-linux```
+
