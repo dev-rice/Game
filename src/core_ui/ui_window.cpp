@@ -107,7 +107,7 @@ void UIWindow::loadFromXML(std::string filepath){
     setGLPosition(getGLPosition());
 
     up_edge_image->setPositionAndDimensions(x_pixels + corner_inner_offset, y_pixels - edge_inner_offset, width_pixels - corner_width, edge_thickness);
-    printf("Up edge:\nX: %.10f\nY: %.10f\n", up_edge_image->getGLPosition().x, up_edge_image->getGLPosition().y);
+    printf("Up edge:\nX: %.20f\nY: %.20f\n", up_edge_image->getGLPosition().x, up_edge_image->getGLPosition().y);
 
     didLoadXML();
 }

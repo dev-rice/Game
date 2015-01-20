@@ -8,7 +8,7 @@ UIDrawable::UIDrawable(GLuint shader_program, GLuint texture) : FlatDrawable(sha
                                       0.0f , window_height, 0.0f,
                                       0.0f , 0.0f  , 1.0f );
 
-    inv_mesh_projection = glm::inverse(mesh_projection);
+    inv_mesh_projection = glm::transpose(mesh_projection);
 
     attachTexture(texture);
 
