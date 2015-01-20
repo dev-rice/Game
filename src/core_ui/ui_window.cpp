@@ -106,6 +106,9 @@ void UIWindow::loadFromXML(std::string filepath){
     updateDimensions();
     setGLPosition(getGLPosition());
 
+    up_edge_image->setPositionAndDimensions(x_pixels + corner_inner_offset, y_pixels - edge_inner_offset, width_pixels - corner_width, edge_thickness);
+    printf("Up edge:\nX: %.10f\nY: %.10f\n", up_edge_image->getGLPosition().x, up_edge_image->getGLPosition().y);
+
     didLoadXML();
 }
 
@@ -115,25 +118,25 @@ void UIWindow::draw(){
 
         FlatDrawable::draw();
 
-        up_edge_image->setPositionAndDimensions(x_pixels + corner_inner_offset, y_pixels - edge_inner_offset, width_pixels - corner_width, edge_thickness);
+        up_edge_image->setPositionAndDimensions(x_pixels, y_pixels - edge_inner_offset, width_pixels, edge_thickness);
         right_edge_image->setPositionAndDimensions(x_pixels + width_pixels - edge_outer_offset, y_pixels + corner_outer_offset, edge_thickness, height_pixels - corner_height);
         left_edge_image->setPositionAndDimensions(x_pixels - edge_inner_offset, y_pixels + corner_outer_offset, edge_thickness, height_pixels - corner_height);
         down_edge_image->setPositionAndDimensions(x_pixels + corner_inner_offset, y_pixels + height_pixels - edge_outer_offset, width_pixels - corner_width, edge_thickness);
 
         up_edge_image->draw();
-        right_edge_image->draw();
-        left_edge_image->draw();
-        down_edge_image->draw();
+        // right_edge_image->draw();
+        // left_edge_image->draw();
+        // down_edge_image->draw();
 
         up_left_corner_image->setPositionAndDimensions(x_pixels - corner_inner_offset, y_pixels - corner_inner_offset, corner_width, corner_height);
         up_right_corner_image->setPositionAndDimensions(x_pixels + width_pixels - corner_outer_offset, y_pixels - corner_inner_offset, corner_width, corner_height);
         down_left_corner_image->setPositionAndDimensions(x_pixels - corner_inner_offset, y_pixels + height_pixels - corner_outer_offset, corner_width, corner_height);
         down_right_corner_image->setPositionAndDimensions(x_pixels + width_pixels - corner_outer_offset, y_pixels + height_pixels - corner_outer_offset, corner_width, corner_height);
 
-        up_left_corner_image->draw();
-        up_right_corner_image->draw();
-        down_left_corner_image->draw();
-        down_right_corner_image->draw();
+        // up_left_corner_image->draw();
+        // up_right_corner_image->draw();
+        // down_left_corner_image->draw();
+        // down_right_corner_image->draw();
 
         for(int i(0); i < subelements.size(); ++i){
             subelements[i]->draw();
