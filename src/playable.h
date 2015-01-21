@@ -8,11 +8,14 @@
 #include <GLFW/glfw3.h>
 
 #include "drawable.h"
+#include "terrain.h"
 
 class Playable : public Drawable {
 public:
 	Playable();
 	Playable(Mesh*, GLuint, glm::vec3, GLfloat);
+
+	void update(Terrain *);
 private:
 	void updateUniformData();
 };

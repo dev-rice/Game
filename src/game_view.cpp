@@ -32,21 +32,6 @@ GameView::GameView(Level* level){
     menu->loadFromXML("res/layouts/test.xml");
     menu->hide();
 
-    // Creation of test playable
-    printf("Starting creation of Playable\n");
-    Mesh *playable_mesh = new Mesh("res/models/demo_unit.obj");
-    printf("Loaded mesh ok\n");
-    GLuint playable_shader = ShaderLoader::loadShaderProgram("shaders/doodad.vs",
-        "shaders/doodad.fs");
-    printf("Loaded shader ok\n");
-    glm::vec3 playable_position = glm::vec3(0.0f, 0.0f, 0.0f);
-    printf("Loaded position ok\n");
-    float playable_scale = 1.0f;
-    printf("Loaded scale ok\n"); 
-
-    playables.push_back(new Playable(playable_mesh, playable_shader, playable_position, playable_scale));
-    printf("Loaded Playable ok!\n");
-
     toggle_key_state = false;
     debug_showing = Debug::is_on;
 
@@ -83,11 +68,6 @@ void GameView::update(){
     // Render the level to the framebuffer
     framebuffer->setAsRenderTarget();
     level->draw();
-
-    // Here, I guess?
-    for(int i(0); i < playables.size(); ++i){
-        playables[i]->draw();
-    }
 
     // Draw the framebuffer N - 1 times (the last pass is drawn to the screen).
     // This is how many times the fxaa shader samples the image.

@@ -13,6 +13,7 @@
 #include "camera.h"
 #include "shader_loader.h"
 #include "texture_loader.h"
+#include "playable.h"
 
 #include "terrain.h"
 
@@ -60,6 +61,7 @@ private:
     std::vector<GLuint> textures;
     std::vector<Mesh*> meshes;
     std::vector<Drawable*> drawables;
+    std::vector<Playable*> units;
     std::vector<Emitter*> emitters;
 
     GLuint doodad_shader;

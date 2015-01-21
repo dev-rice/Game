@@ -17,8 +17,8 @@ Level::Level(const char* filename){
     proj_matrix = glm::perspective(45.0f, (float)width / (float)height, 0.1f,
         500.0f);
 
-    // camera = new Camera(glm::vec3(0.0f, 40.0f, 40.0f), glm::vec3(1.04f, 0.0f, 0.0f));
-    camera = new Camera(glm::vec3(7.39f, 2.91f, 1.13f), glm::vec3(0.07, 1.2, 0.0));
+    camera = new Camera(glm::vec3(0.0f, 40.0f, 40.0f), glm::vec3(1.04f, 0.0f, 0.0f));
+    // camera = new Camera(glm::vec3(7.39f, 2.91f, 1.13f), glm::vec3(0.07, 1.2, 0.0));
 
     doodad_shader = ShaderLoader::loadShaderProgram("shaders/doodad.vs",
         "shaders/doodad.fs");
@@ -55,6 +55,16 @@ Level::Level(const char* filename){
 
     loadLevel(filename);
 
+    // Creation of test playable
+    Mesh *playable_mesh = new Mesh("res/models/demo_unit.obj");
+    GLuint playable_shader = ShaderLoader::loadShaderProgram("shaders/doodad.vs",
+        "shaders/doodad.fs");
+    glm::vec3 playable_position = glm::vec3(0.0f, 0.0f, 0.0f);
+    float playable_scale = 1.0f;
+
+    units.push_back(new Playable(playable_mesh, playable_shader, playable_position, playable_scale));
+
+
 }
 
 void Level::draw(){
@@ -65,6 +75,11 @@ void Level::draw(){
     // Draw all the drawables
     for (int i = 0; i < drawables.size(); ++i){
         drawables[i]->draw();
+    }
+
+    for (int i = 0; i < units.size(); ++i){
+        units[i]->update(ground);
+        units[i]->draw();
     }
 
     // Draw all the particle emitters
