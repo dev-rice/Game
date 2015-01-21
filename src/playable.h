@@ -14,6 +14,7 @@ public:
 	Playable();
 	Playable(Mesh*, GLuint, glm::vec3, GLfloat);
 private:
+	void updateUniformData();
 };
 
 #endif
