@@ -55,7 +55,8 @@ void Profile::loadSettings(){
     ifile = fopen("settings/settings.conf", "r");
 
     if(ifile == NULL){
-        Debug::error("Error opening configuration file.\n");
+        // Can't throw error - debug hasn't been turned on yet
+        printf("Error opening configuration file.\n");
         return;
 
     }

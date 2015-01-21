@@ -44,6 +44,7 @@ private:
 
     UIDrawable* selection_box;
     std::vector<UIDrawable*> ui_drawables;
+    std::vector<UIDrawable*> playables;
 
     TextRenderer* text_renderer;
 
