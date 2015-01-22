@@ -26,9 +26,9 @@
     </corner_sprites>
 
     <edge_sprites>
-        <outer_offset>5</outer_offset>
+        <outer_offset>1</outer_offset>
         <inner_offset>11</inner_offset>
-        <thickness>16</thickness>
+        <thickness>12</thickness>
         <right>res/textures/edge_right.png</right>
         <down>res/textures/edge_down.png</down>
         <left>res/textures/edge_left.png</left>

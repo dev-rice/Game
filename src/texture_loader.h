@@ -21,7 +21,7 @@ public:
 
     static GLuint loadPink();
     static GLuint loadAlpha();
-    static GLuint loadGray();
+    static GLuint loadBlack();
     static GLuint loadBlue();
 
     static GLuint loadTextureFromFile(const char*, GLuint);
@@ -30,12 +30,12 @@ public:
 private:
     static GLuint pink;
     static GLuint alpha;
-    static GLuint gray;
+    static GLuint black;
     static GLuint blue;
 
     static bool loaded_pink;
     static bool loaded_alpha;
-    static bool loaded_gray;
+    static bool loaded_black;
     static bool loaded_blue;
 
 };

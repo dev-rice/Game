@@ -13,7 +13,7 @@ UIImage* UIWindow::up_right_corner_image;
 UIImage* UIWindow::down_left_corner_image;
 UIImage* UIWindow::down_right_corner_image;
 
-UIWindow::UIWindow(GLuint shader_program) : UIDrawable(shader_program, TextureLoader::loadGray()){
+UIWindow::UIWindow(GLuint shader_program) : UIDrawable(shader_program, TextureLoader::loadBlack()){
     this->shader = shader_program;
     is_showing = false;
 }
@@ -106,6 +106,8 @@ void UIWindow::loadFromXML(std::string filepath){
     updateDimensions();
     setGLPosition(getGLPosition());
 
+    up_edge_image->setPositionAndDimensions(x_pixels + corner_inner_offset, y_pixels - edge_inner_offset, width_pixels - corner_width, edge_thickness);
+
     didLoadXML();
 }
 
@@ -115,7 +117,7 @@ void UIWindow::draw(){
 
         FlatDrawable::draw();
 
-        up_edge_image->setPositionAndDimensions(x_pixels + corner_inner_offset, y_pixels - edge_inner_offset, width_pixels - corner_width, edge_thickness);
+        up_edge_image->setPositionAndDimensions(x_pixels + corner_outer_offset, y_pixels - edge_inner_offset, width_pixels - corner_width, edge_thickness);
         right_edge_image->setPositionAndDimensions(x_pixels + width_pixels - edge_outer_offset, y_pixels + corner_outer_offset, edge_thickness, height_pixels - corner_height);
         left_edge_image->setPositionAndDimensions(x_pixels - edge_inner_offset, y_pixels + corner_outer_offset, edge_thickness, height_pixels - corner_height);
         down_edge_image->setPositionAndDimensions(x_pixels + corner_inner_offset, y_pixels + height_pixels - edge_outer_offset, width_pixels - corner_width, edge_thickness);
