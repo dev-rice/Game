@@ -51,14 +51,15 @@ bool Profile::getWindowed(){
 void Profile::loadSettings(){
 	char buffer[128];
 
+	const char* settings_filename = "settings/settings.conf";
+
     FILE * ifile;
-    ifile = fopen("settings/settings.conf", "r");
+    ifile = fopen(settings_filename, "r");
 
     if(ifile == NULL){
-        // Can't throw error - debug hasn't been turned on yet
-        printf("Error opening configuration file.\n");
+        Debug::error("Could not open configuration file '%s'.\n",
+			settings_filename);
         return;
-
     }
 
      while(! feof(ifile)){

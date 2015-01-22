@@ -33,7 +33,6 @@ void error_callback(int error, const char* description){
 
 int main(int argc, char* argv[]) {
 
-
     // Make the randomizer random
     srand(time(NULL));
 
@@ -104,7 +103,7 @@ int main(int argc, char* argv[]) {
         Debug::error("Failed to initialize GLFW\n");
         return -1;
     }
-    
+
     glfwSetErrorCallback(error_callback);
 
     if (fullscreen){
