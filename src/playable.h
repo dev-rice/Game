@@ -16,8 +16,16 @@ public:
 	Playable(Mesh*, GLuint, glm::vec3, GLfloat);
 
 	void update(Terrain *);
+	void loadFromXML();
 private:
 	void updateUniformData();
+
+	float speed;
+	float acceleration;
+	float turning_speed;
+	float radius;
+	float sight_radius;
+
 };
 
 #endif
