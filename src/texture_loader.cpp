@@ -2,12 +2,12 @@
 
 GLuint TextureLoader::pink;
 GLuint TextureLoader::alpha;
-GLuint TextureLoader::gray;
+GLuint TextureLoader::black;
 GLuint TextureLoader::blue;
 
 bool TextureLoader::loaded_pink;
 bool TextureLoader::loaded_alpha;
-bool TextureLoader::loaded_gray;
+bool TextureLoader::loaded_black;
 bool TextureLoader::loaded_blue;
 
 GLuint TextureLoader::loadPink(){
@@ -39,18 +39,18 @@ GLuint TextureLoader::loadAlpha(){
 
 }
 
-GLuint TextureLoader::loadGray(){
-    if (!loaded_gray){
-        std::vector<GLfloat> gray_pixel;
-        gray_pixel.push_back(0.433f);
-        gray_pixel.push_back(0.433f);
-        gray_pixel.push_back(0.433f);
-        gray_pixel.push_back(1.0f);
+GLuint TextureLoader::loadBlack(){
+    if (!loaded_black){
+        std::vector<GLfloat> black_pixel;
+        black_pixel.push_back(0.0f);
+        black_pixel.push_back(0.0f);
+        black_pixel.push_back(0.0f);
+        black_pixel.push_back(0.75f);
 
-        TextureLoader::gray = TextureLoader::loadTextureFromPixel(gray_pixel);
-        loaded_gray = true;
+        TextureLoader::black = TextureLoader::loadTextureFromPixel(black_pixel);
+        loaded_black = true;
     }
-    return TextureLoader::gray;
+    return TextureLoader::black;
 
 }
 
@@ -82,12 +82,9 @@ GLuint TextureLoader::loadTextureFromFile(const char* filename, GLuint filter){
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
                  GL_UNSIGNED_BYTE, image);
 
-    float color[] = { 1.0f, 0.0f, 0.0f, 0.1f };
-    glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, color);
-
     // Set the texture wrapping to repeat
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     // Do nearest interpolation for scaling the image up and down.
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
     // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
