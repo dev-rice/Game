@@ -148,7 +148,7 @@ void Drawable::draw(){
     mesh->draw();
 }
 
-void Drawable::rotateLocalEuler(GLfloat x, GLfloat y, GLfloat z){
+void Drawable::rotateGlobalEuler(GLfloat x, GLfloat y, GLfloat z){
     // Rotate the model about each axis.
     float cx = cos(x);
     float sx = sin(x);
@@ -179,24 +179,6 @@ void Drawable::rotateLocalEuler(GLfloat x, GLfloat y, GLfloat z){
     rotation_matrix = rotation_z * rotation_matrix;
 }
 
-void Drawable::rotateLocalEuler(glm::vec3 rotation){
-    Drawable::rotateLocalEuler(rotation.x, rotation.y, rotation.z);
-}
-
-void Drawable::rotateGlobalEuler(GLfloat x, GLfloat y, GLfloat z){
-
-    // Axes on which to preform the rotations.
-    glm::vec3 x_axis = glm::vec3(1.0f, 0.0f, 0.0f);
-    glm::vec3 y_axis = glm::vec3(0.0f, 1.0f, 0.0f);
-    glm::vec3 z_axis = glm::vec3(0.0f, 0.0f, 1.0f);
-
-    // Rotate the model about each axis.
-    rotation_matrix = glm::rotate(rotation_matrix, x, x_axis);
-    rotation_matrix = glm::rotate(rotation_matrix, y, y_axis);
-    rotation_matrix = glm::rotate(rotation_matrix, z, z_axis);
-
-}
-
 void Drawable::rotateGlobalEuler(glm::vec3 rotation){
     Drawable::rotateGlobalEuler(rotation.x, rotation.y, rotation.z);
 }
@@ -204,7 +186,11 @@ void Drawable::rotateGlobalEuler(glm::vec3 rotation){
 void Drawable::rotateAxisAngle(glm::vec3 axis, GLfloat angle){
     glm::quat quaternion =  glm::angleAxis(angle, axis);
     rotation_matrix = glm::toMat4(quaternion);
-    Drawable::rotateGlobalEuler(M_PI / 2.0f, 0.0, 0.0);
+
+    GLfloat x = M_PI / 2.0f;
+    glm::vec3 x_axis = glm::vec3(1.0f, 0.0f, 0.0f);
+    rotation_matrix = glm::rotate(rotation_matrix, x, x_axis);
+
 }
 
 void Drawable::updateModelMatrix(){

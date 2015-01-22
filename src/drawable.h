@@ -31,9 +31,6 @@ public:
 
     void draw();
 
-    void rotateLocalEuler(GLfloat x, GLfloat y, GLfloat z);
-    void rotateLocalEuler(glm::vec3 rotation);
-
     void rotateGlobalEuler(GLfloat x, GLfloat y, GLfloat z);
     void rotateGlobalEuler(glm::vec3 rotation);
 

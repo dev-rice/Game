@@ -6,6 +6,7 @@
 
 #include <vector>
 #include <string>
+#include <cmath>
 
 #include "drawable.h"
 #include "doodad.h"
