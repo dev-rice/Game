@@ -174,6 +174,8 @@ void Drawable::rotateGlobalEuler(GLfloat x, GLfloat y, GLfloat z){
                                        sy,  0,  cy, 0,
                                        0 ,  0,  0 , 1);
 
+    // The convention followed is rotate around X-axis, then Y-axis, and finally
+    // Z-axis.
     rotation_matrix = rotation_x * rotation_matrix;
     rotation_matrix = rotation_y * rotation_matrix;
     rotation_matrix = rotation_z * rotation_matrix;
