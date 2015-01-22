@@ -186,9 +186,10 @@ void Level::loadLevel(const char* filename){
         }
 
         if(buffer[0] == 'd'){
-            sscanf(buffer, "%*c %d %d %d %d %d %f %f %f %f %f %f %f",
+            float x_axis, y_axis, z_axis, angle;
+            sscanf(buffer, "%*c %d %d %d %d %d %f %f %f %f %f %f %f %f",
                 &objectIndex, &diffIndex, &specIndex, &normIndex, &emitIndex,
-                &x, &y, &z, &scale, &x_rot, &y_rot, &z_rot);
+                &x, &y, &z, &scale, &x_axis, &y_axis, &z_axis, &angle);
 
             Mesh* mesh = meshes[objectIndex];
 
@@ -198,10 +199,10 @@ void Level::loadLevel(const char* filename){
             GLuint normal = getTexture(normIndex);
 
             glm::vec3 position = glm::vec3(x, y, z);
-            glm::vec3 rotation = glm::vec3(x_rot, y_rot, z_rot);
+            glm::vec3 rotation = glm::vec3(x_axis, y_axis, z_axis);
 
-            Doodad* drawable = new Doodad(mesh, doodad_shader, position,
-                rotation, scale);
+            Doodad* drawable = new Doodad(mesh, doodad_shader, position, scale);
+            drawable->rotateAxisAngle(rotation, angle);
             drawable->setDiffuse(diffuse);
             drawable->setSpecular(specular);
             drawable->setEmissive(emissive);

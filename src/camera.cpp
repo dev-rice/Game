@@ -65,24 +65,21 @@ glm::mat4 Camera::getViewMatrix(){
     glm::vec3 center = position - glm::vec3(0.0f, 0.0f, 1.0f);
     glm::vec3 up     = local_y;
 
-    // X rotation matrix
-    glm::mat3 x_rotation_matrix = glm::mat3( 1.0f, 0.0f      , 0.0f,
-                                             0.0f, cos(rotation.x), -sin(rotation.x),
-                                             0.0f, sin(rotation.x), cos(rotation.x));
+    float cx = cos(rotation.x);
+    float sx = sin(rotation.x);
 
-    // Y rotation matrix
-    glm::mat3 y_rotation_matrix = glm::mat3( cos(rotation.y) , 0.0f, sin(rotation.y),
-                                             0.0f            , 1.0f, 0.0f,
-                                             -sin(rotation.y), 0.0f, cos(rotation.y));
-    y_rotation_matrix = glm::inverse(y_rotation_matrix);
+    float cy = cos(rotation.y);
+    float sy = sin(rotation.y);
 
-    // Z rotation matrix
-    // #warning Useless z rotation
-    // glm::mat3 z_rotation_matrix = glm::mat3( cos(rotation.z), -sin(rotation.z), 0.0f,
-    //                                          sin(rotation.z),  cos(rotation.z), 0.0f,
-    //                                          0.0f           , 0.0f            , 1.0f);
+    glm::mat3 rotation_x = glm::mat3(  1 ,  0 ,  0 ,
+                                       0 ,  cx, -sx,
+                                       0 ,  sx,  cx  );
 
-    glm::mat3 rotation_matrix = y_rotation_matrix * x_rotation_matrix;
+    glm::mat3 rotation_y = glm::mat3(  cy,  0 , -sy,
+                                       0 ,  1 ,  0 ,
+                                       sy,  0 ,  cy  );
+
+    glm::mat3 rotation_matrix = rotation_y * rotation_x;
 
     // Transform the center vector
     center = position - (rotation_matrix * glm::vec3(0.0f, 0.0f, 1.0f));
@@ -91,12 +88,6 @@ glm::mat4 Camera::getViewMatrix(){
     local_x = rotation_matrix * glm::vec3(1.0f, 0.0f, 0.0f);
     local_y = rotation_matrix * glm::vec3(0.0f, 1.0f, 0.0f);
     local_z = rotation_matrix * glm::vec3(0.0f, 0.0f, 1.0f);
-
-    // local_x = glm::vec3(1.0f, 0.0f, 0.0f);
-    // local_z = glm::vec3(0.0f, 0.0f, 1.0f);
-
-    // Debug
-    // print();
 
     glm::mat4 view_matrix = glm::lookAt(eye, center, up);
 
@@ -109,13 +100,4 @@ glm::vec3 Camera::getPosition(){
 
 glm::vec3 Camera::getRotation(){
     return rotation;
-}
-
-void Camera::print(){
-    printf("Camera\n");
-    printf("    position = <%f, %f, %f>\n", position.x, position.y, position.z);
-    printf("    rotation = <%f, %f, %f>\n\n", 180 * rotation.x / M_PI, 180 * rotation.y / M_PI, 180 * rotation.z / M_PI);
-    printf("    local_x  = <%f, %f, %f>\n", local_x.x, local_x.y, local_x.z);
-    printf("    local_y  = <%f, %f, %f>\n", local_y.x, local_y.y, local_y.z);
-    printf("    local_z  = <%f, %f, %f>\n", local_z.x, local_z.y, local_z.z);
 }

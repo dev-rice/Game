@@ -54,8 +54,7 @@ Terrain::Terrain(GLuint shader_program, std::string heightmap_filename, float am
 
     // Once we have a mesh, we can load the drawable data required for this
     // child class.
-    Drawable::load(mesh, shader_program, glm::vec3(0.0f, 0.0f, 0.0f),
-        glm::vec3(0.0f, 0.0f, 0.0f), 1.0f);
+    Drawable::load(mesh, shader_program, glm::vec3(0.0f, 0.0f, 0.0f), 1.0f);
 
 }
 
@@ -107,7 +106,11 @@ glm::vec3 Terrain::getNormal(GLfloat x_pos, GLfloat z_pos){
     // Calculate the index of the current point in the vertex array.
     int i = getIndex(x, z);
 
-    return normals[i];
+    if (i < 0 || i > vertices.size() - 1){
+        return glm::vec3(0.0f, 0.0f, 0.0f);
+    } else {
+        return normals[i];
+    }
 }
 
 Mesh* Terrain::generateMesh(Heightmap& heightmap){

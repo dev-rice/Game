@@ -18,7 +18,6 @@ public:
 
     Particle(Mesh*, GLuint);
     Particle(Mesh*, GLuint, glm::vec3, GLfloat);
-    Particle(Mesh*, GLuint, glm::vec3, glm::vec3, GLfloat);
 
     // ~Particle();
 

@@ -5,22 +5,16 @@
 #include "drawable.h"
 
 Drawable::Drawable(Mesh* mesh, GLuint shader_program){
-    load(mesh, shader_program, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f);
+    load(mesh, shader_program, glm::vec3(0.0f, 0.0f, 0.0f), 1.0f);
 }
 
 Drawable::Drawable(Mesh* mesh, GLuint shader_program, glm::vec3 position, GLfloat scale) {
-    load(mesh, shader_program, position, glm::vec3(0.0f, 0.0f, 0.0f), scale);
+    load(mesh, shader_program, position, scale);
 }
 
-Drawable::Drawable(Mesh* mesh, GLuint shader_program, glm::vec3 position, glm::vec3 rotation, GLfloat scale) {
-    load(mesh, shader_program, position, rotation, scale);
-
-}
-
-void Drawable::load(Mesh* mesh, GLuint shader_program, glm::vec3 position, glm::vec3 rotation, GLfloat scale) {
+void Drawable::load(Mesh* mesh, GLuint shader_program, glm::vec3 position, GLfloat scale) {
     // Set the position, rotation, scale, and mesh pointer
     this->position = position;
-    this->rotation = rotation;
     this->mesh = mesh;
     this->scale = scale;
 
@@ -93,6 +87,8 @@ void Drawable::setSpecular(GLuint specular) {
 void Drawable::setEmissive(GLuint emissive) {
     if (emissive != 0){
         this->emissive = emissive;
+    } else if (diffuse == TextureLoader::loadAlpha()) {
+        this->emissive = TextureLoader::loadPink();
     } else {
         this->emissive = TextureLoader::loadAlpha();
     }
@@ -152,21 +148,57 @@ void Drawable::draw(){
     mesh->draw();
 }
 
+void Drawable::rotateGlobalEuler(GLfloat x, GLfloat y, GLfloat z){
+    // Rotate the model about each axis.
+    float cx = cos(x);
+    float sx = sin(x);
+
+    float cy = cos(y);
+    float sy = sin(y);
+
+    float cz = cos(z);
+    float sz = sin(z);
+
+    glm::mat4 rotation_z = glm::mat4( cz, -sz, 0, 0,
+                                      sz,  cz, 0, 0,
+                                      0 ,  0 , 1, 0,
+                                      0 ,  0 , 0, 1);
+
+    glm::mat4 rotation_x = glm::mat4( 1, 0 ,  0 , 0,
+                                      0, cx, -sx, 0,
+                                      0, sx,  cx, 0,
+                                      0, 0 ,  0 , 1);
+
+    glm::mat4 rotation_y = glm::mat4(  cy,  0, -sy, 0,
+                                       0 ,  1,  0 , 0,
+                                       sy,  0,  cy, 0,
+                                       0 ,  0,  0 , 1);
+
+    // The convention followed is rotate around X-axis, then Y-axis, and finally
+    // Z-axis.
+    rotation_matrix = rotation_x * rotation_matrix;
+    rotation_matrix = rotation_y * rotation_matrix;
+    rotation_matrix = rotation_z * rotation_matrix;
+}
+
+void Drawable::rotateGlobalEuler(glm::vec3 rotation){
+    Drawable::rotateGlobalEuler(rotation.x, rotation.y, rotation.z);
+}
+
+void Drawable::rotateAxisAngle(glm::vec3 axis, GLfloat angle){
+    glm::quat quaternion =  glm::angleAxis(angle, axis);
+    rotation_matrix = glm::toMat4(quaternion);
+
+    GLfloat x = M_PI / 2.0f;
+    glm::vec3 x_axis = glm::vec3(1.0f, 0.0f, 0.0f);
+    rotation_matrix = glm::rotate(rotation_matrix, x, x_axis);
+
+}
+
 void Drawable::updateModelMatrix(){
     // Creates the model matrix from the Drawables position and rotation.
     glm::mat4 translation_matrix = glm::translate(glm::mat4(), position);
 
-    // Axes on which to preform the rotations.
-    glm::vec3 x_axis = glm::vec3(1.0f, 0.0f, 0.0f);
-    glm::vec3 y_axis = glm::vec3(0.0f, 1.0f, 0.0f);
-    glm::vec3 z_axis = glm::vec3(0.0f, 0.0f, 1.0f);
-
-    // Rotate the model about each axis.
-    glm::mat4 rotation_matrix;
-    rotation_matrix = glm::rotate(rotation_matrix, rotation.x, x_axis);
-    rotation_matrix = glm::rotate(rotation_matrix, rotation.y, y_axis);
-    rotation_matrix = glm::rotate(rotation_matrix, rotation.z, z_axis);
-
     model_matrix = rotation_matrix;
-    model_matrix = translation_matrix * rotation_matrix;
+    model_matrix = translation_matrix * model_matrix;
 }

@@ -13,6 +13,9 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/quaternion.hpp>
+
+#include <cmath>
 
 #include "mesh.h"
 #include "camera.h"
@@ -25,12 +28,15 @@ public:
     Drawable () {;}
     Drawable(Mesh*, GLuint);
     Drawable(Mesh*, GLuint, glm::vec3, GLfloat);
-    Drawable(Mesh*, GLuint, glm::vec3, glm::vec3, GLfloat);
 
     void draw();
 
+    void rotateGlobalEuler(GLfloat x, GLfloat y, GLfloat z);
+    void rotateGlobalEuler(glm::vec3 rotation);
+
+    void rotateAxisAngle(glm::vec3 axis, GLfloat angle);
+
     void setPosition(glm::vec3 p) {position = p;}
-    void setRotation(glm::vec3 r) {rotation = r;}
     void setScale(GLfloat s) {scale = s;}
     void setShader(GLuint);
 
@@ -40,12 +46,11 @@ public:
     void setNormal(GLuint n);
 
     glm::vec3 getPosition() {return position;}
-    glm::vec3 getRotation() {return rotation;}
     GLfloat getScale() {return scale;}
     GLuint getShader() {return shader_program;}
 
 protected:
-    void load(Mesh*, GLuint, glm::vec3, glm::vec3, GLfloat);
+    void load(Mesh*, GLuint, glm::vec3, GLfloat);
     void updateModelMatrix();
 
     virtual void bindTextures();
@@ -58,9 +63,9 @@ protected:
     GLfloat scale;
 
     glm::vec3 position;
-    glm::vec3 rotation;
 
     glm::mat4 model_matrix;
+    glm::mat4 rotation_matrix;
 
     GLuint diffuse;
     GLuint specular;
