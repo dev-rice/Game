@@ -23,9 +23,9 @@ void Debug::info(const char* input, ...){
 }
 
 void Debug::error(const char* input, ...){
-    if (!Debug::is_on){
-        return;
-    }
+    // if (!Debug::is_on){
+    //     return;
+    // }
 
     char buffer[256];
     sprintf(buffer, "%s[error]%s %s", Debug::ERROR, Debug::NORMAL, input);
