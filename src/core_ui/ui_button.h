@@ -26,9 +26,9 @@ protected:
     TextRenderer* text_renderer;
     std::string button_text;
 
-    UIImage* center_image;
-    UIImage* left_image;
-    UIImage* right_image;
+    static UIImage* center_image;
+    static UIImage* left_image;
+    static UIImage* right_image;
     // Needs hovering and click images
 };
 

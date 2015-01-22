@@ -3,6 +3,10 @@
 
 #include "ui_button.h"
 
+UIImage* UIButton::center_image;
+UIImage* UIButton::left_image;
+UIImage* UIButton::right_image;
+
 UIButton::UIButton(GLuint shader_program) : UIDrawable(shader_program, TextureLoader::loadPink()){
 
 }
@@ -35,15 +39,17 @@ void UIButton::loadFromXML(std::string filepath){
     parseConstraints(constraints_node);
 
     // Add in decorative images
-    GLuint center = TextureLoader::loadTextureFromFile("res/textures/button_center.png", GL_NEAREST);
-    // center_image = new UIImage(shader, center, x_pixels + 15, y_pixels, width_pixels - 30, 32);
+    if(center_image == NULL){
+        center_image = new UIImage(shader, TextureLoader::loadTextureFromFile("res/textures/button_center.png", GL_NEAREST));
+    }
 
-    GLuint left = TextureLoader::loadTextureFromFile("res/textures/button_left.png", GL_NEAREST);
-    // left_image = new UIImage(shader, left, x_pixels - 1, y_pixels, 17, 32);
-
-    GLuint right = TextureLoader::loadTextureFromFile("res/textures/button_right.png", GL_NEAREST);
-    // right_image = new UIImage(shader, right, x_pixels + width_pixels - 16, y_pixels, 17, 32);
-
+    if(left_image == NULL){
+        left_image = new UIImage(shader, TextureLoader::loadTextureFromFile("res/textures/button_left.png", GL_NEAREST));
+    }
+   
+    if(right_image == NULL){
+        right_image = new UIImage(shader, TextureLoader::loadTextureFromFile("res/textures/button_right.png", GL_NEAREST));
+    }
 
     // Convert all pixel coords into screen
     updateDimensions();
@@ -63,10 +69,14 @@ void UIButton::draw(){
 
         // Draws pink bounding box. Useful for debugging
         // FlatDrawable::draw();
+
+        center_image->setPositionAndDimensions(x_pixels + 15, y_pixels, width_pixels - 30, 32);
+        left_image->setPositionAndDimensions(x_pixels - 1, y_pixels, 17, 32);
+        right_image->setPositionAndDimensions(x_pixels + width_pixels - 16, y_pixels, 17, 32);
         
-        // center_image->draw();
-        // left_image->draw();
-        // right_image->draw();
+        center_image->draw();
+        left_image->draw();
+        right_image->draw();
 
     }
 
