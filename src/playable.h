@@ -30,17 +30,24 @@ private:
 	void updateUniformData();
 
 	// Not a complete list
-	enum class PlayableAttribute { MASSIVE, ARMORED, ARMY, WORKER, FLYING, INVULNERABLE, MECHANICAL };
+	static enum class PlayableAttribute { MASSIVE, ARMORED, ARMY, WORKER, FLYING, INVULNERABLE, MECHANICAL };
 
-	bool selected;
-
-	Doodad* selection_ring;
+	static Doodad* selection_ring;
 
 	float speed;
 	float acceleration;
 	float turning_speed;
 	float radius;
 	float sight_radius;
+
+	int per_level_health_boost;
+	int per_level_strength_boost;
+
+	bool selected;
+
+	int level;
+
+	int strength;
 
 	int health;
 	int healing_rate;
