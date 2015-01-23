@@ -233,10 +233,10 @@ void MeshLoader::loadMeshFromOBJ(const char* fileName){
 
 }
 
-void MeshLoader::loadMeshFromDAE(const char* fileName){
+void MeshLoader::loadMeshFromDAE(const char* filename){
     // Load the document into a pugixml object
     pugi::xml_document doc;
-    pugi::xml_parse_result result = doc.load_file("/Users/chrisrice/Desktop/cube.dae");
+    pugi::xml_parse_result result = doc.load_file(filename);
 
     // Get the node that contains geometry data for each mesh.
     pugi::xml_node mesh_list_node = doc.child("COLLADA").child("library_geometries");

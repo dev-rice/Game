@@ -134,7 +134,7 @@ int main(int argc, char* argv[]) {
 
     // Do some mesh loading
     MeshLoader mesh_loader = MeshLoader("res/models/sword.obj");
-    mesh_loader.loadMeshFromDAE("");
+    mesh_loader.loadMeshFromDAE("res/models/cube.dae");
 
     // Create the world
     World* world;

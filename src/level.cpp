@@ -77,10 +77,10 @@ void Level::draw(){
         drawables[i]->draw();
     }
 
-    for (int i = 0; i < units.size(); ++i){
-        units[i]->update(ground);
-        units[i]->draw();
-    }
+    // for (int i = 0; i < units.size(); ++i){
+    //     units[i]->update(ground);
+    //     units[i]->draw();
+    // }
 
     // Draw all the particle emitters
     for(int i(0); i < emitters.size(); ++i){
