@@ -100,12 +100,12 @@ void GameView::update(){
         selection_box->setGLCoordinates(initial_left_click_position, final_left_click_position);
         selection_box->draw();
     }
-    if(left_mouse_button_unclick && (dragged_x || dragged_y)){
+    if(left_mouse_button_unclick && !Mouse::getInstance()->isHovering() && (dragged_x || dragged_y)){
         // Need to transform click positions into world space
 
         printf("Left mouse unclicked (Dragging) just now\n");
         // level->selectUnits();
-    } else if(left_mouse_button_unclick){
+    } else if(left_mouse_button_unclick && !Mouse::getInstance()->isHovering()){
         printf("Left mouse unclicked (Clicking) just now\n");
     }
 
