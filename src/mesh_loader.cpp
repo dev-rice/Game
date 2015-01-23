@@ -246,13 +246,6 @@ void MeshLoader::loadMeshFromDAE(const char* filename){
     for (pugi::xml_node geometry_node : mesh_list_node.children()){
         std::string mesh_id = getNodeAttribute(geometry_node, "id");
 
-        // Get the id of the mesh, this might be helpful later
-        // for (pugi::xml_attribute attribute : geometry_node.attributes()){
-        //     if (std::string(attribute.name()) == "id") {
-        //         mesh_id = std::string(attribute.value());
-        //     }
-        // }
-
         Debug::info("Collada Mesh Data:\n");
         Debug::info("  mesh id: %s\n", mesh_id.c_str());
 
