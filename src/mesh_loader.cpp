@@ -262,6 +262,10 @@ void MeshLoader::loadMeshFromDAE(const char* filename){
             if (strcmp(mesh_data_node.name(), "source") == 0){
                 std::string source_id = getNodeAttribute(mesh_data_node, "id");
                 Debug::info("%s\n", source_id.c_str());
+                if (source_id == mesh_vertex_source_id){
+                    std::string vertex_array_string = mesh_data_node.child_value("float_array");
+                    Debug::info("%s\n", vertex_array_string.c_str());
+                }
             }
         }
 
