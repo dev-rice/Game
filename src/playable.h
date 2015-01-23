@@ -15,6 +15,9 @@
 
 class Playable : public Drawable {
 public:
+	// Not a complete list
+	enum class PlayableAttribute { MASSIVE, ARMORED, ARMY, WORKER, FLYING, INVULNERABLE, MECHANICAL };
+
 	Playable();
 	Playable(Mesh*, GLuint, glm::vec3, GLfloat);
 
@@ -34,6 +37,15 @@ private:
 	float turning_speed;
 	float radius;
 	float sight_radius;
+
+	int health;
+	int healing_rate;
+
+	vector<PlayableAttribute> attributes;
+
+	// Not implemented yet
+	// Weapon* weapon
+	// Ability* ability
 
 };
 
