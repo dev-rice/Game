@@ -13,6 +13,8 @@ Playable::Playable(Mesh* mesh, GLuint shader_program, glm::vec3 position, GLfloa
 
 	selection_ring = new Doodad(selection_ring_mesh, shader_program, position, 1.0f);
 	selection_ring->setEmissive(TextureLoader::loadTextureFromFile("res/textures/selection_ring.png", GL_LINEAR));
+
+	selected = false;
 }
 
 void Playable::updateUniformData(){
@@ -30,7 +32,9 @@ void Playable::draw(){
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
 
-    selection_ring->draw();
+    if(selected){
+    	selection_ring->draw();
+    }
 
     glUseProgram(shader_program);
 

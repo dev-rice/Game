@@ -30,6 +30,7 @@ private:
 
     // Mouse controls
     int mouse_count;
+    bool left_mouse_button_unclick;
     glm::vec2 initial_left_click_position;
     glm::vec2 final_left_click_position;
 

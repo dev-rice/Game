@@ -46,6 +46,8 @@ public:
     Terrain* getTerrain() {return ground;}
     glm::mat4 getProjection() {return proj_matrix;}
 
+    void selectUnits(glm::vec2, glm::vec2);
+
 
     Camera* getCamera() {return camera;}
     Shadowbuffer* getShadowbuffer(){return shadowbuffer;}

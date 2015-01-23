@@ -38,6 +38,7 @@ GameView::GameView(Level* level){
     menu_key_state = false;
 
     mouse_count = 0;
+    left_mouse_button_unclick = false;
 
     frame_count = 0;
     average_frame_time = 0.0f;
@@ -98,6 +99,14 @@ void GameView::update(){
         Mouse::getInstance()->setCursorSprite(Mouse::cursorType::SELECTION);
         selection_box->setGLCoordinates(initial_left_click_position, final_left_click_position);
         selection_box->draw();
+    }
+    if(left_mouse_button_unclick && (dragged_x || dragged_y)){
+        // Need to transform click positions into world space
+
+        printf("Left mouse unclicked (Dragging) just now\n");
+        // level->selectUnits();
+    } else if(left_mouse_button_unclick){
+        printf("Left mouse unclicked (Clicking) just now\n");
     }
 
     float frame_time = glfwGetTime() - start_time;
@@ -229,6 +238,11 @@ void GameView::handleInputs(){
         window->requestClose();
     }
 
+    // Left mouse button handling
+    if(left_mouse_button_unclick){
+        left_mouse_button_unclick = false;
+    }
+
     if(glfwGetMouseButton(glfw_window, GLFW_MOUSE_BUTTON_LEFT)){
         // Left mouse button
         if(mouse_count == 0){
@@ -239,6 +253,7 @@ void GameView::handleInputs(){
         mouse_count++;
     } else if(mouse_count != 0){
         mouse_count = 0;
+        left_mouse_button_unclick = true;
     }
 
     if(glfwGetMouseButton(glfw_window, GLFW_MOUSE_BUTTON_RIGHT)){

@@ -25,6 +25,8 @@ public:
 private:
 	void updateUniformData();
 
+	bool selected;
+
 	Doodad* selection_ring;
 
 	float speed;
