@@ -244,17 +244,21 @@ void MeshLoader::loadMeshFromDAE(const char* filename){
     // For now we don't really support multiple mesh loading from one file
     // but this is still good to have
     for (pugi::xml_node geometry_node : mesh_list_node.children()){
-        std::string mesh_id;
+        std::string mesh_id = getNodeAttribute(geometry_node, "id");
 
         // Get the id of the mesh, this might be helpful later
-        for (pugi::xml_attribute attribute : geometry_node.attributes()){
-            if (std::string(attribute.name()) == "id") {
-                mesh_id = std::string(attribute.value());
-            }
-        }
+        // for (pugi::xml_attribute attribute : geometry_node.attributes()){
+        //     if (std::string(attribute.name()) == "id") {
+        //         mesh_id = std::string(attribute.value());
+        //     }
+        // }
 
         Debug::info("Collada Mesh Data:\n");
         Debug::info("  mesh id: %s\n", mesh_id.c_str());
+
+        std::string mesh_vertex_source_id = mesh_id + "-positions";
+        std::string mesh_normal_source_id = mesh_id + "-normals";
+        std::string mesh_uv_source_id = mesh_id + "-map-0";
 
         // The first child in a geometry node contains all the data
         // relevant to the mesh.
@@ -263,11 +267,22 @@ void MeshLoader::loadMeshFromDAE(const char* filename){
         for (pugi::xml_node mesh_data_node : mesh_node.children()){
             // If it is a source node
             if (strcmp(mesh_data_node.name(), "source") == 0){
-                Debug::info("  source: %s\n", mesh_data_node.first_attribute().value());
+                std::string source_id = getNodeAttribute(mesh_data_node, "id");
+                Debug::info("%s\n", source_id.c_str());
             }
         }
 
     }
+}
+
+std::string MeshLoader::getNodeAttribute(pugi::xml_node node, std::string identifier){
+    std::string attribute_str = "";
+    for (pugi::xml_attribute attribute : node.attributes()){
+        if (std::string(attribute.name()) == identifier) {
+            attribute_str = std::string(attribute.value());
+        }
+    }
+    return attribute_str;
 }
 
 std::vector<GLfloat> MeshLoader::getVertexArray(){

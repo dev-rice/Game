@@ -20,6 +20,7 @@
 
 #include <vector>
 #include <cmath>
+#include <string>
 
 #include "pugixml.hpp" // PUGI xml library
 
@@ -33,11 +34,13 @@ public:
     std::vector<GLfloat> getVertexArray();
     std::vector<GLuint>  getFaceArray();
 
-    void loadMeshFromDAE(const char*);    
+    void loadMeshFromDAE(const char*);
 
 private:
 
     void loadMeshFromOBJ(const char*);
+
+    std::string getNodeAttribute(pugi::xml_node, std::string);
 
     std::vector<GLuint> final_tris;
     std::vector<GLfloat> final_verts;
