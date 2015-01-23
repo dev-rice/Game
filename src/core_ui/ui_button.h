@@ -19,16 +19,26 @@ public:
 
 protected:
 
+    virtual void onClick(){;}
+
     bool constraintsAreValid(bool, bool, bool, bool, bool, bool);
+
+    bool has_clicked;
 
     std::string functionName;
 
     TextRenderer* text_renderer;
     std::string button_text;
 
+    int button_text_width;
+
     static UIImage* center_image;
     static UIImage* left_image;
     static UIImage* right_image;
+
+    static UIImage* center_hover_image;
+    static UIImage* left_hover_image;
+    static UIImage* right_hover_image;
     // Needs hovering and click images
 };
 

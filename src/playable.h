@@ -30,9 +30,10 @@ private:
 	void updateUniformData();
 
 	// Not a complete list
-	static enum class PlayableAttribute { MASSIVE, ARMORED, ARMY, WORKER, FLYING, INVULNERABLE, MECHANICAL };
+	enum class PlayableAttribute { MASSIVE, ARMORED, ARMY, WORKER, FLYING, INVULNERABLE, MECHANICAL };
 
-	static Doodad* selection_ring;
+	// Needs to be static
+	Doodad* selection_ring;
 
 	float speed;
 	float acceleration;
