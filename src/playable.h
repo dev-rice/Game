@@ -7,6 +7,9 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include "texture_loader.h"
+#include "doodad.h"
+#include "mesh.h"
 #include "drawable.h"
 #include "terrain.h"
 
@@ -17,8 +20,12 @@ public:
 
 	void update(Terrain *);
 	void loadFromXML();
+
+	void draw();
 private:
 	void updateUniformData();
+
+	Doodad* selection_ring;
 
 	float speed;
 	float acceleration;
