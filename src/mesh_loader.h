@@ -21,7 +21,10 @@
 #include <vector>
 #include <cmath>
 
+#include "pugixml.hpp" // PUGI xml library
+
 #include "debug.h"
+
 
 class MeshLoader{
 public:
@@ -30,9 +33,11 @@ public:
     std::vector<GLfloat> getVertexArray();
     std::vector<GLuint>  getFaceArray();
 
+    void loadMeshFromDAE(const char*);    
+
 private:
 
-    void loadMeshFromFile(const char*);
+    void loadMeshFromOBJ(const char*);
 
     std::vector<GLuint> final_tris;
     std::vector<GLfloat> final_verts;

@@ -11,10 +11,10 @@
 #include "mesh_loader.h"
 
 MeshLoader::MeshLoader(const char* filename){
-    loadMeshFromFile(filename);
+    loadMeshFromOBJ(filename);
 }
 
-void MeshLoader::loadMeshFromFile(const char* fileName){
+void MeshLoader::loadMeshFromOBJ(const char* fileName){
     float tempX, tempY, tempZ;
     int tempA, tempB, tempC, tempD, tempE, tempF, tempG, tempH, tempI;
 
@@ -37,7 +37,7 @@ void MeshLoader::loadMeshFromFile(const char* fileName){
     ifile = fopen(fileName, "r");
 
     if(ifile == NULL){
-        printf("Error opening file %s\n", fileName);
+        Debug::error("Error opening file %s\n", fileName);
         return;
 
     }
@@ -231,6 +231,43 @@ void MeshLoader::loadMeshFromFile(const char* fileName){
 
     final_verts = vertices;
 
+}
+
+void MeshLoader::loadMeshFromDAE(const char* fileName){
+    // Load the document into a pugixml object
+    pugi::xml_document doc;
+    pugi::xml_parse_result result = doc.load_file("/Users/chrisrice/Desktop/cube.dae");
+
+    // Get the node that contains geometry data for each mesh.
+    pugi::xml_node mesh_list_node = doc.child("COLLADA").child("library_geometries");
+
+    // For now we don't really support multiple mesh loading from one file
+    // but this is still good to have
+    for (pugi::xml_node geometry_node : mesh_list_node.children()){
+        std::string mesh_id;
+
+        // Get the id of the mesh, this might be helpful later
+        for (pugi::xml_attribute attribute : geometry_node.attributes()){
+            if (std::string(attribute.name()) == "id") {
+                mesh_id = std::string(attribute.value());
+            }
+        }
+
+        Debug::info("Collada Mesh Data:\n");
+        Debug::info("  mesh id: %s\n", mesh_id.c_str());
+
+        // The first child in a geometry node contains all the data
+        // relevant to the mesh.
+        pugi::xml_node mesh_node = geometry_node.first_child();
+
+        for (pugi::xml_node mesh_data_node : mesh_node.children()){
+            // If it is a source node
+            if (strcmp(mesh_data_node.name(), "source") == 0){
+                Debug::info("  source: %s\n", mesh_data_node.first_attribute().value());
+            }
+        }
+
+    }
 }
 
 std::vector<GLfloat> MeshLoader::getVertexArray(){

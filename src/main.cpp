@@ -26,6 +26,7 @@
 #include "debug.h"
 #include "profile.h"
 #include "window.h"
+#include "mesh_loader.h"
 
 void error_callback(int error, const char* description){
     Debug::error("GLFW Error %d: %s\n", error, description);
@@ -130,6 +131,10 @@ int main(int argc, char* argv[]) {
     window->setVsync(vsync);
     window->setFxaaLevel(fxaa_level);
 
+
+    // Do some mesh loading
+    MeshLoader mesh_loader = MeshLoader("res/models/sword.obj");
+    mesh_loader.loadMeshFromDAE("");
 
     // Create the world
     World* world;
