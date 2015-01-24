@@ -270,7 +270,7 @@ std::vector<int> getIntsFromString(std::string input, char delim){
     return result;
 }
 
-std::vector<glm::vec3> getVec3FromString(std::string input){
+std::vector<glm::vec3> breakStringIntoVec3s(std::string input){
     std::vector<glm::vec3> result;
     std::string tmp;
     std::string::iterator i;
@@ -301,7 +301,7 @@ std::vector<glm::vec3> getVec3FromString(std::string input){
     return result;
 }
 
-std::vector<glm::vec2> getVec2FromString(std::string input){
+std::vector<glm::vec2> breakStringIntoVec2s(std::string input){
     std::vector<glm::vec2> result;
     std::string tmp;
     std::string::iterator i;
@@ -382,7 +382,7 @@ void MeshLoader::loadMeshFromDAE(const char* filename){
                             filename);
                     } else {
                         std::string vertex_array_string = mesh_data_node.child_value("float_array");
-                        vertices = getVec3FromString(vertex_array_string);
+                        vertices = breakStringIntoVec3s(vertex_array_string);
                     }
 
                 } else if (source_id == mesh_normal_source_id){
@@ -392,7 +392,7 @@ void MeshLoader::loadMeshFromDAE(const char* filename){
                             filename);
                     } else {
                         std::string normal_array_string = mesh_data_node.child_value("float_array");
-                        normals = getVec3FromString(normal_array_string);
+                        normals = breakStringIntoVec3s(normal_array_string);
                     }
 
                 } else if (source_id == mesh_uv_source_id){
@@ -403,7 +403,7 @@ void MeshLoader::loadMeshFromDAE(const char* filename){
                             filename);
                     } else {
                         std::string uv_array_string = mesh_data_node.child_value("float_array");
-                        texcoords = getVec2FromString(uv_array_string);
+                        texcoords = breakStringIntoVec2s(uv_array_string);
                     }
 
                 }
