@@ -234,24 +234,6 @@ void MeshLoader::loadMeshFromOBJ(const char* filename){
 
 }
 
-std::vector<float> getFloatsFromString(std::string input, char delim){
-    std::vector<float> result;
-    std::string tmp;
-    std::string::iterator i;
-    result.clear();
-
-    for(i = input.begin(); i <= input.end(); ++i) {
-        if((const char)*i != delim  && i != input.end()) {
-            tmp += *i;
-        } else {
-            result.push_back(std::stof(tmp));
-            tmp = "";
-        }
-    }
-
-    return result;
-}
-
 std::vector<int> getIntsFromString(std::string input, char delim){
     std::vector<int> result;
     std::string tmp;
@@ -353,6 +335,8 @@ void MeshLoader::loadMeshFromDAE(const char* filename){
     // For now we don't really support multiple mesh loading from one file.
     // Just look at the first geometry node.
     pugi::xml_node geometry_node = mesh_list_node.first_child();
+
+    // Create the vectors that will hold vertex and face data
     std::vector<Vertex> vertices;
     std::vector<int> elements;
     getVerticesAndElements(geometry_node, vertices, elements);
