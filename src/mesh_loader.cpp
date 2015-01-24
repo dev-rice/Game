@@ -247,6 +247,24 @@ std::vector<float> getFloatsFromString(std::string input, char delim){
     return result;
 }
 
+std::vector<int> getIntsFromString(std::string input, char delim){
+    std::vector<int> result;
+    std::string tmp;
+    std::string::iterator i;
+    result.clear();
+
+    for(i = input.begin(); i <= input.end(); ++i) {
+        if((const char)*i != delim  && i != input.end()) {
+            tmp += *i;
+        } else {
+            result.push_back(std::stoi(tmp));
+            tmp = "";
+        }
+    }
+
+    return result;
+}
+
 void MeshLoader::loadMeshFromDAE(const char* filename){
     // Load the document into a pugixml object
     pugi::xml_document doc;
@@ -261,6 +279,7 @@ void MeshLoader::loadMeshFromDAE(const char* filename){
         std::vector<float> vertices;
         std::vector<float> normals;
         std::vector<float> texcoords;
+        std::vector<int> faces;
 
         std::string mesh_id = std::string(geometry_node.attribute("id").as_string());
 
@@ -313,14 +332,21 @@ void MeshLoader::loadMeshFromDAE(const char* filename){
 
                 }
 
+            } else if (strcmp(mesh_data_node.name(), "polylist") == 0){
+                // Check that the vertex counts are all three (triangles)
+                std::string vcount_str = mesh_data_node.child_value("vcount");
+
+                // Get the list of faces
+                std::string faces_str = mesh_data_node.child_value("p");
+                faces = getIntsFromString(faces_str, ' ');
             }
         }
 
-    if (!vertices.empty() && !normals.empty() && !texcoords.empty()){
-        Debug::info("Mesh data loaded successfully.\n");
-    } else {
-        Debug::error("Error loading mesh data from '%s'.\n", filename);
-    }
+        if (!vertices.empty() && !normals.empty() && !texcoords.empty()){
+            Debug::info("Mesh data loaded successfully.\n");
+        } else {
+            Debug::error("Error loading mesh data from '%s'.\n", filename);
+        }
 
     }
 }
