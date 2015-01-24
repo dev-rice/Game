@@ -272,13 +272,32 @@ void MeshLoader::loadMeshFromDAE(const char* filename){
                     std::string vertex_array_string = mesh_data_node.child_value("float_array");
                     Debug::info("Vertices: %s\n", vertex_array_string.c_str());
 
+                    // Check if the array width is correct for the vertices
+                    if (stride != 3){
+                        Debug::error("Invalid array width for vertex array in %s",
+                            filename);
+                    }
+
                 } else if (source_id == mesh_normal_source_id){
                     std::string normal_array_string = mesh_data_node.child_value("float_array");
                     Debug::info("Normals: %s\n", normal_array_string.c_str());
 
+                    // Check if the array width is correct for the normals
+                    if (stride != 3){
+                        Debug::error("Invalid array width for normal array in %s",
+                            filename);
+                    }
+
                 } else if (source_id == mesh_uv_source_id){
                     std::string uv_array_string = mesh_data_node.child_value("float_array");
                     Debug::info("Texcoord: %s\n", uv_array_string.c_str());
+
+                    // Check if the array width is correct for the texture
+                    // coordinates
+                    if (stride != 2){
+                        Debug::error("Invalid array width for uv array in %s",
+                            filename);
+                    }
 
                 }
 
