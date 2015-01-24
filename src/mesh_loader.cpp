@@ -119,16 +119,16 @@ void MeshLoader::loadMeshFromOBJ(const char* filename){
                 GLfloat tempX2 = verts2D[ (tuple[1]-1)*2+0 ];
                 GLfloat tempY2 = verts2D[ (tuple[1]-1)*2+1 ];
 
-                final_verts.push_back(tempX);
-                final_verts.push_back(tempY);
-                final_verts.push_back(tempZ);
-                final_verts.push_back(tempVN1);
-                final_verts.push_back(tempVN2);
-                final_verts.push_back(tempVN3);
-                final_verts.push_back(tempX2);
-                final_verts.push_back(tempY2);
+                final_vertices.push_back(tempX);
+                final_vertices.push_back(tempY);
+                final_vertices.push_back(tempZ);
+                final_vertices.push_back(tempVN1);
+                final_vertices.push_back(tempVN2);
+                final_vertices.push_back(tempVN3);
+                final_vertices.push_back(tempX2);
+                final_vertices.push_back(tempY2);
             }
-            final_tris.push_back(mappedEdgeLoops[tuple]-1);
+            final_faces.push_back(mappedEdgeLoops[tuple]-1);
         }
     }
 
@@ -159,23 +159,23 @@ void MeshLoader::loadMeshFromOBJ(const char* filename){
     // The following is not the most eficient way to implement this
     // because it requires creating a new vertex vector and a bunch of
     // other stuff that was done already.
-    int num_vertices = final_verts.size() / 8;
+    int num_vertices = final_vertices.size() / 8;
     std::vector<GLfloat> vertices = std::vector<GLfloat>(num_vertices * 14);
 
-    for (int i = 0; i < final_tris.size(); i += 3){
+    for (int i = 0; i < final_faces.size(); i += 3){
         std::vector<glm::vec3> points;
         std::vector<glm::vec3> normals;
         std::vector<glm::vec2> uvs;
 
         for (int j = 0; j < 3; ++j){
-            int index = final_tris[i + j] * 8;
+            int index = final_faces[i + j] * 8;
 
-            glm::vec3 p = glm::vec3(final_verts[index],
-                final_verts[index + 1], final_verts[index + 2]);
-            glm::vec3 n = glm::vec3(final_verts[index + 3],
-                final_verts[index + 4], final_verts[index + 5]);
-            glm::vec2 uv = glm::vec2(final_verts[index + 6],
-                final_verts[index + 7]);
+            glm::vec3 p = glm::vec3(final_vertices[index],
+                final_vertices[index + 1], final_vertices[index + 2]);
+            glm::vec3 n = glm::vec3(final_vertices[index + 3],
+                final_vertices[index + 4], final_vertices[index + 5]);
+            glm::vec2 uv = glm::vec2(final_vertices[index + 6],
+                final_vertices[index + 7]);
 
             points.push_back(p);
             normals.push_back(n);
@@ -201,7 +201,7 @@ void MeshLoader::loadMeshFromOBJ(const char* filename){
 
         // Actually set this data in the vertex array
         for (int j = 0; j < 3; ++j){
-            int index = final_tris[i + j] * 14;
+            int index = final_faces[i + j] * 14;
 
             glm::vec3 point = points[j];
             glm::vec3 normal = normals[j];
@@ -227,7 +227,7 @@ void MeshLoader::loadMeshFromOBJ(const char* filename){
         }
     }
 
-    final_verts = vertices;
+    final_vertices = vertices;
 
     float delta_time = glfwGetTime() - start_time;
     Debug::info("Obj mesh loaded from %s in %.5f seconds.\n", filename, delta_time);
@@ -428,20 +428,10 @@ void MeshLoader::loadMeshFromDAE(const char* filename){
         if (loaded_correctly) {
             Debug::info("Mesh data loaded successfully.\n");
 
-            Debug::info("Vertices:\n");
-            for (glm::vec3 vertex : vertices){
-                Debug::info("  %f, %f, %f\n", vertex.x, vertex.y, vertex.z);
+            for (int i = 0; i < faces.size(); ++i){
+
             }
 
-            Debug::info("Normals:\n");
-            for (glm::vec3 normal : normals){
-                Debug::info("  %f, %f, %f\n", normal.x, normal.y, normal.z);
-            }
-
-            Debug::info("Texcoords:\n");
-            for (glm::vec2 uv : texcoords){
-                Debug::info("  %f, %f\n", uv.x, uv.y);
-            }
         } else {
             Debug::error("Failed to load mesh data from '%s'.\n", filename);
         }
@@ -452,18 +442,14 @@ void MeshLoader::loadMeshFromDAE(const char* filename){
     Debug::info("Collada mesh loaded from %s in %.5f seconds.\n", filename, delta_time);
 }
 
-std::vector<GLfloat> MeshLoader::getVertexArray(){
-    // GLfloat* vertices = new GLfloat[final_verts.size()];
-    // for (int i = 0; i < final_verts.size(); ++i){
-    //     vertices[i] = final_verts[i];
-    // }
-    return final_verts;
-}
+// So many arguments!
+void MeshLoader::combineDataIntoFinalArrays(std::vector<glm::vec3>& vertices,
+    std::vector<glm::vec3>& normals, std::vector<glm::vec3>& tangents,
+    std::vector<glm::vec3>& binormals, std::vector<glm::vec2>& texcoords){
 
-std::vector<GLuint> MeshLoader::getFaceArray(){
-    // GLuint* faces = new GLuint[final_tris.size()];
-    // for (int i = 0; i < final_tris.size(); ++i){
-    //     faces[i] = final_tris[i];
-    // }
-    return final_tris;
+    final_vertices.clear();
+    final_faces.clear();
+
+
+
 }

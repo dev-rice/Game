@@ -31,8 +31,8 @@ class MeshLoader{
 public:
     MeshLoader(const char*);
 
-    std::vector<GLfloat> getVertexArray();
-    std::vector<GLuint>  getFaceArray();
+    std::vector<GLfloat> getVertexArray() {return final_vertices;}
+    std::vector<GLuint>  getFaceArray() {return final_faces;}
 
     void loadMeshFromDAE(const char*);
 
@@ -40,8 +40,11 @@ private:
 
     void loadMeshFromOBJ(const char*);
 
-    std::vector<GLuint> final_tris;
-    std::vector<GLfloat> final_verts;
+    void combineDataIntoFinalArrays(std::vector<glm::vec3>&, std::vector<glm::vec3>&,
+        std::vector<glm::vec3>&, std::vector<glm::vec3>&, std::vector<glm::vec2>&);
+
+    std::vector<GLfloat> final_vertices;
+    std::vector<GLuint> final_faces;
 };
 
 #endif
