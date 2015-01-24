@@ -14,7 +14,9 @@ MeshLoader::MeshLoader(const char* filename){
     loadMeshFromOBJ(filename);
 }
 
-void MeshLoader::loadMeshFromOBJ(const char* fileName){
+void MeshLoader::loadMeshFromOBJ(const char* filename){
+    float start_time = glfwGetTime();
+
     float tempX, tempY, tempZ;
     int tempA, tempB, tempC, tempD, tempE, tempF, tempG, tempH, tempI;
 
@@ -34,10 +36,10 @@ void MeshLoader::loadMeshFromOBJ(const char* fileName){
     char buffer[128];
 
     FILE *ifile;
-    ifile = fopen(fileName, "r");
+    ifile = fopen(filename, "r");
 
     if(ifile == NULL){
-        Debug::error("Error opening file %s\n", fileName);
+        Debug::error("Error opening file %s\n", filename);
         return;
 
     }
@@ -227,6 +229,9 @@ void MeshLoader::loadMeshFromOBJ(const char* fileName){
 
     final_verts = vertices;
 
+    float delta_time = glfwGetTime() - start_time;
+    Debug::info("Obj mesh loaded from %s in %.5f seconds.\n", filename, delta_time);
+
 }
 
 std::vector<float> getFloatsFromString(std::string input, char delim){
@@ -266,6 +271,8 @@ std::vector<int> getIntsFromString(std::string input, char delim){
 }
 
 void MeshLoader::loadMeshFromDAE(const char* filename){
+    float start_time = glfwGetTime();
+
     // Load the document into a pugixml object
     pugi::xml_document doc;
     pugi::xml_parse_result result = doc.load_file(filename);
@@ -349,6 +356,9 @@ void MeshLoader::loadMeshFromDAE(const char* filename){
         }
 
     }
+
+    float delta_time = glfwGetTime() - start_time;
+    Debug::info("Collada mesh loaded from %s in %.5f seconds.\n", filename, delta_time);
 }
 
 std::vector<GLfloat> MeshLoader::getVertexArray(){
