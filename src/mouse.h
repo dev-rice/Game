@@ -20,6 +20,7 @@ public:
     void setHovering();
     bool isHovering();
 
+    glm::vec3 getWorldPositionFromPoint(glm::vec2, Camera*, glm::mat4&);
     glm::vec3 getWorldPosition(Camera*, glm::mat4&);
 private:
 

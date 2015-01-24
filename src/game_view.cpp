@@ -98,6 +98,15 @@ void GameView::update(){
         // draw from initial_left_click_position to final_left_click_position
         Mouse::getInstance()->setCursorSprite(Mouse::cursorType::SELECTION);
         selection_box->setGLCoordinates(initial_left_click_position, final_left_click_position);
+
+        Camera* camera = level->getCamera();
+        glm::mat4 proj_matrix = level->getProjection();
+
+        glm::vec3 world_point1 = Mouse::getInstance()->getWorldPositionFromPoint(
+            initial_left_click_position, camera, proj_matrix);
+        glm::vec3 world_point2 = Mouse::getInstance()->getWorldPositionFromPoint(
+            final_left_click_position, camera, proj_matrix);
+
         selection_box->draw();
     }
     if(left_mouse_button_unclick && !Mouse::getInstance()->isHovering() && (dragged_x || dragged_y)){
