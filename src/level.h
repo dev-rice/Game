@@ -48,6 +48,7 @@ public:
     glm::mat4 getProjection() {return proj_matrix;}
 
     void selectUnits(glm::vec3, glm::vec3);
+    void tempSelectUnits(glm::vec3, glm::vec3);
 
 
     Camera* getCamera() {return camera;}

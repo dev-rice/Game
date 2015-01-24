@@ -91,24 +91,25 @@ void GameView::update(){
     menu->draw();
 
     // draw selection rectangle here and change the cursor based on amount of dragging
+    Camera* camera = level->getCamera();
+    glm::mat4 proj_matrix = level->getProjection();
+    glm::vec3 init = Mouse::getInstance()->getWorldPositionFromPoint(initial_left_click_position, camera, proj_matrix);
+    glm::vec3 fina = Mouse::getInstance()->getWorldPositionFromPoint(final_left_click_position, camera, proj_matrix);
+
     bool dragged_x = fabs(initial_left_click_position.x - final_left_click_position.x) > 0.05;
     bool dragged_y = fabs(initial_left_click_position.y - final_left_click_position.y) > 0.05;
 
     if(mouse_count > 1 && !Mouse::getInstance()->isHovering() && (dragged_x || dragged_y)){
         // draw from initial_left_click_position to final_left_click_position
         Mouse::getInstance()->setCursorSprite(Mouse::cursorType::SELECTION);
-        selection_box->setGLCoordinates(initial_left_click_position, final_left_click_position);
 
+        level->tempSelectUnits(init, fina);
+
+        selection_box->setGLCoordinates(initial_left_click_position, final_left_click_position);
         selection_box->draw();
     }
     if(left_mouse_button_unclick && !Mouse::getInstance()->isHovering() && (dragged_x || dragged_y)){
-
-        // Need to transform click positions into world space
-        Camera* camera = level->getCamera();
-        glm::mat4 proj_matrix = level->getProjection();
-
-        glm::vec3 init = Mouse::getInstance()->getWorldPositionFromPoint(initial_left_click_position, camera, proj_matrix);
-        glm::vec3 fina = Mouse::getInstance()->getWorldPositionFromPoint(final_left_click_position, camera, proj_matrix);
+        
         level->selectUnits(init, fina);
 
     } else if(left_mouse_button_unclick && !Mouse::getInstance()->isHovering()){
@@ -144,8 +145,8 @@ void GameView::update(){
     }
 
     // Calculating the mouse vector
-    Camera* camera = level->getCamera();
-    glm::mat4 proj_matrix = level->getProjection();
+    // Camera* camera = level->getCamera();
+    // glm::mat4 proj_matrix = level->getProjection();
 
     glm::vec3 mouse_point = Mouse::getInstance()->getWorldPosition(camera,
         proj_matrix);

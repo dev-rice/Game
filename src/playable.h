@@ -27,6 +27,7 @@ public:
 
 	void draw();
 	void select();
+	void tempSelect();
 private:
 	void updateUniformData();
 
@@ -46,6 +47,7 @@ private:
 	int per_level_strength_boost;
 
 	bool selected;
+	int temp_selected;
 
 	int level;
 

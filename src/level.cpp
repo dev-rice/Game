@@ -304,8 +304,23 @@ void Level::selectUnits(glm::vec3 coord_a, glm::vec3 coord_b){
         glm::vec3 unit_pos = units[i]->getPosition();
 
         if(left < unit_pos.x && right > unit_pos.x && down < unit_pos.y && up > unit_pos.y){
-            printf("Found a unit that I can select!\n");
             units[i]->select();
+        }
+    }
+}
+
+void Level::tempSelectUnits(glm::vec3 coord_a, glm::vec3 coord_b){
+    float left = std::min(coord_a.x, coord_b.x);
+    float right = std::max(coord_a.x, coord_b.x);
+
+    float down = std::min(coord_a.z, coord_b.z);
+    float up = std::max(coord_a.z, coord_b.z);
+
+    for(int i = 0; i < units.size(); ++i){
+        glm::vec3 unit_pos = units[i]->getPosition();
+
+        if(left < unit_pos.x && right > unit_pos.x && down < unit_pos.y && up > unit_pos.y){
+            units[i]->tempSelect();
         }
     }
 }
