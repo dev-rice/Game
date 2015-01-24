@@ -40,8 +40,6 @@ private:
 
     void loadMeshFromOBJ(const char*);
 
-    std::string getNodeAttribute(pugi::xml_node, std::string);
-
     std::vector<GLuint> final_tris;
     std::vector<GLfloat> final_verts;
 };

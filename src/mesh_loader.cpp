@@ -244,7 +244,7 @@ void MeshLoader::loadMeshFromDAE(const char* filename){
     // For now we don't really support multiple mesh loading from one file
     // but this is still good to have
     for (pugi::xml_node geometry_node : mesh_list_node.children()){
-        std::string mesh_id = getNodeAttribute(geometry_node, "id");
+        std::string mesh_id = std::string(geometry_node.attribute("id").as_string());
 
         Debug::info("Collada Mesh Data:\n");
         Debug::info("  mesh id: %s\n", mesh_id.c_str());
@@ -260,33 +260,32 @@ void MeshLoader::loadMeshFromDAE(const char* filename){
         for (pugi::xml_node mesh_data_node : mesh_node.children()){
             // If it is a source node
             if (strcmp(mesh_data_node.name(), "source") == 0){
-                std::string source_id = getNodeAttribute(mesh_data_node, "id");
+                std::string source_id = std::string(mesh_data_node.attribute("id").as_string());
                 Debug::info("%s\n", source_id.c_str());
+
+                // Get the count and stride for error checking.
+                pugi::xml_node accessor = mesh_data_node.child("technique_common").child("accessor");
+                int stride = accessor.attribute("stride").as_int();
+                Debug::info("stride: %d\n", stride);
+
                 if (source_id == mesh_vertex_source_id){
                     std::string vertex_array_string = mesh_data_node.child_value("float_array");
                     Debug::info("Vertices: %s\n", vertex_array_string.c_str());
+
                 } else if (source_id == mesh_normal_source_id){
                     std::string normal_array_string = mesh_data_node.child_value("float_array");
                     Debug::info("Normals: %s\n", normal_array_string.c_str());
+
                 } else if (source_id == mesh_uv_source_id){
                     std::string uv_array_string = mesh_data_node.child_value("float_array");
                     Debug::info("Texcoord: %s\n", uv_array_string.c_str());
+
                 }
 
             }
         }
 
     }
-}
-
-std::string MeshLoader::getNodeAttribute(pugi::xml_node node, std::string identifier){
-    std::string attribute_str = "";
-    for (pugi::xml_attribute attribute : node.attributes()){
-        if (std::string(attribute.name()) == identifier) {
-            attribute_str = std::string(attribute.value());
-        }
-    }
-    return attribute_str;
 }
 
 std::vector<GLfloat> MeshLoader::getVertexArray(){
