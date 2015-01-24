@@ -188,11 +188,7 @@ void Drawable::rotateGlobalEuler(glm::vec3 rotation){
 void Drawable::rotateAxisAngle(glm::vec3 axis, GLfloat angle){
     glm::quat quaternion =  glm::angleAxis(angle, axis);
     rotation_matrix = glm::toMat4(quaternion);
-
-    GLfloat x = M_PI / 2.0f;
-    glm::vec3 x_axis = glm::vec3(1.0f, 0.0f, 0.0f);
-    rotation_matrix = glm::rotate(rotation_matrix, x, x_axis);
-
+    
 }
 
 void Drawable::updateModelMatrix(){

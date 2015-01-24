@@ -1,6 +1,6 @@
 #include "world.h"
 
-World::World() : World("res/maps/swords.map"){}
+World::World() : World("res/maps/daetest.map"){}
 
 World::World(const char* level_filename){
     this->window = Window::getInstance();

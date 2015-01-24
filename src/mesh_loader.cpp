@@ -11,7 +11,7 @@
 #include "mesh_loader.h"
 
 MeshLoader::MeshLoader(const char* filename){
-    loadMeshFromOBJ(filename);
+    loadMeshFromDAE(filename);
 }
 
 void MeshLoader::loadMeshFromOBJ(const char* filename){
@@ -379,7 +379,51 @@ void MeshLoader::writeFinalArrays(std::vector<Vertex>& vertices, std::vector<GLu
 }
 
 void MeshLoader::calculateTangentsAndBinormals(std::vector<Vertex>& vertices, std::vector<GLuint>& elements) {
+    // For every face declaration calculate the
+    // face tangents and binormals.
+    for (int i = 0; i < elements.size(); i += 3){
+        int A = elements[i];
+        int B = elements[i + 1];
+        int C = elements[i + 2];
 
+        glm::vec3 P0 = vertices[A].position;
+        glm::vec3 P1 = vertices[B].position;
+        glm::vec3 P2 = vertices[C].position;
+
+        glm::vec2 UV0 = vertices[A].texcoord;
+        glm::vec2 UV1 = vertices[B].texcoord;
+        glm::vec2 UV2 = vertices[C].texcoord;
+
+        glm::vec3 Q1 = P1 - P0;
+        glm::vec3 Q2 = P2 - P0;
+        float s1 = UV1.x - UV0.x;
+        float t1 = UV1.y - UV0.y;
+        float s2 = UV2.x - UV0.x;
+        float t2 = UV2.y - UV2.x;
+
+        glm::mat3 st = glm::mat3( t2, -t1, 0,
+                                 -s2,  s1, 0,
+                                  0 ,  0 , 0 );
+
+        glm::mat3 q = glm::mat3(Q1.x, Q1.y, Q1.z,
+                                Q2.x, Q2.y, Q2.z,
+                                0   , 0   , 0    );
+        float multiplier = 1.0 / ((s1 * t2) - (s2 * t1));
+        glm::mat3 tb = multiplier * st * q;
+
+        glm::vec3 tangent = glm::vec3(tb[0][0], tb[1][0], tb[2][0]);
+        glm::vec3 binormal = glm::vec3(tb[0][1], tb[1][1], tb[2][1]);
+
+        vertices[A].tangent = tangent;
+        vertices[A].binormal = binormal;
+
+        vertices[B].tangent = tangent;
+        vertices[B].binormal = binormal;
+
+        vertices[C].tangent = tangent;
+        vertices[C].binormal = binormal;
+
+    }
 }
 
 void MeshLoader::getVerticesAndElements(pugi::xml_node geometry_node, std::vector<Vertex>& vertices, std::vector<GLuint>& elements){
