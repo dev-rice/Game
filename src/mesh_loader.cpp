@@ -264,8 +264,15 @@ void MeshLoader::loadMeshFromDAE(const char* filename){
                 Debug::info("%s\n", source_id.c_str());
                 if (source_id == mesh_vertex_source_id){
                     std::string vertex_array_string = mesh_data_node.child_value("float_array");
-                    Debug::info("%s\n", vertex_array_string.c_str());
+                    Debug::info("Vertices: %s\n", vertex_array_string.c_str());
+                } else if (source_id == mesh_normal_source_id){
+                    std::string normal_array_string = mesh_data_node.child_value("float_array");
+                    Debug::info("Normals: %s\n", normal_array_string.c_str());
+                } else if (source_id == mesh_uv_source_id){
+                    std::string uv_array_string = mesh_data_node.child_value("float_array");
+                    Debug::info("Texcoord: %s\n", uv_array_string.c_str());
                 }
+
             }
         }
 
