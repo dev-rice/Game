@@ -35,10 +35,6 @@ void Playable::draw(){
 
     if(selected || temp_selected > 0){
     	selection_ring->draw();
-        
-        if(temp_selected > 0){
-            temp_selected--;
-        }
     }
     
 
@@ -73,5 +69,9 @@ void Playable::select(){
 }
 
 void Playable::tempSelect(){
-    temp_selected = 2;
+    temp_selected = true;
+}
+
+void Playable::tempDeSelect(){
+    temp_selected = false;
 }

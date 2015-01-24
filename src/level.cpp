@@ -321,6 +321,8 @@ void Level::tempSelectUnits(glm::vec3 coord_a, glm::vec3 coord_b){
 
         if(left < unit_pos.x && right > unit_pos.x && down < unit_pos.y && up > unit_pos.y){
             units[i]->tempSelect();
+        } else {
+            units[i]->tempDeSelect();
         }
     }
 }

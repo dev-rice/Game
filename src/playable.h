@@ -26,8 +26,10 @@ public:
 	void loadFromXML();
 
 	void draw();
+	
 	void select();
 	void tempSelect();
+	void tempDeSelect();
 private:
 	void updateUniformData();
 
