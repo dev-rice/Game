@@ -29,7 +29,7 @@ public:
     Drawable(Mesh*, GLuint);
     Drawable(Mesh*, GLuint, glm::vec3, GLfloat);
 
-    void draw();
+    virtual void draw();
 
     void rotateGlobalEuler(GLfloat x, GLfloat y, GLfloat z);
     void rotateGlobalEuler(glm::vec3 rotation);

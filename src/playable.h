@@ -26,6 +26,7 @@ public:
 	void loadFromXML();
 
 	void draw();
+	void select();
 private:
 	void updateUniformData();
 

@@ -7,6 +7,7 @@
 #include <vector>
 #include <string>
 #include <cmath>
+#include <algorithm>    // std::max
 
 #include "drawable.h"
 #include "doodad.h"
@@ -46,7 +47,7 @@ public:
     Terrain* getTerrain() {return ground;}
     glm::mat4 getProjection() {return proj_matrix;}
 
-    void selectUnits(glm::vec2, glm::vec2);
+    void selectUnits(glm::vec3, glm::vec3);
 
 
     Camera* getCamera() {return camera;}

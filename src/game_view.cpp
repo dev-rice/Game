@@ -99,23 +99,21 @@ void GameView::update(){
         Mouse::getInstance()->setCursorSprite(Mouse::cursorType::SELECTION);
         selection_box->setGLCoordinates(initial_left_click_position, final_left_click_position);
 
-        Camera* camera = level->getCamera();
-        glm::mat4 proj_matrix = level->getProjection();
-
-        glm::vec3 world_point1 = Mouse::getInstance()->getWorldPositionFromPoint(
-            initial_left_click_position, camera, proj_matrix);
-        glm::vec3 world_point2 = Mouse::getInstance()->getWorldPositionFromPoint(
-            final_left_click_position, camera, proj_matrix);
-
         selection_box->draw();
     }
     if(left_mouse_button_unclick && !Mouse::getInstance()->isHovering() && (dragged_x || dragged_y)){
-        // Need to transform click positions into world space
 
-        printf("Left mouse unclicked (Dragging) just now\n");
-        // level->selectUnits();
+        // Need to transform click positions into world space
+        Camera* camera = level->getCamera();
+        glm::mat4 proj_matrix = level->getProjection();
+
+        glm::vec3 init = Mouse::getInstance()->getWorldPositionFromPoint(initial_left_click_position, camera, proj_matrix);
+        glm::vec3 fina = Mouse::getInstance()->getWorldPositionFromPoint(final_left_click_position, camera, proj_matrix);
+        level->selectUnits(init, fina);
+
     } else if(left_mouse_button_unclick && !Mouse::getInstance()->isHovering()){
-        printf("Left mouse unclicked (Clicking) just now\n");
+        // glm::vec3 fina = Mouse::getInstance()->getWorldPositionFromPoint(final_left_click_position, level->getCamera(), level->getProjection());
+        // call singular selectUnits();
     }
 
     float frame_time = glfwGetTime() - start_time;

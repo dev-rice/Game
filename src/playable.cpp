@@ -61,3 +61,7 @@ void Playable::draw(){
 
     mesh->draw();
 }
+
+void Playable::select(){
+    selected = true;
+}

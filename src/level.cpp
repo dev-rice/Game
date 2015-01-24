@@ -62,7 +62,9 @@ Level::Level(const char* filename){
     glm::vec3 playable_position = glm::vec3(0.0f, 0.0f, 0.0f);
     float playable_scale = 1.0f;
 
-    units.push_back(new Playable(playable_mesh, playable_shader, playable_position, playable_scale));
+    Playable* temp = new Playable(playable_mesh, playable_shader, playable_position, playable_scale);
+    drawables.push_back(temp);
+    units.push_back(temp);
 
 
 }
@@ -72,14 +74,14 @@ void Level::draw(){
     // camera location / position
     updateGlobalUniforms();
 
+    // update all the units
+    for (int i = 0; i < units.size(); ++i){
+       units[i]->update(ground);
+    }
+
     // Draw all the drawables
     for (int i = 0; i < drawables.size(); ++i){
         drawables[i]->draw();
-    }
-
-    for (int i = 0; i < units.size(); ++i){
-        units[i]->update(ground);
-        units[i]->draw();
     }
 
     // Draw all the particle emitters
@@ -289,4 +291,21 @@ int Level::getMapDepth(){
 
 int Level::getMapWidth(){
     return ground->getWidth();
+}
+
+void Level::selectUnits(glm::vec3 coord_a, glm::vec3 coord_b){
+    float left = std::min(coord_a.x, coord_b.x);
+    float right = std::max(coord_a.x, coord_b.x);
+
+    float down = std::min(coord_a.z, coord_b.z);
+    float up = std::max(coord_a.z, coord_b.z);
+
+    for(int i = 0; i < units.size(); ++i){
+        glm::vec3 unit_pos = units[i]->getPosition();
+
+        if(left < unit_pos.x && right > unit_pos.x && down < unit_pos.y && up > unit_pos.y){
+            printf("Found a unit that I can select!\n");
+            units[i]->select();
+        }
+    }
 }
