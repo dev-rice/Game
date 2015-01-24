@@ -270,6 +270,66 @@ std::vector<int> getIntsFromString(std::string input, char delim){
     return result;
 }
 
+std::vector<glm::vec3> getVec3FromString(std::string input){
+    std::vector<glm::vec3> result;
+    std::string tmp;
+    std::string::iterator i;
+    char delim = ' ';
+
+    glm::vec3 current_vector;
+    int count = 0;
+    for(i = input.begin(); i <= input.end(); ++i) {
+        if((const char)*i != delim  && i != input.end()) {
+            tmp += *i;
+        } else {
+            count++;
+            float value = std::stof(tmp);
+            if (count == 1){
+                current_vector.x = value;
+            } else if (count == 2){
+                current_vector.y = value;
+            } else if (count == 3){
+                current_vector.z = value;
+                result.push_back(current_vector);
+                current_vector = glm::vec3();
+                count = 0;
+            }
+            tmp = "";
+        }
+    }
+
+    return result;
+}
+
+std::vector<glm::vec2> getVec2FromString(std::string input){
+    std::vector<glm::vec2> result;
+    std::string tmp;
+    std::string::iterator i;
+    char delim = ' ';
+
+    glm::vec2 current_vector;
+    int count = 0;
+    for(i = input.begin(); i <= input.end(); ++i) {
+        if((const char)*i != delim  && i != input.end()) {
+            tmp += *i;
+        } else {
+            count++;
+            float value = std::stof(tmp);
+            if (count == 1){
+                current_vector.x = value;
+            } else if (count == 2){
+                current_vector.y = value;
+                result.push_back(current_vector);
+                current_vector = glm::vec2();
+                count = 0;
+            }
+            tmp = "";
+        }
+    }
+
+    return result;
+}
+
 void MeshLoader::loadMeshFromDAE(const char* filename){
     float start_time = glfwGetTime();
 
@@ -283,9 +343,9 @@ void MeshLoader::loadMeshFromDAE(const char* filename){
     // For now we don't really support multiple mesh loading from one file
     // but this is still good to have
     for (pugi::xml_node geometry_node : mesh_list_node.children()){
-        std::vector<float> vertices;
-        std::vector<float> normals;
-        std::vector<float> texcoords;
+        std::vector<glm::vec3> vertices;
+        std::vector<glm::vec3> normals;
+        std::vector<glm::vec2> texcoords;
         std::vector<int> faces;
 
         std::string mesh_id = std::string(geometry_node.attribute("id").as_string());
@@ -313,7 +373,7 @@ void MeshLoader::loadMeshFromDAE(const char* filename){
                             filename);
                     } else {
                         std::string vertex_array_string = mesh_data_node.child_value("float_array");
-                        vertices = getFloatsFromString(vertex_array_string, ' ');
+                        vertices = getVec3FromString(vertex_array_string);
                     }
 
                 } else if (source_id == mesh_normal_source_id){
@@ -323,7 +383,7 @@ void MeshLoader::loadMeshFromDAE(const char* filename){
                             filename);
                     } else {
                         std::string normal_array_string = mesh_data_node.child_value("float_array");
-                        normals = getFloatsFromString(normal_array_string, ' ');
+                        normals = getVec3FromString(normal_array_string);
                     }
 
                 } else if (source_id == mesh_uv_source_id){
@@ -334,7 +394,7 @@ void MeshLoader::loadMeshFromDAE(const char* filename){
                             filename);
                     } else {
                         std::string uv_array_string = mesh_data_node.child_value("float_array");
-                        texcoords = getFloatsFromString(uv_array_string, ' ');
+                        texcoords = getVec2FromString(uv_array_string);
                     }
 
                 }
@@ -351,6 +411,21 @@ void MeshLoader::loadMeshFromDAE(const char* filename){
 
         if (!vertices.empty() && !normals.empty() && !texcoords.empty()){
             Debug::info("Mesh data loaded successfully.\n");
+
+            Debug::info("Vertices:\n");
+            for (glm::vec3 vertex : vertices){
+                Debug::info("  %f, %f, %f\n", vertex.x, vertex.y, vertex.z);
+            }
+
+            Debug::info("Normals:\n");
+            for (glm::vec3 normal : normals){
+                Debug::info("  %f, %f, %f\n", normal.x, normal.y, normal.z);
+            }
+
+            Debug::info("Texcoords:\n");
+            for (glm::vec2 uv : texcoords){
+                Debug::info("  %f, %f\n", uv.x, uv.y);
+            }
         } else {
             Debug::error("Error loading mesh data from '%s'.\n", filename);
         }
