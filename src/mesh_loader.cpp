@@ -270,15 +270,6 @@ std::vector<int> getIntsFromString(std::string input, char delim){
     return result;
 }
 
-struct Face {
-    // Stores the indices for vertices A, B, and C
-    // and the corresponding normals and texcoords
-
-    int vertices[3];
-    int normals[3];
-    int texcoords[3];
-};
-
 std::vector<glm::vec3> breakStringIntoVec3s(std::string input){
     std::vector<glm::vec3> result;
     std::string tmp;
@@ -339,51 +330,6 @@ std::vector<glm::vec2> breakStringIntoVec2s(std::string input){
     return result;
 }
 
-std::vector<Face> breakStringIntoFaces(std::string input){
-    // Face comes in as several of these repeated
-    // v n t v n t v n t
-    // 1 2 3 4 5 6 7 8 9
-
-    std::vector<Face> result;
-    std::string tmp;
-    std::string::iterator i;
-    char delim = ' ';
-
-    Face current_face;
-    int count = 0;
-    int vertex_index = 0;
-    for(i = input.begin(); i <= input.end(); ++i) {
-        if((const char)*i != delim  && i != input.end()) {
-            tmp += *i;
-        } else {
-            count++;
-            int value = std::stoi(tmp);
-
-            if (count % 3 == 0){
-                // If it is 3, 6, or 9
-                current_face.texcoords[vertex_index] = value;
-                ++vertex_index;
-            } else if ((count + 1) % 3 == 0){
-                // If it is 2, 5, or 8
-                current_face.normals[vertex_index] = value;
-            } else if ((count + 2) % 3 == 0) {
-                // If it is 1, 4, or 7
-                current_face.vertices[vertex_index] = value;
-            }
-
-            if (count == 9){
-                result.push_back(current_face);
-                count = 0;
-                vertex_index = 0;
-            }
-
-            tmp = "";
-        }
-    }
-
-    return result;
-}
-
 bool isAllThrees(std::string input){
     bool result = true;
     for (int i = 0; i < input.length(); ++i){
@@ -395,6 +341,7 @@ bool isAllThrees(std::string input){
 
 void MeshLoader::loadMeshFromDAE(const char* filename){
     float start_time = glfwGetTime();
+    this->filename = filename;
 
     // Load the document into a pugixml object
     pugi::xml_document doc;
@@ -403,113 +350,119 @@ void MeshLoader::loadMeshFromDAE(const char* filename){
     // Get the node that contains geometry data for each mesh.
     pugi::xml_node mesh_list_node = doc.child("COLLADA").child("library_geometries");
 
-    // For now we don't really support multiple mesh loading from one file
-    // but this is still good to have
-    for (pugi::xml_node geometry_node : mesh_list_node.children()){
-        std::vector<glm::vec3> vertices;
-        std::vector<glm::vec3> normals;
-        std::vector<glm::vec2> texcoords;
-        std::vector<Face> faces;
+    // For now we don't really support multiple mesh loading from one file.
+    // Just look at the first geometry node.
+    pugi::xml_node geometry_node = mesh_list_node.first_child();
+    std::vector<Vertex> vertices;
+    std::vector<int> elements;
+    getVerticesAndElements(geometry_node, vertices, elements);
 
-        std::string mesh_id = std::string(geometry_node.attribute("id").as_string());
-
-        std::string mesh_vertex_source_id = mesh_id + "-positions";
-        std::string mesh_normal_source_id = mesh_id + "-normals";
-        std::string mesh_uv_source_id = mesh_id + "-map-0";
-
-        // The first child in a geometry node contains all the data
-        // relevant to the mesh.
-        pugi::xml_node mesh_node = geometry_node.first_child();
-
-        for (pugi::xml_node mesh_data_node : mesh_node.children()){
-            // If it is a source node
-            if (strcmp(mesh_data_node.name(), "source") == 0){
-                std::string source_id = std::string(mesh_data_node.attribute("id").as_string());
-                // Get the count and stride for error checking.
-                pugi::xml_node accessor = mesh_data_node.child("technique_common").child("accessor");
-                int stride = accessor.attribute("stride").as_int();
-
-                if (source_id == mesh_vertex_source_id){
-                    // Check if the array width is correct for the vertices
-                    if (stride != 3){
-                        Debug::error("Invalid array width for vertex array in %s",
-                            filename);
-                    } else {
-                        std::string vertex_array_string = mesh_data_node.child_value("float_array");
-                        vertices = breakStringIntoVec3s(vertex_array_string);
-                    }
-
-                } else if (source_id == mesh_normal_source_id){
-                    // Check if the array width is correct for the normals
-                    if (stride != 3){
-                        Debug::error("Invalid array width for normal array in %s",
-                            filename);
-                    } else {
-                        std::string normal_array_string = mesh_data_node.child_value("float_array");
-                        normals = breakStringIntoVec3s(normal_array_string);
-                    }
-
-                } else if (source_id == mesh_uv_source_id){
-                    // Check if the array width is correct for the texture
-                    // coordinates
-                    if (stride != 2){
-                        Debug::error("Invalid array width for uv array in %s",
-                            filename);
-                    } else {
-                        std::string uv_array_string = mesh_data_node.child_value("float_array");
-                        texcoords = breakStringIntoVec2s(uv_array_string);
-                    }
-
-                }
-
-            } else if (strcmp(mesh_data_node.name(), "polylist") == 0){
-                // Check that the vertex counts are all three (triangles)
-                std::string vcount_str = mesh_data_node.child_value("vcount");
-                if (isAllThrees(vcount_str)){
-                    // Get the list of faces
-                    std::string faces_str = mesh_data_node.child_value("p");
-                    faces = breakStringIntoFaces(faces_str);
-                } else {
-                    Debug::error("The faces in mesh '%s' are not triangulated.\n",
-                        filename);
-                }
-            }
-        }
-
-        bool loaded_correctly = !vertices.empty() && !normals.empty() &&
-            !texcoords.empty() && !faces.empty();
-
-        if (loaded_correctly) {
-            Debug::info("Mesh data loaded successfully.\n");
-
-            for (Face face : faces){
-                Debug::info("Face:\n");
-                Debug::info("  A: %d, %d, %d\n", face.vertices[0], face.normals[0],
-                    face.texcoords[0]);
-                Debug::info("  B: %d, %d, %d\n", face.vertices[1], face.normals[1],
-                    face.texcoords[1]);
-                Debug::info("  C: %d, %d, %d\n", face.vertices[2], face.normals[2],
-                    face.texcoords[2]);
-            }
-
-        } else {
-            Debug::error("Failed to load mesh data from '%s'.\n", filename);
-        }
-
+    // At this point the tangents and binormals still need to be
+    // calculated.
+    for (int i = 0; i < elements.size(); i += 3){
+        Debug::info("%d %d %d\n", elements[i], elements[i + 1], elements[i + 2]);
     }
 
     float delta_time = glfwGetTime() - start_time;
     Debug::info("Collada mesh loaded from %s in %.5f seconds.\n", filename, delta_time);
 }
 
-// So many arguments!
-void MeshLoader::combineDataIntoFinalArrays(std::vector<glm::vec3>& vertices,
-    std::vector<glm::vec3>& normals, std::vector<glm::vec3>& tangents,
-    std::vector<glm::vec3>& binormals, std::vector<glm::vec2>& texcoords){
+void MeshLoader::getVerticesAndElements(pugi::xml_node geometry_node, std::vector<Vertex>& vertices, std::vector<int>& elements){
+    vertices.clear();
+    elements.clear();
 
-    final_vertices.clear();
-    final_faces.clear();
+    std::vector<glm::vec3> positions;
+    std::vector<glm::vec3> normals;
+    std::vector<glm::vec2> texcoords;
+    std::vector<int> faces;
 
+    std::string mesh_id = std::string(geometry_node.attribute("id").as_string());
 
+    std::string mesh_vertex_source_id = mesh_id + "-positions";
+    std::string mesh_normal_source_id = mesh_id + "-normals";
+    std::string mesh_uv_source_id = mesh_id + "-map-0";
+
+    // The first child in a geometry node contains all the data
+    // relevant to the mesh.
+    pugi::xml_node mesh_node = geometry_node.first_child();
+
+    for (pugi::xml_node mesh_data_node : mesh_node.children()){
+        // If it is a source node
+        if (strcmp(mesh_data_node.name(), "source") == 0){
+            std::string source_id = std::string(mesh_data_node.attribute("id").as_string());
+            // Get the count and stride for error checking.
+            pugi::xml_node accessor = mesh_data_node.child("technique_common").child("accessor");
+            int stride = accessor.attribute("stride").as_int();
+
+            if (source_id == mesh_vertex_source_id){
+                // Check if the array width is correct for the positions
+                if (stride != 3){
+                    Debug::error("Invalid array width for vertex array in %s",
+                    filename);
+                } else {
+                    std::string vertex_array_string = mesh_data_node.child_value("float_array");
+                    positions = breakStringIntoVec3s(vertex_array_string);
+                }
+
+            } else if (source_id == mesh_normal_source_id){
+                // Check if the array width is correct for the normals
+                if (stride != 3){
+                    Debug::error("Invalid array width for normal array in %s",
+                    filename);
+                } else {
+                    std::string normal_array_string = mesh_data_node.child_value("float_array");
+                    normals = breakStringIntoVec3s(normal_array_string);
+                }
+
+            } else if (source_id == mesh_uv_source_id){
+                // Check if the array width is correct for the texture
+                // coordinates
+                if (stride != 2){
+                    Debug::error("Invalid array width for uv array in %s",
+                    filename);
+                } else {
+                    std::string uv_array_string = mesh_data_node.child_value("float_array");
+                    texcoords = breakStringIntoVec2s(uv_array_string);
+                }
+
+            }
+
+        } else if (strcmp(mesh_data_node.name(), "polylist") == 0){
+            // Check that the vertex counts are all three (triangles)
+            std::string vcount_str = mesh_data_node.child_value("vcount");
+            if (isAllThrees(vcount_str)){
+                // Get the list of faces
+                std::string faces_str = mesh_data_node.child_value("p");
+                faces = getIntsFromString(faces_str, ' ');
+            } else {
+                Debug::error("The faces in mesh '%s' are not triangulated.\n",
+                filename);
+            }
+        }
+    }
+
+    bool loaded_correctly = !positions.empty() && !normals.empty() &&
+    !texcoords.empty() && !faces.empty();
+
+    if (loaded_correctly) {
+        Debug::info("Mesh data loaded successfully.\n");
+
+        for (int i = 0; i < faces.size(); i += 3){
+            // See if this combination of position, normal, uv, has
+            // been used before. If not, make a new vertex and add
+            // the corresponding number to the actual faces.
+            Vertex vertex;
+            vertex.position = positions[faces[i]];
+            vertex.normal = normals[faces[i]];
+            vertex.texcoord = texcoords[faces[i]];
+
+            vertices.push_back(vertex);
+            elements.push_back(vertices.size() - 1);
+
+        }
+
+    } else {
+        Debug::error("Failed to load mesh data from '%s'.\n", filename);
+    }
 
 }

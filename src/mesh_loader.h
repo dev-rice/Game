@@ -26,6 +26,13 @@
 
 #include "debug.h"
 
+struct Vertex {
+    glm::vec3 position;
+    glm::vec3 normal;
+    glm::vec3 tangent;
+    glm::vec3 binormal;
+    glm::vec2 texcoord;
+};
 
 class MeshLoader{
 public:
@@ -39,12 +46,12 @@ public:
 private:
 
     void loadMeshFromOBJ(const char*);
-
-    void combineDataIntoFinalArrays(std::vector<glm::vec3>&, std::vector<glm::vec3>&,
-        std::vector<glm::vec3>&, std::vector<glm::vec3>&, std::vector<glm::vec2>&);
+    void getVerticesAndElements(pugi::xml_node, std::vector<Vertex>&, std::vector<int>&);
 
     std::vector<GLfloat> final_vertices;
     std::vector<GLuint> final_faces;
+
+    const char* filename;
 };
 
 #endif
