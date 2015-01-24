@@ -330,6 +330,15 @@ std::vector<glm::vec2> getVec2FromString(std::string input){
     return result;
 }
 
+bool isAllThrees(std::string input){
+    bool result = true;
+    for (int i = 0; i < input.length(); ++i){
+        char current_char = input[i];
+        result &= (current_char == '3') || (current_char == ' ');
+    }
+    return result;
+}
+
 void MeshLoader::loadMeshFromDAE(const char* filename){
     float start_time = glfwGetTime();
 
@@ -402,14 +411,21 @@ void MeshLoader::loadMeshFromDAE(const char* filename){
             } else if (strcmp(mesh_data_node.name(), "polylist") == 0){
                 // Check that the vertex counts are all three (triangles)
                 std::string vcount_str = mesh_data_node.child_value("vcount");
-
-                // Get the list of faces
-                std::string faces_str = mesh_data_node.child_value("p");
-                faces = getIntsFromString(faces_str, ' ');
+                if (isAllThrees(vcount_str)){
+                    // Get the list of faces
+                    std::string faces_str = mesh_data_node.child_value("p");
+                    faces = getIntsFromString(faces_str, ' ');
+                } else {
+                    Debug::error("The faces in mesh '%s' are not triangulated.\n",
+                        filename);
+                }
             }
         }
 
-        if (!vertices.empty() && !normals.empty() && !texcoords.empty()){
+        bool loaded_correctly = !vertices.empty() && !normals.empty() &&
+            !texcoords.empty() && !faces.empty();
+
+        if (loaded_correctly) {
             Debug::info("Mesh data loaded successfully.\n");
 
             Debug::info("Vertices:\n");
@@ -427,7 +443,7 @@ void MeshLoader::loadMeshFromDAE(const char* filename){
                 Debug::info("  %f, %f\n", uv.x, uv.y);
             }
         } else {
-            Debug::error("Error loading mesh data from '%s'.\n", filename);
+            Debug::error("Failed to load mesh data from '%s'.\n", filename);
         }
 
     }
