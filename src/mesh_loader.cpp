@@ -270,6 +270,15 @@ std::vector<int> getIntsFromString(std::string input, char delim){
     return result;
 }
 
+struct Face {
+    // Stores the indices for vertices A, B, and C
+    // and the corresponding normals and texcoords
+
+    int vertices[3];
+    int normals[3];
+    int texcoords[3];
+};
+
 std::vector<glm::vec3> breakStringIntoVec3s(std::string input){
     std::vector<glm::vec3> result;
     std::string tmp;
@@ -330,6 +339,51 @@ std::vector<glm::vec2> breakStringIntoVec2s(std::string input){
     return result;
 }
 
+std::vector<Face> breakStringIntoFaces(std::string input){
+    // Face comes in as several of these repeated
+    // v n t v n t v n t
+    // 1 2 3 4 5 6 7 8 9
+
+    std::vector<Face> result;
+    std::string tmp;
+    std::string::iterator i;
+    char delim = ' ';
+
+    Face current_face;
+    int count = 0;
+    int vertex_index = 0;
+    for(i = input.begin(); i <= input.end(); ++i) {
+        if((const char)*i != delim  && i != input.end()) {
+            tmp += *i;
+        } else {
+            count++;
+            int value = std::stoi(tmp);
+
+            if (count % 3 == 0){
+                // If it is 3, 6, or 9
+                current_face.texcoords[vertex_index] = value;
+                ++vertex_index;
+            } else if ((count + 1) % 3 == 0){
+                // If it is 2, 5, or 8
+                current_face.normals[vertex_index] = value;
+            } else if ((count + 2) % 3 == 0) {
+                // If it is 1, 4, or 7
+                current_face.vertices[vertex_index] = value;
+            }
+
+            if (count == 9){
+                result.push_back(current_face);
+                count = 0;
+                vertex_index = 0;
+            }
+
+            tmp = "";
+        }
+    }
+
+    return result;
+}
+
 bool isAllThrees(std::string input){
     bool result = true;
     for (int i = 0; i < input.length(); ++i){
@@ -355,7 +409,7 @@ void MeshLoader::loadMeshFromDAE(const char* filename){
         std::vector<glm::vec3> vertices;
         std::vector<glm::vec3> normals;
         std::vector<glm::vec2> texcoords;
-        std::vector<int> faces;
+        std::vector<Face> faces;
 
         std::string mesh_id = std::string(geometry_node.attribute("id").as_string());
 
@@ -414,7 +468,7 @@ void MeshLoader::loadMeshFromDAE(const char* filename){
                 if (isAllThrees(vcount_str)){
                     // Get the list of faces
                     std::string faces_str = mesh_data_node.child_value("p");
-                    faces = getIntsFromString(faces_str, ' ');
+                    faces = breakStringIntoFaces(faces_str);
                 } else {
                     Debug::error("The faces in mesh '%s' are not triangulated.\n",
                         filename);
@@ -428,8 +482,14 @@ void MeshLoader::loadMeshFromDAE(const char* filename){
         if (loaded_correctly) {
             Debug::info("Mesh data loaded successfully.\n");
 
-            for (int i = 0; i < faces.size(); ++i){
-
+            for (Face face : faces){
+                Debug::info("Face:\n");
+                Debug::info("  A: %d, %d, %d\n", face.vertices[0], face.normals[0],
+                    face.texcoords[0]);
+                Debug::info("  B: %d, %d, %d\n", face.vertices[1], face.normals[1],
+                    face.texcoords[1]);
+                Debug::info("  C: %d, %d, %d\n", face.vertices[2], face.normals[2],
+                    face.texcoords[2]);
             }
 
         } else {
