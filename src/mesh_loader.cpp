@@ -160,7 +160,6 @@ void MeshLoader::loadMeshFromOBJ(const char* fileName){
     int num_vertices = final_verts.size() / 8;
     std::vector<GLfloat> vertices = std::vector<GLfloat>(num_vertices * 14);
 
-    float start_time = glfwGetTime();
     for (int i = 0; i < final_tris.size(); i += 3){
         std::vector<glm::vec3> points;
         std::vector<glm::vec3> normals;
@@ -225,12 +224,27 @@ void MeshLoader::loadMeshFromOBJ(const char* fileName){
             vertices[index + 13] = uv.y;
         }
     }
-    float delta_time = glfwGetTime() - start_time;
-    Debug::info("Took %f seconds to do the basis calculations for %s.\n",
-        delta_time, fileName);
 
     final_verts = vertices;
 
+}
+
+std::vector<float> getFloatsFromString(std::string input, char delim){
+    std::vector<float> result;
+    std::string tmp;
+    std::string::iterator i;
+    result.clear();
+
+    for(i = input.begin(); i <= input.end(); ++i) {
+        if((const char)*i != delim  && i != input.end()) {
+            tmp += *i;
+        } else {
+            result.push_back(std::stof(tmp));
+            tmp = "";
+        }
+    }
+
+    return result;
 }
 
 void MeshLoader::loadMeshFromDAE(const char* filename){
@@ -244,10 +258,11 @@ void MeshLoader::loadMeshFromDAE(const char* filename){
     // For now we don't really support multiple mesh loading from one file
     // but this is still good to have
     for (pugi::xml_node geometry_node : mesh_list_node.children()){
-        std::string mesh_id = std::string(geometry_node.attribute("id").as_string());
+        std::vector<float> vertices;
+        std::vector<float> normals;
+        std::vector<float> texcoords;
 
-        Debug::info("Collada Mesh Data:\n");
-        Debug::info("  mesh id: %s\n", mesh_id.c_str());
+        std::string mesh_id = std::string(geometry_node.attribute("id").as_string());
 
         std::string mesh_vertex_source_id = mesh_id + "-positions";
         std::string mesh_normal_source_id = mesh_id + "-normals";
@@ -261,48 +276,51 @@ void MeshLoader::loadMeshFromDAE(const char* filename){
             // If it is a source node
             if (strcmp(mesh_data_node.name(), "source") == 0){
                 std::string source_id = std::string(mesh_data_node.attribute("id").as_string());
-                Debug::info("%s\n", source_id.c_str());
-
                 // Get the count and stride for error checking.
                 pugi::xml_node accessor = mesh_data_node.child("technique_common").child("accessor");
                 int stride = accessor.attribute("stride").as_int();
-                Debug::info("stride: %d\n", stride);
 
                 if (source_id == mesh_vertex_source_id){
-                    std::string vertex_array_string = mesh_data_node.child_value("float_array");
-                    Debug::info("Vertices: %s\n", vertex_array_string.c_str());
-
                     // Check if the array width is correct for the vertices
                     if (stride != 3){
                         Debug::error("Invalid array width for vertex array in %s",
                             filename);
+                    } else {
+                        std::string vertex_array_string = mesh_data_node.child_value("float_array");
+                        vertices = getFloatsFromString(vertex_array_string, ' ');
                     }
 
                 } else if (source_id == mesh_normal_source_id){
-                    std::string normal_array_string = mesh_data_node.child_value("float_array");
-                    Debug::info("Normals: %s\n", normal_array_string.c_str());
-
                     // Check if the array width is correct for the normals
                     if (stride != 3){
                         Debug::error("Invalid array width for normal array in %s",
                             filename);
+                    } else {
+                        std::string normal_array_string = mesh_data_node.child_value("float_array");
+                        normals = getFloatsFromString(normal_array_string, ' ');
                     }
 
                 } else if (source_id == mesh_uv_source_id){
-                    std::string uv_array_string = mesh_data_node.child_value("float_array");
-                    Debug::info("Texcoord: %s\n", uv_array_string.c_str());
-
                     // Check if the array width is correct for the texture
                     // coordinates
                     if (stride != 2){
                         Debug::error("Invalid array width for uv array in %s",
                             filename);
+                    } else {
+                        std::string uv_array_string = mesh_data_node.child_value("float_array");
+                        texcoords = getFloatsFromString(uv_array_string, ' ');
                     }
 
                 }
 
             }
         }
+
+    if (!vertices.empty() && !normals.empty() && !texcoords.empty()){
+        Debug::info("Mesh data loaded successfully.\n");
+    } else {
+        Debug::error("Error loading mesh data from '%s'.\n", filename);
+    }
 
     }
 }
