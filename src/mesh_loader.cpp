@@ -234,8 +234,8 @@ void MeshLoader::loadMeshFromOBJ(const char* filename){
 
 }
 
-std::vector<int> getIntsFromString(std::string input, char delim){
-    std::vector<int> result;
+std::vector<GLuint> getIntsFromString(std::string input, char delim){
+    std::vector<GLuint> result;
     std::string tmp;
     std::string::iterator i;
     result.clear();
@@ -338,27 +338,58 @@ void MeshLoader::loadMeshFromDAE(const char* filename){
 
     // Create the vectors that will hold vertex and face data
     std::vector<Vertex> vertices;
-    std::vector<int> elements;
+    std::vector<GLuint> elements;
     getVerticesAndElements(geometry_node, vertices, elements);
 
     // At this point the tangents and binormals still need to be
     // calculated.
-    for (int i = 0; i < elements.size(); i += 3){
-        Debug::info("%d %d %d\n", elements[i], elements[i + 1], elements[i + 2]);
-    }
+    calculateTangentsAndBinormals(vertices, elements);
+
+    writeFinalArrays(vertices, elements);
 
     float delta_time = glfwGetTime() - start_time;
     Debug::info("Collada mesh loaded from %s in %.5f seconds.\n", filename, delta_time);
 }
 
-void MeshLoader::getVerticesAndElements(pugi::xml_node geometry_node, std::vector<Vertex>& vertices, std::vector<int>& elements){
+void MeshLoader::writeFinalArrays(std::vector<Vertex>& vertices, std::vector<GLuint>& elements){
+    final_vertices.clear();
+    final_faces.clear();
+
+    for (int i = 0; i < vertices.size(); ++i){
+        Vertex vertex = vertices[i];
+        final_vertices.push_back(vertex.position.x);
+        final_vertices.push_back(vertex.position.y);
+        final_vertices.push_back(vertex.position.z);
+        final_vertices.push_back(vertex.normal.x);
+        final_vertices.push_back(vertex.normal.y);
+        final_vertices.push_back(vertex.normal.z);
+        final_vertices.push_back(vertex.tangent.x);
+        final_vertices.push_back(vertex.tangent.y);
+        final_vertices.push_back(vertex.tangent.z);
+        final_vertices.push_back(vertex.binormal.x);
+        final_vertices.push_back(vertex.binormal.y);
+        final_vertices.push_back(vertex.binormal.z);
+        final_vertices.push_back(vertex.texcoord.x);
+        final_vertices.push_back(vertex.texcoord.y);
+    }
+
+    // Elements are already ordered correctly.
+    // Could look for duplicates but, eh...
+    final_faces = elements;
+}
+
+void MeshLoader::calculateTangentsAndBinormals(std::vector<Vertex>& vertices, std::vector<GLuint>& elements) {
+
+}
+
+void MeshLoader::getVerticesAndElements(pugi::xml_node geometry_node, std::vector<Vertex>& vertices, std::vector<GLuint>& elements){
     vertices.clear();
     elements.clear();
 
     std::vector<glm::vec3> positions;
     std::vector<glm::vec3> normals;
     std::vector<glm::vec2> texcoords;
-    std::vector<int> faces;
+    std::vector<GLuint> faces;
 
     std::string mesh_id = std::string(geometry_node.attribute("id").as_string());
 
@@ -420,7 +451,7 @@ void MeshLoader::getVerticesAndElements(pugi::xml_node geometry_node, std::vecto
                 faces = getIntsFromString(faces_str, ' ');
             } else {
                 Debug::error("The faces in mesh '%s' are not triangulated.\n",
-                filename);
+                    filename);
             }
         }
     }
