@@ -97,7 +97,7 @@ void Drawable::setNormal(GLuint normal) {
     if (normal != 0){
         this->normal = normal;
     } else {
-        this->normal = TextureLoader::loadAlpha();
+        this->normal = TextureLoader::loadBlue();
     }
 }
 
@@ -188,7 +188,7 @@ void Drawable::rotateGlobalEuler(glm::vec3 rotation){
 void Drawable::rotateAxisAngle(glm::vec3 axis, GLfloat angle){
     glm::quat quaternion =  glm::angleAxis(angle, axis);
     rotation_matrix = glm::toMat4(quaternion);
-    
+
 }
 
 void Drawable::updateModelMatrix(){

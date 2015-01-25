@@ -11,227 +11,8 @@
 #include "mesh_loader.h"
 
 MeshLoader::MeshLoader(const char* filename){
+    flat_shading = true;
     loadMeshFromDAE(filename);
-}
-
-void MeshLoader::loadMeshFromOBJ(const char* filename){
-    float start_time = glfwGetTime();
-
-    float tempX, tempY, tempZ;
-    int tempA, tempB, tempC, tempD, tempE, tempF, tempG, tempH, tempI;
-
-    std::vector<GLfloat> verts3D;
-    std::vector<GLfloat> verts2D;
-    std::vector<GLfloat> verts_norm;
-    std::vector<GLuint> tris3D;
-    std::vector<GLuint> tris2D;
-    std::vector<GLuint> norms3D;
-
-    std::vector<glm::vec3> tangents;
-    std::vector<glm::vec3> bitangents;
-
-
-    int triCount = 0;
-
-    char buffer[128];
-
-    FILE *ifile;
-    ifile = fopen(filename, "r");
-
-    if(ifile == NULL){
-        Debug::error("Error opening file %s\n", filename);
-        return;
-
-    }
-
-    while(! feof(ifile)){
-        if(fgets(buffer, 128, ifile) == NULL){
-            // Can't read into buffer
-            break;
-        }
-
-        if(buffer[0] == 'v'){
-            if(buffer[1] == 't'){
-                // texture vertex
-                sscanf(buffer, "%*2c %f %f", &tempX, &tempY);
-                verts2D.push_back((GLfloat)tempX);
-                verts2D.push_back((GLfloat)(1.0f - tempY));
-            } else if (buffer[1] == 'n'){
-                sscanf(buffer, "%*2c %f %f %f", &tempX, &tempY, &tempZ);
-                verts_norm.push_back((GLfloat)tempX);
-                verts_norm.push_back((GLfloat)tempY);
-                verts_norm.push_back((GLfloat)tempZ);
-            } else {
-                // 3d vertex
-                sscanf(buffer, "%*c %f %f %f", &tempX, &tempY, &tempZ);
-                verts3D.push_back((GLfloat)tempX);
-                verts3D.push_back((GLfloat)tempY);
-                verts3D.push_back((GLfloat)tempZ);
-            }
-        } else if(buffer[0] == 'f'){
-            // Face declarations
-            sscanf(buffer, "%*c %d/%d/%d %d/%d/%d %d/%d/%d", &tempA, &tempD, &tempG, &tempB, &tempE, &tempH, &tempC, &tempF, &tempI);
-            tris3D.push_back((GLuint)tempA);
-            tris3D.push_back((GLuint)tempB);
-            tris3D.push_back((GLuint)tempC);
-            tris2D.push_back((GLuint)tempD);
-            tris2D.push_back((GLuint)tempE);
-            tris2D.push_back((GLuint)tempF);
-            norms3D.push_back((GLuint)tempG);
-            norms3D.push_back((GLuint)tempH);
-            norms3D.push_back((GLuint)tempI);
-            triCount++;
-        }
-    }
-
-    fclose(ifile);
-
-    // Setting up the data structure to see if vertex mapping has already been done
-    int count = 1;
-
-    std::map<std::array<GLuint, 2>, GLuint> mappedEdgeLoops;
-
-    for(int i(0); i < triCount; ++i){
-
-        for(int j(0); j < 3; ++j){
-
-            std::array<GLuint, 2> tuple = {tris3D[i*3+j], tris2D[i*3+j]};
-
-            int result = mappedEdgeLoops[tuple];
-
-            if(result == 0){
-                // Has not been declared yet
-                mappedEdgeLoops[tuple] = count;
-                count++;
-
-                // Acessing 3D vertices indicated by the connection list
-                tempX = verts3D[ (tuple[0]-1)*3+0 ];
-                tempY = verts3D[ (tuple[0]-1)*3+1 ];
-                tempZ = verts3D[ (tuple[0]-1)*3+2 ];
-
-                // Acessing 3D normal vertices indicated by the connection list
-                GLuint something = norms3D[i*3 + j];
-                GLfloat tempVN1 = verts_norm[(something - 1)*3 +0 ];
-                GLfloat tempVN2 = verts_norm[ (something - 1)*3 +1 ];
-                GLfloat tempVN3 = verts_norm[(something - 1)*3 +2  ];
-
-                // Acessing 2D vertices indicated by the connection list
-                GLfloat tempX2 = verts2D[ (tuple[1]-1)*2+0 ];
-                GLfloat tempY2 = verts2D[ (tuple[1]-1)*2+1 ];
-
-                final_vertices.push_back(tempX);
-                final_vertices.push_back(tempY);
-                final_vertices.push_back(tempZ);
-                final_vertices.push_back(tempVN1);
-                final_vertices.push_back(tempVN2);
-                final_vertices.push_back(tempVN3);
-                final_vertices.push_back(tempX2);
-                final_vertices.push_back(tempY2);
-            }
-            final_faces.push_back(mappedEdgeLoops[tuple]-1);
-        }
-    }
-
-    // Define the basis of the space that each vertex is at for
-    // normal mapping.
-    // For each face:
-    //      1. The first point is P0, second is P1, third is P2
-    //      2. Find P10 and P20 which are vectors defining the edges
-    //      3. Find U10, U20, V10, and V20 which are scalars that
-    //         represent the change in texture coordinates for each
-    //         point.
-    //      4. Calculate the Tangent by
-    //
-    //                    P10 * V20 - P20 * V10
-    //            T =  ----------------------------
-    //                    U10 * V20 - U20 * V10
-    //
-    //      5. And the Bitangent by
-    //
-    //                    P20 * U10 - P10 * U20
-    //            T =  ----------------------------
-    //                    U10 * V20 - U20 * V10
-    //
-    //      6. Add these into all vertices on the face
-
-    // Ideally the tangent and bitangent would be already written to
-    // the object file. For now, this will suffice.
-    // The following is not the most eficient way to implement this
-    // because it requires creating a new vertex vector and a bunch of
-    // other stuff that was done already.
-    int num_vertices = final_vertices.size() / 8;
-    std::vector<GLfloat> vertices = std::vector<GLfloat>(num_vertices * 14);
-
-    for (int i = 0; i < final_faces.size(); i += 3){
-        std::vector<glm::vec3> points;
-        std::vector<glm::vec3> normals;
-        std::vector<glm::vec2> uvs;
-
-        for (int j = 0; j < 3; ++j){
-            int index = final_faces[i + j] * 8;
-
-            glm::vec3 p = glm::vec3(final_vertices[index],
-                final_vertices[index + 1], final_vertices[index + 2]);
-            glm::vec3 n = glm::vec3(final_vertices[index + 3],
-                final_vertices[index + 4], final_vertices[index + 5]);
-            glm::vec2 uv = glm::vec2(final_vertices[index + 6],
-                final_vertices[index + 7]);
-
-            points.push_back(p);
-            normals.push_back(n);
-            uvs.push_back(uv);
-        }
-
-        glm::vec3 p10 = points[1] - points[0];
-        glm::vec3 p20 = points[2] - points[0];
-
-        float u10 = uvs[1].x - uvs[0].x;
-        float u20 = uvs[2].x - uvs[0].x;
-        float v10 = uvs[1].y - uvs[0].y;
-        float v20 = uvs[2].y - uvs[0].y;
-
-        // Need to check for edge cases because this math
-        // breaks if ((u10 * v20) - (v10 * u20)) = 0
-        float divisor = 1.0f / (u10 * v20 - v10 * u20);
-        glm::vec3 tangent = (p10 * v20 - p20 * v10) * divisor;
-        glm::vec3 bitangent = (p20 * u10 - p10 * u20) * divisor;
-
-        tangent = glm::normalize(tangent);
-        bitangent = glm::normalize(bitangent);
-
-        // Actually set this data in the vertex array
-        for (int j = 0; j < 3; ++j){
-            int index = final_faces[i + j] * 14;
-
-            glm::vec3 point = points[j];
-            glm::vec3 normal = normals[j];
-            glm::vec2 uv = uvs[j];
-
-            normal = glm::normalize(normal);
-
-            // Shitty Shitty Shit Shit code
-            vertices[index]      = point.x;
-            vertices[index + 1]  = point.y;
-            vertices[index + 2]  = point.z;
-            vertices[index + 3]  = normal.x;
-            vertices[index + 4]  = normal.y;
-            vertices[index + 5]  = normal.z;
-            vertices[index + 6]  = tangent.x;
-            vertices[index + 7]  = tangent.y;
-            vertices[index + 8]  = tangent.z;
-            vertices[index + 9]  = bitangent.x;
-            vertices[index + 10] = bitangent.y;
-            vertices[index + 11] = bitangent.z;
-            vertices[index + 12] = uv.x;
-            vertices[index + 13] = uv.y;
-        }
-    }
-
-    final_vertices = vertices;
-
-    float delta_time = glfwGetTime() - start_time;
-    Debug::info("Obj mesh loaded from %s in %.5f seconds.\n", filename, delta_time);
-
 }
 
 std::vector<GLuint> getIntsFromString(std::string input, char delim){
@@ -349,7 +130,7 @@ void MeshLoader::loadMeshFromDAE(const char* filename){
         writeFinalArrays(vertices, elements);
 
         float delta_time = glfwGetTime() - start_time;
-        Debug::info("Collada mesh loaded from %s in %.5f seconds.\n", filename, delta_time);
+        Debug::info("Collada mesh loaded from '%s' in %.5f seconds.\n", filename, delta_time);
     }
 }
 
@@ -383,6 +164,7 @@ void MeshLoader::writeFinalArrays(std::vector<Vertex>& vertices, std::vector<GLu
 void MeshLoader::calculateTangentsAndBinormals(std::vector<Vertex>& vertices, std::vector<GLuint>& elements) {
     // For every face declaration calculate the
     // face tangents and binormals.
+
     for (int i = 0; i < elements.size(); i += 3){
         int A = elements[i];
         int B = elements[i + 1];
@@ -396,35 +178,65 @@ void MeshLoader::calculateTangentsAndBinormals(std::vector<Vertex>& vertices, st
         glm::vec2 UV1 = vertices[B].texcoord;
         glm::vec2 UV2 = vertices[C].texcoord;
 
-        glm::vec3 Q1 = P1 - P0;
-        glm::vec3 Q2 = P2 - P0;
-        float s1 = UV1.x - UV0.x;
-        float t1 = UV1.y - UV0.y;
-        float s2 = UV2.x - UV0.x;
-        float t2 = UV2.y - UV2.x;
+        glm::vec3 p10 = P1 - P0;
+        glm::vec3 p20 = P2 - P0;
+        float u10 = UV1.x - UV0.x;
+        float v10 = UV1.y - UV0.y;
+        float u20 = UV2.x - UV0.x;
+        float v20 = UV2.y - UV0.y;
 
-        glm::mat3 st = glm::mat3( t2, -t1, 0,
-                                 -s2,  s1, 0,
-                                  0 ,  0 , 0 );
+        float divisor = 1.0f / (u10 * v20 - v10 * u20);
+        glm::vec3 tangent = (p10 * v20 - p20 * v10) * divisor;
+        glm::vec3 binormal = (p20 * u10 - p10 * u20) * divisor;
 
-        glm::mat3 q = glm::mat3(Q1.x, Q1.y, Q1.z,
-                                Q2.x, Q2.y, Q2.z,
-                                0   , 0   , 0    );
-        float multiplier = 1.0 / ((s1 * t2) - (s2 * t1));
-        glm::mat3 tb = multiplier * st * q;
+        if (flat_shading){
+            tangent = glm::normalize(tangent);
+            binormal = glm::normalize(binormal);
 
-        glm::vec3 tangent = glm::vec3(tb[0][0], tb[1][0], tb[2][0]);
-        glm::vec3 binormal = glm::vec3(tb[0][1], tb[1][1], tb[2][1]);
+            vertices[A].tangent = tangent;
+            vertices[A].binormal = binormal;
 
-        // vertices[A].tangent = tangent;
-        // vertices[A].binormal = binormal;
-        //
-        // vertices[B].tangent = tangent;
-        // vertices[B].binormal = binormal;
-        //
-        // vertices[C].tangent = tangent;
-        // vertices[C].binormal = binormal;
+            vertices[B].tangent = tangent;
+            vertices[B].binormal = binormal;
 
+            vertices[C].tangent = tangent;
+            vertices[C].binormal = binormal;
+
+        } else {
+            // These normals be fuckity.
+            int A_unique_index = vertex_to_unique[A];
+            int B_unique_index = vertex_to_unique[B];
+            int C_unique_index = vertex_to_unique[C];
+
+            unique_vertices[A_unique_index].tangent  += tangent;
+            unique_vertices[A_unique_index].binormal += binormal;
+
+            unique_vertices[B_unique_index].tangent  += tangent;
+            unique_vertices[B_unique_index].binormal += binormal;
+
+            unique_vertices[C_unique_index].tangent  += tangent;
+            unique_vertices[C_unique_index].binormal += binormal;
+        }
+
+    }
+
+    if (!flat_shading){
+        for (int i = 0; i < unique_vertices.size(); ++i){
+            unique_vertices[i].tangent = glm::normalize(unique_vertices[i].tangent);
+            unique_vertices[i].binormal = glm::normalize(unique_vertices[i].binormal);
+
+        }
+
+        for (int i = 0; i < vertices.size(); ++i){
+            // Find which unique vertex this corresponds to
+            int unique_vertex_index = vertex_to_unique[i];
+
+            // Set this vertex's tangent and bitangent to be the same as
+            // the unique vertex's
+            vertices[i].tangent = unique_vertices[unique_vertex_index].tangent;
+            vertices[i].binormal = unique_vertices[unique_vertex_index].binormal;
+
+        }
     }
 }
 
@@ -510,8 +322,6 @@ bool MeshLoader::getVerticesAndElements(pugi::xml_node geometry_node, std::vecto
     !texcoords.empty() && !faces.empty();
 
     if (loaded_correctly) {
-        Debug::info("Mesh data loaded successfully.\n");
-
         for (int i = 0; i < faces.size(); i += 3){
             // See if this combination of position, normal, uv, has
             // been used before. If not, make a new vertex and add
@@ -528,7 +338,21 @@ bool MeshLoader::getVerticesAndElements(pugi::xml_node geometry_node, std::vecto
             vertex.texcoord = adjusted_texcoord;
 
             vertices.push_back(vertex);
-            elements.push_back(vertices.size() - 1);
+            int vertex_index = vertices.size() - 1;
+            elements.push_back(vertex_index);
+
+
+            std::vector<Vertex>::iterator it = std::find(unique_vertices.begin(),
+                unique_vertices.end(), vertex);
+            bool is_unique = (it == unique_vertices.end());
+            if (is_unique){
+                unique_vertices.push_back(vertex);
+                int index = unique_vertices.size() - 1;
+                vertex_to_unique[vertex_index] = index;
+            } else {
+                int index = it - unique_vertices.begin();
+                vertex_to_unique[vertex_index] = index;
+            }
 
         }
 

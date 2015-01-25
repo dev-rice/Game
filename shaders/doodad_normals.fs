@@ -36,6 +36,7 @@ vec4 emissive;
 vec3 map_surface_normal;
 
 const bool SHADOWS = true;
+const bool NORMAL_DEBUG = true;
 
 vec4 lightFragment(vec3 light_vector, vec3 light_color, float light_power){
     float intensity = light_power / (pow(light_vector.x, 2) + pow(light_vector.y,
@@ -137,6 +138,11 @@ void main() {
     if (texel.a < 0.5){
         discard;
     }
-    outColor = texel;
-    // outColor = vec4(Normal, 1.0);
+
+    if (NORMAL_DEBUG){
+        // outColor = vec4(map_surface_normal, 1.0);
+        outColor = vec4((lights[0].light_to_surface + 1.0) / 2.0, 1.0);
+    } else {
+        outColor = texel;
+    }
 }
