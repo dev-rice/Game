@@ -26,8 +26,14 @@ void Playable::updateUniformData(){
 }
 
 void Playable::update(Terrain* ground){
-	position.y = ground->getHeight(position.x, position.z);
+	
 	// position.x += 0.05f;
+
+    if(this->position != move_to_position){
+        position = move_to_position;
+    }
+
+    position.y = ground->getHeight(position.x, position.z);
 
 	selection_ring->setPosition(glm::vec3(position.x, position.y + 0.5, position.z));
 }

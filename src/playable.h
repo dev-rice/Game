@@ -31,7 +31,7 @@ public:
 	void tempSelect();
 	void tempDeSelect();
 
-	void setMovementTarget(glm::vec2 pos){ move_to_position = pos; }
+	void setMovementTarget(glm::vec3 pos){ move_to_position = pos; }
 
 	bool isSelected(){ return selected; }
 
@@ -39,7 +39,7 @@ public:
 private:
 	void updateUniformData();
 
-	glm::vec2 move_to_position;
+	glm::vec3 move_to_position;
 
 	// Not a complete list
 	enum class PlayableAttribute { MASSIVE, ARMORED, ARMY, WORKER, FLYING, INVULNERABLE, MECHANICAL };

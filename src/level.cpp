@@ -307,7 +307,7 @@ int Level::getMapWidth(){
 void Level::issueOrder(glm::vec3 location){
     printf("Issuing orders!\n");
     for(int i = 0; i < selected_units.size(); ++i){
-        selected_units[i]->setMovementTarget(glm::vec2(location.x, location.z));
+        selected_units[i]->setMovementTarget(glm::vec3(location.x, 0.0f, location.z));
     }
 }
 
