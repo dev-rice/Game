@@ -21,6 +21,8 @@
 #include <vector>
 #include <cmath>
 #include <string>
+#include <algorithm>
+#include <map>
 
 #include "pugixml.hpp" // PUGI xml library
 
@@ -32,6 +34,10 @@ struct Vertex {
     glm::vec3 tangent;
     glm::vec3 binormal;
     glm::vec2 texcoord;
+
+    bool operator==(const Vertex& rhs){
+        return (position == rhs.position);
+    }
 };
 
 class MeshLoader{
@@ -53,6 +59,9 @@ private:
 
     std::vector<GLfloat> final_vertices;
     std::vector<GLuint> final_faces;
+
+    std::vector<Vertex> unique_vertices;
+    std::map<int, int> vertex_to_unique;
 
     const char* filename;
 };

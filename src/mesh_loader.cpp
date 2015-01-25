@@ -407,29 +407,39 @@ void MeshLoader::calculateTangentsAndBinormals(std::vector<Vertex>& vertices, st
         glm::vec3 tangent = (p10 * v20 - p20 * v10) * divisor;
         glm::vec3 binormal = (p20 * u10 - p10 * u20) * divisor;
 
-        tangent = glm::normalize(tangent);
-        binormal = glm::normalize(binormal);
+        // tangent = glm::normalize(tangent);
+        // binormal = glm::normalize(binormal);
 
         // These normals be fuckity.
-        vertices[A].tangent = tangent;
-        vertices[A].binormal = binormal;
+        int A_unique_index = vertex_to_unique[A];
+        int B_unique_index = vertex_to_unique[B];
+        int C_unique_index = vertex_to_unique[C];
 
-        vertices[B].tangent = tangent;
-        vertices[B].binormal = binormal;
+        unique_vertices[A_unique_index].tangent  += tangent;
+        unique_vertices[A_unique_index].binormal += binormal;
 
-        vertices[C].tangent = tangent;
-        vertices[C].binormal = binormal;
+        unique_vertices[B_unique_index].tangent  += tangent;
+        unique_vertices[B_unique_index].binormal += binormal;
 
-        // Debug::info("=======================================\n");
-        // Debug::info("Q1 = %.2f, %.2f, %.2f\n", Q1.x, Q1.y, Q1.z);
-        // Debug::info("Q2 = %.2f, %.2f, %.2f\n", Q2.x, Q2.y, Q2.z);
-        // Debug::info("s1 = %.2f\n", s1);
-        // Debug::info("t1 = %.2f\n", t1);
-        // Debug::info("s2 = %.2f\n", s2);
-        // Debug::info("t2 = %.2f\n", t2);
-        // Debug::info("tangent = %.2f, %.2f, %.2f\n", tangent.x, tangent.y, tangent.z);
-        // Debug::info("binormal = %.2f, %.2f, %.2f\n", binormal.x, binormal.y, binormal.z);
-        // Debug::info("=======================================\n");
+        unique_vertices[C_unique_index].tangent  += tangent;
+        unique_vertices[C_unique_index].binormal += binormal;
+
+    }
+
+    for (int i = 0; i < unique_vertices.size(); ++i){
+        unique_vertices[i].tangent = glm::normalize(unique_vertices[i].tangent);
+        unique_vertices[i].binormal = glm::normalize(unique_vertices[i].binormal);
+
+    }
+
+    for (int i = 0; i < vertices.size(); ++i){
+        // Find which unique vertex this corresponds to
+        int unique_vertex_index = vertex_to_unique[i];
+
+        // Set this vertex's tangent and bitangent to be the same as
+        // the unique vertex's
+        vertices[i].tangent = unique_vertices[unique_vertex_index].tangent;
+        vertices[i].binormal = unique_vertices[unique_vertex_index].binormal;
 
     }
 }
@@ -532,7 +542,21 @@ bool MeshLoader::getVerticesAndElements(pugi::xml_node geometry_node, std::vecto
             vertex.texcoord = adjusted_texcoord;
 
             vertices.push_back(vertex);
-            elements.push_back(vertices.size() - 1);
+            int vertex_index = vertices.size() - 1;
+            elements.push_back(vertex_index);
+
+
+            std::vector<Vertex>::iterator it = std::find(unique_vertices.begin(),
+                unique_vertices.end(), vertex);
+            bool is_unique = (it == unique_vertices.end());
+            if (is_unique){
+                unique_vertices.push_back(vertex);
+                int index = unique_vertices.size() - 1;
+                vertex_to_unique[vertex_index] = index;
+            } else {
+                int index = it - unique_vertices.begin();
+                vertex_to_unique[vertex_index] = index;
+            }
 
         }
 
