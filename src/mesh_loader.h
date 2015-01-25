@@ -36,7 +36,8 @@ struct Vertex {
     glm::vec2 texcoord;
 
     bool operator==(const Vertex& rhs){
-        return (position == rhs.position);
+        return (position == rhs.position) && (normal == rhs.normal) &&
+            (texcoord == rhs.texcoord);
     }
 };
 
