@@ -67,6 +67,19 @@ Level::Level(const char* filename){
     units.push_back(temp);
     selected_units.push_back(temp);
 
+    // extra units
+    // playable_position = glm::vec3(1.0f, 0.0f, 0.0f);
+    // temp = new Playable(playable_mesh, playable_shader, playable_position, playable_scale);
+    // drawables.push_back(temp);
+    // units.push_back(temp);
+    // selected_units.push_back(temp);
+
+    // playable_position = glm::vec3(1.0f, 0.0f, 1.0f);
+    // temp = new Playable(playable_mesh, playable_shader, playable_position, playable_scale);
+    // drawables.push_back(temp);
+    // units.push_back(temp);
+    // selected_units.push_back(temp);
+
 
 }
 

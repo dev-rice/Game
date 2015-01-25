@@ -17,20 +17,34 @@ Playable::Playable(Mesh* mesh, GLuint shader_program, glm::vec3 position, GLfloa
 	selected = false;
     temp_selected = 0;
 
-    // Temporary thingy
+    // Temporary stuff until XML parsing is ready
     radius = 2.5f;
+    speed = 0.05f;
 }
 
 void Playable::updateUniformData(){
 	glUniform1f(glGetUniformLocation(shader_program, "scale"), scale);
 }
 
-void Playable::update(Terrain* ground){
-	
-	// position.x += 0.05f;
+void Playable::setMovementTarget(glm::vec3 pos){
+    move_to_position = pos;
 
-    if(this->position != move_to_position){
-        position = move_to_position;
+    float x_delta = move_to_position.x - position.x;
+    float z_delta = move_to_position.z - position.z;
+    float theta = atan2(x_delta, z_delta);
+
+    rotateGlobalEuler(0.0f, theta - current_direction, 0.0f);
+    current_direction = theta; 
+}
+
+void Playable::update(Terrain* ground){
+
+    // TODO add pathfinding AI
+    float x_delta = abs(move_to_position.x - position.x);
+    float z_delta = abs(move_to_position.z - position.z);
+    if( sqrt(x_delta*x_delta + z_delta*z_delta) > 0.01){
+        position.x += sin(current_direction)*speed;
+        position.z += cos(current_direction)*speed;
     }
 
     position.y = ground->getHeight(position.x, position.z);
