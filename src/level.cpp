@@ -318,7 +318,6 @@ int Level::getMapWidth(){
 }
 
 void Level::issueOrder(glm::vec3 location){
-    printf("Issuing orders!\n");
     for(int i = 0; i < selected_units.size(); ++i){
         selected_units[i]->setMovementTarget(glm::vec3(location.x, 0.0f, location.z));
     }
@@ -333,6 +332,7 @@ void Level::selectUnit(glm::vec3 click){
 
         if( sqrt(x_diff*x_diff + y_diff*y_diff) < units[i]->getRadius()){
             units[i]->select();
+            selected_units.push_back(units[i]);
         }
     }
 }
