@@ -36,6 +36,7 @@ public:
 
     void rotateAxisAngle(glm::vec3 axis, GLfloat angle);
 
+    void setPosition(GLfloat x, GLfloat y, GLfloat z){ position = glm::vec3(z, y, z); }
     void setPosition(glm::vec3 p) {position = p;}
     void setScale(GLfloat s) {scale = s;}
     void setShader(GLuint);
