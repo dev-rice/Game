@@ -131,12 +131,6 @@ int main(int argc, char* argv[]) {
     window->setVsync(vsync);
     window->setFxaaLevel(fxaa_level);
 
-
-    // Do some mesh loading
-    MeshLoader mesh_loader = MeshLoader("res/models/sword.obj");
-    mesh_loader.loadMeshFromDAE("res/models/cube.dae");
-    mesh_loader.loadMeshFromDAE("res/models/sword.dae");
-
     // Create the world
     World* world;
     if (has_map){

@@ -49,7 +49,7 @@ private:
 
     void writeFinalArrays(std::vector<Vertex>&, std::vector<GLuint>&);
     void calculateTangentsAndBinormals(std::vector<Vertex>&, std::vector<GLuint>&);
-    void getVerticesAndElements(pugi::xml_node, std::vector<Vertex>&, std::vector<GLuint>&);
+    bool getVerticesAndElements(pugi::xml_node, std::vector<Vertex>&, std::vector<GLuint>&);
 
     std::vector<GLfloat> final_vertices;
     std::vector<GLuint> final_faces;

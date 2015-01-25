@@ -339,16 +339,18 @@ void MeshLoader::loadMeshFromDAE(const char* filename){
     // Create the vectors that will hold vertex and face data
     std::vector<Vertex> vertices;
     std::vector<GLuint> elements;
-    getVerticesAndElements(geometry_node, vertices, elements);
+    bool successful = getVerticesAndElements(geometry_node, vertices, elements);
 
-    // At this point the tangents and binormals still need to be
-    // calculated.
-    calculateTangentsAndBinormals(vertices, elements);
+    if (successful){
+        // At this point the tangents and binormals still need to be
+        // calculated.
+        calculateTangentsAndBinormals(vertices, elements);
 
-    writeFinalArrays(vertices, elements);
+        writeFinalArrays(vertices, elements);
 
-    float delta_time = glfwGetTime() - start_time;
-    Debug::info("Collada mesh loaded from %s in %.5f seconds.\n", filename, delta_time);
+        float delta_time = glfwGetTime() - start_time;
+        Debug::info("Collada mesh loaded from %s in %.5f seconds.\n", filename, delta_time);
+    }
 }
 
 void MeshLoader::writeFinalArrays(std::vector<Vertex>& vertices, std::vector<GLuint>& elements){
@@ -414,19 +416,21 @@ void MeshLoader::calculateTangentsAndBinormals(std::vector<Vertex>& vertices, st
         glm::vec3 tangent = glm::vec3(tb[0][0], tb[1][0], tb[2][0]);
         glm::vec3 binormal = glm::vec3(tb[0][1], tb[1][1], tb[2][1]);
 
-        vertices[A].tangent = tangent;
-        vertices[A].binormal = binormal;
-
-        vertices[B].tangent = tangent;
-        vertices[B].binormal = binormal;
-
-        vertices[C].tangent = tangent;
-        vertices[C].binormal = binormal;
+        // vertices[A].tangent = tangent;
+        // vertices[A].binormal = binormal;
+        //
+        // vertices[B].tangent = tangent;
+        // vertices[B].binormal = binormal;
+        //
+        // vertices[C].tangent = tangent;
+        // vertices[C].binormal = binormal;
 
     }
 }
 
-void MeshLoader::getVerticesAndElements(pugi::xml_node geometry_node, std::vector<Vertex>& vertices, std::vector<GLuint>& elements){
+bool MeshLoader::getVerticesAndElements(pugi::xml_node geometry_node, std::vector<Vertex>& vertices, std::vector<GLuint>& elements){
+    bool success = true;
+
     vertices.clear();
     elements.clear();
 
@@ -457,7 +461,7 @@ void MeshLoader::getVerticesAndElements(pugi::xml_node geometry_node, std::vecto
                 // Check if the array width is correct for the positions
                 if (stride != 3){
                     Debug::error("Invalid array width for vertex array in %s",
-                    filename);
+                        filename);
                 } else {
                     std::string vertex_array_string = mesh_data_node.child_value("float_array");
                     positions = breakStringIntoVec3s(vertex_array_string);
@@ -467,7 +471,7 @@ void MeshLoader::getVerticesAndElements(pugi::xml_node geometry_node, std::vecto
                 // Check if the array width is correct for the normals
                 if (stride != 3){
                     Debug::error("Invalid array width for normal array in %s",
-                    filename);
+                        filename);
                 } else {
                     std::string normal_array_string = mesh_data_node.child_value("float_array");
                     normals = breakStringIntoVec3s(normal_array_string);
@@ -478,12 +482,14 @@ void MeshLoader::getVerticesAndElements(pugi::xml_node geometry_node, std::vecto
                 // coordinates
                 if (stride != 2){
                     Debug::error("Invalid array width for uv array in %s",
-                    filename);
+                        filename);
                 } else {
                     std::string uv_array_string = mesh_data_node.child_value("float_array");
                     texcoords = breakStringIntoVec2s(uv_array_string);
                 }
 
+            } else {
+                Debug::warning("Unknown source id: %s.\n", source_id.c_str());
             }
 
         } else if (strcmp(mesh_data_node.name(), "polylist") == 0){
@@ -528,6 +534,9 @@ void MeshLoader::getVerticesAndElements(pugi::xml_node geometry_node, std::vecto
 
     } else {
         Debug::error("Failed to load mesh data from '%s'.\n", filename);
+        success = false;
     }
+
+    return success;
 
 }
