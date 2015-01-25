@@ -335,8 +335,8 @@ void Level::selectUnit(glm::vec3 click){
         glm::vec3 unit_pos = units[i]->getPosition();
 
         float x_diff = abs(unit_pos.x - click.x);
-        float y_diff = abs(unit_pos.y - click.y);
-        float distance = sqrt(x_diff*x_diff + y_diff*y_diff);
+        float z_diff = abs(unit_pos.z - click.z);
+        float distance = sqrt(x_diff*x_diff + z_diff*z_diff);
 
         if( distance < units[i]->getRadius() && distance < nearest){
             nearest = distance;
@@ -374,7 +374,7 @@ void Level::selectUnits(glm::vec3 coord_a, glm::vec3 coord_b){
     for(int i = 0; i < units.size(); ++i){
         glm::vec3 unit_pos = units[i]->getPosition();
 
-        if(left < unit_pos.x && right > unit_pos.x && down < unit_pos.y && up > unit_pos.y){
+        if(left < unit_pos.x && right > unit_pos.x && down < unit_pos.z && up > unit_pos.z){
             units[i]->select();
             selected_units.push_back(units[i]);
         } else {
