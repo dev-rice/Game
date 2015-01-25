@@ -396,25 +396,19 @@ void MeshLoader::calculateTangentsAndBinormals(std::vector<Vertex>& vertices, st
         glm::vec2 UV1 = vertices[B].texcoord;
         glm::vec2 UV2 = vertices[C].texcoord;
 
-        glm::vec3 Q1 = P1 - P0;
-        glm::vec3 Q2 = P2 - P0;
-        float s1 = UV1.x - UV0.x;
-        float t1 = UV1.y - UV0.y;
-        float s2 = UV2.x - UV0.x;
-        float t2 = UV2.y - UV2.x;
+        glm::vec3 p10 = P1 - P0;
+        glm::vec3 p20 = P2 - P0;
+        float u10 = UV1.x - UV0.x;
+        float v10 = UV1.y - UV0.y;
+        float u20 = UV2.x - UV0.x;
+        float v20 = UV2.y - UV0.y;
 
-        glm::mat3 st = glm::mat3( t2, -t1, 0,
-                                 -s2,  s1, 0,
-                                  0 ,  0 , 0 );
+        float divisor = 1.0f / (u10 * v20 - v10 * u20);
+        glm::vec3 tangent = (p10 * v20 - p20 * v10) * divisor;
+        glm::vec3 binormal = (p20 * u10 - p10 * u20) * divisor;
 
-        glm::mat3 q = glm::mat3(Q1.x, Q1.y, Q1.z,
-                                Q2.x, Q2.y, Q2.z,
-                                0   , 0   , 0    );
-        float multiplier = 1.0 / ((s1 * t2) - (s2 * t1));
-        glm::mat3 tb = multiplier * st * q;
-
-        glm::vec3 tangent = glm::vec3(tb[0][0], tb[1][0], tb[2][0]);
-        glm::vec3 binormal = glm::vec3(tb[0][1], tb[1][1], tb[2][1]);
+        tangent = glm::normalize(tangent);
+        binormal = glm::normalize(binormal);
 
         // These normals be fuckity.
         vertices[A].tangent = tangent;
@@ -425,6 +419,17 @@ void MeshLoader::calculateTangentsAndBinormals(std::vector<Vertex>& vertices, st
 
         vertices[C].tangent = tangent;
         vertices[C].binormal = binormal;
+
+        // Debug::info("=======================================\n");
+        // Debug::info("Q1 = %.2f, %.2f, %.2f\n", Q1.x, Q1.y, Q1.z);
+        // Debug::info("Q2 = %.2f, %.2f, %.2f\n", Q2.x, Q2.y, Q2.z);
+        // Debug::info("s1 = %.2f\n", s1);
+        // Debug::info("t1 = %.2f\n", t1);
+        // Debug::info("s2 = %.2f\n", s2);
+        // Debug::info("t2 = %.2f\n", t2);
+        // Debug::info("tangent = %.2f, %.2f, %.2f\n", tangent.x, tangent.y, tangent.z);
+        // Debug::info("binormal = %.2f, %.2f, %.2f\n", binormal.x, binormal.y, binormal.z);
+        // Debug::info("=======================================\n");
 
     }
 }
