@@ -68,17 +68,17 @@ Level::Level(const char* filename){
     selected_units.push_back(temp);
 
     // extra units
-    // playable_position = glm::vec3(1.0f, 0.0f, 0.0f);
-    // temp = new Playable(playable_mesh, playable_shader, playable_position, playable_scale);
-    // drawables.push_back(temp);
-    // units.push_back(temp);
-    // selected_units.push_back(temp);
+    playable_position = glm::vec3(4.0f, 0.0f, 0.0f);
+    temp = new Playable(playable_mesh, playable_shader, playable_position, playable_scale);
+    drawables.push_back(temp);
+    units.push_back(temp);
+    selected_units.push_back(temp);
 
-    // playable_position = glm::vec3(1.0f, 0.0f, 1.0f);
-    // temp = new Playable(playable_mesh, playable_shader, playable_position, playable_scale);
-    // drawables.push_back(temp);
-    // units.push_back(temp);
-    // selected_units.push_back(temp);
+    playable_position = glm::vec3(4.0f, 0.0f, 4.0f);
+    temp = new Playable(playable_mesh, playable_shader, playable_position, playable_scale);
+    drawables.push_back(temp);
+    units.push_back(temp);
+    selected_units.push_back(temp);
 
 
 }
@@ -275,7 +275,7 @@ void Level::loadLevel(const char* filename){
             GLuint terrain_shader = ShaderLoader::loadShaderProgram(
                 "shaders/terrain.vs", "shaders/terrain.fs");
 
-            ground = new Terrain(terrain_shader, heightmap_filename_str);
+            ground = new Terrain(terrain_shader, heightmap_filename_str, 0.0f);
 
             GLuint diffuse = TextureLoader::loadTextureFromFile(ground_filename,
                 GL_LINEAR);
@@ -324,20 +324,47 @@ void Level::issueOrder(glm::vec3 location){
 }
 
 void Level::selectUnit(glm::vec3 click){
+
+    std::vector<Playable*> selected_units_copy = selected_units;
+    selected_units.clear();
+
+    float nearest = FLT_MAX;
+    Playable* nearest_playable = 0;
+
     for(int i = 0; i < units.size(); ++i){
         glm::vec3 unit_pos = units[i]->getPosition();
 
         float x_diff = abs(unit_pos.x - click.x);
         float y_diff = abs(unit_pos.y - click.y);
+        float distance = sqrt(x_diff*x_diff + y_diff*y_diff);
 
-        if( sqrt(x_diff*x_diff + y_diff*y_diff) < units[i]->getRadius()){
-            units[i]->select();
-            selected_units.push_back(units[i]);
+        if( distance < units[i]->getRadius() && distance < nearest){
+            nearest = distance;
+            nearest_playable = units[i];
+        } else {
+            units[i]->deSelect();
+        }
+    }
+
+    // If we found one that was clicked on and is the nearest
+    if(nearest_playable){
+        nearest_playable->select();
+        selected_units.push_back(nearest_playable);
+    } else {
+        printf("REVERTING FROM CLICKING\n");
+        selected_units = selected_units_copy;
+
+        for(int i = 0; i < selected_units.size(); ++i){
+            selected_units[i]->select();
         }
     }
 }
 
 void Level::selectUnits(glm::vec3 coord_a, glm::vec3 coord_b){
+
+    std::vector<Playable*> selected_units_copy = selected_units;
+    selected_units.clear();
+
     float left = std::min(coord_a.x, coord_b.x);
     float right = std::max(coord_a.x, coord_b.x);
 
@@ -350,6 +377,17 @@ void Level::selectUnits(glm::vec3 coord_a, glm::vec3 coord_b){
         if(left < unit_pos.x && right > unit_pos.x && down < unit_pos.y && up > unit_pos.y){
             units[i]->select();
             selected_units.push_back(units[i]);
+        } else {
+            units[i]->deSelect();
+        }
+    }
+
+    if(selected_units.size() == 0){
+        printf("REVERTING FROM DRAGGING\n");
+        selected_units = selected_units_copy;
+
+        for(int i = 0; i < selected_units.size(); ++i){
+            selected_units[i]->select();
         }
     }
 }

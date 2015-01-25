@@ -28,6 +28,7 @@ public:
 	void draw();
 	
 	void select();
+	void deSelect();
 	void tempSelect();
 	void tempDeSelect();
 

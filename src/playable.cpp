@@ -18,8 +18,11 @@ Playable::Playable(Mesh* mesh, GLuint shader_program, glm::vec3 position, GLfloa
     temp_selected = 0;
 
     // Temporary stuff until XML parsing is ready
-    radius = 2.5f;
+    radius = 1.5f;
     speed = 0.05f;
+
+    move_to_position = position;
+    current_direction = 0.0f;
 }
 
 void Playable::updateUniformData(){
@@ -56,7 +59,7 @@ void Playable::draw(){
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
 
-    if(selected || temp_selected > 0){
+    if(selected || temp_selected ){
     	selection_ring->draw();
     }
     
@@ -89,6 +92,11 @@ void Playable::draw(){
 
 void Playable::select(){
     selected = true;
+}
+
+void Playable::deSelect(){
+    selected = false;
+    temp_selected = false;
 }
 
 void Playable::tempSelect(){
