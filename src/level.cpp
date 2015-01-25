@@ -275,7 +275,7 @@ void Level::loadLevel(const char* filename){
             GLuint terrain_shader = ShaderLoader::loadShaderProgram(
                 "shaders/terrain.vs", "shaders/terrain.fs");
 
-            ground = new Terrain(terrain_shader, heightmap_filename_str, 0.0f);
+            ground = new Terrain(terrain_shader, heightmap_filename_str);
 
             GLuint diffuse = TextureLoader::loadTextureFromFile(ground_filename,
                 GL_LINEAR);
@@ -351,7 +351,6 @@ void Level::selectUnit(glm::vec3 click){
         nearest_playable->select();
         selected_units.push_back(nearest_playable);
     } else {
-        printf("REVERTING FROM CLICKING\n");
         selected_units = selected_units_copy;
 
         for(int i = 0; i < selected_units.size(); ++i){
@@ -383,7 +382,6 @@ void Level::selectUnits(glm::vec3 coord_a, glm::vec3 coord_b){
     }
 
     if(selected_units.size() == 0){
-        printf("REVERTING FROM DRAGGING\n");
         selected_units = selected_units_copy;
 
         for(int i = 0; i < selected_units.size(); ++i){
