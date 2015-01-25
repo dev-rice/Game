@@ -48,6 +48,8 @@ public:
     Terrain* getTerrain() {return ground;}
     glm::mat4 getProjection() {return proj_matrix;}
 
+    // Need to add type of order
+    void issueOrder(glm::vec3);
     void selectUnit(glm::vec3);
     void selectUnits(glm::vec3, glm::vec3);
     void tempSelectUnits(glm::vec3, glm::vec3);
@@ -68,6 +70,7 @@ private:
     std::vector<GLuint> textures;
     std::vector<Mesh*> meshes;
     std::vector<Drawable*> drawables;
+    std::vector<Playable*> selected_units;
     std::vector<Playable*> units;
     std::vector<Emitter*> emitters;
 

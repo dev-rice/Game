@@ -31,6 +31,10 @@ public:
 	void tempSelect();
 	void tempDeSelect();
 
+	void setMovementTarget(glm::vec2 pos){ move_to_position = pos; }
+
+	bool isSelected(){ return selected; }
+
 	float getRadius(){ return radius; }
 private:
 	void updateUniformData();

@@ -65,6 +65,7 @@ Level::Level(const char* filename){
     Playable* temp = new Playable(playable_mesh, playable_shader, playable_position, playable_scale);
     drawables.push_back(temp);
     units.push_back(temp);
+    selected_units.push_back(temp);
 
 
 }
@@ -73,6 +74,16 @@ void Level::draw(){
     // Update the view matrix based on the current
     // camera location / position
     updateGlobalUniforms();
+
+    // make sure the selected units are good to go
+    std::vector<Playable*> new_selected_units;
+    for(int i = 0; i < selected_units.size(); ++i){
+        if(selected_units[i]->isSelected()){
+            new_selected_units.push_back(selected_units[i]);
+        }
+    }
+    selected_units.clear();
+    selected_units = new_selected_units;
 
     // update all the units
     for (int i = 0; i < units.size(); ++i){
@@ -293,6 +304,13 @@ int Level::getMapWidth(){
     return ground->getWidth();
 }
 
+void Level::issueOrder(glm::vec3 location){
+    printf("Issuing orders!\n");
+    for(int i = 0; i < selected_units.size(); ++i){
+        selected_units[i]->setMovementTarget(glm::vec2(location.x, location.z));
+    }
+}
+
 void Level::selectUnit(glm::vec3 click){
     for(int i = 0; i < units.size(); ++i){
         glm::vec3 unit_pos = units[i]->getPosition();
@@ -318,6 +336,7 @@ void Level::selectUnits(glm::vec3 coord_a, glm::vec3 coord_b){
 
         if(left < unit_pos.x && right > unit_pos.x && down < unit_pos.y && up > unit_pos.y){
             units[i]->select();
+            selected_units.push_back(units[i]);
         }
     }
 }

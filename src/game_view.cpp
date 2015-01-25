@@ -263,9 +263,25 @@ void GameView::handleInputs(){
         left_mouse_button_unclick = true;
     }
 
+    // right mouse button handling
+    if(right_mouse_button_unclick){
+        right_mouse_button_unclick = false;
+    }
+
     if(glfwGetMouseButton(glfw_window, GLFW_MOUSE_BUTTON_RIGHT)){
         // Right mouse button
         // printf("Clicked right mouse button\n");
+        if(!right_mouse_button_click){
+            Camera* camera = level->getCamera();
+            glm::mat4 proj_matrix = level->getProjection();
+
+            level->issueOrder(Mouse::getInstance()->getWorldPosition(camera, proj_matrix));
+        }
+
+        right_mouse_button_click = true;
+    } else if(right_mouse_button_click){
+        right_mouse_button_click = false;
+        right_mouse_button_unclick = true;
     }
 
 
