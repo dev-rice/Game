@@ -137,6 +137,8 @@ void main() {
     if (texel.a < 0.5){
         discard;
     }
-    outColor = texel;
-    // outColor = vec4(Normal, 1.0);
+    // outColor = texel;
+    // map_surface_normal = vec3(abs(map_surface_normal.x), abs(map_surface_normal.y),
+    //     abs(map_surface_normal.z));
+    outColor = vec4((lights[0].light_to_surface + 1.0) / 2.0, 1.0);
 }
