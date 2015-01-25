@@ -416,14 +416,15 @@ void MeshLoader::calculateTangentsAndBinormals(std::vector<Vertex>& vertices, st
         glm::vec3 tangent = glm::vec3(tb[0][0], tb[1][0], tb[2][0]);
         glm::vec3 binormal = glm::vec3(tb[0][1], tb[1][1], tb[2][1]);
 
-        // vertices[A].tangent = tangent;
-        // vertices[A].binormal = binormal;
-        //
-        // vertices[B].tangent = tangent;
-        // vertices[B].binormal = binormal;
-        //
-        // vertices[C].tangent = tangent;
-        // vertices[C].binormal = binormal;
+        // These normals be fuckity.
+        vertices[A].tangent = tangent;
+        vertices[A].binormal = binormal;
+
+        vertices[B].tangent = tangent;
+        vertices[B].binormal = binormal;
+
+        vertices[C].tangent = tangent;
+        vertices[C].binormal = binormal;
 
     }
 }
@@ -510,8 +511,6 @@ bool MeshLoader::getVerticesAndElements(pugi::xml_node geometry_node, std::vecto
     !texcoords.empty() && !faces.empty();
 
     if (loaded_correctly) {
-        Debug::info("Mesh data loaded successfully.\n");
-
         for (int i = 0; i < faces.size(); i += 3){
             // See if this combination of position, normal, uv, has
             // been used before. If not, make a new vertex and add
