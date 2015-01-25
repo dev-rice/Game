@@ -189,6 +189,12 @@ void MeshLoader::calculateTangentsAndBinormals(std::vector<Vertex>& vertices, st
         glm::vec3 tangent = (p10 * v20 - p20 * v10) * divisor;
         glm::vec3 binormal = (p20 * u10 - p10 * u20) * divisor;
 
+        glm::vec3 normal = vertices[A].normal;
+
+        if (glm::dot(glm::cross(normal, tangent), binormal) < 0.0f){
+            tangent = tangent * -1.0f;
+        }
+
         if (flat_shading){
             tangent = glm::normalize(tangent);
             binormal = glm::normalize(binormal);
@@ -222,8 +228,11 @@ void MeshLoader::calculateTangentsAndBinormals(std::vector<Vertex>& vertices, st
 
     if (!flat_shading){
         for (int i = 0; i < unique_vertices.size(); ++i){
-            unique_vertices[i].tangent = glm::normalize(unique_vertices[i].tangent);
-            unique_vertices[i].binormal = glm::normalize(unique_vertices[i].binormal);
+            glm::vec3 normal = unique_vertices[i].normal;
+            glm::vec3 tangent = unique_vertices[i].tangent;
+            tangent = tangent - normal * glm::dot(normal, tangent);
+            unique_vertices[i].tangent = glm::normalize(tangent);
+            unique_vertices[i].binormal = glm::normalize(glm::cross(normal, tangent));
 
         }
 
