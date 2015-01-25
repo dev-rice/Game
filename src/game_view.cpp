@@ -113,8 +113,7 @@ void GameView::update(){
         level->selectUnits(init, fina);
 
     } else if(left_mouse_button_unclick && !Mouse::getInstance()->isHovering()){
-        // glm::vec3 fina = Mouse::getInstance()->getWorldPositionFromPoint(final_left_click_position, level->getCamera(), level->getProjection());
-        // call singular selectUnits();
+        level->selectUnit(Mouse::getInstance()->getWorldPosition(camera, proj_matrix));
     }
 
     float frame_time = glfwGetTime() - start_time;

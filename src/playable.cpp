@@ -16,6 +16,9 @@ Playable::Playable(Mesh* mesh, GLuint shader_program, glm::vec3 position, GLfloa
 
 	selected = false;
     temp_selected = 0;
+
+    // Temporary thingy
+    radius = 2.5f;
 }
 
 void Playable::updateUniformData(){
@@ -24,7 +27,7 @@ void Playable::updateUniformData(){
 
 void Playable::update(Terrain* ground){
 	position.y = ground->getHeight(position.x, position.z);
-	position.x += 0.05f;
+	// position.x += 0.05f;
 
 	selection_ring->setPosition(glm::vec3(position.x, position.y + 0.5, position.z));
 }

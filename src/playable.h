@@ -30,8 +30,12 @@ public:
 	void select();
 	void tempSelect();
 	void tempDeSelect();
+
+	float getRadius(){ return radius; }
 private:
 	void updateUniformData();
+
+	glm::vec2 move_to_position;
 
 	// Not a complete list
 	enum class PlayableAttribute { MASSIVE, ARMORED, ARMY, WORKER, FLYING, INVULNERABLE, MECHANICAL };

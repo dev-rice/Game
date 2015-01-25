@@ -293,6 +293,19 @@ int Level::getMapWidth(){
     return ground->getWidth();
 }
 
+void Level::selectUnit(glm::vec3 click){
+    for(int i = 0; i < units.size(); ++i){
+        glm::vec3 unit_pos = units[i]->getPosition();
+
+        float x_diff = abs(unit_pos.x - click.x);
+        float y_diff = abs(unit_pos.y - click.y);
+
+        if( sqrt(x_diff*x_diff + y_diff*y_diff) < units[i]->getRadius()){
+            units[i]->select();
+        }
+    }
+}
+
 void Level::selectUnits(glm::vec3 coord_a, glm::vec3 coord_b){
     float left = std::min(coord_a.x, coord_b.x);
     float right = std::max(coord_a.x, coord_b.x);

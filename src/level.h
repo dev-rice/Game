@@ -7,6 +7,7 @@
 #include <vector>
 #include <string>
 #include <cmath>
+#include <math.h>       // sqrt
 #include <algorithm>    // std::max
 
 #include "drawable.h"
@@ -47,6 +48,7 @@ public:
     Terrain* getTerrain() {return ground;}
     glm::mat4 getProjection() {return proj_matrix;}
 
+    void selectUnit(glm::vec3);
     void selectUnits(glm::vec3, glm::vec3);
     void tempSelectUnits(glm::vec3, glm::vec3);
 
