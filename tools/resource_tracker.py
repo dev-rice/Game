@@ -40,8 +40,8 @@ class Tracker:
                 if match and match.group(0) not in self.StaticScrapedUniqueTexturesList:
                     self.StaticScrapedUniqueTexturesList.append((match.group(0), file_name))
 
-            if ".obj" in line:
-                match = re.search('[A-Za-z_]+\.obj', line)
+            if ".dae" in line:
+                match = re.search('[A-Za-z_]+\.dae', line)
                 if match and match.group(0) not in self.StaticScrapedUniqueModelsList:
                     self.StaticScrapedUniqueModelsList.append((match.group(0), file_name))
 
@@ -51,7 +51,7 @@ class Tracker:
                     if ".png" in file and file not in self.StaticDetectedUniqueTexturesList:
                         self.StaticDetectedUniqueTexturesList.append(file)
 
-                    if ".obj" in file and file not in self.StaticDetectedUniqueModelsList:
+                    if ".dae" in file and file not in self.StaticDetectedUniqueModelsList:
                         self.StaticDetectedUniqueModelsList.append(file)
 
     def compareTextures(self):
