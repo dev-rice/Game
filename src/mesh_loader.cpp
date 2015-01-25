@@ -349,7 +349,7 @@ void MeshLoader::loadMeshFromDAE(const char* filename){
         writeFinalArrays(vertices, elements);
 
         float delta_time = glfwGetTime() - start_time;
-        Debug::info("Collada mesh loaded from %s in %.5f seconds.\n", filename, delta_time);
+        Debug::info("Collada mesh loaded from '%s' in %.5f seconds.\n", filename, delta_time);
     }
 }
 
