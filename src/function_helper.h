@@ -22,6 +22,7 @@ private:
     FunctionHelper();
 
     void testFunction();
+    void exitProgram();
 
     std::map<std::string, function> lookup_table;
 };

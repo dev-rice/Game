@@ -16,6 +16,7 @@ FunctionHelper* FunctionHelper::getInstance(){
 
 FunctionHelper::FunctionHelper(){
     lookup_table["testFunction"] = &FunctionHelper::testFunction;
+    lookup_table["exitProgram"] = &FunctionHelper::exitProgram;
 }
 
 void FunctionHelper::runFunction(std::string function_name){
@@ -31,4 +32,8 @@ void FunctionHelper::runFunction(std::string function_name){
 
 void FunctionHelper::testFunction(){
     Profile::getInstance()->toggleVsync();
+}
+
+void FunctionHelper::exitProgram(){
+    Window::getInstance()->requestClose();
 }

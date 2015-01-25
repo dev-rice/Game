@@ -97,7 +97,7 @@ void UIButton::draw(){
         left_image->draw();
         right_image->draw();
 
-        text_renderer->print(x_pixels + width_pixels/2 - button_text_width, y_pixels, "%s", button_text.c_str());
+        text_renderer->print(x_pixels + width_pixels/2 - button_text_width/2, y_pixels, "%s", button_text.c_str());
 
          glm::vec2 gl_mouse_position = Mouse::getInstance()->getGLPosition();
         if(gl_mouse_position.x < position.x + width &&

@@ -10,10 +10,10 @@
             <anchor>centered</anchor>
             <offset>0</offset>
         </y>
-        <width>100</width>
+        <width>250</width>
     </constraints>
 
-    <text>OK</text>
-    <function>testFunction</function>
+    <text>Exit Program</text>
+    <function>exitProgram</function>
 
 </layout>
