@@ -36,7 +36,7 @@ vec4 emissive;
 vec3 map_surface_normal;
 
 const bool SHADOWS = true;
-const bool NORMAL_DEBUG = true;
+const bool NORMAL_DEBUG = false;
 
 vec4 lightFragment(vec3 light_vector, vec3 light_color, float light_power){
     float intensity = light_power / (pow(light_vector.x, 2) + pow(light_vector.y,
