@@ -65,6 +65,8 @@ private:
     std::map<int, int> vertex_to_unique;
 
     const char* filename;
+
+    bool flat_shading;
 };
 
 #endif
