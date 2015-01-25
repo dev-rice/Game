@@ -439,7 +439,7 @@ void MeshLoader::getVerticesAndElements(pugi::xml_node geometry_node, std::vecto
 
     std::string mesh_vertex_source_id = mesh_id + "-positions";
     std::string mesh_normal_source_id = mesh_id + "-normals";
-    std::string mesh_uv_source_id = mesh_id + "-map-0";
+    std::string mesh_uv_source_id = mesh_id + "-map";
 
     // The first child in a geometry node contains all the data
     // relevant to the mesh.
@@ -510,10 +510,16 @@ void MeshLoader::getVerticesAndElements(pugi::xml_node geometry_node, std::vecto
             // See if this combination of position, normal, uv, has
             // been used before. If not, make a new vertex and add
             // the corresponding number to the actual faces.
+            int position_index = faces[i];
+            int normal_index = faces[i + 1];
+            int texcoord_index = faces[i + 2];
             Vertex vertex;
-            vertex.position = positions[faces[i]];
-            vertex.normal = normals[faces[i]];
-            vertex.texcoord = texcoords[faces[i]];
+            vertex.position = positions[position_index];
+            vertex.normal = normals[normal_index];
+
+            glm::vec2 adjusted_texcoord = texcoords[texcoord_index];
+            adjusted_texcoord.y = 1.0f - adjusted_texcoord.y;
+            vertex.texcoord = adjusted_texcoord;
 
             vertices.push_back(vertex);
             elements.push_back(vertices.size() - 1);

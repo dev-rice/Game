@@ -20,8 +20,8 @@ Level::Level(const char* filename){
     camera = new Camera(glm::vec3(0.0f, 40.0f, 40.0f), glm::vec3(1.04f, 0.0f, 0.0f));
     // camera = new Camera(glm::vec3(7.39f, 2.91f, 1.13f), glm::vec3(0.07, 1.2, 0.0));
 
-    doodad_shader = ShaderLoader::loadShaderProgram("shaders/terrain.vs",
-        "shaders/terrain.fs");
+    doodad_shader = ShaderLoader::loadShaderProgram("shaders/doodad.vs",
+        "shaders/doodad.fs");
 
     particle_shader = ShaderLoader::loadShaderProgram("shaders/particle.vs",
         "shaders/particle.fs");
