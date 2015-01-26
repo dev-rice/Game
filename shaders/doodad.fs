@@ -38,10 +38,40 @@ vec3 map_surface_normal;
 const bool SHADOWS = true;
 const bool NORMAL_DEBUG = false;
 
-const vec2 poisson_disk[4] = vec2[]( vec2( -0.94201624, -0.39906216 ),
-                                     vec2( 0.94558609, -0.76890725 ),
-                                     vec2( -0.094184101, -0.92938870 ),
-                                     vec2( 0.34495938, 0.29387760 ) );
+// const int poisson_samples = 4;
+// const vec2 poisson_disk[4] = vec2[]( vec2( -0.94201624, -0.39906216 ),
+//                                      vec2( 0.94558609, -0.76890725 ),
+//                                      vec2( -0.094184101, -0.92938870 ),
+//                                      vec2( 0.34495938, 0.29387760 ) );
+
+const int poisson_samples = 8;
+const vec2 poisson_disk[8] = vec2[]( vec2(-0.1720364f, -0.2151852f),
+                                     vec2(0.3053397f, 0.3449444f),
+                                     vec2(0.345497f, -0.6371536f),
+                                     vec2(-0.3129719f, -0.6846723f),
+                                     vec2(-0.871155f, -0.4244208f),
+                                     vec2(-0.564598f, -0.08805853f),
+                                     vec2(0.4264781f, -0.07169557f),
+                                     vec2(-0.3741353f, 0.45067f));
+
+// const int poisson_samples = 16;
+// const vec2 poisson_disk[16] = vec2[]( vec2(-0.1720364f, -0.2151852f),
+//                                       vec2(0.3053397f, 0.3449444f),
+//                                       vec2(0.345497f, -0.6371536f),
+//                                       vec2(-0.3129719f, -0.6846723f),
+//                                       vec2(-0.871155f, -0.4244208f),
+//                                       vec2(-0.564598f, -0.08805853f),
+//                                       vec2(0.4264781f, -0.07169557f),
+//                                       vec2(-0.3741353f, 0.45067f),
+//                                       vec2(0.8592183f, -0.1411734f),
+//                                       vec2(0.5787006f, 0.731523f),
+//                                       vec2(0.08467636f, 0.8623562f),
+//                                       vec2(-0.7691356f, 0.2981086f),
+//                                       vec2(-0.4271979f, 0.8866745f),
+//                                       vec2(0.05698008f, -0.9206058f),
+//                                       vec2(0.7499817f, -0.5811188f),
+//                                       vec2(0.8284409f, 0.3923607f));
+
 
 vec4 lightFragment(vec3 light_vector, vec3 light_color, float light_power){
     float intensity = light_power / (pow(light_vector.x, 2) + pow(light_vector.y,
@@ -78,12 +108,12 @@ float getShadowFactor(){
         (shadow_coord.y >= 0.0) && (shadow_coord.y <= 1.0);
 
     float visibility = 1.0;
-    for (int i=0;i<4;i++){
+    for (int i = 0; i < poisson_samples; i++){
         float light_depth = texture(shadow_map, shadow_coord.xy + poisson_disk[i]/700.0).z;
         float current_depth = shadow_coord.z - bias;
 
         if ((light_depth < current_depth) && in_shadow_map && !is_back_face){
-            visibility -= 0.2;
+            visibility -= 0.8 / poisson_samples;
         }
     }
 
