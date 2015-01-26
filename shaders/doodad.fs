@@ -38,6 +38,11 @@ vec3 map_surface_normal;
 const bool SHADOWS = true;
 const bool NORMAL_DEBUG = false;
 
+const vec2 poisson_disk[4] = vec2[]( vec2( -0.94201624, -0.39906216 ),
+                                     vec2( 0.94558609, -0.76890725 ),
+                                     vec2( -0.094184101, -0.92938870 ),
+                                     vec2( 0.34495938, 0.29387760 ) );
+
 vec4 lightFragment(vec3 light_vector, vec3 light_color, float light_power){
     float intensity = light_power / (pow(light_vector.x, 2) + pow(light_vector.y,
          2) + pow(light_vector.z, 2));
@@ -64,34 +69,22 @@ vec4 lightFragment(vec3 light_vector, vec3 light_color, float light_power){
 float getShadowFactor(){
     // Shadows
     float bias = 0.005;
-    float visibility;
 
     float angle = dot(normalize(map_surface_normal),
         normalize(lights[0].light_to_surface));
 
-    vec4 n_pixel  = textureOffset(shadow_map, shadow_coord.xy, ivec2(0, 1));
-    vec4 s_pixel  = textureOffset(shadow_map, shadow_coord.xy, ivec2(0, -1));
-    vec4 e_pixel  = textureOffset(shadow_map, shadow_coord.xy, ivec2(1, 0));
-    vec4 w_pixel  = textureOffset(shadow_map, shadow_coord.xy, ivec2(-1, 0));
-    vec4 nw_pixel = textureOffset(shadow_map, shadow_coord.xy, ivec2(-1,-1));
-    vec4 ne_pixel = textureOffset(shadow_map, shadow_coord.xy, ivec2( 1,-1));
-    vec4 sw_pixel = textureOffset(shadow_map, shadow_coord.xy, ivec2(-1, 1));
-    vec4 se_pixel = textureOffset(shadow_map, shadow_coord.xy, ivec2( 1, 1));
-    vec4 middle_pixel = texture(shadow_map, shadow_coord.xy);
-
-    vec4 blurred_pixel = (n_pixel + s_pixel + e_pixel + w_pixel + nw_pixel +
-        ne_pixel + sw_pixel + se_pixel + middle_pixel) / 9.0;
-
-    vec4 shadow_texture = blurred_pixel;
-
+    bool is_back_face = angle < 0.2;
     bool in_shadow_map = (shadow_coord.x >= 0.0) && (shadow_coord.x <= 1.0) &&
-    (shadow_coord.y >= 0.0) && (shadow_coord.y <= 1.0);
-    float light_depth = shadow_texture.z;
-    float current_depth = shadow_coord.z - bias;
-    if ((light_depth  <=  current_depth) && in_shadow_map && (angle > 0.2)){
-        visibility = 0.2;
-    } else {
-        visibility = 1.0;
+        (shadow_coord.y >= 0.0) && (shadow_coord.y <= 1.0);
+
+    float visibility = 1.0;
+    for (int i=0;i<4;i++){
+        float light_depth = texture(shadow_map, shadow_coord.xy + poisson_disk[i]/700.0).z;
+        float current_depth = shadow_coord.z - bias;
+
+        if ((light_depth < current_depth) && in_shadow_map && !is_back_face){
+            visibility -= 0.2;
+        }
     }
 
     return visibility;
