@@ -29,13 +29,14 @@ public:
     Drawable(Mesh*, GLuint);
     Drawable(Mesh*, GLuint, glm::vec3, GLfloat);
 
-    void draw();
+    virtual void draw();
 
     void rotateGlobalEuler(GLfloat x, GLfloat y, GLfloat z);
     void rotateGlobalEuler(glm::vec3 rotation);
 
     void rotateAxisAngle(glm::vec3 axis, GLfloat angle);
 
+    void setPosition(GLfloat x, GLfloat y, GLfloat z){ position = glm::vec3(z, y, z); }
     void setPosition(glm::vec3 p) {position = p;}
     void setScale(GLfloat s) {scale = s;}
     void setShader(GLuint);

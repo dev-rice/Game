@@ -38,6 +38,7 @@ GameView::GameView(Level* level){
     menu_key_state = false;
 
     mouse_count = 0;
+    left_mouse_button_unclick = false;
 
     frame_count = 0;
     average_frame_time = 0.0f;
@@ -90,14 +91,29 @@ void GameView::update(){
     menu->draw();
 
     // draw selection rectangle here and change the cursor based on amount of dragging
+    Camera* camera = level->getCamera();
+    glm::mat4 proj_matrix = level->getProjection();
+    glm::vec3 init = Mouse::getInstance()->getWorldPositionFromPoint(initial_left_click_position, camera, proj_matrix);
+    glm::vec3 fina = Mouse::getInstance()->getWorldPositionFromPoint(final_left_click_position, camera, proj_matrix);
+
     bool dragged_x = fabs(initial_left_click_position.x - final_left_click_position.x) > 0.05;
     bool dragged_y = fabs(initial_left_click_position.y - final_left_click_position.y) > 0.05;
 
     if(mouse_count > 1 && !Mouse::getInstance()->isHovering() && (dragged_x || dragged_y)){
         // draw from initial_left_click_position to final_left_click_position
         Mouse::getInstance()->setCursorSprite(Mouse::cursorType::SELECTION);
+
+        level->tempSelectUnits(init, fina);
+
         selection_box->setGLCoordinates(initial_left_click_position, final_left_click_position);
         selection_box->draw();
+    }
+    if(left_mouse_button_unclick && !Mouse::getInstance()->isHovering() && (dragged_x || dragged_y)){
+        
+        level->selectUnits(init, fina);
+
+    } else if(left_mouse_button_unclick && !Mouse::getInstance()->isHovering()){
+        level->selectUnit(Mouse::getInstance()->getWorldPosition(camera, proj_matrix));
     }
 
     float frame_time = glfwGetTime() - start_time;
@@ -128,8 +144,8 @@ void GameView::update(){
     }
 
     // Calculating the mouse vector
-    Camera* camera = level->getCamera();
-    glm::mat4 proj_matrix = level->getProjection();
+    // Camera* camera = level->getCamera();
+    // glm::mat4 proj_matrix = level->getProjection();
 
     glm::vec3 mouse_point = Mouse::getInstance()->getWorldPosition(camera,
         proj_matrix);
@@ -229,6 +245,11 @@ void GameView::handleInputs(){
         window->requestClose();
     }
 
+    // Left mouse button handling
+    if(left_mouse_button_unclick){
+        left_mouse_button_unclick = false;
+    }
+
     if(glfwGetMouseButton(glfw_window, GLFW_MOUSE_BUTTON_LEFT)){
         // Left mouse button
         if(mouse_count == 0){
@@ -239,11 +260,28 @@ void GameView::handleInputs(){
         mouse_count++;
     } else if(mouse_count != 0){
         mouse_count = 0;
+        left_mouse_button_unclick = true;
+    }
+
+    // right mouse button handling
+    if(right_mouse_button_unclick){
+        right_mouse_button_unclick = false;
     }
 
     if(glfwGetMouseButton(glfw_window, GLFW_MOUSE_BUTTON_RIGHT)){
         // Right mouse button
         // printf("Clicked right mouse button\n");
+        if(!right_mouse_button_click){
+            Camera* camera = level->getCamera();
+            glm::mat4 proj_matrix = level->getProjection();
+
+            level->issueOrder(Mouse::getInstance()->getWorldPosition(camera, proj_matrix));
+        }
+
+        right_mouse_button_click = true;
+    } else if(right_mouse_button_click){
+        right_mouse_button_click = false;
+        right_mouse_button_unclick = true;
     }
 
 

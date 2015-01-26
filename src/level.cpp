@@ -62,7 +62,23 @@ Level::Level(const char* filename){
     glm::vec3 playable_position = glm::vec3(0.0f, 0.0f, 0.0f);
     float playable_scale = 1.0f;
 
-    units.push_back(new Playable(playable_mesh, playable_shader, playable_position, playable_scale));
+    Playable* temp = new Playable(playable_mesh, playable_shader, playable_position, playable_scale);
+    drawables.push_back(temp);
+    units.push_back(temp);
+    selected_units.push_back(temp);
+
+    // extra units
+    playable_position = glm::vec3(4.0f, 0.0f, 0.0f);
+    temp = new Playable(playable_mesh, playable_shader, playable_position, playable_scale);
+    drawables.push_back(temp);
+    units.push_back(temp);
+    selected_units.push_back(temp);
+
+    playable_position = glm::vec3(4.0f, 0.0f, 4.0f);
+    temp = new Playable(playable_mesh, playable_shader, playable_position, playable_scale);
+    drawables.push_back(temp);
+    units.push_back(temp);
+    selected_units.push_back(temp);
 
 
 }
@@ -72,15 +88,25 @@ void Level::draw(){
     // camera location / position
     updateGlobalUniforms();
 
+    // make sure the selected units are good to go
+    std::vector<Playable*> new_selected_units;
+    for(int i = 0; i < selected_units.size(); ++i){
+        if(selected_units[i]->isSelected()){
+            new_selected_units.push_back(selected_units[i]);
+        }
+    }
+    selected_units.clear();
+    selected_units = new_selected_units;
+
+    // update all the units
+    for (int i = 0; i < units.size(); ++i){
+       units[i]->update(ground, units);
+    }
+
     // Draw all the drawables
     for (int i = 0; i < drawables.size(); ++i){
         drawables[i]->draw();
     }
-
-    // for (int i = 0; i < units.size(); ++i){
-    //     units[i]->update(ground);
-    //     units[i]->draw();
-    // }
 
     // Draw all the particle emitters
     for(int i(0); i < emitters.size(); ++i){
@@ -289,4 +315,95 @@ int Level::getMapDepth(){
 
 int Level::getMapWidth(){
     return ground->getWidth();
+}
+
+void Level::issueOrder(glm::vec3 location){
+    for(int i = 0; i < selected_units.size(); ++i){
+        selected_units[i]->setMovementTarget(glm::vec3(location.x, 0.0f, location.z));
+    }
+}
+
+void Level::selectUnit(glm::vec3 click){
+
+    std::vector<Playable*> selected_units_copy = selected_units;
+    selected_units.clear();
+
+    float nearest = FLT_MAX;
+    Playable* nearest_playable = 0;
+
+    for(int i = 0; i < units.size(); ++i){
+        glm::vec3 unit_pos = units[i]->getPosition();
+
+        float x_diff = abs(unit_pos.x - click.x);
+        float z_diff = abs(unit_pos.z - click.z);
+        float distance = sqrt(x_diff*x_diff + z_diff*z_diff);
+
+        if( distance < units[i]->getRadius() && distance < nearest){
+            nearest = distance;
+            nearest_playable = units[i];
+        } else {
+            units[i]->deSelect();
+        }
+    }
+
+    // If we found one that was clicked on and is the nearest
+    if(nearest_playable){
+        nearest_playable->select();
+        selected_units.push_back(nearest_playable);
+    } else {
+        selected_units = selected_units_copy;
+
+        for(int i = 0; i < selected_units.size(); ++i){
+            selected_units[i]->select();
+        }
+    }
+}
+
+void Level::selectUnits(glm::vec3 coord_a, glm::vec3 coord_b){
+
+    std::vector<Playable*> selected_units_copy = selected_units;
+    selected_units.clear();
+
+    float left = std::min(coord_a.x, coord_b.x);
+    float right = std::max(coord_a.x, coord_b.x);
+
+    float down = std::min(coord_a.z, coord_b.z);
+    float up = std::max(coord_a.z, coord_b.z);
+
+    for(int i = 0; i < units.size(); ++i){
+        glm::vec3 unit_pos = units[i]->getPosition();
+
+        if(left < unit_pos.x && right > unit_pos.x && down < unit_pos.z && up > unit_pos.z){
+            units[i]->select();
+            selected_units.push_back(units[i]);
+        } else {
+            units[i]->deSelect();
+        }
+    }
+
+    if(selected_units.size() == 0){
+        selected_units = selected_units_copy;
+
+        for(int i = 0; i < selected_units.size(); ++i){
+            selected_units[i]->select();
+        }
+    }
+}
+
+void Level::tempSelectUnits(glm::vec3 coord_a, glm::vec3 coord_b){
+    float left = std::min(coord_a.x, coord_b.x);
+    float right = std::max(coord_a.x, coord_b.x);
+
+    float down = std::min(coord_a.z, coord_b.z);
+    float up = std::max(coord_a.z, coord_b.z);
+
+    for(int i = 0; i < units.size(); ++i){
+        glm::vec3 unit_pos = units[i]->getPosition();
+
+        if(left < unit_pos.x && right > unit_pos.x && down < unit_pos.y && up > unit_pos.y){
+            units[i]->tempSelect();
+        } else {
+            units[i]->tempDeSelect();
+        }
+    }
 }

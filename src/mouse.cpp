@@ -105,15 +105,16 @@ bool Mouse::isHovering(){
     return hovering;
 }
 
-glm::vec3 Mouse::getWorldPosition(Camera* camera, glm::mat4& proj){
+// GO AWAY
+glm::vec3 Mouse::getWorldPositionFromPoint(glm::vec2 screen_point, Camera* camera, glm::mat4& proj){
     glm::mat4 view = camera->getViewMatrix();
 
-    glm::vec2 gl_mouse = Mouse::getInstance()->getGLPosition();
+    glm::vec2 gl_mouse = screen_point;
     glm::vec3 world_mouse = glm::vec3(glm::inverse(proj) *
-    glm::vec4(gl_mouse, -1.0, 1.0));
+        glm::vec4(gl_mouse, -1.0, 1.0));
     world_mouse.z = -1.0;
     world_mouse = glm::vec3(glm::inverse(view) *
-    glm::vec4(world_mouse, 0.0));
+        glm::vec4(world_mouse, 0.0));
     world_mouse = glm::normalize(world_mouse);
 
     // To find the point on the plane of clicking (defined by mouse_plane)
@@ -128,4 +129,9 @@ glm::vec3 Mouse::getWorldPosition(Camera* camera, glm::mat4& proj){
     glm::vec3 mouse_point = d * l + l0;
 
     return mouse_point;
+}
+
+glm::vec3 Mouse::getWorldPosition(Camera* camera, glm::mat4& proj){
+    return getWorldPositionFromPoint(Mouse::getInstance()->getGLPosition(),
+        camera, proj);
 }

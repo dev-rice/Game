@@ -30,8 +30,12 @@ private:
 
     // Mouse controls
     int mouse_count;
+    bool left_mouse_button_unclick;
     glm::vec2 initial_left_click_position;
     glm::vec2 final_left_click_position;
+
+    bool right_mouse_button_click;
+    bool right_mouse_button_unclick;
 
     Window* window;
     GLFWwindow* glfw_window;

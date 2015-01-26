@@ -7,6 +7,10 @@ UIImage* UIButton::center_image;
 UIImage* UIButton::left_image;
 UIImage* UIButton::right_image;
 
+UIImage* UIButton::center_hover_image;
+UIImage* UIButton::left_hover_image;
+UIImage* UIButton::right_hover_image;
+
 UIButton::UIButton(GLuint shader_program) : UIDrawable(shader_program, TextureLoader::loadPink()){
 
 }
@@ -33,6 +37,9 @@ void UIButton::loadFromXML(std::string filepath){
     text_renderer = new TextRenderer("res/fonts/inconsolata_bold_font.png", 28);
     button_text = layout_node.child_value("text");
 
+    // Get button text size
+    button_text_width = button_text.length()*16;
+
     // Parse constraints
     height_pixels = 32;
 
@@ -49,6 +56,18 @@ void UIButton::loadFromXML(std::string filepath){
    
     if(right_image == NULL){
         right_image = new UIImage(shader, TextureLoader::loadTextureFromFile("res/textures/button_right.png", GL_NEAREST));
+    }
+
+    if(center_hover_image == NULL){
+        center_hover_image = new UIImage(shader, TextureLoader::loadTextureFromFile("res/textures/button_center_hover.png", GL_NEAREST));
+    }
+
+    if(right_hover_image == NULL){
+        right_hover_image = new UIImage(shader, TextureLoader::loadTextureFromFile("res/textures/button_right_hover.png", GL_NEAREST));
+    }
+
+    if(left_hover_image == NULL){
+        left_hover_image = new UIImage(shader, TextureLoader::loadTextureFromFile("res/textures/button_left_hover.png", GL_NEAREST));
     }
 
     // Convert all pixel coords into screen
@@ -77,6 +96,40 @@ void UIButton::draw(){
         center_image->draw();
         left_image->draw();
         right_image->draw();
+
+        text_renderer->print(x_pixels + width_pixels/2 - button_text_width/2, y_pixels, "%s", button_text.c_str());
+
+         glm::vec2 gl_mouse_position = Mouse::getInstance()->getGLPosition();
+        if(gl_mouse_position.x < position.x + width &&
+           gl_mouse_position.x > position.x - width &&
+           gl_mouse_position.y < position.y + height &&
+           gl_mouse_position.y > position.y - height){
+
+            center_hover_image->setPositionAndDimensions(x_pixels + 15, y_pixels, width_pixels - 30, 32);
+            left_hover_image->setPositionAndDimensions(x_pixels - 1, y_pixels, 17, 32);
+            right_hover_image->setPositionAndDimensions(x_pixels + width_pixels - 16, y_pixels, 17, 32);
+            
+            center_hover_image->draw();
+            left_hover_image->draw();
+            right_hover_image->draw();
+
+            bool clicking = glfwGetMouseButton(Window::getInstance()->getGLFWWindow(), GLFW_MOUSE_BUTTON_LEFT);
+            if(clicking && !has_clicked){
+
+                // Run the extended execution of a potential child class
+                onClick();
+
+                // Alert the parent of the notification
+                parent->receiveNotification(this);
+
+                FunctionHelper::getInstance()->runFunction(functionName);
+
+                has_clicked = true;
+            } else if(!clicking){
+                has_clicked = false;
+            }
+
+        }
 
     }
 
