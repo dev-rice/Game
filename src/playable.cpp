@@ -68,6 +68,10 @@ void Playable::addMovementTarget(glm::vec3 pos){
         movement_list.clear();
         movement_list = new_stack;
     }
+
+    if(movement_list.size() == 0){
+        movement_list.push_back(position);
+    }
     
     movement_list.push_back(pos);
 }
@@ -113,7 +117,6 @@ void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
 
                 // Apply the movement to the other unit IF they aren't moving
                 if( ! otherUnits[i]->isMoving()){
-                    otherUnits[i]->addMovementTarget(otherUnits[i]->getPosition());
                     otherUnits[i]->addMovementTarget(glm::vec3(push_to_x, 0.0f, push_to_z));
                 }
             }
