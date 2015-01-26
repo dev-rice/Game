@@ -44,13 +44,17 @@ void Playable::addMovementTarget(glm::vec3 pos){
     movement_stack.push(pos);
 }
 
-void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
-
+bool Playable::isMoving(){
     float x_delta = abs(move_to_position.x - position.x);
     float z_delta = abs(move_to_position.z - position.z);
 
+    return (sqrt(x_delta*x_delta + z_delta*z_delta) > 0.01);
+}
+
+void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
+
     // If THIS is not at it's target position
-    if( sqrt(x_delta*x_delta + z_delta*z_delta) > 0.01){
+    if(isMoving()){
 
         // Calculate where THIS intends to move
         float move_to_x = position.x + sin(current_direction)*speed;
@@ -59,11 +63,14 @@ void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
         // Check all the other units
         for(int i = 0; i < otherUnits.size(); ++i){
             // Find the x and z difference between THIS and other unit
-            x_delta = abs(otherUnits[i]->getPosition().x - move_to_x);
-            z_delta = abs(otherUnits[i]->getPosition().z - move_to_z);
+            float x_delta = otherUnits[i]->getPosition().x - move_to_x;
+            float z_delta = otherUnits[i]->getPosition().z - move_to_z;
+
+            float abs_x_delta = abs(x_delta);
+            float abs_z_delta = abs(z_delta);
 
             // If it's not THIS and if THIS moves too close
-            if(otherUnits[i] != this && sqrt(x_delta*x_delta + z_delta*z_delta) < otherUnits[i]->getRadius() + radius){
+            if(otherUnits[i] != this && sqrt(abs_x_delta*abs_x_delta + abs_z_delta*abs_z_delta) < otherUnits[i]->getRadius() + radius){
                 // Push the other unit
 
                 // Get the push direction
@@ -76,8 +83,11 @@ void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
                 float push_to_x = move_to_x + sin(theta)*(other_radius + radius);
                 float push_to_z = move_to_z + cos(theta)*(other_radius + radius);
 
-                // Apply the movement to the other unit
-                otherUnits[i]->addMovementTarget(glm::vec3(push_to_x, 0.0f, push_to_z));
+                // Apply the movement to the other unit IF they aren't moving
+                if( ! otherUnits[i]->isMoving()){
+                    otherUnits[i]->addMovementTarget(otherUnits[i]->getPosition());
+                    otherUnits[i]->addMovementTarget(glm::vec3(push_to_x, 0.0f, push_to_z));
+                }
                 // otherUnits[i]->setPosition(push_to_x, ground->getHeight(push_to_x, push_to_z), push_to_z);
             }
         }
@@ -86,11 +96,11 @@ void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
         position.x = move_to_x;
         position.z = move_to_z;
         position.y = ground->getHeight(position.x, position.z);
-        selection_ring->setPosition(glm::vec3(position.x, position.y + 0.5, position.z));
+        // selection_ring->setPosition(glm::vec3(position.x, position.y + 0.5, position.z));
+        selection_ring->setPosition(glm::vec3(move_to_position.x, position.y + 0.5, move_to_position.z));
         
     } else if(movement_stack.size() > 0){
     // We have more moves to make
-
         setMovementTarget(movement_stack.top());
         movement_stack.pop();
     }

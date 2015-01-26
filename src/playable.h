@@ -36,6 +36,7 @@ public:
 	void setMovementTarget(glm::vec3);
 	void addMovementTarget(glm::vec3);
 
+	bool isMoving();
 	bool isSelected(){ return selected; }
 
 	float getRadius(){ return radius; }
