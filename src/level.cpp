@@ -59,28 +59,16 @@ Level::Level(const char* filename){
     Mesh *playable_mesh = new Mesh("res/models/demo_unit.dae");
     GLuint playable_shader = ShaderLoader::loadShaderProgram("shaders/doodad.vs",
         "shaders/doodad.fs");
-    glm::vec3 playable_position = glm::vec3(0.0f, 0.0f, 0.0f);
     float playable_scale = 1.0f;
 
-    Playable* temp = new Playable(playable_mesh, playable_shader, playable_position, playable_scale);
-    drawables.push_back(temp);
-    units.push_back(temp);
-    selected_units.push_back(temp);
-
-    // extra units
-    playable_position = glm::vec3(4.0f, 0.0f, 0.0f);
-    temp = new Playable(playable_mesh, playable_shader, playable_position, playable_scale);
-    drawables.push_back(temp);
-    units.push_back(temp);
-    selected_units.push_back(temp);
-
-    playable_position = glm::vec3(4.0f, 0.0f, 4.0f);
-    temp = new Playable(playable_mesh, playable_shader, playable_position, playable_scale);
-    drawables.push_back(temp);
-    units.push_back(temp);
-    selected_units.push_back(temp);
-
-
+    for(int i = 0; i < 10; ++i){
+        for(int j = 0; j < 20; ++j){
+            glm::vec3 playable_position = glm::vec3(2.0f*i, 0.0f, 2.0f*j);
+            Playable* temp = new Playable(playable_mesh, playable_shader, playable_position, playable_scale);
+            drawables.push_back(temp);
+            units.push_back(temp);
+        }
+    }
 }
 
 void Level::draw(){
