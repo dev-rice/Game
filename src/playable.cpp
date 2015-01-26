@@ -175,8 +175,6 @@ void Playable::draw(){
     bindTextures();
 
     // Draw the geometry
-    
-
     mesh->draw();
 }
 

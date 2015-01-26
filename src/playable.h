@@ -39,6 +39,7 @@ public:
 
 	bool isMoving();
 	bool isSelected(){ return selected; }
+	bool isTempSelected(){ return temp_selected; }
 
 	float getRadius(){ return radius; }
 private:

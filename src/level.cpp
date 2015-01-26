@@ -408,10 +408,9 @@ void Level::selectUnits(glm::vec3 coord_a, glm::vec3 coord_b){
     float up = std::max(coord_a.z, coord_b.z);
 
     for(int i = 0; i < units.size(); ++i){
-        glm::vec3 unit_pos = units[i]->getPosition();
-
-        if(left < unit_pos.x && right > unit_pos.x && down < unit_pos.z && up > unit_pos.z){
+        if(units[i]->isTempSelected()){
             units[i]->select();
+            units[i]->tempDeSelect();
             selected_units.push_back(units[i]);
         } else {
             units[i]->deSelect();
@@ -436,8 +435,9 @@ void Level::tempSelectUnits(glm::vec3 coord_a, glm::vec3 coord_b){
 
     for(int i = 0; i < units.size(); ++i){
         glm::vec3 unit_pos = units[i]->getPosition();
+        float radius = units[i]->getRadius();
 
-        if(left < unit_pos.x && right > unit_pos.x && down < unit_pos.y && up > unit_pos.y){
+        if(left - radius < unit_pos.x && right + radius > unit_pos.x && down - radius < unit_pos.z && up + radius > unit_pos.z){
             units[i]->tempSelect();
         } else {
             units[i]->tempDeSelect();
