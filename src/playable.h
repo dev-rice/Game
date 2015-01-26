@@ -52,8 +52,7 @@ private:
 	// Not a complete list
 	enum class PlayableAttribute { MASSIVE, ARMORED, ARMY, WORKER, FLYING, INVULNERABLE, MECHANICAL };
 
-	// Needs to be static
-	Doodad* selection_ring;
+	static Doodad* selection_ring;
 
 	float speed;
 	float acceleration;

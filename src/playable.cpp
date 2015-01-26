@@ -3,17 +3,20 @@
 
 #include "playable.h"
 
+Doodad* Playable::selection_ring;
+
 Playable::Playable() : Drawable(){
 
 }
 
 Playable::Playable(Mesh* mesh, GLuint shader_program, glm::vec3 position, GLfloat scale) : Drawable(mesh, shader_program, position, scale) {
 
-	Mesh* selection_ring_mesh = new Mesh("res/models/selection_ring.dae");
-
-	selection_ring = new Doodad(selection_ring_mesh, shader_program, position, 1.0f);
-	selection_ring->setEmissive(TextureLoader::loadTextureFromFile("res/textures/selection_ring.png", GL_LINEAR));
-    selection_ring->rotateGlobalEuler(M_PI/2.0f, 0.0f, 0.0f);
+    if(! selection_ring){
+    	Mesh* selection_ring_mesh = new Mesh("res/models/selection_ring.dae");
+    	selection_ring = new Doodad(selection_ring_mesh, shader_program, position, 1.0f);
+    	selection_ring->setEmissive(TextureLoader::loadTextureFromFile("res/textures/selection_ring.png", GL_LINEAR));
+        selection_ring->rotateGlobalEuler(M_PI/2.0f, 0.0f, 0.0f);
+    }
 
 	selected = false;
     temp_selected = 0;
@@ -22,7 +25,7 @@ Playable::Playable(Mesh* mesh, GLuint shader_program, glm::vec3 position, GLfloa
     rotateGlobalEuler(M_PI/2.0f, 0.0f, 0.0f);
 
     // Temporary stuff until XML parsing is ready
-    radius = 1.5f;
+    radius = 2.0f;
     speed = 0.05f;
 
     move_to_position = position;
@@ -99,22 +102,20 @@ void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
                     otherUnits[i]->addMovementTarget(otherUnits[i]->getPosition());
                     otherUnits[i]->addMovementTarget(glm::vec3(push_to_x, 0.0f, push_to_z));
                 }
-                // otherUnits[i]->setPosition(push_to_x, ground->getHeight(push_to_x, push_to_z), push_to_z);
             }
         }
 
         // Apply all the position changes
         position.x = move_to_x;
-        position.z = move_to_z;
-        position.y = ground->getHeight(position.x, position.z);
-        selection_ring->setPosition(glm::vec3(position.x, position.y + 0.5, position.z));
-        // selection_ring->setPosition(glm::vec3(move_to_position.x, position.y + 0.5, move_to_position.z));
-        
+        position.z = move_to_z;    
+
     } else if(movement_stack.size() > 0){
     // We have more moves to make
         setMovementTarget(movement_stack.top());
         movement_stack.pop();
-    }
+    } 
+
+    position.y = ground->getHeight(position.x, position.z);
 }
 
 
@@ -123,6 +124,7 @@ void Playable::draw(){
     glEnable(GL_DEPTH_TEST);
 
     if(selected || temp_selected ){
+        selection_ring->setPosition(glm::vec3(position.x, position.y + 0.5, position.z));
     	selection_ring->draw();
     }
     
