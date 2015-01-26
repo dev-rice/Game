@@ -319,7 +319,7 @@ int Level::getMapWidth(){
 
 void Level::issueOrder(glm::vec3 location){
     for(int i = 0; i < selected_units.size(); ++i){
-        selected_units[i]->setMovementTarget(glm::vec3(location.x, 0.0f, location.z));
+        selected_units[i]->setMovementTargetAndClearStack(glm::vec3(location.x, 0.0f, location.z));
     }
 }
 

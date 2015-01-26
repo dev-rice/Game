@@ -34,6 +34,7 @@ public:
 	void tempDeSelect();
 
 	void setMovementTarget(glm::vec3);
+	void setMovementTargetAndClearStack(glm::vec3);
 	void addMovementTarget(glm::vec3);
 
 	bool isMoving();

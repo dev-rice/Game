@@ -33,6 +33,13 @@ void Playable::updateUniformData(){
 	glUniform1f(glGetUniformLocation(shader_program, "scale"), scale);
 }
 
+void Playable::setMovementTargetAndClearStack(glm::vec3 pos){
+    while(! movement_stack.empty()){
+        movement_stack.pop();
+    }
+    setMovementTarget(pos);
+}
+
 void Playable::setMovementTarget(glm::vec3 pos){
     move_to_position = pos;
 
