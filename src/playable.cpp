@@ -4,7 +4,7 @@
 #include "playable.h"
 
 Doodad* Playable::selection_ring;
-
+int Playable::max_stack_size;
 Playable::Playable() : Drawable(){
 
 }
@@ -17,6 +17,8 @@ Playable::Playable(Mesh* mesh, GLuint shader_program, glm::vec3 position, GLfloa
     	selection_ring->setEmissive(TextureLoader::loadTextureFromFile("res/textures/selection_ring.png", GL_LINEAR));
         selection_ring->rotateGlobalEuler(M_PI/2.0f, 0.0f, 0.0f);
     }
+
+    max_stack_size = 0;
 
 	selected = false;
     temp_selected = 0;
@@ -37,9 +39,7 @@ void Playable::updateUniformData(){
 }
 
 void Playable::setMovementTargetAndClearStack(glm::vec3 pos){
-    while(! movement_stack.empty()){
-        movement_stack.pop();
-    }
+    movement_list.clear();
     setMovementTarget(pos);
 }
 
@@ -55,7 +55,21 @@ void Playable::setMovementTarget(glm::vec3 pos){
 }
 
 void Playable::addMovementTarget(glm::vec3 pos){
-    movement_stack.push(pos);
+
+    std::vector<glm::vec3> new_stack;
+    if(movement_list.size() > 20){
+
+        for(int i = 0; i < movement_list.size(); ++i){
+            if(i % 2 != 0){
+               new_stack.push_back(movement_list[i]);
+            }
+        }
+
+        movement_list.clear();
+        movement_list = new_stack;
+    }
+    
+    movement_list.push_back(pos);
 }
 
 bool Playable::isMoving(){
@@ -109,10 +123,10 @@ void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
         position.x = move_to_x;
         position.z = move_to_z;    
 
-    } else if(movement_stack.size() > 0){
+    } else if(movement_list.size() > 0){
     // We have more moves to make
-        setMovementTarget(movement_stack.top());
-        movement_stack.pop();
+        setMovementTarget(movement_list.back());
+        movement_list.pop_back();
     } 
 
     position.y = ground->getHeight(position.x, position.z);
@@ -123,9 +137,17 @@ void Playable::draw(){
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
 
+    // if(movement_list.size() > max_stack_size){
+    //     max_stack_size = movement_list.size();
+    //     printf("New maximum size: %d\n", max_stack_size);
+    // }
+
     if(selected || temp_selected ){
+        // selection_ring->setPosition(glm::vec3(move_to_position.x, position.y + 0.5, move_to_position.z));
+    	// selection_ring->draw();
+
         selection_ring->setPosition(glm::vec3(position.x, position.y + 0.5, position.z));
-    	selection_ring->draw();
+        selection_ring->draw();
     }
     
 

@@ -44,7 +44,9 @@ public:
 private:
 	void updateUniformData();
 
-	std::stack<glm::vec3> movement_stack;
+	static int max_stack_size;
+
+	std::vector<glm::vec3> movement_list;
 
 	glm::vec3 move_to_position;
 	float current_direction;
