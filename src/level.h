@@ -55,6 +55,7 @@ public:
     void selectUnits(glm::vec3, glm::vec3);
     void tempSelectUnits(glm::vec3, glm::vec3);
 
+    float getDistance(float, float, float, float);
 
     Camera* getCamera() {return camera;}
     Shadowbuffer* getShadowbuffer(){return shadowbuffer;}

@@ -61,8 +61,8 @@ Level::Level(const char* filename){
         "shaders/doodad.fs");
     float playable_scale = 1.0f;
 
-    for(int i = 0; i < 10; ++i){
-        for(int j = 0; j < 20; ++j){
+    for(int i = 0; i < 3; ++i){
+        for(int j = 0; j < 3; ++j){
             glm::vec3 playable_position = glm::vec3(2.0f*i, 0.0f, 2.0f*j);
             Playable* temp = new Playable(playable_mesh, playable_shader, playable_position, playable_scale);
             drawables.push_back(temp);
@@ -306,10 +306,61 @@ int Level::getMapWidth(){
 }
 
 void Level::issueOrder(glm::vec3 location){
+    if(selected_units.size() == 1){
+        selected_units[0]->setMovementTargetAndClearStack(glm::vec3(location.x, 0.0f, location.z));
+        return;
+    }
+    // Get centroid of the selected units
+    float x_sum = 0.0f;
+    float z_sum = 0.0f;
+
     for(int i = 0; i < selected_units.size(); ++i){
-        selected_units[i]->setMovementTargetAndClearStack(glm::vec3(location.x, 0.0f, location.z));
+        glm::vec3 unit_pos = selected_units[i]->getPosition();
+        x_sum += unit_pos.x;
+        z_sum += unit_pos.z;
+    }
+
+    float x_center = x_sum / selected_units.size();
+    float z_center = z_sum / selected_units.size();
+
+    // find the unit furthest from the centroid
+    // this defines the magic box
+    float max_distance = 0.0f;
+
+    for(int i = 0; i < selected_units.size(); ++i){
+
+        glm::vec3 unit_pos = selected_units[i]->getPosition();
+        float distance = getDistance(unit_pos.x, unit_pos.z, x_center, z_center);
+
+        if(distance > max_distance){
+            max_distance = distance;
+        }
+    }
+
+    float click_distance = getDistance(location.x, location.z, x_center, z_center);
+
+    // Issue the appropriate order
+    for(int i = 0; i < selected_units.size(); ++i){
+
+        float x_to_move = location.x;
+        float z_to_move = location.z;
+        glm::vec3 unit_pos = selected_units[i]->getPosition();
+
+        if(click_distance > max_distance){
+            x_to_move += (unit_pos.x - x_center);
+            z_to_move += (unit_pos.z - z_center);
+        }
+
+        selected_units[i]->setMovementTargetAndClearStack(glm::vec3(x_to_move, 0.0f, z_to_move));
     }
 }
+
+float Level::getDistance(float a1, float a2, float b1, float b2){
+    float x_diff = abs(a1 - b1);
+    float z_diff = abs(a2 - b2);
+    return sqrt(x_diff*x_diff + z_diff*z_diff);
+}
+
 
 void Level::selectUnit(glm::vec3 click){
 
@@ -320,11 +371,9 @@ void Level::selectUnit(glm::vec3 click){
     Playable* nearest_playable = 0;
 
     for(int i = 0; i < units.size(); ++i){
-        glm::vec3 unit_pos = units[i]->getPosition();
 
-        float x_diff = abs(unit_pos.x - click.x);
-        float z_diff = abs(unit_pos.z - click.z);
-        float distance = sqrt(x_diff*x_diff + z_diff*z_diff);
+        glm::vec3 unit_pos = units[i]->getPosition();
+        float distance = getDistance(unit_pos.x, unit_pos.z, click.x, click.z);
 
         if( distance < units[i]->getRadius() && distance < nearest){
             nearest = distance;
