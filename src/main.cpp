@@ -26,6 +26,7 @@
 #include "debug.h"
 #include "profile.h"
 #include "window.h"
+#include "mesh_loader.h"
 
 void error_callback(int error, const char* description){
     Debug::error("GLFW Error %d: %s\n", error, description);
@@ -129,7 +130,6 @@ int main(int argc, char* argv[]) {
 
     window->setVsync(vsync);
     window->setFxaaLevel(fxaa_level);
-
 
     // Create the world
     World* world;

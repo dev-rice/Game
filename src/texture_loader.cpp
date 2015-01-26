@@ -59,7 +59,7 @@ GLuint TextureLoader::loadBlue(){
         std::vector<GLfloat> blue_pixel;
         blue_pixel.push_back(0.5f);
         blue_pixel.push_back(0.5f);
-        blue_pixel.push_back(1.0);
+        blue_pixel.push_back(1.0f);
         blue_pixel.push_back(1.0f);
 
         TextureLoader::blue = TextureLoader::loadTextureFromPixel(blue_pixel);
