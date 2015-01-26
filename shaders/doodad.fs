@@ -38,6 +38,11 @@ vec3 map_surface_normal;
 const bool SHADOWS = true;
 const bool NORMAL_DEBUG = false;
 
+// Range: 0 to 4
+// 0 is sharp
+// 4 is pretty blurry
+const float shadow_blurriness = 2.0;
+
 // const int poisson_samples = 4;
 // const vec2 poisson_disk[4] = vec2[]( vec2( -0.94201624, -0.39906216 ),
 //                                      vec2( 0.94558609, -0.76890725 ),
@@ -109,7 +114,8 @@ float getShadowFactor(){
 
     float visibility = 1.0;
     for (int i = 0; i < poisson_samples; i++){
-        float light_depth = texture(shadow_map, shadow_coord.xy + poisson_disk[i]/700.0).z;
+        vec2 poisson_coord = shadow_coord.xy + poisson_disk[i] * shadow_blurriness/700.0;
+        float light_depth = texture(shadow_map, poisson_coord).z;
         float current_depth = shadow_coord.z - bias;
 
         if ((light_depth < current_depth) && in_shadow_map && !is_back_face){
