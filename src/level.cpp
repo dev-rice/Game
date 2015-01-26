@@ -100,7 +100,7 @@ void Level::draw(){
 
     // update all the units
     for (int i = 0; i < units.size(); ++i){
-       units[i]->update(ground);
+       units[i]->update(ground, units);
     }
 
     // Draw all the drawables

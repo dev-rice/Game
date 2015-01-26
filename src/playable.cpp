@@ -40,20 +40,62 @@ void Playable::setMovementTarget(glm::vec3 pos){
     current_direction = theta; 
 }
 
-void Playable::update(Terrain* ground){
+void Playable::addMovementTarget(glm::vec3 pos){
+    movement_stack.push(pos);
+}
 
-    // TODO add pathfinding AI
+void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
+
     float x_delta = abs(move_to_position.x - position.x);
     float z_delta = abs(move_to_position.z - position.z);
+
+    // If THIS is not at it's target position
     if( sqrt(x_delta*x_delta + z_delta*z_delta) > 0.01){
-        position.x += sin(current_direction)*speed;
-        position.z += cos(current_direction)*speed;
+
+        // Calculate where THIS intends to move
+        float move_to_x = position.x + sin(current_direction)*speed;
+        float move_to_z = position.z + cos(current_direction)*speed;
+    
+        // Check all the other units
+        for(int i = 0; i < otherUnits.size(); ++i){
+            // Find the x and z difference between THIS and other unit
+            x_delta = abs(otherUnits[i]->getPosition().x - move_to_x);
+            z_delta = abs(otherUnits[i]->getPosition().z - move_to_z);
+
+            // If it's not THIS and if THIS moves too close
+            if(otherUnits[i] != this && sqrt(x_delta*x_delta + z_delta*z_delta) < otherUnits[i]->getRadius() + radius){
+                // Push the other unit
+
+                // Get the push direction
+                float theta = atan2(x_delta, z_delta);
+
+                // Saving the radius
+                float other_radius = otherUnits[i]->getRadius();
+
+                // Add the distance to push to the location-to-be of THIS
+                float push_to_x = move_to_x + sin(theta)*(other_radius + radius);
+                float push_to_z = move_to_z + cos(theta)*(other_radius + radius);
+
+                // Apply the movement to the other unit
+                otherUnits[i]->addMovementTarget(glm::vec3(push_to_x, 0.0f, push_to_z));
+                // otherUnits[i]->setPosition(push_to_x, ground->getHeight(push_to_x, push_to_z), push_to_z);
+            }
+        }
+
+        // Apply all the position changes
+        position.x = move_to_x;
+        position.z = move_to_z;
+        position.y = ground->getHeight(position.x, position.z);
+        selection_ring->setPosition(glm::vec3(position.x, position.y + 0.5, position.z));
+        
+    } else if(movement_stack.size() > 0){
+    // We have more moves to make
+
+        setMovementTarget(movement_stack.top());
+        movement_stack.pop();
     }
-
-    position.y = ground->getHeight(position.x, position.z);
-
-	selection_ring->setPosition(glm::vec3(position.x, position.y + 0.5, position.z));
 }
+
 
 void Playable::draw(){
     glEnable(GL_CULL_FACE);

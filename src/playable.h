@@ -8,6 +8,7 @@
 #include <GLFW/glfw3.h>
 
 #include <vector>
+#include <stack>
 
 #include "texture_loader.h"
 #include "doodad.h"
@@ -22,7 +23,7 @@ public:
 	Playable();
 	Playable(Mesh*, GLuint, glm::vec3, GLfloat);
 
-	void update(Terrain *);
+	void update(Terrain *, std::vector<Playable*>);
 	void loadFromXML();
 
 	void draw();
@@ -33,12 +34,15 @@ public:
 	void tempDeSelect();
 
 	void setMovementTarget(glm::vec3);
+	void addMovementTarget(glm::vec3);
 
 	bool isSelected(){ return selected; }
 
 	float getRadius(){ return radius; }
 private:
 	void updateUniformData();
+
+	std::stack<glm::vec3> movement_stack;
 
 	glm::vec3 move_to_position;
 	float current_direction;
