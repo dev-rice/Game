@@ -103,7 +103,7 @@ vec4 lightFragment(vec3 light_vector, vec3 light_color, float light_power){
 
 float getShadowFactor(){
     // Shadows
-    float bias = 0.005;
+    float bias = 0.01;
 
     float angle = dot(normalize(map_surface_normal),
         normalize(lights[0].light_to_surface));
