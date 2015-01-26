@@ -9,13 +9,17 @@ Playable::Playable() : Drawable(){
 
 Playable::Playable(Mesh* mesh, GLuint shader_program, glm::vec3 position, GLfloat scale) : Drawable(mesh, shader_program, position, scale) {
 
-	Mesh* selection_ring_mesh = new Mesh("res/models/selection_ring.obj");
+	Mesh* selection_ring_mesh = new Mesh("res/models/selection_ring.dae");
 
 	selection_ring = new Doodad(selection_ring_mesh, shader_program, position, 1.0f);
 	selection_ring->setEmissive(TextureLoader::loadTextureFromFile("res/textures/selection_ring.png", GL_LINEAR));
+    selection_ring->rotateGlobalEuler(M_PI/2.0f, 0.0f, 0.0f);
 
 	selected = false;
     temp_selected = 0;
+
+    #warning Fix the 90* offset bug
+    rotateGlobalEuler(M_PI/2.0f, 0.0f, 0.0f);
 
     // Temporary stuff until XML parsing is ready
     radius = 1.5f;
@@ -96,8 +100,8 @@ void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
         position.x = move_to_x;
         position.z = move_to_z;
         position.y = ground->getHeight(position.x, position.z);
-        // selection_ring->setPosition(glm::vec3(position.x, position.y + 0.5, position.z));
-        selection_ring->setPosition(glm::vec3(move_to_position.x, position.y + 0.5, move_to_position.z));
+        selection_ring->setPosition(glm::vec3(position.x, position.y + 0.5, position.z));
+        // selection_ring->setPosition(glm::vec3(move_to_position.x, position.y + 0.5, move_to_position.z));
         
     } else if(movement_stack.size() > 0){
     // We have more moves to make

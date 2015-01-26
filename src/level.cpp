@@ -56,7 +56,7 @@ Level::Level(const char* filename){
     loadLevel(filename);
 
     // Creation of test playable
-    Mesh *playable_mesh = new Mesh("res/models/demo_unit.obj");
+    Mesh *playable_mesh = new Mesh("res/models/demo_unit.dae");
     GLuint playable_shader = ShaderLoader::loadShaderProgram("shaders/doodad.vs",
         "shaders/doodad.fs");
     glm::vec3 playable_position = glm::vec3(0.0f, 0.0f, 0.0f);

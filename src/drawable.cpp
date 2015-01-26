@@ -32,7 +32,6 @@ void Drawable::load(Mesh* mesh, GLuint shader_program, glm::vec3 position, GLflo
     this->normal = blue;
     this->gloss = alpha;
 
-
     // Set the shader program and load the geometry data
     // from the mesh onto it.
     setShader(shader_program);
