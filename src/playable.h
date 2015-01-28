@@ -33,6 +33,8 @@ public:
 	void tempSelect();
 	void tempDeSelect();
 
+	bool requestPush(glm::vec3);
+
 	void setMovementTarget(glm::vec3);
 	void setMovementTargetAndClearStack(glm::vec3);
 	void addMovementTarget(glm::vec3);
@@ -47,7 +49,7 @@ public:
 private:
 	void updateUniformData();
 
-	static int max_stack_size;
+	int movement_requests_this_draw_cycle;
 
 	std::vector<glm::vec3> movement_list;
 

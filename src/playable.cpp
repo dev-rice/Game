@@ -4,7 +4,7 @@
 #include "playable.h"
 
 Doodad* Playable::selection_ring;
-int Playable::max_stack_size;
+
 Playable::Playable() : Drawable(){
 
 }
@@ -18,8 +18,6 @@ Playable::Playable(Mesh* mesh, GLuint shader_program, glm::vec3 position, GLfloa
         selection_ring->rotateGlobalEuler(M_PI/2.0f, 0.0f, 0.0f);
     }
 
-    max_stack_size = 0;
-
 	selected = false;
     temp_selected = 0;
 
@@ -28,7 +26,7 @@ Playable::Playable(Mesh* mesh, GLuint shader_program, glm::vec3 position, GLfloa
 
     // Temporary stuff until XML parsing is ready
     radius = 2.0f;
-    speed = 0.05f;
+    speed = 0.1f;
 
     move_to_position = position;
     current_direction = 0.0f;
@@ -36,6 +34,18 @@ Playable::Playable(Mesh* mesh, GLuint shader_program, glm::vec3 position, GLfloa
 
 void Playable::updateUniformData(){
 	glUniform1f(glGetUniformLocation(shader_program, "scale"), scale);
+}
+
+bool Playable::requestPush(glm::vec3 pos){
+    // Holding position -> return false
+
+     if(movement_requests_this_draw_cycle < 1){
+        movement_requests_this_draw_cycle++;
+        addMovementTarget(pos);
+        return true;
+    } 
+
+    return false;
 }
 
 void Playable::setMovementTargetAndClearStack(glm::vec3 pos){
@@ -55,6 +65,7 @@ void Playable::setMovementTarget(glm::vec3 pos){
 }
 
 void Playable::addMovementTarget(glm::vec3 pos){
+    // Self-treshholding logic
 
     std::vector<glm::vec3> new_stack;
     if(movement_list.size() > 20){
@@ -69,10 +80,6 @@ void Playable::addMovementTarget(glm::vec3 pos){
         movement_list = new_stack;
     }
 
-    if(movement_list.size() == 0){
-        movement_list.push_back(position);
-    }
-
     movement_list.push_back(pos);
 }
 
@@ -85,12 +92,16 @@ bool Playable::isMoving(){
 
 void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
 
+    bool can_move = true;
+
     // If THIS is not at it's target position
     if(isMoving()){
 
         // Calculate where THIS intends to move
         float move_to_x = position.x + sin(current_direction)*speed;
         float move_to_z = position.z + cos(current_direction)*speed;
+
+        
 
         // Check all the other units
         for(int i = 0; i < otherUnits.size(); ++i){
@@ -101,8 +112,10 @@ void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
             float abs_x_delta = abs(x_delta);
             float abs_z_delta = abs(z_delta);
 
+            float distance_to_unit_after_move = sqrt(abs_x_delta*abs_x_delta + abs_z_delta*abs_z_delta);
+
             // If it's not THIS and if THIS moves too close
-            if(otherUnits[i] != this && sqrt(abs_x_delta*abs_x_delta + abs_z_delta*abs_z_delta) < otherUnits[i]->getRadius() + radius){
+            if(otherUnits[i] != this && distance_to_unit_after_move < otherUnits[i]->getRadius() + radius){
                 // Push the other unit
 
                 // Get the push direction
@@ -116,10 +129,19 @@ void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
                 float push_to_z = move_to_z + cos(theta)*(other_radius + radius);
 
                 // Apply the movement to the other unit IF they aren't moving
-                if( ! otherUnits[i]->isMoving()){
-                    otherUnits[i]->addMovementTarget(glm::vec3(push_to_x, 0.0f, push_to_z));
+                if( ! otherUnits[i]->isMoving()){     
+
+                    bool did_push = otherUnits[i]->requestPush(glm::vec3(push_to_x, 0.0f, push_to_z));
+                    bool moved_away = distance_to_unit_after_move > otherUnits[i]->getRadius();
+
+                    can_move = can_move && (did_push || moved_away);
                 }
             }
+        }
+
+        if( can_move){
+            position.x = move_to_x;
+            position.z = move_to_z;
         }
 
         // Apply all the position changes
@@ -131,8 +153,7 @@ void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
         //     position.z = move_to_z;
         // }
 
-        position.x = move_to_x;
-        position.z = move_to_z;
+        
 
     } else if(movement_list.size() > 0){
     // We have more moves to make
@@ -156,6 +177,9 @@ void Playable::draw(){
         selection_ring->setPosition(glm::vec3(position.x, position.y + 0.5, position.z));
         selection_ring->draw();
     }
+
+    // Reset this counter
+    movement_requests_this_draw_cycle = 0;
 
 }
 
