@@ -320,7 +320,7 @@ int Level::getMapWidth(){
 
 void Level::issueOrder(glm::vec3 location){
     if(selected_units.size() == 1){
-        selected_units[0]->setMovementTargetAndClearStack(glm::vec3(location.x, 0.0f, location.z));
+        selected_units[0]->issueOrder(Playable::Order::MOVE, glm::vec3(location.x, 0.0f, location.z), false);
         return;
     }
     // Get centroid of the selected units
@@ -364,7 +364,7 @@ void Level::issueOrder(glm::vec3 location){
             z_to_move += (unit_pos.z - z_center);
         }
 
-        selected_units[i]->setMovementTargetAndClearStack(glm::vec3(x_to_move, 0.0f, z_to_move));
+        selected_units[i]->issueOrder(Playable::Order::MOVE, glm::vec3(x_to_move, 0.0f, z_to_move), false);
     }
 }
 

@@ -19,7 +19,8 @@
 class Playable : public Drawable {
 public:
 	// Not a complete list
-	enum class PlayableAttribute { MASSIVE, ARMORED, ARMY, WORKER, FLYING, INVULNERABLE, MECHANICAL };
+	enum class Order{ MOVE, ATTACK };
+	enum class PlayableAttribute{ MASSIVE, ARMORED, ARMY, WORKER, FLYING, INVULNERABLE, MECHANICAL };
 
 	Playable();
 	Playable(Mesh*, GLuint, glm::vec3, GLfloat);
@@ -33,6 +34,8 @@ public:
 	void deSelect();
 	void tempSelect();
 	void tempDeSelect();
+
+	bool issueOrder(Playable::Order, glm::vec3, bool);
 
 	bool requestPush(glm::vec3);
 

@@ -27,13 +27,27 @@ Playable::Playable(Mesh* mesh, GLuint shader_program, glm::vec3 position, GLfloa
     // Temporary stuff until XML parsing is ready
     radius = 2.0f;
     speed = 0.1f;
-    turning_speed = 0.1;
+    turning_speed = 0.7;
 
     move_to_position = position;
 }
 
 void Playable::updateUniformData(){
 	glUniform1f(glGetUniformLocation(shader_program, "scale"), scale);
+}
+
+bool Playable::issueOrder(Playable::Order o, glm::vec3 target, bool queue){
+    switch(o){
+        case Playable::Order::MOVE:
+            if(queue){
+                // something
+            } else {
+                setMovementTargetAndClearStack(target);
+            }
+            break;
+        case Playable::Order::ATTACK:
+            break; // Iunno
+    }
 }
 
 bool Playable::requestPush(glm::vec3 pos){
