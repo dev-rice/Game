@@ -109,6 +109,7 @@ float getShadowFactor(){
         normalize(lights[0].light_to_surface));
 
     bool is_back_face = angle < 0.2;
+    is_back_face = false;
     bool in_shadow_map = (shadow_coord.x >= 0.0) && (shadow_coord.x <= 1.0) &&
         (shadow_coord.y >= 0.0) && (shadow_coord.y <= 1.0);
 
