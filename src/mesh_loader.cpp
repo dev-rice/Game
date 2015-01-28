@@ -11,7 +11,7 @@
 #include "mesh_loader.h"
 
 MeshLoader::MeshLoader(const char* filename){
-    flat_shading = false;
+    flat_shading = true;
     loadMeshFromDAE(filename);
 }
 
@@ -123,6 +123,8 @@ void MeshLoader::loadMeshFromDAE(const char* filename){
     bool successful = getVerticesAndElements(geometry_node, vertices, elements);
 
     if (successful){
+
+
         // At this point the tangents and binormals still need to be
         // calculated.
         calculateTangentsAndBinormals(vertices, elements);
@@ -194,6 +196,9 @@ void MeshLoader::calculateTangentsAndBinormals(std::vector<Vertex>& vertices, st
         if (glm::dot(glm::cross(normal, tangent), binormal) < 0.0f){
             tangent = tangent * -1.0f;
         }
+        if (glm::dot(glm::cross(normal, binormal), tangent) < 0.0f){
+            binormal = binormal * -1.0f;
+        }
 
         if (flat_shading){
             tangent = glm::normalize(tangent);
@@ -224,6 +229,27 @@ void MeshLoader::calculateTangentsAndBinormals(std::vector<Vertex>& vertices, st
             unique_vertices[C_unique_index].binormal += binormal;
         }
 
+    }
+
+    for (int i = 0; i < unique_vertices.size(); ++i){
+        Vertex current = unique_vertices[i];
+        if (current.position == glm::vec3(0.0f, 0.0f, 2.0f)){
+            Debug::info("Found the offending vertices:\n");
+            for (int j = 0; j < vertices.size(); ++j){
+                int this_unique_vertex_index = vertex_to_unique[j];
+                if (this_unique_vertex_index == i){
+                    glm::vec3 pos = vertices[j].position;
+                    glm::vec3 normal = vertices[j].normal;
+                    glm::vec3 tangent = vertices[j].tangent;
+                    glm::vec3 binormal = vertices[j].binormal;
+                    Debug::info("    position = %.2f %.2f %.2f\n", pos.x, pos.y, pos.z);
+                    Debug::info("    normal   = %.2f %.2f %.2f\n", normal.x, normal.y, normal.z);
+                    Debug::info("    tangent  = %.2f %.2f %.2f\n", tangent.x, tangent.y, tangent.z);
+                    Debug::info("    binormal = %.2f %.2f %.2f\n", binormal.x, binormal.y, binormal.z);
+                    Debug::info("\n");
+                }
+            }
+        }
     }
 
     if (!flat_shading){
