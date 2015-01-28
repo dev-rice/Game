@@ -78,6 +78,11 @@ const vec2 poisson_disk[8] = vec2[]( vec2(-0.1720364f, -0.2151852f),
 //                                       vec2(0.8284409f, 0.3923607f));
 
 
+float rand(vec4 seed){
+    float dot_product = dot(seed, vec4(12.9898,78.233,45.164,94.673));
+    return fract(sin(dot_product) * 43758.5453);
+}
+
 vec4 lightFragment(vec3 light_vector, vec3 light_color, float light_power){
     float intensity = light_power / (pow(light_vector.x, 2) + pow(light_vector.y,
          2) + pow(light_vector.z, 2));
@@ -124,7 +129,20 @@ float getShadowFactor(){
         }
     }
 
-    return visibility;
+    // Definitely has some bugs
+    int shadow_sum = 0;
+    for (int i = -1; i < 2; ++i){
+        for (int j = -1; j < 2; ++j){
+            vec2 current_coord = shadow_coord.xy + vec2(i, j);
+            float light_depth = texture(shadow_map, current_coord).z;
+            float current_depth = shadow_coord.z - bias;
+            if ((light_depth < current_depth)){
+                shadow_sum++;
+            }
+        }
+    }
+
+    return visibility * (1 - (3.0 * shadow_sum / 9.0));
 }
 
 void main() {
