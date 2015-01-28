@@ -109,7 +109,7 @@ void GameView::update(){
         selection_box->draw();
     }
     if(left_mouse_button_unclick && !Mouse::getInstance()->isHovering() && (dragged_x || dragged_y)){
-        
+
         level->selectUnits(init, fina);
 
     } else if(left_mouse_button_unclick && !Mouse::getInstance()->isHovering()){
@@ -151,7 +151,7 @@ void GameView::update(){
         proj_matrix);
 
     Terrain* terrain = level->getTerrain();
-    mouse_point.y = terrain->getHeight(mouse_point.x, mouse_point.z);
+    mouse_point.y = terrain->getHeightInterpolated(mouse_point.x, mouse_point.z);
 
     glBindBuffer(GL_UNIFORM_BUFFER, mouse_ubo);
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::vec3),
