@@ -147,6 +147,18 @@ void Drawable::draw(){
     mesh->draw();
 }
 
+void Drawable::setRotationEuler(GLfloat x, GLfloat y, GLfloat z){
+    // Clear the rotation matrix to the identity matrix
+    rotation_matrix = glm::mat4();
+
+    // Rotate the specified amount.
+    rotateGlobalEuler(x, y, z);
+}
+
+void Drawable::setRotationEuler(glm::vec3 rotation){
+    Drawable::setRotationEuler(rotation.x, rotation.y, rotation.z);
+}
+
 void Drawable::rotateGlobalEuler(GLfloat x, GLfloat y, GLfloat z){
     // Rotate the model about each axis.
     float cx = cos(x);
