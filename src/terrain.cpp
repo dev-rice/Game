@@ -89,6 +89,43 @@ GLfloat Terrain::getHeight(GLfloat x_pos, GLfloat z_pos){
     }
 }
 
+GLfloat Terrain::getHeightInterpolated(GLfloat x_pos, GLfloat z_pos){
+    // Interpolates in the current square. Because the positions get floored
+    // We can say that the unit is always "at" the top left.
+
+    //        o--------o
+    //        |1      2|
+    //        |        |
+    //        |3      4|
+    //   ^    o--------o
+    // x |
+    //   o-->
+    //     z
+
+    // Get the heights for each point
+    GLfloat height_1 = getHeight(x_pos, z_pos);
+    GLfloat height_2 = getHeight(x_pos + 1, z_pos);
+    GLfloat height_3 = getHeight(x_pos, z_pos + 1);
+
+    // Get the change in height from point 2 to 1 and from 3 to 1
+    GLfloat delta_height_2 = height_2 - height_1;
+    GLfloat delta_height_3 = height_3 - height_1;
+
+    // Find the fractional component of the
+    // x and z position to know how much to
+    // weight each height.
+    double intpart;
+    GLfloat x_mult = modf(x_pos, &intpart);
+    GLfloat z_mult = modf(z_pos, &intpart);
+
+    // Calculate the height by adding the initial height to the
+    // weighted combination of the other two points.
+    GLfloat interpolated_height = height_1 + (x_mult * delta_height_2) +
+        (z_mult * delta_height_3);
+
+    return interpolated_height;
+}
+
 glm::vec3 Terrain::getNormal(GLfloat x_pos, GLfloat z_pos){
     // Returns the normal vector at the specified x and y position.
     // This is good for knowing how a unit can move across a segment

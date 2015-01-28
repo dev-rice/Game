@@ -51,7 +51,7 @@ void Playable::setMovementTarget(glm::vec3 pos){
     float theta = atan2(x_delta, z_delta);
 
     rotateGlobalEuler(0.0f, theta - current_direction, 0.0f);
-    current_direction = theta; 
+    current_direction = theta;
 }
 
 void Playable::addMovementTarget(glm::vec3 pos){
@@ -72,7 +72,7 @@ void Playable::addMovementTarget(glm::vec3 pos){
     if(movement_list.size() == 0){
         movement_list.push_back(position);
     }
-    
+
     movement_list.push_back(pos);
 }
 
@@ -91,7 +91,7 @@ void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
         // Calculate where THIS intends to move
         float move_to_x = position.x + sin(current_direction)*speed;
         float move_to_z = position.z + cos(current_direction)*speed;
-    
+
         // Check all the other units
         for(int i = 0; i < otherUnits.size(); ++i){
             // Find the x and z difference between THIS and other unit
@@ -124,15 +124,15 @@ void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
 
         // Apply all the position changes
         position.x = move_to_x;
-        position.z = move_to_z;    
+        position.z = move_to_z;
 
     } else if(movement_list.size() > 0){
     // We have more moves to make
         setMovementTarget(movement_list.back());
         movement_list.pop_back();
-    } 
+    }
 
-    position.y = ground->getHeight(position.x, position.z);
+    position.y = ground->getHeightInterpolated(position.x, position.z);
 }
 
 
@@ -152,7 +152,7 @@ void Playable::draw(){
         selection_ring->setPosition(glm::vec3(position.x, position.y + 0.5, position.z));
         selection_ring->draw();
     }
-    
+
 
     glUseProgram(shader_program);
 

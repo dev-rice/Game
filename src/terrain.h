@@ -24,6 +24,7 @@ public:
     int getWidth();
 
     GLfloat getHeight(GLfloat, GLfloat);
+    GLfloat getHeightInterpolated(GLfloat, GLfloat);
     glm::vec3 getNormal(GLfloat, GLfloat);
 
 private:
