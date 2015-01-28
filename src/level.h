@@ -9,7 +9,8 @@
 #include <cmath>
 #include <math.h>       // sqrt
 #include <algorithm>    // std::max
-#include <cfloat>       // FLT_MAX 
+#include <cfloat>       // FLT_MAX
+#include <random>
 
 #include "drawable.h"
 #include "doodad.h"

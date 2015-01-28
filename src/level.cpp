@@ -31,12 +31,12 @@ Level::Level(const char* filename){
 
     shadowbuffer = new Shadowbuffer(1.0);
 
-    glm::vec3 light_direction = glm::vec3(-1.0f, 1.0f, 0.5f);
+    glm::vec3 light_direction = glm::vec3(1.0f, 2.0f, -0.5f);
     depth_view = glm::lookAt(light_direction, glm::vec3(0,0,0),
         glm::vec3(0,1,0));
     // Size of the box to render (tailored to fit current map).
-    // depth_proj = glm::ortho<float>(-50,50,-50, 50,-20,20);
-    depth_proj = glm::ortho<float>(-10,10,-10, 10,-20,20);
+    depth_proj = glm::ortho<float>(-50,50,-50, 50,-20,20);
+    // depth_proj = glm::ortho<float>(-10,10,-10, 10,-20,20);
 
     // Create the uniform buffer object.
     glGenBuffers(1, &camera_ubo);
@@ -65,6 +65,11 @@ Level::Level(const char* filename){
         for(int j = 0; j < 3; ++j){
             glm::vec3 playable_position = glm::vec3(2.0f*i, 0.0f, 2.0f*j);
             Playable* temp = new Playable(playable_mesh, playable_shader, playable_position, playable_scale);
+            if (rand() % 2){
+                temp->setDiffuse(TextureLoader::loadBlue());
+            } else {
+                temp->setDiffuse(TextureLoader::loadGreen());
+            }
             drawables.push_back(temp);
             units.push_back(temp);
         }
