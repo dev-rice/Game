@@ -150,6 +150,14 @@ glm::vec3 Terrain::getNormal(GLfloat x_pos, GLfloat z_pos){
     }
 }
 
+bool Terrain::isOnTerrain(GLfloat x_pos, GLfloat z_pos, GLfloat tolerance){
+    bool is_on_terrain = (x_pos >= (-getWidth() / 2.0) + tolerance) &&
+        (x_pos <= (getWidth() / 2.0) - tolerance) &&
+        (z_pos >= (-getDepth() / 2.0) + tolerance) &&
+        (z_pos <= (getDepth() / 2.0) - tolerance);
+    return is_on_terrain;
+}
+
 Mesh* Terrain::generateMesh(Heightmap& heightmap){
     // These two vectors hold the geometry data that will be
     // used to instantiate the Mesh.

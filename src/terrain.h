@@ -27,6 +27,8 @@ public:
     GLfloat getHeightInterpolated(GLfloat, GLfloat);
     glm::vec3 getNormal(GLfloat, GLfloat);
 
+    bool isOnTerrain(GLfloat, GLfloat, GLfloat);
+
 private:
 
     void updateUniformData();

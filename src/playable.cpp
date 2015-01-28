@@ -123,6 +123,14 @@ void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
         }
 
         // Apply all the position changes
+
+        // Try to check if the unit can move (not off the map).
+        // This makes them get stuck though.
+        // if (ground->isOnTerrain(position.x, position.z, 1.0)){
+        //     position.x = move_to_x;
+        //     position.z = move_to_z;
+        // }
+
         position.x = move_to_x;
         position.z = move_to_z;
 
@@ -137,13 +145,9 @@ void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
 
 
 void Playable::draw(){
-    glEnable(GL_CULL_FACE);
-    glEnable(GL_DEPTH_TEST);
-
-    // if(movement_list.size() > max_stack_size){
-    //     max_stack_size = movement_list.size();
-    //     printf("New maximum size: %d\n", max_stack_size);
-    // }
+    // Make the base drawable call before
+    // Drawing things specific to playable
+    Drawable::draw();
 
     if(selected || temp_selected ){
         // selection_ring->setPosition(glm::vec3(move_to_position.x, position.y + 0.5, move_to_position.z));
@@ -153,29 +157,6 @@ void Playable::draw(){
         selection_ring->draw();
     }
 
-
-    glUseProgram(shader_program);
-
-    // Bind the Mesh's VAO. This lets us put transformations and textures on
-    // top of the geometry.
-    mesh->bindVAO();
-
-    // We need to update the model matrix to account for any rotations
-    // or translations that have occured since the last draw call.
-    updateModelMatrix();
-
-    // Update the current model, view, and projection matrices in the shader. These are standard for all
-    // Drawables so they should always be updated in draw. Child specific data is updated in updateUniformData().
-    glUniformMatrix4fv(glGetUniformLocation(shader_program, "model"), 1, GL_FALSE, glm::value_ptr(model_matrix));
-
-    // Update other shader data
-    updateUniformData();
-
-    // Make sure to use this Drawable's textures
-    bindTextures();
-
-    // Draw the geometry
-    mesh->draw();
 }
 
 void Playable::select(){
