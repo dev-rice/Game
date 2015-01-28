@@ -11,7 +11,7 @@
 #include "mesh_loader.h"
 
 MeshLoader::MeshLoader(const char* filename){
-    flat_shading = true;
+    flat_shading = false;
     loadMeshFromDAE(filename);
 }
 
