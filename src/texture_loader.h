@@ -24,6 +24,7 @@ public:
     static GLuint loadBlack();
     static GLuint loadBlue();
     static GLuint loadGreen();
+    static GLuint loadRed();
 
     static GLuint loadTextureFromFile(const char*, GLuint);
     static GLuint loadTextureFromPixel(std::vector<GLfloat>);
@@ -34,12 +35,14 @@ private:
     static GLuint black;
     static GLuint blue;
     static GLuint green;
+    static GLuint red;
 
     static bool loaded_pink;
     static bool loaded_alpha;
     static bool loaded_black;
     static bool loaded_blue;
     static bool loaded_green;
+    static bool loaded_red;
 
 };
 

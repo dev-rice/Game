@@ -18,7 +18,7 @@
 
 class Playable : public Drawable {
 public:
-	
+
 
 	Playable();
 	Playable(Mesh*, GLuint, glm::vec3, GLfloat);
@@ -27,7 +27,7 @@ public:
 	void loadFromXML();
 
 	void draw();
-	
+
 	void select();
 	void deSelect();
 	void tempSelect();
@@ -42,6 +42,8 @@ public:
 	bool isTempSelected(){ return temp_selected; }
 
 	float getRadius(){ return radius; }
+
+	void setSpeed(float s) {speed = s;}
 private:
 	void updateUniformData();
 
