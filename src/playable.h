@@ -54,7 +54,6 @@ private:
 	std::vector<glm::vec3> movement_list;
 
 	glm::vec3 move_to_position;
-	float current_direction;
 
 	// Not a complete list
 	enum class PlayableAttribute { MASSIVE, ARMORED, ARMY, WORKER, FLYING, INVULNERABLE, MECHANICAL };

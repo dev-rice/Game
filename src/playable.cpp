@@ -29,7 +29,6 @@ Playable::Playable(Mesh* mesh, GLuint shader_program, glm::vec3 position, GLfloa
     speed = 0.1f;
 
     move_to_position = position;
-    current_direction = 0.0f;
 }
 
 void Playable::updateUniformData(){
@@ -60,8 +59,7 @@ void Playable::setMovementTarget(glm::vec3 pos){
     float z_delta = move_to_position.z - position.z;
     float theta = atan2(x_delta, z_delta);
 
-    rotateGlobalEuler(0.0f, theta - current_direction, 0.0f);
-    current_direction = theta;
+    setRotationEuler(rotation.x, theta, rotation.z);
 }
 
 void Playable::addMovementTarget(glm::vec3 pos){
@@ -98,8 +96,8 @@ void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
     if(isMoving()){
 
         // Calculate where THIS intends to move
-        float move_to_x = position.x + sin(current_direction)*speed;
-        float move_to_z = position.z + cos(current_direction)*speed;
+        float move_to_x = position.x + sin(rotation.y)*speed;
+        float move_to_z = position.z + cos(rotation.y)*speed;
 
         
 

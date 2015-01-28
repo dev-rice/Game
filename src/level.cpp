@@ -64,7 +64,7 @@ Level::Level(const char* filename){
     bool has_red = false;
     for(int i = 0; i < 3; ++i){
         for(int j = 0; j < 3; ++j){
-            glm::vec3 playable_position = glm::vec3(2.0f*i, 0.0f, 2.0f*j);
+            glm::vec3 playable_position = glm::vec3(3.0f*i, 0.0f, 3.0f*j);
             Playable* temp = new Playable(playable_mesh, playable_shader, playable_position, playable_scale);
             if (rand() % 2){
                 temp->setDiffuse(TextureLoader::loadBlue());

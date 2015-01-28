@@ -68,6 +68,7 @@ protected:
     GLfloat scale;
 
     glm::vec3 position;
+    glm::vec3 rotation;
 
     glm::mat4 model_matrix;
     glm::mat4 rotation_matrix;
