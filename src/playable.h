@@ -18,7 +18,8 @@
 
 class Playable : public Drawable {
 public:
-
+	// Not a complete list
+	enum class PlayableAttribute { MASSIVE, ARMORED, ARMY, WORKER, FLYING, INVULNERABLE, MECHANICAL };
 
 	Playable();
 	Playable(Mesh*, GLuint, glm::vec3, GLfloat);
@@ -49,14 +50,13 @@ public:
 private:
 	void updateUniformData();
 
+	// Pathing and movement info
 	int movement_requests_this_draw_cycle;
-
 	std::vector<glm::vec3> movement_list;
-
 	glm::vec3 move_to_position;
+	float movement_target_direction;
 
-	// Not a complete list
-	enum class PlayableAttribute { MASSIVE, ARMORED, ARMY, WORKER, FLYING, INVULNERABLE, MECHANICAL };
+	
 
 	static Doodad* selection_ring;
 

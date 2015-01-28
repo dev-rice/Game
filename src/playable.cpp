@@ -27,6 +27,7 @@ Playable::Playable(Mesh* mesh, GLuint shader_program, glm::vec3 position, GLfloa
     // Temporary stuff until XML parsing is ready
     radius = 2.0f;
     speed = 0.1f;
+    turning_speed = 0.1;
 
     move_to_position = position;
 }
@@ -37,6 +38,8 @@ void Playable::updateUniformData(){
 
 bool Playable::requestPush(glm::vec3 pos){
     // Holding position -> return false
+
+    // try clearing the current stack?
 
      if(movement_requests_this_draw_cycle < 1){
         movement_requests_this_draw_cycle++;
@@ -57,16 +60,16 @@ void Playable::setMovementTarget(glm::vec3 pos){
 
     float x_delta = move_to_position.x - position.x;
     float z_delta = move_to_position.z - position.z;
-    float theta = atan2(x_delta, z_delta);
+    movement_target_direction = atan2(x_delta, z_delta);
 
-    setRotationEuler(rotation.x, theta, rotation.z);
 }
 
 void Playable::addMovementTarget(glm::vec3 pos){
-    // Self-treshholding logic
-
-    std::vector<glm::vec3> new_stack;
+    
+    // Self-thresholding logic
+   
     if(movement_list.size() > 20){
+        std::vector<glm::vec3> new_stack;
 
         for(int i = 0; i < movement_list.size(); ++i){
             if(i % 2 != 0){
@@ -95,11 +98,28 @@ void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
     // If THIS is not at it's target position
     if(isMoving()){
 
+        // http://stackoverflow.com/questions/1878907/the-smallest-difference-between-2-angles
+        float angle_delta = atan2(sin(movement_target_direction-rotation.y), cos(movement_target_direction-rotation.y));
+
+        // Needs to rotate to face the movement direction
+        if(fabs(angle_delta) > 0.01){
+            float sign = 1.0f;
+
+            if(angle_delta < 0){
+                sign = -1.0f;
+            }
+
+            if(fabs(angle_delta) < turning_speed){
+                setRotationEuler(rotation.x, movement_target_direction, rotation.z);
+            } else {
+                setRotationEuler(rotation.x, rotation.y + (turning_speed*sign), rotation.z);
+            }
+            return;
+        } 
+       
         // Calculate where THIS intends to move
         float move_to_x = position.x + sin(rotation.y)*speed;
         float move_to_z = position.z + cos(rotation.y)*speed;
-
-        
 
         // Check all the other units
         for(int i = 0; i < otherUnits.size(); ++i){
@@ -137,7 +157,7 @@ void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
             }
         }
 
-        if( can_move){
+        if(can_move){
             position.x = move_to_x;
             position.z = move_to_z;
         }
