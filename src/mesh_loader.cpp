@@ -196,9 +196,6 @@ void MeshLoader::calculateTangentsAndBinormals(std::vector<Vertex>& vertices, st
         if (glm::dot(glm::cross(normal, tangent), binormal) < 0.0f){
             tangent = tangent * -1.0f;
         }
-        if (glm::dot(glm::cross(normal, binormal), tangent) < 0.0f){
-            binormal = binormal * -1.0f;
-        }
 
         if (flat_shading){
             tangent = glm::normalize(tangent);
