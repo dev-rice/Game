@@ -265,7 +265,8 @@ void Level::loadLevel(const char* filename){
         if(buffer[0] == 'h'){
             char parameter[64];
             char ground_texture[64];
-            sscanf(buffer, "%*c %s %s", parameter, ground_texture);
+            float amplification;
+            sscanf(buffer, "%*c %s %s %f", parameter, ground_texture, &amplification);
 
             char heightmap_filename[80] = "";
             strcat(heightmap_filename, TEXTURE_PATH);
@@ -280,7 +281,7 @@ void Level::loadLevel(const char* filename){
             GLuint terrain_shader = ShaderLoader::loadShaderProgram(
                 "shaders/doodad.vs", "shaders/doodad.fs");
 
-            ground = new Terrain(terrain_shader, heightmap_filename_str);
+            ground = new Terrain(terrain_shader, heightmap_filename_str, amplification);
 
             GLuint diffuse = TextureLoader::loadTextureFromFile(ground_filename,
                 GL_LINEAR);
