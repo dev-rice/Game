@@ -15,9 +15,6 @@ in vec3 surface_normal;
 in vec3 camera_to_surface;
 in Light lights[num_lights];
 in vec4 shadow_coord;
-in vec3 Tangent;
-in vec3 Bitangent;
-in vec3 Normal;
 
 out vec4 outColor;
 
@@ -35,6 +32,7 @@ vec4 emissive;
 
 vec3 map_surface_normal;
 
+const bool LIGHTING = true;
 const bool SHADOWS = true;
 const bool NORMAL_DEBUG = false;
 
@@ -129,17 +127,22 @@ float getShadowFactor(){
         }
     }
 
-    // Definitely has some bugs
     int shadow_sum = 0;
-    for (int i = -1; i < 2; ++i){
-        for (int j = -1; j < 2; ++j){
-            vec2 current_coord = shadow_coord.xy + vec2(i, j);
-            float light_depth = texture(shadow_map, current_coord).z;
-            float current_depth = shadow_coord.z - bias;
-            if ((light_depth < current_depth)){
-                shadow_sum++;
-            }
-        }
+    // Definitely has some bugs
+    // for (int i = -1; i < 2; ++i){
+    //     for (int j = -1; j < 2; ++j){
+    //         vec2 current_coord = shadow_coord.xy + vec2(i, j);
+    //         float light_depth = texture(shadow_map, current_coord).z;
+    //         float current_depth = shadow_coord.z - bias;
+    //         if ((light_depth < current_depth) && in_shadow_map){
+    //             shadow_sum++;
+    //         }
+    //     }
+    // }
+
+    // Debugging for the shadowmap box size
+    if (!in_shadow_map){
+        visibility = 0.2;
     }
 
     return visibility * (1 - (3.0 * shadow_sum / 9.0));
@@ -160,28 +163,32 @@ void main() {
         visibility = 1.0;
     }
 
-    // Works fine
-    Light light;
-    vec4 lit_component = vec4(0.0, 0.0, 0.0, 0.0);
+    vec4 texel;
+    if (LIGHTING){
+        // Works fine
+        Light light;
+        vec4 lit_component = vec4(0.0, 0.0, 0.0, 0.0);
 
-    // Direction light
-    light = lights[0];
-    lit_component = lit_component + visibility *
+        // Direction light
+        light = lights[0];
+        lit_component = lit_component + visibility *
         lightFragment(light.light_to_surface, light.color, light.power);
 
-    // Other lights
-    light = lights[1];
-    lit_component = lit_component +
+        // Other lights
+        light = lights[1];
+        lit_component = lit_component +
         lightFragment(light.light_to_surface, light.color, light.power);
-    light = lights[2];
-    lit_component = lit_component +
+        light = lights[2];
+        lit_component = lit_component +
         lightFragment(light.light_to_surface, light.color, light.power);
 
-    vec4 ambient_component = vec4(0.1, 0.1, 0.1, 1.0) * diffuse;
-    vec4 emissive_component = vec4(emissive.rgb, 1.0);
-
-    vec4 texel = mix(lit_component + ambient_component, emissive_component,
-        emissive.a);
+        vec4 ambient_component = vec4(0.1, 0.1, 0.1, 1.0) * diffuse;
+        vec4 emissive_component = vec4(emissive.rgb, 1.0);
+        texel = mix(lit_component + ambient_component, emissive_component,
+            emissive.a);
+    } else {
+        texel = diffuse;
+    }
 
     if (texel.a < 0.5){
         discard;

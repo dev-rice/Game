@@ -21,10 +21,6 @@ out vec3 surface_normal;
 out vec3 camera_to_surface;
 out Light lights[num_lights];
 out vec4 shadow_coord;
-out vec3 Tangent;
-out vec3 Bitangent;
-out vec3 Normal;
-
 
 layout(std140) uniform GlobalMatrices {
     mat4 view;
@@ -47,10 +43,6 @@ uniform float scale;
 
 void main() {
     Texcoord = texcoord;
-
-    Tangent = tangent;
-    Bitangent = bitangent;
-    Normal = normal;
 
     vec4 normal_world = view * (model * vec4(normal, 0.0));
     normal_world.w = 0.0;

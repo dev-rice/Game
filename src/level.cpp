@@ -35,8 +35,7 @@ Level::Level(const char* filename){
     depth_view = glm::lookAt(light_direction, glm::vec3(0,0,0),
         glm::vec3(0,1,0));
     // Size of the box to render (tailored to fit current map).
-    depth_proj = glm::ortho<float>(-50,50,-50, 50,-20,20);
-    // depth_proj = glm::ortho<float>(-10,10,-10, 10,-20,20);
+    depth_proj = glm::ortho<float>(-60,50,-60, 50,-40,40);
 
     // Create the uniform buffer object.
     glGenBuffers(1, &camera_ubo);
