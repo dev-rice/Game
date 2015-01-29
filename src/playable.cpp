@@ -56,10 +56,9 @@ bool Playable::requestPush(glm::vec3 pos){
      if(movement_requests_this_draw_cycle < 1){
         movement_requests_this_draw_cycle++;
         setMovementTarget(pos);
-        return true;
     } 
 
-    return false;
+    return true;
 }
 
 void Playable::setMovementTargetAndClearStack(glm::vec3 pos){
