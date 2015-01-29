@@ -258,8 +258,8 @@ class Converter:
             for root, dirs, files in os.walk("../res/models/"):
                 for file in files:
                     potential_filename = os.path.join(root, file).split("/")[-1]
-                    if(potential_filename == obj.x3dName+".obj"):
-                        obj.matchedName = obj.x3dName+".obj"
+                    if(potential_filename == obj.x3dName+".dae"):
+                        obj.matchedName = obj.x3dName+".dae"
                         # print(obj.matchedName)
 
 
