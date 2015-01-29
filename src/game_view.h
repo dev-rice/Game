@@ -34,6 +34,8 @@ private:
     glm::vec2 initial_left_click_position;
     glm::vec2 final_left_click_position;
 
+    bool middle_mouse_button_click;
+
     bool right_mouse_button_click;
     bool right_mouse_button_unclick;
 

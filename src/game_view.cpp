@@ -245,7 +245,12 @@ void GameView::handleInputs(){
         window->requestClose();
     }
 
-    // Left mouse button handling
+    // grabbing the left shift key
+    bool shift_pressed = (glfwGetKey(glfw_window, GLFW_KEY_LEFT_SHIFT ) == GLFW_PRESS || glfwGetKey(glfw_window, GLFW_KEY_RIGHT_SHIFT)  == GLFW_PRESS);
+
+    //##############################################################################
+    // Left Mouse Button Handling
+    //##############################################################################
     if(left_mouse_button_unclick){
         left_mouse_button_unclick = false;
     }
@@ -263,11 +268,24 @@ void GameView::handleInputs(){
         left_mouse_button_unclick = true;
     }
 
-    // right mouse button handling
+    if(glfwGetMouseButton(glfw_window, GLFW_MOUSE_BUTTON_MIDDLE)){
+        // Middle mouse button
+        if(!middle_mouse_button_click){
+            Camera* camera = level->getCamera();
+            glm::mat4 proj_matrix = level->getProjection();
 
-    // grabbing the left shift key
-    bool shift_pressed = (glfwGetKey(glfw_window, GLFW_KEY_LEFT_SHIFT ) == GLFW_PRESS);
+            // Needs to be attack move
+            level->issueOrder(Playable::Order::MOVE, Mouse::getInstance()->getWorldPosition(camera, proj_matrix), shift_pressed);
+        }
 
+        right_mouse_button_click = true;
+    } else if(middle_mouse_button_click){
+        middle_mouse_button_click = false;
+    }
+
+    //##############################################################################
+    // Right Mouse Button Handling
+    //##############################################################################
     if(right_mouse_button_unclick){
         right_mouse_button_unclick = false;
     }
