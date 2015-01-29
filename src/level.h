@@ -51,7 +51,7 @@ public:
     glm::mat4 getProjection() {return proj_matrix;}
 
     // Need to add type of order
-    void issueOrder(glm::vec3);
+    void issueOrder(Playable::Order, glm::vec3, bool);
     void selectUnit(glm::vec3);
     void selectUnits(glm::vec3, glm::vec3);
     void tempSelectUnits(glm::vec3, glm::vec3);

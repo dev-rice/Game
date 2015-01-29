@@ -264,6 +264,10 @@ void GameView::handleInputs(){
     }
 
     // right mouse button handling
+
+    // grabbing the left shift key
+    bool shift_pressed = (glfwGetKey(glfw_window, GLFW_KEY_LEFT_SHIFT ) == GLFW_PRESS);
+
     if(right_mouse_button_unclick){
         right_mouse_button_unclick = false;
     }
@@ -275,7 +279,7 @@ void GameView::handleInputs(){
             Camera* camera = level->getCamera();
             glm::mat4 proj_matrix = level->getProjection();
 
-            level->issueOrder(Mouse::getInstance()->getWorldPosition(camera, proj_matrix));
+            level->issueOrder(Playable::Order::MOVE, Mouse::getInstance()->getWorldPosition(camera, proj_matrix), shift_pressed);
         }
 
         right_mouse_button_click = true;

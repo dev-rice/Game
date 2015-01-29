@@ -41,9 +41,11 @@ public:
 
 	void setMovementTarget(glm::vec3);
 	void setMovementTargetAndClearStack(glm::vec3);
-	void addMovementTarget(glm::vec3);
+	void addExternalMovementTarget(glm::vec3);
 
 	bool isMoving();
+	bool canBePushed();
+
 	bool isSelected(){ return selected; }
 	bool isTempSelected(){ return temp_selected; }
 
@@ -53,9 +55,11 @@ public:
 private:
 	void updateUniformData();
 
-	// Pathing and movement info
+	// Pathing, and movement info
 	int movement_requests_this_draw_cycle;
-	std::vector<glm::vec3> movement_list;
+
+	std::vector<glm::vec3> external_movement_list;
+
 	glm::vec3 move_to_position;
 	float movement_target_direction;
 

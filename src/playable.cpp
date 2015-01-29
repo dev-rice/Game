@@ -40,7 +40,7 @@ bool Playable::issueOrder(Playable::Order o, glm::vec3 target, bool queue){
     switch(o){
         case Playable::Order::MOVE:
             if(queue){
-                // something
+                addExternalMovementTarget(target);
             } else {
                 setMovementTargetAndClearStack(target);
             }
@@ -53,11 +53,9 @@ bool Playable::issueOrder(Playable::Order o, glm::vec3 target, bool queue){
 bool Playable::requestPush(glm::vec3 pos){
     // Holding position -> return false
 
-    // try clearing the current stack?
-
      if(movement_requests_this_draw_cycle < 1){
         movement_requests_this_draw_cycle++;
-        addMovementTarget(pos);
+        setMovementTarget(pos);
         return true;
     } 
 
@@ -65,7 +63,7 @@ bool Playable::requestPush(glm::vec3 pos){
 }
 
 void Playable::setMovementTargetAndClearStack(glm::vec3 pos){
-    movement_list.clear();
+    external_movement_list.clear();
     setMovementTarget(pos);
 }
 
@@ -75,34 +73,26 @@ void Playable::setMovementTarget(glm::vec3 pos){
     float x_delta = move_to_position.x - position.x;
     float z_delta = move_to_position.z - position.z;
     movement_target_direction = atan2(x_delta, z_delta);
-
 }
 
-void Playable::addMovementTarget(glm::vec3 pos){
-    
-    // Self-thresholding logic
-   
-    if(movement_list.size() > 20){
-        std::vector<glm::vec3> new_stack;
-
-        for(int i = 0; i < movement_list.size(); ++i){
-            if(i % 2 != 0){
-               new_stack.push_back(movement_list[i]);
-            }
-        }
-
-        movement_list.clear();
-        movement_list = new_stack;
+void Playable::addExternalMovementTarget(glm::vec3 pos){
+    if(external_movement_list.size() == 0){
+        // If empty, add the old one
+        external_movement_list.insert(external_movement_list.begin(), move_to_position);
     }
 
-    movement_list.push_back(pos);
+    external_movement_list.insert(external_movement_list.begin(), pos);
 }
 
 bool Playable::isMoving(){
     float x_delta = abs(move_to_position.x - position.x);
     float z_delta = abs(move_to_position.z - position.z);
 
-    return (sqrt(x_delta*x_delta + z_delta*z_delta) > 0.01);
+    return (sqrt(x_delta*x_delta + z_delta*z_delta) > 0.01) ;
+}
+
+bool Playable::canBePushed(){
+    return isMoving() || (external_movement_list.size() > 0);
 }
 
 void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
@@ -161,7 +151,7 @@ void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
                 float push_to_z = move_to_z + cos(theta)*(other_radius + radius);
 
                 // Apply the movement to the other unit IF they aren't moving
-                if( ! otherUnits[i]->isMoving()){     
+                if( ! otherUnits[i]->canBePushed()){     
 
                     bool did_push = otherUnits[i]->requestPush(glm::vec3(push_to_x, 0.0f, push_to_z));
                     bool moved_away = distance_to_unit_after_move > otherUnits[i]->getRadius();
@@ -185,12 +175,9 @@ void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
         //     position.z = move_to_z;
         // }
 
-        
-
-    } else if(movement_list.size() > 0){
-    // We have more moves to make
-        setMovementTarget(movement_list.back());
-        movement_list.pop_back();
+    } else if(external_movement_list.size() > 0){
+        setMovementTarget(external_movement_list.back());
+        external_movement_list.pop_back();
     }
 
     position.y = ground->getHeightInterpolated(position.x, position.z);
@@ -203,7 +190,7 @@ void Playable::draw(){
     Drawable::draw();
 
     if(selected || temp_selected ){
-        // selection_ring->setPosition(glm::vec3(move_to_position.x, position.y + 0.5, move_to_position.z));
+     //    selection_ring->setPosition(glm::vec3(move_to_position.x, position.y + 0.5, move_to_position.z));
     	// selection_ring->draw();
 
         selection_ring->setPosition(glm::vec3(position.x, position.y + 0.5, position.z));
