@@ -31,6 +31,8 @@ public:
 
     bool isOnTerrain(GLfloat, GLfloat, GLfloat);
 
+    bool canPath(int, int);
+
 private:
 
     void updateUniformData();
@@ -39,6 +41,8 @@ private:
     float getMapHeight(Heightmap&, int, int);
 
     int getIndex(int, int);
+
+    bool** pathing_array;
 
     GLuint width;
     GLuint depth;

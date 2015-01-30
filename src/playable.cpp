@@ -104,12 +104,6 @@ void Playable::stop(){
     setMovementTarget(position);
 }
 
-void Playable::setMovementTargetAndClearStack(glm::vec3 pos){
-    // Todo clear internal stack
-    // USE ONLY INTERNALLY!!!!
-    setMovementTarget(pos);
-}
-
 void Playable::setMovementTarget(glm::vec3 pos){
     holding_position = false;
     move_to_position = pos;
@@ -202,7 +196,7 @@ void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
         }
     }
 
-    can_move &= ground->getSteepness(move_to_x, move_to_z) < 0.8; // random ass constant
+    can_move &= ground->getSteepness(move_to_x, move_to_z) < 0.8f;
     can_move &= ground->isOnTerrain(move_to_x, move_to_z, 1.0); 
 
     if(can_move && isMoving()){

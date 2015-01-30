@@ -56,6 +56,25 @@ Terrain::Terrain(GLuint shader_program, std::string heightmap_filename, float am
     // child class.
     Drawable::load(mesh, shader_program, glm::vec3(0.0f, 0.0f, 0.0f), 1.0f);
 
+    // Could do bit-packing here but it really doesn't matter
+    pathing_array = new bool*[heightmap.height];
+    for(int i = 0; i < heightmap.height; ++i){
+        pathing_array[i] = new bool[heightmap.width];
+    }
+
+    // Iterate through the pathing array, filling in all the places where we can't go
+    for(int z = 0; z < heightmap.height; ++z){
+        for(int x = 0; x < heightmap.width; ++x){
+            pathing_array[z][x] = (getSteepness(GLfloat(x) + start_x, GLfloat(z) + start_z) < 0.8f);
+
+            if(pathing_array[z][x]){
+                printf("  ");
+            } else {
+                printf("██");
+            }
+        }
+        printf("\n");
+    }
 }
 
 int Terrain::getDepth(){

@@ -44,8 +44,6 @@ public:
 	bool requestPush(glm::vec3);
 
 	void setMovementTarget(glm::vec3);
-	void setMovementTargetAndClearStack(glm::vec3);
-	void addExternalMovementTarget(glm::vec3);
 
 	void holdPosition();
 	void stop();
@@ -67,6 +65,7 @@ private:
 	bool holding_position;
 
 	std::vector<std::tuple<Playable::Order, glm::vec3>> order_queue;
+	std::vector<std::tuple<Playable::Order, glm::vec3>> internal_order_queue;
 
 	glm::vec3 move_to_position;
 	float movement_target_direction;
