@@ -38,12 +38,12 @@ void Playable::updateUniformData(){
 
 bool Playable::receiveOrder(Playable::Order order, glm::vec3 target, bool queue){
     if(!queue){
-        order_list.clear();
+        order_queue.clear();
         executeOrder(order, target);
         return true; // like below, todo
     }
 
-    order_list.push_back(std::make_tuple(order, target));
+    order_queue.push_back(std::make_tuple(order, target));
 
     // Later, have this return validity of order
     return true;
@@ -91,7 +91,7 @@ bool Playable::isMoving(){
 }
 
 bool Playable::canBePushed(){
-    return isMoving() || (order_list.size() > 0);
+    return isMoving() || (order_queue.size() > 0);
 }
 
 void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
@@ -169,9 +169,9 @@ void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
             position.z = move_to_z;
         }
 
-    } else if(order_list.size() > 0){
-        executeOrder(std::get<0>(order_list.back()), std::get<1>(order_list.back()));
-        order_list.pop_back();
+    } else if(order_queue.size() > 0){
+        executeOrder(std::get<0>(order_queue.back()), std::get<1>(order_queue.back()));
+        order_queue.pop_back();
     }
 
     position.y = ground->getHeightInterpolated(position.x, position.z);

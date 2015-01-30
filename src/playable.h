@@ -58,7 +58,7 @@ private:
 
 	bool has_been_push_requested;
 
-	std::vector<std::tuple<Playable::Order, glm::vec3>> order_list;
+	std::vector<std::tuple<Playable::Order, glm::vec3>> order_queue;
 
 	glm::vec3 move_to_position;
 	float movement_target_direction;
