@@ -160,8 +160,8 @@ void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
             }
         }
 
-        can_move &= ground->getSteepness(position.x, position.z) < 0.8;
-        can_move &= ground->isOnTerrain(position.x, position.z, 1.0);
+        can_move &= ground->getSteepness(move_to_x, move_to_z) < 0.8;
+        can_move &= ground->isOnTerrain(move_to_x, move_to_z, 1.0); 
 
 
         if(can_move){
