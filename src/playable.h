@@ -19,7 +19,7 @@
 class Playable : public Drawable {
 public:
 	// Not a complete list
-	enum class Order{ MOVE, ATTACK };
+	enum class Order{ MOVE, ATTACK, HOLD_POSITION, STOP };
 	enum class PlayableAttribute{ MASSIVE, ARMORED, ARMY, WORKER, FLYING, INVULNERABLE, MECHANICAL };
 
 	Playable();
@@ -44,6 +44,8 @@ public:
 	void setMovementTargetAndClearStack(glm::vec3);
 	void addExternalMovementTarget(glm::vec3);
 
+	void holdPosition();
+
 	bool isMoving();
 	bool canBePushed();
 
@@ -56,7 +58,9 @@ public:
 private:
 	void updateUniformData();
 
+	// Movement and interaction variables
 	bool has_been_push_requested;
+	bool holding_position;
 
 	std::vector<std::tuple<Playable::Order, glm::vec3>> order_queue;
 

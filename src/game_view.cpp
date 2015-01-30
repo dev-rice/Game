@@ -245,7 +245,9 @@ void GameView::handleInputs(){
         window->requestClose();
     }
 
-    // grabbing the left shift key
+    //##############################################################################
+    // Shift Key Handling
+    //##############################################################################
     bool shift_pressed = (glfwGetKey(glfw_window, GLFW_KEY_LEFT_SHIFT ) == GLFW_PRESS || glfwGetKey(glfw_window, GLFW_KEY_RIGHT_SHIFT)  == GLFW_PRESS);
 
     //##############################################################################
@@ -268,6 +270,9 @@ void GameView::handleInputs(){
         left_mouse_button_unclick = true;
     }
 
+    //##############################################################################
+    // Middle Mouse Button Handling
+    //##############################################################################
     if(glfwGetMouseButton(glfw_window, GLFW_MOUSE_BUTTON_MIDDLE)){
         // Middle mouse button
         if(!middle_mouse_button_click){
@@ -306,6 +311,15 @@ void GameView::handleInputs(){
         right_mouse_button_unclick = true;
     }
 
+    //##############################################################################
+    // Hold-Action Key Handling
+    //##############################################################################
+    if (glfwGetKey(glfw_window, GLFW_KEY_H) == GLFW_PRESS){
+        Camera* camera = level->getCamera();
+        glm::mat4 proj_matrix = level->getProjection();
+
+        level->issueOrder(Playable::Order::HOLD_POSITION, Mouse::getInstance()->getWorldPosition(camera, proj_matrix), shift_pressed);
+    }
 
     if (Debug::is_on){
         // Camera controls

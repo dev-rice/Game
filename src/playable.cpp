@@ -56,17 +56,27 @@ void Playable::executeOrder(Playable::Order order, glm::vec3 target){
             break;
         case Playable::Order::ATTACK:
             break; // Iunno
+        case Playable::Order::HOLD_POSITION:
+            holdPosition();
+            break;
     }
 }
 
 bool Playable::requestPush(glm::vec3 pos){
-    // Holding position -> return false
+    if(holding_position){
+        return false;
+    }
 
     if(!has_been_push_requested){
         setMovementTarget(pos);
     }
 
     return true;
+}
+
+void Playable::holdPosition(){
+    setMovementTarget(position);
+    holding_position = true;
 }
 
 void Playable::setMovementTargetAndClearStack(glm::vec3 pos){
@@ -76,6 +86,7 @@ void Playable::setMovementTargetAndClearStack(glm::vec3 pos){
 }
 
 void Playable::setMovementTarget(glm::vec3 pos){
+    holding_position = false;
     move_to_position = pos;
 
     float x_delta = move_to_position.x - position.x;
