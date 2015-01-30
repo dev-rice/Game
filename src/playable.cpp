@@ -36,14 +36,23 @@ void Playable::updateUniformData(){
 	glUniform1f(glGetUniformLocation(shader_program, "scale"), scale);
 }
 
-bool Playable::issueOrder(Playable::Order o, glm::vec3 target, bool queue){
-    switch(o){
+bool Playable::receiveOrder(Playable::Order order, glm::vec3 target, bool queue){
+    if(!queue){
+        order_list.clear();
+        executeOrder(order, target);
+        return true; // like below, todo
+    }
+
+    order_list.push_back(std::make_tuple(order, target));
+
+    // Later, have this return validity of order
+    return true;
+}
+
+void Playable::executeOrder(Playable::Order order, glm::vec3 target){
+    switch(order){
         case Playable::Order::MOVE:
-            if(queue){
-                addExternalMovementTarget(target);
-            } else {
-                setMovementTargetAndClearStack(target);
-            }
+            setMovementTarget(target);
             break;
         case Playable::Order::ATTACK:
             break; // Iunno
@@ -53,8 +62,7 @@ bool Playable::issueOrder(Playable::Order o, glm::vec3 target, bool queue){
 bool Playable::requestPush(glm::vec3 pos){
     // Holding position -> return false
 
-     if(movement_requests_this_draw_cycle < 1){
-        movement_requests_this_draw_cycle++;
+    if(!has_been_push_requested){
         setMovementTarget(pos);
     }
 
@@ -62,7 +70,8 @@ bool Playable::requestPush(glm::vec3 pos){
 }
 
 void Playable::setMovementTargetAndClearStack(glm::vec3 pos){
-    external_movement_list.clear();
+    // Todo clear internal stack
+    // USE ONLY INTERNALLY!!!!
     setMovementTarget(pos);
 }
 
@@ -74,15 +83,6 @@ void Playable::setMovementTarget(glm::vec3 pos){
     movement_target_direction = atan2(x_delta, z_delta);
 }
 
-void Playable::addExternalMovementTarget(glm::vec3 pos){
-    if(external_movement_list.size() == 0){
-        // If empty, add the old one
-        external_movement_list.insert(external_movement_list.begin(), move_to_position);
-    }
-
-    external_movement_list.insert(external_movement_list.begin(), pos);
-}
-
 bool Playable::isMoving(){
     float x_delta = abs(move_to_position.x - position.x);
     float z_delta = abs(move_to_position.z - position.z);
@@ -91,7 +91,7 @@ bool Playable::isMoving(){
 }
 
 bool Playable::canBePushed(){
-    return isMoving() || (external_movement_list.size() > 0);
+    return isMoving() || (order_list.size() > 0);
 }
 
 void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
@@ -160,27 +160,18 @@ void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
             }
         }
 
+        // random ass thingy
         can_move &= ground->getSteepness(move_to_x, move_to_z) < 0.8;
         can_move &= ground->isOnTerrain(move_to_x, move_to_z, 1.0); 
-
 
         if(can_move){
             position.x = move_to_x;
             position.z = move_to_z;
         }
 
-        // Apply all the position changes
-
-        // Try to check if the unit can move (not off the map).
-        // This makes them get stuck though.
-        // if (){
-        //     position.x = move_to_x;
-        //     position.z = move_to_z;
-        // }
-
-    } else if(external_movement_list.size() > 0){
-        setMovementTarget(external_movement_list.back());
-        external_movement_list.pop_back();
+    } else if(order_list.size() > 0){
+        executeOrder(std::get<0>(order_list.back()), std::get<1>(order_list.back()));
+        order_list.pop_back();
     }
 
     position.y = ground->getHeightInterpolated(position.x, position.z);
@@ -200,9 +191,7 @@ void Playable::draw(){
         selection_ring->draw();
     }
 
-    // Reset this counter
-    movement_requests_this_draw_cycle = 0;
-
+    has_been_push_requested = false;
 }
 
 void Playable::select(){

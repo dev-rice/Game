@@ -325,7 +325,7 @@ int Level::getMapWidth(){
 
 void Level::issueOrder(Playable::Order order, glm::vec3 location, bool queue){
     if(selected_units.size() == 1){
-        selected_units[0]->issueOrder(order, glm::vec3(location.x, 0.0f, location.z), queue);
+        selected_units[0]->receiveOrder(order, glm::vec3(location.x, 0.0f, location.z), queue);
         return;
     }
 
@@ -370,7 +370,7 @@ void Level::issueOrder(Playable::Order order, glm::vec3 location, bool queue){
             z_to_move += (unit_pos.z - z_center);
         }
 
-        selected_units[i]->issueOrder(order, glm::vec3(x_to_move, 0.0f, z_to_move), queue);
+        selected_units[i]->receiveOrder(order, glm::vec3(x_to_move, 0.0f, z_to_move), queue);
     }
 }
 

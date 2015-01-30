@@ -35,7 +35,8 @@ public:
 	void tempSelect();
 	void tempDeSelect();
 
-	bool issueOrder(Playable::Order, glm::vec3, bool);
+	bool receiveOrder(Playable::Order, glm::vec3, bool);
+	void executeOrder(Playable::Order, glm::vec3);
 
 	bool requestPush(glm::vec3);
 
@@ -55,15 +56,12 @@ public:
 private:
 	void updateUniformData();
 
-	// Pathing, and movement info
-	int movement_requests_this_draw_cycle;
+	bool has_been_push_requested;
 
-	std::vector<glm::vec3> external_movement_list;
+	std::vector<std::tuple<Playable::Order, glm::vec3>> order_list;
 
 	glm::vec3 move_to_position;
 	float movement_target_direction;
-
-	
 
 	static Doodad* selection_ring;
 
