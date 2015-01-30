@@ -41,10 +41,11 @@ void Playable::loadFromXML(std::string filepath){
     pugi::xml_node unit_node = doc.child("unit");
 
     unit_type = unit_node.child_value("unit_type");
-    speed = atoi(unit_node.child_value("speed"));
-    acceleration = atoi(unit_node.child_value("acceleration"));
-    radius = atoi(unit_node.child_value("radius"));
-    sight_radius = atoi(unit_node.child_value("sight_radius"));
+    speed = std::stof(unit_node.child_value("speed"));
+    acceleration = std::stof(unit_node.child_value("acceleration"));
+    turning_speed = std::stof(unit_node.child_value("turning_speed"));
+    radius = std::stof(unit_node.child_value("radius"));
+    sight_radius = std::stof(unit_node.child_value("sight_radius"));
 
 }
 

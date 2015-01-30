@@ -1,9 +1,14 @@
 <unit>
     <unit_type>Dart Frog</unit_type>
 
-    <speed>2.0</speed>
+    <model>...</model>
+    <walking_animation>...</walking_animation>
+    <idle_animation>...</idle_animation>
+    <death_animation>...</death_animation>
+
+    <speed>0.2</speed>
     <acceleration>0.5</acceleration>
-    <turning_speed>0.1</turning_speed>
+    <turning_speed>1.0</turning_speed>
     <radius>2.0</radius>
     <sight_radius>4.0</sight_radius>
 
