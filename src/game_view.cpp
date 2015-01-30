@@ -43,6 +43,8 @@ GameView::GameView(Level* level){
     frame_count = 0;
     average_frame_time = 0.0f;
 
+    attack_command_prime = false;
+
     // Usually OpenGL code shouldn't be this high up but this is for cool
     // mouse effects.
     glGenBuffers(1, &mouse_ubo);
@@ -260,7 +262,15 @@ void GameView::handleInputs(){
 
     if(glfwGetMouseButton(glfw_window, GLFW_MOUSE_BUTTON_LEFT)){
         // Left mouse button
-        if(mouse_count == 0){
+        if(attack_command_prime){
+
+            attack_command_prime = false;
+            level->issueOrder(Playable::Order::ATTACK, Mouse::getInstance()->getWorldPosition(camera, proj_matrix), shift_pressed);
+            mouse_count = -1;
+            left_mouse_button_unclick = true;
+
+        } /* Probably more orders here */
+        else if(mouse_count == 0){
             initial_left_click_position = gl_mouse_position;
         } else {
             final_left_click_position = gl_mouse_position;
@@ -280,6 +290,7 @@ void GameView::handleInputs(){
             level->issueOrder(Playable::Order::ATTACK, Mouse::getInstance()->getWorldPosition(camera, proj_matrix), shift_pressed);
         }
 
+        attack_command_prime = false;
         right_mouse_button_click = true;
     } else if(middle_mouse_button_click){
         middle_mouse_button_click = false;
@@ -299,6 +310,7 @@ void GameView::handleInputs(){
             level->issueOrder(Playable::Order::MOVE, Mouse::getInstance()->getWorldPosition(camera, proj_matrix), shift_pressed);
         }
 
+        attack_command_prime = false;
         right_mouse_button_click = true;
     } else if(right_mouse_button_click){
         right_mouse_button_click = false;
@@ -317,6 +329,13 @@ void GameView::handleInputs(){
     //##############################################################################
     if (glfwGetKey(glfw_window, GLFW_KEY_S) == GLFW_PRESS){
         level->issueOrder(Playable::Order::STOP, Mouse::getInstance()->getWorldPosition(camera, proj_matrix), shift_pressed);
+    }
+
+    //##############################################################################
+    // Attack-Action Key Handling
+    //##############################################################################
+    if (glfwGetKey(glfw_window, GLFW_KEY_A) == GLFW_PRESS){
+        attack_command_prime = true;
     }
 
     if (Debug::is_on){

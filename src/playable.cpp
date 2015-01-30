@@ -55,6 +55,7 @@ void Playable::executeOrder(Playable::Order order, glm::vec3 target){
             setMovementTarget(target);
             break;
         case Playable::Order::ATTACK:
+            stop();
             break; // Iunno
         case Playable::Order::HOLD_POSITION:
             holdPosition();

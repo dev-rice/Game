@@ -39,6 +39,8 @@ private:
     bool right_mouse_button_click;
     bool right_mouse_button_unclick;
 
+    bool attack_command_prime;
+
     Window* window;
     GLFWwindow* glfw_window;
 
