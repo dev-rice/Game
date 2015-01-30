@@ -56,7 +56,7 @@ bool Playable::requestPush(glm::vec3 pos){
      if(movement_requests_this_draw_cycle < 1){
         movement_requests_this_draw_cycle++;
         setMovementTarget(pos);
-    } 
+    }
 
     return true;
 }
@@ -118,8 +118,8 @@ void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
                 setRotationEuler(rotation.x, rotation.y + (turning_speed*sign), rotation.z);
             }
             return;
-        } 
-       
+        }
+
         // Calculate where THIS intends to move
         float move_to_x = position.x + sin(rotation.y)*speed;
         float move_to_z = position.z + cos(rotation.y)*speed;
@@ -150,7 +150,7 @@ void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
                 float push_to_z = move_to_z + cos(theta)*(other_radius + radius);
 
                 // Apply the movement to the other unit IF they aren't moving
-                if( ! otherUnits[i]->canBePushed()){     
+                if( ! otherUnits[i]->canBePushed()){
 
                     bool did_push = otherUnits[i]->requestPush(glm::vec3(push_to_x, 0.0f, push_to_z));
                     bool moved_away = distance_to_unit_after_move > otherUnits[i]->getRadius();
@@ -159,6 +159,10 @@ void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
                 }
             }
         }
+
+        can_move &= ground->getSteepness(position.x, position.z) < 0.8;
+        can_move &= ground->isOnTerrain(position.x, position.z, 1.0);
+
 
         if(can_move){
             position.x = move_to_x;
@@ -169,7 +173,7 @@ void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
 
         // Try to check if the unit can move (not off the map).
         // This makes them get stuck though.
-        // if (ground->isOnTerrain(position.x, position.z, 1.0)){
+        // if (){
         //     position.x = move_to_x;
         //     position.z = move_to_z;
         // }

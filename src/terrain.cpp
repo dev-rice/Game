@@ -97,10 +97,11 @@ GLfloat Terrain::getHeightInterpolated(GLfloat x_pos, GLfloat z_pos){
     //        |1      2|
     //        |        |
     //        |3      4|
-    //   ^    o--------o
-    // x |
+    //        o--------o
+    //     x
     //   o-->
-    //     z
+    // z |
+    //   v
 
     // Get the heights for each point
     GLfloat height_1 = getHeight(x_pos, z_pos);
@@ -148,6 +149,16 @@ glm::vec3 Terrain::getNormal(GLfloat x_pos, GLfloat z_pos){
     } else {
         return normals[i];
     }
+}
+
+GLfloat Terrain::getSteepness(GLfloat x_pos, GLfloat z_pos){
+    glm::vec3 normal = getNormal(x_pos, z_pos);
+    GLfloat cosTheta = abs(glm::dot(glm::vec3(0.0, 1.0, 0.0), normal));
+
+    GLfloat steepness = acos(cosTheta);
+
+    return steepness;
+
 }
 
 bool Terrain::isOnTerrain(GLfloat x_pos, GLfloat z_pos, GLfloat tolerance){

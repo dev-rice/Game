@@ -38,4 +38,4 @@ d 0 1 2 8 0 -3.940373 0.068830 -4.155382 0.085235 0.308021 -0.189454 -0.932325 2
 p fire -1.400000 0.000000 0.000000
 
 # Ground specification - Begin writing here (h, g)
-h heightmap.png rough_ground.png 10.0
+h mountains.png rough_ground.png 10.0

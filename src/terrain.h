@@ -4,6 +4,7 @@
 #include <SOIL.h>
 #include <string>
 #include <vector>
+#include <cmath>
 
 #include "mesh.h"
 #include "drawable.h"
@@ -26,6 +27,7 @@ public:
     GLfloat getHeight(GLfloat, GLfloat);
     GLfloat getHeightInterpolated(GLfloat, GLfloat);
     glm::vec3 getNormal(GLfloat, GLfloat);
+    float getSteepness(GLfloat, GLfloat);
 
     bool isOnTerrain(GLfloat, GLfloat, GLfloat);
 
