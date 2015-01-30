@@ -65,6 +65,8 @@ Level::Level(const char* filename){
         for(int j = 0; j < 3; ++j){
             glm::vec3 playable_position = glm::vec3(3.0f*i, 0.0f, 3.0f*j);
             Playable* temp = new Playable(playable_mesh, playable_shader, playable_position, playable_scale);
+            temp->loadFromXML("res/units/testunit.xml");
+
             if (rand() % 2){
                 temp->setDiffuse(TextureLoader::loadBlue());
             } else {

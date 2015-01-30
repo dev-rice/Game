@@ -24,12 +24,28 @@ Playable::Playable(Mesh* mesh, GLuint shader_program, glm::vec3 position, GLfloa
     #warning Fix the 90* offset bug
     rotateGlobalEuler(M_PI/2.0f, 0.0f, 0.0f);
 
-    // Temporary stuff until XML parsing is ready
-    radius = 2.0f;
-    speed = 0.1f;
-    turning_speed = 0.7;
-
     move_to_position = position;
+}
+
+void Playable::loadFromXML(std::string filepath){
+    pugi::xml_document doc;
+    pugi::xml_parse_result result = doc.load_file(filepath.c_str());
+
+    if(!result){
+        Debug::error("Could not load unit: %s\n", filepath.c_str());
+        return;
+    }
+
+    Debug::info("Parsed unit: %s\n", filepath.c_str());
+
+    pugi::xml_node unit_node = doc.child("unit");
+
+    unit_type = unit_node.child_value("unit_type");
+    speed = atoi(unit_node.child_value("speed"));
+    acceleration = atoi(unit_node.child_value("acceleration"));
+    radius = atoi(unit_node.child_value("radius"));
+    sight_radius = atoi(unit_node.child_value("sight_radius"));
+
 }
 
 void Playable::updateUniformData(){

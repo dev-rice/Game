@@ -9,6 +9,9 @@
 
 #include <vector>
 #include <stack>
+#include <string>
+
+#include "pugixml.hpp" // PUGI xml library
 
 #include "texture_loader.h"
 #include "doodad.h"
@@ -26,7 +29,7 @@ public:
 	Playable(Mesh*, GLuint, glm::vec3, GLfloat);
 
 	void update(Terrain *, std::vector<Playable*>);
-	void loadFromXML();
+	void loadFromXML(std::string filepath);
 
 	void draw();
 
@@ -69,6 +72,8 @@ private:
 	float movement_target_direction;
 
 	static Doodad* selection_ring;
+
+	std::string unit_type;
 
 	float speed;
 	float acceleration;
