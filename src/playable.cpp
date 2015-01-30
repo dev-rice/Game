@@ -43,7 +43,7 @@ bool Playable::receiveOrder(Playable::Order order, glm::vec3 target, bool queue)
         return true; // like below, todo
     }
 
-    order_queue.push_back(std::make_tuple(order, target));
+    order_queue.insert(order_queue.begin(), std::make_tuple(order, target));
 
     // Later, have this return validity of order
     return true;
@@ -58,6 +58,9 @@ void Playable::executeOrder(Playable::Order order, glm::vec3 target){
             break; // Iunno
         case Playable::Order::HOLD_POSITION:
             holdPosition();
+            break;
+        case Playable::Order::STOP:
+            stop();
             break;
     }
 }
@@ -77,6 +80,10 @@ bool Playable::requestPush(glm::vec3 pos){
 void Playable::holdPosition(){
     setMovementTarget(position);
     holding_position = true;
+}
+
+void Playable::stop(){
+    setMovementTarget(position);
 }
 
 void Playable::setMovementTargetAndClearStack(glm::vec3 pos){
@@ -102,12 +109,15 @@ bool Playable::isMoving(){
 }
 
 bool Playable::canBePushed(){
-    return isMoving() || (order_queue.size() > 0);
+    return !isMoving() && (order_queue.size() == 0);
 }
 
 void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
 
     bool can_move = true;
+
+    float move_to_x = position.x;
+    float move_to_z = position.z;
 
     // If THIS is not at it's target position
     if(isMoving()){
@@ -132,55 +142,57 @@ void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
         }
 
         // Calculate where THIS intends to move
-        float move_to_x = position.x + sin(rotation.y)*speed;
-        float move_to_z = position.z + cos(rotation.y)*speed;
+        move_to_x = position.x + sin(rotation.y)*speed;
+        move_to_z = position.z + cos(rotation.y)*speed;
+    } 
 
-        // Check all the other units
-        for(int i = 0; i < otherUnits.size(); ++i){
-            // Find the x and z difference between THIS and other unit
-            float x_delta = otherUnits[i]->getPosition().x - move_to_x;
-            float z_delta = otherUnits[i]->getPosition().z - move_to_z;
+    // Push around or attack the other units
+    // Pretty much bully everyone
+    for(int i = 0; i < otherUnits.size(); ++i){
 
-            float abs_x_delta = abs(x_delta);
-            float abs_z_delta = abs(z_delta);
+        // Find the x and z difference between THIS and other unit
+        float x_delta = otherUnits[i]->getPosition().x - move_to_x;
+        float z_delta = otherUnits[i]->getPosition().z - move_to_z;
 
-            float distance_to_unit_after_move = sqrt(abs_x_delta*abs_x_delta + abs_z_delta*abs_z_delta);
+        float abs_x_delta = abs(x_delta);
+        float abs_z_delta = abs(z_delta);
 
-            // If it's not THIS and if THIS moves too close
-            if(otherUnits[i] != this && distance_to_unit_after_move < otherUnits[i]->getRadius() + radius){
-                // Push the other unit
+        float distance_to_unit_after_move = sqrt(abs_x_delta*abs_x_delta + abs_z_delta*abs_z_delta);
 
-                // Get the push direction
-                float theta = atan2(x_delta, z_delta);
+        // If it's not THIS and if THIS moves too close
+        if(otherUnits[i] != this && distance_to_unit_after_move < otherUnits[i]->getRadius() + radius){
+            // Push the other unit
 
-                // Saving the radius
-                float other_radius = otherUnits[i]->getRadius();
+            // Get the push direction
+            float theta = atan2(x_delta, z_delta);
 
-                // Add the distance to push to the location-to-be of THIS
-                float push_to_x = move_to_x + sin(theta)*(other_radius + radius);
-                float push_to_z = move_to_z + cos(theta)*(other_radius + radius);
+            // Saving the radius
+            float other_radius = otherUnits[i]->getRadius();
 
-                // Apply the movement to the other unit IF they aren't moving
-                if( ! otherUnits[i]->canBePushed()){
+            // Add the distance to push to the location-to-be of THIS
+            float push_to_x = move_to_x + sin(theta)*(other_radius + radius);
+            float push_to_z = move_to_z + cos(theta)*(other_radius + radius);
 
-                    bool did_push = otherUnits[i]->requestPush(glm::vec3(push_to_x, 0.0f, push_to_z));
-                    bool moved_away = distance_to_unit_after_move > otherUnits[i]->getRadius();
+            // Apply the movement to the other unit IF they aren't moving
+            if(otherUnits[i]->canBePushed()){
 
-                    can_move = can_move && (did_push || moved_away);
-                }
+                bool did_push = otherUnits[i]->requestPush(glm::vec3(push_to_x, 0.0f, push_to_z));
+                bool moved_away = distance_to_unit_after_move > otherUnits[i]->getRadius();
+
+                can_move = can_move && (did_push || moved_away);
             }
         }
+    }
 
-        // random ass thingy
-        can_move &= ground->getSteepness(move_to_x, move_to_z) < 0.8;
-        can_move &= ground->isOnTerrain(move_to_x, move_to_z, 1.0); 
+    can_move &= ground->getSteepness(move_to_x, move_to_z) < 0.8; // random ass constant
+    can_move &= ground->isOnTerrain(move_to_x, move_to_z, 1.0); 
 
-        if(can_move){
-            position.x = move_to_x;
-            position.z = move_to_z;
-        }
+    if(can_move && isMoving()){
+        position.x = move_to_x;
+        position.z = move_to_z;
+    }
 
-    } else if(order_queue.size() > 0){
+    if( !isMoving() && order_queue.size() > 0){
         executeOrder(std::get<0>(order_queue.back()), std::get<1>(order_queue.back()));
         order_queue.pop_back();
     }

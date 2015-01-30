@@ -45,6 +45,7 @@ public:
 	void addExternalMovementTarget(glm::vec3);
 
 	void holdPosition();
+	void stop();
 
 	bool isMoving();
 	bool canBePushed();

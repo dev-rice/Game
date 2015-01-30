@@ -166,7 +166,8 @@ void GameView::update(){
 
 void GameView::handleInputs(){
     Camera* camera = level->getCamera();
-
+    glm::mat4 proj_matrix = level->getProjection();
+    
     glfwPollEvents();
 
     glm::vec2 gl_mouse_position = Mouse::getInstance()->getGLPosition();
@@ -276,11 +277,7 @@ void GameView::handleInputs(){
     if(glfwGetMouseButton(glfw_window, GLFW_MOUSE_BUTTON_MIDDLE)){
         // Middle mouse button
         if(!middle_mouse_button_click){
-            Camera* camera = level->getCamera();
-            glm::mat4 proj_matrix = level->getProjection();
-
-            // Needs to be attack move
-            level->issueOrder(Playable::Order::MOVE, Mouse::getInstance()->getWorldPosition(camera, proj_matrix), shift_pressed);
+            level->issueOrder(Playable::Order::ATTACK, Mouse::getInstance()->getWorldPosition(camera, proj_matrix), shift_pressed);
         }
 
         right_mouse_button_click = true;
@@ -297,10 +294,7 @@ void GameView::handleInputs(){
 
     if(glfwGetMouseButton(glfw_window, GLFW_MOUSE_BUTTON_RIGHT)){
         // Right mouse button
-        // printf("Clicked right mouse button\n");
         if(!right_mouse_button_click){
-            Camera* camera = level->getCamera();
-            glm::mat4 proj_matrix = level->getProjection();
 
             level->issueOrder(Playable::Order::MOVE, Mouse::getInstance()->getWorldPosition(camera, proj_matrix), shift_pressed);
         }
@@ -315,10 +309,14 @@ void GameView::handleInputs(){
     // Hold-Action Key Handling
     //##############################################################################
     if (glfwGetKey(glfw_window, GLFW_KEY_H) == GLFW_PRESS){
-        Camera* camera = level->getCamera();
-        glm::mat4 proj_matrix = level->getProjection();
-
         level->issueOrder(Playable::Order::HOLD_POSITION, Mouse::getInstance()->getWorldPosition(camera, proj_matrix), shift_pressed);
+    }
+
+    //##############################################################################
+    // Stop-Action Key Handling
+    //##############################################################################
+    if (glfwGetKey(glfw_window, GLFW_KEY_S) == GLFW_PRESS){
+        level->issueOrder(Playable::Order::STOP, Mouse::getInstance()->getWorldPosition(camera, proj_matrix), shift_pressed);
     }
 
     if (Debug::is_on){
