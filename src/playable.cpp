@@ -72,8 +72,8 @@ void Playable::executeOrder(Playable::Order order, glm::vec3 target){
             setMovementTarget(target);
             break;
         case Playable::Order::ATTACK:
-            stop();
-            break; // Iunno
+            stop(); // Attack not done yet
+            break; 
         case Playable::Order::HOLD_POSITION:
             holdPosition();
             break;
@@ -150,12 +150,12 @@ void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
             } else {
                 setRotationEuler(rotation.x, rotation.y + (turning_speed*sign), rotation.z);
             }
-            return;
+            // return; // UNCOMMENT ME IF YOU WANT TURN THAN MOVE
         }
 
         // Calculate where THIS intends to move
-        move_to_x = position.x + sin(rotation.y)*speed;
-        move_to_z = position.z + cos(rotation.y)*speed;
+        move_to_x = position.x + sin(movement_target_direction)*speed;
+        move_to_z = position.z + cos(movement_target_direction)*speed;
     } 
 
     // Push around or attack the other units
