@@ -69,10 +69,12 @@ bool Playable::receiveOrder(Playable::Order order, glm::vec3 target, bool queue)
 void Playable::executeOrder(Playable::Order order, glm::vec3 target){
     switch(order){
         case Playable::Order::MOVE:
+            needs_pathing_on_update = true;
             setMovementTarget(target);
             break;
         case Playable::Order::ATTACK:
-            stop(); // Attack not done yet
+            needs_pathing_on_update = true;
+            setMovementTarget(target); // Attack not done yet
             break; 
         case Playable::Order::HOLD_POSITION:
             holdPosition();
@@ -125,6 +127,15 @@ bool Playable::canBePushed(){
 }
 
 void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
+
+    // If the units needs pathing (having just been given a new order)
+    if(needs_pathing_on_update){
+        needs_pathing_on_update = false;
+        internal_order_queue.clear();
+        setupInternalQueue(ground);
+
+        // Setup the first movement target
+    }
 
     bool can_move = true;
 
@@ -212,6 +223,9 @@ void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
     position.y = ground->getHeightInterpolated(position.x, position.z);
 }
 
+void Playable::setupInternalQueue(Terrain* ground){
+    printf("SHIT!!!\n");
+}
 
 void Playable::draw(){
     // Make the base drawable call before

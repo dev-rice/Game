@@ -56,13 +56,16 @@ public:
 
 	float getRadius(){ return radius; }
 
+	// remove me later
 	void setSpeed(float s) {speed = s;}
 private:
 	void updateUniformData();
+	void setupInternalQueue(Terrain*);
 
 	// Movement and interaction variables
 	bool has_been_push_requested;
 	bool holding_position;
+	bool needs_pathing_on_update;
 
 	std::vector<std::tuple<Playable::Order, glm::vec3>> order_queue;
 	std::vector<std::tuple<Playable::Order, glm::vec3>> internal_order_queue;
