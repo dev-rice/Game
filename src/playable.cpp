@@ -132,7 +132,7 @@ void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
     if(needs_pathing_on_update){
         needs_pathing_on_update = false;
         internal_order_queue.clear();
-        setupInternalQueue(ground);
+        // setupInternalQueue(ground);
 
         // Setup the first movement target
     }
@@ -221,10 +221,6 @@ void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
     }
 
     position.y = ground->getHeightInterpolated(position.x, position.z);
-}
-
-void Playable::setupInternalQueue(Terrain* ground){
-    printf("SHIT!!!\n");
 }
 
 void Playable::draw(){

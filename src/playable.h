@@ -8,7 +8,6 @@
 #include <GLFW/glfw3.h>
 
 #include <vector>
-#include <stack>
 #include <string>
 
 #include "pugixml.hpp" // PUGI xml library
@@ -60,7 +59,6 @@ public:
 	void setSpeed(float s) {speed = s;}
 private:
 	void updateUniformData();
-	void setupInternalQueue(Terrain*);
 
 	// Movement and interaction variables
 	bool has_been_push_requested;
