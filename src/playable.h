@@ -17,6 +17,7 @@
 #include "mesh.h"
 #include "drawable.h"
 #include "terrain.h"
+#include "pathfinder.h"
 
 class Playable : public Drawable {
 public:
