@@ -30,26 +30,28 @@ std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, int start_x, int s
 	printf("Beginning A* search... ");
 	// could put some benchmarking code here
 
-	std::vector<Node> visited_nodes;												// The set of nodes already evaluated.
-	std::priority_queue<Node, std::vector<Node>, LessThanByGScore> frontier_nodes;	// The set of tentative nodes to be evaluated...
+	std::map<Node*, bool> visited_nodes;											// The set of nodes already evaluated.
+	std::priority_queue<Node*, std::vector<Node*>, LessThanByGScore> frontier_nodes;	// The set of tentative nodes to be evaluated...
+				
+	frontier_nodes.push(new Node(start_x, start_y, 0));								// ...initially containing the start node
+																					// Cost from start along best known path (included)
+	
+	std::map<Node*, Node*> parent_of;												// The map of navigated nodes.
 
-	Node start_node = {start_x, start_y, 0};										// Cost from start along best known path (included)	
-	frontier_nodes.push(start_node);												// ...initially containing the start node
-
-	std::map<Node, Node> parent_of;													// The map of navigated nodes.
-
-	float f_score = start_node.g + heuristic_estimate(start_node.x, start_node.y, target_x, target_y);
+	float f_score = heuristic_estimate(start_x, start_y, target_x, target_y);
 																					// Estimated total cost from start to goal through y.
 
  	while( ! frontier_nodes.empty()){
  	
- 		Node current_node = frontier_nodes.top();
+ 		Node* current_node = frontier_nodes.top();
 
-        if(current_node.x == target_x && current_node.y == target_y){
+        if(current_node->x == target_x && current_node->y == target_y){
         	return reconstruct_path(parent_of, current_node);
         }
 
         frontier_nodes.pop();
+
+        visited_nodes[current_node] = true;
 
  		break;
  	}
@@ -70,7 +72,7 @@ float PathFinder::heuristic_estimate(int current_x, int current_y, int target_x,
 	return sqrt(float(x_delta*x_delta + y_delta*y_delta));
 }
 
-std::vector<glm::vec3> PathFinder::reconstruct_path(std::map<Node, Node> parent_of, Node origin){
+std::vector<glm::vec3> PathFinder::reconstruct_path(std::map<Node*, Node*> parent_of, Node* origin){
 	std::vector<glm::vec3> temp;
 	return temp;
 }
