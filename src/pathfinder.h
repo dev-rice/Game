@@ -25,7 +25,7 @@ public:
 
 	int x;
 	int y;
-	int g;
+	float g;
 };
 
 struct LessThanByGScore{
@@ -39,9 +39,11 @@ class PathFinder {
 public:
 	static std::vector<glm::vec3> find_path(Terrain*, int, int, int, int);
 private:
+	static float distance_between(int, int, int, int);
 	static float heuristic_estimate(int, int, int, int);
 	static std::vector<glm::vec3> reconstruct_path(std::map<Node*, Node*>, Node*);
 	static std::vector<Node*> getNeighborNodes(Node*);
+	static bool nodeIsInList(std::priority_queue<Node*, std::vector<Node*>, LessThanByGScore>, Node*);
 };
 
 #endif
