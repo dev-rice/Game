@@ -4,22 +4,54 @@
 #include "pathfinder.h"
 
 std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, int start_x, int start_y, int target_x, int target_y){
-	printf("Beginning A* search...\n");
+
+//         add current to closedset
+//         for each neighbor in neighbor_nodes(current)
+//             if neighbor in closedset
+//                 continue
+//             tentative_g_score := g_score[current] + dist_between(current,neighbor)
+ 
+//             if neighbor not in openset or tentative_g_score < g_score[neighbor] 
+//                 came_from[neighbor] := current
+//                 g_score[neighbor] := tentative_g_score
+//                 f_score[neighbor] := g_score[neighbor] + heuristic_cost_estimate(neighbor, goal)
+//                 if neighbor not in openset
+//                     add neighbor to openset
+ 
+//     return failure
+ 
+// function reconstruct_path(came_from,current)
+//     total_path := [current]
+//     while current in came_from:
+//         current := came_from[current]
+//         total_path.append(current)
+//     return total_path
+
+	printf("Beginning A* search... ");
 	// could put some benchmarking code here
 
-	// Setup
-	std::vector<Node> visited_nodes;
-	std::vector<Node> frontier_nodes; 
-	Node start_node = {start_x, start_y, 0};
-	frontier_nodes.push_back(start_node);
-	std::map<Node, Node> parent_of;
+	std::vector<Node> visited_nodes;												// The set of nodes already evaluated.
+	std::priority_queue<Node, std::vector<Node>, LessThanByGScore> frontier_nodes;	// The set of tentative nodes to be evaluated...
+
+	Node start_node = {start_x, start_y, 0};										// Cost from start along best known path (included)	
+	frontier_nodes.push(start_node);												// ...initially containing the start node
+
+	std::map<Node, Node> parent_of;													// The map of navigated nodes.
+
 	float f_score = start_node.g + heuristic_estimate(start_node.x, start_node.y, target_x, target_y);
+																					// Estimated total cost from start to goal through y.
 
  	while( ! frontier_nodes.empty()){
- 		 Node current_node = getLowestHeuristicEstimate(frontier_nodes, target_x, target_y);
+ 	
+ 		Node current_node = frontier_nodes.top();
 
+        if(current_node.x == target_x && current_node.y == target_y){
+        	return reconstruct_path(parent_of, current_node);
+        }
 
- 		 break;
+        frontier_nodes.pop();
+
+ 		break;
  	}
 
 
@@ -38,16 +70,7 @@ float PathFinder::heuristic_estimate(int current_x, int current_y, int target_x,
 	return sqrt(float(x_delta*x_delta + y_delta*y_delta));
 }
 
-Node PathFinder::getLowestHeuristicEstimate(std::vector<Node> list, int target_x, int target_y){
-	float max = -9999.0f;
-	Node max_node;
-	for(int i = 0; i < list.size(); ++i){
-		float f_score = list[i].g + heuristic_estimate(list[i].x, list[i].y, target_x, target_y);
-		if( f_score > max){
-			max = f_score;
-			max_node = list[i];
-		}
-	}
-
-	return max_node;
+std::vector<glm::vec3> PathFinder::reconstruct_path(std::map<Node, Node> parent_of, Node origin){
+	std::vector<glm::vec3> temp;
+	return temp;
 }
