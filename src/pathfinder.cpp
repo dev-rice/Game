@@ -27,7 +27,7 @@ std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, int start_x, int s
 //         total_path.append(current)
 //     return total_path
 
-	printf("Beginning A* search... ");
+	printf("Beginning A* search...\n");
 	// could put some benchmarking code here
 
 	std::map<Node*, bool> visited_nodes;											// The set of nodes already evaluated.
@@ -53,6 +53,11 @@ std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, int start_x, int s
 
         visited_nodes[current_node] = true;
 
+        std::vector<Node*> neighbor_nodes = getNeighborNodes(current_node);
+        for(int i = 0; i < neighbor_nodes.size(); ++i){
+        	printf("Neighbor #%d\n", i);
+        }
+
  		break;
  	}
 
@@ -76,3 +81,17 @@ std::vector<glm::vec3> PathFinder::reconstruct_path(std::map<Node*, Node*> paren
 	std::vector<glm::vec3> temp;
 	return temp;
 }
+
+std::vector<Node*> PathFinder::getNeighborNodes(Node *current_node){
+	std::vector<Node*> temp;
+	temp.push_back(new Node(current_node->x + 1, current_node->y - 1, current_node->g + 1));
+	temp.push_back(new Node(current_node->x + 1, current_node->y + 0, current_node->g + 1));
+	temp.push_back(new Node(current_node->x + 1, current_node->y + 1, current_node->g + 1));
+	temp.push_back(new Node(current_node->x + 0, current_node->y - 1, current_node->g + 1));
+	temp.push_back(new Node(current_node->x + 0, current_node->y + 1, current_node->g + 1));
+	temp.push_back(new Node(current_node->x - 1, current_node->y - 1, current_node->g + 1));
+	temp.push_back(new Node(current_node->x - 1, current_node->y + 0, current_node->g + 1));
+	temp.push_back(new Node(current_node->x - 1, current_node->y + 1, current_node->g + 1));
+	return temp;
+}
+
