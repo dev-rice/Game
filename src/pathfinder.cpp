@@ -5,12 +5,6 @@
 
 std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, int start_x, int start_y, int target_x, int target_y){
 
-//             if neighbor not in openset or tentative_g_score < g_score[neighbor] 
-//                 came_from[neighbor] := current
-//                 g_score[neighbor] := tentative_g_score
-//                 f_score[neighbor] := g_score[neighbor] + heuristic_cost_estimate(neighbor, goal)
-
-
 	printf("Beginning A* search...\n");
 	// could put some benchmarking code here
 
@@ -23,15 +17,17 @@ std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, int start_x, int s
 												
 	std::map<Node*, Node*> parent_of;												// The map of navigated nodes.
 
-	float f_score = heuristic_estimate(start_x, start_y, target_x, target_y);
-																					// Estimated total cost from start to goal through y.
+	float f_score = heuristic_estimate(start_x, start_y, target_x, target_y);		// Estimated total cost from start to goal through y.
+																					
+	int count = 0;
 
  	while( ! frontier_nodes.empty()){
- 	
+ 		count ++;
  		Node* current_node = frontier_nodes.top();
 
         if(current_node->x == target_x && current_node->y == target_y){
-        	printf("Finished A* search.\n");
+   			printf("Final count: %d\n", count);
+        	printf("Finished A* search successfully.\n");
         	return reconstruct_path(parent_of, current_node);
         }
 
@@ -45,20 +41,20 @@ std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, int start_x, int s
 
         	float temp_g_score = current_node->g + distance_between(current_node->x, current_node->y, neighbor_nodes[i]->x, neighbor_nodes[i]->y);
 
+        	bool can_move_to = ground->canPath(neighbor_nodes[i]->x, neighbor_nodes[i]->y);
         	bool is_not_visited = !visited_nodes[neighbor_nodes[i]];
         	bool is_not_in_frontier = ! nodeIsInList(frontier_nodes, neighbor_nodes[i]);
 
-        	if(is_not_visited && (is_not_in_frontier || temp_g_score < neighbor_nodes[i]->g)){
+        	if(is_not_visited && can_move_to && (is_not_in_frontier || temp_g_score < neighbor_nodes[i]->g)){
         		parent_of[neighbor_nodes[i]] = current_node;
         		neighbor_nodes[i]->g = temp_g_score;
 
         		if(is_not_in_frontier){
+        			// printf("Trying to push node(%d, %d) into the frontier\n", neighbor_nodes[i]->x, neighbor_nodes[i]->y);
         			frontier_nodes.push(neighbor_nodes[i]);
         		}
         	}
         }
-
- 		break;
  	}
 
  	// Failure reaches here
@@ -85,7 +81,7 @@ std::vector<glm::vec3> PathFinder::reconstruct_path(std::map<Node*, Node*> paren
 
 	while(parent_of[origin]){
 		origin = parent_of[origin];
-		temp.push_back(glm::vec3(origin->x, 0.0f, origin->y));
+		temp.insert(temp.begin(), glm::vec3(origin->x, 0.0f, origin->y));
 	}
 
 	return temp;

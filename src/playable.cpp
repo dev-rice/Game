@@ -116,10 +116,10 @@ void Playable::setMovementTarget(glm::vec3 pos){
 }
 
 bool Playable::isMoving(){
-    float x_delta = abs(move_to_position.x - position.x);
-    float z_delta = abs(move_to_position.z - position.z);
+    float x_delta = move_to_position.x - position.x;
+    float z_delta = move_to_position.z - position.z;
 
-    return (sqrt(x_delta*x_delta + z_delta*z_delta) > 0.01) ;
+    return (sqrt(x_delta*x_delta + z_delta*z_delta) > 0.1);
 }
 
 bool Playable::canBePushed(){
@@ -134,14 +134,19 @@ void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
         internal_order_queue.clear();
         std::vector<glm::vec3> temp = PathFinder::find_path(ground, int(position.x), int(position.z), int(move_to_position.x), int(move_to_position.z));
         
-        if(temp.size() > 0){
-            printf("Holy shit we found a path!\n");
-        } else {
-            printf("Aww... No path.\n");
-        }
-        // setupInternalQueue(ground);
+        printf("Starting here: (%f, %f)\n", position.x, position.z);
 
-        // Setup the first movement target
+        // Skip the two orders. It just kind of looks better
+        for(int i = 2; i < temp.size(); ++i){
+            // printf("-> (%f, %f)\n", temp[i].x, temp[i].z);
+            internal_order_queue.insert(internal_order_queue.begin(), temp[i]);
+        }
+        printf("Ending here: (%f, %f)\n", move_to_position.x, move_to_position.z);
+        internal_order_queue.insert(internal_order_queue.begin(), move_to_position);
+
+        // Go to the first one
+        setMovementTarget(internal_order_queue.back());
+        internal_order_queue.pop_back();
     }
 
     bool can_move = true;
@@ -222,9 +227,20 @@ void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
         position.z = move_to_z;
     }
 
-    if( !isMoving() && order_queue.size() > 0){
+    if( !isMoving() && internal_order_queue.size() > 0){
+
+        printf("Popping and moving, because (%f, %f)==(%f, %f). %d nodes remaining\n", move_to_position.x, move_to_position.z, position.x, position.z, internal_order_queue.size  ());
+        setMovementTarget(internal_order_queue.back());
+        internal_order_queue.pop_back();
+
+    }
+
+    if( !isMoving() && order_queue.size() > 0 && internal_order_queue.size () == 0){
+
         executeOrder(std::get<0>(order_queue.back()), std::get<1>(order_queue.back()));
+        internal_order_queue.clear();
         order_queue.pop_back();
+
     }
 
     position.y = ground->getHeightInterpolated(position.x, position.z);
