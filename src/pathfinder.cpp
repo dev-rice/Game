@@ -5,14 +5,13 @@
 
 std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, int start_x, int start_y, int target_x, int target_y){
 
+	// First, see if a straight-line will work
+
 	printf("Beginning A* search...\n");
 	// could put some benchmarking code here
 
-	// OCCASIONALLY SEGFAULTS... WHY!?!?!?!
-
-
-	// THIS CAN BE MORE EFFECIENT
-	std::vector<Node*> visited_nodes;											// The set of nodes already evaluated.
+		// THIS CAN BE MORE TIME EFFICIENT AT THE COST OF MEMORY
+	std::vector<Node*> visited_nodes;											    // The set of nodes already evaluated.
 	
 	std::priority_queue<Node*, std::vector<Node*>, LessThanByGScore> frontier_nodes;// The set of tentative nodes to be evaluated...
 			
@@ -23,7 +22,7 @@ std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, int start_x, int s
 																					
 	int count = 0;
 
- 	while( ! frontier_nodes.empty()){
+ 	while(! frontier_nodes.empty()){
  		count ++;
  		Node* current_node = frontier_nodes.top();
 
@@ -43,7 +42,12 @@ std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, int start_x, int s
 
         	float temp_g_score = current_node->g + distance_between(current_node->x, current_node->y, neighbor_nodes[i]->x, neighbor_nodes[i]->y);
 
-        	bool can_move_to = ground->canPath(neighbor_nodes[i]->x, neighbor_nodes[i]->y);
+        	bool can_move_to = ground->canPath(neighbor_nodes[i]->x, neighbor_nodes[i]->y); // Check neighbor nodes for pathing as well?
+        	can_move_to &= ground->canPath(neighbor_nodes[i]->x + 1, neighbor_nodes[i]->y);
+        	can_move_to &= ground->canPath(neighbor_nodes[i]->x - 1, neighbor_nodes[i]->y);
+        	can_move_to &= ground->canPath(neighbor_nodes[i]->x,     neighbor_nodes[i]->y + 1);
+        	can_move_to &= ground->canPath(neighbor_nodes[i]->x,     neighbor_nodes[i]->y - 1);
+
         	bool is_not_visited = ! nodeIsInVector(visited_nodes, neighbor_nodes[i]);
         	bool is_not_in_frontier = ! nodeIsInQueue(frontier_nodes, neighbor_nodes[i]);
 
@@ -52,7 +56,6 @@ std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, int start_x, int s
         		neighbor_nodes[i]->g = temp_g_score;
 
         		if(is_not_in_frontier){
-        			// printf("Trying to push node(%d, %d) into the frontier\n", neighbor_nodes[i]->x, neighbor_nodes[i]->y);
         			frontier_nodes.push(neighbor_nodes[i]);
         		}
         	}

@@ -133,15 +133,10 @@ void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
         needs_pathing_on_update = false;
         internal_order_queue.clear();
         std::vector<glm::vec3> temp = PathFinder::find_path(ground, int(position.x), int(position.z), int(move_to_position.x), int(move_to_position.z));
-        
-        printf("Starting here: (%f, %f)\n", position.x, position.z);
 
-        // Skip the two orders. It just kind of looks better
-        for(int i = 2; i < temp.size(); ++i){
-            // printf("-> (%f, %f)\n", temp[i].x, temp[i].z);
+        for(int i = 0; i < temp.size(); ++i){
             internal_order_queue.insert(internal_order_queue.begin(), temp[i]);
         }
-        printf("Ending here: (%f, %f)\n", move_to_position.x, move_to_position.z);
         internal_order_queue.insert(internal_order_queue.begin(), move_to_position);
 
         // Go to the first one
@@ -227,14 +222,15 @@ void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
         position.z = move_to_z;
     }
 
+    // We've arrived, but we still have internal orders
     if( !isMoving() && internal_order_queue.size() > 0){
 
-        printf("Popping and moving, because (%f, %f)==(%f, %f). %d nodes remaining\n", move_to_position.x, move_to_position.z, position.x, position.z, internal_order_queue.size  ());
         setMovementTarget(internal_order_queue.back());
         internal_order_queue.pop_back();
 
     }
 
+    // We've arrived, and we have a new order from the user
     if( !isMoving() && order_queue.size() > 0 && internal_order_queue.size () == 0){
 
         executeOrder(std::get<0>(order_queue.back()), std::get<1>(order_queue.back()));
