@@ -8,7 +8,9 @@ std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, int start_x, int s
 	printf("Beginning A* search...\n");
 	// could put some benchmarking code here
 
-	std::map<Node*, bool> visited_nodes;											// The set of nodes already evaluated.
+
+	// THIS CAN BE MORE EFFECIENT
+	std::vector<Node*> visited_nodes;											// The set of nodes already evaluated.
 	
 	std::priority_queue<Node*, std::vector<Node*>, LessThanByGScore> frontier_nodes;// The set of tentative nodes to be evaluated...
 			
@@ -33,7 +35,7 @@ std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, int start_x, int s
 
         frontier_nodes.pop();
 
-        visited_nodes[current_node] = true;
+        visited_nodes.push_back(current_node);
 
         std::vector<Node*> neighbor_nodes = getNeighborNodes(current_node);
 
@@ -42,8 +44,8 @@ std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, int start_x, int s
         	float temp_g_score = current_node->g + distance_between(current_node->x, current_node->y, neighbor_nodes[i]->x, neighbor_nodes[i]->y);
 
         	bool can_move_to = ground->canPath(neighbor_nodes[i]->x, neighbor_nodes[i]->y);
-        	bool is_not_visited = !visited_nodes[neighbor_nodes[i]];
-        	bool is_not_in_frontier = ! nodeIsInList(frontier_nodes, neighbor_nodes[i]);
+        	bool is_not_visited = ! nodeIsInVector(visited_nodes, neighbor_nodes[i]);
+        	bool is_not_in_frontier = ! nodeIsInQueue(frontier_nodes, neighbor_nodes[i]);
 
         	if(is_not_visited && can_move_to && (is_not_in_frontier || temp_g_score < neighbor_nodes[i]->g)){
         		parent_of[neighbor_nodes[i]] = current_node;
@@ -100,12 +102,21 @@ std::vector<Node*> PathFinder::getNeighborNodes(Node *current_node){
 	return temp;
 }
 
-bool PathFinder::nodeIsInList(std::priority_queue<Node*, std::vector<Node*>, LessThanByGScore> list, Node* node){
+bool PathFinder::nodeIsInQueue(std::priority_queue<Node*, std::vector<Node*>, LessThanByGScore> list, Node* node){
 	while(! list.empty()){
 		Node* temp = list.top();
 		list.pop();
 
 		if((node->x == temp->x) && (node->y == temp->y)){
+			return true;
+		}
+	}
+	return false;
+}
+
+bool PathFinder::nodeIsInVector(std::vector<Node*> list, Node* node){
+	for(int i = 0; i < list.size(); ++i){
+		if((node->x == list[i]->x) && (node->y == list[i]->y)){
 			return true;
 		}
 	}
