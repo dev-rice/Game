@@ -8,6 +8,8 @@ std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, int start_x, int s
 	printf("Beginning A* search...\n");
 	// could put some benchmarking code here
 
+	// OCCASIONALLY SEGFAULTS... WHY!?!?!?!
+
 
 	// THIS CAN BE MORE EFFECIENT
 	std::vector<Node*> visited_nodes;											// The set of nodes already evaluated.
@@ -18,8 +20,6 @@ std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, int start_x, int s
 	frontier_nodes.push(start_node);												// Cost from start along best known path (included)							                
 												
 	std::map<Node*, Node*> parent_of;												// The map of navigated nodes.
-
-	float f_score = heuristic_estimate(start_x, start_y, target_x, target_y);		// Estimated total cost from start to goal through y.
 																					
 	int count = 0;
 

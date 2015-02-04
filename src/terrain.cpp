@@ -80,7 +80,7 @@ bool Terrain::canPath(int x, int z){
     x -= int(start_x);
     z -= int(start_z);
 
-    if(x < 0 || z < 0 || x > width || z > depth){
+    if(x < 0 || z < 0 || x > width - 1 || z > depth - 1){
         return false;
     }
 
