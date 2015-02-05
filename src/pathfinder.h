@@ -48,6 +48,10 @@ private:
 	static int **node_state_array;
 	static int depth;
 	static int width;
+
+	static const int UNVISITED = 0;
+	static const int IN_FRONTIER = 1;
+	static const int VISITED = 2;
 };
 
 #endif

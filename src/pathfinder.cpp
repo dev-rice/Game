@@ -7,6 +7,10 @@ int** PathFinder::node_state_array;
 int PathFinder::depth;
 int PathFinder::width;
 
+const int PathFinder::UNVISITED;
+const int PathFinder::IN_FRONTIER;
+const int PathFinder::VISITED;
+
 void PathFinder::allocateArray(Terrain* ground){
 	depth = ground->getDepth();
 	width = ground->getWidth();
@@ -15,7 +19,7 @@ void PathFinder::allocateArray(Terrain* ground){
     for(int i = 0; i < width; ++i){
         node_state_array[i] = new int[depth];
         for(int j = 0; j < depth; ++j){
-        	node_state_array[i][j] = 0;
+        	node_state_array[i][j] = UNVISITED;
         }
     }
 
@@ -54,11 +58,11 @@ std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, int start_x, int s
         if(current_node->x == target_x && current_node->y == target_y){
         	// Clear out the old visited nodes
         	while(! frontier_nodes.empty()){
-        		node_state_array[frontier_nodes.top()->x + x_offset][frontier_nodes.top()->y + y_offset] = 0;
+        		node_state_array[frontier_nodes.top()->x + x_offset][frontier_nodes.top()->y + y_offset] = UNVISITED;
         		frontier_nodes.pop();
         	}
         	for(int i = 0; i < visited_nodes.size(); ++i){
-        		node_state_array[visited_nodes[i]->x + x_offset][visited_nodes[i]->y + y_offset] = 0;
+        		node_state_array[visited_nodes[i]->x + x_offset][visited_nodes[i]->y + y_offset] = UNVISITED;
         	}
         	return reconstruct_path(parent_of, current_node);
         }
@@ -66,7 +70,7 @@ std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, int start_x, int s
         frontier_nodes.pop();
 
         visited_nodes.push_back(current_node);
-        node_state_array[current_node->x + x_offset][current_node->y + y_offset] = 2;
+        node_state_array[current_node->x + x_offset][current_node->y + y_offset] = VISITED;
 
         std::vector<Node*> neighbor_nodes = getNeighborNodes(current_node);
 
@@ -89,8 +93,8 @@ std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, int start_x, int s
 
         	if(index_y > 0 && index_y < depth && index_x > 0 && index_x < width){
         		node_state = node_state_array[n->x + x_offset][n->y + y_offset];
-        		is_not_visited = node_state == 0;
-        		is_not_in_frontier = node_state != 1;
+        		is_not_visited = node_state == UNVISITED;
+        		is_not_in_frontier = node_state != IN_FRONTIER;
         	}
 
         	if(is_not_visited && can_move_to && (is_not_in_frontier || temp_g_score < n->g)){
@@ -99,17 +103,13 @@ std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, int start_x, int s
 
         		if(is_not_in_frontier){
         			frontier_nodes.push(n);
-    				node_state_array[n->x + x_offset][n->y + y_offset] = 1;
+    				node_state_array[n->x + x_offset][n->y + y_offset] = IN_FRONTIER;
         		}
         	}
         }
  	}
 
  	// Clear out the old visited nodes
- 	while(! frontier_nodes.empty()){
-    	node_state_array[frontier_nodes.top()->x + x_offset][frontier_nodes.top()->y + y_offset] = 0;
-    	frontier_nodes.pop();
-    }
 	for(int i = 0; i < visited_nodes.size(); ++i){
 		node_state_array[visited_nodes[i]->x + x_offset][visited_nodes[i]->y + y_offset] = 0;
 	}
@@ -146,6 +146,7 @@ std::vector<glm::vec3> PathFinder::reconstruct_path(std::map<Node*, Node*> paren
 
 std::vector<Node*> PathFinder::getNeighborNodes(Node *current_node){
 	std::vector<Node*> temp;
+	// could do up/down/right/left only
 	temp.push_back(new Node(current_node->x + 1, current_node->y - 1, current_node->g + 1.4f));
 	temp.push_back(new Node(current_node->x + 1, current_node->y + 0, current_node->g + 1.0f));
 	temp.push_back(new Node(current_node->x + 1, current_node->y + 1, current_node->g + 1.4f));
