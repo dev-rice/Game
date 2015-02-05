@@ -66,14 +66,11 @@ Terrain::Terrain(GLuint shader_program, std::string heightmap_filename, float am
     for(int z = 0; z < heightmap.height; ++z){
         for(int x = 0; x < heightmap.width; ++x){
             pathing_array[z][x] = (getSteepness(GLfloat(x) + start_x, GLfloat(z) + start_z) < 0.8f);
-            // if(pathing_array[z][x]){
-            //     printf("  ");
-            // } else {
-            //     printf("██");
-            // }
         }
-        // printf("\n");
     }
+
+    // Debugging the allowed areas
+    // printPathing();
 }
 
 bool Terrain::canPath(int x, int z){
@@ -85,6 +82,16 @@ bool Terrain::canPath(int x, int z){
     }
 
     return pathing_array[z][x];
+}
+
+void Terrain::printPathing(){
+    Debug::info("Pathing array:\n");
+    for (int x = 0; x < width - 1; ++x){
+        for (int z = 0; z < depth - 1; ++ z){
+            printf(" %d", pathing_array[z][x]);
+        }
+        printf("\n");
+    }
 }
 
 int Terrain::getDepth(){
@@ -182,12 +189,11 @@ glm::vec3 Terrain::getNormal(GLfloat x_pos, GLfloat z_pos){
 
 GLfloat Terrain::getSteepness(GLfloat x_pos, GLfloat z_pos){
     glm::vec3 normal = getNormal(x_pos, z_pos);
-    GLfloat cosTheta = abs(glm::dot(glm::vec3(0.0, 1.0, 0.0), normal));
+    GLfloat cosTheta = glm::dot(glm::vec3(0.0, 1.0, 0.0), normal);
 
     GLfloat steepness = acos(cosTheta);
 
     return steepness;
-
 }
 
 bool Terrain::isOnTerrain(GLfloat x_pos, GLfloat z_pos, GLfloat tolerance){

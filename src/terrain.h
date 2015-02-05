@@ -28,6 +28,7 @@ public:
     GLfloat getHeightInterpolated(GLfloat, GLfloat);
     glm::vec3 getNormal(GLfloat, GLfloat);
     float getSteepness(GLfloat, GLfloat);
+    void printPathing();
 
     bool isOnTerrain(GLfloat, GLfloat, GLfloat);
 
