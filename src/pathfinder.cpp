@@ -22,11 +22,6 @@ void PathFinder::allocateArray(Terrain* ground){
         	node_state_array[i][j] = UNVISITED;
         }
     }
-
-    //  We have so much damn space anyway, since ints are the same size as bools
-    // 0 is unvisited
-    // 1 is in frontier
-    // 2 is visited
 }
 
 std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, int start_x, int start_y, int target_x, int target_y){
@@ -46,10 +41,14 @@ std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, int start_x, int s
 	int count = 0;
 	int index_x, index_y;
 	float temp_g_score;
+	float distance_to_goal;
 	bool can_move_to;
 	bool is_not_visited;
 	bool is_not_in_frontier;
 	int node_state;
+
+	Node* closest_node;
+	float closest_node_distance = 99999.0f;
 
  	while(! frontier_nodes.empty()){
  		count ++;
@@ -65,6 +64,12 @@ std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, int start_x, int s
         		node_state_array[visited_nodes[i]->x + x_offset][visited_nodes[i]->y + y_offset] = UNVISITED;
         	}
         	return reconstruct_path(parent_of, current_node);
+        }
+
+		distance_to_goal = distance_between(current_node->x, current_node->y, target_x, target_y);
+        if(distance_to_goal < closest_node_distance){
+        	closest_node_distance = distance_to_goal;
+        	closest_node = current_node;
         }
 
         frontier_nodes.pop();
@@ -113,10 +118,7 @@ std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, int start_x, int s
 	for(int i = 0; i < visited_nodes.size(); ++i){
 		node_state_array[visited_nodes[i]->x + x_offset][visited_nodes[i]->y + y_offset] = 0;
 	}
-
- 	// Failure reaches here
-	std::vector<glm::vec3> temp;
-	return temp;
+	return reconstruct_path(parent_of, closest_node);
 }
 
 float PathFinder::distance_between(int current_x, int current_y, int target_x, int target_y){
@@ -134,6 +136,11 @@ float PathFinder::heuristic_estimate(int a, int b, int c, int d){
 
 std::vector<glm::vec3> PathFinder::reconstruct_path(std::map<Node*, Node*> parent_of, Node* origin){
 	std::vector<glm::vec3> temp;
+	
+	if(! origin){
+		return temp;
+	}
+
 	temp.push_back(glm::vec3(origin->x, 0.0f, origin->y));
 
 	while(parent_of[origin]){
