@@ -54,6 +54,8 @@ Level::Level(const char* filename){
 
     loadLevel(filename);
 
+    PathFinder::allocateArray(ground);
+
     // Creation of test playable
     Mesh *playable_mesh = new Mesh("res/models/demo_unit.dae");
     GLuint playable_shader = ShaderLoader::loadShaderProgram("shaders/doodad.vs",

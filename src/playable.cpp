@@ -85,16 +85,19 @@ void Playable::executeOrder(Playable::Order order, glm::vec3 target){
     }
 }
 
-bool Playable::requestPush(glm::vec3 pos){
+bool Playable::requestPush(Terrain *ground, glm::vec3 pos){
     if(holding_position){
         return false;
     }
 
     if(!has_been_push_requested){
-        setMovementTarget(pos);
+        if(ground->canPath(int(pos.x), int(pos.z))){
+            setMovementTarget(pos);
+            return true;
+        } else {
+            return false;
+        }        
     }
-
-    return true;
 }
 
 void Playable::holdPosition(){
@@ -206,17 +209,16 @@ void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
             // Apply the movement to the other unit IF they aren't moving
             if(otherUnits[i]->canBePushed()){
 
-                bool did_push = otherUnits[i]->requestPush(glm::vec3(push_to_x, 0.0f, push_to_z));
-                bool moved_away = distance_to_unit_after_move > otherUnits[i]->getRadius();
+                bool did_push = otherUnits[i]->requestPush(ground, glm::vec3(push_to_x, 0.0f, push_to_z));
 
-                can_move = can_move && (did_push || moved_away);
+                can_move &= did_push;
             }
         }
     }
 
-    can_move &= ground->getSteepness(move_to_x, move_to_z) < 0.8f;
-    can_move &= ground->isOnTerrain(move_to_x, move_to_z, 1.0); 
-
+    // can_move &= ground->getSteepness(move_to_x, move_to_z) < 0.8f;
+    // can_move &= ground->isOnTerrain(move_to_x, move_to_z, 1.0); 
+    
     if(can_move && isMoving()){
         position.x = move_to_x;
         position.z = move_to_z;

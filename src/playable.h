@@ -41,7 +41,7 @@ public:
 	bool receiveOrder(Playable::Order, glm::vec3, bool);
 	void executeOrder(Playable::Order, glm::vec3);
 
-	bool requestPush(glm::vec3);
+	bool requestPush(Terrain*, glm::vec3);
 
 	void setMovementTarget(glm::vec3);
 

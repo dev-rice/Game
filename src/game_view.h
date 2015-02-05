@@ -18,6 +18,7 @@
 #include "screenbuffer.h"
 #include "window.h"
 #include "core_ui/ui_window.h"
+#include "pathfinder.h"
 
 class GameView {
 public:

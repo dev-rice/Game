@@ -3,14 +3,31 @@
 
 #include "pathfinder.h"
 
-std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, int start_x, int start_y, int target_x, int target_y){
+bool** PathFinder::visited_nodes_array;
+int PathFinder::depth;
+int PathFinder::width;
 
-	// First, see if a straight-line will work
+void PathFinder::allocateArray(Terrain* ground){
+	depth = ground->getDepth();
+	width = ground->getWidth();
+
+	visited_nodes_array = new bool*[width];
+    for(int i = 0; i < width; ++i){
+        visited_nodes_array[i] = new bool[depth];
+        // for(int j = 0; j < width; ++j){
+        // 	visited_nodes_array[i][j] = false;
+        // }
+    }
+}
+
+std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, int start_x, int start_y, int target_x, int target_y){
 
 	printf("Beginning A* search...\n");
 	// could put some benchmarking code here
 
-		// THIS CAN BE MORE TIME EFFICIENT AT THE COST OF MEMORY
+	int x_offset = width/2;
+	int y_offset = depth/2;
+
 	std::vector<Node*> visited_nodes;											    // The set of nodes already evaluated.
 	
 	std::priority_queue<Node*, std::vector<Node*>, LessThanByGScore> frontier_nodes;// The set of tentative nodes to be evaluated...
@@ -29,34 +46,50 @@ std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, int start_x, int s
         if(current_node->x == target_x && current_node->y == target_y){
    			printf("Final count: %d\n", count);
         	printf("Finished A* search successfully.\n");
+
+        	// Clear out the old visited nodes
+        	for(int i = 0; i < visited_nodes.size(); ++i){
+        		visited_nodes_array[visited_nodes[i]->x + x_offset][visited_nodes[i]->y + y_offset] = false;
+        	}
         	return reconstruct_path(parent_of, current_node);
         }
 
         frontier_nodes.pop();
 
         visited_nodes.push_back(current_node);
+        visited_nodes_array[current_node->x + x_offset][current_node->y + y_offset] = true;
 
         std::vector<Node*> neighbor_nodes = getNeighborNodes(current_node);
 
         for(int i = 0; i < neighbor_nodes.size(); ++i){
 
-        	float temp_g_score = current_node->g + distance_between(current_node->x, current_node->y, neighbor_nodes[i]->x, neighbor_nodes[i]->y);
+        	Node* n = neighbor_nodes[i];
 
-        	bool can_move_to = ground->canPath(neighbor_nodes[i]->x, neighbor_nodes[i]->y); // Check neighbor nodes for pathing as well?
-        	can_move_to &= ground->canPath(neighbor_nodes[i]->x + 1, neighbor_nodes[i]->y);
-        	can_move_to &= ground->canPath(neighbor_nodes[i]->x - 1, neighbor_nodes[i]->y);
-        	can_move_to &= ground->canPath(neighbor_nodes[i]->x,     neighbor_nodes[i]->y + 1);
-        	can_move_to &= ground->canPath(neighbor_nodes[i]->x,     neighbor_nodes[i]->y - 1);
+        	float temp_g_score = current_node->g + distance_between(current_node->x, current_node->y, n->x, n->y);
 
-        	bool is_not_visited = ! nodeIsInVector(visited_nodes, neighbor_nodes[i]);
-        	bool is_not_in_frontier = ! nodeIsInQueue(frontier_nodes, neighbor_nodes[i]);
+        	bool can_move_to = ground->canPath(n->x, n->y);
+        	can_move_to &= ground->canPath(n->x + 1, n->y);
+        	can_move_to &= ground->canPath(n->x - 1, n->y);
+        	can_move_to &= ground->canPath(n->x,     n->y + 1);
+        	can_move_to &= ground->canPath(n->x,     n->y - 1);
 
-        	if(is_not_visited && can_move_to && (is_not_in_frontier || temp_g_score < neighbor_nodes[i]->g)){
-        		parent_of[neighbor_nodes[i]] = current_node;
-        		neighbor_nodes[i]->g = temp_g_score;
+        	bool is_not_visited = false;
+
+        	int index_x = n->x + x_offset;
+        	int index_y = n->y + y_offset;
+
+        	if(index_y > 0 && index_y < depth && index_x > 0 && index_x < width){
+        		is_not_visited = ! visited_nodes_array[n->x + x_offset][n->y + y_offset];
+        	}
+        	        	
+        	bool is_not_in_frontier = ! nodeIsInQueue(frontier_nodes, n);
+
+        	if(is_not_visited && can_move_to && (is_not_in_frontier || temp_g_score < n->g)){
+        		parent_of[n] = current_node;
+        		n->g = temp_g_score;
 
         		if(is_not_in_frontier){
-        			frontier_nodes.push(neighbor_nodes[i]);
+        			frontier_nodes.push(n);
         		}
         	}
         }

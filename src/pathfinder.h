@@ -37,6 +37,7 @@ struct LessThanByGScore{
 
 class PathFinder {
 public:
+	static void allocateArray(Terrain*);
 	static std::vector<glm::vec3> find_path(Terrain*, int, int, int, int);
 private:
 	static float distance_between(int, int, int, int);
@@ -45,6 +46,10 @@ private:
 	static std::vector<Node*> getNeighborNodes(Node*);
 	static bool nodeIsInQueue(std::priority_queue<Node*, std::vector<Node*>, LessThanByGScore>, Node*);
 	static bool nodeIsInVector(std::vector<Node*>, Node*);
+
+	static bool **visited_nodes_array;
+	static int depth;
+	static int width;
 };
 
 #endif
