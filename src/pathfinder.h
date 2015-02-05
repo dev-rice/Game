@@ -44,10 +44,8 @@ private:
 	static float heuristic_estimate(int, int, int, int);
 	static std::vector<glm::vec3> reconstruct_path(std::map<Node*, Node*>, Node*);
 	static std::vector<Node*> getNeighborNodes(Node*);
-	static bool nodeIsInQueue(std::priority_queue<Node*, std::vector<Node*>, LessThanByGScore>, Node*);
-	static bool nodeIsInVector(std::vector<Node*>, Node*);
 
-	static bool **visited_nodes_array;
+	static int **node_state_array;
 	static int depth;
 	static int width;
 };

@@ -139,12 +139,17 @@ void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
 
         for(int i = 0; i < temp.size(); ++i){
             internal_order_queue.insert(internal_order_queue.begin(), temp[i]);
-        }
-        internal_order_queue.insert(internal_order_queue.begin(), move_to_position);
+        }   
 
-        // Go to the first one
-        setMovementTarget(internal_order_queue.back());
-        internal_order_queue.pop_back();
+        if(internal_order_queue.size() > 0){
+            internal_order_queue.insert(internal_order_queue.begin(), move_to_position);
+
+            // Go to the first one
+            setMovementTarget(internal_order_queue.back());
+            internal_order_queue.pop_back();
+        } else {
+            stop();
+        }
     }
 
     bool can_move = true;
