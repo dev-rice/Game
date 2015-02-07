@@ -5,8 +5,6 @@ GameView::GameView(Level* level){
     this->glfw_window = window->getGLFWWindow();
     this->level = level;
 
-    Profile::getInstance()->updateShaderSettings();
-
     screen = new Screenbuffer();
     framebuffer = new Framebuffer();
 
@@ -54,6 +52,8 @@ GameView::GameView(Level* level){
     glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::vec3), NULL, GL_STREAM_DRAW);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
     glBindBufferRange(GL_UNIFORM_BUFFER, 3, mouse_ubo, 0, sizeof(glm::vec3));
+
+    Profile::getInstance()->updateShaderSettings();
 
 }
 
