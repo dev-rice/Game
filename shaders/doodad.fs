@@ -32,8 +32,12 @@ vec4 emissive;
 
 vec3 map_surface_normal;
 
-const bool LIGHTING = true;
-const bool SHADOWS = true;
+
+layout(std140) uniform ProfileSettings {
+    bool LIGHTING;
+    bool SHADOWS;
+};
+
 const bool NORMAL_DEBUG = false;
 
 // Range: 0 to 4
@@ -154,7 +158,6 @@ void main() {
     emissive = texture(emissive_texture, Texcoord);
 
     map_surface_normal = (texture(normal_map, Texcoord) * 2 - vec4(1, 1, 1, 0)).rgb;
-    // map_surface_normal = surface_normal;
 
     float visibility;
     if (SHADOWS){

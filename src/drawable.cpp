@@ -52,6 +52,9 @@ void Drawable::setShader(GLuint shader_program){
     GLint mouse_point_location = glGetUniformBlockIndex(shader_program, "Mouse");
     glUniformBlockBinding(shader_program, mouse_point_location, 3);
 
+    GLint settings_location = glGetUniformBlockIndex(shader_program, "ProfileSettings");
+    glUniformBlockBinding(shader_program, settings_location, 4);
+
     // Try to set the texture locations
     glUniform1i(glGetUniformLocation(shader_program, "diffuse_texture"), 0);
     glUniform1i(glGetUniformLocation(shader_program, "specular_texture"), 1);

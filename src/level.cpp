@@ -118,8 +118,10 @@ void Level::draw(){
     }
 
     // Draw all the particle emitters
-    for(int i(0); i < emitters.size(); ++i){
-        emitters[i]->draw(camera);
+    if (Profile::getInstance()->isParticlesOn()){
+        for(int i(0); i < emitters.size(); ++i){
+            emitters[i]->draw(camera);
+        }
     }
 
 }
@@ -282,10 +284,7 @@ void Level::loadLevel(const char* filename){
 
             std::string heightmap_filename_str(heightmap_filename);
 
-            GLuint terrain_shader = ShaderLoader::loadShaderProgram(
-                "shaders/doodad.vs", "shaders/doodad.fs");
-
-            ground = new Terrain(terrain_shader, heightmap_filename_str, amplification);
+            ground = new Terrain(doodad_shader, heightmap_filename_str, amplification);
 
             GLuint diffuse = TextureLoader::loadTextureFromFile(ground_filename,
                 GL_LINEAR);

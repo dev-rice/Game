@@ -29,6 +29,7 @@
 
 #include "shadowbuffer.h"
 #include "window.h"
+#include "profile.h"
 
 #include "mouse.h"
 

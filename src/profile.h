@@ -20,15 +20,26 @@ public:
 	int getFxaaLevel();
 	bool getVsync();
 	bool getWindowed();
+	bool isParticlesOn() {return particles_on;}
+	bool isShadowsOn() {return shadows_on;}
+	bool isFramebuffersOn() {return framebuffers_on;}
+	bool isLightingOn() {return lighting_on;}
 	int getWindowHeight();
 	int getWindowWidth();
 
+
 	void toggleVsync();
+
+	void updateShaderSettings();
 
 private:
 	int fxaa_level;
 	bool vsync_on;
 	bool windowed_on;
+	bool particles_on;
+	bool shadows_on;
+	bool framebuffers_on;
+	bool lighting_on;
 	int resolution_index;
 	std::map<int, std::tuple<int, int>> resolution_map;
 
@@ -36,6 +47,8 @@ private:
 	Profile();
 	void loadSettings();
 	std::tuple<char*, char*> split(char*, char);
+
+	GLuint settings_ubo;
 };
 
 #endif

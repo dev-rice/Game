@@ -89,9 +89,33 @@ void Profile::loadSettings(){
                 }
         	} else if(strcmp(keyword, "texturedetail") == 0){
                 // TODO implement texture detail system
-            }
+            } else if(strcmp(keyword, "particles") == 0){
+				particles_on = (strcmp(value, "true") == 0);
+			} else if(strcmp(keyword, "shadows") == 0){
+				shadows_on = (strcmp(value, "true") == 0);
+			} else if(strcmp(keyword, "framebuffers") == 0){
+				framebuffers_on = (strcmp(value, "true") == 0);
+			} else if(strcmp(keyword, "lighting") == 0){
+				lighting_on = (strcmp(value, "true") == 0);
+			}
         }
     }
+
+}
+
+void Profile::updateShaderSettings(){
+	// Usually OpenGL code shouldn't be this high up but this is for
+	// sending settings to the shader
+	glGenBuffers(1, &settings_ubo);
+	glBindBuffer(GL_UNIFORM_BUFFER, settings_ubo);
+	glBufferData(GL_UNIFORM_BUFFER, sizeof(bool) * 2, NULL, GL_STREAM_DRAW);
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+	glBindBufferRange(GL_UNIFORM_BUFFER, 4, settings_ubo, 0, sizeof(bool) * 2);
+
+	glBindBuffer(GL_UNIFORM_BUFFER, settings_ubo);
+	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(bool), &lighting_on);
+	glBufferSubData(GL_UNIFORM_BUFFER, sizeof(bool), sizeof(bool), &shadows_on);
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
 std::tuple<char*, char*> Profile::split(char* str, char key){

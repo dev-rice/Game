@@ -5,6 +5,8 @@ GameView::GameView(Level* level){
     this->glfw_window = window->getGLFWWindow();
     this->level = level;
 
+    Profile::getInstance()->updateShaderSettings();
+
     screen = new Screenbuffer();
     framebuffer = new Framebuffer();
 
@@ -65,26 +67,35 @@ void GameView::update(){
     handleInputs();
 
     // Render the shadow map into the shadow buffer
-    level->getShadowbuffer()->setAsRenderTarget();
-    level->drawShadowMap();
-
-    // Render the level to the framebuffer
-    framebuffer->setAsRenderTarget();
-    level->draw();
-
-    // Draw the framebuffer N - 1 times (the last pass is drawn to the screen).
-    // This is how many times the fxaa shader samples the image.
-    // A good number is 4, 8 looks blurry, 1 doesn't do much.
-    int fxaa_level = window->getFxaaLevel();
-    if (fxaa_level){
-        for (int i = 0; i < fxaa_level - 1; ++i){
-            framebuffer->draw();
-        }
+    if (Profile::getInstance()->isShadowsOn()){
+        level->getShadowbuffer()->setAsRenderTarget();
+        level->drawShadowMap();
     }
 
-    // Draw the framebuffer
-    screen->setAsRenderTarget();
-    framebuffer->draw();
+    // Render the level to the framebuffer
+    if (Profile::getInstance()->isFramebuffersOn()){
+        framebuffer->setAsRenderTarget();
+        level->draw();
+
+        // Draw the framebuffer N - 1 times (the last pass is drawn to the screen).
+        // This is how many times the fxaa shader samples the image.
+        // A good number is 4, 8 looks blurry, 1 doesn't do much.
+        int fxaa_level = window->getFxaaLevel();
+        if (fxaa_level){
+            for (int i = 0; i < fxaa_level - 1; ++i){
+                framebuffer->draw();
+            }
+        }
+
+        // Draw the framebuffer
+        screen->setAsRenderTarget();
+        framebuffer->draw();
+    } else {
+        // Draw the level
+        screen->setAsRenderTarget();
+        level->draw();
+    }
+
 
     // Draw all of the ui elements on top of the level
     for(int i = 0; i < ui_drawables.size(); ++i){
@@ -169,7 +180,7 @@ void GameView::update(){
 void GameView::handleInputs(){
     Camera* camera = level->getCamera();
     glm::mat4 proj_matrix = level->getProjection();
-    
+
     glfwPollEvents();
 
     glm::vec2 gl_mouse_position = Mouse::getInstance()->getGLPosition();
