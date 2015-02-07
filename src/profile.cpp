@@ -112,6 +112,8 @@ void Profile::updateShaderSettings(){
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 	glBindBufferRange(GL_UNIFORM_BUFFER, 4, settings_ubo, 0, sizeof(bool) * 2);
 
+
+	// Shadows arent working
 	glBindBuffer(GL_UNIFORM_BUFFER, settings_ubo);
 	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(bool), &lighting_on);
 	glBufferSubData(GL_UNIFORM_BUFFER, sizeof(bool), sizeof(bool), &shadows_on);
