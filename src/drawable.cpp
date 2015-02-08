@@ -53,6 +53,7 @@ void Drawable::setShader(GLuint shader_program){
     glUniformBlockBinding(shader_program, mouse_point_location, 3);
 
     GLint settings_location = glGetUniformBlockIndex(shader_program, "ProfileSettings");
+    // Debug::info("settings_location = %d\n", settings_location);
     glUniformBlockBinding(shader_program, settings_location, 4);
 
     // Try to set the texture locations

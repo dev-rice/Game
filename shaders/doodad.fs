@@ -32,10 +32,9 @@ vec4 emissive;
 
 vec3 map_surface_normal;
 
-
 layout(std140) uniform ProfileSettings {
-    bool LIGHTING;
-    bool SHADOWS;
+    float lighting;
+    float shadows;
 };
 
 const bool NORMAL_DEBUG = false;
@@ -159,15 +158,18 @@ void main() {
 
     map_surface_normal = (texture(normal_map, Texcoord) * 2 - vec4(1, 1, 1, 0)).rgb;
 
+    bool lighting_on = lighting != 0.0f;
+    bool shadows_on = shadows != 0.0f;
+
     float visibility;
-    if (SHADOWS){
+    if (shadows_on){
         visibility = getShadowFactor();
     } else{
         visibility = 1.0;
     }
 
     vec4 texel;
-    if (LIGHTING){
+    if (lighting_on){
         // Works fine
         Light light;
         vec4 lit_component = vec4(0.0, 0.0, 0.0, 0.0);
@@ -190,7 +192,8 @@ void main() {
         texel = mix(lit_component + ambient_component, emissive_component,
             emissive.a);
     } else {
-        texel = diffuse;
+        texel = visibility * diffuse;
+        texel.a = diffuse.a;
     }
 
     if (texel.a < 0.5){

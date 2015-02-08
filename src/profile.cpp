@@ -108,15 +108,21 @@ void Profile::updateShaderSettings(){
 	// sending settings to the shader
 	glGenBuffers(1, &settings_ubo);
 	glBindBuffer(GL_UNIFORM_BUFFER, settings_ubo);
-	glBufferData(GL_UNIFORM_BUFFER, sizeof(bool) * 2, NULL, GL_STREAM_DRAW);
+	glBufferData(GL_UNIFORM_BUFFER, sizeof(GLfloat) * 2, NULL, GL_STREAM_DRAW);
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
-	glBindBufferRange(GL_UNIFORM_BUFFER, 4, settings_ubo, 0, sizeof(bool) * 2);
+	glBindBufferRange(GL_UNIFORM_BUFFER, 4, settings_ubo, 0, sizeof(GLfloat) * 2);
 
+	Debug::info("lighting_on == %d\n", lighting_on);
+	Debug::info("shadows_on  == %d\n", shadows_on);
 
-	// Shadows arent working
+	// For some reason you can't pass a bool through a UBO.
+	// So just represent it as a float.
+	GLfloat lighting = (lighting_on) ? 1.0f : 0.0f;
+	GLfloat shadows = (shadows_on) ? 1.0f : 0.0f;
+
 	glBindBuffer(GL_UNIFORM_BUFFER, settings_ubo);
-	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(bool), &lighting_on);
-	glBufferSubData(GL_UNIFORM_BUFFER, sizeof(bool), sizeof(bool), &shadows_on);
+	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(GLfloat), &lighting);
+	glBufferSubData(GL_UNIFORM_BUFFER, sizeof(GLfloat), sizeof(GLfloat), &shadows);
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 

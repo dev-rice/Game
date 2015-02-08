@@ -13,4 +13,6 @@ void Doodad::updateUniformData(){
     // ^ It's definitely a thing
     glUniform1f(glGetUniformLocation(shader_program, "scale"), scale);
 
+    
+
 }
