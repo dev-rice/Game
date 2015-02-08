@@ -43,15 +43,22 @@ void Window::takeScreenshot(){
     glReadPixels(0, 0, width, height, GL_RGBA,
         GL_UNSIGNED_BYTE, data);
 
-    int save_result = SOIL_save_image
-        (
-            filename.c_str(),
-            SOIL_SAVE_TYPE_BMP,
-            width, height, components,
-            data
-        );
+    // Flip the image about the horizontal axis
+    GLubyte* correct_data = new GLubyte[components * width * height];
+    int image_width = components * width;
+    int image_height = height;
+    for (int x = 0; x < image_width; x += components){
+        for (int y = 0; y < image_height; ++y){
+            for (int c = 0; c < components; ++c){
+                int data_index = c + x + ((image_height - y) * image_width);
+                int correct_index = c + x + (y * image_width);
+                correct_data[correct_index] = data[data_index];
+            }
+        }
+    }
 
-    // bool save_result = (data != NULL);
+    int save_result = SOIL_save_image(filename.c_str(), SOIL_SAVE_TYPE_BMP,
+        width, height, components, correct_data);
 
     if (save_result){
         Debug::info("Took screenshot %s.\n", filename.c_str());
@@ -60,7 +67,9 @@ void Window::takeScreenshot(){
     }
 
     delete[] data;
+    delete[] correct_data;
     data = NULL;
+    correct_data = NULL;
 }
 
 Window* Window::getInstance(){
