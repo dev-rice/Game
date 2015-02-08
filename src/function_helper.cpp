@@ -17,6 +17,7 @@ FunctionHelper* FunctionHelper::getInstance(){
 FunctionHelper::FunctionHelper(){
     lookup_table["testFunction"] = &FunctionHelper::testFunction;
     lookup_table["exitProgram"] = &FunctionHelper::exitProgram;
+    lookup_table["toggleShadows"] = &FunctionHelper::toggleShadows;
 }
 
 void FunctionHelper::runFunction(std::string function_name){
@@ -32,6 +33,10 @@ void FunctionHelper::runFunction(std::string function_name){
 
 void FunctionHelper::testFunction(){
     Profile::getInstance()->toggleVsync();
+}
+
+void FunctionHelper::toggleShadows(){
+    Profile::getInstance()->toggleShadows();
 }
 
 void FunctionHelper::exitProgram(){

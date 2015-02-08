@@ -28,6 +28,7 @@ public:
 	int getWindowWidth();
 
 
+	void toggleShadows();
 	void toggleVsync();
 
 	void updateShaderSettings();

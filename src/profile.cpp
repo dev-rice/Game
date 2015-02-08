@@ -38,6 +38,11 @@ bool Profile::getVsync(){
 	return vsync_on;
 }
 
+void Profile::toggleShadows(){
+	shadows_on = !shadows_on;
+	updateShaderSettings();
+}
+
 void Profile::toggleVsync(){
 	vsync_on = !vsync_on;
 	Window::getInstance()->setVsync(vsync_on);
@@ -111,9 +116,6 @@ void Profile::updateShaderSettings(){
 	glBufferData(GL_UNIFORM_BUFFER, sizeof(GLfloat) * 2, NULL, GL_STREAM_DRAW);
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 	glBindBufferRange(GL_UNIFORM_BUFFER, 4, settings_ubo, 0, sizeof(GLfloat) * 2);
-
-	Debug::info("lighting_on == %d\n", lighting_on);
-	Debug::info("shadows_on  == %d\n", shadows_on);
 
 	// For some reason you can't pass a bool through a UBO.
 	// So just represent it as a float.
