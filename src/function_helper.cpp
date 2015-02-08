@@ -18,6 +18,8 @@ FunctionHelper::FunctionHelper(){
     lookup_table["testFunction"] = &FunctionHelper::testFunction;
     lookup_table["exitProgram"] = &FunctionHelper::exitProgram;
     lookup_table["toggleShadows"] = &FunctionHelper::toggleShadows;
+    lookup_table["toggleNormals"] = &FunctionHelper::toggleNormals;
+
 }
 
 void FunctionHelper::runFunction(std::string function_name){
@@ -37,6 +39,10 @@ void FunctionHelper::testFunction(){
 
 void FunctionHelper::toggleShadows(){
     Profile::getInstance()->toggleShadows();
+}
+
+void FunctionHelper::toggleNormals(){
+    Profile::getInstance()->toggleNormals();
 }
 
 void FunctionHelper::exitProgram(){

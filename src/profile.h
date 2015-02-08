@@ -30,6 +30,7 @@ public:
 
 	void toggleShadows();
 	void toggleVsync();
+	void toggleNormals();
 
 	void updateShaderSettings();
 

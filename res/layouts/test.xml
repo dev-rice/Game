@@ -44,6 +44,10 @@
             <layout_filepath>res/layouts/radio_shadow.xml</layout_filepath>
         </ui_radiobutton>
 
+        <ui_radiobutton>
+            <layout_filepath>res/layouts/radio_normals.xml</layout_filepath>
+        </ui_radiobutton>
+
         <ui_button>
             <layout_filepath>res/layouts/buttontest.xml</layout_filepath>
         </ui_button>

@@ -24,6 +24,8 @@ private:
     void testFunction();
     void exitProgram();
     void toggleShadows();
+    void toggleNormals();
+
 
     std::map<std::string, function> lookup_table;
 };
