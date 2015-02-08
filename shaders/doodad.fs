@@ -35,6 +35,7 @@ vec3 map_surface_normal;
 layout(std140) uniform ProfileSettings {
     float lighting;
     float shadows;
+    float normal_maps;
 };
 
 const bool NORMAL_DEBUG = false;
@@ -156,10 +157,15 @@ void main() {
     specular = texture(specular_texture, Texcoord);
     emissive = texture(emissive_texture, Texcoord);
 
-    map_surface_normal = (texture(normal_map, Texcoord) * 2 - vec4(1, 1, 1, 0)).rgb;
-
     bool lighting_on = lighting != 0.0f;
     bool shadows_on = shadows != 0.0f;
+    bool normals_on = normal_maps != 0.0f;
+
+    if (normals_on){
+        map_surface_normal = (texture(normal_map, Texcoord) * 2 - vec4(1, 1, 1, 0)).rgb;
+    } else {
+        map_surface_normal = surface_normal;
+    }
 
     float visibility;
     if (shadows_on){

@@ -102,6 +102,8 @@ void Profile::loadSettings(){
 				framebuffers_on = (strcmp(value, "true") == 0);
 			} else if(strcmp(keyword, "lighting") == 0){
 				lighting_on = (strcmp(value, "true") == 0);
+			} else if(strcmp(keyword, "normals") == 0){
+				normals_on = (strcmp(value, "true") == 0);
 			}
         }
     }
@@ -113,18 +115,20 @@ void Profile::updateShaderSettings(){
 	// sending settings to the shader
 	glGenBuffers(1, &settings_ubo);
 	glBindBuffer(GL_UNIFORM_BUFFER, settings_ubo);
-	glBufferData(GL_UNIFORM_BUFFER, sizeof(GLfloat) * 2, NULL, GL_STREAM_DRAW);
+	glBufferData(GL_UNIFORM_BUFFER, sizeof(GLfloat) * 3, NULL, GL_STREAM_DRAW);
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
-	glBindBufferRange(GL_UNIFORM_BUFFER, 4, settings_ubo, 0, sizeof(GLfloat) * 2);
+	glBindBufferRange(GL_UNIFORM_BUFFER, 4, settings_ubo, 0, sizeof(GLfloat) * 3);
 
 	// For some reason you can't pass a bool through a UBO.
 	// So just represent it as a float.
 	GLfloat lighting = (lighting_on) ? 1.0f : 0.0f;
 	GLfloat shadows = (shadows_on) ? 1.0f : 0.0f;
+	GLfloat normals = (normals_on) ? 1.0f : 0.0f;
 
 	glBindBuffer(GL_UNIFORM_BUFFER, settings_ubo);
 	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(GLfloat), &lighting);
 	glBufferSubData(GL_UNIFORM_BUFFER, sizeof(GLfloat), sizeof(GLfloat), &shadows);
+	glBufferSubData(GL_UNIFORM_BUFFER, sizeof(GLfloat) * 2, sizeof(GLfloat), &normals);
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 

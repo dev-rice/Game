@@ -39,6 +39,7 @@ layout(std140) uniform Mouse {
 layout(std140) uniform ProfileSettings {
     float lighting;
     float shadows;
+    float normal_maps;
 };
 
 uniform mat4 model;
@@ -51,19 +52,25 @@ void main() {
 
     bool lighting_on = lighting != 0.0f;
     bool shadows_on = shadows != 0.0f;
+    bool normals_on = normal_maps != 0.0f;
 
-    vec4 normal_world = view * (model * vec4(normal, 0.0));
-    normal_world.w = 0.0;
-    vec4 tangent_world = view * (model * vec4(tangent, 0.0));
-    tangent_world.w = 0.0;
-    vec4 bitangent_world = view * (model * vec4(bitangent, 0.0));
-    bitangent_world.w = 0.0;
+    mat4 normal_basis;
+    if (normals_on) {
+        vec4 normal_world = view * (model * vec4(normal, 0.0));
+        normal_world.w = 0.0;
+        vec4 tangent_world = view * (model * vec4(tangent, 0.0));
+        tangent_world.w = 0.0;
+        vec4 bitangent_world = view * (model * vec4(bitangent, 0.0));
+        bitangent_world.w = 0.0;
 
-    mat4 normal_basis = mat4(tangent_world,
-                             bitangent_world,
-                             normal_world,
-                             0, 0, 0  , 1);
-    normal_basis = inverse(normal_basis);
+        normal_basis = mat4(tangent_world,
+                                 bitangent_world,
+                                 normal_world,
+                                 0, 0, 0  , 1);
+        normal_basis = inverse(normal_basis);
+    } else {
+        normal_basis = mat4(1);
+    }
 
     vec3 scaled_position = position * scale;
     vec4 model_position = model * vec4(scaled_position, 1.0);

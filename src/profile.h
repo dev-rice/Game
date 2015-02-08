@@ -41,6 +41,7 @@ private:
 	bool shadows_on;
 	bool framebuffers_on;
 	bool lighting_on;
+	bool normals_on;
 	int resolution_index;
 	std::map<int, std::tuple<int, int>> resolution_map;
 
