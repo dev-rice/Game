@@ -38,6 +38,7 @@ void Window::takeScreenshot(){
     // Create the unsigned byte array of size components * width * height
     // In this case components is 3 because we are saving the RGB components
     int components = 4;
+    // Flipped vertically
     GLubyte* data = new GLubyte[components * width * height];
     glReadPixels(0, 0, width, height, GL_RGBA,
         GL_UNSIGNED_BYTE, data);
