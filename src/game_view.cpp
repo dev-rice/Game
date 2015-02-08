@@ -61,10 +61,10 @@ void GameView::update(){
     ++frame_count;
 
     float start_time = glfwGetTime();
+    handleInputs();
     // Swap display/rendering buffers
     window->swapBuffers();
 
-    handleInputs();
 
     // Render the shadow map into the shadow buffer
     if (Profile::getInstance()->isShadowsOn()){
@@ -421,8 +421,12 @@ void GameView::handleInputs(){
     }
 
     //Print the screen
-    if (glfwGetKey(glfw_window, GLFW_KEY_P) == GLFW_PRESS){
+    if ((glfwGetKey(glfw_window, GLFW_KEY_P) == GLFW_PRESS) && (!printscreen_key_state)){
         Window::getInstance()->takeScreenshot();
+        printscreen_key_state = true;
+    }
+    if (glfwGetKey(glfw_window, GLFW_KEY_P) == GLFW_RELEASE){
+        printscreen_key_state = false;
     }
 
 }

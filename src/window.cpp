@@ -33,14 +33,33 @@ void Window::takeScreenshot(){
 
     std::string filename = "screenshot_" + std::string(buf) + ".bmp";
 
-    int save_result = SOIL_save_screenshot(filename.c_str(), SOIL_SAVE_TYPE_BMP,
-        0, 0, requested_width, requested_height);
+    Debug::info("Attempting to save screenshot %s.\n", filename.c_str());
+
+    // Create the unsigned byte array of size components * width * height
+    // In this case components is 3 because we are saving the RGB components
+    int components = 4;
+    GLubyte* data = new GLubyte[components * width * height];
+    glReadPixels(0, 0, width, height, GL_RGBA,
+        GL_UNSIGNED_BYTE, data);
+
+    int save_result = SOIL_save_image
+        (
+            filename.c_str(),
+            SOIL_SAVE_TYPE_BMP,
+            width, height, components,
+            data
+        );
+
+    // bool save_result = (data != NULL);
 
     if (save_result){
         Debug::info("Took screenshot %s.\n", filename.c_str());
     } else {
         Debug::error("Error saving screenshot %s.\n", filename.c_str());
     }
+
+    delete[] data;
+    data = NULL;
 }
 
 Window* Window::getInstance(){

@@ -59,6 +59,8 @@ private:
     bool toggle_key_state;
     bool debug_showing;
 
+    bool printscreen_key_state;
+
     UIWindow* menu;
     bool menu_key_state;
 
