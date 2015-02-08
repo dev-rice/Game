@@ -36,6 +36,11 @@ layout(std140) uniform Mouse {
     vec3 mouse_point;
 };
 
+layout(std140) uniform ProfileSettings {
+    float lighting;
+    float shadows;
+};
+
 uniform mat4 model;
 
 uniform float time;
@@ -43,6 +48,9 @@ uniform float scale;
 
 void main() {
     Texcoord = texcoord;
+
+    bool lighting_on = lighting != 0.0f;
+    bool shadows_on = shadows != 0.0f;
 
     vec4 normal_world = view * (model * vec4(normal, 0.0));
     normal_world.w = 0.0;
@@ -64,41 +72,45 @@ void main() {
     gl_Position = proj * world_position;
 
     // Real directional lighting
-    lights[0].position = vec3(1.0, 2.0, -0.5);
-    lights[0].color = vec3(1.0, 1.0, 1.0);
-    lights[0].power = 1.0;
-    vec3 direction_vector = normalize(lights[0].position);
-    vec4 light_vector = view * vec4(direction_vector, 0.0);
-    light_vector = normalize(normal_basis * light_vector);
-    lights[0].light_to_surface = light_vector.xyz;
+    if (lighting_on){
+        lights[0].position = vec3(1.0, 2.0, -0.5);
+        lights[0].color = vec3(1.0, 1.0, 1.0);
+        lights[0].power = 1.0;
+        vec3 direction_vector = normalize(lights[0].position);
+        vec4 light_vector = view * vec4(direction_vector, 0.0);
+        light_vector = normalize(normal_basis * light_vector);
+        lights[0].light_to_surface = light_vector.xyz;
 
-    lights[1].position = vec3(-1.415, 0.5, 0.0);
-    lights[1].color = vec3(1.0, 0.3, 0.1);
-    lights[1].power = 5.0;
+        lights[1].position = vec3(-1.415, 0.5, 0.0);
+        lights[1].color = vec3(1.0, 0.3, 0.1);
+        lights[1].power = 5.0;
 
-    lights[2].position = vec3(mouse_point.x, mouse_point.y + 1.0, mouse_point.z);
-    lights[2].color = vec3(0.0, 0.4, 1.0);
-    lights[2].power = 10.0;
+        lights[2].position = vec3(mouse_point.x, mouse_point.y + 1.0, mouse_point.z);
+        lights[2].color = vec3(0.0, 0.4, 1.0);
+        lights[2].power = 10.0;
 
-    // The first light is reserved for the directional light
-    for (int i = 1; i < num_lights; ++i){
-        vec3 light_vector = (normal_basis * (view * (vec4(lights[i].position, 1.0)) -
-            (world_position))).xyz;
+        // The first light is reserved for the directional light
+        for (int i = 1; i < num_lights; ++i){
+            vec3 light_vector = (normal_basis * (view * (vec4(lights[i].position, 1.0)) -
+                (world_position))).xyz;
 
-        lights[i].light_to_surface = light_vector;
+            lights[i].light_to_surface = light_vector;
+        }
+
+        surface_normal = (view * model * vec4(normal, 0.0)).xyz;
+        camera_to_surface = vec3(0,0,0) - (world_position).xyz;
     }
 
-    surface_normal = (view * model * vec4(normal, 0.0)).xyz;
-    camera_to_surface = vec3(0,0,0) - (world_position).xyz;
-
     // Shadow shtuff
-    mat4 bias_matrix = mat4( 0.5, 0.0, 0.0, 0.0,
-                             0.0, 0.5, 0.0, 0.0,
-                             0.0, 0.0, 0.5, 0.0,
-                             0.5, 0.5, 0.5, 1.0 );
+    if (shadows_on){
+        mat4 bias_matrix = mat4( 0.5, 0.0, 0.0, 0.0,
+                                 0.0, 0.5, 0.0, 0.0,
+                                 0.0, 0.0, 0.5, 0.0,
+                                 0.5, 0.5, 0.5, 1.0 );
 
-    mat4 depth_matrix = depth_proj * depth_view * model;
-    depth_matrix = bias_matrix * depth_matrix;
-    shadow_coord = depth_matrix * vec4(scaled_position, 1.0);
+        mat4 depth_matrix = depth_proj * depth_view * model;
+        depth_matrix = bias_matrix * depth_matrix;
+        shadow_coord = depth_matrix * vec4(scaled_position, 1.0);
+    }
 
 }
