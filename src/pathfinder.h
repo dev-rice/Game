@@ -42,8 +42,9 @@ public:
 private:
 	static float distance_between(int, int, int, int);
 	static float heuristic_estimate(int, int, int, int);
-	static std::vector<glm::vec3> reconstruct_path(std::map<Node*, Node*>, Node*);
+	static std::vector<glm::vec3> reconstruct_path(Terrain*, std::map<Node*, Node*>, Node*);
 	static std::vector<Node*> getNeighborNodes(Node*);
+	static bool canPathOnLine(Terrain*, int, int, int, int);
 
 	static int **node_state_array;
 	static int depth;

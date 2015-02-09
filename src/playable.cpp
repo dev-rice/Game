@@ -182,41 +182,42 @@ void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
         // Calculate where THIS intends to move
         move_to_x = position.x + sin(movement_target_direction)*speed;
         move_to_z = position.z + cos(movement_target_direction)*speed;
-    } 
+ 
 
-    // Push around or attack the other units
-    // Pretty much bully everyone
-    for(int i = 0; i < otherUnits.size(); ++i){
+        // Push around or attack the other units
+        // Pretty much bully everyone
+        for(int i = 0; i < otherUnits.size(); ++i){
 
-        // Find the x and z difference between THIS and other unit
-        float x_delta = otherUnits[i]->getPosition().x - move_to_x;
-        float z_delta = otherUnits[i]->getPosition().z - move_to_z;
+            // Find the x and z difference between THIS and other unit
+            float x_delta = otherUnits[i]->getPosition().x - move_to_x;
+            float z_delta = otherUnits[i]->getPosition().z - move_to_z;
 
-        float abs_x_delta = abs(x_delta);
-        float abs_z_delta = abs(z_delta);
+            float abs_x_delta = abs(x_delta);
+            float abs_z_delta = abs(z_delta);
 
-        float distance_to_unit_after_move = sqrt(abs_x_delta*abs_x_delta + abs_z_delta*abs_z_delta);
+            float distance_to_unit_after_move = sqrt(abs_x_delta*abs_x_delta + abs_z_delta*abs_z_delta);
 
-        // If it's not THIS and if THIS moves too close
-        if(otherUnits[i] != this && distance_to_unit_after_move < otherUnits[i]->getRadius() + radius){
-            // Push the other unit
+            // If it's not THIS and if THIS moves too close
+            if(otherUnits[i] != this && distance_to_unit_after_move < otherUnits[i]->getRadius() + radius){
+                // Push the other unit
 
-            // Get the push direction
-            float theta = atan2(x_delta, z_delta);
+                // Get the push direction
+                float theta = atan2(x_delta, z_delta);
 
-            // Saving the radius
-            float other_radius = otherUnits[i]->getRadius();
+                // Saving the radius
+                float other_radius = otherUnits[i]->getRadius();
 
-            // Add the distance to push to the location-to-be of THIS
-            float push_to_x = move_to_x + sin(theta)*(other_radius + radius);
-            float push_to_z = move_to_z + cos(theta)*(other_radius + radius);
+                // Add the distance to push to the location-to-be of THIS
+                float push_to_x = move_to_x + sin(theta)*(other_radius + radius);
+                float push_to_z = move_to_z + cos(theta)*(other_radius + radius);
 
-            // Apply the movement to the other unit IF they aren't moving
-            if(otherUnits[i]->canBePushed()){
+                // Apply the movement to the other unit IF they aren't moving
+                if(otherUnits[i]->canBePushed()){
 
-                bool did_push = otherUnits[i]->requestPush(ground, glm::vec3(push_to_x, 0.0f, push_to_z));
+                    bool did_push = otherUnits[i]->requestPush(ground, glm::vec3(push_to_x, 0.0f, push_to_z));
 
-                can_move &= did_push;
+                    can_move &= did_push;
+                }
             }
         }
     }

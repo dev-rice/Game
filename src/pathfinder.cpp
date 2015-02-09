@@ -26,6 +26,8 @@ void PathFinder::allocateArray(Terrain* ground){
 
 std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, int start_x, int start_y, int target_x, int target_y){
 
+	bool can_path_line = canPathOnLine(ground, start_x, start_y, target_x, target_y);
+
 	int x_offset = width/2;
 	int y_offset = depth/2;
 
@@ -63,7 +65,7 @@ std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, int start_x, int s
         	for(int i = 0; i < visited_nodes.size(); ++i){
         		node_state_array[visited_nodes[i]->x + x_offset][visited_nodes[i]->y + y_offset] = UNVISITED;
         	}
-        	return reconstruct_path(parent_of, current_node);
+        	return reconstruct_path(ground, parent_of, current_node);
         }
 
 		distance_to_goal = distance_between(current_node->x, current_node->y, target_x, target_y);
@@ -118,7 +120,7 @@ std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, int start_x, int s
 	for(int i = 0; i < visited_nodes.size(); ++i){
 		node_state_array[visited_nodes[i]->x + x_offset][visited_nodes[i]->y + y_offset] = 0;
 	}
-	return reconstruct_path(parent_of, closest_node);
+	return reconstruct_path(ground, parent_of, closest_node);
 }
 
 float PathFinder::distance_between(int current_x, int current_y, int target_x, int target_y){
@@ -134,19 +136,20 @@ float PathFinder::heuristic_estimate(int a, int b, int c, int d){
 	return distance_between(a, b, c, d);
 }
 
-std::vector<glm::vec3> PathFinder::reconstruct_path(std::map<Node*, Node*> parent_of, Node* origin){
+std::vector<glm::vec3> PathFinder::reconstruct_path(Terrain *ground, std::map<Node*, Node*> parent_of, Node* origin){
 	std::vector<glm::vec3> temp;
-	
+
 	if(! origin){
 		return temp;
 	}
 
 	temp.push_back(glm::vec3(origin->x, 0.0f, origin->y));
-
 	while(parent_of[origin]){
 		origin = parent_of[origin];
 		temp.insert(temp.begin(), glm::vec3(origin->x, 0.0f, origin->y));
 	}
+
+	// Smoothing goes here
 
 	return temp;
 }
@@ -163,4 +166,55 @@ std::vector<Node*> PathFinder::getNeighborNodes(Node *current_node){
 	temp.push_back(new Node(current_node->x - 1, current_node->y + 0, current_node->g + 1.0f));
 	temp.push_back(new Node(current_node->x - 1, current_node->y + 1, current_node->g + 1.4f));
 	return temp;
+}
+
+bool PathFinder::canPathOnLine(Terrain* ground, int x0, int y0, int x1, int y1){
+	// http://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm#Algorithm_for_integer_arithmetic
+	// dx=x1-x0
+	// dy=y1-y0
+
+	// D = 2*dy - dx
+	// plot(x0,y0)
+	// y=y0
+
+	// for x from x0+1 to x1
+	// if D > 0
+	//   y = y+1
+	//   plot(x,y)
+	//   D = D + (2*dy-2*dx)
+	// else
+	//   plot(x,y)
+	//   D = D + (2*dy)
+
+	// ONLY WORKS FOR OCTANT 0:
+	//  \5|6/
+	//  4\|/7
+	// ---+---
+	//  3/|\0
+	//  /2|1\
+
+	printf("Starting line draw...\n");
+	int dx = x1 - x0;
+	int dy = y1 - y0;
+
+	int d = (dy + dy) - dx;
+	printf("(%d, %d)\n", x0, y0);
+	int y = y0;
+
+	for(int x = x0 + 1; x < x1; ++x){
+		if(d > 0){
+			y++;
+			printf("(%d, %d)\n", x, y);
+			d += (dy + dy) - (dx + dx);
+		} else {
+			printf("(%d, %d)\n", x, y);
+			d += (dy + dy);
+		}
+	}
+
+	printf("(%d, %d)\n", x1, y1);
+	printf("Ended line draw\n\n");
+
+
+	return true;
 }
