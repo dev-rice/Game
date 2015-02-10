@@ -140,7 +140,7 @@ void Level::updateGlobalUniforms(){
     glm::vec3 light_direction = glm::vec3(1.0f, 2.0f, -0.5f);
     glm::vec3 camera_offset = glm::vec3(camera->getPosition().x, 0, camera->getPosition().z - 40.0);
     depth_view = glm::lookAt(light_direction + camera_offset, camera_offset,
-    glm::vec3(0,1,0));
+        glm::vec3(0,1,0));
 
     view_matrix = camera->getViewMatrix();
 
