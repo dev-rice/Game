@@ -1,3 +1,5 @@
+PLATFORM := $(shell uname)
+
 COMPILER := g++
 
 OPTIONS :=
@@ -15,7 +17,17 @@ LINUX_LIBRARIES := -lGL -lGLEW -I /usr/lib/x86_64-linux-gnu/ -lglfw -I /usr/loca
 LINUX_LIBRARIES_ALT := -lglfw3 -lX11 -lXxf86vm -lXrandr -lpthread -lXi -lrt -lXinerama -lXcursor -lGL -lGLEW -I /usr/local/include -lSOIL
 
 all:
-	@ echo Please specify target platform
+# Try to auto detect the platform to build for
+ifeq ($(PLATFORM),Darwin)
+	@ echo Building for Mac OSX.
+	@ make mac
+else ifeq ($(PLATFORM),Linux)
+	@ echo Building for Linux.
+	@ make linux
+else
+	@ echo Unknown platform '$(PLATFORM)'
+endif
+
 mac:
 	@ ./tools/buildcount.sh
 	@ rm -f res/models/*.mtl
