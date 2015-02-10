@@ -207,8 +207,7 @@ void main() {
     }
 
     if (NORMAL_DEBUG){
-        // outColor = vec4(map_surface_normal, 1.0);
-        outColor = vec4((lights[0].light_to_surface + 1.0) / 2.0, 1.0);
+        outColor = vec4(map_surface_normal, 1.0);
     } else {
         outColor = texel;
     }
