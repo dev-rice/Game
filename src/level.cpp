@@ -88,13 +88,6 @@ Level::Level(const char* filename){
 }
 
 void Level::draw(){
-    glm::vec3 light_direction = glm::vec3(1.0f, 2.0f, -0.5f);
-    glm::vec3 camera_offset = glm::vec3(camera->getPosition().x, 0, camera->getPosition().z - 40.0);
-    depth_view = glm::lookAt(light_direction + camera_offset, camera_offset,
-    glm::vec3(0,1,0));
-
-    // Update the view matrix based on the current
-    // camera location / position
     updateGlobalUniforms();
 
     // make sure the selected units are good to go
@@ -142,6 +135,13 @@ void Level::drawShadowMap(){
 }
 
 void Level::updateGlobalUniforms(){
+    // Update the shadow view matrix based on the current
+    // camera position
+    glm::vec3 light_direction = glm::vec3(1.0f, 2.0f, -0.5f);
+    glm::vec3 camera_offset = glm::vec3(camera->getPosition().x, 0, camera->getPosition().z - 40.0);
+    depth_view = glm::lookAt(light_direction + camera_offset, camera_offset,
+    glm::vec3(0,1,0));
+
     view_matrix = camera->getViewMatrix();
 
     // Attach the shadow texture to location 4
