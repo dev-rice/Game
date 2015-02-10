@@ -32,6 +32,10 @@ GameView::GameView(Level* level){
     menu->loadFromXML("res/layouts/test.xml");
     menu->hide();
 
+    graphics_menu = new UIWindow(ui_shader);
+    graphics_menu->loadFromXML("res/layouts/graphics_settings.xml");
+    graphics_menu->hide();
+
     toggle_key_state = false;
     debug_showing = Debug::is_on;
 
@@ -102,6 +106,7 @@ void GameView::update(){
         ui_drawables[i]->draw();
     }
     menu->draw();
+    graphics_menu->draw();
 
     // draw selection rectangle here and change the cursor based on amount of dragging
     Camera* camera = level->getCamera();
@@ -185,75 +190,118 @@ void GameView::handleInputs(){
 
     glm::vec2 gl_mouse_position = Mouse::getInstance()->getGLPosition();
 
-    // Mouse scrolling the screen
-    if(mouse_count == 0){
+    if (debug_showing){
+        // Camera controls for debug mode
+        // Movement
+        if (glfwGetKey(glfw_window, GLFW_KEY_W) == GLFW_PRESS){
+            camera->moveZ(-1);
+        }
+        if (glfwGetKey(glfw_window, GLFW_KEY_S) == GLFW_PRESS){
+            camera->moveZ(1);
+        }
+        if (glfwGetKey(glfw_window, GLFW_KEY_D) == GLFW_PRESS){
+            camera->moveX(1);
+        }
+        if (glfwGetKey(glfw_window, GLFW_KEY_A) == GLFW_PRESS){
+            camera->moveX(-1);
+        }
+        if (glfwGetKey(glfw_window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS){
+            camera->moveY(-1);
+        }
+        if (glfwGetKey(glfw_window, GLFW_KEY_SPACE) == GLFW_PRESS){
+            camera->moveY(1);
+        }
 
-        Mouse::getInstance()->setCursorSprite(Mouse::cursorType::CURSOR);
+        // Rotation
+        if (glfwGetKey(glfw_window, GLFW_KEY_Q) == GLFW_PRESS){
+            camera->rotateY(1);
+        }
+        if (glfwGetKey(glfw_window, GLFW_KEY_E) == GLFW_PRESS){
+            camera->rotateY(-1);
+        }
+        if (glfwGetKey(glfw_window, GLFW_KEY_R) == GLFW_PRESS){
+            camera->rotateX(1);
+        }
+        if (glfwGetKey(glfw_window, GLFW_KEY_F) == GLFW_PRESS){
+            camera->rotateX(-1);
+        }
+        if (glfwGetKey(glfw_window, GLFW_KEY_Z) == GLFW_PRESS){
+            camera->rotateZ(1);
+        }
+        if (glfwGetKey(glfw_window, GLFW_KEY_C) == GLFW_PRESS){
+            camera->rotateZ(-1);
+        }
+    } else {
+        // Mouse scrolling the screen when not in debug mode
+        if(mouse_count == 0){
 
-        // LEFT
-        if(camera->getPosition().x >= -1.0 * level->getMapWidth()/2 + 70){
-            if(gl_mouse_position.x < -0.95){
-                camera->moveGlobalX(-10);
-            } else if(gl_mouse_position.x < -0.85){
-                camera->moveGlobalX(-5);
+            Mouse::getInstance()->setCursorSprite(Mouse::cursorType::CURSOR);
+
+            // LEFT
+            if(camera->getPosition().x >= -1.0 * level->getMapWidth()/2 + 70){
+                if(gl_mouse_position.x < -0.95){
+                    camera->moveGlobalX(-10);
+                } else if(gl_mouse_position.x < -0.85){
+                    camera->moveGlobalX(-5);
+                }
+            }
+
+            // RIGHT
+            if(camera->getPosition().x <= 1.0 * level->getMapWidth()/2 - 70){
+                if(gl_mouse_position.x > 0.95){
+                    camera->moveGlobalX(10);
+                } else if (gl_mouse_position.x > 0.85){
+                    camera->moveGlobalX(5);
+                }
+            }
+
+            // DOWN
+            if(camera->getPosition().z <= 1.0 * level->getMapDepth()/2 - 3){
+                if(gl_mouse_position.y < -0.95){
+                    camera->moveGlobalZ(10);
+                } else if(gl_mouse_position.y < -0.85){
+                    camera->moveGlobalZ(5);
+                }
+            }
+
+            // UP                            . Compensating for the camera angle
+            if(camera->getPosition().z >= -1.0 * level->getMapDepth()/2 + 70){
+                if(gl_mouse_position.y > 0.95){
+                    camera->moveGlobalZ(-10);
+                } else if (gl_mouse_position.y > 0.85){
+                    camera->moveGlobalZ(-5);
+                }
+            }
+
+            // Changing the mouse cursor based on scrolling
+            if(gl_mouse_position.x < -0.85){
+                Mouse::getInstance()->setCursorSprite(Mouse::cursorType::LEFT);
+            }
+            if(gl_mouse_position.x > 0.85){
+                Mouse::getInstance()->setCursorSprite(Mouse::cursorType::RIGHT);
+            }
+            if(gl_mouse_position.y > 0.85){
+                Mouse::getInstance()->setCursorSprite(Mouse::cursorType::UP);
+            }
+            if(gl_mouse_position.y < -0.85){
+                Mouse::getInstance()->setCursorSprite(Mouse::cursorType::DOWN);
+            }
+
+            if(gl_mouse_position.x < -0.85 && gl_mouse_position.y < -0.85){
+                Mouse::getInstance()->setCursorSprite(Mouse::cursorType::DOWN_LEFT);
+            }
+            if(gl_mouse_position.x > 0.85 && gl_mouse_position.y < -0.85){
+                Mouse::getInstance()->setCursorSprite(Mouse::cursorType::DOWN_RIGHT);
+            }
+            if(gl_mouse_position.x < -0.85 && gl_mouse_position.y > 0.85){
+                Mouse::getInstance()->setCursorSprite(Mouse::cursorType::UP_LEFT);
+            }
+            if(gl_mouse_position.x > 0.85 && gl_mouse_position.y > 0.85){
+                Mouse::getInstance()->setCursorSprite(Mouse::cursorType::UP_RIGHT);
             }
         }
 
-        // RIGHT
-        if(camera->getPosition().x <= 1.0 * level->getMapWidth()/2 - 70){
-            if(gl_mouse_position.x > 0.95){
-                camera->moveGlobalX(10);
-            } else if (gl_mouse_position.x > 0.85){
-                camera->moveGlobalX(5);
-            }
-        }
-
-        // DOWN
-        if(camera->getPosition().z <= 1.0 * level->getMapDepth()/2 - 3){
-            if(gl_mouse_position.y < -0.95){
-                camera->moveGlobalZ(10);
-            } else if(gl_mouse_position.y < -0.85){
-                camera->moveGlobalZ(5);
-            }
-        }
-
-        // UP                            . Compensating for the camera angle
-        if(camera->getPosition().z >= -1.0 * level->getMapDepth()/2 + 70){
-            if(gl_mouse_position.y > 0.95){
-                camera->moveGlobalZ(-10);
-            } else if (gl_mouse_position.y > 0.85){
-                camera->moveGlobalZ(-5);
-            }
-        }
-
-        // Changing the mouse cursor based on scrolling
-        if(gl_mouse_position.x < -0.85){
-            Mouse::getInstance()->setCursorSprite(Mouse::cursorType::LEFT);
-        }
-        if(gl_mouse_position.x > 0.85){
-            Mouse::getInstance()->setCursorSprite(Mouse::cursorType::RIGHT);
-        }
-        if(gl_mouse_position.y > 0.85){
-            Mouse::getInstance()->setCursorSprite(Mouse::cursorType::UP);
-        }
-        if(gl_mouse_position.y < -0.85){
-            Mouse::getInstance()->setCursorSprite(Mouse::cursorType::DOWN);
-        }
-
-        if(gl_mouse_position.x < -0.85 && gl_mouse_position.y < -0.85){
-            Mouse::getInstance()->setCursorSprite(Mouse::cursorType::DOWN_LEFT);
-        }
-        if(gl_mouse_position.x > 0.85 && gl_mouse_position.y < -0.85){
-            Mouse::getInstance()->setCursorSprite(Mouse::cursorType::DOWN_RIGHT);
-        }
-        if(gl_mouse_position.x < -0.85 && gl_mouse_position.y > 0.85){
-            Mouse::getInstance()->setCursorSprite(Mouse::cursorType::UP_LEFT);
-        }
-        if(gl_mouse_position.x > 0.85 && gl_mouse_position.y > 0.85){
-            Mouse::getInstance()->setCursorSprite(Mouse::cursorType::UP_RIGHT);
-        }
     }
-
     // Closing the window
     if (glfwGetKey(glfw_window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
         window->requestClose();
@@ -349,49 +397,6 @@ void GameView::handleInputs(){
         attack_command_prime = true;
     }
 
-    if (Debug::is_on){
-        // Camera controls
-        // Movement
-        if (glfwGetKey(glfw_window, GLFW_KEY_W) == GLFW_PRESS){
-            camera->moveZ(-1);
-        }
-        if (glfwGetKey(glfw_window, GLFW_KEY_S) == GLFW_PRESS){
-            camera->moveZ(1);
-        }
-        if (glfwGetKey(glfw_window, GLFW_KEY_D) == GLFW_PRESS){
-            camera->moveX(1);
-        }
-        if (glfwGetKey(glfw_window, GLFW_KEY_A) == GLFW_PRESS){
-            camera->moveX(-1);
-        }
-        if (glfwGetKey(glfw_window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS){
-            camera->moveY(-1);
-        }
-        if (glfwGetKey(glfw_window, GLFW_KEY_SPACE) == GLFW_PRESS){
-            camera->moveY(1);
-        }
-
-        // Rotation
-        if (glfwGetKey(glfw_window, GLFW_KEY_Q) == GLFW_PRESS){
-            camera->rotateY(1);
-        }
-        if (glfwGetKey(glfw_window, GLFW_KEY_E) == GLFW_PRESS){
-            camera->rotateY(-1);
-        }
-        if (glfwGetKey(glfw_window, GLFW_KEY_R) == GLFW_PRESS){
-            camera->rotateX(1);
-        }
-        if (glfwGetKey(glfw_window, GLFW_KEY_F) == GLFW_PRESS){
-            camera->rotateX(-1);
-        }
-        if (glfwGetKey(glfw_window, GLFW_KEY_Z) == GLFW_PRESS){
-            camera->rotateZ(1);
-        }
-        if (glfwGetKey(glfw_window, GLFW_KEY_C) == GLFW_PRESS){
-            camera->rotateZ(-1);
-        }
-    }
-
     // Handle the debug toggle key
     if ((glfwGetKey(glfw_window, GLFW_KEY_TAB) == GLFW_PRESS) && (!toggle_key_state)){
         toggle_key_state = true;
@@ -399,6 +404,12 @@ void GameView::handleInputs(){
     }
     if (glfwGetKey(glfw_window, GLFW_KEY_TAB) == GLFW_RELEASE){
         toggle_key_state = false;
+    }
+
+    if (debug_showing){
+        graphics_menu->show();
+    } else {
+        graphics_menu->hide();
     }
 
     // Handle the menu toggle key

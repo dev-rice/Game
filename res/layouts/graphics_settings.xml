@@ -3,15 +3,15 @@
 
     <constraints>
         <x>
-            <anchor>centered</anchor>
-            <offset>0</offset>
+            <anchor>right</anchor>
+            <offset>-390</offset>
         </x>
         <y>
-            <anchor>centered</anchor>
-            <offset>0</offset>
+            <anchor>top</anchor>
+            <offset>-20</offset>
         </y>
-        <width>500</width>
-        <height>500</height>
+        <width>400</width>
+        <height>300</height>
     </constraints>
 
     <corner_sprites>
@@ -36,9 +36,17 @@
     </edge_sprites>
 
     <subelements>
-        <ui_button>
-            <layout_filepath>res/layouts/buttontest.xml</layout_filepath>
-        </ui_button>
+        <ui_radiobutton>
+            <layout_filepath>res/layouts/radiotest.xml</layout_filepath>
+        </ui_radiobutton>
+
+        <ui_radiobutton>
+            <layout_filepath>res/layouts/radio_shadow.xml</layout_filepath>
+        </ui_radiobutton>
+
+        <ui_radiobutton>
+            <layout_filepath>res/layouts/radio_normals.xml</layout_filepath>
+        </ui_radiobutton>
     </subelements>
 
 </layout>

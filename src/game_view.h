@@ -64,6 +64,9 @@ private:
     UIWindow* menu;
     bool menu_key_state;
 
+    UIWindow* graphics_menu;
+    bool graphics_menu_key_state;
+
     // Move this to some fps/graphics debug class
     int frame_count;
     float average_frame_time;
