@@ -12,7 +12,7 @@
         </y>
     </constraints>
 
-    <text>Toggle Vsync</text>
+    <text>Vsync</text>
     <font>res/fonts/inconsolata_bold_font.png</font>
     <mode>on</mode>
     <function>testFunction</function>

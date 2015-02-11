@@ -12,7 +12,7 @@
         </y>
     </constraints>
 
-    <text>Toggle Normal Maps</text>
+    <text>Normal Maps</text>
     <font>res/fonts/inconsolata_bold_font.png</font>
     <mode>on</mode>
     <function>toggleNormals</function>

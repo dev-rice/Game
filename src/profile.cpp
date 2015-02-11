@@ -48,6 +48,16 @@ void Profile::toggleNormals(){
 	updateShaderSettings();
 }
 
+void Profile::toggleLighting(){
+	lighting_on = !lighting_on;
+	updateShaderSettings();
+}
+
+void Profile::toggleParticles(){
+	particles_on = !particles_on;
+	updateShaderSettings();
+}
+
 void Profile::toggleVsync(){
 	vsync_on = !vsync_on;
 	Window::getInstance()->setVsync(vsync_on);

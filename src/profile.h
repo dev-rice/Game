@@ -31,6 +31,8 @@ public:
 	void toggleShadows();
 	void toggleVsync();
 	void toggleNormals();
+	void toggleLighting();
+	void toggleParticles();
 
 	void updateShaderSettings();
 

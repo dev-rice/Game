@@ -25,7 +25,8 @@ private:
     void exitProgram();
     void toggleShadows();
     void toggleNormals();
-
+    void toggleLighting();
+    void toggleParticles();
 
     std::map<std::string, function> lookup_table;
 };

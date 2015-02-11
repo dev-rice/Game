@@ -47,6 +47,14 @@
         <ui_radiobutton>
             <layout_filepath>res/layouts/radio_normals.xml</layout_filepath>
         </ui_radiobutton>
+
+        <ui_radiobutton>
+            <layout_filepath>res/layouts/radio_lighting.xml</layout_filepath>
+        </ui_radiobutton>
+
+        <ui_radiobutton>
+            <layout_filepath>res/layouts/radio_particles.xml</layout_filepath>
+        </ui_radiobutton>
     </subelements>
 
 </layout>

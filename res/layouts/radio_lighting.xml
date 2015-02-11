@@ -8,14 +8,14 @@
         </x>
         <y>
             <anchor>centered</anchor>
-            <offset>0</offset>
+            <offset>50</offset>
         </y>
     </constraints>
 
-    <text>Shadows</text>
+    <text>Lighting</text>
     <font>res/fonts/inconsolata_bold_font.png</font>
     <mode>on</mode>
-    <function>toggleShadows</function>
+    <function>toggleLighting</function>
 
     <sprites>
         <width>28</width>
