@@ -20,12 +20,13 @@ Profile::Profile(){
     resolution_map[0] = std::make_tuple( 800,  600);
     resolution_map[1] = std::make_tuple(1024,  768);
 	resolution_map[2] = std::make_tuple(1366,  768);
-    resolution_map[3] = std::make_tuple(1920, 1080);
-    resolution_map[4] = std::make_tuple(1920, 1200);
-    resolution_map[5] = std::make_tuple(2560, 1440);
-    resolution_map[6] = std::make_tuple(2560, 1600);
-    resolution_map[7] = std::make_tuple(3840, 2160);
-    resolution_map[8] = std::make_tuple(5120, 2880);
+	resolution_map[3] = std::make_tuple(1600,  900);
+    resolution_map[4] = std::make_tuple(1920, 1080);
+    resolution_map[5] = std::make_tuple(1920, 1200);
+    resolution_map[6] = std::make_tuple(2560, 1440);
+    resolution_map[7] = std::make_tuple(2560, 1600);
+    resolution_map[8] = std::make_tuple(3840, 2160);
+    resolution_map[9] = std::make_tuple(5120, 2880);
 
 	loadSettings();
 }

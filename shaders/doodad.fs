@@ -200,6 +200,9 @@ void main() {
     } else {
         texel = visibility * diffuse;
         texel.a = diffuse.a;
+
+        vec4 emissive_component = vec4(emissive.rgb, 1.0);
+        texel = mix(texel, emissive_component, emissive.a);
     }
 
     if (texel.a < 0.5){
