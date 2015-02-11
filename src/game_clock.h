@@ -8,6 +8,12 @@ public:
     static GameClock* getInstance();
 
     void tick();
+    void resetAverage();
+
+    float getDeltaTime();
+    float getAverageDeltaTime();
+
+
 private:
     GameClock();
 
@@ -15,6 +21,11 @@ private:
 
     float current_time;
     float last_time;
+    float delta_time;
+
+    int tick_count;
+    float average_delta_time;
+
 };
 
 #endif

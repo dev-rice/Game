@@ -19,6 +19,7 @@
 #include "window.h"
 #include "core_ui/ui_window.h"
 #include "pathfinder.h"
+#include "game_clock.h"
 
 class GameView {
 public:
@@ -66,10 +67,6 @@ private:
 
     UIWindow* graphics_menu;
     bool graphics_menu_key_state;
-
-    // Move this to some fps/graphics debug class
-    int frame_count;
-    float average_frame_time;
 
     GLuint mouse_ubo;
 };

@@ -44,9 +44,6 @@ GameView::GameView(Level* level){
     mouse_count = 0;
     left_mouse_button_unclick = false;
 
-    frame_count = 0;
-    average_frame_time = 0.0f;
-
     attack_command_prime = false;
 
     // Usually OpenGL code shouldn't be this high up but this is for cool
@@ -62,9 +59,8 @@ GameView::GameView(Level* level){
 }
 
 void GameView::update(){
-    ++frame_count;
+    GameClock::getInstance()->tick();
 
-    float start_time = glfwGetTime();
     handleInputs();
     // Swap display/rendering buffers
     window->swapBuffers();
@@ -134,19 +130,15 @@ void GameView::update(){
         level->selectUnit(Mouse::getInstance()->getWorldPosition(camera, proj_matrix));
     }
 
-    float frame_time = glfwGetTime() - start_time;
-
-    // Calculate the moving average of the frame time
-    average_frame_time = (average_frame_time *
-        (float)(frame_count-1)/(float)frame_count)
-        + (frame_time / (float)frame_count);
-
     // Draw the debug information
     if (debug_showing){
         Camera* camera = level->getCamera();
         glm::vec3 position = camera->getPosition();
         glm::vec3 rotation = camera->getRotation();
         glm::vec2 gl_mouse = Mouse::getInstance()->getGLPosition();
+
+        float frame_time = GameClock::getInstance()->getDeltaTime();
+        float average_frame_time = GameClock::getInstance()->getAverageDeltaTime();
 
         text_renderer->print(10, 20, "fps: %.2f",
             1.0 / frame_time);
@@ -427,8 +419,7 @@ void GameView::handleInputs(){
 
     // Reset the average frame time calculations
     if (glfwGetKey(glfw_window, GLFW_KEY_T) == GLFW_PRESS){
-        frame_count = 1;
-        average_frame_time = 0.0f;
+        GameClock::getInstance()->resetAverage();
     }
 
     //Print the screen
