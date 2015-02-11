@@ -33,6 +33,7 @@ public:
 	void toggleNormals();
 	void toggleLighting();
 	void toggleParticles();
+	void toggleFramebuffers();
 
 	void updateShaderSettings();
 

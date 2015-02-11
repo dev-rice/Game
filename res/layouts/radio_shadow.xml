@@ -8,7 +8,7 @@
         </x>
         <y>
             <anchor>centered</anchor>
-            <offset>0</offset>
+            <offset>-25</offset>
         </y>
     </constraints>
 

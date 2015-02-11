@@ -11,7 +11,7 @@
             <offset>-20</offset>
         </y>
         <width>400</width>
-        <height>300</height>
+        <height>350</height>
     </constraints>
 
     <corner_sprites>
@@ -54,6 +54,10 @@
 
         <ui_radiobutton>
             <layout_filepath>res/layouts/radio_particles.xml</layout_filepath>
+        </ui_radiobutton>
+
+        <ui_radiobutton>
+            <layout_filepath>res/layouts/radio_framebuffers.xml</layout_filepath>
         </ui_radiobutton>
     </subelements>
 

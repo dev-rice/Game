@@ -59,6 +59,11 @@ void Profile::toggleParticles(){
 	updateShaderSettings();
 }
 
+void Profile::toggleFramebuffers(){
+	framebuffers_on = !framebuffers_on;
+	updateShaderSettings();
+}
+
 void Profile::toggleVsync(){
 	vsync_on = !vsync_on;
 	Window::getInstance()->setVsync(vsync_on);

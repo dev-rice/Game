@@ -8,14 +8,14 @@
         </x>
         <y>
             <anchor>centered</anchor>
-            <offset>25</offset>
+            <offset>125</offset>
         </y>
     </constraints>
 
-    <text>Lighting</text>
+    <text>Post Processing</text>
     <font>res/fonts/inconsolata_bold_font.png</font>
     <mode>on</mode>
-    <function>toggleLighting</function>
+    <function>toggleFramebuffers</function>
 
     <sprites>
         <width>28</width>

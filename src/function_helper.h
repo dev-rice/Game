@@ -27,6 +27,7 @@ private:
     void toggleNormals();
     void toggleLighting();
     void toggleParticles();
+    void toggleFramebuffers();
 
     std::map<std::string, function> lookup_table;
 };
