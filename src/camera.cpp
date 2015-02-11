@@ -21,39 +21,39 @@ void Camera::setRotation(glm::vec3 rotation){
 }
 
 void Camera::moveX(int direction){
-    position += move_sensitivity * direction * local_x;
+    position += move_sensitivity * direction * local_x * GameClock::getInstance()->getDeltaTime();
 }
 
 void Camera::moveY(int direction){
-    position += move_sensitivity * direction * local_y;
+    position += move_sensitivity * direction * local_y * GameClock::getInstance()->getDeltaTime();
 }
 
 void Camera::moveZ(int direction){
-    position += move_sensitivity * direction * local_z;
+    position += move_sensitivity * direction * local_z * GameClock::getInstance()->getDeltaTime();
 }
 
 void Camera::moveGlobalX(int direction){
-    position.x += move_sensitivity * direction;
+    position.x += move_sensitivity * direction * GameClock::getInstance()->getDeltaTime();
 }
 
 void Camera::moveGlobalY(int direction){
-    position.y += move_sensitivity * direction;
+    position.y += move_sensitivity * direction * GameClock::getInstance()->getDeltaTime();
 }
 
 void Camera::moveGlobalZ(int direction){
-    position.z += move_sensitivity * direction;
+    position.z += move_sensitivity * direction * GameClock::getInstance()->getDeltaTime();
 }
 
 void Camera::rotateX(int direction){
-    rotation.x += rotate_sensitivity * direction;
+    rotation.x += rotate_sensitivity * direction * GameClock::getInstance()->getDeltaTime();
 }
 
 void Camera::rotateY(int direction){
-    rotation.y += rotate_sensitivity * direction;
+    rotation.y += rotate_sensitivity * direction * GameClock::getInstance()->getDeltaTime();
 }
 
 void Camera::rotateZ(int direction){
-    rotation.z += rotate_sensitivity * direction;
+    rotation.z += rotate_sensitivity * direction * GameClock::getInstance()->getDeltaTime();
 }
 
 glm::mat4 Camera::getViewMatrix(){

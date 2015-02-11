@@ -59,6 +59,7 @@ GameView::GameView(Level* level){
 }
 
 void GameView::update(){
+    // Tick the game clock.
     GameClock::getInstance()->tick();
 
     handleInputs();
@@ -154,9 +155,6 @@ void GameView::update(){
     }
 
     // Calculating the mouse vector
-    // Camera* camera = level->getCamera();
-    // glm::mat4 proj_matrix = level->getProjection();
-
     glm::vec3 mouse_point = Mouse::getInstance()->getWorldPosition(camera,
         proj_matrix);
 
@@ -167,7 +165,6 @@ void GameView::update(){
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::vec3),
         glm::value_ptr(mouse_point));
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
-
 
     // The mouse draws on top of everything else
     Mouse::getInstance()->draw();

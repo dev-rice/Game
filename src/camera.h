@@ -8,8 +8,10 @@
 
 #include <stdio.h>
 
-const float MOVE_SENSITIVITY = 0.1;
-const float ROTATE_SENSITIVITY = 0.025;
+#include "game_clock.h"
+
+const float MOVE_SENSITIVITY = 10.0;
+const float ROTATE_SENSITIVITY = 2.0;
 
 class Camera {
 public:
@@ -17,7 +19,6 @@ public:
     Camera(glm::vec3 p) : Camera(p, glm::vec3(), MOVE_SENSITIVITY, ROTATE_SENSITIVITY) {;}
     Camera(glm::vec3 p, glm::vec3 r) : Camera(p, r, MOVE_SENSITIVITY, ROTATE_SENSITIVITY) {;}
     Camera(glm::vec3, glm::vec3, float, float);
-
 
     void moveX(int);
     void moveY(int);
