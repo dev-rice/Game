@@ -227,7 +227,7 @@ void GameView::handleInputs(){
             Mouse::getInstance()->setCursorSprite(Mouse::cursorType::CURSOR);
 
             // LEFT
-            if(camera->getPosition().x >= -1.0 * level->getMapWidth()/2 + 70){
+            if(camera->getPosition().x >= -1.0 * level->getMapWidth()/2 + 55){
                 if(gl_mouse_position.x < -0.95){
                     camera->moveGlobalX(-10);
                 } else if(gl_mouse_position.x < -0.85){
@@ -236,7 +236,7 @@ void GameView::handleInputs(){
             }
 
             // RIGHT
-            if(camera->getPosition().x <= 1.0 * level->getMapWidth()/2 - 70){
+            if(camera->getPosition().x <= 1.0 * level->getMapWidth()/2 - 55){
                 if(gl_mouse_position.x > 0.95){
                     camera->moveGlobalX(10);
                 } else if (gl_mouse_position.x > 0.85){
@@ -254,7 +254,7 @@ void GameView::handleInputs(){
             }
 
             // UP                            . Compensating for the camera angle
-            if(camera->getPosition().z >= -1.0 * level->getMapDepth()/2 + 70){
+            if(camera->getPosition().z >= -1.0 * level->getMapDepth()/2 + 55){
                 if(gl_mouse_position.y > 0.95){
                     camera->moveGlobalZ(-10);
                 } else if (gl_mouse_position.y > 0.85){
