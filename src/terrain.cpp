@@ -177,6 +177,10 @@ Mesh* Terrain::generateMesh(std::string filename, float amplification){
     start_x = -width / 2;
     start_z = -depth / 2;
 
+    // The number of terrain tiles before the
+    // texture repeats.
+    int texture_size = 8;
+
     vertices = std::vector<Vertex>(width * depth);
     std::vector<GLuint> faces;
 
@@ -188,8 +192,10 @@ Mesh* Terrain::generateMesh(std::string filename, float amplification){
             current.normal   = glm::vec3(0.0f, 1.0f, 0.0f);
             current.tangent  = glm::vec3(1.0f, 0.0f, 0.0f);
             current.binormal = glm::vec3(0.0f, 0.0f, 1.0f);
-            current.texcoord = glm::vec2((float)x / (float)width,
-                (float)z / (float)depth);
+
+            float u = (x % texture_size) / (float)texture_size;
+            float v = (z % texture_size) / (float)texture_size;
+            current.texcoord = glm::vec2(u, v);
 
             int index = getIndex(x, z);
             vertices[index] = current;
