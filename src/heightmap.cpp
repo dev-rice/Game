@@ -5,7 +5,8 @@ int isPowerOfTwo (unsigned int x){
     return ((x != 0) && ((x & (~x + 1)) == x));
 }
 
-Heightmap::Heightmap(std::string filename){
+Heightmap::Heightmap(std::string filename, float amplification){
+    this->amplification = amplification;
     image = SOIL_load_image(filename.c_str(), &(width), &(height),
         0, SOIL_LOAD_RGBA);
 
@@ -36,6 +37,6 @@ float Heightmap::getMapHeight(int x, int y){
 
     // Scale the height such that the value is between 0.0 and 1.0
     float map_height = float(red + green + blue) / (3.0f * 255.0);
-
+    map_height *= amplification;
     return map_height;
 }

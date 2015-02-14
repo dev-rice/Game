@@ -18,13 +18,10 @@ Terrain::Terrain(GLuint shader_program, std::string heightmap_filename, float am
     // This is where generate the new mesh and override the one passed in by
     // the constructor. This is to save space in the game files, so we don't have a terrain mesh
 
-    this->amplification = amplification;
-
-
     // After loading in the heightmap to memory, we can make a terrain mesh
     // based on the data
     float start_time = glfwGetTime();
-    mesh = generateMesh(heightmap_filename);
+    mesh = generateMesh(heightmap_filename, amplification);
     float delta_time = glfwGetTime() - start_time;
     Debug::info("Took %f seconds to generate the terrain mesh.\n", delta_time);
 
@@ -71,105 +68,96 @@ void Terrain::printPathing(){
 }
 
 GLfloat Terrain::getHeight(GLfloat x_pos, GLfloat z_pos){
-    // // Returns the map height for a specified x and z position.
-    // // This will be useful for moving units around the terrain.
-    //
-    // // Just do an integer conversion to get the vertex index.
-    // // Later this should be interpolated using the normal.
-    // int x = x_pos;
-    // int z = z_pos;
-    //
-    // // Offset the positions by the starting positions of the mesh
-    // x = x - start_x;
-    // z = z - start_z;
-    //
-    // // Calculate the index of the current point in the vertex array.
-    // int i = getIndex(x, z);
-    //
-    // if (i < 0 || i > vertices.size() - 1){
-    //     return 0.0f;
-    // } else {
-    //     return vertices[i].y;
-    // }
+    // Returns the map height for a specified x and z position.
+    // This will be useful for moving units around the terrain.
 
-    return 0.0f;
+    // Just do an integer conversion to get the vertex index.
+    int x = x_pos;
+    int z = z_pos;
+
+    // Offset the positions by the starting positions of the mesh
+    x = x - start_x;
+    z = z - start_z;
+
+    // Calculate the index of the current point in the vertex array.
+    int i = getIndex(x, z);
+
+    if (i < 0 || i > vertices.size() - 1){
+        return 0.0f;
+    } else {
+        return vertices[i].position.y;
+    }
 }
 
 GLfloat Terrain::getHeightInterpolated(GLfloat x_pos, GLfloat z_pos){
-    // // Interpolates in the current square. Because the positions get floored
-    // // We can say that the unit is always "at" the top left.
-    //
-    // //        o--------o
-    // //        |1      2|
-    // //        |        |
-    // //        |3      4|
-    // //        o--------o
-    // //     x
-    // //   o-->
-    // // z |
-    // //   v
-    //
-    // // Get the heights for each point
-    // GLfloat height_1 = getHeight(x_pos, z_pos);
-    // GLfloat height_2 = getHeight(x_pos + 1, z_pos);
-    // GLfloat height_3 = getHeight(x_pos, z_pos + 1);
-    //
-    // // Get the change in height from point 2 to 1 and from 3 to 1
-    // GLfloat delta_height_2 = height_2 - height_1;
-    // GLfloat delta_height_3 = height_3 - height_1;
-    //
-    // // Find the fractional component of the
-    // // x and z position to know how much to
-    // // weight each height.
-    // double intpart;
-    // GLfloat x_mult = modf(x_pos, &intpart);
-    // GLfloat z_mult = modf(z_pos, &intpart);
-    //
-    // // Calculate the height by adding the initial height to the
-    // // weighted combination of the other two points.
-    // GLfloat interpolated_height = height_1 + (x_mult * delta_height_2) +
-    //     (z_mult * delta_height_3);
-    //
-    // return interpolated_height;
+    // Interpolates in the current square. Because the positions get floored
+    // We can say that the unit is always "at" the top left.
 
-    return 0.0f;
+    //        o--------o
+    //        |1      2|
+    //        |        |
+    //        |3      4|
+    //        o--------o
+    //     x
+    //   o-->
+    // z |
+    //   v
+
+    // Get the heights for each point
+    GLfloat height_1 = getHeight(x_pos, z_pos);
+    GLfloat height_2 = getHeight(x_pos + 1, z_pos);
+    GLfloat height_3 = getHeight(x_pos, z_pos + 1);
+
+    // Get the change in height from point 2 to 1 and from 3 to 1
+    GLfloat delta_height_2 = height_2 - height_1;
+    GLfloat delta_height_3 = height_3 - height_1;
+
+    // Find the fractional component of the
+    // x and z position to know how much to
+    // weight each height.
+    double intpart;
+    GLfloat x_mult = modf(x_pos, &intpart);
+    GLfloat z_mult = modf(z_pos, &intpart);
+
+    // Calculate the height by adding the initial height to the
+    // weighted combination of the other two points.
+    GLfloat interpolated_height = height_1 + (x_mult * delta_height_2) +
+        (z_mult * delta_height_3);
+
+    return interpolated_height;
 }
 
 glm::vec3 Terrain::getNormal(GLfloat x_pos, GLfloat z_pos){
-    // // Returns the normal vector at the specified x and y position.
-    // // This is good for knowing how a unit can move across a segment
-    // // of terrain. For example, if the normal is too steep, the unit
-    // // won't be able to move on that segment.
-    // // Just do an integer conversion to get the vertex index.
-    // // Later this should be interpolated using the normal.
-    // int x = x_pos;
-    // int z = z_pos;
-    //
-    // // Offset the positions by the starting positions of the mesh
-    // x = x - start_x;
-    // z = z - start_z;
-    //
-    // // Calculate the index of the current point in the vertex array.
-    // int i = getIndex(x, z);
-    //
-    // if (i < 0 || i > vertices.size() - 1){
-    //     return glm::vec3(0.0f, 0.0f, 0.0f);
-    // } else {
-    //     return normals[i];
-    // }
+    // Returns the normal vector at the specified x and y position.
+    // This is good for knowing how a unit can move across a segment
+    // of terrain. For example, if the normal is too steep, the unit
+    // won't be able to move on that segment.
+    // Just do an integer conversion to get the vertex index.
+    // Later this should be interpolated using the normal.
+    int x = x_pos;
+    int z = z_pos;
 
-    return glm::vec3(0.0f, 1.0f, 0.0f);
+    // Offset the positions by the starting positions of the mesh
+    x = x - start_x;
+    z = z - start_z;
+
+    // Calculate the index of the current point in the vertex array.
+    int i = getIndex(x, z);
+
+    if (i < 0 || i > vertices.size() - 1){
+        return glm::vec3(0.0f, 0.0f, 0.0f);
+    } else {
+        return vertices[i].normal;
+    }
 }
 
 GLfloat Terrain::getSteepness(GLfloat x_pos, GLfloat z_pos){
-    // glm::vec3 normal = getNormal(x_pos, z_pos);
-    // GLfloat cosTheta = glm::dot(glm::vec3(0.0, 1.0, 0.0), normal);
-    //
-    // GLfloat steepness = acos(cosTheta);
-    //
-    // return steepness;
+    glm::vec3 normal = getNormal(x_pos, z_pos);
+    GLfloat cosTheta = glm::dot(glm::vec3(0.0, 1.0, 0.0), normal);
 
-    return 0.0f;
+    GLfloat steepness = acos(cosTheta);
+
+    return steepness;
 }
 
 bool Terrain::isOnTerrain(GLfloat x_pos, GLfloat z_pos, GLfloat tolerance){
@@ -180,8 +168,8 @@ bool Terrain::isOnTerrain(GLfloat x_pos, GLfloat z_pos, GLfloat tolerance){
     return is_on_terrain;
 }
 
-Mesh* Terrain::generateMesh(std::string filename){
-    Heightmap heightmap = Heightmap(filename);
+Mesh* Terrain::generateMesh(std::string filename, float amplification){
+    Heightmap heightmap = Heightmap(filename, amplification);
 
     width = heightmap.getWidth();
     depth = heightmap.getHeight();
@@ -195,10 +183,8 @@ Mesh* Terrain::generateMesh(std::string filename){
     for (int x = 0; x < width; ++x){
         for (int z = 0; z < depth; ++z){
             Vertex current;
-            float height = amplification * heightmap.getMapHeight(x, z);
+            float height = heightmap.getMapHeight(x, z);
             current.position = glm::vec3(x + start_x, height, z + start_z);
-            Debug::info("%.2f, %.2f, %.2f\n", current.position.x,
-                current.position.y, current.position.z);
             current.normal   = glm::vec3(0.0f, 1.0f, 0.0f);
             current.tangent  = glm::vec3(1.0f, 0.0f, 0.0f);
             current.binormal = glm::vec3(0.0f, 0.0f, 1.0f);
@@ -211,25 +197,14 @@ Mesh* Terrain::generateMesh(std::string filename){
     }
 
     for (int x = 0; x < width - 1; ++x){
-        for (int y = 0; y < depth - 1; ++y){
-            int y_index = (y * width);
-            faces.push_back(x + y_index);
-            faces.push_back(x + y_index + 1);
-            faces.push_back(x + y_index + width);
+        for (int z = 0; z < depth - 1; ++z){
+            faces.push_back(getIndex(x, z));
+            faces.push_back(getIndex(x + 1, z));
+            faces.push_back(getIndex(x, z + 1));
 
-            faces.push_back(x + y_index + 1);
-            faces.push_back(x + y_index + width + 1);
-            faces.push_back(x + y_index + width);
-        }
-    }
-
-    int count = 0;
-    for (GLuint face: faces){
-        ++count;
-        printf("%d ", face);
-        if (count == 3){
-            printf("\n");
-            count = 0;
+            faces.push_back(getIndex(x + 1, z));
+            faces.push_back(getIndex(x + 1, z + 1));
+            faces.push_back(getIndex(x, z + 1));
         }
     }
 

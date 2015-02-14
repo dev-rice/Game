@@ -32,10 +32,9 @@ private:
 
     void updateUniformData();
 
-    Mesh* generateMesh(std::string filename);
+    Mesh* generateMesh(std::string filename, float);
     int getIndex(int x, int y);
 
-    float amplification;
     bool** pathing_array;
 
     std::vector<Vertex> vertices;

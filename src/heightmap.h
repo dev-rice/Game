@@ -8,7 +8,7 @@
 
 class Heightmap {
 public:
-    Heightmap(std::string filename);
+    Heightmap(std::string filename, float ampliciation);
     ~Heightmap();
 
     float getMapHeight(int x, int y);
@@ -19,6 +19,7 @@ private:
     unsigned char* image;
     int width;
     int height;
+    float amplification;
 };
 
 #endif

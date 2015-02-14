@@ -62,22 +62,22 @@ Level::Level(const char* filename){
         "shaders/doodad.fs");
     float playable_scale = 1.0f;
 
-    // for(int i = 0; i < 2; ++i){
-    //     for(int j = 0; j < 2; ++j){
-    //         glm::vec3 playable_position = glm::vec3(3.0f*i, 0.0f, 3.0f*j);
-    //         Playable* temp = new Playable(playable_mesh, playable_shader, playable_position, playable_scale);
-    //         temp->loadFromXML("res/units/testunit.xml");
-    //
-    //         if (rand() % 2){
-    //             temp->setDiffuse(TextureLoader::loadBlue());
-    //         } else {
-    //             temp->setDiffuse(TextureLoader::loadGreen());
-    //         }
-    //
-    //         drawables.push_back(temp);
-    //         units.push_back(temp);
-    //     }
-    // }
+    for(int i = 0; i < 2; ++i){
+        for(int j = 0; j < 2; ++j){
+            glm::vec3 playable_position = glm::vec3(3.0f*i, 0.0f, 3.0f*j);
+            Playable* temp = new Playable(playable_mesh, playable_shader, playable_position, playable_scale);
+            temp->loadFromXML("res/units/testunit.xml");
+
+            if (rand() % 2){
+                temp->setDiffuse(TextureLoader::loadBlue());
+            } else {
+                temp->setDiffuse(TextureLoader::loadGreen());
+            }
+
+            drawables.push_back(temp);
+            units.push_back(temp);
+        }
+    }
 }
 
 void Level::draw(){
@@ -94,9 +94,9 @@ void Level::draw(){
     selected_units = new_selected_units;
 
     // update all the units
-    // for (int i = 0; i < units.size(); ++i){
-    //    units[i]->update(ground, units);
-    // }
+    for (int i = 0; i < units.size(); ++i){
+       units[i]->update(ground, units);
+    }
 
     // Draw all the drawables
     for (int i = 0; i < drawables.size(); ++i){
