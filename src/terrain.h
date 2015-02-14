@@ -8,21 +8,15 @@
 
 #include "mesh.h"
 #include "drawable.h"
-
-struct Heightmap {
-    unsigned char* image;
-    int width;
-    int height;
-};
+#include "heightmap.h"
 
 class Terrain : public Drawable {
 public:
     Terrain (GLuint s, std::string h) : Terrain(s, h, 10.0f) {;}
     Terrain (GLuint, std::string, float);
 
-
-    int getDepth();
-    int getWidth();
+    int getDepth() {return depth;}
+    int getWidth() {return width;}
 
     GLfloat getHeight(GLfloat, GLfloat);
     GLfloat getHeightInterpolated(GLfloat, GLfloat);
@@ -38,24 +32,16 @@ private:
 
     void updateUniformData();
 
-    Mesh* generateMesh(Heightmap&);
-    float getMapHeight(Heightmap&, int, int);
-
-    int getIndex(int, int);
-
-    bool** pathing_array;
-
-    GLuint width;
-    GLuint depth;
-
-    float start_x;
-    float start_z;
+    Mesh* generateMesh(std::string filename);
+    int getIndex(int x, int y);
 
     float amplification;
+    bool** pathing_array;
 
-    std::vector<glm::vec3> vertices;
-    std::vector<glm::vec3> normals;
-
+    int width;
+    int depth;
+    int start_x;
+    int start_z;
 
 
 };
