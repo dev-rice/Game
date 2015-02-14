@@ -38,7 +38,7 @@ layout(std140) uniform ProfileSettings {
     float normal_maps;
 };
 
-const bool NORMAL_DEBUG = true;
+const bool NORMAL_DEBUG = false;
 
 // Range: 0 to 4
 // 0 is sharp

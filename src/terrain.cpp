@@ -214,28 +214,6 @@ Mesh* Terrain::generateMesh(std::string filename, float amplification){
         }
     }
 
-    for (int i = 0; i < faces.size(); i += 3){
-        Vertex* a = &vertices[faces[i]];
-        Vertex* b = &vertices[faces[i + 1]];
-        Vertex* c = &vertices[faces[i + 2]];
-
-        glm::vec3 edge1 = b->position - a->position;
-        glm::vec3 edge2 = c->position - a->position;
-
-        glm::vec3 normal = glm::cross(edge2, edge1);
-        // normal = glm::normalize(normal);
-
-        a->normal += normal;
-        b->normal += normal;
-        c->normal += normal;
-
-    }
-
-    for (int i = 0; i < vertices.size(); ++i){
-        Vertex* current = &vertices[i];
-        current->normal = glm::normalize(current->normal);
-    }
-
     std::vector<GLfloat> mesh_vertices;
     for (int x = 0; x < width; ++x){
         for (int z = 0; z < depth; ++z){
