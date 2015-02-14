@@ -123,7 +123,7 @@ float getShadowFactor(){
     float visibility = 1.0;
     for (int i = 0; i < poisson_samples; i++){
         vec2 poisson_coord = shadow_coord.xy + poisson_disk[i] * shadow_blurriness/700.0;
-        float light_depth = texture(shadow_map, poisson_coord).z;
+        float light_depth = texture(shadow_map, poisson_coord).r;
         float current_depth = shadow_coord.z - bias;
 
         if ((light_depth < current_depth) && in_shadow_map && !is_back_face){

@@ -91,6 +91,7 @@ void GameView::update(){
         // Draw the framebuffer
         screen->setAsRenderTarget();
         framebuffer->draw();
+
     } else {
         // Draw the level
         screen->setAsRenderTarget();

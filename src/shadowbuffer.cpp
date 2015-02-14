@@ -11,7 +11,7 @@ Shadowbuffer::Shadowbuffer(float up_sample){
     this->width = up_sample * Window::getInstance()->getWidth();
     this->height = up_sample * Window::getInstance()->getHeight();
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, this->width, this->height, 0, GL_RGB,
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, this->width, this->height, 0, GL_RED,
         GL_UNSIGNED_BYTE, NULL);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
