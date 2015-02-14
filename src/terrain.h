@@ -38,6 +38,8 @@ private:
     float amplification;
     bool** pathing_array;
 
+    std::vector<Vertex> vertices;
+
     int width;
     int depth;
     int start_x;

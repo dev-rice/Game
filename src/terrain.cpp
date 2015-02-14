@@ -189,17 +189,79 @@ Mesh* Terrain::generateMesh(std::string filename){
     start_x = -width / 2;
     start_z = -depth / 2;
 
-    std::vector<GLfloat> vertices;
+    vertices = std::vector<Vertex>(width * depth);
     std::vector<GLuint> faces;
 
-    return new Mesh(vertices, faces);
+    for (int x = 0; x < width; ++x){
+        for (int z = 0; z < depth; ++z){
+            Vertex current;
+            float height = amplification * heightmap.getMapHeight(x, z);
+            current.position = glm::vec3(x + start_x, height, z + start_z);
+            Debug::info("%.2f, %.2f, %.2f\n", current.position.x,
+                current.position.y, current.position.z);
+            current.normal   = glm::vec3(0.0f, 1.0f, 0.0f);
+            current.tangent  = glm::vec3(1.0f, 0.0f, 0.0f);
+            current.binormal = glm::vec3(0.0f, 0.0f, 1.0f);
+            current.texcoord = glm::vec2((float)x / (float)width,
+                (float)z / (float)depth);
+
+            int index = getIndex(x, z);
+            vertices[index] = current;
+        }
+    }
+
+    for (int x = 0; x < width - 1; ++x){
+        for (int y = 0; y < depth - 1; ++y){
+            int y_index = (y * width);
+            faces.push_back(x + y_index);
+            faces.push_back(x + y_index + 1);
+            faces.push_back(x + y_index + width);
+
+            faces.push_back(x + y_index + 1);
+            faces.push_back(x + y_index + width + 1);
+            faces.push_back(x + y_index + width);
+        }
+    }
+
+    int count = 0;
+    for (GLuint face: faces){
+        ++count;
+        printf("%d ", face);
+        if (count == 3){
+            printf("\n");
+            count = 0;
+        }
+    }
+
+    std::vector<GLfloat> mesh_vertices;
+    for (int x = 0; x < width; ++x){
+        for (int z = 0; z < depth; ++z){
+            int index = getIndex(x, z);
+            Vertex current = vertices[index];
+            mesh_vertices.push_back(current.position.x);
+            mesh_vertices.push_back(current.position.y);
+            mesh_vertices.push_back(current.position.z);
+            mesh_vertices.push_back(current.normal.x);
+            mesh_vertices.push_back(current.normal.y);
+            mesh_vertices.push_back(current.normal.z);
+            mesh_vertices.push_back(current.tangent.x);
+            mesh_vertices.push_back(current.tangent.y);
+            mesh_vertices.push_back(current.tangent.z);
+            mesh_vertices.push_back(current.binormal.x);
+            mesh_vertices.push_back(current.binormal.y);
+            mesh_vertices.push_back(current.binormal.z);
+            mesh_vertices.push_back(current.texcoord.x);
+            mesh_vertices.push_back(current.texcoord.y);
+        }
+    }
+    return new Mesh(mesh_vertices, faces);
 }
 
-int Terrain::getIndex(int x, int y){
-    // For a given x,y coordinate this will return the
+int Terrain::getIndex(int x, int z){
+    // For a given x,z coordinate this will return the
     // index for that element in our linear arrays: vertices,
     // and normals.
-    return x + ((width) * y);
+    return x + ((width) * z);
 }
 
 void Terrain::updateUniformData(){
