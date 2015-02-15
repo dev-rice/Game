@@ -10,6 +10,7 @@
 #include "mesh.h"
 #include "drawable.h"
 #include "heightmap.h"
+#include "vertex.h"
 
 
 class Terrain : public Drawable {
@@ -41,13 +42,12 @@ private:
 
     bool** pathing_array;
 
-    std::vector<Vertex> vertices;
+    std::vector<TerrainVertex> vertices;
 
     int width;
     int depth;
     int start_x;
     int start_z;
-
 
 };
 

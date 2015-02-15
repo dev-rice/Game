@@ -27,19 +27,7 @@
 #include "pugixml.hpp" // PUGI xml library
 
 #include "debug.h"
-
-struct Vertex {
-    glm::vec3 position;
-    glm::vec3 normal;
-    glm::vec3 tangent;
-    glm::vec3 binormal;
-    glm::vec2 texcoord;
-
-    bool operator==(const Vertex& rhs){
-        return (position == rhs.position) && (normal == rhs.normal) &&
-            (texcoord == rhs.texcoord);
-    }
-};
+#include "vertex.h"
 
 class MeshLoader{
 public:

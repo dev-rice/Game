@@ -175,10 +175,10 @@ void Terrain::initializeBaseMesh(Heightmap& heightmap){
     // because the actual mesh that gets drawn needs to
     // have more accurate normals and texture coordinates
     // for actually drawing things.
-    vertices = std::vector<Vertex>(width * depth);
+    vertices = std::vector<TerrainVertex>(width * depth);
     for (int x = 0; x < width; ++x){
         for (int z = 0; z < depth; ++z){
-            Vertex current;
+            TerrainVertex current;
             float height = heightmap.getMapHeight(x, z);
             current.position = glm::vec3(x + start_x, height, z + start_z);
 
@@ -205,9 +205,9 @@ void Terrain::initializeBaseMesh(Heightmap& heightmap){
     // Dumb normal calculations without hard edge detection
     // These are sufficient for gameplay terrain data (pathing).
     for (int i = 0; i < faces.size(); i += 3){
-        Vertex* a = &vertices[faces[i]];
-        Vertex* b = &vertices[faces[i + 1]];
-        Vertex* c = &vertices[faces[i + 2]];
+        TerrainVertex* a = &vertices[faces[i]];
+        TerrainVertex* b = &vertices[faces[i + 1]];
+        TerrainVertex* c = &vertices[faces[i + 2]];
 
         glm::vec3 edge1 = b->position - a->position;
         glm::vec3 edge2 = c->position - a->position;
@@ -232,7 +232,7 @@ void Terrain::initializeBaseMesh(Heightmap& heightmap){
 
     // Normalize the normals
     for (int i = 0; i < vertices.size(); ++i){
-        Vertex* current = &vertices[i];
+        TerrainVertex* current = &vertices[i];
         current->normal = glm::normalize(current->normal);
         current->tangent = glm::normalize(current->tangent);
         current->binormal = glm::normalize(current->binormal);
@@ -262,7 +262,7 @@ Mesh* Terrain::generateMesh(std::string filename, float amplification){
     // it will be hard to do the normal fix afterwards. Also
     // its so many loops!
     std::vector<GLuint> faces;
-    std::vector<Vertex> textured_vertices;
+    std::vector<TerrainVertex> textured_vertices;
     std::unordered_map<int, bool> valid_vertices;
     for (int x = 0; x < width; x += texture_size){
         for (int z = 0; z < depth; z += texture_size){
@@ -275,9 +275,14 @@ Mesh* Terrain::generateMesh(std::string filename, float amplification){
                     float u = i / (float)(texture_size);
                     float v = j / (float)(texture_size);
 
-                    Vertex current = vertices[index];
-                    current.texcoord = glm::vec2(u, v);
-                    textured_vertices.push_back(current);
+                    if (index < vertices.size()){
+                        TerrainVertex current = vertices[index];
+                        current.texcoord = glm::vec2(u, v);
+                        textured_vertices.push_back(current);
+                    } else {
+                        TerrainVertex current;
+                        textured_vertices.push_back(current);
+                    }
 
                     int textured_index = textured_vertices.size() - 1;
                     if (((x + i) >= width) || ((z + j) >= depth)){
@@ -321,7 +326,7 @@ Mesh* Terrain::generateMesh(std::string filename, float amplification){
 
     std::vector<GLfloat> out_vertices;
     for (int i = 0; i < textured_vertices.size(); ++i){
-        Vertex current = textured_vertices[i];
+        TerrainVertex current = textured_vertices[i];
         out_vertices.push_back(current.position.x);
         out_vertices.push_back(current.position.y);
         out_vertices.push_back(current.position.z);

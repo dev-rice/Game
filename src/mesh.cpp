@@ -25,7 +25,7 @@ Mesh::Mesh(std::vector<GLfloat> vertices, std::vector<GLuint> elements){
 
 void Mesh::loadMeshData(std::vector<GLfloat> vertices, std::vector<GLuint> elements){
     // The single vertex specification is:
-    //      x, y, z, nx, ny, nz, u, v
+    //      x, y, z, nx, ny, nz, tx, ty, tz, bx, by, bz, u, v
     // Where:
     //      x = x position of vertex
     //      y = y position of vertex
@@ -33,6 +33,12 @@ void Mesh::loadMeshData(std::vector<GLfloat> vertices, std::vector<GLuint> eleme
     //      nx = x component of the normal vector
     //      ny = y component of the normal vector
     //      nz = z component of the normal vector
+    //      tx = x component of the tangent vector
+    //      ty = y component of the tangent vector
+    //      tz = z component of the tangent vector
+    //      bx = x component of the binormal vector
+    //      by = y component of the binormal vector
+    //      bz = z component of the binormal vector
     //      u = U texture coordinate on UV map
     //      v = V texture coordinate on UV map
 
