@@ -247,17 +247,17 @@ Mesh* Terrain::generateMesh(std::string filename, float amplification){
 
     std::vector<GLuint> faces;
     std::vector<Vertex> textured_vertices;
-    for (int x = 0; x < width; x += (texture_size - 1)){
-        for (int z = 0; z < depth; z += (texture_size - 1)){
+    for (int x = 0; x < width; x += texture_size){
+        for (int z = 0; z < depth; z += texture_size){
 
             int start_index = textured_vertices.size();
 
             // Create the big tile
-            for (int i = 0; i < texture_size; ++i){
-                for (int j = 0; j < texture_size; ++j){
+            for (int i = 0; i <= texture_size; ++i){
+                for (int j = 0; j <= texture_size; ++j){
                     int index = getIndex(x + i, z + j);
-                    float u = i / (float)(texture_size - 1);
-                    float v = j / (float)(texture_size - 1);
+                    float u = i / (float)(texture_size);
+                    float v = j / (float)(texture_size);
 
                     Vertex current = vertices[index];
                     current.texcoord = glm::vec2(u, v);
@@ -266,9 +266,9 @@ Mesh* Terrain::generateMesh(std::string filename, float amplification){
                 }
             }
 
-            for (int i = 0; i < texture_size - 1; ++i){
-                for (int j = 0; j < texture_size - 1; ++j){
-                    int block_width = texture_size;
+            for (int i = 0; i < texture_size; ++i){
+                for (int j = 0; j < texture_size; ++j){
+                    int block_width = texture_size + 1;
                     faces.push_back(start_index + getIndex(i, j, block_width));
                     faces.push_back(start_index + getIndex(i + 1, j, block_width));
                     faces.push_back(start_index + getIndex(i, j + 1, block_width));
