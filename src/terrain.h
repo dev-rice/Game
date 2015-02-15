@@ -35,6 +35,7 @@ private:
     void initializeBaseMesh(Heightmap&);
     Mesh* generateMesh(std::string filename, float);
     int getIndex(int x, int y);
+    int getIndex(int x, int y, int width);
 
     bool** pathing_array;
 

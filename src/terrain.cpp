@@ -245,46 +245,73 @@ Mesh* Terrain::generateMesh(std::string filename, float amplification){
     // texture repeats.
     int texture_size = 8;
 
-    // Make the edge loops to simplify the normal
-    // calculations.
     std::vector<GLuint> faces;
-    for (int x = 0; x < width - 1; ++x){
-        for (int z = 0; z < depth - 1; ++z){
-            faces.push_back(getIndex(x, z));
-            faces.push_back(getIndex(x + 1, z));
-            faces.push_back(getIndex(x, z + 1));
+    std::vector<Vertex> textured_vertices;
+    for (int x = 0; x < width; x += (texture_size - 1)){
+        for (int z = 0; z < depth; z += (texture_size - 1)){
 
-            faces.push_back(getIndex(x + 1, z));
-            faces.push_back(getIndex(x + 1, z + 1));
-            faces.push_back(getIndex(x, z + 1));
+            int start_index = textured_vertices.size();
+
+            // Create the big tile
+            for (int i = 0; i < texture_size; ++i){
+                for (int j = 0; j < texture_size; ++j){
+                    int index = getIndex(x + i, z + j);
+                    float u = i / (float)(texture_size - 1);
+                    float v = j / (float)(texture_size - 1);
+
+                    Vertex current = vertices[index];
+                    current.texcoord = glm::vec2(u, v);
+                    textured_vertices.push_back(current);
+
+                }
+            }
+
+            for (int i = 0; i < texture_size - 1; ++i){
+                for (int j = 0; j < texture_size - 1; ++j){
+                    int block_width = texture_size;
+                    faces.push_back(start_index + getIndex(i, j, block_width));
+                    faces.push_back(start_index + getIndex(i + 1, j, block_width));
+                    faces.push_back(start_index + getIndex(i, j + 1, block_width));
+
+                    faces.push_back(start_index + getIndex(i + 1, j, block_width));
+                    faces.push_back(start_index + getIndex(i + 1, j + 1, block_width));
+                    faces.push_back(start_index + getIndex(i, j + 1, block_width));
+
+                }
+            }
+
         }
     }
 
-    std::vector<GLfloat> mesh_vertices;
-    for (int x = 0; x < width; ++x){
-        for (int z = 0; z < depth; ++z){
-            int index = getIndex(x, z);
-            Vertex current = vertices[index];
-            mesh_vertices.push_back(current.position.x);
-            mesh_vertices.push_back(current.position.y);
-            mesh_vertices.push_back(current.position.z);
-            mesh_vertices.push_back(current.normal.x);
-            mesh_vertices.push_back(current.normal.y);
-            mesh_vertices.push_back(current.normal.z);
-            mesh_vertices.push_back(current.tangent.x);
-            mesh_vertices.push_back(current.tangent.y);
-            mesh_vertices.push_back(current.tangent.z);
-            mesh_vertices.push_back(current.binormal.x);
-            mesh_vertices.push_back(current.binormal.y);
-            mesh_vertices.push_back(current.binormal.z);
-            mesh_vertices.push_back(current.texcoord.x);
-            mesh_vertices.push_back(current.texcoord.y);
-        }
+    std::vector<GLfloat> out_vertices;
+    for (int i = 0; i < textured_vertices.size(); ++i){
+        Vertex current = textured_vertices[i];
+        out_vertices.push_back(current.position.x);
+        out_vertices.push_back(current.position.y);
+        out_vertices.push_back(current.position.z);
+        out_vertices.push_back(current.normal.x);
+        out_vertices.push_back(current.normal.y);
+        out_vertices.push_back(current.normal.z);
+        out_vertices.push_back(current.tangent.x);
+        out_vertices.push_back(current.tangent.y);
+        out_vertices.push_back(current.tangent.z);
+        out_vertices.push_back(current.binormal.x);
+        out_vertices.push_back(current.binormal.y);
+        out_vertices.push_back(current.binormal.z);
+        out_vertices.push_back(current.texcoord.x);
+        out_vertices.push_back(current.texcoord.y);
     }
-    return new Mesh(mesh_vertices, faces);
+    return new Mesh(out_vertices, faces);
 }
 
 int Terrain::getIndex(int x, int z){
+    // For a given x,z coordinate this will return the
+    // index for that element in our linear arrays: vertices,
+    // and normals.
+    return x + ((width) * z);
+}
+
+int Terrain::getIndex(int x, int z, int width){
     // For a given x,z coordinate this will return the
     // index for that element in our linear arrays: vertices,
     // and normals.

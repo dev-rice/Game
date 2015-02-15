@@ -17,4 +17,4 @@ d 0 1 0 0 1 -1.414910 -0.010000 0.000000 1.799613 0.000000 0.707107 0.707107 3.1
 p fire -1.400000 0.000000 0.000000
 
 # Ground specification - Begin writing here (h, g)
-h maze.png rough_ground.png 10.0
+h maze.png rough_ground.png 5.0
