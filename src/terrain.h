@@ -32,6 +32,7 @@ private:
 
     void updateUniformData();
 
+    void initializeBaseMesh(Heightmap&);
     Mesh* generateMesh(std::string filename, float);
     int getIndex(int x, int y);
 

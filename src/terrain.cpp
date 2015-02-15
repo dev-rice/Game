@@ -168,6 +168,65 @@ bool Terrain::isOnTerrain(GLfloat x_pos, GLfloat z_pos, GLfloat tolerance){
     return is_on_terrain;
 }
 
+void Terrain::initializeBaseMesh(Heightmap& heightmap){
+    // This generates the mesh that will be used for the
+    // top level terrain data, like height and normals.
+    // This is just the basic layout of the mesh though
+    // because the actual mesh that gets drawn needs to
+    // have more accurate normals and texture coordinates
+    // for actually drawing things.
+    vertices = std::vector<Vertex>(width * depth);
+    for (int x = 0; x < width; ++x){
+        for (int z = 0; z < depth; ++z){
+            Vertex current;
+            float height = heightmap.getMapHeight(x, z);
+            current.position = glm::vec3(x + start_x, height, z + start_z);
+
+            int index = getIndex(x, z);
+            vertices[index] = current;
+        }
+    }
+
+    // Make the edge loops to simplify the normal
+    // calculations.
+    std::vector<GLuint> faces;
+    for (int x = 0; x < width - 1; ++x){
+        for (int z = 0; z < depth - 1; ++z){
+            faces.push_back(getIndex(x, z));
+            faces.push_back(getIndex(x + 1, z));
+            faces.push_back(getIndex(x, z + 1));
+
+            faces.push_back(getIndex(x + 1, z));
+            faces.push_back(getIndex(x + 1, z + 1));
+            faces.push_back(getIndex(x, z + 1));
+        }
+    }
+
+    // Dumb normal calculations without hard edge detection
+    // These are sufficient for gameplay terrain data (pathing).
+    for (int i = 0; i < faces.size(); i += 3){
+        Vertex* a = &vertices[faces[i]];
+        Vertex* b = &vertices[faces[i + 1]];
+        Vertex* c = &vertices[faces[i + 2]];
+
+        glm::vec3 edge1 = b->position - a->position;
+        glm::vec3 edge2 = c->position - a->position;
+
+        glm::vec3 normal = glm::cross(edge2, edge1);
+
+        a->normal += normal;
+        b->normal += normal;
+        c->normal += normal;
+
+    }
+
+    // Normalize the normals
+    for (int i = 0; i < vertices.size(); ++i){
+        Vertex* current = &vertices[i];
+        current->normal = glm::normalize(current->normal);
+    }
+}
+
 Mesh* Terrain::generateMesh(std::string filename, float amplification){
     Heightmap heightmap = Heightmap(filename, amplification);
 
@@ -177,31 +236,18 @@ Mesh* Terrain::generateMesh(std::string filename, float amplification){
     start_x = -width / 2;
     start_z = -depth / 2;
 
+    // Generate the mesh for gameplay data
+    initializeBaseMesh(heightmap);
+
+    // Now make it look nice!
+
     // The number of terrain tiles before the
     // texture repeats.
     int texture_size = 8;
 
-    vertices = std::vector<Vertex>(width * depth);
+    // Make the edge loops to simplify the normal
+    // calculations.
     std::vector<GLuint> faces;
-
-    for (int x = 0; x < width; ++x){
-        for (int z = 0; z < depth; ++z){
-            Vertex current;
-            float height = heightmap.getMapHeight(x, z);
-            current.position = glm::vec3(x + start_x, height, z + start_z);
-            current.normal   = glm::vec3(0.0f, 1.0f, 0.0f);
-            current.tangent  = glm::vec3(1.0f, 0.0f, 0.0f);
-            current.binormal = glm::vec3(0.0f, 0.0f, 1.0f);
-
-            float u = (x % texture_size) / (float)texture_size;
-            float v = (z % texture_size) / (float)texture_size;
-            current.texcoord = glm::vec2(u, v);
-
-            int index = getIndex(x, z);
-            vertices[index] = current;
-        }
-    }
-
     for (int x = 0; x < width - 1; ++x){
         for (int z = 0; z < depth - 1; ++z){
             faces.push_back(getIndex(x, z));
