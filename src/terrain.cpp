@@ -182,6 +182,10 @@ void Terrain::initializeBaseMesh(Heightmap& heightmap){
             float height = heightmap.getMapHeight(x, z);
             current.position = glm::vec3(x + start_x, height, z + start_z);
 
+            float u = x / (float)width;
+            float v = z / (float)depth;
+            current.splatcoord = glm::vec2(u, v);
+
             int index = getIndex(x, z);
             vertices[index] = current;
         }
