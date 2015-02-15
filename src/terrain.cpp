@@ -13,58 +13,31 @@
 //   ------------------
 //        width
 
-// From http://www.exploringbinary.com/ten-ways-to-check-if-an-integer-is-a-power-of-two-in-c/
-int isPowerOfTwo (unsigned int x){
-    return ((x != 0) && ((x & (~x + 1)) == x));
-}
-
 Terrain::Terrain(GLuint shader_program, std::string heightmap_filename, float amplification)
     : Drawable() {
     // This is where generate the new mesh and override the one passed in by
     // the constructor. This is to save space in the game files, so we don't have a terrain mesh
 
-    this->amplification = amplification;
-
-    // First, we load the actual image data, and post to debug
-    struct Heightmap heightmap;
-    heightmap.image = SOIL_load_image(heightmap_filename.c_str(),
-        &(heightmap.width), &(heightmap.height), 0, SOIL_LOAD_RGBA);
-
-    if(heightmap.image){
-        Debug::info("Loaded heightmap \"%s\" (%d by %d) into memory.\n",
-            heightmap_filename.c_str(), heightmap.width, heightmap.height );
-    } else {
-        Debug::error("Could not load heightmap \"%s\" into memory.\n",
-            heightmap_filename.c_str());
-    }
-
-    if(!isPowerOfTwo(heightmap.width) || !isPowerOfTwo(heightmap.height)){
-        Debug::warning("Terrain map size is not base 2."
-            " Mesh generation may behave incorrectly.\n");
-    }
-
     // After loading in the heightmap to memory, we can make a terrain mesh
     // based on the data
     float start_time = glfwGetTime();
-    mesh = generateMesh(heightmap);
+    mesh = generateMesh(heightmap_filename, amplification);
     float delta_time = glfwGetTime() - start_time;
     Debug::info("Took %f seconds to generate the terrain mesh.\n", delta_time);
-
-    SOIL_free_image_data(heightmap.image);
 
     // Once we have a mesh, we can load the drawable data required for this
     // child class.
     Drawable::load(mesh, shader_program, glm::vec3(0.0f, 0.0f, 0.0f), 1.0f);
 
     // Could do bit-packing here but it really doesn't matter
-    pathing_array = new bool*[heightmap.height];
-    for(int i = 0; i < heightmap.height; ++i){
-        pathing_array[i] = new bool[heightmap.width];
+    pathing_array = new bool*[depth];
+    for(int i = 0; i < depth; ++i){
+        pathing_array[i] = new bool[width];
     }
 
     // Iterate through the pathing array, filling in all the places where we can't go
-    for(int z = 0; z < heightmap.height; ++z){
-        for(int x = 0; x < heightmap.width; ++x){
+    for(int z = 0; z < depth; ++z){
+        for(int x = 0; x < width; ++x){
             pathing_array[z][x] = (getSteepness(GLfloat(x) + start_x, GLfloat(z) + start_z) < 0.8f);
         }
     }
@@ -94,20 +67,11 @@ void Terrain::printPathing(){
     }
 }
 
-int Terrain::getDepth(){
-    return scale * depth;
-}
-
-int Terrain::getWidth(){
-    return scale * width;
-}
-
 GLfloat Terrain::getHeight(GLfloat x_pos, GLfloat z_pos){
     // Returns the map height for a specified x and z position.
     // This will be useful for moving units around the terrain.
 
     // Just do an integer conversion to get the vertex index.
-    // Later this should be interpolated using the normal.
     int x = x_pos;
     int z = z_pos;
 
@@ -121,7 +85,7 @@ GLfloat Terrain::getHeight(GLfloat x_pos, GLfloat z_pos){
     if (i < 0 || i > vertices.size() - 1){
         return 0.0f;
     } else {
-        return vertices[i].y;
+        return vertices[i].position.y;
     }
 }
 
@@ -183,7 +147,7 @@ glm::vec3 Terrain::getNormal(GLfloat x_pos, GLfloat z_pos){
     if (i < 0 || i > vertices.size() - 1){
         return glm::vec3(0.0f, 0.0f, 0.0f);
     } else {
-        return normals[i];
+        return vertices[i].normal;
     }
 }
 
@@ -204,277 +168,190 @@ bool Terrain::isOnTerrain(GLfloat x_pos, GLfloat z_pos, GLfloat tolerance){
     return is_on_terrain;
 }
 
-Mesh* Terrain::generateMesh(Heightmap& heightmap){
-    // These two vectors hold the geometry data that will be
-    // used to instantiate the Mesh.
-    std::vector<GLuint> faces_vector;
+void Terrain::initializeBaseMesh(Heightmap& heightmap){
+    // This generates the mesh that will be used for the
+    // top level terrain data, like height and normals.
+    // This is just the basic layout of the mesh though
+    // because the actual mesh that gets drawn needs to
+    // have more accurate normals and texture coordinates
+    // for actually drawing things.
+    vertices = std::vector<Vertex>(width * depth);
+    for (int x = 0; x < width; ++x){
+        for (int z = 0; z < depth; ++z){
+            Vertex current;
+            float height = heightmap.getMapHeight(x, z);
+            current.position = glm::vec3(x + start_x, height, z + start_z);
 
-    // Starting positions of the mesh
-    start_x = -heightmap.width / 2.0;
-    start_z = -heightmap.height / 2.0;
-
-    width = heightmap.width;
-    depth = heightmap.height;
-
-    // Now, we must generate a mesh from the data in the heightmap.
-    float map_height;
-    glm::vec3 pos;
-    for(int y = 0; y < heightmap.height; ++y){
-        for(int x = 0; x < heightmap.width; ++x){
-            map_height = getMapHeight(heightmap, x, y);
-
-            // Calculate the vertex position based on the current x, y
-            // coordinates, the starting position, and the calculated height
-            pos = glm::vec3(start_x + x, map_height, start_z + y);
-
-            // Position Data
-            vertices.push_back(pos);
+            int index = getIndex(x, z);
+            vertices[index] = current;
         }
     }
 
-    // Generate the face connections in CCW encirclements.
-    // For a set of vertices like:
-    //      0   1   2
-    //      3   4   5
-    //      6   7   8
-    //
-    // Faces (triangles) are:
-    //      0   3   1
-    //      1   3   4
-    //
-    //      1   4   2
-    //      2   4   5
-    //
-    //      3   6   4
-    //      4   6   7
-    //
-    //      4   7   5
-    //      5   7   8
+    // Make the edge loops to simplify the normal
+    // calculations.
+    std::vector<GLuint> faces;
+    for (int x = 0; x < width - 1; ++x){
+        for (int z = 0; z < depth - 1; ++z){
+            faces.push_back(getIndex(x, z));
+            faces.push_back(getIndex(x + 1, z));
+            faces.push_back(getIndex(x, z + 1));
 
-    for (int y = 0; y < heightmap.height - 1; ++y){
-        for (int x = 0; x < heightmap.width - 1; ++x){
-            int y_index = (y * heightmap.width);
-            faces_vector.push_back(x + y_index);
-            faces_vector.push_back(x + y_index + heightmap.width);
-            faces_vector.push_back(x + y_index + 1);
-
-            faces_vector.push_back(x + y_index + 1);
-            faces_vector.push_back(x + y_index + heightmap.width);
-            faces_vector.push_back(x + y_index + heightmap.width + 1);
+            faces.push_back(getIndex(x + 1, z));
+            faces.push_back(getIndex(x + 1, z + 1));
+            faces.push_back(getIndex(x, z + 1));
         }
     }
 
-    // Normal calculations:
-    //
-    // Calculate a normal for a vertex by taking the cross product of the
-    // two edges.
-    //
-    // For smooth shading, each vertex will have multiple faces attached to it
-    // The resultant normal is the sum of the normals for each face (not
-    // normalized). This accounts for weighting the normal more for faces with
-    // large areas.
-    // The normal vector is the unit vector of the sum of each face normal.
-    normals = std::vector<glm::vec3>(vertices.size());
-    std::vector<glm::vec3> tangents = std::vector<glm::vec3>(vertices.size());
-    std::vector<glm::vec3> bitangents = std::vector<glm::vec3>(vertices.size());
+    // Dumb normal calculations without hard edge detection
+    // These are sufficient for gameplay terrain data (pathing).
+    for (int i = 0; i < faces.size(); i += 3){
+        Vertex* a = &vertices[faces[i]];
+        Vertex* b = &vertices[faces[i + 1]];
+        Vertex* c = &vertices[faces[i + 2]];
 
-    GLuint a_index, b_index, c_index;
-    glm::vec3 a, b, c;
-    glm::vec3 current_normal, current_tangent, current_bitangent;
-    for (int i = 0; i < faces_vector.size(); i += 3){
-        // The normal is uniform across a face so we can
-        // calculate the normal for the first vertex in
-        // a face and set the others to that.
-        a_index = faces_vector[i];
-        b_index = faces_vector[i + 1];
-        c_index = faces_vector[i + 2];
+        glm::vec3 edge1 = b->position - a->position;
+        glm::vec3 edge2 = c->position - a->position;
 
-        a = vertices[a_index];
-        b = vertices[b_index];
-        c = vertices[c_index];
+        glm::vec3 normal   = glm::cross(edge2, edge1);
+        glm::vec3 tangent  = edge1;
+        glm::vec3 binormal = edge2;
 
-        current_normal = glm::cross((b - a), (c - a));
-        current_tangent = c - a;
-        current_bitangent = b - a;
+        a->normal += normal;
+        b->normal += normal;
+        c->normal += normal;
 
-        normals[a_index] += current_normal;
-        normals[b_index] += current_normal;
-        normals[c_index] += current_normal;
+        a->tangent += tangent;
+        b->tangent += tangent;
+        c->tangent += tangent;
 
-        tangents[a_index] += current_tangent;
-        tangents[b_index] += current_tangent;
-        tangents[c_index] += current_tangent;
-
-        bitangents[a_index] += current_bitangent;
-        bitangents[b_index] += current_bitangent;
-        bitangents[c_index] += current_bitangent;
-
+        a->binormal += binormal;
+        b->binormal += binormal;
+        c->binormal += binormal;
 
     }
 
     // Normalize the normals
-    for (int i = 0; i < normals.size(); ++i){
-        normals[i] = glm::normalize(normals[i]);
-        tangents[i] = glm::normalize(tangents[i]);
-        bitangents[i] = glm::normalize(bitangents[i]);
+    for (int i = 0; i < vertices.size(); ++i){
+        Vertex* current = &vertices[i];
+        current->normal = glm::normalize(current->normal);
+        current->tangent = glm::normalize(current->tangent);
+        current->binormal = glm::normalize(current->binormal);
+
     }
+}
 
-    // Create the map that will be used by level and other things for
-    // accessing geometry data from C++.
+Mesh* Terrain::generateMesh(std::string filename, float amplification){
+    Heightmap heightmap = Heightmap(filename, amplification);
 
-    // Create the final vertex vector that will be used by OpenGL
-    std::vector<GLfloat> texture_repeated_vertices;
-    for(int y = 0; y < heightmap.height - 1; ++y){
-        for(int x = 0; x < heightmap.width - 1; ++x){
+    width = heightmap.getWidth();
+    depth = heightmap.getHeight();
 
-            int i;
-            glm::vec3 vertex;
-            glm::vec3 normal;
-            glm::vec3 tangent;
-            glm::vec3 bitangent;
+    start_x = -width / 2;
+    start_z = -depth / 2;
 
-            // Upper left
-            i = getIndex(x, y);
-            vertex = vertices[i];
-            normal = normals[i];
-            tangent = tangents[i];
-            bitangent = bitangents[i];
+    // Generate the mesh for gameplay data
+    initializeBaseMesh(heightmap);
 
-            texture_repeated_vertices.push_back(vertex.x);
-            texture_repeated_vertices.push_back(vertex.y);
-            texture_repeated_vertices.push_back(vertex.z);
+    // Now make it look nice!
 
-            texture_repeated_vertices.push_back(normal.x);
-            texture_repeated_vertices.push_back(normal.y);
-            texture_repeated_vertices.push_back(normal.z);
+    // The number of terrain tiles before the
+    // texture repeats.
+    int texture_size = 16;
 
-            texture_repeated_vertices.push_back(tangent.x);
-            texture_repeated_vertices.push_back(tangent.y);
-            texture_repeated_vertices.push_back(tangent.z);
+    // This should probably definitely be rewritten because
+    // it will be hard to do the normal fix afterwards. Also
+    // its so many loops!
+    std::vector<GLuint> faces;
+    std::vector<Vertex> textured_vertices;
+    std::unordered_map<int, bool> valid_vertices;
+    for (int x = 0; x < width; x += texture_size){
+        for (int z = 0; z < depth; z += texture_size){
+            int start_index = textured_vertices.size();
 
-            texture_repeated_vertices.push_back(bitangent.x);
-            texture_repeated_vertices.push_back(bitangent.y);
-            texture_repeated_vertices.push_back(bitangent.z);
+            // Create the big tile
+            for (int i = 0; i <= texture_size; ++i){
+                for (int j = 0; j <= texture_size; ++j){
+                    int index = getIndex(x + i, z + j);
+                    float u = i / (float)(texture_size);
+                    float v = j / (float)(texture_size);
 
-            texture_repeated_vertices.push_back(0.0f);
-            texture_repeated_vertices.push_back(0.0f);
+                    Vertex current = vertices[index];
+                    current.texcoord = glm::vec2(u, v);
+                    textured_vertices.push_back(current);
 
-            // Upper right
-            i = getIndex(x+1, y);
-            vertex = vertices[i];
-            normal = normals[i];
-            tangent = tangents[i];
-            bitangent = bitangents[i];
+                    int textured_index = textured_vertices.size() - 1;
+                    if (((x + i) >= width) || ((z + j) >= depth)){
+                        valid_vertices[textured_index] = false;
+                    } else {
+                        valid_vertices[textured_index] = true;
+                    }
+                }
+            }
 
-            texture_repeated_vertices.push_back(vertex.x);
-            texture_repeated_vertices.push_back(vertex.y);
-            texture_repeated_vertices.push_back(vertex.z);
+            for (int i = 0; i < texture_size; ++i){
+                for (int j = 0; j < texture_size; ++j){
+                    int block_width = texture_size + 1;
 
-            texture_repeated_vertices.push_back(normal.x);
-            texture_repeated_vertices.push_back(normal.y);
-            texture_repeated_vertices.push_back(normal.z);
+                    int upper_left  = start_index + getIndex(i, j, block_width);
+                    int upper_right = start_index + getIndex(i + 1, j, block_width);
+                    int lower_left  = start_index + getIndex(i, j + 1, block_width);
+                    int lower_right = start_index + getIndex(i + 1, j + 1, block_width);
 
-            texture_repeated_vertices.push_back(tangent.x);
-            texture_repeated_vertices.push_back(tangent.y);
-            texture_repeated_vertices.push_back(tangent.z);
+                    bool is_valid = true;
+                    is_valid &= valid_vertices[upper_left];
+                    is_valid &= valid_vertices[upper_right];
+                    is_valid &= valid_vertices[lower_left];
+                    is_valid &= valid_vertices[lower_right];
 
-            texture_repeated_vertices.push_back(bitangent.x);
-            texture_repeated_vertices.push_back(bitangent.y);
-            texture_repeated_vertices.push_back(bitangent.z);
+                    if (is_valid){
+                        faces.push_back(upper_left);
+                        faces.push_back(upper_right);
+                        faces.push_back(lower_left);
 
-            texture_repeated_vertices.push_back(1.0f);
-            texture_repeated_vertices.push_back(0.0f);
+                        faces.push_back(upper_right);
+                        faces.push_back(lower_right);
+                        faces.push_back(lower_left);
+                    }
 
-            // Bottom left
-            i = getIndex(x, y+1);
-            vertex = vertices[i];
-            normal = normals[i];
-            tangent = tangents[i];
-            bitangent = bitangents[i];
-
-            texture_repeated_vertices.push_back(vertex.x);
-            texture_repeated_vertices.push_back(vertex.y);
-            texture_repeated_vertices.push_back(vertex.z);
-
-            texture_repeated_vertices.push_back(normal.x);
-            texture_repeated_vertices.push_back(normal.y);
-            texture_repeated_vertices.push_back(normal.z);
-
-            texture_repeated_vertices.push_back(tangent.x);
-            texture_repeated_vertices.push_back(tangent.y);
-            texture_repeated_vertices.push_back(tangent.z);
-
-            texture_repeated_vertices.push_back(bitangent.x);
-            texture_repeated_vertices.push_back(bitangent.y);
-            texture_repeated_vertices.push_back(bitangent.z);
-
-            texture_repeated_vertices.push_back(0.0f);
-            texture_repeated_vertices.push_back(1.0f);
-
-            // Bottom right
-            i = getIndex(x+1, y+1);
-            vertex = vertices[i];
-            normal = normals[i];
-            tangent = tangents[i];
-            bitangent = bitangents[i];
-
-            texture_repeated_vertices.push_back(vertex.x);
-            texture_repeated_vertices.push_back(vertex.y);
-            texture_repeated_vertices.push_back(vertex.z);
-
-            texture_repeated_vertices.push_back(normal.x);
-            texture_repeated_vertices.push_back(normal.y);
-            texture_repeated_vertices.push_back(normal.z);
-
-            texture_repeated_vertices.push_back(tangent.x);
-            texture_repeated_vertices.push_back(tangent.y);
-            texture_repeated_vertices.push_back(tangent.z);
-
-            texture_repeated_vertices.push_back(bitangent.x);
-            texture_repeated_vertices.push_back(bitangent.y);
-            texture_repeated_vertices.push_back(bitangent.z);
-
-            texture_repeated_vertices.push_back(1.0f);
-            texture_repeated_vertices.push_back(1.0f);
+                }
+            }
 
         }
     }
 
-    // Create the final faces vector
-    std::vector<GLuint> faces;
-    for (int i = 0; i < texture_repeated_vertices.size() / 14.0f; i+= 4){
-        faces.push_back(i + 2);
-        faces.push_back(i + 1);
-        faces.push_back(i + 0);
-
-        faces.push_back(i + 1);
-        faces.push_back(i + 2);
-        faces.push_back(i + 3);
+    std::vector<GLfloat> out_vertices;
+    for (int i = 0; i < textured_vertices.size(); ++i){
+        Vertex current = textured_vertices[i];
+        out_vertices.push_back(current.position.x);
+        out_vertices.push_back(current.position.y);
+        out_vertices.push_back(current.position.z);
+        out_vertices.push_back(current.normal.x);
+        out_vertices.push_back(current.normal.y);
+        out_vertices.push_back(current.normal.z);
+        out_vertices.push_back(current.tangent.x);
+        out_vertices.push_back(current.tangent.y);
+        out_vertices.push_back(current.tangent.z);
+        out_vertices.push_back(current.binormal.x);
+        out_vertices.push_back(current.binormal.y);
+        out_vertices.push_back(current.binormal.z);
+        out_vertices.push_back(current.texcoord.x);
+        out_vertices.push_back(current.texcoord.y);
     }
-
-    Mesh* ground = new Mesh(texture_repeated_vertices, faces);
-    return ground;
+    return new Mesh(out_vertices, faces);
 }
 
-float Terrain::getMapHeight(Heightmap& heightmap, int x, int y){
-    // Scaling factor for the height map data
-    int red = heightmap.image[(y*heightmap.width + x)*4 + 0];
-    int grn = heightmap.image[(y*heightmap.width + x)*4 + 1];
-    int blu = heightmap.image[(y*heightmap.width + x)*4 + 2];
-
-    // Scale the height such that the value is between 0.0 and 1.0
-    float map_height = float(red + grn + blu)/(3.0f * 255.0);
-    // Amplify the map height
-    map_height = amplification * map_height;
-
-    return map_height;
-}
-
-int Terrain::getIndex(int x, int y){
-    // For a given x,y coordinate this will return the
+int Terrain::getIndex(int x, int z){
+    // For a given x,z coordinate this will return the
     // index for that element in our linear arrays: vertices,
     // and normals.
-    return x + ((width) * y);
+    return x + ((width) * z);
+}
+
+int Terrain::getIndex(int x, int z, int width){
+    // For a given x,z coordinate this will return the
+    // index for that element in our linear arrays: vertices,
+    // and normals.
+    return x + ((width) * z);
 }
 
 void Terrain::updateUniformData(){

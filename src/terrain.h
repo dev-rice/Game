@@ -5,24 +5,20 @@
 #include <string>
 #include <vector>
 #include <cmath>
+#include <unordered_map>
 
 #include "mesh.h"
 #include "drawable.h"
+#include "heightmap.h"
 
-struct Heightmap {
-    unsigned char* image;
-    int width;
-    int height;
-};
 
 class Terrain : public Drawable {
 public:
     Terrain (GLuint s, std::string h) : Terrain(s, h, 10.0f) {;}
     Terrain (GLuint, std::string, float);
 
-
-    int getDepth();
-    int getWidth();
+    int getDepth() {return depth;}
+    int getWidth() {return width;}
 
     GLfloat getHeight(GLfloat, GLfloat);
     GLfloat getHeightInterpolated(GLfloat, GLfloat);
@@ -38,24 +34,19 @@ private:
 
     void updateUniformData();
 
-    Mesh* generateMesh(Heightmap&);
-    float getMapHeight(Heightmap&, int, int);
-
-    int getIndex(int, int);
+    void initializeBaseMesh(Heightmap&);
+    Mesh* generateMesh(std::string filename, float);
+    int getIndex(int x, int y);
+    int getIndex(int x, int y, int width);
 
     bool** pathing_array;
 
-    GLuint width;
-    GLuint depth;
+    std::vector<Vertex> vertices;
 
-    float start_x;
-    float start_z;
-
-    float amplification;
-
-    std::vector<glm::vec3> vertices;
-    std::vector<glm::vec3> normals;
-
+    int width;
+    int depth;
+    int start_x;
+    int start_z;
 
 
 };
