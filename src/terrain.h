@@ -5,10 +5,12 @@
 #include <string>
 #include <vector>
 #include <cmath>
+#include <unordered_map>
 
 #include "mesh.h"
 #include "drawable.h"
 #include "heightmap.h"
+
 
 class Terrain : public Drawable {
 public:

@@ -212,11 +212,21 @@ void Terrain::initializeBaseMesh(Heightmap& heightmap){
         glm::vec3 edge1 = b->position - a->position;
         glm::vec3 edge2 = c->position - a->position;
 
-        glm::vec3 normal = glm::cross(edge2, edge1);
+        glm::vec3 normal   = glm::cross(edge2, edge1);
+        glm::vec3 tangent  = edge1;
+        glm::vec3 binormal = edge2;
 
         a->normal += normal;
         b->normal += normal;
         c->normal += normal;
+
+        a->tangent += tangent;
+        b->tangent += tangent;
+        c->tangent += tangent;
+
+        a->binormal += binormal;
+        b->binormal += binormal;
+        c->binormal += binormal;
 
     }
 
@@ -224,6 +234,9 @@ void Terrain::initializeBaseMesh(Heightmap& heightmap){
     for (int i = 0; i < vertices.size(); ++i){
         Vertex* current = &vertices[i];
         current->normal = glm::normalize(current->normal);
+        current->tangent = glm::normalize(current->tangent);
+        current->binormal = glm::normalize(current->binormal);
+
     }
 }
 
@@ -243,13 +256,16 @@ Mesh* Terrain::generateMesh(std::string filename, float amplification){
 
     // The number of terrain tiles before the
     // texture repeats.
-    int texture_size = 8;
+    int texture_size = 16;
 
+    // This should probably definitely be rewritten because
+    // it will be hard to do the normal fix afterwards. Also
+    // its so many loops!
     std::vector<GLuint> faces;
     std::vector<Vertex> textured_vertices;
+    std::unordered_map<int, bool> valid_vertices;
     for (int x = 0; x < width; x += texture_size){
         for (int z = 0; z < depth; z += texture_size){
-
             int start_index = textured_vertices.size();
 
             // Create the big tile
@@ -263,19 +279,39 @@ Mesh* Terrain::generateMesh(std::string filename, float amplification){
                     current.texcoord = glm::vec2(u, v);
                     textured_vertices.push_back(current);
 
+                    int textured_index = textured_vertices.size() - 1;
+                    if (((x + i) >= width) || ((z + j) >= depth)){
+                        valid_vertices[textured_index] = false;
+                    } else {
+                        valid_vertices[textured_index] = true;
+                    }
                 }
             }
 
             for (int i = 0; i < texture_size; ++i){
                 for (int j = 0; j < texture_size; ++j){
                     int block_width = texture_size + 1;
-                    faces.push_back(start_index + getIndex(i, j, block_width));
-                    faces.push_back(start_index + getIndex(i + 1, j, block_width));
-                    faces.push_back(start_index + getIndex(i, j + 1, block_width));
 
-                    faces.push_back(start_index + getIndex(i + 1, j, block_width));
-                    faces.push_back(start_index + getIndex(i + 1, j + 1, block_width));
-                    faces.push_back(start_index + getIndex(i, j + 1, block_width));
+                    int upper_left  = start_index + getIndex(i, j, block_width);
+                    int upper_right = start_index + getIndex(i + 1, j, block_width);
+                    int lower_left  = start_index + getIndex(i, j + 1, block_width);
+                    int lower_right = start_index + getIndex(i + 1, j + 1, block_width);
+
+                    bool is_valid = true;
+                    is_valid &= valid_vertices[upper_left];
+                    is_valid &= valid_vertices[upper_right];
+                    is_valid &= valid_vertices[lower_left];
+                    is_valid &= valid_vertices[lower_right];
+
+                    if (is_valid){
+                        faces.push_back(upper_left);
+                        faces.push_back(upper_right);
+                        faces.push_back(lower_left);
+
+                        faces.push_back(upper_right);
+                        faces.push_back(lower_right);
+                        faces.push_back(lower_left);
+                    }
 
                 }
             }
