@@ -11,7 +11,7 @@
 #include "drawable.h"
 #include "heightmap.h"
 #include "vertex.h"
-
+#include "terrain_mesh.h"
 
 class Terrain : public Drawable {
 public:

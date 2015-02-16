@@ -23,6 +23,30 @@ Mesh::Mesh(std::vector<GLfloat> vertices, std::vector<GLuint> elements){
     loadMeshData(vertices, elements);
 }
 
+Mesh::Mesh(std::vector<Vertex> vertices, std::vector<GLuint> elements){
+    // This constructor loads geometry data (vertices and faces) from std::vectors.
+    std::vector<GLfloat> out_vertices;
+    for (int i = 0; i < vertices.size(); ++i){
+        Vertex vertex = vertices[i];
+        out_vertices.push_back(vertex.position.x);
+        out_vertices.push_back(vertex.position.y);
+        out_vertices.push_back(vertex.position.z);
+        out_vertices.push_back(vertex.normal.x);
+        out_vertices.push_back(vertex.normal.y);
+        out_vertices.push_back(vertex.normal.z);
+        out_vertices.push_back(vertex.tangent.x);
+        out_vertices.push_back(vertex.tangent.y);
+        out_vertices.push_back(vertex.tangent.z);
+        out_vertices.push_back(vertex.binormal.x);
+        out_vertices.push_back(vertex.binormal.y);
+        out_vertices.push_back(vertex.binormal.z);
+        out_vertices.push_back(vertex.texcoord.x);
+        out_vertices.push_back(vertex.texcoord.y);
+    }
+
+    loadMeshData(out_vertices, elements);
+}
+
 void Mesh::loadMeshData(std::vector<GLfloat> vertices, std::vector<GLuint> elements){
     // The single vertex specification is:
     //      x, y, z, nx, ny, nz, tx, ty, tz, bx, by, bz, u, v

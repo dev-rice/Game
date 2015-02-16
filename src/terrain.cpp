@@ -328,25 +328,7 @@ Mesh* Terrain::generateMesh(std::string filename, float amplification){
         }
     }
 
-    std::vector<GLfloat> out_vertices;
-    for (int i = 0; i < textured_vertices.size(); ++i){
-        TerrainVertex current = textured_vertices[i];
-        out_vertices.push_back(current.position.x);
-        out_vertices.push_back(current.position.y);
-        out_vertices.push_back(current.position.z);
-        out_vertices.push_back(current.normal.x);
-        out_vertices.push_back(current.normal.y);
-        out_vertices.push_back(current.normal.z);
-        out_vertices.push_back(current.tangent.x);
-        out_vertices.push_back(current.tangent.y);
-        out_vertices.push_back(current.tangent.z);
-        out_vertices.push_back(current.binormal.x);
-        out_vertices.push_back(current.binormal.y);
-        out_vertices.push_back(current.binormal.z);
-        out_vertices.push_back(current.texcoord.x);
-        out_vertices.push_back(current.texcoord.y);
-    }
-    return new Mesh(out_vertices, faces);
+    return new TerrainMesh(textured_vertices, faces);
 }
 
 int Terrain::getIndex(int x, int z){
