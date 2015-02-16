@@ -32,10 +32,11 @@ d 3 6 0 7 0 -1.000000 0.000000 -6.200000 2.500000 0.000000 0.707107 0.707107 3.1
 d 0 1 2 8 0 -3.940373 0.068830 -4.155382 0.085235 0.308021 -0.189454 -0.932325 2.010341
 
 # Particle definitions (p)
-
-# Ground specification - Begin writing here (h, g)
-# Particle definitions (p)
 p fire -1.400000 0.000000 0.000000
 
 # Ground specification - Begin writing here (h, g)
-h mountains.png rough_ground.png 10.0
+h mountains.png 10.0
+g 0 rough_ground_alt.png
+g 1 bricks.png bricks_splat.png
+g 2 stone.png stone_splat.png
+g 3 glacier.png ice_splat.png
