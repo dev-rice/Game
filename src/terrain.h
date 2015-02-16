@@ -25,6 +25,9 @@ public:
     GLfloat getHeightInterpolated(GLfloat, GLfloat);
     glm::vec3 getNormal(GLfloat, GLfloat);
     float getSteepness(GLfloat, GLfloat);
+
+    void setSplatmap(GLuint splat) {splatmap = splat;}
+
     void printPathing();
 
     bool isOnTerrain(GLfloat, GLfloat, GLfloat);
@@ -40,6 +43,9 @@ private:
     int getIndex(int x, int y);
     int getIndex(int x, int y, int width);
 
+    virtual void bindTextures();
+    virtual void setTextureLocations();
+
     bool** pathing_array;
 
     std::vector<TerrainVertex> vertices;
@@ -48,6 +54,8 @@ private:
     int depth;
     int start_x;
     int start_z;
+
+    GLuint splatmap;
 
 };
 

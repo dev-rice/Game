@@ -351,3 +351,34 @@ void Terrain::updateUniformData(){
     glUniform1f(glGetUniformLocation(shader_program, "scale"), scale);
 
 }
+
+void Terrain::bindTextures(){
+    // Put each texture into the correct location for this Drawable. GL_TEXTURE0-3
+    // correspond to the uniforms set in attachTextureSet(). This is where we actually
+    // tell the graphics card which textures to use.
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, diffuse);
+
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, specular);
+
+    glActiveTexture(GL_TEXTURE2);
+    glBindTexture(GL_TEXTURE_2D, emissive);
+
+    glActiveTexture(GL_TEXTURE3);
+    glBindTexture(GL_TEXTURE_2D, normal);
+
+    glActiveTexture(GL_TEXTURE5);
+    glBindTexture(GL_TEXTURE_2D, splatmap);
+
+}
+
+void Terrain::setTextureLocations(){
+    // Try to set the texture locations
+    glUniform1i(glGetUniformLocation(shader_program, "diffuse_texture"), 0);
+    glUniform1i(glGetUniformLocation(shader_program, "specular_texture"), 1);
+    glUniform1i(glGetUniformLocation(shader_program, "emissive_texture"), 2);
+    glUniform1i(glGetUniformLocation(shader_program, "normal_map"), 3);
+    glUniform1i(glGetUniformLocation(shader_program, "shadow_map"), 4);
+    glUniform1i(glGetUniformLocation(shader_program, "splatmap"), 5);
+}

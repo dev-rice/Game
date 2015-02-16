@@ -59,6 +59,7 @@ protected:
     void updateModelMatrix();
 
     virtual void bindTextures();
+    virtual void setTextureLocations();
     virtual void updateUniformData() = 0;
 
     Mesh* mesh;

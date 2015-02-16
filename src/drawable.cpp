@@ -56,13 +56,7 @@ void Drawable::setShader(GLuint shader_program){
     // Debug::info("settings_location = %d\n", settings_location);
     glUniformBlockBinding(shader_program, settings_location, 4);
 
-    // Try to set the texture locations
-    glUniform1i(glGetUniformLocation(shader_program, "diffuse_texture"), 0);
-    glUniform1i(glGetUniformLocation(shader_program, "specular_texture"), 1);
-    glUniform1i(glGetUniformLocation(shader_program, "emissive_texture"), 2);
-    glUniform1i(glGetUniformLocation(shader_program, "normal_map"), 3);
-    glUniform1i(glGetUniformLocation(shader_program, "shadow_map"), 4);
-
+    setTextureLocations();
 
 }
 
@@ -121,6 +115,15 @@ void Drawable::bindTextures(){
     glActiveTexture(GL_TEXTURE3);
     glBindTexture(GL_TEXTURE_2D, normal);
 
+}
+
+void Drawable::setTextureLocations(){
+    // Try to set the texture locations
+    glUniform1i(glGetUniformLocation(shader_program, "diffuse_texture"), 0);
+    glUniform1i(glGetUniformLocation(shader_program, "specular_texture"), 1);
+    glUniform1i(glGetUniformLocation(shader_program, "emissive_texture"), 2);
+    glUniform1i(glGetUniformLocation(shader_program, "normal_map"), 3);
+    glUniform1i(glGetUniformLocation(shader_program, "shadow_map"), 4);
 }
 
 void Drawable::draw(){

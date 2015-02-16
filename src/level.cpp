@@ -286,9 +286,13 @@ void Level::loadLevel(const char* filename){
                 GL_LINEAR);
             GLuint normal = TextureLoader::loadTextureFromFile(
                 "res/textures/rough_ground_norm.png", GL_LINEAR);
+            GLuint splatmap = TextureLoader::loadTextureFromFile(
+                "res/textures/splatmap.png", GL_LINEAR);
+
 
             ground->setDiffuse(diffuse);
             ground->setNormal(normal);
+            ground->setSplatmap(splatmap);
 
             drawables.push_back((Drawable*) ground);
         }
