@@ -282,19 +282,35 @@ void Level::loadLevel(const char* filename){
 
             ground = new Terrain(terrain_shader, heightmap_filename_str, amplification);
 
+            GLuint normal = TextureLoader::loadTextureFromFile(
+                "res/textures/rough_ground_norm.png", GL_LINEAR);
+
             GLuint diffuse1 = TextureLoader::loadTextureFromFile(ground_filename,
                 GL_LINEAR);
             GLuint diffuse2 = TextureLoader::loadTextureFromFile(
                 "res/textures/glacier.png", GL_LINEAR);
-            GLuint normal = TextureLoader::loadTextureFromFile(
-                "res/textures/rough_ground_norm.png", GL_LINEAR);
+            GLuint diffuse3 = TextureLoader::loadTextureFromFile(
+                "res/textures/stone.png", GL_LINEAR);
+            GLuint diffuse4 = TextureLoader::loadTextureFromFile(
+                "res/textures/bricks.png", GL_LINEAR);
+
             GLuint splatmap1 = TextureLoader::loadTextureFromFile(
                 "res/textures/splatmap1.png", GL_LINEAR);
+            GLuint splatmap2 = TextureLoader::loadTextureFromFile(
+                "res/textures/splatmap2.png", GL_LINEAR);
+            GLuint splatmap3 = TextureLoader::loadTextureFromFile(
+                "res/textures/splatmap3.png", GL_LINEAR);
 
             ground->setDiffuse(diffuse1, 0);
             ground->setDiffuse(diffuse2, 1);
-            ground->setNormal(normal);
+            ground->setDiffuse(diffuse3, 2);
+            ground->setDiffuse(diffuse4, 3);
+
             ground->setSplatmap(splatmap1, 0);
+            ground->setSplatmap(splatmap2, 1);
+            ground->setSplatmap(splatmap3, 2);
+
+            ground->setNormal(normal);
 
             drawables.push_back((Drawable*) ground);
         }

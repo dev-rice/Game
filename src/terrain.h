@@ -56,8 +56,8 @@ private:
     int start_x;
     int start_z;
 
-    GLuint splatmaps[1];
-    GLuint diffuse_textures[2];
+    GLuint splatmaps[3];
+    GLuint diffuse_textures[4];
 
 
 };
