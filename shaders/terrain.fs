@@ -25,7 +25,8 @@ uniform sampler2D specular_texture;
 uniform sampler2D normal_map;
 uniform sampler2D emissive_texture;
 uniform sampler2D shadow_map;
-uniform sampler2D splatmap;
+uniform sampler2D splatmap1;
+uniform sampler2D diffuse_texture2;
 
 vec4 diffuse;
 vec4 specular;
@@ -155,14 +156,16 @@ float getShadowFactor(){
 }
 
 void main() {
-    diffuse = texture(diffuse_texture, Texcoord);
+    // Change this to take average value or luminance
+    float splat_values[2];
+    splat_values[0] = texture(splatmap1, Splatcoord).r;
+
+    vec4 base_diffuse = texture(diffuse_texture, Texcoord);
+    vec4 diffuse2 = texture(diffuse_texture2, Texcoord);
+    diffuse = mix(base_diffuse, diffuse2, splat_values[0]);
+
     specular = texture(specular_texture, Texcoord);
     emissive = texture(emissive_texture, Texcoord);
-
-    // Change this to take average value or luminance
-    float splat_value = texture(splatmap, Splatcoord).r;
-
-    vec4 unsplat_color = vec4(1.0, 0.0, 1.0, 1.0);
 
     bool lighting_on = lighting != 0.0f;
     bool shadows_on = shadows != 0.0f;
@@ -204,8 +207,6 @@ void main() {
         vec4 emissive_component = vec4(emissive.rgb, 1.0);
         texel = mix(lit_component + ambient_component, emissive_component,
             emissive.a);
-
-        texel = mix(unsplat_color, texel, splat_value);
 
     } else {
         texel = visibility * diffuse;

@@ -356,8 +356,6 @@ void Terrain::bindTextures(){
     // Put each texture into the correct location for this Drawable. GL_TEXTURE0-3
     // correspond to the uniforms set in attachTextureSet(). This is where we actually
     // tell the graphics card which textures to use.
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, diffuse);
 
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, specular);
@@ -369,16 +367,28 @@ void Terrain::bindTextures(){
     glBindTexture(GL_TEXTURE_2D, normal);
 
     glActiveTexture(GL_TEXTURE5);
-    glBindTexture(GL_TEXTURE_2D, splatmap);
+    glBindTexture(GL_TEXTURE_2D, splatmaps[0]);
 
+    glActiveTexture(GL_TEXTURE10);
+    glBindTexture(GL_TEXTURE_2D, diffuse_textures[0]);
+
+    glActiveTexture(GL_TEXTURE11);
+    glBindTexture(GL_TEXTURE_2D, diffuse_textures[1]);
 }
 
 void Terrain::setTextureLocations(){
     // Try to set the texture locations
-    glUniform1i(glGetUniformLocation(shader_program, "diffuse_texture"), 0);
     glUniform1i(glGetUniformLocation(shader_program, "specular_texture"), 1);
     glUniform1i(glGetUniformLocation(shader_program, "emissive_texture"), 2);
     glUniform1i(glGetUniformLocation(shader_program, "normal_map"), 3);
     glUniform1i(glGetUniformLocation(shader_program, "shadow_map"), 4);
-    glUniform1i(glGetUniformLocation(shader_program, "splatmap"), 5);
+    glUniform1i(glGetUniformLocation(shader_program, "splatmap1"), 5);
+    glUniform1i(glGetUniformLocation(shader_program, "diffuse_texture"), 10);
+    glUniform1i(glGetUniformLocation(shader_program, "diffuse_texture2"), 11);
+
+}
+
+void Terrain::setDiffuse(GLuint diff, int index) {
+    diffuse_textures[index] = diff;
+    Drawable::setDiffuse(diff);
 }
