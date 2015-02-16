@@ -23,6 +23,9 @@ Level::Level(const char* filename){
     doodad_shader = ShaderLoader::loadShaderProgram("shaders/doodad.vs",
         "shaders/doodad.fs");
 
+    terrain_shader = ShaderLoader::loadShaderProgram("shaders/terrain.vs",
+        "shaders/terrain.fs");
+
     particle_shader = ShaderLoader::loadShaderProgram("shaders/particle.vs",
         "shaders/particle.fs");
 
@@ -277,7 +280,7 @@ void Level::loadLevel(const char* filename){
 
             std::string heightmap_filename_str(heightmap_filename);
 
-            ground = new Terrain(doodad_shader, heightmap_filename_str, amplification);
+            ground = new Terrain(terrain_shader, heightmap_filename_str, amplification);
 
             GLuint diffuse = TextureLoader::loadTextureFromFile(ground_filename,
                 GL_LINEAR);

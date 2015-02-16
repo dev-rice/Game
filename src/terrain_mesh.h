@@ -6,6 +6,9 @@
 class TerrainMesh : public Mesh {
 public:
     TerrainMesh(std::vector<TerrainVertex>, std::vector<GLuint>);
+
+    void attachGeometryToShader(GLuint shader_program);
+
 private:
 
 };

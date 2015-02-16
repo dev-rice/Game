@@ -35,7 +35,7 @@ public:
 
     void draw();
     void bindVAO();
-    void attachGeometryToShader(GLuint);
+    virtual void attachGeometryToShader(GLuint);
 protected:
 
     void loadMeshData(std::vector<GLfloat>, std::vector<GLuint>);
