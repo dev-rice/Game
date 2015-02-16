@@ -11,6 +11,7 @@ struct Light {
 const int num_lights = 3;
 
 in vec2 Texcoord;
+in vec2 Splatcoord;
 in vec3 surface_normal;
 in vec3 camera_to_surface;
 in Light lights[num_lights];
@@ -24,6 +25,12 @@ uniform sampler2D specular_texture;
 uniform sampler2D normal_map;
 uniform sampler2D emissive_texture;
 uniform sampler2D shadow_map;
+uniform sampler2D splatmap1;
+uniform sampler2D splatmap2;
+uniform sampler2D splatmap3;
+uniform sampler2D diffuse_texture2;
+uniform sampler2D diffuse_texture3;
+uniform sampler2D diffuse_texture4;
 
 vec4 diffuse;
 vec4 specular;
@@ -153,7 +160,22 @@ float getShadowFactor(){
 }
 
 void main() {
-    diffuse = texture(diffuse_texture, Texcoord);
+    // Change this to take average value or luminance
+    float splat_values[3];
+    splat_values[0] = texture(splatmap1, Splatcoord).r;
+    splat_values[1] = texture(splatmap2, Splatcoord).r;
+    splat_values[2] = texture(splatmap3, Splatcoord).r;
+
+    vec4 base_diffuse = texture(diffuse_texture, Texcoord);
+    vec4 diffuse2 = texture(diffuse_texture2, Texcoord);
+    vec4 diffuse3 = texture(diffuse_texture3, Texcoord);
+    vec4 diffuse4 = texture(diffuse_texture4, Texcoord);
+
+    diffuse = base_diffuse;
+    diffuse = mix(diffuse, diffuse2, splat_values[0]);
+    diffuse = mix(diffuse, diffuse3, splat_values[1]);
+    diffuse = mix(diffuse, diffuse4, splat_values[2]);
+
     specular = texture(specular_texture, Texcoord);
     emissive = texture(emissive_texture, Texcoord);
 
@@ -197,6 +219,7 @@ void main() {
         vec4 emissive_component = vec4(emissive.rgb, 1.0);
         texel = mix(lit_component + ambient_component, emissive_component,
             emissive.a);
+
     } else {
         texel = visibility * diffuse;
         texel.a = diffuse.a;

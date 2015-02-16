@@ -79,6 +79,7 @@ private:
     std::vector<Emitter*> emitters;
 
     GLuint doodad_shader;
+    GLuint terrain_shader;
     GLuint particle_shader;
     GLuint shadow_shader;
 

@@ -4,17 +4,18 @@
 c 0.0f, 0.0
 
 # Included Meshes (m)
-m firepit.dae
+m cube.dae
 
 # Included Textures (t)
-t firepit_diff.png
-t firepit_emit.png
+t positioned.png
 
 # Object location, rotation, scale, and texture binding (d)
-d 0 1 0 0 1 -1.414910 -0.010000 0.000000 1.799613 0.000000 0.707107 0.707107 3.141593
+d 0 1 0 0 0  0.000000 15.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000
 
 # Particle definitions (p)
-p fire -1.400000 0.000000 0.000000
 
 # Ground specification - Begin writing here (h, g)
-h maze.png glacier.png 15.0
+# Particle definitions (p)
+
+# Ground specification - Begin writing here (h, g)
+h testheight.png rough_ground.png 2.0

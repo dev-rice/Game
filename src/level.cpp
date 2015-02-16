@@ -23,6 +23,9 @@ Level::Level(const char* filename){
     doodad_shader = ShaderLoader::loadShaderProgram("shaders/doodad.vs",
         "shaders/doodad.fs");
 
+    terrain_shader = ShaderLoader::loadShaderProgram("shaders/terrain.vs",
+        "shaders/terrain.fs");
+
     particle_shader = ShaderLoader::loadShaderProgram("shaders/particle.vs",
         "shaders/particle.fs");
 
@@ -262,37 +265,48 @@ void Level::loadLevel(const char* filename){
         }
 
         if(buffer[0] == 'h'){
-            char parameter[64];
-            char ground_texture[64];
+            char heightmap_name[64];
             float amplification;
-            sscanf(buffer, "%*c %s %s %f", parameter, ground_texture, &amplification);
+            sscanf(buffer, "%*c %s %f", heightmap_name, &amplification);
 
             char heightmap_filename[80] = "";
             strcat(heightmap_filename, TEXTURE_PATH);
-            strcat(heightmap_filename, parameter);
-
-            char ground_filename[80] = "";
-            strcat(ground_filename, TEXTURE_PATH);
-            strcat(ground_filename, ground_texture);
+            strcat(heightmap_filename, heightmap_name);
 
             std::string heightmap_filename_str(heightmap_filename);
 
-            ground = new Terrain(doodad_shader, heightmap_filename_str, amplification);
-
-            GLuint diffuse = TextureLoader::loadTextureFromFile(ground_filename,
-                GL_LINEAR);
-            GLuint normal = TextureLoader::loadTextureFromFile(
-                "res/textures/rough_ground_norm.png", GL_LINEAR);
-
-            ground->setDiffuse(diffuse);
-            ground->setNormal(normal);
+            ground = new Terrain(terrain_shader, heightmap_filename_str, amplification);
 
             drawables.push_back((Drawable*) ground);
         }
 
         if(buffer[0] == 'g'){
             // For now, a simple comment
-            Debug::info("Found a ground texture set!\n");
+            int texture_number;
+            char diffuse_name[64];
+            char splatmap_name[64];
+            sscanf(buffer, "%*c %d %s %s", &texture_number, diffuse_name, splatmap_name);
+
+            Debug::info("Found a ground texture: %d %s %s\n", texture_number, diffuse_name, splatmap_name);
+
+            char diffuse_filename[80] = "";
+            strcat(diffuse_filename, TEXTURE_PATH);
+            strcat(diffuse_filename, diffuse_name);
+
+            char splatmap_filename[80] = "";
+            strcat(splatmap_filename, TEXTURE_PATH);
+            strcat(splatmap_filename, splatmap_name);
+
+            GLuint diffuse = TextureLoader::loadTextureFromFile(diffuse_filename, GL_LINEAR);
+
+            if (texture_number == 0){
+                ground->setDiffuse(diffuse, 0);
+
+            } else {
+                GLuint splatmap = TextureLoader::loadTextureFromFile(splatmap_filename, GL_LINEAR);
+                ground->setDiffuse(diffuse, texture_number);
+                ground->setSplatmap(splatmap, texture_number - 1);
+            }
         }
 
     }

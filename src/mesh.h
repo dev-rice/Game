@@ -24,16 +24,19 @@
 #include "shader_loader.h"
 #include "mesh_loader.h"
 #include "debug.h"
+#include "vertex.h"
 
 class Mesh {
 public:
+    Mesh() {;}
     Mesh(const char*);
     Mesh(std::vector<GLfloat>, std::vector<GLuint>);
+    Mesh(std::vector<Vertex>, std::vector<GLuint>);
 
     void draw();
     void bindVAO();
-    void attachGeometryToShader(GLuint);
-private:
+    virtual void attachGeometryToShader(GLuint);
+protected:
 
     void loadMeshData(std::vector<GLfloat>, std::vector<GLuint>);
 

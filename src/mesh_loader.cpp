@@ -228,27 +228,6 @@ void MeshLoader::calculateTangentsAndBinormals(std::vector<Vertex>& vertices, st
 
     }
 
-    for (int i = 0; i < unique_vertices.size(); ++i){
-        Vertex current = unique_vertices[i];
-        if (current.position == glm::vec3(0.0f, 0.0f, 2.0f)){
-            // Debug::info("Found the offending vertices:\n");
-            for (int j = 0; j < vertices.size(); ++j){
-                int this_unique_vertex_index = vertex_to_unique[j];
-                if (this_unique_vertex_index == i){
-                    glm::vec3 pos = vertices[j].position;
-                    glm::vec3 normal = vertices[j].normal;
-                    glm::vec3 tangent = vertices[j].tangent;
-                    glm::vec3 binormal = vertices[j].binormal;
-                    // Debug::info("    position = %.2f %.2f %.2f\n", pos.x, pos.y, pos.z);
-                    // Debug::info("    normal   = %.2f %.2f %.2f\n", normal.x, normal.y, normal.z);
-                    // Debug::info("    tangent  = %.2f %.2f %.2f\n", tangent.x, tangent.y, tangent.z);
-                    // Debug::info("    binormal = %.2f %.2f %.2f\n", binormal.x, binormal.y, binormal.z);
-                    // Debug::info("\n");
-                }
-            }
-        }
-    }
-
     if (!flat_shading){
         for (int i = 0; i < unique_vertices.size(); ++i){
             glm::vec3 normal = unique_vertices[i].normal;

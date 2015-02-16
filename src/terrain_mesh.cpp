@@ -1,14 +1,7 @@
-// Mesh:
-//      Mesh handles all of the lowest level OpenGL drawing. It is a representation of a VAO.
-//      From a top level perspective the Mesh holds geometry data: vertices and faces. This data
-//      can either be passed in as std::vectors in the constructor or loaded from a .obj file. The
-//      VAO is not complete without having an associated shader. Before using the mesh you must specify
-//      which shader you will be using so that it knows the geometry data. Ultimately when using this object,
-//      you will get a VAO back. This VAO can then be bound such that you can attach uniform data and textures
-//      to the shader at a higher level.
+#include "terrain_mesh.h"
 
 // The single vertex specification is:
-//      x, y, z, nx, ny, nz, tx, ty, tz, bx, by, bz, u, v
+//      x, y, z, nx, ny, nz, tx, ty, tz, bx, by, bz, u, v, su, sv
 // Where:
 //      x = x position of vertex
 //      y = y position of vertex
@@ -24,28 +17,14 @@
 //      bz = z component of the binormal vector
 //      u = U texture coordinate on UV map
 //      v = V texture coordinate on UV map
+//      su = U texture coordinate on splat map
+//      sv = V texture coordinate on splat map
 
-#include "mesh.h"
-
-Mesh::Mesh(const char* filename){
-    // This constructor loads geometry data (vertices and faces) from a .obj file.
-    MeshLoader mesh_loader = MeshLoader(filename);
-    std::vector<GLfloat> vertices = mesh_loader.getVertexArray();
-    std::vector<GLuint>  elements = mesh_loader.getFaceArray();
-
-    loadMeshData(vertices, elements);
-}
-
-Mesh::Mesh(std::vector<GLfloat> vertices, std::vector<GLuint> elements){
-    // This constructor loads geometry data (vertices and faces) from std::vectors.
-    loadMeshData(vertices, elements);
-}
-
-Mesh::Mesh(std::vector<Vertex> vertices, std::vector<GLuint> elements){
+TerrainMesh::TerrainMesh(std::vector<TerrainVertex> vertices, std::vector<GLuint> elements){
     // This constructor loads geometry data (vertices and faces) from std::vectors.
     std::vector<GLfloat> out_vertices;
     for (int i = 0; i < vertices.size(); ++i){
-        Vertex vertex = vertices[i];
+        TerrainVertex vertex = vertices[i];
         out_vertices.push_back(vertex.position.x);
         out_vertices.push_back(vertex.position.y);
         out_vertices.push_back(vertex.position.z);
@@ -60,45 +39,14 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<GLuint> elements){
         out_vertices.push_back(vertex.binormal.z);
         out_vertices.push_back(vertex.texcoord.x);
         out_vertices.push_back(vertex.texcoord.y);
+        out_vertices.push_back(vertex.splatcoord.x);
+        out_vertices.push_back(vertex.splatcoord.y);
     }
 
-    loadMeshData(out_vertices, elements);
+    TerrainMesh::loadMeshData(out_vertices, elements);
 }
 
-void Mesh::loadMeshData(std::vector<GLfloat> vertices, std::vector<GLuint> elements){
-
-    // We need to know how many faces to draw later on.
-    num_faces = elements.size();
-
-    // Create our Vertex Array Object (VAO) which will hold our vertex and element data.
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
-
-    GLuint ebo;
-
-    // Store all of the vertex data in a Vertex Buffer Object (VBO)
-    glGenBuffers(1, &vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), vertices.data(), GL_STATIC_DRAW);
-
-    // Store all of the face data in a Element Buffer Object (EBO)
-    glGenBuffers(1, &ebo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements.size()* sizeof(GLuint), elements.data(), GL_STATIC_DRAW);
-
-}
-
-void Mesh::bindVAO(){
-    // This will bind the vertex array for you so that you can use the mesh at a higher level.
-    glBindVertexArray(vao);
-}
-void Mesh::draw(){
-    // Draws the actual geometry. Textures and everything else are attached at a higher level.
-    glDrawElements(GL_TRIANGLES, this->num_faces, GL_UNSIGNED_INT, 0);
-
-}
-
-void Mesh::attachGeometryToShader(GLuint shader_program){
+void TerrainMesh::attachGeometryToShader(GLuint shader_program){
     // As soon as you've bound a certain VAO, every time you call glVertexAttribPointer,
     // that information will be stored in that VAO. This makes switching between different vertex data
     // and vertex formats as easy as binding a different VAO.
@@ -120,33 +68,40 @@ void Mesh::attachGeometryToShader(GLuint shader_program){
         glEnableVertexAttribArray(posAttrib);
         // Load the position attributes from our vertex spec with width 8. The position
         // values start at index 0. Tell it to load 3 values.
-        glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE,
-                               14*sizeof(float), 0);
+        glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE, 16*sizeof(float), 0);
 
         GLint normalAttrib = glGetAttribLocation(shader_program, "normal");
         glEnableVertexAttribArray(normalAttrib);
         // Load the normal pointer from our vertex spec with width 8. The normal values
         // start at index 2. Tell it to load 3 values.
-        glVertexAttribPointer(normalAttrib, 3, GL_FLOAT, GL_FALSE,
-                               14*sizeof(float), (void*)(3*sizeof(float)));
+        glVertexAttribPointer(normalAttrib, 3, GL_FLOAT, GL_FALSE, 16*sizeof(float),
+            (void*)(3*sizeof(float)));
 
         GLint tangent_attrib = glGetAttribLocation(shader_program, "tangent");
         glEnableVertexAttribArray(tangent_attrib);
-        glVertexAttribPointer(tangent_attrib, 3, GL_FLOAT, GL_FALSE,
-        14*sizeof(float), (void*)(6*sizeof(float)));
+        glVertexAttribPointer(tangent_attrib, 3, GL_FLOAT, GL_FALSE, 16*sizeof(float),
+            (void*)(6*sizeof(float)));
 
         GLint bitangent_attrib = glGetAttribLocation(shader_program, "bitangent");
         glEnableVertexAttribArray(bitangent_attrib);
-        glVertexAttribPointer(bitangent_attrib, 3, GL_FLOAT, GL_FALSE,
-        14*sizeof(float), (void*)(9*sizeof(float)));
+        glVertexAttribPointer(bitangent_attrib, 3, GL_FLOAT, GL_FALSE, 16*sizeof(float),
+            (void*)(9*sizeof(float)));
 
         // Link the texture coordinates to the shader.
         GLint texAttrib = glGetAttribLocation(shader_program, "texcoord");
         glEnableVertexAttribArray(texAttrib);
         // Load the texture attributes from our vertex spec with width 8. The texture
         // values start at index 8. Tell it to load 2 values.
-        glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE,
-                               14*sizeof(float), (void*)(12*sizeof(float)));
+        glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 16*sizeof(float),
+            (void*)(12*sizeof(float)));
+
+        // Link the texture coordinates to the shader.
+        GLint splatAttrib = glGetAttribLocation(shader_program, "splatcoord");
+        glEnableVertexAttribArray(splatAttrib);
+        // Load the texture attributes from our vertex spec with width 8. The texture
+        // values start at index 8. Tell it to load 2 values.
+        glVertexAttribPointer(splatAttrib, 2, GL_FLOAT, GL_FALSE, 16*sizeof(float),
+            (void*)(14*sizeof(float)));
 
         // Keep track of which shaders we have already bound data to
         bound_shaders.push_back(shader_program);
