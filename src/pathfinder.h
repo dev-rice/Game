@@ -45,6 +45,8 @@ private:
 	static std::vector<glm::vec3> reconstruct_path(Terrain*, std::map<Node*, Node*>, Node*);
 	static std::vector<Node*> getNeighborNodes(Node*);
 	static bool canPathOnLine(Terrain*, int, int, int, int);
+	static int* transformToOctant(int, int, int);
+	static int* transformFromOctant(int, int, int);
 
 	static int **node_state_array;
 	static int depth;

@@ -170,51 +170,153 @@ std::vector<Node*> PathFinder::getNeighborNodes(Node *current_node){
 
 bool PathFinder::canPathOnLine(Terrain* ground, int x0, int y0, int x1, int y1){
 	// http://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm#Algorithm_for_integer_arithmetic
-	// dx=x1-x0
-	// dy=y1-y0
-
-	// D = 2*dy - dx
-	// plot(x0,y0)
-	// y=y0
-
-	// for x from x0+1 to x1
-	// if D > 0
-	//   y = y+1
-	//   plot(x,y)
-	//   D = D + (2*dy-2*dx)
-	// else
-	//   plot(x,y)
-	//   D = D + (2*dy)
-
-	// ONLY WORKS FOR OCTANT 0:
-	//  \5|6/
-	//  4\|/7
-	// ---+---
-	//  3/|\0
-	//  /2|1\
 
 	printf("Starting line draw...\n");
+
+	// OCTANTS 2 AND 6 ARE BE FUCKITY
+
+	// Get the octant
+	float angle_in_degrees = atan2(y1 - y0, x1 - x0) * 180.0f / M_PI;
+	if(angle_in_degrees < 0){
+		angle_in_degrees += 360.0f;
+	}
+	int octant = int((angle_in_degrees - 1.0f) / 45.0f);	
+	printf("Octant: %d\n", octant);
+
+	printf("(%d, %d)\n", x0, y0);
+
+	// Transform current stuff into correct octant
+	int *temp0 = transformToOctant(octant, x0, y0);
+	int *temp1 = transformToOctant(octant, x1, y1);
+
+	x0 = temp0[0];
+	y0 = temp0[1];
+
+	x1 = temp1[0];
+	y1 = temp1[1];
+
+	// Now we can start drawing the line
 	int dx = x1 - x0;
 	int dy = y1 - y0;
 
 	int d = (dy + dy) - dx;
-	printf("(%d, %d)\n", x0, y0);
 	int y = y0;
 
+	int* realtemp;
+	int real_x, real_y;
+
 	for(int x = x0 + 1; x < x1; ++x){
+
 		if(d > 0){
 			y++;
-			printf("(%d, %d)\n", x, y);
 			d += (dy + dy) - (dx + dx);
+
+			realtemp = transformFromOctant(octant, x, y);
+			real_x = realtemp[0];
+			real_y = realtemp[1];
+
+			printf("(%d, %d)\n", real_x, real_y);
 		} else {
-			printf("(%d, %d)\n", x, y);
 			d += (dy + dy);
+
+			realtemp = transformFromOctant(octant, x, y);
+			real_x = realtemp[0];
+			real_y = realtemp[1];
+
+			printf("(%d, %d)\n", real_x, real_y);
 		}
 	}
 
-	printf("(%d, %d)\n", x1, y1);
+	printf("(%d, %d)\n", real_x, real_y);
 	printf("Ended line draw\n\n");
 
-
 	return true;
+}
+
+int* PathFinder::transformToOctant(int octant, int x, int y){
+	int temp_x, temp_y;
+
+	switch(octant){  
+		case 0:
+			temp_x = x;
+			temp_y = y;
+			break;
+		case 1:
+			temp_x = y;
+			temp_y = x;
+			break;
+		case 2:
+			temp_x = -y;
+			temp_y = x;
+			break;
+		case 3:
+			temp_x = -x;
+			temp_y = y;
+			break;
+		case 4:
+			temp_x = -x;
+			temp_y = -y;
+			break;
+		case 5:
+			temp_x = -y;
+			temp_y = -x;
+			break;
+		case 6:
+			temp_x = y;
+			temp_y = -x;
+			break;
+		case 7:
+			temp_x = x;
+			temp_y = -y;
+			break;
+	}
+
+	int* temp_arr = new int[2];
+	temp_arr[0] = temp_x;
+	temp_arr[1] = temp_y;
+	return temp_arr;
+}
+
+int* PathFinder::transformFromOctant(int octant, int x, int y){
+	int temp_x, temp_y;
+
+	switch(octant){  
+		case 0:
+			temp_x = x;
+			temp_y = y;
+			break;
+		case 1:
+			temp_x = y;
+			temp_y = x;
+			break;
+		case 2:
+			temp_x = y;
+			temp_y = -x;
+			break;
+		case 3:
+			temp_x = -x;
+			temp_y = y;
+			break;
+		case 4:
+			temp_x = -x;
+			temp_y = -y;
+			break;
+		case 5:
+			temp_x = -y;
+			temp_y = -x;
+			break;
+		case 6:
+			temp_x = -y;
+			temp_y = x;
+			break;
+		case 7:
+			temp_x = x;
+			temp_y = -y;
+			break;
+	}
+
+	int* temp_arr = new int[2];
+	temp_arr[0] = temp_x;
+	temp_arr[1] = temp_y;
+	return temp_arr;
 }

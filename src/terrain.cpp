@@ -66,7 +66,14 @@ Terrain::Terrain(GLuint shader_program, std::string heightmap_filename, float am
     for(int z = 0; z < heightmap.height; ++z){
         for(int x = 0; x < heightmap.width; ++x){
             pathing_array[z][x] = (getSteepness(GLfloat(x) + start_x, GLfloat(z) + start_z) < 0.8f);
+
+            if(pathing_array[z][x]){
+                // printf("  ");
+            } else {
+                // printf("██");
+            }
         }
+        // printf("\n");
     }
 
     // Debugging the allowed areas
