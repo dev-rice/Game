@@ -13,7 +13,7 @@ BINARY_OUTPUT := game
 FRAMEWORKS := -framework OpenGl -framework CoreFoundation
 MAC_LIBRARIES := -I/usr/local/include -lglfw3 -lglew -lSOIL
 
-LINUX_LIBRARIES := -lGL -lGLEW -I /usr/lib/x86_64-linux-gnu/ -lglfw -I /usr/local/include -lSOIL
+LINUX_LIBRARIES := -lGL -lGLEW -I /usr/lib/x86_64-linux-gnu/ -lglfw -I /usr/local/include -lSOIL -lpthread
 LINUX_LIBRARIES_ALT := -lglfw3 -lX11 -lXxf86vm -lXrandr -lpthread -lXi -lrt -lXinerama -lXcursor -lGL -lGLEW -I /usr/local/include -lSOIL
 
 all:

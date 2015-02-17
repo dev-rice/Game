@@ -3,6 +3,8 @@
 
 #include <ctime>
 #include <vector>
+#include <thread>
+#include <mutex>
 
 #include "mesh.h"
 #include "drawable.h"
@@ -20,11 +22,13 @@
 #include "core_ui/ui_window.h"
 #include "pathfinder.h"
 #include "game_clock.h"
+#include "debug_console.h"
 
 class GameView {
 public:
 
     GameView(Level*);
+    ~GameView();
 
     void update();
 private:
@@ -68,7 +72,12 @@ private:
     UIWindow* graphics_menu;
     bool graphics_menu_key_state;
 
+    DebugConsole* debug_console;
+    bool debug_console_key_state;
+
     GLuint mouse_ubo;
+
+    std::thread input_thread;
 };
 
 #endif

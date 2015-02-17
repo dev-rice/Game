@@ -1,5 +1,15 @@
 #include "game_view.h"
 
+std::mutex mtx;
+
+unsigned int total = 0;
+
+void doSomething(){
+    while(true){
+        total++;
+    }
+}
+
 GameView::GameView(Level* level){
     this->window = Window::getInstance();
     this->glfw_window = window->getGLFWWindow();
@@ -56,6 +66,13 @@ GameView::GameView(Level* level){
 
     Profile::getInstance()->updateShaderSettings();
 
+    input_thread = std::thread(doSomething);
+
+    debug_console = new DebugConsole(ui_shader);
+}
+
+GameView::~GameView(){
+    input_thread.join();
 }
 
 void GameView::update(){
@@ -152,6 +169,7 @@ void GameView::update(){
             "%.2f, %.2f, %.2f", rotation.x, rotation.y, rotation.z);
         text_renderer->print(10, 100, "mouse <x, y>: %.2f, %.2f",
             gl_mouse.x, gl_mouse.y);
+        text_renderer->print(10, 120, "total: %u", total);
 
     }
 
@@ -166,6 +184,8 @@ void GameView::update(){
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::vec3),
         glm::value_ptr(mouse_point));
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+    debug_console->draw();
 
     // The mouse draws on top of everything else
     Mouse::getInstance()->draw();
@@ -402,14 +422,19 @@ void GameView::handleInputs(){
         graphics_menu->hide();
     }
 
+    // Handle the debug console toggle key
+    if ((glfwGetKey(glfw_window, GLFW_KEY_F8) == GLFW_PRESS) && (!debug_console_key_state)){
+        debug_console_key_state = true;
+        debug_console->toggleShowing();
+    }
+    if (glfwGetKey(glfw_window, GLFW_KEY_F8) == GLFW_RELEASE){
+        debug_console_key_state = false;
+    }
+
     // Handle the menu toggle key
     if ((glfwGetKey(glfw_window, GLFW_KEY_F10) == GLFW_PRESS) && (!menu_key_state)){
         menu_key_state = true;
-        if (menu->isShowing()){
-            menu->hide();
-        } else {
-            menu->show();
-        }
+        menu->toggleShowing();
     }
     if (glfwGetKey(glfw_window, GLFW_KEY_F10) == GLFW_RELEASE){
         menu_key_state = false;

@@ -94,7 +94,7 @@ void UIWindow::loadFromXML(std::string filepath){
         } else if(strcmp(it->name(), "ui_button") == 0){
             ui_element = new UIButton(shader);
         }
-        
+
         if(ui_element){
             ui_element->setParent(this);
             ui_element->loadFromXML(it->child_value("layout_filepath"));
@@ -151,3 +151,10 @@ void UIWindow::hide(){
     is_showing = false;
 }
 
+void UIWindow::toggleShowing(){
+    if (is_showing){
+        hide();
+    } else {
+        show();
+    }
+}
