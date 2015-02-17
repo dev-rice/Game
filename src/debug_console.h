@@ -13,7 +13,7 @@ public:
     void draw();
 
 private:
-    void pollInputs(GLFWwindow* window, int key, int scancode, int action, int mods);
+    void pollInputs();
 
     TextRenderer* text_renderer;
     std::string input_buffer;
