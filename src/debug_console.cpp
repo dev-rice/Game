@@ -19,10 +19,12 @@ void DebugConsole::draw(){
         if (messages.size() > 16){
             start = end - 16;
         }
-        for (int i = end; i >= start; --i){
+        for (int i = start; i <= end; ++i){
             const char* temp_buffer = messages[i].c_str();
             int x = x_pixels + 16;
-            int y = y_pixels + height_pixels - (22 * (i - start)) - 32;
+            int y_base = y_pixels + height_pixels - 32;
+            int y_offset = 22 * (end - i);
+            int y = y_base - y_offset;
             text_renderer->print(x, y, temp_buffer);
         }
     }
