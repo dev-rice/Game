@@ -22,7 +22,7 @@ public:
     void toggleShowing();
 
     bool isShowing() {return is_showing;}
-private:
+protected:
     bool is_showing;
 
     std::vector<UIDrawable*> subelements;

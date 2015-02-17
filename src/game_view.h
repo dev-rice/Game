@@ -3,8 +3,6 @@
 
 #include <ctime>
 #include <vector>
-#include <thread>
-#include <mutex>
 
 #include "mesh.h"
 #include "drawable.h"
@@ -28,7 +26,6 @@ class GameView {
 public:
 
     GameView(Level*);
-    ~GameView();
 
     void update();
 private:
@@ -76,8 +73,6 @@ private:
     bool debug_console_key_state;
 
     GLuint mouse_ubo;
-
-    std::thread input_thread;
 };
 
 #endif

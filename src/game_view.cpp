@@ -1,15 +1,5 @@
 #include "game_view.h"
 
-std::mutex mtx;
-
-unsigned int total = 0;
-
-void doSomething(){
-    while(true){
-        total++;
-    }
-}
-
 GameView::GameView(Level* level){
     this->window = Window::getInstance();
     this->glfw_window = window->getGLFWWindow();
@@ -66,13 +56,7 @@ GameView::GameView(Level* level){
 
     Profile::getInstance()->updateShaderSettings();
 
-    input_thread = std::thread(doSomething);
-
     debug_console = new DebugConsole(ui_shader);
-}
-
-GameView::~GameView(){
-    input_thread.join();
 }
 
 void GameView::update(){
@@ -169,7 +153,6 @@ void GameView::update(){
             "%.2f, %.2f, %.2f", rotation.x, rotation.y, rotation.z);
         text_renderer->print(10, 100, "mouse <x, y>: %.2f, %.2f",
             gl_mouse.x, gl_mouse.y);
-        text_renderer->print(10, 120, "total: %u", total);
 
     }
 
