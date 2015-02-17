@@ -28,7 +28,7 @@ void TextRenderer::drawString(int x, int y, std::string to_draw){
 void TextRenderer::print(int x, int y, const char* format, ...){
     // Some real hacky C shit from
     // http://stackoverflow.com/questions/5876646/how-to-overload-printf-or-cout
-    char buffer[256];
+    char* buffer = new char[1024];
 
     va_list argument_list;
     va_start(argument_list, format);
@@ -36,4 +36,7 @@ void TextRenderer::print(int x, int y, const char* format, ...){
     va_end(argument_list);
 
     drawString(x, y, std::string(buffer));
+
+    delete[] buffer;
+    buffer = NULL;
 }

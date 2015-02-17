@@ -5,6 +5,7 @@
 #include <mutex>
 
 #include "core_ui/ui_window.h"
+#include "debug.h"
 
 class DebugConsole : public UIWindow {
 public:
@@ -16,9 +17,6 @@ private:
     void pollInputs();
 
     TextRenderer* text_renderer;
-    std::string input_buffer;
-
-    std::thread input_thread;
 
 };
 

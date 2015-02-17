@@ -117,7 +117,7 @@ void TerrainMesh::attachGeometryToShader(GLuint shader_program){
                 shader_name.c_str());
         }
         if (texAttrib == -1){
-            Debug::warning("Texture coordinate attribute for VAO %d and shader '%s' is not used,\n", vao,
+            Debug::warning("Texcoord attribute for VAO %d and shader '%s' is not used,\n", vao,
                 shader_name.c_str());
         }
 

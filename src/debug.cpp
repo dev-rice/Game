@@ -5,6 +5,8 @@ const char* Debug::ERROR = "\033[1;31m";
 const char* Debug::WARNING = "\033[1;33m";
 const char* Debug::NORMAL = "\033[0m";
 
+std::vector<std::string> Debug::messages;
+
 bool Debug::is_on;
 
 void Debug::info(const char* input, ...){
@@ -17,24 +19,28 @@ void Debug::info(const char* input, ...){
     input = buffer;
 
     va_list argument_list;
+    char output[256];
     va_start(argument_list, input);
-    vprintf(input, argument_list);
+    vsprintf(output, input, argument_list);
     va_end(argument_list);
+
+    printf("%s", output);
+    messages.push_back(std::string(output));
 }
 
 void Debug::error(const char* input, ...){
-    // if (!Debug::is_on){
-    //     return;
-    // }
-
     char buffer[256];
     sprintf(buffer, "%s[error]%s %s", Debug::ERROR, Debug::NORMAL, input);
     input = buffer;
 
     va_list argument_list;
+    char output[256];
     va_start(argument_list, input);
-    vprintf(input, argument_list);
+    vsprintf(output, input, argument_list);
     va_end(argument_list);
+
+    printf("%s", output);
+    messages.push_back(std::string(output));
 }
 
 void Debug::warning(const char* input, ...){
@@ -47,9 +53,13 @@ void Debug::warning(const char* input, ...){
     input = buffer;
 
     va_list argument_list;
+    char output[256];
     va_start(argument_list, input);
-    vprintf(input, argument_list);
+    vsprintf(output, input, argument_list);
     va_end(argument_list);
+
+    printf("%s", output);
+    messages.push_back(std::string(output));
 }
 
 void Debug::print(const char* to_print, ...){
