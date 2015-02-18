@@ -12,6 +12,7 @@
 #include <set>
 #include <queue>          // std::priority_queue
 #include <vector>         // std::vector
+#include <algorithm>	  // std::swap
 
 #include "terrain.h"
 
@@ -38,15 +39,13 @@ struct LessThanByGScore{
 class PathFinder {
 public:
 	static void allocateArray(Terrain*);
-	static std::vector<glm::vec3> find_path(Terrain*, int, int, int, int);
+	static std::vector<glm::vec3> find_path(Terrain*, float, float, float, float);
 private:
 	static float distance_between(int, int, int, int);
 	static float heuristic_estimate(int, int, int, int);
 	static std::vector<glm::vec3> reconstruct_path(Terrain*, std::map<Node*, Node*>, Node*);
 	static std::vector<Node*> getNeighborNodes(Node*);
-	static bool canPathOnLine(Terrain*, int, int, int, int);
-	static int* transformToOctant(int, int, int);
-	static int* transformFromOctant(int, int, int);
+	static bool canPathOnLine(Terrain*, float, float, float, float);
 
 	static int **node_state_array;
 	static int depth;

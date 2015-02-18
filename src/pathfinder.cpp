@@ -24,9 +24,21 @@ void PathFinder::allocateArray(Terrain* ground){
     }
 }
 
-std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, int start_x, int start_y, int target_x, int target_y){
+std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, float start_x, float start_y, float target_x, float target_y){
+	// Need radius stuff
 
-	bool can_path_line = canPathOnLine(ground, start_x, start_y, target_x, target_y);
+	// No A* search if there is a straight line from start to target
+	if( canPathOnLine(ground, start_x, start_y, target_x, target_y) ){
+		printf("Pathing the line!\n");
+		std::vector<glm::vec3> temp;
+		temp.push_back(glm::vec3(target_x, 0.0f, target_y));
+		return temp;
+	}
+
+	int start_x_int = int(start_x);
+	int start_y_int = int(start_y);
+	int target_x_int = int(target_x);
+	int target_y_int = int(target_y);
 
 	int x_offset = width/2;
 	int y_offset = depth/2;
@@ -35,7 +47,7 @@ std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, int start_x, int s
 	
 	std::priority_queue<Node*, std::vector<Node*>, LessThanByGScore> frontier_nodes;// The set of tentative nodes to be evaluated...
 			
-	Node *start_node = new Node(start_x, start_y, 0.0f);							// ...initially containing the start node		
+	Node *start_node = new Node(start_x_int, start_y_int, 0.0f);					// ...initially containing the start node		
 	frontier_nodes.push(start_node);												// Cost from start along best known path (included)							                
 												
 	std::map<Node*, Node*> parent_of;												// The map of navigated nodes.
@@ -56,7 +68,7 @@ std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, int start_x, int s
  		count ++;
  		Node* current_node = frontier_nodes.top();
 
-        if(current_node->x == target_x && current_node->y == target_y){
+        if(current_node->x == target_x_int && current_node->y == target_y_int){
         	// Clear out the old visited nodes
         	while(! frontier_nodes.empty()){
         		node_state_array[frontier_nodes.top()->x + x_offset][frontier_nodes.top()->y + y_offset] = UNVISITED;
@@ -137,21 +149,46 @@ float PathFinder::heuristic_estimate(int a, int b, int c, int d){
 }
 
 std::vector<glm::vec3> PathFinder::reconstruct_path(Terrain *ground, std::map<Node*, Node*> parent_of, Node* origin){
-	std::vector<glm::vec3> temp;
+
+	std::vector<Node*> temp;
+	std::vector<glm::vec3> final;
 
 	if(! origin){
-		return temp;
+		return final;
 	}
 
-	temp.push_back(glm::vec3(origin->x, 0.0f, origin->y));
+	temp.push_back(origin);
+
 	while(parent_of[origin]){
 		origin = parent_of[origin];
-		temp.insert(temp.begin(), glm::vec3(origin->x, 0.0f, origin->y));
+		temp.push_back(origin);
 	}
 
-	// Smoothing goes here
+	// Still need bezier smoothing if we want it
 
-	return temp;
+	Node* anchor = temp[0];
+	Node* current = 0;
+	Node* previous = 0;
+
+	for(int i = 0; i < temp.size(); ++i){
+
+		// Get the current node
+		current = temp[i];
+
+		// see if we can path between the anchor and the current 								 
+		bool line_between = i == 0 || canPathOnLine(ground, anchor->x, anchor->y, current->x, current->y);
+
+		if(line_between){
+			previous = current;
+		} else {
+			final.insert(final.begin(), glm::vec3(previous->x, 0.0f, previous->y));
+			anchor = previous;
+			i--;
+		}
+	
+	}
+
+	return final;
 }
 
 std::vector<Node*> PathFinder::getNeighborNodes(Node *current_node){
@@ -168,155 +205,55 @@ std::vector<Node*> PathFinder::getNeighborNodes(Node *current_node){
 	return temp;
 }
 
-bool PathFinder::canPathOnLine(Terrain* ground, int x0, int y0, int x1, int y1){
-	// http://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm#Algorithm_for_integer_arithmetic
+bool PathFinder::canPathOnLine(Terrain* ground, float x1, float y1, float x2, float y2){
+	// Might need radius stuff later
 
-	printf("Starting line draw...\n");
+ 	// http://rosettacode.org/wiki/Bitmap/Bresenham%27s_line_algorithm#C.2B.2B
+	// Bresenham's line algorithm
 
-	// OCTANTS 2 AND 6 ARE BE FUCKITY
+	const bool steep = (abs(y2 - y1) > abs(x2 - x1));
 
-	// Get the octant
-	float angle_in_degrees = atan2(y1 - y0, x1 - x0) * 180.0f / M_PI;
-	if(angle_in_degrees < 0){
-		angle_in_degrees += 360.0f;
+	if(steep){
+	  std::swap(x1, y1);
+	  std::swap(x2, y2);
 	}
-	int octant = int((angle_in_degrees - 1.0f) / 45.0f);	
-	printf("Octant: %d\n", octant);
+	
+	if(x1 > x2){
+	  std::swap(x1, x2);
+	  std::swap(y1, y2);
+	}
+	
+	const float dx = x2 - x1;
+	const float dy = abs(y2 - y1);
+	
+	float error = dx / 2.0f;
+	const int ystep = (y1 < y2) ? 1 : -1;
+	int y = (int)y1;
+	
+	const int maxX = int(x2);
 
-	printf("(%d, %d)\n", x0, y0);
+	int x_path, y_path;
+	
+	for(int x = int(x1); x < maxX; x++){
 
-	// Transform current stuff into correct octant
-	int *temp0 = transformToOctant(octant, x0, y0);
-	int *temp1 = transformToOctant(octant, x1, y1);
-
-	x0 = temp0[0];
-	y0 = temp0[1];
-
-	x1 = temp1[0];
-	y1 = temp1[1];
-
-	// Now we can start drawing the line
-	int dx = x1 - x0;
-	int dy = y1 - y0;
-
-	int d = (dy + dy) - dx;
-	int y = y0;
-
-	int* realtemp;
-	int real_x, real_y;
-
-	for(int x = x0 + 1; x < x1; ++x){
-
-		if(d > 0){
-			y++;
-			d += (dy + dy) - (dx + dx);
-
-			realtemp = transformFromOctant(octant, x, y);
-			real_x = realtemp[0];
-			real_y = realtemp[1];
-
-			printf("(%d, %d)\n", real_x, real_y);
+		if(steep){
+		  x_path = y;
+		  y_path = x;
 		} else {
-			d += (dy + dy);
+		  x_path = x;
+		  y_path = y;
+		}
 
-			realtemp = transformFromOctant(octant, x, y);
-			real_x = realtemp[0];
-			real_y = realtemp[1];
+		if(ground->canPath(x_path, y_path) == false){
+			return false;
+		}
 
-			printf("(%d, %d)\n", real_x, real_y);
+		error -= dy;
+		if(error < 0) {
+		  y += ystep;
+		  error += dx;
 		}
 	}
 
-	printf("(%d, %d)\n", real_x, real_y);
-	printf("Ended line draw\n\n");
-
 	return true;
-}
-
-int* PathFinder::transformToOctant(int octant, int x, int y){
-	int temp_x, temp_y;
-
-	switch(octant){  
-		case 0:
-			temp_x = x;
-			temp_y = y;
-			break;
-		case 1:
-			temp_x = y;
-			temp_y = x;
-			break;
-		case 2:
-			temp_x = -y;
-			temp_y = x;
-			break;
-		case 3:
-			temp_x = -x;
-			temp_y = y;
-			break;
-		case 4:
-			temp_x = -x;
-			temp_y = -y;
-			break;
-		case 5:
-			temp_x = -y;
-			temp_y = -x;
-			break;
-		case 6:
-			temp_x = y;
-			temp_y = -x;
-			break;
-		case 7:
-			temp_x = x;
-			temp_y = -y;
-			break;
-	}
-
-	int* temp_arr = new int[2];
-	temp_arr[0] = temp_x;
-	temp_arr[1] = temp_y;
-	return temp_arr;
-}
-
-int* PathFinder::transformFromOctant(int octant, int x, int y){
-	int temp_x, temp_y;
-
-	switch(octant){  
-		case 0:
-			temp_x = x;
-			temp_y = y;
-			break;
-		case 1:
-			temp_x = y;
-			temp_y = x;
-			break;
-		case 2:
-			temp_x = y;
-			temp_y = -x;
-			break;
-		case 3:
-			temp_x = -x;
-			temp_y = y;
-			break;
-		case 4:
-			temp_x = -x;
-			temp_y = -y;
-			break;
-		case 5:
-			temp_x = -y;
-			temp_y = -x;
-			break;
-		case 6:
-			temp_x = -y;
-			temp_y = x;
-			break;
-		case 7:
-			temp_x = x;
-			temp_y = -y;
-			break;
-	}
-
-	int* temp_arr = new int[2];
-	temp_arr[0] = temp_x;
-	temp_arr[1] = temp_y;
-	return temp_arr;
 }
