@@ -29,7 +29,6 @@ std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, float start_x, flo
 
 	// No A* search if there is a straight line from start to target
 	if( canPathOnLine(ground, start_x, start_y, target_x, target_y) ){
-		printf("Pathing the line!\n");
 		std::vector<glm::vec3> temp;
 		temp.push_back(glm::vec3(target_x, 0.0f, target_y));
 		return temp;
@@ -50,7 +49,7 @@ std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, float start_x, flo
 	Node *start_node = new Node(start_x_int, start_y_int, 0.0f);					// ...initially containing the start node		
 	frontier_nodes.push(start_node);												// Cost from start along best known path (included)							                
 												
-	std::map<Node*, Node*> parent_of;												// The map of navigated nodes.
+	std::unordered_map<Node*, Node*> parent_of;										// The map of navigated nodes.
 																					
 	int count = 0;
 	int index_x, index_y;
@@ -148,7 +147,7 @@ float PathFinder::heuristic_estimate(int a, int b, int c, int d){
 	return distance_between(a, b, c, d);
 }
 
-std::vector<glm::vec3> PathFinder::reconstruct_path(Terrain *ground, std::map<Node*, Node*> parent_of, Node* origin){
+std::vector<glm::vec3> PathFinder::reconstruct_path(Terrain *ground, std::unordered_map<Node*, Node*> parent_of, Node* origin){
 
 	std::vector<Node*> temp;
 	std::vector<glm::vec3> final;

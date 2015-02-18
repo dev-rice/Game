@@ -7,9 +7,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#include <map>
-#include <unordered_set>
-#include <set>
+#include <unordered_map>  // std::unordered_map
 #include <queue>          // std::priority_queue
 #include <vector>         // std::vector
 #include <algorithm>	  // std::swap
@@ -43,7 +41,7 @@ public:
 private:
 	static float distance_between(int, int, int, int);
 	static float heuristic_estimate(int, int, int, int);
-	static std::vector<glm::vec3> reconstruct_path(Terrain*, std::map<Node*, Node*>, Node*);
+	static std::vector<glm::vec3> reconstruct_path(Terrain*, std::unordered_map<Node*, Node*>, Node*);
 	static std::vector<Node*> getNeighborNodes(Node*);
 	static bool canPathOnLine(Terrain*, float, float, float, float);
 
