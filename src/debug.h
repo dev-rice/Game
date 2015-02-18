@@ -7,6 +7,8 @@
 #include <string>
 #include <vector>
 
+class DebugConsole;
+
 class Debug{
 public:
     static void info(const char*, ...);

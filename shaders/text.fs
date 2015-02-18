@@ -8,5 +8,6 @@ uniform sampler2D base_texture;
 uniform vec3 textColor;
 
 void main() {
-    outColor = texture(base_texture, Texcoord);
+    vec4 base = texture(base_texture, Texcoord);
+    outColor = vec4(textColor * base.rgb, base.a);
 }

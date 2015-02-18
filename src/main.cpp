@@ -22,8 +22,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "world.h"
 #include "debug.h"
+#include "world.h"
 #include "profile.h"
 #include "window.h"
 #include "mesh_loader.h"
