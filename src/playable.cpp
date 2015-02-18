@@ -135,7 +135,7 @@ void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
     if(needs_pathing_on_update){
         needs_pathing_on_update = false;
         internal_order_queue.clear();
-        std::vector<glm::vec3> temp = PathFinder::find_path(ground, int(position.x), int(position.z), int(move_to_position.x), int(move_to_position.z));
+        std::vector<glm::vec3> temp = PathFinder::find_path(ground, int(position.x), int(position.z), int(move_to_position.x), int(move_to_position.z), radius);
 
         for(int i = 0; i < temp.size(); ++i){
             internal_order_queue.insert(internal_order_queue.begin(), temp[i]);

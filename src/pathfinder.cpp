@@ -24,8 +24,7 @@ void PathFinder::allocateArray(Terrain* ground){
     }
 }
 
-std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, float start_x, float start_y, float target_x, float target_y){
-	// Need radius stuff
+std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, float start_x, float start_y, float target_x, float target_y, float radius){
 
 	// No A* search if there is a straight line from start to target
 	if( canPathOnLine(ground, start_x, start_y, target_x, target_y) ){
@@ -60,6 +59,7 @@ std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, float start_x, flo
 	bool is_not_in_frontier;
 	int node_state;
 
+	// Closest node is buggy
 	Node* closest_node;
 	float closest_node_distance = 99999.0f;
 
@@ -100,11 +100,7 @@ std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, float start_x, flo
 
         	temp_g_score = current_node->g + distance_between(current_node->x, current_node->y, n->x, n->y);
 
-        	can_move_to = ground->canPath(n->x, n->y);
-        	can_move_to &= ground->canPath(n->x + 1, n->y);
-        	can_move_to &= ground->canPath(n->x - 1, n->y);
-        	can_move_to &= ground->canPath(n->x,     n->y + 1);
-        	can_move_to &= ground->canPath(n->x,     n->y - 1);
+        	can_move_to = checkCircle(ground, n->x, n->y, radius);
 
         	is_not_visited = false;
         	is_not_in_frontier = false;
@@ -256,3 +252,49 @@ bool PathFinder::canPathOnLine(Terrain* ground, float x1, float y1, float x2, fl
 
 	return true;
 }
+
+bool PathFinder::checkCircle(Terrain* ground, int x0, int y0, int radius){
+	// http://rosettacode.org/wiki/Bitmap/Midpoint_circle_algorithm#C
+	// Circle drawing algorithm
+
+  	int f = 1 - radius;
+    int ddF_x = 0;
+    int ddF_y = -2 * radius;
+    int x = 0;
+    int y = radius;
+
+    bool radius_path = true;
+ 
+    radius_path &= ground->canPath(x0, y0 + radius);
+    radius_path &= ground->canPath(x0, y0 - radius);
+    radius_path &= ground->canPath(x0 + radius, y0);
+    radius_path &= ground->canPath(x0 - radius, y0);
+ 
+    while(x < y) 
+    {
+        if(f >= 0) 
+        {
+            y--;
+            ddF_y += 2;
+            f += ddF_y;
+        }
+        x++;
+        ddF_x += 2;
+        f += ddF_x + 1; 
+
+        radius_path &= ground->canPath(x0 + x, y0 + y);
+        radius_path &= ground->canPath(x0 - x, y0 + y);
+        radius_path &= ground->canPath(x0 + x, y0 - y);
+        radius_path &= ground->canPath(x0 - x, y0 - y);
+        radius_path &= ground->canPath(x0 + y, y0 + x);
+        radius_path &= ground->canPath(x0 - y, y0 + x);
+        radius_path &= ground->canPath(x0 + y, y0 - x);
+        radius_path &= ground->canPath(x0 - y, y0 - x);
+
+        if(!radius_path){
+        	return false;
+        }
+    }
+
+    return true;
+} 
