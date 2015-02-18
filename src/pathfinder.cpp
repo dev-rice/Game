@@ -27,6 +27,8 @@ void PathFinder::allocateArray(Terrain* ground){
 std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, float start_x, float start_y, float target_x, float target_y){
 	// Need radius stuff
 
+	float start_time = glfwGetTime();
+
 	// No A* search if there is a straight line from start to target
 	if( canPathOnLine(ground, start_x, start_y, target_x, target_y) ){
 		std::vector<glm::vec3> temp;
@@ -43,14 +45,14 @@ std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, float start_x, flo
 	int y_offset = depth/2;
 
 	std::vector<Node*> visited_nodes;											    // The set of nodes already evaluated.
-	
+
 	std::priority_queue<Node*, std::vector<Node*>, LessThanByGScore> frontier_nodes;// The set of tentative nodes to be evaluated...
-			
-	Node *start_node = new Node(start_x_int, start_y_int, 0.0f);					// ...initially containing the start node		
-	frontier_nodes.push(start_node);												// Cost from start along best known path (included)							                
-												
+
+	Node *start_node = new Node(start_x_int, start_y_int, 0.0f);					// ...initially containing the start node
+	frontier_nodes.push(start_node);												// Cost from start along best known path (included)
+
 	std::unordered_map<Node*, Node*> parent_of;										// The map of navigated nodes.
-																					
+
 	int count = 0;
 	int index_x, index_y;
 	float temp_g_score;
@@ -76,6 +78,8 @@ std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, float start_x, flo
         	for(int i = 0; i < visited_nodes.size(); ++i){
         		node_state_array[visited_nodes[i]->x + x_offset][visited_nodes[i]->y + y_offset] = UNVISITED;
         	}
+			float delta_time = glfwGetTime() - start_time;
+			Debug::info("Took %.2f seconds to find the path.\n", delta_time);
         	return reconstruct_path(ground, parent_of, current_node);
         }
 
@@ -131,6 +135,9 @@ std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, float start_x, flo
 	for(int i = 0; i < visited_nodes.size(); ++i){
 		node_state_array[visited_nodes[i]->x + x_offset][visited_nodes[i]->y + y_offset] = 0;
 	}
+
+	float delta_time = glfwGetTime() - start_time;
+	Debug::info("Took %.2f seconds to find the path.\n", delta_time);
 	return reconstruct_path(ground, parent_of, closest_node);
 }
 
@@ -174,7 +181,7 @@ std::vector<glm::vec3> PathFinder::reconstruct_path(Terrain *ground, std::unorde
 		// Get the current node
 		current = temp[i];
 
-		// see if we can path between the anchor and the current 								 
+		// see if we can path between the anchor and the current
 		bool line_between = i == 0 || canPathOnLine(ground, anchor->x, anchor->y, current->x, current->y);
 
 		if(line_between){
@@ -184,7 +191,7 @@ std::vector<glm::vec3> PathFinder::reconstruct_path(Terrain *ground, std::unorde
 			anchor = previous;
 			i--;
 		}
-	
+
 	}
 
 	return final;
@@ -216,23 +223,23 @@ bool PathFinder::canPathOnLine(Terrain* ground, float x1, float y1, float x2, fl
 	  std::swap(x1, y1);
 	  std::swap(x2, y2);
 	}
-	
+
 	if(x1 > x2){
 	  std::swap(x1, x2);
 	  std::swap(y1, y2);
 	}
-	
+
 	const float dx = x2 - x1;
 	const float dy = abs(y2 - y1);
-	
+
 	float error = dx / 2.0f;
 	const int ystep = (y1 < y2) ? 1 : -1;
 	int y = (int)y1;
-	
+
 	const int maxX = int(x2);
 
 	int x_path, y_path;
-	
+
 	for(int x = int(x1); x < maxX; x++){
 
 		if(steep){
