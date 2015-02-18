@@ -13,11 +13,14 @@ public:
 
     void setCharacter(char);
     void setPixelPosition(int, int);
+    void setTextColor(glm::vec3 color);
+    void setTextColor(float r, float g, float b);
     void moveToNext();
 private:
     void updateUniformData();
 
     glm::vec2 uv_offset;
+    glm::vec3 text_color;
 };
 
 #endif

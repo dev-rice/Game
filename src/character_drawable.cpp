@@ -9,6 +9,8 @@ CharacterDrawable::CharacterDrawable(GLuint shader_program, GLuint texture, GLin
         height_pixels = point;
         width_pixels = point * (CharacterMesh::CHARACTER_WIDTH / CharacterMesh::CHARACTER_HEIGHT);
 
+        setTextColor(1.0, 1.0, 1.0);
+
         updateDimensions();
         setGLPosition(getGLPosition());
 }
@@ -18,6 +20,14 @@ void CharacterDrawable::setPixelPosition(int x, int y){
     y_pixels = y;
 
     setGLPosition(getGLPosition());
+}
+
+void CharacterDrawable::setTextColor(glm::vec3 color){
+    text_color = color;
+}
+
+void CharacterDrawable::setTextColor(float r, float g, float b){
+    setTextColor(glm::vec3(r, g, b));
 }
 
 void CharacterDrawable::moveToNext(){
@@ -41,4 +51,5 @@ void CharacterDrawable::setCharacter(char to_render){
 
 void CharacterDrawable::updateUniformData(){
     glUniform2f(glGetUniformLocation(shader_program, "uv_offset"), uv_offset.x, uv_offset.y);
+    glUniform3f(glGetUniformLocation(shader_program, "textColor"), text_color.x, text_color.y, text_color.z);
 }

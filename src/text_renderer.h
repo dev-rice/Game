@@ -13,6 +13,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <string>
+#include <unordered_map>
 
 #include "character_drawable.h"
 #include "character_mesh.h"
@@ -27,9 +29,12 @@ public:
     void print(int, int, const char*, ...);
 private:
     void drawString(int, int, std::string);
+    void drawStringInitial(int x, int y, std::string to_draw);
 
     CharacterMesh* character_mesh;
     CharacterDrawable* character_box;
+
+    std::unordered_map<std::string, glm::vec3> colors;
 
     GLfloat point;
 };
