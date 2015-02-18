@@ -9,14 +9,18 @@
 
 class DebugConsole : public UIWindow {
 public:
-    DebugConsole(GLuint s);
+    static DebugConsole* getInstance();
 
     void draw();
 
 private:
+    DebugConsole();
+
     void pollInputs();
 
     TextRenderer* text_renderer;
+
+    static DebugConsole* instance;
 
 };
 
