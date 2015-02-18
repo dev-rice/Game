@@ -65,8 +65,8 @@ Level::Level(const char* filename){
         "shaders/doodad.fs");
     float playable_scale = 1.0f;
 
-    for(int i = 0; i < 1; ++i){
-        for(int j = 0; j < 1; ++j){
+    for(int i = 0; i < 2; ++i){
+        for(int j = 0; j < 2; ++j){
             glm::vec3 playable_position = glm::vec3(3.0f*i, 0.0f, 3.0f*j);
             Playable* temp = new Playable(playable_mesh, playable_shader, playable_position, playable_scale);
             temp->loadFromXML("res/units/testunit.xml");
