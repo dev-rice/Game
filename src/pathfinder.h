@@ -37,13 +37,14 @@ struct LessThanByGScore{
 class PathFinder {
 public:
 	static void allocateArray(Terrain*);
-	static std::vector<glm::vec3> find_path(Terrain*, float, float, float, float);
+	static std::vector<glm::vec3> find_path(Terrain*, float, float, float, float, float);
 private:
 	static float distance_between(int, int, int, int);
 	static float heuristic_estimate(int, int, int, int);
-	static std::vector<glm::vec3> reconstruct_path(Terrain*, std::unordered_map<Node*, Node*>, Node*);
+	static std::vector<glm::vec3> reconstruct_path(Terrain*, std::unordered_map<Node*, Node*>, Node*, float);
 	static std::vector<Node*> getNeighborNodes(Node*);
-	static bool canPathOnLine(Terrain*, float, float, float, float);
+	static bool canPathOnLine(Terrain*, float, float, float, float, float);
+	static bool checkCircle(Terrain*, int, int, int);
 
 	static int **node_state_array;
 	static int depth;
