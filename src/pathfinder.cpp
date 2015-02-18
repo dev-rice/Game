@@ -29,7 +29,7 @@ std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, float start_x, flo
 	float start_time = glfwGetTime();
 
 	// No A* search if there is a straight line from start to target
-	if( canPathOnLine(ground, start_x, start_y, target_x, target_y) ){
+	if( canPathOnLine(ground, start_x, start_y, target_x, target_y, radius) ){
 		std::vector<glm::vec3> temp;
 		temp.push_back(glm::vec3(target_x, 0.0f, target_y));
 		return temp;
@@ -80,7 +80,7 @@ std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, float start_x, flo
         	}
 			float delta_time = glfwGetTime() - start_time;
 			Debug::info("Took %.2f seconds to find the path.\n", delta_time);
-        	return reconstruct_path(ground, parent_of, current_node);
+        	return reconstruct_path(ground, parent_of, current_node, radius);
         }
 
 		distance_to_goal = distance_between(current_node->x, current_node->y, target_x, target_y);
@@ -134,7 +134,7 @@ std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, float start_x, flo
 
 	float delta_time = glfwGetTime() - start_time;
 	Debug::info("Took %.2f seconds to find the path.\n", delta_time);
-	return reconstruct_path(ground, parent_of, closest_node);
+	return reconstruct_path(ground, parent_of, closest_node, radius);
 }
 
 float PathFinder::distance_between(int current_x, int current_y, int target_x, int target_y){
@@ -150,7 +150,7 @@ float PathFinder::heuristic_estimate(int a, int b, int c, int d){
 	return distance_between(a, b, c, d);
 }
 
-std::vector<glm::vec3> PathFinder::reconstruct_path(Terrain *ground, std::unordered_map<Node*, Node*> parent_of, Node* origin){
+std::vector<glm::vec3> PathFinder::reconstruct_path(Terrain *ground, std::unordered_map<Node*, Node*> parent_of, Node* origin, float radius){
 
 	std::vector<Node*> temp;
 	std::vector<glm::vec3> final;
@@ -178,7 +178,7 @@ std::vector<glm::vec3> PathFinder::reconstruct_path(Terrain *ground, std::unorde
 		current = temp[i];
 
 		// see if we can path between the anchor and the current
-		bool line_between = i == 0 || canPathOnLine(ground, anchor->x, anchor->y, current->x, current->y);
+		bool line_between = i == 0 || canPathOnLine(ground, anchor->x, anchor->y, current->x, current->y, radius);
 
 		if(line_between){
 			previous = current;
@@ -207,8 +207,7 @@ std::vector<Node*> PathFinder::getNeighborNodes(Node *current_node){
 	return temp;
 }
 
-bool PathFinder::canPathOnLine(Terrain* ground, float x1, float y1, float x2, float y2){
-	// Might need radius stuff later
+bool PathFinder::canPathOnLine(Terrain* ground, float x1, float y1, float x2, float y2, float radius){
 
  	// http://rosettacode.org/wiki/Bitmap/Bresenham%27s_line_algorithm#C.2B.2B
 	// Bresenham's line algorithm
@@ -246,7 +245,7 @@ bool PathFinder::canPathOnLine(Terrain* ground, float x1, float y1, float x2, fl
 		  y_path = y;
 		}
 
-		if(ground->canPath(x_path, y_path) == false){
+		if(checkCircle(ground, x_path, y_path, radius) == false){
 			return false;
 		}
 
