@@ -17,10 +17,12 @@ private:
     DebugConsole();
 
     void pollInputs();
-
+    void syncWithDebug();
     TextRenderer* text_renderer;
+    std::vector<std::string> messages;
 
     static DebugConsole* instance;
+
 
 };
 

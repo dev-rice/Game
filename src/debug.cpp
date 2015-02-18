@@ -5,7 +5,7 @@ const char* Debug::ERROR = "\033[1;31m";
 const char* Debug::WARNING = "\033[1;33m";
 const char* Debug::NORMAL = "\033[0m";
 
-std::vector<std::string> Debug::messages;
+std::queue<std::string> Debug::messages;
 
 bool Debug::is_on;
 
@@ -25,7 +25,7 @@ void Debug::info(const char* input, ...){
     va_end(argument_list);
 
     printf("%s", output);
-    messages.push_back(std::string(output));
+    messages.push(std::string(output));
 }
 
 void Debug::error(const char* input, ...){
@@ -40,7 +40,7 @@ void Debug::error(const char* input, ...){
     va_end(argument_list);
 
     printf("%s", output);
-    messages.push_back(std::string(output));
+    messages.push(std::string(output));
 }
 
 void Debug::warning(const char* input, ...){
@@ -59,7 +59,22 @@ void Debug::warning(const char* input, ...){
     va_end(argument_list);
 
     printf("%s", output);
-    messages.push_back(std::string(output));
+    messages.push(std::string(output));
+}
+
+std::string Debug::popMessage(){
+    std::string out;
+    if (hasMessages()){
+        out = messages.front();
+        messages.pop();
+    } else {
+        out = "";
+    }
+    return out;
+}
+
+bool Debug::hasMessages(){
+    return !messages.empty();
 }
 
 void Debug::print(const char* to_print, ...){

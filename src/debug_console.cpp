@@ -15,13 +15,18 @@ DebugConsole* DebugConsole::getInstance(){
 DebugConsole::DebugConsole() : UIWindow(ShaderLoader::loadShaderProgram("shaders/ui.vs","shaders/ui.fs")) {
     loadFromXML("res/layouts/debug_console.xml");
     text_renderer = new TextRenderer("res/fonts/inconsolata_bold_font.png", 22);
+
+    // Do this so we don't have to process a ton of messages on the first
+    // draw call
+    syncWithDebug();
+
 }
 
 void DebugConsole::draw(){
+    syncWithDebug();
+
     if (is_showing){
         UIWindow::draw();
-
-        std::vector<std::string> messages = Debug::getMessages();
         int start = 0;
         int end = messages.size() - 1;
         if (messages.size() > 16){
@@ -37,4 +42,11 @@ void DebugConsole::draw(){
         }
     }
 
+}
+
+void DebugConsole::syncWithDebug(){
+    // Get all of the messages that debug has in its queue
+    while (Debug::hasMessages()){
+        messages.push_back(Debug::popMessage());
+    }
 }

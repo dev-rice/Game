@@ -5,7 +5,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <string>
-#include <vector>
+#include <queue>
 
 class DebugConsole;
 
@@ -15,7 +15,8 @@ public:
     static void error(const char*, ...);
     static void warning(const char*, ...);
 
-    static std::vector<std::string> getMessages() {return messages;}
+    static std::string popMessage();
+    static bool hasMessages();
 
     static bool is_on;
 private:
@@ -26,7 +27,7 @@ private:
 
     static void print(const char*, ...);
 
-    static std::vector<std::string> messages;
+    static std::queue<std::string> messages;
 
 };
 
