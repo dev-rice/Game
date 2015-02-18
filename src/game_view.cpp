@@ -56,7 +56,6 @@ GameView::GameView(Level* level){
 
     Profile::getInstance()->updateShaderSettings();
 
-    debug_console = new DebugConsole(ui_shader);
 }
 
 void GameView::update(){
@@ -168,7 +167,7 @@ void GameView::update(){
         glm::value_ptr(mouse_point));
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
-    debug_console->draw();
+    DebugConsole::getInstance()->draw();
 
     // The mouse draws on top of everything else
     Mouse::getInstance()->draw();
@@ -408,7 +407,7 @@ void GameView::handleInputs(){
     // Handle the debug console toggle key
     if ((glfwGetKey(glfw_window, GLFW_KEY_F8) == GLFW_PRESS) && (!debug_console_key_state)){
         debug_console_key_state = true;
-        debug_console->toggleShowing();
+        DebugConsole::getInstance()->toggleShowing();
     }
     if (glfwGetKey(glfw_window, GLFW_KEY_F8) == GLFW_RELEASE){
         debug_console_key_state = false;

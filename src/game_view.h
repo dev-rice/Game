@@ -69,7 +69,6 @@ private:
     UIWindow* graphics_menu;
     bool graphics_menu_key_state;
 
-    DebugConsole* debug_console;
     bool debug_console_key_state;
 
     GLuint mouse_ubo;

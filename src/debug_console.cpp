@@ -1,12 +1,20 @@
 #include "debug_console.h"
 
-std::mutex mtx;
+DebugConsole* DebugConsole::instance;
 
-DebugConsole::DebugConsole(GLuint shader_program) : UIWindow(shader_program) {
+DebugConsole* DebugConsole::getInstance(){
+    if(instance){
+        return instance;
+    } else {
+        instance = new DebugConsole();
+        return instance;
+    }
+
+}
+
+DebugConsole::DebugConsole() : UIWindow(ShaderLoader::loadShaderProgram("shaders/ui.vs","shaders/ui.fs")) {
     loadFromXML("res/layouts/debug_console.xml");
-
     text_renderer = new TextRenderer("res/fonts/inconsolata_bold_font.png", 22);
-
 }
 
 void DebugConsole::draw(){
