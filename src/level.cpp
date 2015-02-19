@@ -333,14 +333,20 @@ int Level::getMapWidth(){
     return ground->getWidth();
 }
 
-void Level::issueOrder(Playable::Order order, glm::vec3 location, bool queue){
+void Level::issueOrder(Playable::Order order, glm::vec3 target, bool queue){
 
-    float x_center = 0.0f;
-    float z_center = 0.0f;
+    // If it's only one unit
+    float x_center = selected_units[0]->getPosition().x;
+    float z_center = selected_units[0]->getPosition().z;
+    float smallest_radius = selected_units[0]->getRadius();
 
-    float click_distance = 0.0f;
+    // Make sure if it skips the click
+    // distance calculation that it will
+    // not offset
+    float click_distance = -1.0f;
     float max_distance = 0.0f;
 
+    // If there is more than one unit, setup the magic box
     if(selected_units.size() > 1){
         // Get centroid of the selected units
         float x_sum = 0.0f;
@@ -363,16 +369,37 @@ void Level::issueOrder(Playable::Order order, glm::vec3 location, bool queue){
             if(distance > max_distance){
                 max_distance = distance;
             }
+
+            if(selected_units[i]->getRadius() < smallest_radius){
+                smallest_radius = selected_units[i]->getRadius();
+            }
         }
 
-        click_distance = getDistance(location.x, location.z, x_center, z_center);
+        click_distance = getDistance(target.x, target.z, x_center, z_center);
     }
+
+    // Start logging the pathfinding time
+    float start_time = glfwGetTime();
+
+    // Create the path for all units in the selection
+    std::vector<glm::vec3> path = PathFinder::find_path(ground, 
+                                                        int(x_center), 
+                                                        int(z_center), 
+                                                        int(target.x), 
+                                                        int(target.z), 
+                                                        smallest_radius);
+
+    path.insert(path.begin(), target);
+
+    // End logging and report
+    float delta_time = glfwGetTime() - start_time;
+    Debug::info("Took %.2f seconds to find the path.\n", delta_time);
 
     // Issue the appropriate order
     for(int i = 0; i < selected_units.size(); ++i){
 
-        float x_to_move = location.x;
-        float z_to_move = location.z;
+        float x_to_move = target.x;
+        float z_to_move = target.z;
         glm::vec3 unit_pos = selected_units[i]->getPosition();
 
         if(click_distance > max_distance){

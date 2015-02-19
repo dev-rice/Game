@@ -133,30 +133,18 @@ void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
 
     // If the units needs pathing (having just been given a new order)
     if(needs_pathing_on_update){
-        needs_pathing_on_update = false;
-        internal_order_queue.clear();
+        // needs_pathing_on_update = false;
+        // internal_order_queue.clear();
 
-        float start_time = glfwGetTime();
-
-        // The big guy
-        std::vector<glm::vec3> temp = PathFinder::find_path(ground, int(position.x), int(position.z), int(move_to_position.x), int(move_to_position.z), radius);
-
-        float delta_time = glfwGetTime() - start_time;
-        Debug::info("Took %.2f seconds to find the path.\n", delta_time);
-
-        for(int i = 0; i < temp.size(); ++i){
-            internal_order_queue.insert(internal_order_queue.begin(), temp[i]);
-        }
-
-        internal_order_queue.insert(internal_order_queue.begin(), move_to_position);
+      
         
-        if(temp.size() > 0){
-            // Go to the first one
-            setMovementTarget(internal_order_queue.back());
-            internal_order_queue.pop_back();
-        } else {
-            stop();
-        }
+        // if(temp.size() > 0){
+        //     // Go to the first one
+        //     setMovementTarget(internal_order_queue.back());
+        //     internal_order_queue.pop_back();
+        // } else {
+        //     stop();
+        // }
     }
 
     bool can_move = true;
