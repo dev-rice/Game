@@ -4,7 +4,8 @@
 # If you are, then set the host to yakkio's local
 # ip, otherwise use the domain name.
 IP=$(curl -s icanhazip.com)
-if [ "$IP" == "76.120.23.142" ]
+LOCAL_IP="76.120.23.142"
+if [ "$IP" ==  "$LOCAL_IP" ]
     then
     HOST="192.168.1.53"
 else
