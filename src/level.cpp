@@ -335,6 +335,9 @@ int Level::getMapWidth(){
 
 void Level::issueOrder(Playable::Order order, glm::vec3 location, bool queue){
 
+    // Pathing goes here
+    
+
     if(selected_units.size() == 1){
         selected_units[0]->receiveOrder(order, glm::vec3(location.x, 0.0f, location.z), queue);
         return;
