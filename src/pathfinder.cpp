@@ -26,8 +26,6 @@ void PathFinder::allocateArray(Terrain* ground){
 
 std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, float start_x, float start_y, float target_x, float target_y, float radius){
 
-	float start_time = glfwGetTime();
-
 	// No A* search if there is a straight line from start to target
 	if( canPathOnLine(ground, start_x, start_y, target_x, target_y, radius) ){
 		std::vector<glm::vec3> temp;
@@ -78,8 +76,6 @@ std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, float start_x, flo
         	for(int i = 0; i < visited_nodes.size(); ++i){
         		node_state_array[visited_nodes[i]->x + x_offset][visited_nodes[i]->y + y_offset] = UNVISITED;
         	}
-			float delta_time = glfwGetTime() - start_time;
-			Debug::info("Took %.2f seconds to find the path.\n", delta_time);
         	return reconstruct_path(ground, parent_of, current_node, radius);
         }
 
@@ -132,8 +128,6 @@ std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, float start_x, flo
 		node_state_array[visited_nodes[i]->x + x_offset][visited_nodes[i]->y + y_offset] = 0;
 	}
 
-	float delta_time = glfwGetTime() - start_time;
-	Debug::info("Took %.2f seconds to find the path.\n", delta_time);
 	return reconstruct_path(ground, parent_of, closest_node, radius);
 }
 
@@ -187,8 +181,9 @@ std::vector<glm::vec3> PathFinder::reconstruct_path(Terrain *ground, std::unorde
 			anchor = previous;
 			i--;
 		}
-
 	}
+
+
 
 	return final;
 }

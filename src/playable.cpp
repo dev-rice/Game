@@ -135,18 +135,22 @@ void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
     if(needs_pathing_on_update){
         needs_pathing_on_update = false;
         internal_order_queue.clear();
+
+        float start_time = glfwGetTime();
+
+        // The big guy
         std::vector<glm::vec3> temp = PathFinder::find_path(ground, int(position.x), int(position.z), int(move_to_position.x), int(move_to_position.z), radius);
 
-        for(int i = 1; i < temp.size(); ++i){
+        float delta_time = glfwGetTime() - start_time;
+        Debug::info("Took %.2f seconds to find the path.\n", delta_time);
+
+        for(int i = 0; i < temp.size(); ++i){
             internal_order_queue.insert(internal_order_queue.begin(), temp[i]);
-        }  
+        }
 
-        // Push the final position
-        internal_order_queue.insert(internal_order_queue.begin(), glm::vec3(move_to_position.x, 0.0f, move_to_position.z));
-
-        if(internal_order_queue.size() > 0){
-            internal_order_queue.insert(internal_order_queue.begin(), move_to_position);
-
+        internal_order_queue.insert(internal_order_queue.begin(), move_to_position);
+        
+        if(temp.size() > 0){
             // Go to the first one
             setMovementTarget(internal_order_queue.back());
             internal_order_queue.pop_back();
@@ -224,9 +228,6 @@ void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
             }
         }
     }
-
-    // can_move &= ground->getSteepness(move_to_x, move_to_z) < 0.8f;
-    // can_move &= ground->isOnTerrain(move_to_x, move_to_z, 1.0); 
     
     if(can_move && isMoving()){
         position.x = move_to_x;
