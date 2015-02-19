@@ -335,42 +335,38 @@ int Level::getMapWidth(){
 
 void Level::issueOrder(Playable::Order order, glm::vec3 location, bool queue){
 
-    // Pathing goes here
-    
+    float x_center = 0.0f;
+    float z_center = 0.0f;
 
-    if(selected_units.size() == 1){
-        selected_units[0]->receiveOrder(order, glm::vec3(location.x, 0.0f, location.z), queue);
-        return;
-    }
-
-    // Get centroid of the selected units
-    float x_sum = 0.0f;
-    float z_sum = 0.0f;
-
-    for(int i = 0; i < selected_units.size(); ++i){
-        glm::vec3 unit_pos = selected_units[i]->getPosition();
-        x_sum += unit_pos.x;
-        z_sum += unit_pos.z;
-    }
-
-    float x_center = x_sum / selected_units.size();
-    float z_center = z_sum / selected_units.size();
-
-    // find the unit furthest from the centroid
-    // this defines the magic box
+    float click_distance = 0.0f;
     float max_distance = 0.0f;
 
-    for(int i = 0; i < selected_units.size(); ++i){
+    if(selected_units.size() > 1){
+        // Get centroid of the selected units
+        float x_sum = 0.0f;
+        float z_sum = 0.0f;
 
-        glm::vec3 unit_pos = selected_units[i]->getPosition();
-        float distance = getDistance(unit_pos.x, unit_pos.z, x_center, z_center);
-
-        if(distance > max_distance){
-            max_distance = distance;
+        for(int i = 0; i < selected_units.size(); ++i){
+            glm::vec3 unit_pos = selected_units[i]->getPosition();
+            x_sum += unit_pos.x;
+            z_sum += unit_pos.z;
         }
-    }
 
-    float click_distance = getDistance(location.x, location.z, x_center, z_center);
+        x_center = x_sum / selected_units.size();
+        z_center = z_sum / selected_units.size();      
+
+        for(int i = 0; i < selected_units.size(); ++i){
+
+            glm::vec3 unit_pos = selected_units[i]->getPosition();
+            float distance = getDistance(unit_pos.x, unit_pos.z, x_center, z_center);
+
+            if(distance > max_distance){
+                max_distance = distance;
+            }
+        }
+
+        click_distance = getDistance(location.x, location.z, x_center, z_center);
+    }
 
     // Issue the appropriate order
     for(int i = 0; i < selected_units.size(); ++i){
