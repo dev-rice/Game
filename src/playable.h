@@ -22,7 +22,7 @@
 class Playable : public Drawable {
 public:
 	// Not a complete list
-	enum class Order{ MOVE, ATTACK, HOLD_POSITION, STOP };
+	enum class Order{ MOVE, MOVE_TARGET, ATTACK, ATTACK_MOVE, ATTACK_TARGET, HOLD_POSITION, STOP };
 	enum class PlayableAttribute{ MASSIVE, ARMORED, ARMY, WORKER, FLYING, INVULNERABLE, MECHANICAL };
 
 	Playable();
@@ -38,7 +38,7 @@ public:
 	void tempSelect();
 	void tempDeSelect();
 
-	bool receiveOrder(Playable::Order, glm::vec3, bool, std::vector<glm::vec3>, Playable*);
+	void receiveOrder(Playable::Order, glm::vec3, bool, std::vector<glm::vec3>, Playable*);
 
 	void holdPosition();
 	void stop();
@@ -49,9 +49,14 @@ public:
 	float getRadius(){ return radius; }
 
 private:
+
+	static Playable::Order determineBodyOrder(Playable::Order, bool);
+	static Playable::Order determineLastOrder(Playable::Order, bool);
+
 	void updateUniformData();
 
 	std::vector<std::tuple<Playable::Order, glm::vec3>> order_queue;
+	std::vector<Playable*> targeted_units;
 
 	glm::vec3 target_position;
 	float target_direction;

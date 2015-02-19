@@ -335,6 +335,11 @@ int Level::getMapWidth(){
 
 void Level::issueOrder(Playable::Order order, glm::vec3 target, bool should_enqueue){
 
+    // even shorter circuit for "not my unit, can't command it".
+
+    // short circuit for stop and hold position
+    // No need to path!
+
     // We need to decide if it's targeting a unit with this command or not
     Playable* targeted_unit = 0;
 

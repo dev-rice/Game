@@ -53,19 +53,54 @@ void Playable::updateUniformData(){
 	glUniform1f(glGetUniformLocation(shader_program, "scale"), scale);
 }
 
-bool Playable::receiveOrder(Playable::Order order, glm::vec3 target, bool should_enqueue, std::vector<glm::vec3> path, Playable* targeted_unit){
-    // Set the final target at the end of the path
-    // path.insert(path.begin(), target);
 
+Playable::Order Playable::determineBodyOrder(Playable::Order order, bool is_targeting){
+    if(order == Playable::Order::MOVE){
+        return Playable::Order::MOVE;
+    } else if (order == Playable::Order::ATTACK && is_targeting){
+        return Playable::Order::MOVE;
+    } else {
+        return Playable::Order::ATTACK_MOVE;
+    }
+}
 
-    if(should_enqueue){
+Playable::Order Playable::determineLastOrder(Playable::Order order, bool is_targeting){
+    if(order == Playable::Order::MOVE && is_targeting){
+        return Playable::Order::MOVE_TARGET;
+    } else if (order == Playable::Order::MOVE){
+        return Playable::Order::MOVE;
+    } else if (order == Playable::Order::ATTACK && is_targeting){
+        return Playable::Order::ATTACK_TARGET;
+    } else {
+        return Playable::Order::ATTACK_MOVE;
+    }
+}
 
+void Playable::receiveOrder(Playable::Order order, glm::vec3 target, bool should_enqueue, std::vector<glm::vec3> path, Playable* targeted_unit){
+
+    // Need short circuit for stop & hold
+    
+    bool is_targeting = (targeted_unit == NULL);
+
+    Playable::Order body_order = determineBodyOrder(order, is_targeting);
+    Playable::Order last_order = determineLastOrder(order, is_targeting);
+
+    std::vector<std::tuple<Playable::Order, glm::vec3>> temp_order_queue;
+
+    for(int i = 0; i < path.size(); ++i){
+        temp_order_queue.push_back(std::make_tuple(body_order, path[i]));
     }
 
-    // order_queue.insert(order_queue.begin(), std::make_tuple(order, target));
+    temp_order_queue.push_back(std::make_tuple(last_order, target));
 
-    // // Later, have this return validity of order
-    return true;
+    if(should_enqueue){
+        order_queue.insert(order_queue.end(), temp_order_queue.begin(), temp_order_queue.end());       
+    } else {
+        order_queue = temp_order_queue;
+        targeted_units.clear();
+    }
+
+    targeted_units.insert(targeted_units.begin(), targeted_unit);
 }
 
 void Playable::holdPosition(){
