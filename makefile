@@ -10,9 +10,7 @@ OBJECTS=$(SOURCES:.cpp=.o)
 
 EXECUTABLE := game
 
-FRAMEWORKS := -framework OpenGl -framework CoreFoundation
-MAC_LIBRARIES := -I/usr/local/include -lglfw3 -lglew -lSOIL
-
+MAC_LIBRARIES := -framework OpenGl -framework CoreFoundation -I/usr/local/include -lglfw3 -lglew -lSOIL
 LINUX_LIBRARIES := -lGL -lGLEW -I /usr/lib/x86_64-linux-gnu/ -lglfw -I /usr/local/include -lSOIL -lpthread
 
 # Try to auto detect the platform to build for
@@ -25,7 +23,7 @@ endif
 all: $(SOURCES) $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS)
-	$(COMPILER) $(FRAMEWORKS) $(LIBRARIES) $(OBJECTS) -o $@
+	$(COMPILER) -I$(SRCDIR) $(OBJECTS) $(LIBRARIES) -o $@
 	@ ./tools/buildcount.sh
 
 .cpp.o:
