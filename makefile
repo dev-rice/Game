@@ -1,49 +1,35 @@
 PLATFORM := $(shell uname)
 
 COMPILER := g++
-
-OPTIONS :=
+COMPILER_FLAGS := -c -std=c++11
 
 SRCDIR := ./src
 SRCEXT := cpp
 SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
+OBJECTS=$(SOURCES:.cpp=.o)
 
-BINARY_OUTPUT := game
+EXECUTABLE := game
 
 FRAMEWORKS := -framework OpenGl -framework CoreFoundation
 MAC_LIBRARIES := -I/usr/local/include -lglfw3 -lglew -lSOIL
 
 LINUX_LIBRARIES := -lGL -lGLEW -I /usr/lib/x86_64-linux-gnu/ -lglfw -I /usr/local/include -lSOIL -lpthread
-LINUX_LIBRARIES_ALT := -lglfw3 -lX11 -lXxf86vm -lXrandr -lpthread -lXi -lrt -lXinerama -lXcursor -lGL -lGLEW -I /usr/local/include -lSOIL
 
-all:
 # Try to auto detect the platform to build for
 ifeq ($(PLATFORM),Darwin)
-	@ echo Building for Mac OSX.
-	@ make mac
+	LIBRARIES := $(MAC_LIBRARIES)
 else ifeq ($(PLATFORM),Linux)
-	@ echo Building for Linux.
-	@ make linux
-else
-	@ echo Unknown platform '$(PLATFORM)'
+	LIBRARIES := $(LINUX_LIBRARIES)
 endif
 
-mac:
+all: $(SOURCES) $(EXECUTABLE)
+
+$(EXECUTABLE): $(OBJECTS)
+	$(COMPILER) $(FRAMEWORKS) $(LIBRARIES) $(OBJECTS) -o $@
 	@ ./tools/buildcount.sh
-	@ rm -f res/models/*.mtl
 
-	@ $(COMPILER) $(OPTIONS) -std=c++11 $(SOURCES) -o $(BINARY_OUTPUT) $(FRAMEWORKS) $(MAC_LIBRARIES) -I$(SRCDIR)
-linux:
-	@ ./tools/buildcount.sh
-	@ rm -f res/models/*.mtl
-
-	@ $(COMPILER) $(OPTIONS) -std=c++11 $(SOURCES) -o $(BINARY_OUTPUT) $(LINUX_LIBRARIES) -I$(SRCDIR)
-
-linux-alt:
-	@ ./tools/buildcount.sh
-	@ rm -f res/models/*.mtl
-
-	@ $(COMPILER) $(OPTIONS) -std=c++11 $(SOURCES) -o $(BINARY_OUTPUT) $(LINUX_LIBRARIES_ALT) -I$(SRCDIR)
+.cpp.o:
+	$(COMPILER) $(COMPILER_FLAGS) -I$(SRCDIR) $< -o $@
 
 configure-linux:
 	@ sudo apt-get install libglew-dev libglm-dev libglfw3-dev curl
@@ -58,3 +44,6 @@ configure-linux:
 discard:
 	@ git clean -df
 	@ git checkout -- .
+
+clean:
+	rm $(SRCDIR)/*.o
