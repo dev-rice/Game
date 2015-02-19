@@ -24,6 +24,7 @@ all: $(SOURCES) $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS)
 	$(COMPILER) -I$(SRCDIR) $(OBJECTS) $(LIBRARIES) -o $@
+	@ echo
 	@ ./tools/buildcount.sh
 
 .cpp.o:
