@@ -24,7 +24,7 @@ Playable::Playable(Mesh* mesh, GLuint shader_program, glm::vec3 position, GLfloa
     #warning Fix the 90* offset bug
     rotateGlobalEuler(M_PI/2.0f, 0.0f, 0.0f);
 
-    move_to_position = position;
+    target_position = position;
 }
 
 void Playable::loadFromXML(std::string filepath){
@@ -53,16 +53,14 @@ void Playable::updateUniformData(){
 	glUniform1f(glGetUniformLocation(shader_program, "scale"), scale);
 }
 
-bool Playable::receiveOrder(Playable::Order order, glm::vec3 target, bool queue, std::vector<glm::vec3> path){
-    // Needs rework
+bool Playable::receiveOrder(Playable::Order order, glm::vec3 target, bool should_enqueue, std::vector<glm::vec3> path, Playable* targeted_unit){
+    // Set the final target at the end of the path
+    // path.insert(path.begin(), target);
 
-    printf("I need reworking!\n");
 
-    // if(!queue){
-    //     order_queue.clear();
-    //     executeOrder(order, target);
-    //     return true; // like below, todo
-    // }
+    if(should_enqueue){
+
+    }
 
     // order_queue.insert(order_queue.begin(), std::make_tuple(order, target));
 

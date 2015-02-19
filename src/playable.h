@@ -38,7 +38,7 @@ public:
 	void tempSelect();
 	void tempDeSelect();
 
-	bool receiveOrder(Playable::Order, glm::vec3, bool, std::vector<glm::vec3>);
+	bool receiveOrder(Playable::Order, glm::vec3, bool, std::vector<glm::vec3>, Playable*);
 
 	void holdPosition();
 	void stop();
@@ -51,16 +51,10 @@ public:
 private:
 	void updateUniformData();
 
-	// Movement and interaction variables
-	bool has_been_push_requested;
-	bool holding_position;
-	bool needs_pathing_on_update;
-
 	std::vector<std::tuple<Playable::Order, glm::vec3>> order_queue;
-	std::vector<glm::vec3> internal_order_queue;
 
-	glm::vec3 move_to_position;
-	float movement_target_direction;
+	glm::vec3 target_position;
+	float target_direction;
 
 	static Doodad* selection_ring;
 
@@ -82,6 +76,7 @@ private:
 
 	int strength;
 
+	int max_health;
 	int health;
 	int healing_rate;
 

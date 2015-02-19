@@ -335,6 +335,19 @@ int Level::getMapWidth(){
 
 void Level::issueOrder(Playable::Order order, glm::vec3 target, bool should_enqueue){
 
+    // We need to decide if it's targeting a unit with this command or not
+    Playable* targeted_unit = 0;
+
+    // Check all the other playables to see if one is the target
+    for(int i = 0; i < units.size(); ++i){
+        glm::vec3 unit_pos = units[i]->getPosition();
+        float click_distance_from_unit = getDistance(unit_pos.x, unit_pos.z, target.x, target.z);
+
+        if(click_distance_from_unit < units[i]->getRadius()){
+            targeted_unit = units[i];
+        }
+    }
+
     // If it's only one unit
     float x_center = selected_units[0]->getPosition().x;
     float z_center = selected_units[0]->getPosition().z;
@@ -386,8 +399,6 @@ void Level::issueOrder(Playable::Order order, glm::vec3 target, bool should_enqu
                                                         int(target.z), 
                                                         smallest_radius);
 
-    path.insert(path.begin(), target);
-
     // End logging and report
     float delta_time = glfwGetTime() - start_time;
     Debug::info("Took %.2f seconds to find the path.\n", delta_time);
@@ -404,7 +415,7 @@ void Level::issueOrder(Playable::Order order, glm::vec3 target, bool should_enqu
             z_to_move += (unit_pos.z - z_center);
         }
 
-        selected_units[i]->receiveOrder(order, glm::vec3(x_to_move, 0.0f, z_to_move), should_enqueue, path);
+        selected_units[i]->receiveOrder(order, glm::vec3(x_to_move, 0.0f, z_to_move), should_enqueue, path, targeted_unit);
     }
 }
 
