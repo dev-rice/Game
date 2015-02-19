@@ -3,10 +3,12 @@ PLATFORM := $(shell uname)
 COMPILER := g++
 COMPILER_FLAGS := -c -std=c++11
 
-SRCDIR := ./src
-SRCEXT := cpp
+SRCDIR  := src
+SRCEXT  := cpp
 SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
-OBJECTS=$(SOURCES:.cpp=.o)
+
+OBJDIR  := obj
+OBJECTS := $(patsubst $(SRCDIR)/%.cpp,$(OBJDIR)/%.o,$(SOURCES))
 
 EXECUTABLE := game
 
@@ -27,7 +29,7 @@ $(EXECUTABLE): $(OBJECTS)
 	@ echo
 	@ ./tools/buildcount.sh
 
-.cpp.o:
+$(OBJDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
 	$(COMPILER) $(COMPILER_FLAGS) -I$(SRCDIR) $< -o $@
 
 configure-linux:

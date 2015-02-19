@@ -1,6 +1,6 @@
 .DS_Store
 game
 *.bmp
-src/*.o
-src/particles/*.o
-src/core_ui/*.o
+obj/*.o
+obj/particles/*.o
+obj/core_ui/*.o
