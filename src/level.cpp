@@ -333,22 +333,19 @@ int Level::getMapWidth(){
     return ground->getWidth();
 }
 
-void Level::issueOrder(Playable::Order order, glm::vec3 target, bool queue){
+void Level::issueOrder(Playable::Order order, glm::vec3 target, bool should_enqueue){
 
     // If it's only one unit
     float x_center = selected_units[0]->getPosition().x;
     float z_center = selected_units[0]->getPosition().z;
     float smallest_radius = selected_units[0]->getRadius();
 
-    // Make sure if it skips the click
-    // distance calculation that it will
-    // not offset
+    // Make sure if it skips the click distance calculation so that it will not offset
     float click_distance = -1.0f;
     float max_distance = 0.0f;
 
     // If there is more than one unit, setup the magic box
     if(selected_units.size() > 1){
-        // Get centroid of the selected units
         float x_sum = 0.0f;
         float z_sum = 0.0f;
 
@@ -407,7 +404,7 @@ void Level::issueOrder(Playable::Order order, glm::vec3 target, bool queue){
             z_to_move += (unit_pos.z - z_center);
         }
 
-        selected_units[i]->receiveOrder(order, glm::vec3(x_to_move, 0.0f, z_to_move), queue);
+        selected_units[i]->receiveOrder(order, glm::vec3(x_to_move, 0.0f, z_to_move), should_enqueue, path);
     }
 }
 

@@ -38,26 +38,16 @@ public:
 	void tempSelect();
 	void tempDeSelect();
 
-	bool receiveOrder(Playable::Order, glm::vec3, bool);
-	void executeOrder(Playable::Order, glm::vec3);
-
-	bool requestPush(Terrain*, glm::vec3);
-
-	void setMovementTarget(glm::vec3);
+	bool receiveOrder(Playable::Order, glm::vec3, bool, std::vector<glm::vec3>);
 
 	void holdPosition();
 	void stop();
-
-	bool isMoving();
-	bool canBePushed();
 
 	bool isSelected(){ return selected; }
 	bool isTempSelected(){ return temp_selected; }
 
 	float getRadius(){ return radius; }
-
-	// remove me later
-	void setSpeed(float s) {speed = s;}
+	
 private:
 	void updateUniformData();
 
