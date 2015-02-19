@@ -78,7 +78,7 @@ void Playable::stop(){
     // Nothing yet
 }
 
-void Playable::update(Terrain* ground, std::vector<Playable*> otherUnits){
+void Playable::update(std::vector<Playable*> *otherUnits){
 
 
     // bool can_move = true;

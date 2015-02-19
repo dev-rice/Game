@@ -28,7 +28,7 @@ public:
 	Playable();
 	Playable(Mesh*, GLuint, glm::vec3, GLfloat);
 
-	void update(Terrain *, std::vector<Playable*>);
+	void update(std::vector<Playable*>*);
 	void loadFromXML(std::string filepath);
 
 	void draw();
@@ -47,7 +47,7 @@ public:
 	bool isTempSelected(){ return temp_selected; }
 
 	float getRadius(){ return radius; }
-	
+
 private:
 	void updateUniformData();
 
