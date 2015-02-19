@@ -47,4 +47,6 @@ discard:
 	@ git checkout -- .
 
 clean:
-	rm $(SRCDIR)/*.o
+	rm -f $(OBJDIR)/*.o
+	rm -f $(OBJDIR)/particles/*.o
+	rm -f $(OBJDIR)/core_ui/*.o
