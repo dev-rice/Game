@@ -47,6 +47,7 @@ void DebugConsole::draw(){
 void DebugConsole::syncWithDebug(){
     // Get all of the messages that debug has in its queue
     while (Debug::hasMessages()){
-        messages.push_back(Debug::popMessage());
+        std::string new_message = Debug::popMessage();
+        messages.push_back(new_message);
     }
 }
