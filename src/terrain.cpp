@@ -376,12 +376,6 @@ void Terrain::bindTextures(){
     glActiveTexture(GL_TEXTURE5);
     glBindTexture(GL_TEXTURE_2D, splatmaps[0]);
 
-    glActiveTexture(GL_TEXTURE6);
-    glBindTexture(GL_TEXTURE_2D, splatmaps[1]);
-
-    glActiveTexture(GL_TEXTURE7);
-    glBindTexture(GL_TEXTURE_2D, splatmaps[2]);
-
     glActiveTexture(GL_TEXTURE10);
     glBindTexture(GL_TEXTURE_2D, diffuse_textures[0]);
 
@@ -401,9 +395,7 @@ void Terrain::setTextureLocations(){
     glUniform1i(glGetUniformLocation(shader_program, "emissive_texture"), 2);
     glUniform1i(glGetUniformLocation(shader_program, "normal_map"), 3);
     glUniform1i(glGetUniformLocation(shader_program, "shadow_map"), 4);
-    glUniform1i(glGetUniformLocation(shader_program, "splatmap1"), 5);
-    glUniform1i(glGetUniformLocation(shader_program, "splatmap2"), 6);
-    glUniform1i(glGetUniformLocation(shader_program, "splatmap3"), 7);
+    glUniform1i(glGetUniformLocation(shader_program, "splatmap"), 5);
     glUniform1i(glGetUniformLocation(shader_program, "diffuse_texture"), 10);
     glUniform1i(glGetUniformLocation(shader_program, "diffuse_texture2"), 11);
     glUniform1i(glGetUniformLocation(shader_program, "diffuse_texture3"), 12);

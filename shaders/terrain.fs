@@ -25,9 +25,7 @@ uniform sampler2D specular_texture;
 uniform sampler2D normal_map;
 uniform sampler2D emissive_texture;
 uniform sampler2D shadow_map;
-uniform sampler2D splatmap1;
-uniform sampler2D splatmap2;
-uniform sampler2D splatmap3;
+uniform sampler2D splatmap;
 uniform sampler2D diffuse_texture2;
 uniform sampler2D diffuse_texture3;
 uniform sampler2D diffuse_texture4;
@@ -162,9 +160,9 @@ float getShadowFactor(){
 void main() {
     // Change this to take average value or luminance
     float splat_values[3];
-    splat_values[0] = texture(splatmap1, Splatcoord).r;
-    splat_values[1] = texture(splatmap2, Splatcoord).r;
-    splat_values[2] = texture(splatmap3, Splatcoord).r;
+    splat_values[0] = texture(splatmap, Splatcoord).r;
+    splat_values[1] = texture(splatmap, Splatcoord).g;
+    splat_values[2] = texture(splatmap, Splatcoord).b;
 
     vec4 base_diffuse = texture(diffuse_texture, Texcoord);
     vec4 diffuse2 = texture(diffuse_texture2, Texcoord);

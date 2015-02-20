@@ -285,9 +285,10 @@ void Level::loadLevel(const char* filename){
             int texture_number;
             char diffuse_name[64];
             char splatmap_name[64];
-            sscanf(buffer, "%*c %d %s %s", &texture_number, diffuse_name, splatmap_name);
+            char splatmap_channel;
+            sscanf(buffer, "%*c %d %s %s %c", &texture_number, diffuse_name, splatmap_name, &splatmap_channel);
 
-            Debug::info("Found a ground texture: %d %s %s\n", texture_number, diffuse_name, splatmap_name);
+            Debug::info("Found a ground texture: %d %s %s %c\n", texture_number, diffuse_name, splatmap_name, splatmap_channel);
 
             char diffuse_filename[80] = "";
             strcat(diffuse_filename, TEXTURE_PATH);

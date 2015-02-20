@@ -37,6 +37,6 @@ p fire -1.400000 0.000000 0.000000
 # Ground specification - Begin writing here (h, g)
 h mountains.png 10.0
 g 0 rough_ground.png
-g 1 bricks.png bricks_splat.png
-g 2 stone.png stone_splat.png
-g 3 glacier.png ice_splat.png
+g 1 bricks.png all_splat.png r
+g 2 stone.png all_splat.png g
+g 3 glacier.png all_splat.png b
