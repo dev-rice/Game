@@ -61,7 +61,7 @@ void Playable::updateUniformData(){
 //##################################################################################################
 void Playable::receiveOrder(Playable::Order order, glm::vec3 target, bool should_enqueue, std::vector<glm::vec3> path, Playable* targeted_unit){
     
-    bool is_targeting = (targeted_unit == NULL);
+    bool is_targeting = bool(targeted_unit);
 
     Playable::Order body_order = determineBodyOrder(order, is_targeting);
     Playable::Order last_order = determineLastOrder(order, is_targeting);
@@ -75,13 +75,22 @@ void Playable::receiveOrder(Playable::Order order, glm::vec3 target, bool should
     temp_order_queue.insert(temp_order_queue.begin(), std::make_tuple(last_order, target));
 
     if(should_enqueue){
-        order_queue.insert(order_queue.end(), temp_order_queue.begin(), temp_order_queue.end());       
+
+        order_queue.insert(order_queue.end(), temp_order_queue.begin(), temp_order_queue.end());
+
     } else {
-        order_queue = temp_order_queue;
+        //Clear out the old
         targeted_units.clear();
+        order_queue.clear();
+
+        // In with the new
+        target_position = position;
+        order_queue = temp_order_queue;        
     }
 
-    targeted_units.insert(targeted_units.begin(), targeted_unit);
+    if(is_targeting){
+        targeted_units.insert(targeted_units.begin(), targeted_unit);
+    }
 }
 
 Playable::Order Playable::determineBodyOrder(Playable::Order order, bool is_targeting){
@@ -133,11 +142,49 @@ float Playable::getDistance(float a1, float a2, float b1, float b2){
 }
 
 void Playable::setTargetPositionAndDirection(glm::vec3 target){
+    old_target_position = target_position;
     target_position = target;
 
     float x_delta = target_position.x - position.x;
     float z_delta = target_position.z - position.z;
     target_direction = atan2(x_delta, z_delta);
+}
+
+//##################################################################################################
+// Steering Helper Functions
+//##################################################################################################
+int Playable::steerToStayOnPath(){
+    // -1 means CCW
+    //  0 means none
+    //  1 means CW
+
+    // Predict future point
+    float prediction_x = position.x + sin(rotation.y);
+    float prediction_z = position.z + cos(rotation.y);
+
+    // Put them in vec2s 
+    glm::vec2 line_0 = glm::vec2(old_target_position.x, old_target_position.z);
+    glm::vec2 line_1 = glm::vec2(target_position.x, target_position.z);
+    glm::vec2 point = glm::vec2(prediction_x, prediction_z);
+
+    // Find the point on the path nearest to prediction
+    float distance = distanceFromPointToLine(line_0, line_1, point);
+
+    printf("Distance = %f", distance);
+
+    return 0;
+}
+
+float Playable::distanceFromPointToLine(glm::vec2 line_0, glm::vec2 line_1, glm::vec2 point){
+     glm::vec2 v = line_1 - line_0;
+     glm::vec2 w = point - line_0;
+
+     float c1 = glm::dot(w,v);
+     float c2 = glm::dot(v,v);
+     float b = c1 / c2;
+
+     glm::vec2 Pb = line_0 + (b * v);
+     return getDistance(point.x, point.y, Pb.x, Pb.y);
 }
 
 //##################################################################################################

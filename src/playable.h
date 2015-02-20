@@ -55,6 +55,10 @@ private:
 
 	static float getDistance(float, float, float, float);
 
+	// Steering
+	int steerToStayOnPath();
+	static float distanceFromPointToLine(glm::vec2, glm::vec2, glm::vec2);
+
 	static Playable::Order determineBodyOrder(Playable::Order, bool);
 	static Playable::Order determineLastOrder(Playable::Order, bool);
 
@@ -65,6 +69,8 @@ private:
 
 	glm::vec3 target_position;
 	float target_direction;
+
+	glm::vec3 old_target_position;
 
 	static Doodad* selection_ring;
 
