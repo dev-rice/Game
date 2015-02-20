@@ -159,20 +159,22 @@ float getShadowFactor(){
 
 void main() {
     // Change this to take average value or luminance
-    float splat_values[3];
-    splat_values[0] = texture(splatmap, Splatcoord).r;
-    splat_values[1] = texture(splatmap, Splatcoord).g;
-    splat_values[2] = texture(splatmap, Splatcoord).b;
+    float splat_values[4];
+    splat_values[0] = 1.0;
+    splat_values[1] = texture(splatmap, Splatcoord).r;
+    splat_values[2] = texture(splatmap, Splatcoord).g;
+    splat_values[3] = texture(splatmap, Splatcoord).b;
 
-    vec4 base_diffuse = texture(diffuse_texture, Texcoord);
-    vec4 diffuse2 = texture(diffuse_texture2, Texcoord);
-    vec4 diffuse3 = texture(diffuse_texture3, Texcoord);
-    vec4 diffuse4 = texture(diffuse_texture4, Texcoord);
+    vec4 diffuses[4];
+    diffuses[0] = texture(diffuse_texture, Texcoord);
+    diffuses[1] = texture(diffuse_texture2, Texcoord);
+    diffuses[2] = texture(diffuse_texture3, Texcoord);
+    diffuses[3] = texture(diffuse_texture4, Texcoord);
 
-    diffuse = base_diffuse;
-    diffuse = mix(diffuse, diffuse2, splat_values[0]);
-    diffuse = mix(diffuse, diffuse3, splat_values[1]);
-    diffuse = mix(diffuse, diffuse4, splat_values[2]);
+    diffuse = mix(diffuse, diffuses[0], splat_values[0]);
+    diffuse = mix(diffuse, diffuses[1], splat_values[1]);
+    diffuse = mix(diffuse, diffuses[2], splat_values[2]);
+    diffuse = mix(diffuse, diffuses[3], splat_values[3]);
 
     specular = texture(specular_texture, Texcoord);
     emissive = texture(emissive_texture, Texcoord);
