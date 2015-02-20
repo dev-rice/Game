@@ -28,7 +28,7 @@ public:
 	Playable();
 	Playable(Mesh*, GLuint, glm::vec3, GLfloat);
 
-	void update(std::vector<Playable*>*);
+	void update(Terrain*, std::vector<Playable*>*);
 	void loadFromXML(std::string filepath);
 
 	void draw();
@@ -49,6 +49,11 @@ public:
 	float getRadius(){ return radius; }
 
 private:
+
+	bool atTargetPosition();
+	void setTargetPositionAndDirection(glm::vec3);
+
+	static float getDistance(float, float, float, float);
 
 	static Playable::Order determineBodyOrder(Playable::Order, bool);
 	static Playable::Order determineLastOrder(Playable::Order, bool);

@@ -5,6 +5,9 @@
 
 Doodad* Playable::selection_ring;
 
+//##################################################################################################
+// Setup
+//##################################################################################################
 Playable::Playable() : Drawable(){
 
 }
@@ -53,6 +56,33 @@ void Playable::updateUniformData(){
 	glUniform1f(glGetUniformLocation(shader_program, "scale"), scale);
 }
 
+//##################################################################################################
+// Order Receiving, Order Helpers, and Simple Orders (Stop, Hold)
+//##################################################################################################
+void Playable::receiveOrder(Playable::Order order, glm::vec3 target, bool should_enqueue, std::vector<glm::vec3> path, Playable* targeted_unit){
+    
+    bool is_targeting = (targeted_unit == NULL);
+
+    Playable::Order body_order = determineBodyOrder(order, is_targeting);
+    Playable::Order last_order = determineLastOrder(order, is_targeting);
+
+    std::vector<std::tuple<Playable::Order, glm::vec3>> temp_order_queue;
+
+    for(int i = 0; i < path.size(); ++i){
+        temp_order_queue.insert(temp_order_queue.begin(), std::make_tuple(body_order, path[i]));
+    }
+
+    temp_order_queue.insert(temp_order_queue.begin(), std::make_tuple(last_order, target));
+
+    if(should_enqueue){
+        order_queue.insert(order_queue.end(), temp_order_queue.begin(), temp_order_queue.end());       
+    } else {
+        order_queue = temp_order_queue;
+        targeted_units.clear();
+    }
+
+    targeted_units.insert(targeted_units.begin(), targeted_unit);
+}
 
 Playable::Order Playable::determineBodyOrder(Playable::Order order, bool is_targeting){
     if(order == Playable::Order::MOVE){
@@ -65,6 +95,11 @@ Playable::Order Playable::determineBodyOrder(Playable::Order order, bool is_targ
 }
 
 Playable::Order Playable::determineLastOrder(Playable::Order order, bool is_targeting){
+
+    if(order == Playable::Order::STOP || order == Playable::Order::HOLD_POSITION){
+        return order;
+    }
+
     if(order == Playable::Order::MOVE && is_targeting){
         return Playable::Order::MOVE_TARGET;
     } else if (order == Playable::Order::MOVE){
@@ -76,33 +111,6 @@ Playable::Order Playable::determineLastOrder(Playable::Order order, bool is_targ
     }
 }
 
-void Playable::receiveOrder(Playable::Order order, glm::vec3 target, bool should_enqueue, std::vector<glm::vec3> path, Playable* targeted_unit){
-
-    // Need short circuit for stop & hold
-    
-    bool is_targeting = (targeted_unit == NULL);
-
-    Playable::Order body_order = determineBodyOrder(order, is_targeting);
-    Playable::Order last_order = determineLastOrder(order, is_targeting);
-
-    std::vector<std::tuple<Playable::Order, glm::vec3>> temp_order_queue;
-
-    for(int i = 0; i < path.size(); ++i){
-        temp_order_queue.push_back(std::make_tuple(body_order, path[i]));
-    }
-
-    temp_order_queue.push_back(std::make_tuple(last_order, target));
-
-    if(should_enqueue){
-        order_queue.insert(order_queue.end(), temp_order_queue.begin(), temp_order_queue.end());       
-    } else {
-        order_queue = temp_order_queue;
-        targeted_units.clear();
-    }
-
-    targeted_units.insert(targeted_units.begin(), targeted_unit);
-}
-
 void Playable::holdPosition(){
     // Nothing yet
 }
@@ -111,7 +119,86 @@ void Playable::stop(){
     // Nothing yet
 }
 
-void Playable::update(std::vector<Playable*> *otherUnits){
+//##################################################################################################
+// Location Helper and Maintenance functions
+//##################################################################################################
+bool Playable::atTargetPosition(){
+    return getDistance(position.x, position.z, target_position.x, target_position.z) < 0.05;
+}
+
+float Playable::getDistance(float a1, float a2, float b1, float b2){
+    float x_diff = abs(a1 - b1);
+    float z_diff = abs(a2 - b2);
+    return sqrt(x_diff*x_diff + z_diff*z_diff);
+}
+
+void Playable::setTargetPositionAndDirection(glm::vec3 target){
+    target_position = target;
+
+    float x_delta = target_position.x - position.x;
+    float z_delta = target_position.z - position.z;
+    target_direction = atan2(x_delta, z_delta);
+}
+
+//##################################################################################################
+// The Update Function
+//##################################################################################################
+void Playable::update(Terrain* ground, std::vector<Playable*> *otherUnits){
+   
+    if(atTargetPosition() && order_queue.size() > 0){
+
+        setTargetPositionAndDirection(std::get<1>(order_queue.back()));
+        order_queue.pop_back();
+
+    } else if(!atTargetPosition()){
+
+        position.x += sin(target_direction)*speed;
+        position.z += cos(target_direction)*speed;
+
+    } else {
+
+        // Do nothing... Attack nearby enemies, randomly turn and idle animate
+
+    }
+
+    position.y = ground->getHeightInterpolated(position.x, position.z);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     // bool can_move = true;
@@ -206,7 +293,6 @@ void Playable::update(std::vector<Playable*> *otherUnits){
 
     // }
 
-    // position.y = ground->getHeightInterpolated(position.x, position.z);
 }
 
 void Playable::draw(){
