@@ -398,10 +398,13 @@ void GameView::handleInputs(){
         toggle_key_state = false;
     }
 
-    if (debug_showing){
-        graphics_menu->show();
-    } else {
-        graphics_menu->hide();
+    // Handle the graphics menu toggle
+    if ((glfwGetKey(glfw_window, GLFW_KEY_G) == GLFW_PRESS) && (!graphics_menu_key_state)){
+        graphics_menu_key_state = true;
+        graphics_menu->toggleShowing();
+    }
+    if (glfwGetKey(glfw_window, GLFW_KEY_G) == GLFW_RELEASE){
+        graphics_menu_key_state = false;
     }
 
     // Handle the debug console toggle key

@@ -28,7 +28,7 @@ public:
 
     void print(int, int, const char*, ...);
 private:
-    void drawString(int, int, std::string);
+    void drawString(std::string);
     void drawStringInitial(int x, int y, std::string to_draw);
 
     CharacterMesh* character_mesh;

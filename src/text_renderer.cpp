@@ -26,7 +26,7 @@ TextRenderer::TextRenderer(std::string font_filename, GLint point){
 
 }
 
-void TextRenderer::drawString(int x, int y, std::string to_draw){
+void TextRenderer::drawString(std::string to_draw){
     if (to_draw.empty()){
         return;
     }
@@ -54,13 +54,13 @@ void TextRenderer::drawString(int x, int y, std::string to_draw){
         character_box->draw();
     }
 
-    drawString(x, y, to_draw.substr(1 + offset, to_draw.size() - 1));
+    drawString(to_draw.substr(1 + offset, to_draw.size() - 1));
 
 }
 
 void TextRenderer::drawStringInitial(int x, int y, std::string to_draw){
     character_box->setPixelPosition(x, y);
-    drawString(x, y, to_draw);
+    drawString(to_draw);
 }
 
 void TextRenderer::print(int x, int y, const char* format, ...){
