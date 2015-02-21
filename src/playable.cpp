@@ -16,7 +16,7 @@ Playable::Playable(Mesh* mesh, GLuint shader_program, glm::vec3 position, GLfloa
 
     if(! selection_ring){
     	Mesh* selection_ring_mesh = new Mesh("res/models/selection_ring.dae");
-    	selection_ring = new Doodad(selection_ring_mesh, shader_program, position, 1.0f);
+    	selection_ring = new Doodad(selection_ring_mesh, shader_program, position, 2.0f);
     	selection_ring->setEmissive(TextureLoader::loadTextureFromFile("res/textures/selection_ring.png", GL_LINEAR));
         selection_ring->rotateGlobalEuler(M_PI/2.0f, 0.0f, 0.0f);
     }
@@ -79,7 +79,7 @@ void Playable::receiveOrder(Playable::Order order, glm::vec3 target, bool should
         order_queue.insert(order_queue.end(), temp_order_queue.begin(), temp_order_queue.end());
 
     } else {
-        //Clear out the old
+        // Out with the old
         targeted_units.clear();
         order_queue.clear();
 
@@ -132,7 +132,7 @@ void Playable::stop(){
 // Location Helper and Maintenance functions
 //##################################################################################################
 bool Playable::atTargetPosition(){
-    return getDistance(position.x, position.z, target_position.x, target_position.z) < 0.05;
+    return getDistance(position.x, position.z, target_position.x, target_position.z) < 0.001;
 }
 
 float Playable::getDistance(float a1, float a2, float b1, float b2){
@@ -158,7 +158,7 @@ int Playable::steerToStayOnPath(){
     //  0 means none
     //  1 means CW
 
-    // Predict future point
+    // Predict future point           * Scaling the amount of prediction would go here
     float prediction_x = position.x + sin(rotation.y);
     float prediction_z = position.z + cos(rotation.y);
 
@@ -170,7 +170,23 @@ int Playable::steerToStayOnPath(){
     // Find the point on the path nearest to prediction
     float distance = distanceFromPointToLine(line_0, line_1, point);
 
-    printf("Distance = %f", distance);
+    // Steer the appropriate direction
+    if(distance > 3.0){
+        glm::vec2 result_steering_CCW = glm::vec2(position.x + sin(rotation.y - turning_speed), 
+                                                  position.z + cos(rotation.y - turning_speed));
+
+        glm::vec2 result_steering_CW  = glm::vec2(position.x + sin(rotation.y + turning_speed),
+                                                  position.z + cos(rotation.y + turning_speed));
+
+        float CCW_distance = distanceFromPointToLine(line_0, line_1, result_steering_CCW);
+        float CW_distance  = distanceFromPointToLine(line_0, line_1, result_steering_CW);
+
+        if(CCW_distance > CW_distance){
+            return -1;
+        } else {
+            return 1;
+        }
+    }
 
     return 0;
 }
@@ -191,16 +207,28 @@ float Playable::distanceFromPointToLine(glm::vec2 line_0, glm::vec2 line_1, glm:
 // The Update Function
 //##################################################################################################
 void Playable::update(Terrain* ground, std::vector<Playable*> *otherUnits){
+
+    // Scan all units, looking for a stuff
+    // Nearest friendly, hurt unit - for healing
+    // Nearest friendly town hall  - resource return
+    // Nearest Enemy unit/struct   - to attack if in engage range
+    // Nearest resource            - to gather
    
     if(atTargetPosition() && order_queue.size() > 0){
 
+        // Get the next order and target from the queue
+        target_order = std::get<0>(order_queue.back());
         setTargetPositionAndDirection(std::get<1>(order_queue.back()));
         order_queue.pop_back();
 
     } else if(!atTargetPosition()){
 
-        position.x += sin(target_direction)*speed;
-        position.z += cos(target_direction)*speed;
+        int path_steer = steerToStayOnPath();
+
+        position.x += sin(rotation.y + (turning_speed * path_steer))*speed;
+        position.z += cos(rotation.y + (turning_speed * path_steer))*speed;
+
+        setRotationEuler(rotation.x, rotation.y + (turning_speed * path_steer), rotation.z);
 
     } else {
 

@@ -67,8 +67,10 @@ private:
 	std::vector<std::tuple<Playable::Order, glm::vec3>> order_queue;
 	std::vector<Playable*> targeted_units;
 
+	// Current Target positions and Orders
 	glm::vec3 target_position;
 	float target_direction;
+	Playable::Order target_order;
 
 	glm::vec3 old_target_position;
 
