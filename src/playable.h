@@ -22,13 +22,13 @@
 class Playable : public Drawable {
 public:
 	// Not a complete list
-	enum class Order{ MOVE, ATTACK, HOLD_POSITION, STOP };
+	enum class Order{ MOVE, MOVE_TARGET, ATTACK, ATTACK_MOVE, ATTACK_TARGET, HOLD_POSITION, STOP };
 	enum class PlayableAttribute{ MASSIVE, ARMORED, ARMY, WORKER, FLYING, INVULNERABLE, MECHANICAL };
 
 	Playable();
 	Playable(Mesh*, GLuint, glm::vec3, GLfloat);
 
-	void update(Terrain *, std::vector<Playable*>);
+	void update(Terrain*, std::vector<Playable*>*);
 	void loadFromXML(std::string filepath);
 
 	void draw();
@@ -38,39 +38,43 @@ public:
 	void tempSelect();
 	void tempDeSelect();
 
-	bool receiveOrder(Playable::Order, glm::vec3, bool);
-	void executeOrder(Playable::Order, glm::vec3);
-
-	bool requestPush(Terrain*, glm::vec3);
-
-	void setMovementTarget(glm::vec3);
+	void receiveOrder(Playable::Order, glm::vec3, bool, std::vector<glm::vec3>, Playable*);
 
 	void holdPosition();
 	void stop();
-
-	bool isMoving();
-	bool canBePushed();
 
 	bool isSelected(){ return selected; }
 	bool isTempSelected(){ return temp_selected; }
 
 	float getRadius(){ return radius; }
 
-	// remove me later
-	void setSpeed(float s) {speed = s;}
 private:
+
+	bool atTargetPosition();
+	void setTargetPositionAndDirection(glm::vec3);
+
+	static float getDistance(float, float, float, float);
+
+	float getCurrentTargetDirection();
+
+	// Steering
+	int steerToStayOnPath();
+	static float distanceFromPointToLine(glm::vec2, glm::vec2, glm::vec2);
+
+	static Playable::Order determineBodyOrder(Playable::Order, bool);
+	static Playable::Order determineLastOrder(Playable::Order, bool);
+
 	void updateUniformData();
 
-	// Movement and interaction variables
-	bool has_been_push_requested;
-	bool holding_position;
-	bool needs_pathing_on_update;
-
 	std::vector<std::tuple<Playable::Order, glm::vec3>> order_queue;
-	std::vector<glm::vec3> internal_order_queue;
+	std::vector<Playable*> targeted_units;
 
-	glm::vec3 move_to_position;
-	float movement_target_direction;
+	// Current Target positions and Orders
+	glm::vec3 target_position;
+	float target_direction;
+	Playable::Order target_order;
+
+	glm::vec3 old_target_position;
 
 	static Doodad* selection_ring;
 
@@ -92,6 +96,7 @@ private:
 
 	int strength;
 
+	int max_health;
 	int health;
 	int healing_rate;
 

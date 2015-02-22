@@ -65,8 +65,8 @@ Level::Level(const char* filename){
         "shaders/doodad.fs");
     float playable_scale = 1.0f;
 
-    for(int i = 0; i < 2; ++i){
-        for(int j = 0; j < 2; ++j){
+    for(int i = 0; i < 1; ++i){
+        for(int j = 0; j < 1; ++j){
             glm::vec3 playable_position = glm::vec3(3.0f*i, 0.0f, 3.0f*j);
             Playable* temp = new Playable(playable_mesh, playable_shader, playable_position, playable_scale);
             temp->loadFromXML("res/units/testunit.xml");
@@ -98,7 +98,7 @@ void Level::draw(){
 
     // update all the units
     for (int i = 0; i < units.size(); ++i){
-       units[i]->update(ground, units);
+       units[i]->update(ground, &units);
     }
 
     // Draw all the drawables
@@ -414,47 +414,86 @@ int Level::getMapWidth(){
     return ground->getWidth();
 }
 
-void Level::issueOrder(Playable::Order order, glm::vec3 location, bool queue){
+void Level::issueOrder(Playable::Order order, glm::vec3 target, bool should_enqueue){
 
-    if(selected_units.size() == 1){
-        selected_units[0]->receiveOrder(order, glm::vec3(location.x, 0.0f, location.z), queue);
-        return;
-    }
+    // even shorter circuit for "not my unit, can't command it".
 
-    // Get centroid of the selected units
-    float x_sum = 0.0f;
-    float z_sum = 0.0f;
+    // short circuit for stop and hold position
+    // No need to path!
 
-    for(int i = 0; i < selected_units.size(); ++i){
-        glm::vec3 unit_pos = selected_units[i]->getPosition();
-        x_sum += unit_pos.x;
-        z_sum += unit_pos.z;
-    }
+    // We need to decide if it's targeting a unit with this command or not
+    Playable* targeted_unit = 0;
 
-    float x_center = x_sum / selected_units.size();
-    float z_center = z_sum / selected_units.size();
+    // Check all the other playables to see if one is the target
+    for(int i = 0; i < units.size(); ++i){
+        glm::vec3 unit_pos = units[i]->getPosition();
+        float click_distance_from_unit = getDistance(unit_pos.x, unit_pos.z, target.x, target.z);
 
-    // find the unit furthest from the centroid
-    // this defines the magic box
-    float max_distance = 0.0f;
-
-    for(int i = 0; i < selected_units.size(); ++i){
-
-        glm::vec3 unit_pos = selected_units[i]->getPosition();
-        float distance = getDistance(unit_pos.x, unit_pos.z, x_center, z_center);
-
-        if(distance > max_distance){
-            max_distance = distance;
+        if(click_distance_from_unit < units[i]->getRadius()){
+            targeted_unit = units[i];
         }
     }
 
-    float click_distance = getDistance(location.x, location.z, x_center, z_center);
+    // If it's only one unit
+    float x_center = selected_units[0]->getPosition().x;
+    float z_center = selected_units[0]->getPosition().z;
+    float smallest_radius = selected_units[0]->getRadius();
+
+    // Make sure if it skips the click distance calculation so that it will not offset
+    float click_distance = -1.0f;
+    float max_distance = 0.0f;
+
+    // If there is more than one unit, setup the magic box
+    if(selected_units.size() > 1){
+        float x_sum = 0.0f;
+        float z_sum = 0.0f;
+
+        for(int i = 0; i < selected_units.size(); ++i){
+            glm::vec3 unit_pos = selected_units[i]->getPosition();
+            x_sum += unit_pos.x;
+            z_sum += unit_pos.z;
+        }
+
+        x_center = x_sum / selected_units.size();
+        z_center = z_sum / selected_units.size();      
+
+        for(int i = 0; i < selected_units.size(); ++i){
+
+            glm::vec3 unit_pos = selected_units[i]->getPosition();
+            float distance = getDistance(unit_pos.x, unit_pos.z, x_center, z_center);
+
+            if(distance > max_distance){
+                max_distance = distance;
+            }
+
+            if(selected_units[i]->getRadius() < smallest_radius){
+                smallest_radius = selected_units[i]->getRadius();
+            }
+        }
+
+        click_distance = getDistance(target.x, target.z, x_center, z_center);
+    }
+
+    // Start logging the pathfinding time
+    float start_time = glfwGetTime();
+
+    // Create the path for all units in the selection
+    std::vector<glm::vec3> path = PathFinder::find_path(ground, 
+                                                        int(x_center), 
+                                                        int(z_center), 
+                                                        int(target.x), 
+                                                        int(target.z), 
+                                                        smallest_radius);
+
+    // End logging and report
+    float delta_time = glfwGetTime() - start_time;
+    Debug::info("Took %.2f seconds to find the path.\n", delta_time);
 
     // Issue the appropriate order
     for(int i = 0; i < selected_units.size(); ++i){
 
-        float x_to_move = location.x;
-        float z_to_move = location.z;
+        float x_to_move = target.x;
+        float z_to_move = target.z;
         glm::vec3 unit_pos = selected_units[i]->getPosition();
 
         if(click_distance > max_distance){
@@ -462,7 +501,7 @@ void Level::issueOrder(Playable::Order order, glm::vec3 location, bool queue){
             z_to_move += (unit_pos.z - z_center);
         }
 
-        selected_units[i]->receiveOrder(order, glm::vec3(x_to_move, 0.0f, z_to_move), queue);
+        selected_units[i]->receiveOrder(order, glm::vec3(x_to_move, 0.0f, z_to_move), should_enqueue, path, targeted_unit);
     }
 }
 

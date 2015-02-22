@@ -19,6 +19,7 @@
 #include "shader_loader.h"
 #include "texture_loader.h"
 #include "playable.h"
+#include "pathfinder.h"
 
 #include "terrain.h"
 
