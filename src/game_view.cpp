@@ -153,6 +153,8 @@ void GameView::update(){
             "%.2f, %.2f, %.2f", position.x, position.y, position.z);
         text_renderer->print(10, 80, "camera rotation <x, y, z>:"
             "%.2f, %.2f, %.2f", rotation.x, rotation.y, rotation.z);
+        text_renderer->print(10, 100, "mouse position <x, y, z>:"
+            "%.2f, %.2f, %.2f", mouse_point.x, mouse_point.y, mouse_point.z);
 
     }
 

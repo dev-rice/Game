@@ -192,15 +192,23 @@ glm::vec3 Level::findScreenPoint(glm::vec3 ray, int steps, float top, float bott
     glm::vec3 line_start = camera->getPosition();
     glm::vec3 plane_normal = glm::vec3(0.0, 1.0, 0.0);
 
+    float top_bound = top;
+    float bottom_bound = top;
+
     for (float height = top; height > bottom; height -= increment){
+        bottom_bound = height;
         glm::vec3 plane_point = glm::vec3(0.0, height, 0.0);
         screen_point = getLinePlaneIntersection(ray, line_start, plane_point, plane_normal);
 
         float terrain_height = ground->getHeightInterpolated(screen_point.x, screen_point.z);
         if (!(abs(screen_point.y - terrain_height) > distance_threshold)){
             break;
+        } else {
+            top_bound = height;
         }
     }
+
+    Debug::info("The screen point is between %.2f and %.2f.\n", bottom_bound, top_bound);
 
     return screen_point;
 }
