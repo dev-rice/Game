@@ -44,6 +44,10 @@ void DebugConsole::draw(){
 
 }
 
+void DebugConsole::clearMessages(){
+    messages.clear();
+}
+
 void DebugConsole::syncWithDebug(){
     // Get all of the messages that debug has in its queue
     while (Debug::hasMessages()){

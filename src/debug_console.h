@@ -12,6 +12,7 @@ public:
     static DebugConsole* getInstance();
 
     void draw();
+    void clearMessages();
 
 private:
     DebugConsole();

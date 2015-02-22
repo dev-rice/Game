@@ -34,7 +34,6 @@
 static const char* MODEL_PATH = "res/models/";
 static const char* TEXTURE_PATH = "res/textures/";
 
-
 class Level{
 public:
     ~Level();
@@ -57,9 +56,10 @@ public:
 
     float getDistance(float, float, float, float);
 
+    glm::vec3 getIntersection(glm::vec3 line, float plane_height);
     glm::vec3 calculateRay(glm::vec2 screen_point);
-    glm::vec3 findScreenPoint(glm::vec3 ray, int steps, float top, float bottom);
-    glm::vec3 findScreenPointInit(glm::vec3 ray, int steps);
+    glm::vec3 findWorldPoint(glm::vec3 ray, int steps, float top, float bottom);
+    glm::vec3 findWorldPointInit(glm::vec3 ray, int steps);
     glm::vec3 calculateWorldPosition(glm::vec2 screen_point);
 
     Camera* getCamera() {return camera;}

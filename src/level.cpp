@@ -162,11 +162,16 @@ void Level::updateGlobalUniforms(){
 
 }
 
-glm::vec3 getLinePlaneIntersection(glm::vec3 line_ray, glm::vec3 line_start, glm::vec3 plane_point, glm::vec3 plane_normal){
+glm::vec3 Level::getIntersection(glm::vec3 line, float height){
+    glm::vec3 line_start = camera->getPosition();
+    glm::vec3 normal = glm::vec3(0.0, 1.0, 0.0);
+    glm::vec3 plane = glm::vec3(0.0, height, 0.0);
+
     // To find the point on the plane of clicking (defined by mouse_plane)
     // From http://en.wikipedia.org/wiki/Line%E2%80%93plane_intersection
-    float d = glm::dot((plane_point - line_start), plane_normal) / glm::dot(line_ray, plane_normal);
-    glm::vec3 intersection = d * line_ray + line_start;
+    float d = glm::dot((plane - line_start), normal) / glm::dot(line, normal);
+    glm::vec3 intersection = d * line + line_start;
+
     return intersection;
 }
 
@@ -179,44 +184,37 @@ glm::vec3 Level::calculateRay(glm::vec2 screen_point){
     return ray;
 }
 
-glm::vec3 Level::findScreenPoint(glm::vec3 ray, int steps, float top, float bottom){
+glm::vec3 Level::findWorldPoint(glm::vec3 ray, int steps, float top, float bottom){
     // Search idea from http://bit.ly/1Jyb6pa
     // can be improved by doing rougher searches into higher precision
     // searches to find a better approximation.
-    glm::vec3 screen_point;
-    int number_of_passes = steps;
+    glm::vec3 world_point;
 
-    float increment = (top - bottom) / (float)number_of_passes;
-    float distance_threshold = increment;
+    float increment = (top - bottom) / (float)steps;
+    float distance_threshold = 2.0 * increment;
 
-    glm::vec3 line_start = camera->getPosition();
-    glm::vec3 plane_normal = glm::vec3(0.0, 1.0, 0.0);
+    Debug::info("Distance threshold: %.4f\n", distance_threshold);
 
-    float top_bound = top;
-    float bottom_bound = top;
+    for (int i = 0; i <= steps; ++i){
+        float height = top - i * increment;
+        world_point = getIntersection(ray, height);
 
-    for (float height = top; height > bottom; height -= increment){
-        bottom_bound = height;
-        glm::vec3 plane_point = glm::vec3(0.0, height, 0.0);
-        screen_point = getLinePlaneIntersection(ray, line_start, plane_point, plane_normal);
+        float terrain_height = ground->getHeightInterpolated(world_point.x, world_point.z);
 
-        float terrain_height = ground->getHeightInterpolated(screen_point.x, screen_point.z);
-        if (!(abs(screen_point.y - terrain_height) > distance_threshold)){
+        float height_error = fabs(world_point.y - terrain_height);
+        // Debug::info("Height error normalized: %.4f\n", height_error);
+        if (height_error < distance_threshold){
             break;
-        } else {
-            top_bound = height;
         }
     }
 
-    Debug::info("The screen point is between %.2f and %.2f.\n", bottom_bound, top_bound);
-
-    return screen_point;
+    return world_point;
 }
 
-glm::vec3 Level::findScreenPointInit(glm::vec3 ray, int steps){
+glm::vec3 Level::findWorldPointInit(glm::vec3 ray, int steps){
     float top = ground->getMaxHeight() + 1.0;
     float bottom = 0;
-    return findScreenPoint(ray, steps, top, bottom);
+    return findWorldPoint(ray, steps, top, bottom);
 }
 
 glm::vec3 Level::calculateWorldPosition(glm::vec2 screen_point){
@@ -229,7 +227,7 @@ glm::vec3 Level::calculateWorldPosition(glm::vec2 screen_point){
     // planes. Do this over and over until the mouse point
     // is valid. This should be O(log(n)) where n is the
     // resolution of the final plane separation.
-    glm::vec3 world_point = findScreenPointInit(ray, 100);
+    glm::vec3 world_point = findWorldPointInit(ray, 100);
 
     return world_point;
 }

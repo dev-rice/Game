@@ -155,6 +155,8 @@ void GameView::update(){
             "%.2f, %.2f, %.2f", rotation.x, rotation.y, rotation.z);
         text_renderer->print(10, 100, "mouse position <x, y, z>:"
             "%.2f, %.2f, %.2f", mouse_point.x, mouse_point.y, mouse_point.z);
+        text_renderer->print(10, 120, "mouse position corrected <x, y, z>:"
+            "%.2f, %.2f, %.2f", mouse_point.x, terrain->getHeightInterpolated(mouse_point.x, mouse_point.z), mouse_point.z);
 
     }
 
@@ -183,7 +185,7 @@ void GameView::handleInputs(){
 
     if (debug_showing){
         Mouse::getInstance()->setCursorSprite(Mouse::cursorType::CURSOR);
-        
+
         // Camera controls for debug mode
         // Movement
         if (glfwGetKey(glfw_window, GLFW_KEY_W) == GLFW_PRESS){
@@ -217,12 +219,6 @@ void GameView::handleInputs(){
         }
         if (glfwGetKey(glfw_window, GLFW_KEY_F) == GLFW_PRESS){
             camera->rotateX(-1);
-        }
-        if (glfwGetKey(glfw_window, GLFW_KEY_Z) == GLFW_PRESS){
-            camera->rotateZ(1);
-        }
-        if (glfwGetKey(glfw_window, GLFW_KEY_C) == GLFW_PRESS){
-            camera->rotateZ(-1);
         }
     } else {
         // Mouse scrolling the screen when not in debug mode
@@ -415,6 +411,10 @@ void GameView::handleInputs(){
     }
     if (glfwGetKey(glfw_window, GLFW_KEY_F8) == GLFW_RELEASE){
         debug_console_key_state = false;
+    }
+
+    if (glfwGetKey(glfw_window, GLFW_KEY_C) == GLFW_PRESS){
+        DebugConsole::getInstance()->clearMessages();
     }
 
     // Handle the menu toggle key
