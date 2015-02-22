@@ -60,7 +60,7 @@ void Playable::updateUniformData(){
 // Order Receiving, Order Helpers, and Simple Orders (Stop, Hold)
 //##################################################################################################
 void Playable::receiveOrder(Playable::Order order, glm::vec3 target, bool should_enqueue, std::vector<glm::vec3> path, Playable* targeted_unit){
-    
+
     bool is_targeting = bool(targeted_unit);
 
     Playable::Order body_order = determineBodyOrder(order, is_targeting);
@@ -85,7 +85,7 @@ void Playable::receiveOrder(Playable::Order order, glm::vec3 target, bool should
 
         // In with the new
         target_position = position;
-        order_queue = temp_order_queue;        
+        order_queue = temp_order_queue;
     }
 
     if(is_targeting){
@@ -200,7 +200,7 @@ int Playable::steerToStayOnPath(){
     float prediction_x = position.x + sin(rotation.y);
     float prediction_z = position.z + cos(rotation.y);
 
-    // Put them in vec2s 
+    // Put them in vec2s
     glm::vec2 line_0 = glm::vec2(old_target_position.x, old_target_position.z);
     glm::vec2 line_1 = glm::vec2(target_position.x, target_position.z);
     glm::vec2 point = glm::vec2(prediction_x, prediction_z);
@@ -210,7 +210,7 @@ int Playable::steerToStayOnPath(){
 
     // Steer the appropriate direction
     if(distance > 2.0){
-        glm::vec2 result_steering_CCW = glm::vec2(position.x + sin(rotation.y - turning_speed), 
+        glm::vec2 result_steering_CCW = glm::vec2(position.x + sin(rotation.y - turning_speed),
                                                   position.z + cos(rotation.y - turning_speed));
 
         glm::vec2 result_steering_CW  = glm::vec2(position.x + sin(rotation.y + turning_speed),
@@ -344,7 +344,7 @@ void Playable::update(Terrain* ground, std::vector<Playable*> *otherUnits){
     //     // Calculate where THIS intends to move
     //     move_to_x = position.x + sin(movement_target_direction)*speed;
     //     move_to_z = position.z + cos(movement_target_direction)*speed;
- 
+
 
     //     // Push around or attack the other units
     //     // Pretty much bully everyone
@@ -383,7 +383,7 @@ void Playable::update(Terrain* ground, std::vector<Playable*> *otherUnits){
     //         }
     //     }
     // }
-    
+
     // if(can_move && isMoving()){
     //     position.x = move_to_x;
     //     position.z = move_to_z;
@@ -418,6 +418,7 @@ void Playable::draw(){
     	// selection_ring->draw();
 
         selection_ring->setPosition(glm::vec3(position.x, position.y + 0.5, position.z));
+        selection_ring->setRotationEuler(glm::vec3(M_PI/2.0f, rotation.y, 0.0));
         selection_ring->draw();
     }
 }
