@@ -105,20 +105,38 @@ bool Mouse::isHovering(){
     return hovering;
 }
 
-glm::vec3 Mouse::getWorldPositionFromPoint(glm::vec2 mouse_point, Camera* camera, glm::mat4& proj, Terrain* terrain){
-    glm::vec3 mouse_ray = getMouseRayFromPoint(mouse_point, camera, proj);
-
+glm::vec3 getLinePlaneIntersection(glm::vec3 line_ray, glm::vec3 line_start, glm::vec3 plane_point, glm::vec3 plane_normal){
     // To find the point on the plane of clicking (defined by mouse_plane)
     // From http://en.wikipedia.org/wiki/Line%E2%80%93plane_intersection
-    glm::vec3 world_mouse_point;
-    for (int i = 0; i < 1; ++i){
-        glm::vec3 p0 = glm::vec3(0.0, 0.1, 0.0);
-        glm::vec3 l = mouse_ray;
-        glm::vec3 l0 = camera->getPosition();
-        glm::vec3 n = glm::vec3(0.0, 1.0, 0.0);
+    float d = glm::dot((plane_point - line_start), plane_normal) / glm::dot(line_ray, plane_normal);
+    glm::vec3 intersection = d * line_ray + line_start;
+    return intersection;
+}
 
-        float d = glm::dot((p0 - l0), n) / glm::dot(l, n);
-        world_mouse_point = d * l + l0;
+glm::vec3 Mouse::getWorldPositionFromPoint(glm::vec2 mouse_point, Camera* camera, glm::mat4& proj, Terrain* terrain){
+    glm::vec3 world_mouse_point;
+
+    glm::vec3 mouse_ray = getMouseRayFromPoint(mouse_point, camera, proj);
+
+    // Search idea from http://bit.ly/1Jyb6pa
+    int number_of_passes = 100;
+    float max_height = terrain->getMaxHeight() + 1.0;
+    float plane_increment = max_height / (float)number_of_passes;
+    float distance_threshold = plane_increment;
+
+    glm::vec3 line_start = camera->getPosition();
+    glm::vec3 plane_normal = glm::vec3(0.0, 1.0, 0.0);
+
+    for (int i = 0; i < number_of_passes; ++i){
+
+        float plane_height = max_height - (i * plane_increment);
+        glm::vec3 plane_point = glm::vec3(0.0, plane_height, 0.0);
+        world_mouse_point = getLinePlaneIntersection(mouse_ray, line_start, plane_point, plane_normal);
+
+        float terrain_height = terrain->getHeightInterpolated(world_mouse_point.x, world_mouse_point.z);
+        if (!(abs(world_mouse_point.y - terrain_height) > distance_threshold)){
+            break;
+        }
     }
 
     return world_mouse_point;

@@ -95,9 +95,9 @@ void main() {
         lights[1].color = vec3(1.0, 0.3, 0.1);
         lights[1].power = 5.0;
 
-        lights[2].position = vec3(mouse_point.x, mouse_point.y + 1.0, mouse_point.z);
+        lights[2].position = vec3(mouse_point.x, mouse_point.y, mouse_point.z);
         lights[2].color = vec3(0.0, 0.4, 1.0);
-        lights[2].power = 10.0;
+        lights[2].power = 20.0;
 
         // The first light is reserved for the directional light
         for (int i = 1; i < num_lights; ++i){

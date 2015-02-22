@@ -156,7 +156,7 @@ void GameView::update(){
 
     }
 
-    mouse_point.y = terrain->getHeightInterpolated(mouse_point.x, mouse_point.z);
+    // mouse_point.y = terrain->getHeightInterpolated(mouse_point.x, mouse_point.z);
 
     glBindBuffer(GL_UNIFORM_BUFFER, mouse_ubo);
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::vec3),

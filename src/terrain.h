@@ -25,6 +25,7 @@ public:
     GLfloat getHeightInterpolated(GLfloat, GLfloat);
     glm::vec3 getNormal(GLfloat, GLfloat);
     float getSteepness(GLfloat, GLfloat);
+    float getMaxHeight(){return max_height;}
 
     void setSplatmap(GLuint splat, char channel);
     void setDiffuse(GLuint diff, int index);
@@ -55,6 +56,7 @@ private:
     int depth;
     int start_x;
     int start_z;
+    float max_height;
 
     GLuint splatmap;
     GLuint diffuse_textures[4];

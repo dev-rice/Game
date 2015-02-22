@@ -18,6 +18,7 @@ Terrain::Terrain(GLuint shader_program, std::string heightmap_filename, float am
     // This is where generate the new mesh and override the one passed in by
     // the constructor. This is to save space in the game files, so we don't have a terrain mesh
 
+    max_height = amplification;
     // After loading in the heightmap to memory, we can make a terrain mesh
     // based on the data
     float start_time = glfwGetTime();
