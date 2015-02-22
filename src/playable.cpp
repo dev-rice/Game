@@ -91,6 +91,12 @@ void Playable::receiveOrder(Playable::Order order, glm::vec3 target, bool should
     if(is_targeting){
         targeted_units.insert(targeted_units.begin(), targeted_unit);
     }
+
+    // First order
+    target_order = std::get<0>(order_queue.back());
+    setTargetPositionAndDirection(std::get<1>(order_queue.back()));
+    setRotationEuler(rotation.x, target_direction, rotation.z);
+    order_queue.pop_back();
 }
 
 Playable::Order Playable::determineBodyOrder(Playable::Order order, bool is_targeting){
@@ -132,12 +138,17 @@ void Playable::stop(){
 // Location Helper and Maintenance functions
 //##################################################################################################
 bool Playable::atTargetPosition(){
-    return getDistance(position.x, position.z, target_position.x, target_position.z) < 0.001;
+    if(order_queue.size() == 0){
+        // We're at the last position
+        return getDistance(position.x, position.z, target_position.x, target_position.z) < 0.1;
+    } else {
+        return getDistance(position.x, position.z, target_position.x, target_position.z) < 4.0f;
+    }
 }
 
 float Playable::getDistance(float a1, float a2, float b1, float b2){
-    float x_diff = abs(a1 - b1);
-    float z_diff = abs(a2 - b2);
+    float x_diff = fabs(a1 - b1);
+    float z_diff = fabs(a2 - b2);
     return sqrt(x_diff*x_diff + z_diff*z_diff);
 }
 
@@ -145,18 +156,45 @@ void Playable::setTargetPositionAndDirection(glm::vec3 target){
     old_target_position = target_position;
     target_position = target;
 
+    target_direction = getCurrentTargetDirection();
+}
+
+float Playable::getCurrentTargetDirection(){
     float x_delta = target_position.x - position.x;
     float z_delta = target_position.z - position.z;
-    target_direction = atan2(x_delta, z_delta);
+    return atan2(x_delta, z_delta);
 }
 
 //##################################################################################################
-// Steering Helper Functions
+// Steering and Helper Functions
 //##################################################################################################
 int Playable::steerToStayOnPath(){
     // -1 means CCW
     //  0 means none
     //  1 means CW
+
+    // Short-circuit for the last target, we want to move precisely to it.
+    if(order_queue.size() == 0){
+
+        // Set the target position and (more importantly) the current target direction
+        float current_target_direction = getCurrentTargetDirection();
+
+        // http://stackoverflow.com/questions/1878907/the-smallest-difference-between-2-angles
+        float angle_delta = atan2(sin(current_target_direction-rotation.y), cos(current_target_direction-rotation.y));
+
+        // Needs to rotate to face the movement direction
+        if(fabs(angle_delta) > 0.1){
+
+            if(angle_delta < 0){
+
+                return -1;
+            }
+
+            return 1;
+        }
+
+        return 0;
+    }
 
     // Predict future point           * Scaling the amount of prediction would go here
     float prediction_x = position.x + sin(rotation.y);
@@ -171,7 +209,7 @@ int Playable::steerToStayOnPath(){
     float distance = distanceFromPointToLine(line_0, line_1, point);
 
     // Steer the appropriate direction
-    if(distance > 3.0){
+    if(distance > 2.0){
         glm::vec2 result_steering_CCW = glm::vec2(position.x + sin(rotation.y - turning_speed), 
                                                   position.z + cos(rotation.y - turning_speed));
 
@@ -182,9 +220,9 @@ int Playable::steerToStayOnPath(){
         float CW_distance  = distanceFromPointToLine(line_0, line_1, result_steering_CW);
 
         if(CCW_distance > CW_distance){
-            return -1;
-        } else {
             return 1;
+        } else {
+            return -1;
         }
     }
 
@@ -213,7 +251,7 @@ void Playable::update(Terrain* ground, std::vector<Playable*> *otherUnits){
     // Nearest friendly town hall  - resource return
     // Nearest Enemy unit/struct   - to attack if in engage range
     // Nearest resource            - to gather
-   
+
     if(atTargetPosition() && order_queue.size() > 0){
 
         // Get the next order and target from the queue

@@ -55,6 +55,8 @@ private:
 
 	static float getDistance(float, float, float, float);
 
+	float getCurrentTargetDirection();
+
 	// Steering
 	int steerToStayOnPath();
 	static float distanceFromPointToLine(glm::vec2, glm::vec2, glm::vec2);
