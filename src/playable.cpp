@@ -15,6 +15,8 @@ Doodad* Playable::selection_ring;
 #define TURN_CCW -1
 #define TURN_NONE 0
 
+#define PATH_WIDTH 2.0f
+
 //##################################################################################################
 // Setup
 //##################################################################################################
@@ -85,7 +87,7 @@ void Playable::receiveOrder(Playable::Order order, glm::vec3 target, bool should
     temp_order_queue.insert(temp_order_queue.begin(), std::make_tuple(last_order, target));
 
     if(should_enqueue){
-
+        // This is be fuckity
         order_queue.insert(order_queue.end(), temp_order_queue.begin(), temp_order_queue.end());
 
     } else {
@@ -215,7 +217,7 @@ int Playable::steerToStayOnPath(){
     float distance = distanceFromPointToLine(line_0, line_1, point);
 
     // Steer the appropriate direction
-    if(distance > 2.0){
+    if(distance > PATH_WIDTH){
         glm::vec2 result_steering_CCW = glm::vec2(position.x + sin(rotation.y - turning_speed),
                                                   position.z + cos(rotation.y - turning_speed));
 
@@ -415,14 +417,10 @@ void Playable::update(Terrain* ground, std::vector<Playable*> *otherUnits){
 }
 
 void Playable::draw(){
-    // Make the base drawable call before
-    // Drawing things specific to playable
+
     Drawable::draw();
 
     if(selected || temp_selected ){
-     //    selection_ring->setPosition(glm::vec3(move_to_position.x, position.y + 0.5, move_to_position.z));
-    	// selection_ring->draw();
-
         selection_ring->setPosition(glm::vec3(position.x, position.y + 0.5, position.z));
         selection_ring->setRotationEuler(glm::vec3(M_PI/2.0f, rotation.y, 0.0));
         selection_ring->draw();
