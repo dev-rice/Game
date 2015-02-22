@@ -374,7 +374,7 @@ void Terrain::bindTextures(){
     glBindTexture(GL_TEXTURE_2D, normal);
 
     glActiveTexture(GL_TEXTURE5);
-    glBindTexture(GL_TEXTURE_2D, splatmaps[0]);
+    glBindTexture(GL_TEXTURE_2D, splatmap);
 
     glActiveTexture(GL_TEXTURE10);
     glBindTexture(GL_TEXTURE_2D, diffuse_textures[0]);
@@ -402,6 +402,10 @@ void Terrain::setTextureLocations(){
     glUniform1i(glGetUniformLocation(shader_program, "diffuse_texture4"), 13);
 
 
+}
+
+void Terrain::setSplatmap(GLuint splat, char channel){
+    splatmap = splat;
 }
 
 void Terrain::setDiffuse(GLuint diff, int index) {

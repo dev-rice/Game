@@ -26,7 +26,7 @@ public:
     glm::vec3 getNormal(GLfloat, GLfloat);
     float getSteepness(GLfloat, GLfloat);
 
-    void setSplatmap(GLuint splat, int index) {splatmaps[index] = splat;}
+    void setSplatmap(GLuint splat, char channel);
     void setDiffuse(GLuint diff, int index);
 
     void printPathing();
@@ -56,7 +56,7 @@ private:
     int start_x;
     int start_z;
 
-    GLuint splatmaps[3];
+    GLuint splatmap;
     GLuint diffuse_textures[4];
 
 

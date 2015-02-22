@@ -306,7 +306,7 @@ void Level::loadLevel(const char* filename){
             } else {
                 GLuint splatmap = TextureLoader::loadTextureFromFile(splatmap_filename, GL_LINEAR);
                 ground->setDiffuse(diffuse, texture_number);
-                ground->setSplatmap(splatmap, texture_number - 1);
+                ground->setSplatmap(splatmap, splatmap_channel);
             }
         }
 
