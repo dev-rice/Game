@@ -5,6 +5,16 @@
 
 Doodad* Playable::selection_ring;
 
+// Magical numbers
+#define AT_TARGET_PATH_RADIUS 0.1f
+#define AT_TARGET_LAST_RADIUS 4.0f
+
+#define ANGLE_PRECISION 0.1f
+
+#define TURN_CW 1
+#define TURN_CCW -1
+#define TURN_NONE 0
+
 //##################################################################################################
 // Setup
 //##################################################################################################
@@ -140,9 +150,9 @@ void Playable::stop(){
 bool Playable::atTargetPosition(){
     if(order_queue.size() == 0){
         // We're at the last position
-        return getDistance(position.x, position.z, target_position.x, target_position.z) < 0.1;
+        return getDistance(position.x, position.z, target_position.x, target_position.z) < AT_TARGET_PATH_RADIUS;
     } else {
-        return getDistance(position.x, position.z, target_position.x, target_position.z) < 4.0f;
+        return getDistance(position.x, position.z, target_position.x, target_position.z) < AT_TARGET_LAST_RADIUS;
     }
 }
 
@@ -183,17 +193,13 @@ int Playable::steerToStayOnPath(){
         float angle_delta = atan2(sin(current_target_direction-rotation.y), cos(current_target_direction-rotation.y));
 
         // Needs to rotate to face the movement direction
-        if(fabs(angle_delta) > 0.1){
-
+        if(fabs(angle_delta) > ANGLE_PRECISION){
             if(angle_delta < 0){
-
-                return -1;
+                return TURN_CCW;
             }
-
-            return 1;
+            return TURN_CW;
         }
-
-        return 0;
+        return TURN_NONE;
     }
 
     // Predict future point           * Scaling the amount of prediction would go here
@@ -220,13 +226,13 @@ int Playable::steerToStayOnPath(){
         float CW_distance  = distanceFromPointToLine(line_0, line_1, result_steering_CW);
 
         if(CCW_distance > CW_distance){
-            return 1;
+            return TURN_CW;
         } else {
-            return -1;
+            return TURN_CCW;
         }
     }
 
-    return 0;
+    return TURN_NONE;
 }
 
 float Playable::distanceFromPointToLine(glm::vec2 line_0, glm::vec2 line_1, glm::vec2 point){
