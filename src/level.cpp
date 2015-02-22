@@ -186,8 +186,6 @@ glm::vec3 Level::calculateRay(glm::vec2 screen_point){
 
 std::tuple<float, float, glm::vec3> Level::findWorldPoint(glm::vec3 ray, int steps, float bottom, float top){
     // Search idea from http://bit.ly/1Jyb6pa
-    // can be improved by doing rougher searches into higher precision
-    // searches to find a better approximation.
     glm::vec3 world_point;
 
     float height = top;
@@ -214,6 +212,13 @@ std::tuple<float, float, glm::vec3> Level::findWorldPoint(glm::vec3 ray, int ste
 }
 
 glm::vec3 Level::findWorldPointInit(glm::vec3 ray, int steps){
+    // Ideal mouse point search algorithm
+    // Do a low resolution pass of the planes and find
+    // which planes the point is between. Then repeat
+    // the process but this time only between those two
+    // planes. Do this over and over until the mouse point
+    // is valid.
+
     float top = ground->getMaxHeight() + 1.0;
     float bottom = 0;
     glm::vec3 world_point;
@@ -226,22 +231,12 @@ glm::vec3 Level::findWorldPointInit(glm::vec3 ray, int steps){
         world_point = std::get<2>(bounds);
     }
 
-    // Debug::info("The point is in between %.4f and %.4f.\n", bottom, top);
-
     return world_point;
 
 }
 
 glm::vec3 Level::calculateWorldPosition(glm::vec2 screen_point){
     glm::vec3 ray = calculateRay(screen_point);
-
-    // Ideal mouse point search algorithm
-    // Do a low resolution pass of the planes and find
-    // which planes the point is between. Then repeat
-    // the process but this time only between those two
-    // planes. Do this over and over until the mouse point
-    // is valid. This should be O(log(n)) where n is the
-    // resolution of the final plane separation.
     glm::vec3 world_point = findWorldPointInit(ray, 100);
 
     return world_point;
