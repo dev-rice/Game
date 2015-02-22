@@ -193,7 +193,7 @@ glm::vec3 Level::findWorldPoint(glm::vec3 ray, int steps, float top, float botto
     float increment = (top - bottom) / (float)steps;
     float distance_threshold = 2.0 * increment;
 
-    Debug::info("Distance threshold: %.4f\n", distance_threshold);
+    // Debug::info("Distance threshold: %.4f\n", distance_threshold);
 
     for (int i = 0; i <= steps; ++i){
         float height = top - i * increment;
