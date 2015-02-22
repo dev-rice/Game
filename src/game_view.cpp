@@ -182,6 +182,8 @@ void GameView::handleInputs(){
     glm::vec2 gl_mouse_position = Mouse::getInstance()->getGLPosition();
 
     if (debug_showing){
+        Mouse::getInstance()->setCursorSprite(Mouse::cursorType::CURSOR);
+        
         // Camera controls for debug mode
         // Movement
         if (glfwGetKey(glfw_window, GLFW_KEY_W) == GLFW_PRESS){
