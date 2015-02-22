@@ -106,11 +106,15 @@ void GameView::update(){
     menu->draw();
     graphics_menu->draw();
 
-    // draw selection rectangle here and change the cursor based on amount of dragging
+    // Calculating the mouse vector
     Camera* camera = level->getCamera();
     glm::mat4 proj_matrix = level->getProjection();
-    glm::vec3 init = Mouse::getInstance()->getWorldPositionFromPoint(initial_left_click_position, camera, proj_matrix);
-    glm::vec3 fina = Mouse::getInstance()->getWorldPositionFromPoint(final_left_click_position, camera, proj_matrix);
+    Terrain* terrain = level->getTerrain();
+    glm::vec3 mouse_point = Mouse::getInstance()->getWorldPosition(camera, proj_matrix, terrain);
+
+    // draw selection rectangle here and change the cursor based on amount of dragging
+    glm::vec3 init = Mouse::getInstance()->getWorldPositionFromPoint(initial_left_click_position, camera, proj_matrix, terrain);
+    glm::vec3 fina = Mouse::getInstance()->getWorldPositionFromPoint(final_left_click_position, camera, proj_matrix, terrain);
 
     bool dragged_x = fabs(initial_left_click_position.x - final_left_click_position.x) > 0.05;
     bool dragged_y = fabs(initial_left_click_position.y - final_left_click_position.y) > 0.05;
@@ -129,7 +133,7 @@ void GameView::update(){
         level->selectUnits(init, fina);
 
     } else if(left_mouse_button_unclick && !Mouse::getInstance()->isHovering()){
-        level->selectUnit(Mouse::getInstance()->getWorldPosition(camera, proj_matrix));
+        level->selectUnit(Mouse::getInstance()->getWorldPosition(camera, proj_matrix, terrain));
     }
 
     // Draw the debug information
@@ -143,7 +147,7 @@ void GameView::update(){
 
         text_renderer->print(10, 20, "fps: %.2f",
             1.0 / frame_time);
-        text_renderer->print(10, 40, "average frame time: %.5f s",
+        text_renderer->print(10, 40, "average frame time: %.7f s",
             average_frame_time);
         text_renderer->print(10, 60, "camera position <x, y, z>:"
             "%.2f, %.2f, %.2f", position.x, position.y, position.z);
@@ -152,11 +156,6 @@ void GameView::update(){
 
     }
 
-    // Calculating the mouse vector
-    glm::vec3 mouse_point = Mouse::getInstance()->getWorldPosition(camera,
-        proj_matrix);
-
-    Terrain* terrain = level->getTerrain();
     mouse_point.y = terrain->getHeightInterpolated(mouse_point.x, mouse_point.z);
 
     glBindBuffer(GL_UNIFORM_BUFFER, mouse_ubo);
@@ -174,6 +173,7 @@ void GameView::update(){
 void GameView::handleInputs(){
     Camera* camera = level->getCamera();
     glm::mat4 proj_matrix = level->getProjection();
+    Terrain* terrain = level->getTerrain();
 
     glfwPollEvents();
 
@@ -313,7 +313,7 @@ void GameView::handleInputs(){
         if(attack_command_prime){
 
             attack_command_prime = false;
-            level->issueOrder(Playable::Order::ATTACK, Mouse::getInstance()->getWorldPosition(camera, proj_matrix), shift_pressed);
+            level->issueOrder(Playable::Order::ATTACK, Mouse::getInstance()->getWorldPosition(camera, proj_matrix, terrain), shift_pressed);
             mouse_count = -1;
             left_mouse_button_unclick = true;
 
@@ -335,7 +335,7 @@ void GameView::handleInputs(){
     if(glfwGetMouseButton(glfw_window, GLFW_MOUSE_BUTTON_MIDDLE)){
         // Middle mouse button
         if(!middle_mouse_button_click){
-            level->issueOrder(Playable::Order::ATTACK, Mouse::getInstance()->getWorldPosition(camera, proj_matrix), shift_pressed);
+            level->issueOrder(Playable::Order::ATTACK, Mouse::getInstance()->getWorldPosition(camera, proj_matrix, terrain), shift_pressed);
         }
 
         attack_command_prime = false;
@@ -355,7 +355,7 @@ void GameView::handleInputs(){
         // Right mouse button
         if(!right_mouse_button_click){
 
-            level->issueOrder(Playable::Order::MOVE, Mouse::getInstance()->getWorldPosition(camera, proj_matrix), shift_pressed);
+            level->issueOrder(Playable::Order::MOVE, Mouse::getInstance()->getWorldPosition(camera, proj_matrix, terrain), shift_pressed);
         }
 
         attack_command_prime = false;
@@ -369,14 +369,14 @@ void GameView::handleInputs(){
     // Hold-Action Key Handling
     //##############################################################################
     if (glfwGetKey(glfw_window, GLFW_KEY_H) == GLFW_PRESS){
-        level->issueOrder(Playable::Order::HOLD_POSITION, Mouse::getInstance()->getWorldPosition(camera, proj_matrix), shift_pressed);
+        level->issueOrder(Playable::Order::HOLD_POSITION, Mouse::getInstance()->getWorldPosition(camera, proj_matrix, terrain), shift_pressed);
     }
 
     //##############################################################################
     // Stop-Action Key Handling
     //##############################################################################
     if (glfwGetKey(glfw_window, GLFW_KEY_S) == GLFW_PRESS){
-        level->issueOrder(Playable::Order::STOP, Mouse::getInstance()->getWorldPosition(camera, proj_matrix), shift_pressed);
+        level->issueOrder(Playable::Order::STOP, Mouse::getInstance()->getWorldPosition(camera, proj_matrix, terrain), shift_pressed);
     }
 
     //##############################################################################

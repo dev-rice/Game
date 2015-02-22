@@ -105,33 +105,38 @@ bool Mouse::isHovering(){
     return hovering;
 }
 
-// GO AWAY
-glm::vec3 Mouse::getWorldPositionFromPoint(glm::vec2 screen_point, Camera* camera, glm::mat4& proj){
-    glm::mat4 view = camera->getViewMatrix();
-
-    glm::vec2 gl_mouse = screen_point;
-    glm::vec3 world_mouse = glm::vec3(glm::inverse(proj) *
-        glm::vec4(gl_mouse, -1.0, 1.0));
-    world_mouse.z = -1.0;
-    world_mouse = glm::vec3(glm::inverse(view) *
-        glm::vec4(world_mouse, 0.0));
-    world_mouse = glm::normalize(world_mouse);
+glm::vec3 Mouse::getWorldPositionFromPoint(glm::vec2 mouse_point, Camera* camera, glm::mat4& proj, Terrain* terrain){
+    glm::vec3 mouse_ray = getMouseRayFromPoint(mouse_point, camera, proj);
 
     // To find the point on the plane of clicking (defined by mouse_plane)
     // From http://en.wikipedia.org/wiki/Line%E2%80%93plane_intersection
-    glm::vec3 p0 = glm::vec3(0.0, 0.1, 0.0);
-    glm::vec3 l = world_mouse;
-    glm::vec3 l0 = camera->getPosition();
-    glm::vec3 n = glm::vec3(0.0, 1.0, 0.0);
+    glm::vec3 world_mouse_point;
+    for (int i = 0; i < 1; ++i){
+        glm::vec3 p0 = glm::vec3(0.0, 0.1, 0.0);
+        glm::vec3 l = mouse_ray;
+        glm::vec3 l0 = camera->getPosition();
+        glm::vec3 n = glm::vec3(0.0, 1.0, 0.0);
 
-    float d = glm::dot((p0 - l0), n) / glm::dot(l, n);
+        float d = glm::dot((p0 - l0), n) / glm::dot(l, n);
+        world_mouse_point = d * l + l0;
+    }
 
-    glm::vec3 mouse_point = d * l + l0;
-
-    return mouse_point;
+    return world_mouse_point;
 }
 
-glm::vec3 Mouse::getWorldPosition(Camera* camera, glm::mat4& proj){
-    return getWorldPositionFromPoint(Mouse::getInstance()->getGLPosition(),
-        camera, proj);
+glm::vec3 Mouse::getMouseRayFromPoint(glm::vec2 mouse_point, Camera* camera, glm::mat4& proj){
+    glm::mat4 view = camera->getViewMatrix();
+    glm::vec2 gl_mouse = mouse_point;
+    glm::vec3 mouse_ray = glm::vec3(glm::inverse(proj) *
+        glm::vec4(gl_mouse, -1.0, 1.0));
+    mouse_ray.z = -1.0;
+    mouse_ray = glm::vec3(glm::inverse(view) *
+        glm::vec4(mouse_ray, 0.0));
+    mouse_ray = glm::normalize(mouse_ray);
+    return mouse_ray;
+}
+
+glm::vec3 Mouse::getWorldPosition(Camera* camera, glm::mat4& proj, Terrain* terrain){
+    glm::vec2 mouse_coords = getGLPosition();
+    return getWorldPositionFromPoint(mouse_coords, camera, proj, terrain);
 }
