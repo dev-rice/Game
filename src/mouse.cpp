@@ -119,6 +119,8 @@ glm::vec3 Mouse::getWorldPositionFromPoint(glm::vec2 mouse_point, Camera* camera
     glm::vec3 mouse_ray = getMouseRayFromPoint(mouse_point, camera, proj);
 
     // Search idea from http://bit.ly/1Jyb6pa
+    // can be improved by doing rougher searches into higher precision
+    // searches to find a better approximation.
     int number_of_passes = 100;
     float max_height = terrain->getMaxHeight() + 1.0;
     float plane_increment = max_height / (float)number_of_passes;
