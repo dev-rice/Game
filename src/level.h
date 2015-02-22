@@ -58,7 +58,8 @@ public:
     float getDistance(float, float, float, float);
 
     glm::vec3 calculateRay(glm::vec2 screen_point);
-    glm::vec3 findMousePoint(glm::vec3 mouse_ray, int steps);
+    glm::vec3 findScreenPoint(glm::vec3 ray, int steps, float top, float bottom);
+    glm::vec3 findScreenPointInit(glm::vec3 ray, int steps);
     glm::vec3 calculateWorldPosition(glm::vec2 screen_point);
 
     Camera* getCamera() {return camera;}
