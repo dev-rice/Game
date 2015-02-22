@@ -162,6 +162,69 @@ void Level::updateGlobalUniforms(){
 
 }
 
+glm::vec3 getLinePlaneIntersection(glm::vec3 line_ray, glm::vec3 line_start, glm::vec3 plane_point, glm::vec3 plane_normal){
+    // To find the point on the plane of clicking (defined by mouse_plane)
+    // From http://en.wikipedia.org/wiki/Line%E2%80%93plane_intersection
+    float d = glm::dot((plane_point - line_start), plane_normal) / glm::dot(line_ray, plane_normal);
+    glm::vec3 intersection = d * line_ray + line_start;
+    return intersection;
+}
+
+glm::vec3 Level::calculateRay(glm::vec2 screen_point){
+    glm::mat4 view = camera->getViewMatrix();
+    glm::vec2 gl_mouse = screen_point;
+    glm::vec3 mouse_ray = glm::vec3(glm::inverse(proj_matrix) *
+        glm::vec4(gl_mouse, -1.0, 1.0));
+    mouse_ray.z = -1.0;
+    mouse_ray = glm::vec3(glm::inverse(view) *
+        glm::vec4(mouse_ray, 0.0));
+    mouse_ray = glm::normalize(mouse_ray);
+    return mouse_ray;
+}
+
+glm::vec3 Level::findMousePoint(glm::vec3 mouse_ray, int steps){
+    // Search idea from http://bit.ly/1Jyb6pa
+    // can be improved by doing rougher searches into higher precision
+    // searches to find a better approximation.
+    glm::vec3 screen_point;
+    int number_of_passes = steps;
+    float max_height = ground->getMaxHeight() + 1.0;
+    float plane_increment = max_height / (float)number_of_passes;
+    float distance_threshold = plane_increment;
+
+    glm::vec3 line_start = camera->getPosition();
+    glm::vec3 plane_normal = glm::vec3(0.0, 1.0, 0.0);
+
+    for (int i = 0; i < number_of_passes; ++i){
+
+        float plane_height = max_height - (i * plane_increment);
+        glm::vec3 plane_point = glm::vec3(0.0, plane_height, 0.0);
+        screen_point = getLinePlaneIntersection(mouse_ray, line_start, plane_point, plane_normal);
+
+        float terrain_height = ground->getHeightInterpolated(screen_point.x, screen_point.z);
+        if (!(abs(screen_point.y - terrain_height) > distance_threshold)){
+            break;
+        }
+    }
+
+    return screen_point;
+}
+
+glm::vec3 Level::calculateWorldPosition(glm::vec2 screen_point){
+    glm::vec3 mouse_ray = calculateRay(screen_point);
+
+    // Ideal mouse point search algorithm
+    // Do a low resolution pass of the planes and find
+    // which planes the point is between. Then repeat
+    // the process but this time only between those two
+    // planes. Do this over and over until the mouse point
+    // is valid. This should be O(log(n)) where n is the
+    // resolution of the final plane separation.
+    glm::vec3 world_point = findMousePoint(mouse_ray, 100);
+
+    return world_point;
+}
+
 void Level::loadLevel(const char* filename){
 
     char buffer[128];

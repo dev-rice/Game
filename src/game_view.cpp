@@ -110,11 +110,11 @@ void GameView::update(){
     Camera* camera = level->getCamera();
     glm::mat4 proj_matrix = level->getProjection();
     Terrain* terrain = level->getTerrain();
-    glm::vec3 mouse_point = Mouse::getInstance()->getWorldPosition(camera, proj_matrix, terrain);
+    glm::vec3 mouse_point = level->calculateWorldPosition(Mouse::getInstance()->getGLPosition());
 
     // draw selection rectangle here and change the cursor based on amount of dragging
-    glm::vec3 init = Mouse::getInstance()->getWorldPositionFromPoint(initial_left_click_position, camera, proj_matrix, terrain);
-    glm::vec3 fina = Mouse::getInstance()->getWorldPositionFromPoint(final_left_click_position, camera, proj_matrix, terrain);
+    glm::vec3 init = level->calculateWorldPosition(initial_left_click_position);
+    glm::vec3 fina = level->calculateWorldPosition(final_left_click_position);
 
     bool dragged_x = fabs(initial_left_click_position.x - final_left_click_position.x) > 0.05;
     bool dragged_y = fabs(initial_left_click_position.y - final_left_click_position.y) > 0.05;
@@ -133,7 +133,7 @@ void GameView::update(){
         level->selectUnits(init, fina);
 
     } else if(left_mouse_button_unclick && !Mouse::getInstance()->isHovering()){
-        level->selectUnit(Mouse::getInstance()->getWorldPosition(camera, proj_matrix, terrain));
+        level->selectUnit(level->calculateWorldPosition(Mouse::getInstance()->getGLPosition()));
     }
 
     // Draw the debug information
@@ -313,7 +313,7 @@ void GameView::handleInputs(){
         if(attack_command_prime){
 
             attack_command_prime = false;
-            level->issueOrder(Playable::Order::ATTACK, Mouse::getInstance()->getWorldPosition(camera, proj_matrix, terrain), shift_pressed);
+            level->issueOrder(Playable::Order::ATTACK, level->calculateWorldPosition(Mouse::getInstance()->getGLPosition()), shift_pressed);
             mouse_count = -1;
             left_mouse_button_unclick = true;
 
@@ -335,7 +335,7 @@ void GameView::handleInputs(){
     if(glfwGetMouseButton(glfw_window, GLFW_MOUSE_BUTTON_MIDDLE)){
         // Middle mouse button
         if(!middle_mouse_button_click){
-            level->issueOrder(Playable::Order::ATTACK, Mouse::getInstance()->getWorldPosition(camera, proj_matrix, terrain), shift_pressed);
+            level->issueOrder(Playable::Order::ATTACK, level->calculateWorldPosition(Mouse::getInstance()->getGLPosition()), shift_pressed);
         }
 
         attack_command_prime = false;
@@ -355,7 +355,7 @@ void GameView::handleInputs(){
         // Right mouse button
         if(!right_mouse_button_click){
 
-            level->issueOrder(Playable::Order::MOVE, Mouse::getInstance()->getWorldPosition(camera, proj_matrix, terrain), shift_pressed);
+            level->issueOrder(Playable::Order::MOVE, level->calculateWorldPosition(Mouse::getInstance()->getGLPosition()), shift_pressed);
         }
 
         attack_command_prime = false;
@@ -369,14 +369,14 @@ void GameView::handleInputs(){
     // Hold-Action Key Handling
     //##############################################################################
     if (glfwGetKey(glfw_window, GLFW_KEY_H) == GLFW_PRESS){
-        level->issueOrder(Playable::Order::HOLD_POSITION, Mouse::getInstance()->getWorldPosition(camera, proj_matrix, terrain), shift_pressed);
+        level->issueOrder(Playable::Order::HOLD_POSITION, level->calculateWorldPosition(Mouse::getInstance()->getGLPosition()), shift_pressed);
     }
 
     //##############################################################################
     // Stop-Action Key Handling
     //##############################################################################
     if (glfwGetKey(glfw_window, GLFW_KEY_S) == GLFW_PRESS){
-        level->issueOrder(Playable::Order::STOP, Mouse::getInstance()->getWorldPosition(camera, proj_matrix, terrain), shift_pressed);
+        level->issueOrder(Playable::Order::STOP, level->calculateWorldPosition(Mouse::getInstance()->getGLPosition()), shift_pressed);
     }
 
     //##############################################################################

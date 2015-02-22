@@ -31,8 +31,6 @@
 #include "window.h"
 #include "profile.h"
 
-#include "mouse.h"
-
 static const char* MODEL_PATH = "res/models/";
 static const char* TEXTURE_PATH = "res/textures/";
 
@@ -58,6 +56,10 @@ public:
     void tempSelectUnits(glm::vec3, glm::vec3);
 
     float getDistance(float, float, float, float);
+
+    glm::vec3 calculateRay(glm::vec2 screen_point);
+    glm::vec3 findMousePoint(glm::vec3 mouse_ray, int steps);
+    glm::vec3 calculateWorldPosition(glm::vec2 screen_point);
 
     Camera* getCamera() {return camera;}
     Shadowbuffer* getShadowbuffer(){return shadowbuffer;}
