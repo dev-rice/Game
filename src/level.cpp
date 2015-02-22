@@ -184,37 +184,52 @@ glm::vec3 Level::calculateRay(glm::vec2 screen_point){
     return ray;
 }
 
-glm::vec3 Level::findWorldPoint(glm::vec3 ray, int steps, float top, float bottom){
+std::tuple<float, float, glm::vec3> Level::findWorldPoint(glm::vec3 ray, int steps, float bottom, float top){
     // Search idea from http://bit.ly/1Jyb6pa
     // can be improved by doing rougher searches into higher precision
     // searches to find a better approximation.
     glm::vec3 world_point;
 
+    float height = top;
     float increment = (top - bottom) / (float)steps;
-    float distance_threshold = 2.0 * increment;
 
-    // Debug::info("Distance threshold: %.4f\n", distance_threshold);
-
+    float bottom_bound = bottom;
+    float top_bound = top;
     for (int i = 0; i <= steps; ++i){
-        float height = top - i * increment;
+        top_bound = height;
+        height = top - i * increment;
         world_point = getIntersection(ray, height);
 
         float terrain_height = ground->getHeightInterpolated(world_point.x, world_point.z);
 
-        float height_error = fabs(world_point.y - terrain_height);
-        // Debug::info("Height error normalized: %.4f\n", height_error);
-        if (height_error < distance_threshold){
+        if (height > terrain_height){
+            top_bound = height;
+        } else if (height < terrain_height){
+            bottom_bound = height;
             break;
         }
     }
 
-    return world_point;
+    return std::make_tuple(bottom_bound, top_bound, world_point);
 }
 
 glm::vec3 Level::findWorldPointInit(glm::vec3 ray, int steps){
     float top = ground->getMaxHeight() + 1.0;
     float bottom = 0;
-    return findWorldPoint(ray, steps, top, bottom);
+    glm::vec3 world_point;
+
+    std::tuple<float,float, glm::vec3> bounds;
+    for (int i = 0; i < 10; ++i){
+        bounds = findWorldPoint(ray, steps, bottom, top);
+        bottom = std::get<0>(bounds);
+        top = std::get<1>(bounds);
+        world_point = std::get<2>(bounds);
+    }
+
+    // Debug::info("The point is in between %.4f and %.4f.\n", bottom, top);
+
+    return world_point;
+
 }
 
 glm::vec3 Level::calculateWorldPosition(glm::vec2 screen_point){
