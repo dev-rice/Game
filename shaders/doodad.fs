@@ -193,7 +193,7 @@ void main() {
         lit_component = lit_component +
         lightFragment(light.light_to_surface, light.color, light.power);
 
-        vec4 ambient_component = vec4(0.1, 0.1, 0.1, 1.0) * diffuse;
+        vec4 ambient_component = vec4(0.05, 0.05, 0.05, 1.0) * diffuse;
         vec4 emissive_component = vec4(emissive.rgb, 1.0);
         texel = mix(lit_component + ambient_component, emissive_component,
             emissive.a);
