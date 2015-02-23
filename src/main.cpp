@@ -28,8 +28,20 @@
 #include "window.h"
 #include "mesh_loader.h"
 
+// Called whenever glfw has an internal error
 void error_callback(int error, const char* description){
     Debug::error("GLFW Error %d: %s\n", error, description);
+}
+
+// Called whenever a key is pressed or released
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode){
+    Debug::info("action=%d, key=%d\n", action, key);
+
+}
+
+// Called whenever
+void character_callback(GLFWwindow* window, unsigned int codepoint){
+    Debug::info("You pressed %u\n", codepoint);
 }
 
 int main(int argc, char* argv[]) {
@@ -130,6 +142,9 @@ int main(int argc, char* argv[]) {
 
     window->setVsync(vsync);
     window->setFxaaLevel(fxaa_level);
+
+    glfwSetKeyCallback(window->getGLFWWindow(), key_callback);
+    glfwSetCharCallback(window->getGLFWWindow(), character_callback);
 
     // Create the world
     World* world;

@@ -33,8 +33,6 @@ void Window::takeScreenshot(){
 
     std::string filename = "screenshot_" + std::string(buf) + ".bmp";
 
-    Debug::info("Attempting to save screenshot %s.\n", filename.c_str());
-
     // Create the unsigned byte array of size components * width * height
     // In this case components is 3 because we are saving the RGB components
     int components = 4;
@@ -50,16 +48,25 @@ void Window::takeScreenshot(){
     for (int x = 0; x < image_width; x += components){
         for (int y = 0; y < image_height; ++y){
             for (int c = 0; c < components; ++c){
-                int data_index = c + x + ((image_height - y) * image_width);
+                int data_index = c + x + ((image_height - y - 1) * image_width);
                 int correct_index = c + x + (y * image_width);
-                correct_data[correct_index] = data[data_index];
+
+                GLubyte this_byte;
+                if (c == 3){
+                    // Set all alpha components to maximum value (-1)
+                    // for unsigned byte
+                    this_byte = -1;
+                } else{
+                    this_byte = data[data_index];
+                }
+
+                correct_data[correct_index] = this_byte;
             }
         }
     }
 
     int save_result = SOIL_save_image(filename.c_str(), SOIL_SAVE_TYPE_BMP,
         width, height, components, correct_data);
-
     if (save_result){
         Debug::info("Took screenshot %s.\n", filename.c_str());
     } else {
