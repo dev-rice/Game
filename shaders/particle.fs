@@ -11,8 +11,5 @@ uniform sampler2D emissive_texture;
 void main(){
     vec4 texel = texture(emissive_texture, Texcoord);
     texel = vec4(texel.rgb, opacity * texel.a);
-    if (texel.a < 0.5){
-        discard;
-    }
     outColor = texel;
 }

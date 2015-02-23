@@ -455,7 +455,7 @@ void Level::issueOrder(Playable::Order order, glm::vec3 target, bool should_enqu
         }
 
         x_center = x_sum / selected_units.size();
-        z_center = z_sum / selected_units.size();      
+        z_center = z_sum / selected_units.size();
 
         for(int i = 0; i < selected_units.size(); ++i){
 
@@ -478,11 +478,11 @@ void Level::issueOrder(Playable::Order order, glm::vec3 target, bool should_enqu
     float start_time = glfwGetTime();
 
     // Create the path for all units in the selection
-    std::vector<glm::vec3> path = PathFinder::find_path(ground, 
-                                                        int(x_center), 
-                                                        int(z_center), 
-                                                        int(target.x), 
-                                                        int(target.z), 
+    std::vector<glm::vec3> path = PathFinder::find_path(ground,
+                                                        int(x_center),
+                                                        int(z_center),
+                                                        int(target.x),
+                                                        int(target.z),
                                                         smallest_radius);
 
     // End logging and report

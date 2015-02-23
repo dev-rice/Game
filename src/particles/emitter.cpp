@@ -51,6 +51,11 @@ void Emitter::setParticleDensity(int density){
 }
 
 void Emitter::draw(Camera* camera){
+    // Disable depth sorting when rendering
+    // particles.
+    glDepthFunc(GL_LEQUAL);
+    glDepthMask(GL_FALSE);
+
     float new_time = glfwGetTime() - old_time;
     int frames = int((new_time*60.0f)) + 1;
     frames = std::max(frames, 0);
@@ -69,6 +74,11 @@ void Emitter::draw(Camera* camera){
     }
 
     old_time = glfwGetTime();
+
+    // Re enable depth sorting for everything else
+    // (really should not be here)
+    glDepthFunc(GL_LESS);
+    glDepthMask(GL_TRUE);
 }
 
 void Emitter::makeShotgun(){
