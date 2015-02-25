@@ -144,6 +144,8 @@ void GameView::update(){
         float frame_time = GameClock::getInstance()->getDeltaTime();
         float average_frame_time = GameClock::getInstance()->getAverageDeltaTime();
 
+        glm::vec2 mouse_position = Mouse::getInstance()->getGLPosition();
+
         text_renderer->print(10, 20, "fps: %.2f",
             1.0 / frame_time);
         text_renderer->print(10, 40, "average frame time: %.7f s",
@@ -152,10 +154,8 @@ void GameView::update(){
             "%.2f, %.2f, %.2f", position.x, position.y, position.z);
         text_renderer->print(10, 80, "camera rotation <x, y, z>:"
             "%.2f, %.2f, %.2f", rotation.x, rotation.y, rotation.z);
-        text_renderer->print(10, 100, "mouse position <x, y, z>:"
-            "%.2f, %.2f, %.2f", mouse_point.x, mouse_point.y, mouse_point.z);
-        text_renderer->print(10, 120, "mouse position corrected <x, y, z>:"
-            "%.2f, %.2f, %.2f", mouse_point.x, terrain->getHeightInterpolated(mouse_point.x, mouse_point.z), mouse_point.z);
+        text_renderer->print(10, 100, "mouse position <x, y>:"
+            "%.2f, %.2f", mouse_position.x, mouse_position.y);
 
     }
 

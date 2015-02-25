@@ -27,6 +27,14 @@ void Window::setVsync(bool value){
     }
 }
 
+glm::vec2 Window::getMousePosition(){
+    double x;
+    double y;
+    glfwGetCursorPos(glfw_window, &x, &y);
+
+    return glm::vec2(x, y);
+}
+
 void Window::takeScreenshot(){
     time_t     now = time(0);
     struct tm  tstruct;

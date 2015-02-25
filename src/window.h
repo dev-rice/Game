@@ -7,6 +7,11 @@
     #include <OpenGL/OpenGL.h>
 #endif
 
+#define GLM_FORCE_RADIANS
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 #include <SOIL.h>
 #include <ctime>
 #include <string>
@@ -35,6 +40,8 @@ public:
 
     float getWidthScale(){return width_scale;}
     float getHeightScale(){return height_scale;}
+
+    glm::vec2 getMousePosition();
 
     GLFWwindow* getGLFWWindow(){ return glfw_window;}
 

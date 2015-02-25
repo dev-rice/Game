@@ -95,15 +95,7 @@ void Mouse::draw(){
 }
 
 glm::vec2 Mouse::getScreenPosition(){
-    double x;
-    double y;
-    GLFWwindow* glfw_window = Window::getInstance()->getGLFWWindow();
-    glfwGetCursorPos(glfw_window, &x, &y);
-
-    x *= Window::getInstance()->getWidthScale();
-    y *= Window::getInstance()->getHeightScale();
-
-    return glm::vec2(x, y);
+    return Window::getInstance()->getMousePosition();
 }
 
 void Mouse::setHovering(){
