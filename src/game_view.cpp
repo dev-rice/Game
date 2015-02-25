@@ -170,7 +170,7 @@ void GameView::update(){
     DebugConsole::getInstance()->draw();
 
     // The mouse draws on top of everything else
-    // Mouse::getInstance()->draw();
+    // Moumse::getInstance()->draw();
 
 }
 
