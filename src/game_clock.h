@@ -10,6 +10,7 @@ public:
     void tick();
     void resetAverage();
 
+    float getCurrentTime();
     float getDeltaTime();
     float getAverageDeltaTime();
 

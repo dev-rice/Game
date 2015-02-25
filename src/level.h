@@ -31,6 +31,7 @@
 #include "shadowbuffer.h"
 #include "window.h"
 #include "profile.h"
+#include "game_clock.h"
 
 static const char* MODEL_PATH = "res/models/";
 static const char* TEXTURE_PATH = "res/textures/";
