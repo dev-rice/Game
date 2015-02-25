@@ -5,15 +5,15 @@ Window* Window::instance;
 Window::Window(){
     should_close = false;
 
-    const char* glfw_version = glfwGetVersionString();
-    Debug::info("GLFW Version: %s\n", glfw_version);
-    if( !glfwInit() ) {
-        Debug::error("Failed to initialize GLFW\n");
-    }
+    // const char* glfw_version = glfwGetVersionString();
+    // Debug::info("GLFW Version: %s\n", glfw_version);
+    // if( !glfwInit() ) {
+    //     Debug::error("Failed to initialize GLFW\n");
+    // }
 }
 
 void Window::swapBuffers(){
-    glfwSwapBuffers(glfw_window);
+    // glfwSwapBuffers(glfw_window);
 }
 
 void Window::requestClose() {
@@ -22,21 +22,21 @@ void Window::requestClose() {
 }
 
 void Window::close(){
-    glfwTerminate();
+    // glfwTerminate();
 }
 
 void Window::setVsync(bool value){
-    if (value){
-        glfwSwapInterval(1);
-    } else {
-        glfwSwapInterval(0);
-    }
+    // if (value){
+    //     glfwSwapInterval(1);
+    // } else {
+    //     glfwSwapInterval(0);
+    // }
 }
 
 glm::vec2 Window::getMousePosition(){
     double x;
     double y;
-    glfwGetCursorPos(glfw_window, &x, &y);
+    // glfwGetCursorPos(glfw_window, &x, &y);
 
     return glm::vec2(x, y);
 }
@@ -108,51 +108,52 @@ Window* Window::getInstance(){
 }
 
 void Window::initializeWindow(){
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-
-    const char* windowTitle = "OpenGL";
-
-    GLFWwindow* window;
-
-    if (fullscreen){
-        // Fullscreen
-        window = glfwCreateWindow(width, height, windowTitle,
-            glfwGetPrimaryMonitor(), nullptr);
-    } else {
-        // Windowed
-        window = glfwCreateWindow(width, height, windowTitle, nullptr, nullptr);
-    }
-
-    if (!window){
-        Debug::error("GLFW window creation failed.\n");
-        glfwTerminate();
-    }
-
-    // Set the cursor in the middle
-    glfwSetCursorPos(window, width/2, height/2);
-
-    int actual_w, actual_h;
-    glfwGetFramebufferSize(window, &actual_w, &actual_h);
-    if (actual_w != width || actual_h != height){
-        Debug::warning("Actual render size is %d by %d.\n", actual_w, actual_h);
-
-    }
-
-    width_scale = (float)actual_w / (float)width;
-    height_scale = (float)actual_h / (float)height;
-
-    this->width = actual_w;
-    this->height = actual_h;
-
-    // Hide the mouse
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-
-    // Create the OpenGL context in the window
-    glfwMakeContextCurrent(window);
+    // glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    // glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+    // glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    // glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    // glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+    //
+    // const char* windowTitle = "OpenGL";
+    //
+    // GLFWwindow* window;
+    //
+    // if (fullscreen){
+    //     // Fullscreen
+    //     window = glfwCreateWindow(width, height, windowTitle,
+    //         glfwGetPrimaryMonitor(), nullptr);
+    // } else {
+    //     // Windowed
+    //     window = glfwCreateWindow(width, height, windowTitle, nullptr, nullptr);
+    // }
+    //
+    // if (!window){
+    //     Debug::error("GLFW window creation failed.\n");
+    //     glfwTerminate();
+    // }
+    //
+    // // Set the cursor in the middle
+    // glfwSetCursorPos(window, width/2, height/2);
+    //
+    // int actual_w, actual_h;
+    // glfwGetFramebufferSize(window, &actual_w, &actual_h);
+    // if (actual_w != width || actual_h != height){
+    //     Debug::warning("Actual render size is %d by %d.\n", actual_w, actual_h);
+    //
+    // }
+    //
+    // width_scale = (float)actual_w / (float)width;
+    // height_scale = (float)actual_h / (float)height;
+    //
+    // this->width = actual_w;
+    // this->height = actual_h;
+    //
+    // // Hide the mouse
+    // glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+    //
+    // // Create the OpenGL context in the window
+    // glfwMakeContextCurrent(window);
+    // glfw_window = window;
 
     // Sets the gl render resolution to the requested window resolution
     // glViewport(0, 0, width, height);
@@ -179,5 +180,4 @@ void Window::initializeWindow(){
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 
-    glfw_window = window;
 }

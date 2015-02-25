@@ -1,6 +1,7 @@
 #define GLEW_STATIC
 
 #include <GL/glew.h>
+#include <SFML/Window.hpp>
 
 #if defined __APPLE__ && __MACH__
     #include <OpenGL/OpenGL.h>
@@ -93,15 +94,37 @@ int main(int argc, char* argv[]) {
 
     Debug::is_on = debug;
 
-    Window* window = Window::getInstance();
+    sf::ContextSettings settings;
+    settings.depthBits = 24;
+    settings.stencilBits = 8;
+    settings.majorVersion = 3;
+    settings.minorVersion = 0;
+
+    // create the window
+    sf::Window window(sf::VideoMode(1680, 1050), "OpenGL", sf::Style::Default, settings);
+    window.setVerticalSyncEnabled(true);
+
+    sf::Vector2u window_size = window.getSize();
+    Debug::info("Window size: %d by %d\n", window_size.x, window_size.y);
+
+    // load resources, initialize the OpenGL states, ...
+    // Initialize GLEW
+    glewExperimental = GL_TRUE;
+    glewInit();
+
+    // Print various info about OpenGL
+    Debug::info("Renderer:       %s\n", glGetString(GL_RENDERER));
+    Debug::info("OpenGL version: %s\n", glGetString(GL_VERSION));
+    Debug::info("GLSL version:   %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+
+    Window* our_window = Window::getInstance();
 
     // Create the window
-    window->setWidth(width);
-    window->setHeight(height);
-    window->setFullscreen(fullscreen);
-    window->initializeWindow();
-
-    window->setVsync(vsync);
+    our_window->setWidth(width);
+    our_window->setHeight(height);
+    our_window->setFullscreen(fullscreen);
+    our_window->setVsync(vsync);
+    our_window->initializeWindow();
 
     // Create the world
     World world;
@@ -112,19 +135,20 @@ int main(int argc, char* argv[]) {
     }
 
     // Display loop
-    while(!window->shouldClose()) {
-        // Close the window if escape is pressed
-        GLFWwindow* glfw_window = window->getGLFWWindow();
-        glfwPollEvents();
-        if (glfwGetKey(glfw_window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
-            window->requestClose();
-        }
+    while(!our_window->shouldClose()) {
+        // clear the buffers
+        // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        // draw...
+        // glDrawArrays(GL_LINE_LOOP, 0, 3);
         world.update();
+
+        // end the current frame (internally swaps the front and back buffers)
+        window.display();
     }
 
     // Close the window
-    window->close();
+    our_window->close();
 
     // Add a line break before going back to the terminal prompt.
     printf("\n");
