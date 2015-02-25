@@ -4,6 +4,12 @@ Window* Window::instance;
 
 Window::Window(){
     should_close = false;
+
+    const char* glfw_version = glfwGetVersionString();
+    Debug::info("GLFW Version: %s\n", glfw_version);
+    if( !glfwInit() ) {
+        Debug::error("Failed to initialize GLFW\n");
+    }
 }
 
 void Window::swapBuffers(){

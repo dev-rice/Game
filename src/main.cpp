@@ -1,7 +1,6 @@
 #define GLEW_STATIC
 
 #include <GL/glew.h>
-#include <GLFW/glfw3.h>
 
 #if defined __APPLE__ && __MACH__
     #include <OpenGL/OpenGL.h>
@@ -27,21 +26,6 @@
 #include "profile.h"
 #include "window.h"
 #include "mesh_loader.h"
-
-// Called whenever glfw has an internal error
-void error_callback(int error, const char* description){
-    Debug::error("GLFW Error %d: %s\n", error, description);
-}
-
-// Called whenever a key is pressed or released
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode){
-    Debug::info("action=%d, key=%d\n", action, key);
-}
-
-// Called whenever
-void character_callback(GLFWwindow* window, unsigned int codepoint){
-    Debug::info("You pressed %u\n", codepoint);
-}
 
 int main(int argc, char* argv[]) {
 
@@ -108,29 +92,6 @@ int main(int argc, char* argv[]) {
 
     Debug::is_on = debug;
 
-
-    const char* glfw_version = glfwGetVersionString();
-    Debug::info("GLFW Version: %s\n", glfw_version);
-    if( !glfwInit() ) {
-        Debug::error("Failed to initialize GLFW\n");
-        return -1;
-    }
-
-    glfwSetErrorCallback(error_callback);
-
-    if (fullscreen){
-        const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-
-        width  = mode->width;
-        height = mode->height;
-
-        Debug::info("Loading in fullscreen mode with resolution: %d by %d\n",
-            (int)width, (int)height);
-    } else {
-        Debug::info("Loading in windowed mode with resolution: %d by %d\n",
-            (int)width, (int)height);
-    }
-
     Window* window = Window::getInstance();
 
     // Create the window
@@ -142,27 +103,21 @@ int main(int argc, char* argv[]) {
     window->setVsync(vsync);
     window->setFxaaLevel(fxaa_level);
 
-    glfwSetKeyCallback(window->getGLFWWindow(), key_callback);
-    glfwSetCharCallback(window->getGLFWWindow(), character_callback);
-
     // Create the world
-    World* world;
+    World world;
     if (has_map){
-        world = new World(map_filename.c_str());
+        world = World(map_filename.c_str());
     } else {
-        world = new World();
+        world = World();
     }
 
     // Display loop
     while(!window->shouldClose()) {
-        world->update();
+        world.update();
     }
 
     // Close the window
     window->close();
-
-    delete world;
-    world = NULL;
 
     // Add a line break before going back to the terminal prompt.
     printf("\n");
