@@ -26,6 +26,7 @@
 #include "profile.h"
 #include "window.h"
 #include "mesh_loader.h"
+#include "game_clock.h"
 
 int main(int argc, char* argv[]) {
 

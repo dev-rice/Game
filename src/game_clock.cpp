@@ -6,6 +6,10 @@ GameClock::GameClock(){
     current_time = last_time = getCurrentTime();
     tick_count = 0;
     average_delta_time = 0.0f;
+    // Debug::info("%p\n", clock);
+    // clock = new sf::Clock();
+    // Debug::info("%p\n", clock);
+
 }
 
 GameClock* GameClock::getInstance(){
@@ -36,7 +40,7 @@ void GameClock::resetAverage(){
 }
 
 float GameClock::getCurrentTime(){
-    return glfwGetTime();
+    return clock.getElapsedTime().asSeconds();
 }
 
 float GameClock::getDeltaTime(){
