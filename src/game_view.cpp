@@ -2,7 +2,6 @@
 
 GameView::GameView(Level* level){
     this->window = Window::getInstance();
-    this->glfw_window = window->getGLFWWindow();
     this->level = level;
 
     screen = new Screenbuffer();
@@ -178,6 +177,8 @@ void GameView::handleInputs(){
     Camera* camera = level->getCamera();
     glm::mat4 proj_matrix = level->getProjection();
     Terrain* terrain = level->getTerrain();
+
+    GLFWwindow* glfw_window = window->getGLFWWindow();
 
     glfwPollEvents();
 

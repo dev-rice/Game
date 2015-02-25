@@ -16,7 +16,6 @@ Mouse::Mouse()
         : UIDrawable(ShaderLoader::loadShaderProgram("shaders/ui.vs","shaders/ui.fs"),
          TextureLoader::loadTextureFromFile("res/textures/cursor_ui.png", GL_LINEAR)) {
 
-    this->glfw_window = Window::getInstance()->getGLFWWindow();
 
     int window_width = Window::getInstance()->getWidth();
     int window_height = Window::getInstance()->getHeight();
@@ -98,6 +97,7 @@ void Mouse::draw(){
 glm::vec2 Mouse::getScreenPosition(){
     double x;
     double y;
+    GLFWwindow* glfw_window = Window::getInstance()->getGLFWWindow();
     glfwGetCursorPos(glfw_window, &x, &y);
 
     x *= Window::getInstance()->getWidthScale();

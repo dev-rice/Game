@@ -34,7 +34,6 @@ private:
 
     std::vector<GLuint> mouse_sprites;
 
-    GLFWwindow* glfw_window;
     glm::mat3 mouse_projection;
     glm::mat3 inv_mouse_projection;
 };

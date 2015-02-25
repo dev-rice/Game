@@ -110,9 +110,6 @@ void Particle::updateUniformData(){
     // Set the planar rotation
     glUniform1f(glGetUniformLocation(shader_program, "plane_rotation"), (float)plane_rotation);
 
-    // Tell the shader the current time
-    // glUniform1f(glGetUniformLocation(shader_program, "time"), (float)glfwGetTime());
-
 }
 
 bool Particle::isDead(){
