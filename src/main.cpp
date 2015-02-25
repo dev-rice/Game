@@ -101,7 +101,6 @@ int main(int argc, char* argv[]) {
     window->initializeWindow();
 
     window->setVsync(vsync);
-    window->setFxaaLevel(fxaa_level);
 
     // Create the world
     World world;

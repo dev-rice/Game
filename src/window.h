@@ -32,11 +32,9 @@ public:
     void setHeight(int h) { height = h;}
     void setFullscreen(bool f) {fullscreen = f;}
     void setVsync(bool);
-    void setFxaaLevel(int l) {fxaa_level = l;}
 
     int getWidth(){return width;}
     int getHeight(){return height;}
-    int getFxaaLevel(){return fxaa_level;}
 
     float getWidthScale(){return width_scale;}
     float getHeightScale(){return height_scale;}
@@ -59,8 +57,6 @@ private:
 
     int requested_width;
     int requested_height;
-
-    int fxaa_level;
 
     bool should_close;
 
