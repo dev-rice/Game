@@ -112,6 +112,13 @@ int main(int argc, char* argv[]) {
 
     // Display loop
     while(!window->shouldClose()) {
+        // Close the window if escape is pressed
+        GLFWwindow* glfw_window = window->getGLFWWindow();
+        glfwPollEvents();
+        if (glfwGetKey(glfw_window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
+            window->requestClose();
+        }
+
         world.update();
     }
 

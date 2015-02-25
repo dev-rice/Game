@@ -178,14 +178,14 @@ void GameView::handleInputs(){
     glm::mat4 proj_matrix = level->getProjection();
     Terrain* terrain = level->getTerrain();
 
-    GLFWwindow* glfw_window = window->getGLFWWindow();
-
-    glfwPollEvents();
-
-    // Closing the window
-    if (glfwGetKey(glfw_window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
-        window->requestClose();
-    }
+    // GLFWwindow* glfw_window = window->getGLFWWindow();
+    //
+    // glfwPollEvents();
+    //
+    // // Closing the window
+    // if (glfwGetKey(glfw_window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
+    //     window->requestClose();
+    // }
 
     //
     // glm::vec2 gl_mouse_position = Mouse::getInstance()->getGLPosition();
