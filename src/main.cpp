@@ -101,16 +101,11 @@ int main(int argc, char* argv[]) {
     settings.minorVersion = 0;
 
     // create the window
-    sf::Window window(sf::VideoMode(1680, 1050), "OpenGL", sf::Style::Default, settings);
+    sf::Window window(sf::VideoMode(width, height), "OpenGL", sf::Style::Default, settings);
     window.setVerticalSyncEnabled(true);
 
     sf::Vector2u window_size = window.getSize();
     Debug::info("Window size: %d by %d\n", window_size.x, window_size.y);
-
-    // load resources, initialize the OpenGL states, ...
-    // Initialize GLEW
-    glewExperimental = GL_TRUE;
-    glewInit();
 
     // Print various info about OpenGL
     Debug::info("Renderer:       %s\n", glGetString(GL_RENDERER));
@@ -136,8 +131,21 @@ int main(int argc, char* argv[]) {
 
     // Display loop
     while(!our_window->shouldClose()) {
-        // clear the buffers
-        // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        // handle events
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
+                // end the program
+                our_window->requestClose();
+            }
+            else if (event.type == sf::Event::Resized) {
+                // adjust the viewport when the window is resized
+                glViewport(0, 0, event.size.width, event.size.height);
+
+            } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+                our_window->requestClose();
+            }
+        }
 
         // draw...
         // glDrawArrays(GL_LINE_LOOP, 0, 3);
