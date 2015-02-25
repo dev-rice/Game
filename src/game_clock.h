@@ -22,7 +22,7 @@ private:
 
     static GameClock* instance;
 
-    sf::Clock clock;
+    sf::Clock* clock;
 
     float current_time;
     float last_time;
