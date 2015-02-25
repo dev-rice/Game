@@ -57,12 +57,10 @@ void Mouse::setCursorSprite(cursorType cursor_type){
 }
 
 void Mouse::draw(){
-    double x;
-    double y;
-    glfwGetCursorPos(glfw_window, &x, &y);
+    glm::vec2 mouse_position = getScreenPosition();
 
-    x_pixels = int(x) - 1;
-    y_pixels = int(y) - 1;
+    x_pixels = int(mouse_position.x) - 1;
+    y_pixels = int(mouse_position.y) - 1;
 
     glm::vec2 current_position = getGLPosition();
 
@@ -95,6 +93,17 @@ void Mouse::draw(){
     UIDrawable::draw();
 
     hovering = false;
+}
+
+glm::vec2 Mouse::getScreenPosition(){
+    double x;
+    double y;
+    glfwGetCursorPos(glfw_window, &x, &y);
+
+    x *= Window::getInstance()->getWidthScale();
+    y *= Window::getInstance()->getHeightScale();
+
+    return glm::vec2(x, y);
 }
 
 void Mouse::setHovering(){

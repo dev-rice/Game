@@ -10,6 +10,11 @@ void Window::swapBuffers(){
     glfwSwapBuffers(glfw_window);
 }
 
+void Window::requestClose() {
+    Debug::info("Window close request received.\n");
+    should_close = true;
+}
+
 void Window::close(){
     glfwTerminate();
 }
@@ -122,6 +127,9 @@ void Window::initializeWindow(){
         Debug::warning("Actual render size is %d by %d.\n", actual_w, actual_h);
 
     }
+
+    width_scale = (float)actual_w / (float)width;
+    height_scale = (float)actual_h / (float)height;
 
     this->width = actual_w;
     this->height = actual_h;

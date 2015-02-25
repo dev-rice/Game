@@ -36,7 +36,6 @@ void error_callback(int error, const char* description){
 // Called whenever a key is pressed or released
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode){
     Debug::info("action=%d, key=%d\n", action, key);
-
 }
 
 // Called whenever

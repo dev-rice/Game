@@ -21,6 +21,8 @@ public:
     void setHovering();
     bool isHovering();
 
+    glm::vec2 getScreenPosition();
+
 private:
 
     bool hovering;

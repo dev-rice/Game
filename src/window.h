@@ -20,7 +20,7 @@ public:
     void close();
     void takeScreenshot();
 
-    void requestClose() {should_close = true;}
+    void requestClose();
     bool shouldClose() {return should_close;}
 
     void setWidth(int w) { width = w;}
@@ -32,6 +32,10 @@ public:
     int getWidth(){return width;}
     int getHeight(){return height;}
     int getFxaaLevel(){return fxaa_level;}
+
+    float getWidthScale(){return width_scale;}
+    float getHeightScale(){return height_scale;}
+
     GLFWwindow* getGLFWWindow(){ return glfw_window;}
 
     static Window* getInstance();
@@ -42,6 +46,9 @@ private:
     int width;
     int height;
     bool fullscreen;
+
+    float width_scale;
+    float height_scale;
 
     int requested_width;
     int requested_height;
