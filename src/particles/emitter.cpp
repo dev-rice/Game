@@ -56,7 +56,7 @@ void Emitter::draw(Camera* camera){
     glDepthFunc(GL_LEQUAL);
     glDepthMask(GL_FALSE);
 
-    float new_time = glfwGetTime() - old_time;
+    float new_time = GameClock::getInstance()->getDeltaTime();
     int frames = int((new_time*60.0f)) + 1;
     frames = std::max(frames, 0);
 
@@ -72,8 +72,6 @@ void Emitter::draw(Camera* camera){
     for(int i = 0; i < particles.size(); ++i){
         particles[i]->draw();
     }
-
-    old_time = glfwGetTime();
 
     // Re enable depth sorting for everything else
     // (really should not be here)
