@@ -5,7 +5,6 @@
 #define PathFinder_h
 
 #include <GL/glew.h>
-#include <GLFW/glfw3.h>
 
 #include <unordered_map>  // std::unordered_map
 #include <queue>          // std::priority_queue

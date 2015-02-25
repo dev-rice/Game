@@ -1,7 +1,6 @@
 #ifndef Emitter_h
 #define Emitter_h
 #include <GL/glew.h>
-#include <GLFW/glfw3.h>
 
 #if defined __APPLE__ && __MACH__
     #include <OpenGL/OpenGL.h>
