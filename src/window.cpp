@@ -4,16 +4,19 @@ Window* Window::instance;
 
 Window::Window(){
     should_close = false;
-
-    // const char* glfw_version = glfwGetVersionString();
-    // Debug::info("GLFW Version: %s\n", glfw_version);
-    // if( !glfwInit() ) {
-    //     Debug::error("Failed to initialize GLFW\n");
-    // }
 }
 
-void Window::swapBuffers(){
-    // glfwSwapBuffers(glfw_window);
+Window* Window::getInstance(){
+    if(instance){
+        return instance;
+    } else {
+        instance = new Window();
+        return instance;
+    }
+}
+
+void Window::display(){
+    sfml_window->display();
 }
 
 void Window::requestClose() {
@@ -21,16 +24,17 @@ void Window::requestClose() {
     should_close = true;
 }
 
+bool Window::shouldClose(){
+    return should_close;
+}
+
+
 void Window::close(){
     // glfwTerminate();
 }
 
 void Window::setVsync(bool value){
-    // if (value){
-    //     glfwSwapInterval(1);
-    // } else {
-    //     glfwSwapInterval(0);
-    // }
+    sfml_window->setVerticalSyncEnabled(value);
 }
 
 glm::vec2 Window::getMousePosition(){
@@ -39,6 +43,22 @@ glm::vec2 Window::getMousePosition(){
     // glfwGetCursorPos(glfw_window, &x, &y);
 
     return glm::vec2(x, y);
+}
+
+void Window::setWidth(int width){
+    this->width = width;
+}
+
+void Window::setHeight(int height){
+    this->height = height;
+}
+
+int Window::getWidth(){
+    return width;
+}
+
+int Window::getHeight(){
+    return height;
 }
 
 void Window::takeScreenshot(){
@@ -98,66 +118,22 @@ void Window::takeScreenshot(){
     correct_data = NULL;
 }
 
-Window* Window::getInstance(){
-    if(instance){
-        return instance;
-    } else {
-        instance = new Window();
-        return instance;
-    }
+sf::Window* Window::getSFMLWindow(){
+    return sfml_window;
 }
 
 void Window::initializeWindow(){
-    // glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    // glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-    // glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    // glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-    // glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-    //
-    // const char* windowTitle = "OpenGL";
-    //
-    // GLFWwindow* window;
-    //
-    // if (fullscreen){
-    //     // Fullscreen
-    //     window = glfwCreateWindow(width, height, windowTitle,
-    //         glfwGetPrimaryMonitor(), nullptr);
-    // } else {
-    //     // Windowed
-    //     window = glfwCreateWindow(width, height, windowTitle, nullptr, nullptr);
-    // }
-    //
-    // if (!window){
-    //     Debug::error("GLFW window creation failed.\n");
-    //     glfwTerminate();
-    // }
-    //
-    // // Set the cursor in the middle
-    // glfwSetCursorPos(window, width/2, height/2);
-    //
-    // int actual_w, actual_h;
-    // glfwGetFramebufferSize(window, &actual_w, &actual_h);
-    // if (actual_w != width || actual_h != height){
-    //     Debug::warning("Actual render size is %d by %d.\n", actual_w, actual_h);
-    //
-    // }
-    //
-    // width_scale = (float)actual_w / (float)width;
-    // height_scale = (float)actual_h / (float)height;
-    //
-    // this->width = actual_w;
-    // this->height = actual_h;
-    //
-    // // Hide the mouse
-    // glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-    //
-    // // Create the OpenGL context in the window
-    // glfwMakeContextCurrent(window);
-    // glfw_window = window;
+    sf::ContextSettings settings;
+    settings.depthBits = 24;
+    settings.stencilBits = 8;
+    settings.majorVersion = 3;
+    settings.minorVersion = 0;
 
-    // Sets the gl render resolution to the requested window resolution
-    // glViewport(0, 0, width, height);
-
+    // create the window
+    sfml_window = new sf::Window(sf::VideoMode(width, height), "OpenGL", sf::Style::Default, settings);
+    setVsync(Profile::getInstance()->getVsync());
+    sf::Vector2u window_size = sfml_window->getSize();
+    Debug::info("Window size: %d by %d\n", window_size.x, window_size.y);
 
     // Set up GLEW so that we can use abstracted OpenGL functions
     glewExperimental = GL_TRUE;

@@ -63,7 +63,7 @@ void GameView::update(){
 
     handleInputs();
     // Swap display/rendering buffers
-    window->swapBuffers();
+    window->display();
 
 
     // Render the shadow map into the shadow buffer
@@ -178,14 +178,24 @@ void GameView::handleInputs(){
     glm::mat4 proj_matrix = level->getProjection();
     Terrain* terrain = level->getTerrain();
 
-    // GLFWwindow* glfw_window = window->getGLFWWindow();
-    //
-    // glfwPollEvents();
-    //
-    // // Closing the window
-    // if (glfwGetKey(glfw_window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
-    //     window->requestClose();
-    // }
+    // handle events
+    sf::Window* sfml_window = window->getSFMLWindow();
+    sf::Event event;
+    while (sfml_window->pollEvent(event)) {
+        if (event.type == sf::Event::Closed) {
+            // end the program
+            window->requestClose();
+        }
+        else if (event.type == sf::Event::Resized) {
+            // adjust the viewport when the sfml_window is resized
+            glViewport(0, 0, event.size.width, event.size.height);
+            window->setWidth(event.size.width);
+            window->setHeight(event.size.height);
+
+        } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+            window->requestClose();
+        }
+    }
 
     //
     // glm::vec2 gl_mouse_position = Mouse::getInstance()->getGLPosition();

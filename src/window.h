@@ -2,7 +2,8 @@
 #define Window_h
 
 #include <GL/glew.h>
-#include <GLFW/glfw3.h>
+#include <SFML/Window.hpp>
+
 #if defined __APPLE__ && __MACH__
     #include <OpenGL/OpenGL.h>
 #endif
@@ -17,37 +18,38 @@
 #include <string>
 
 #include "debug.h"
+#include "profile.h"
 
 class Window{
 public:
+    static Window* getInstance();
+
     void initializeWindow();
-    void swapBuffers();
+    void display();
     void close();
     void takeScreenshot();
 
     void requestClose();
-    bool shouldClose() {return should_close;}
+    bool shouldClose();
 
-    void setWidth(int w) { width = w;}
-    void setHeight(int h) { height = h;}
+    void setWidth(int w);
+    void setHeight(int h);
     void setFullscreen(bool f) {fullscreen = f;}
     void setVsync(bool);
 
-    int getWidth(){return width;}
-    int getHeight(){return height;}
+    int getWidth();
+    int getHeight();
 
     float getWidthScale(){return width_scale;}
     float getHeightScale(){return height_scale;}
 
     glm::vec2 getMousePosition();
 
-    GLFWwindow* getGLFWWindow(){ return glfw_window;}
+    sf::Window* getSFMLWindow();
 
-    static Window* getInstance();
 
 private:
 
-    GLFWwindow* glfw_window;
     int width;
     int height;
     bool fullscreen;
@@ -59,6 +61,8 @@ private:
     int requested_height;
 
     bool should_close;
+
+    sf::Window* sfml_window;
 
     static Window* instance;
     Window();

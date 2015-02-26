@@ -94,32 +94,14 @@ int main(int argc, char* argv[]) {
 
     Debug::is_on = debug;
 
-    sf::ContextSettings settings;
-    settings.depthBits = 24;
-    settings.stencilBits = 8;
-    settings.majorVersion = 3;
-    settings.minorVersion = 0;
-
-    // create the window
-    sf::Window window(sf::VideoMode(width, height), "OpenGL", sf::Style::Default, settings);
-    window.setVerticalSyncEnabled(true);
-
-    sf::Vector2u window_size = window.getSize();
-    Debug::info("Window size: %d by %d\n", window_size.x, window_size.y);
-
-    // Print various info about OpenGL
-    Debug::info("Renderer:       %s\n", glGetString(GL_RENDERER));
-    Debug::info("OpenGL version: %s\n", glGetString(GL_VERSION));
-    Debug::info("GLSL version:   %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
-
     Window* our_window = Window::getInstance();
 
     // Create the window
     our_window->setWidth(width);
     our_window->setHeight(height);
-    our_window->setFullscreen(fullscreen);
-    our_window->setVsync(vsync);
     our_window->initializeWindow();
+
+    sf::Window* sfml_window = our_window->getSFMLWindow();
 
     // Create the world
     World world;
@@ -131,28 +113,9 @@ int main(int argc, char* argv[]) {
 
     // Display loop
     while(!our_window->shouldClose()) {
-        // handle events
-        sf::Event event;
-        while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed) {
-                // end the program
-                our_window->requestClose();
-            }
-            else if (event.type == sf::Event::Resized) {
-                // adjust the viewport when the window is resized
-                glViewport(0, 0, event.size.width, event.size.height);
-
-            } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
-                our_window->requestClose();
-            }
-        }
 
         // draw...
-        // glDrawArrays(GL_LINE_LOOP, 0, 3);
         world.update();
-
-        // end the current frame (internally swaps the front and back buffers)
-        window.display();
     }
 
     // Close the window
