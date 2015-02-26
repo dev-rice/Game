@@ -13,7 +13,7 @@ OBJECTS := $(patsubst $(SRCDIR)/%.cpp,$(OBJDIR)/%.o,$(SOURCES))
 EXECUTABLE := game
 
 MAC_LIBRARIES := -framework OpenGl -framework CoreFoundation -I/usr/local/include -lglfw3 -lglew -lSOIL -lsfml-graphics -lsfml-window -lsfml-system
-LINUX_LIBRARIES := -lGL -lGLEW -I /usr/lib/x86_64-linux-gnu/ -lglfw -I /usr/local/include -lSOIL -lpthread -lsfml-graphics -lsfml-window -lsfml-system
+LINUX_LIBRARIES := -lGL -lGLEW -I /usr/lib/x86_64-linux-gnu/ -I /usr/local/include -lSOIL -lpthread -lsfml-graphics -lsfml-window -lsfml-system
 
 # Try to auto detect the platform to build for
 ifeq ($(PLATFORM),Darwin)
