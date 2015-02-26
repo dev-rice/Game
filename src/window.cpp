@@ -135,6 +135,9 @@ void Window::initializeWindow(){
     sf::Vector2u window_size = sfml_window->getSize();
     Debug::info("Window size: %d by %d\n", window_size.x, window_size.y);
 
+    // Hide the mouse because we have our own
+    sfml_window->setMouseCursorVisible(false);
+
     // Set up GLEW so that we can use abstracted OpenGL functions
     glewExperimental = GL_TRUE;
     glewInit();
