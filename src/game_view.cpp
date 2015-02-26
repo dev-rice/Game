@@ -144,7 +144,7 @@ void GameView::update(){
         float frame_time = GameClock::getInstance()->getDeltaTime();
         float average_frame_time = GameClock::getInstance()->getAverageDeltaTime();
 
-        glm::vec2 mouse_position = Mouse::getInstance()->getGLPosition();
+        glm::vec2 mouse_position = Mouse::getInstance()->getScreenPosition();
 
         text_renderer->print(10, 20, "fps: %.2f",
             1.0 / frame_time);
@@ -169,7 +169,7 @@ void GameView::update(){
     DebugConsole::getInstance()->draw();
 
     // The mouse draws on top of everything else
-    // Moumse::getInstance()->draw();
+    Mouse::getInstance()->draw();
 
 }
 
