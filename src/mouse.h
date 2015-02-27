@@ -21,6 +21,7 @@ public:
     void setHovering();
     bool isHovering();
 
+    glm::vec2 getGLPosition();
     glm::vec2 getScreenPosition();
 
 private:
@@ -34,7 +35,6 @@ private:
 
     std::vector<GLuint> mouse_sprites;
 
-    GLFWwindow* glfw_window;
     glm::mat3 mouse_projection;
     glm::mat3 inv_mouse_projection;
 };

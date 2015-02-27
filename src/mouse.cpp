@@ -16,7 +16,6 @@ Mouse::Mouse()
         : UIDrawable(ShaderLoader::loadShaderProgram("shaders/ui.vs","shaders/ui.fs"),
          TextureLoader::loadTextureFromFile("res/textures/cursor_ui.png", GL_LINEAR)) {
 
-    this->glfw_window = Window::getInstance()->getGLFWWindow();
 
     int window_width = Window::getInstance()->getWidth();
     int window_height = Window::getInstance()->getHeight();
@@ -49,7 +48,8 @@ Mouse::Mouse()
 
     hovering = false;
 
-
+    // Set the cursor to the pointer by default
+    setCursorSprite(Mouse::cursorType::CURSOR);
 }
 
 void Mouse::setCursorSprite(cursorType cursor_type){
@@ -57,11 +57,6 @@ void Mouse::setCursorSprite(cursorType cursor_type){
 }
 
 void Mouse::draw(){
-    glm::vec2 mouse_position = getScreenPosition();
-
-    x_pixels = int(mouse_position.x) - 1;
-    y_pixels = int(mouse_position.y) - 1;
-
     glm::vec2 current_position = getGLPosition();
 
     // Position the cursor specially for certain cursors
@@ -95,15 +90,19 @@ void Mouse::draw(){
     hovering = false;
 }
 
+glm::vec2 Mouse::getGLPosition(){
+    glm::vec2 mouse_position = getScreenPosition();
+
+    x_pixels = int(mouse_position.x) - 1;
+    y_pixels = int(mouse_position.y) - 1;
+
+    return UIDrawable::getGLPosition();
+}
+
 glm::vec2 Mouse::getScreenPosition(){
-    double x;
-    double y;
-    glfwGetCursorPos(glfw_window, &x, &y);
-
-    x *= Window::getInstance()->getWidthScale();
-    y *= Window::getInstance()->getHeightScale();
-
-    return glm::vec2(x, y);
+    sf::Window* sfml_window = Window::getInstance()->getSFMLWindow();
+    sf::Vector2i mouse_pos = sf::Mouse::getPosition(*sfml_window);
+    return glm::vec2(mouse_pos.x, mouse_pos.y);
 }
 
 void Mouse::setHovering(){

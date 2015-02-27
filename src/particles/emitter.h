@@ -21,7 +21,7 @@
 #include "mesh.h"
 #include "camera.h"
 #include "texture_loader.h"
-
+#include "game_clock.h"
 
 #include "particle.h"
 

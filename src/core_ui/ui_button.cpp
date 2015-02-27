@@ -29,7 +29,7 @@ void UIButton::loadFromXML(std::string filepath){
     }
 
     pugi::xml_node constraints_node = layout_node.child("constraints");
-    
+
     // Parse function
     functionName = layout_node.child_value("function");
 
@@ -53,7 +53,7 @@ void UIButton::loadFromXML(std::string filepath){
     if(left_image == NULL){
         left_image = new UIImage(shader, TextureLoader::loadTextureFromFile("res/textures/button_left.png", GL_NEAREST));
     }
-   
+
     if(right_image == NULL){
         right_image = new UIImage(shader, TextureLoader::loadTextureFromFile("res/textures/button_right.png", GL_NEAREST));
     }
@@ -75,7 +75,7 @@ void UIButton::loadFromXML(std::string filepath){
     setGLPosition(getGLPosition());
 
     didLoadXML();
-}   
+}
 
 bool UIButton::constraintsAreValid(bool x, bool y, bool w, bool h, bool x2, bool y2){
     return (x && y && w);
@@ -92,7 +92,7 @@ void UIButton::draw(){
         center_image->setPositionAndDimensions(x_pixels + 15, y_pixels, width_pixels - 30, 32);
         left_image->setPositionAndDimensions(x_pixels - 1, y_pixels, 17, 32);
         right_image->setPositionAndDimensions(x_pixels + width_pixels - 16, y_pixels, 17, 32);
-        
+
         center_image->draw();
         left_image->draw();
         right_image->draw();
@@ -108,12 +108,12 @@ void UIButton::draw(){
             center_hover_image->setPositionAndDimensions(x_pixels + 15, y_pixels, width_pixels - 30, 32);
             left_hover_image->setPositionAndDimensions(x_pixels - 1, y_pixels, 17, 32);
             right_hover_image->setPositionAndDimensions(x_pixels + width_pixels - 16, y_pixels, 17, 32);
-            
+
             center_hover_image->draw();
             left_hover_image->draw();
             right_hover_image->draw();
 
-            bool clicking = glfwGetMouseButton(Window::getInstance()->getGLFWWindow(), GLFW_MOUSE_BUTTON_LEFT);
+            bool clicking = sf::Mouse::isButtonPressed(sf::Mouse::Left);
             if(clicking && !has_clicked){
 
                 // Run the extended execution of a potential child class

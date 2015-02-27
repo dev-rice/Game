@@ -34,7 +34,7 @@ Shadowbuffer::Shadowbuffer(float up_sample){
 
     GLuint framebuffer_vs, framebuffer_fs, framebuffer_shader;
     // Load framebuffer shader
-    if (Window::getInstance()->getFxaaLevel()){
+    if (Profile::getInstance()->getFxaaLevel()){
         framebuffer_shader = ShaderLoader::loadShaderProgram("shaders/framebuffer_fxaa.vs",
         "shaders/aa.fs");
     } else {

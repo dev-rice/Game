@@ -12,8 +12,8 @@ OBJECTS := $(patsubst $(SRCDIR)/%.cpp,$(OBJDIR)/%.o,$(SOURCES))
 
 EXECUTABLE := game
 
-MAC_LIBRARIES := -framework OpenGl -framework CoreFoundation -I/usr/local/include -lglfw3 -lglew -lSOIL
-LINUX_LIBRARIES := -lGL -lGLEW -I /usr/lib/x86_64-linux-gnu/ -lglfw -I /usr/local/include -lSOIL -lpthread
+MAC_LIBRARIES := -framework OpenGl -framework CoreFoundation -I/usr/local/include -lglew -lSOIL -lsfml-graphics -lsfml-window -lsfml-system
+LINUX_LIBRARIES := -lGL -lGLEW -I /usr/lib/x86_64-linux-gnu/ -I /usr/local/include -lSOIL -lpthread -lsfml-graphics -lsfml-window -lsfml-system
 
 # Try to auto detect the platform to build for
 ifeq ($(PLATFORM),Darwin)
@@ -33,7 +33,7 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
 	$(COMPILER) $(COMPILER_FLAGS) -I$(SRCDIR) $< -o $@
 
 configure-linux:
-	@ sudo apt-get install libglew-dev libglm-dev libglfw3-dev curl
+	@ sudo apt-get install libglew-dev libglm-dev libsfml-dev curl
 	@ wget http://www.lonesock.net/files/soil.zip
 	@ unzip soil.zip -d soil
 	@ rm soil.zip

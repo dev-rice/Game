@@ -45,7 +45,6 @@ private:
     bool attack_command_prime;
 
     Window* window;
-    GLFWwindow* glfw_window;
 
     Level* level;
 

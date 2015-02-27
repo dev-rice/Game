@@ -12,6 +12,7 @@
 #include "heightmap.h"
 #include "vertex.h"
 #include "terrain_mesh.h"
+#include "game_clock.h"
 
 class Terrain : public Drawable {
 public:

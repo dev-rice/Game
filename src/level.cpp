@@ -475,7 +475,7 @@ void Level::issueOrder(Playable::Order order, glm::vec3 target, bool should_enqu
     }
 
     // Start logging the pathfinding time
-    float start_time = glfwGetTime();
+    float start_time = GameClock::getInstance()->getCurrentTime();
 
     // Create the path for all units in the selection
     std::vector<glm::vec3> path = PathFinder::find_path(ground,
@@ -486,7 +486,7 @@ void Level::issueOrder(Playable::Order order, glm::vec3 target, bool should_enqu
                                                         smallest_radius);
 
     // End logging and report
-    float delta_time = glfwGetTime() - start_time;
+    float delta_time = GameClock::getInstance()->getCurrentTime() - start_time;
     Debug::info("Took %.2f seconds to find the path.\n", delta_time);
 
     // Issue the appropriate order

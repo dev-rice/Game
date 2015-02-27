@@ -2,7 +2,6 @@
 
 GameView::GameView(Level* level){
     this->window = Window::getInstance();
-    this->glfw_window = window->getGLFWWindow();
     this->level = level;
 
     screen = new Screenbuffer();
@@ -64,7 +63,7 @@ void GameView::update(){
 
     handleInputs();
     // Swap display/rendering buffers
-    window->swapBuffers();
+    window->display();
 
 
     // Render the shadow map into the shadow buffer
@@ -81,7 +80,7 @@ void GameView::update(){
         // Draw the framebuffer N - 1 times (the last pass is drawn to the screen).
         // This is how many times the fxaa shader samples the image.
         // A good number is 4, 8 looks blurry, 1 doesn't do much.
-        int fxaa_level = window->getFxaaLevel();
+        int fxaa_level = Profile::getInstance()->getFxaaLevel();
         if (fxaa_level){
             for (int i = 0; i < fxaa_level - 1; ++i){
                 framebuffer->draw();
@@ -145,6 +144,8 @@ void GameView::update(){
         float frame_time = GameClock::getInstance()->getDeltaTime();
         float average_frame_time = GameClock::getInstance()->getAverageDeltaTime();
 
+        glm::vec2 mouse_position = Mouse::getInstance()->getScreenPosition();
+
         text_renderer->print(10, 20, "fps: %.2f",
             1.0 / frame_time);
         text_renderer->print(10, 40, "average frame time: %.7f s",
@@ -153,10 +154,8 @@ void GameView::update(){
             "%.2f, %.2f, %.2f", position.x, position.y, position.z);
         text_renderer->print(10, 80, "camera rotation <x, y, z>:"
             "%.2f, %.2f, %.2f", rotation.x, rotation.y, rotation.z);
-        text_renderer->print(10, 100, "mouse position <x, y, z>:"
-            "%.2f, %.2f, %.2f", mouse_point.x, mouse_point.y, mouse_point.z);
-        text_renderer->print(10, 120, "mouse position corrected <x, y, z>:"
-            "%.2f, %.2f, %.2f", mouse_point.x, terrain->getHeightInterpolated(mouse_point.x, mouse_point.z), mouse_point.z);
+        text_renderer->print(10, 100, "mouse position <x, y>:"
+            "%.2f, %.2f", mouse_position.x, mouse_position.y);
 
     }
 
@@ -179,149 +178,107 @@ void GameView::handleInputs(){
     glm::mat4 proj_matrix = level->getProjection();
     Terrain* terrain = level->getTerrain();
 
-    glfwPollEvents();
+    // Set the cursor to the pointer by default
+    Mouse::getInstance()->setCursorSprite(Mouse::cursorType::CURSOR);
 
-    glm::vec2 gl_mouse_position = Mouse::getInstance()->getGLPosition();
+    // handle events
+    sf::Window* sfml_window = window->getSFMLWindow();
+    sf::Event event;
+    while (sfml_window->pollEvent(event)) {
 
-    if (debug_showing){
-        Mouse::getInstance()->setCursorSprite(Mouse::cursorType::CURSOR);
-
-        // Camera controls for debug mode
-        // Movement
-        if (glfwGetKey(glfw_window, GLFW_KEY_W) == GLFW_PRESS){
-            camera->moveZ(-1);
-        }
-        if (glfwGetKey(glfw_window, GLFW_KEY_S) == GLFW_PRESS){
-            camera->moveZ(1);
-        }
-        if (glfwGetKey(glfw_window, GLFW_KEY_D) == GLFW_PRESS){
-            camera->moveX(1);
-        }
-        if (glfwGetKey(glfw_window, GLFW_KEY_A) == GLFW_PRESS){
-            camera->moveX(-1);
-        }
-        if (glfwGetKey(glfw_window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS){
-            camera->moveY(-1);
-        }
-        if (glfwGetKey(glfw_window, GLFW_KEY_SPACE) == GLFW_PRESS){
-            camera->moveY(1);
+        if (event.type == sf::Event::Resized) {
+            // adjust the viewport when the sfml_window is resized
+            glViewport(0, 0, event.size.width, event.size.height);
+            window->setWidth(event.size.width);
+            window->setHeight(event.size.height);
         }
 
-        // Rotation
-        if (glfwGetKey(glfw_window, GLFW_KEY_Q) == GLFW_PRESS){
-            camera->rotateY(1);
-        }
-        if (glfwGetKey(glfw_window, GLFW_KEY_E) == GLFW_PRESS){
-            camera->rotateY(-1);
-        }
-        if (glfwGetKey(glfw_window, GLFW_KEY_R) == GLFW_PRESS){
-            camera->rotateX(1);
-        }
-        if (glfwGetKey(glfw_window, GLFW_KEY_F) == GLFW_PRESS){
-            camera->rotateX(-1);
-        }
-    } else {
-        // Mouse scrolling the screen when not in debug mode
-        if(mouse_count == 0){
-
-            Mouse::getInstance()->setCursorSprite(Mouse::cursorType::CURSOR);
-
-            // LEFT
-            if(camera->getPosition().x >= -1.0 * level->getMapWidth()/2 + 55){
-                if(gl_mouse_position.x < -0.95){
-                    camera->moveGlobalX(-10);
-                } else if(gl_mouse_position.x < -0.85){
-                    camera->moveGlobalX(-5);
-                }
-            }
-
-            // RIGHT
-            if(camera->getPosition().x <= 1.0 * level->getMapWidth()/2 - 55){
-                if(gl_mouse_position.x > 0.95){
-                    camera->moveGlobalX(10);
-                } else if (gl_mouse_position.x > 0.85){
-                    camera->moveGlobalX(5);
-                }
-            }
-
-            // DOWN
-            if(camera->getPosition().z <= 1.0 * level->getMapDepth()/2 - 3){
-                if(gl_mouse_position.y < -0.95){
-                    camera->moveGlobalZ(10);
-                } else if(gl_mouse_position.y < -0.85){
-                    camera->moveGlobalZ(5);
-                }
-            }
-
-            // UP                            . Compensating for the camera angle
-            if(camera->getPosition().z >= -1.0 * level->getMapDepth()/2 + 55){
-                if(gl_mouse_position.y > 0.95){
-                    camera->moveGlobalZ(-10);
-                } else if (gl_mouse_position.y > 0.85){
-                    camera->moveGlobalZ(-5);
-                }
-            }
-
-            // Changing the mouse cursor based on scrolling
-            if(gl_mouse_position.x < -0.85){
-                Mouse::getInstance()->setCursorSprite(Mouse::cursorType::LEFT);
-            }
-            if(gl_mouse_position.x > 0.85){
-                Mouse::getInstance()->setCursorSprite(Mouse::cursorType::RIGHT);
-            }
-            if(gl_mouse_position.y > 0.85){
-                Mouse::getInstance()->setCursorSprite(Mouse::cursorType::UP);
-            }
-            if(gl_mouse_position.y < -0.85){
-                Mouse::getInstance()->setCursorSprite(Mouse::cursorType::DOWN);
-            }
-
-            if(gl_mouse_position.x < -0.85 && gl_mouse_position.y < -0.85){
-                Mouse::getInstance()->setCursorSprite(Mouse::cursorType::DOWN_LEFT);
-            }
-            if(gl_mouse_position.x > 0.85 && gl_mouse_position.y < -0.85){
-                Mouse::getInstance()->setCursorSprite(Mouse::cursorType::DOWN_RIGHT);
-            }
-            if(gl_mouse_position.x < -0.85 && gl_mouse_position.y > 0.85){
-                Mouse::getInstance()->setCursorSprite(Mouse::cursorType::UP_LEFT);
-            }
-            if(gl_mouse_position.x > 0.85 && gl_mouse_position.y > 0.85){
-                Mouse::getInstance()->setCursorSprite(Mouse::cursorType::UP_RIGHT);
-            }
+        // Handle the window being closed
+        if (event.type == sf::Event::Closed) {
+            window->requestClose();
         }
 
     }
-    // Closing the window
-    if (glfwGetKey(glfw_window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
+
+    // Close the window if escape is pressed
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
         window->requestClose();
     }
+
+    // Handle the debug menu toggle
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Tab) && (!toggle_key_state)){
+        toggle_key_state = true;
+        debug_showing = !debug_showing;
+    } else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Tab)) {
+        toggle_key_state = false;
+    }
+
+    // Handle the debug console toggle
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::F8) && (!debug_console_key_state)){
+        debug_console_key_state = true;
+        DebugConsole::getInstance()->toggleShowing();
+    } else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::F8)) {
+        debug_console_key_state = false;
+    }
+
+    // Handle the graphics menu toggle
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::G) && (!graphics_menu_key_state)){
+        graphics_menu_key_state = true;
+        graphics_menu->toggleShowing();
+    } else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::G)) {
+        graphics_menu_key_state = false;
+    }
+
+    // Handle the menu toggle key
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::F10) && (!menu_key_state)){
+        menu_key_state = true;
+        menu->toggleShowing();
+    } else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::F10)) {
+        menu_key_state = false;
+    }
+
+    //Print the screen
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::P) && (!printscreen_key_state)){
+        printscreen_key_state = true;
+        Window::getInstance()->takeScreenshot();
+    } else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::P)) {
+        printscreen_key_state = false;
+    }
+
+    // Reset the average frame time calculations
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::T)){
+        GameClock::getInstance()->resetAverage();
+    }
+
+    glm::vec2 mouse_gl_pos = Mouse::getInstance()->getGLPosition();
+    glm::vec3 mouse_world_pos = level->calculateWorldPosition(mouse_gl_pos);
 
     //##############################################################################
     // Shift Key Handling
     //##############################################################################
-    bool shift_pressed = (glfwGetKey(glfw_window, GLFW_KEY_LEFT_SHIFT ) == GLFW_PRESS || glfwGetKey(glfw_window, GLFW_KEY_RIGHT_SHIFT)  == GLFW_PRESS);
+    bool shift_pressed = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift);
 
     //##############################################################################
     // Left Mouse Button Handling
     //##############################################################################
-    if(left_mouse_button_unclick){
+    if (left_mouse_button_unclick){
         left_mouse_button_unclick = false;
     }
 
-    if(glfwGetMouseButton(glfw_window, GLFW_MOUSE_BUTTON_LEFT)){
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
         // Left mouse button
-        if(attack_command_prime){
+        if (attack_command_prime){
 
             attack_command_prime = false;
-            level->issueOrder(Playable::Order::ATTACK, level->calculateWorldPosition(Mouse::getInstance()->getGLPosition()), shift_pressed);
+            level->issueOrder(Playable::Order::ATTACK, mouse_world_pos, shift_pressed);
             mouse_count = -1;
             left_mouse_button_unclick = true;
 
         } /* Probably more orders here */
-        else if(mouse_count == 0){
-            initial_left_click_position = gl_mouse_position;
+        else if (mouse_count == 0){
+            initial_left_click_position = mouse_gl_pos;
         } else {
-            final_left_click_position = gl_mouse_position;
+            final_left_click_position = mouse_gl_pos;
         }
         mouse_count++;
     } else if(mouse_count != 0){
@@ -332,35 +289,35 @@ void GameView::handleInputs(){
     //##############################################################################
     // Middle Mouse Button Handling
     //##############################################################################
-    if(glfwGetMouseButton(glfw_window, GLFW_MOUSE_BUTTON_MIDDLE)){
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Middle)){
         // Middle mouse button
-        if(!middle_mouse_button_click){
-            level->issueOrder(Playable::Order::ATTACK, level->calculateWorldPosition(Mouse::getInstance()->getGLPosition()), shift_pressed);
+        if (!middle_mouse_button_click){
+            level->issueOrder(Playable::Order::ATTACK, mouse_world_pos, shift_pressed);
         }
 
         attack_command_prime = false;
         right_mouse_button_click = true;
-    } else if(middle_mouse_button_click){
+    } else if (middle_mouse_button_click){
         middle_mouse_button_click = false;
     }
 
     //##############################################################################
     // Right Mouse Button Handling
     //##############################################################################
-    if(right_mouse_button_unclick){
+    if (right_mouse_button_unclick){
         right_mouse_button_unclick = false;
     }
 
-    if(glfwGetMouseButton(glfw_window, GLFW_MOUSE_BUTTON_RIGHT)){
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Right)){
         // Right mouse button
-        if(!right_mouse_button_click){
-
-            level->issueOrder(Playable::Order::MOVE, level->calculateWorldPosition(Mouse::getInstance()->getGLPosition()), shift_pressed);
+        if (!right_mouse_button_click){
+            level->issueOrder(Playable::Order::MOVE, mouse_world_pos, shift_pressed);
         }
 
         attack_command_prime = false;
         right_mouse_button_click = true;
-    } else if(right_mouse_button_click){
+
+    } else if (right_mouse_button_click){
         right_mouse_button_click = false;
         right_mouse_button_unclick = true;
     }
@@ -368,76 +325,129 @@ void GameView::handleInputs(){
     //##############################################################################
     // Hold-Action Key Handling
     //##############################################################################
-    if (glfwGetKey(glfw_window, GLFW_KEY_H) == GLFW_PRESS){
-        level->issueOrder(Playable::Order::HOLD_POSITION, level->calculateWorldPosition(Mouse::getInstance()->getGLPosition()), shift_pressed);
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::H)){
+        level->issueOrder(Playable::Order::HOLD_POSITION, mouse_world_pos, shift_pressed);
     }
 
     //##############################################################################
     // Stop-Action Key Handling
     //##############################################################################
-    if (glfwGetKey(glfw_window, GLFW_KEY_S) == GLFW_PRESS){
-        level->issueOrder(Playable::Order::STOP, level->calculateWorldPosition(Mouse::getInstance()->getGLPosition()), shift_pressed);
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)){
+        // segfaults
+        // level->issueOrder(Playable::Order::STOP, mouse_world_pos, shift_pressed);
     }
 
     //##############################################################################
     // Attack-Action Key Handling
     //##############################################################################
-    if (glfwGetKey(glfw_window, GLFW_KEY_A) == GLFW_PRESS){
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
         attack_command_prime = true;
     }
 
-    // Handle the debug toggle key
-    if ((glfwGetKey(glfw_window, GLFW_KEY_TAB) == GLFW_PRESS) && (!toggle_key_state)){
-        toggle_key_state = true;
-        debug_showing = !debug_showing;
-    }
-    if (glfwGetKey(glfw_window, GLFW_KEY_TAB) == GLFW_RELEASE){
-        toggle_key_state = false;
-    }
+    //##############################################################################
+    // Camera Movement Handling
+    //##############################################################################
+    if (debug_showing){
+        // Translation
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
+            camera->moveZ(-1);
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)){
+            camera->moveZ(1);
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
+            camera->moveX(-1);
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
+            camera->moveX(1);
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)){
+            camera->moveY(-1);
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
+            camera->moveY(1);
+        }
 
-    // Handle the graphics menu toggle
-    if ((glfwGetKey(glfw_window, GLFW_KEY_G) == GLFW_PRESS) && (!graphics_menu_key_state)){
-        graphics_menu_key_state = true;
-        graphics_menu->toggleShowing();
-    }
-    if (glfwGetKey(glfw_window, GLFW_KEY_G) == GLFW_RELEASE){
-        graphics_menu_key_state = false;
-    }
+        // Rotation
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)){
+            camera->rotateY(-1);
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)){
+            camera->rotateY(1);
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::F)){
+            camera->rotateX(-1);
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
+            camera->rotateX(1);
+        }
+    } else {
+        // Mouse scrolling the screen when not in debug mode
+        if(mouse_count == 0){
+            // LEFT
+            if(camera->getPosition().x >= -1.0 * level->getMapWidth()/2 + 55){
+                if(mouse_gl_pos.x < -0.95){
+                    camera->moveGlobalX(-10);
+                } else if(mouse_gl_pos.x < -0.85){
+                    camera->moveGlobalX(-5);
+                }
+            }
 
-    // Handle the debug console toggle key
-    if ((glfwGetKey(glfw_window, GLFW_KEY_F8) == GLFW_PRESS) && (!debug_console_key_state)){
-        debug_console_key_state = true;
-        DebugConsole::getInstance()->toggleShowing();
-    }
-    if (glfwGetKey(glfw_window, GLFW_KEY_F8) == GLFW_RELEASE){
-        debug_console_key_state = false;
-    }
+            // RIGHT
+            if(camera->getPosition().x <= 1.0 * level->getMapWidth()/2 - 55){
+                if(mouse_gl_pos.x > 0.95){
+                    camera->moveGlobalX(10);
+                } else if (mouse_gl_pos.x > 0.85){
+                    camera->moveGlobalX(5);
+                }
+            }
 
-    if (glfwGetKey(glfw_window, GLFW_KEY_C) == GLFW_PRESS){
-        DebugConsole::getInstance()->clearMessages();
-    }
+            // DOWN
+            if(camera->getPosition().z <= 1.0 * level->getMapDepth()/2 - 3){
+                if(mouse_gl_pos.y < -0.95){
+                    camera->moveGlobalZ(10);
+                } else if(mouse_gl_pos.y < -0.85){
+                    camera->moveGlobalZ(5);
+                }
+            }
 
-    // Handle the menu toggle key
-    if ((glfwGetKey(glfw_window, GLFW_KEY_F10) == GLFW_PRESS) && (!menu_key_state)){
-        menu_key_state = true;
-        menu->toggleShowing();
-    }
-    if (glfwGetKey(glfw_window, GLFW_KEY_F10) == GLFW_RELEASE){
-        menu_key_state = false;
-    }
+            // UP                            . Compensating for the camera angle
+            if(camera->getPosition().z >= -1.0 * level->getMapDepth()/2 + 55){
+                if(mouse_gl_pos.y > 0.95){
+                    camera->moveGlobalZ(-10);
+                } else if (mouse_gl_pos.y > 0.85){
+                    camera->moveGlobalZ(-5);
+                }
+            }
 
-    // Reset the average frame time calculations
-    if (glfwGetKey(glfw_window, GLFW_KEY_T) == GLFW_PRESS){
-        GameClock::getInstance()->resetAverage();
-    }
+            // Changing the mouse cursor based on scrolling
+            if(mouse_gl_pos.x < -0.85){
+                Mouse::getInstance()->setCursorSprite(Mouse::cursorType::LEFT);
+            }
+            if(mouse_gl_pos.x > 0.85){
+                Mouse::getInstance()->setCursorSprite(Mouse::cursorType::RIGHT);
+            }
+            if(mouse_gl_pos.y > 0.85){
+                Mouse::getInstance()->setCursorSprite(Mouse::cursorType::UP);
+            }
+            if(mouse_gl_pos.y < -0.85){
+                Mouse::getInstance()->setCursorSprite(Mouse::cursorType::DOWN);
+            }
 
-    //Print the screen
-    if ((glfwGetKey(glfw_window, GLFW_KEY_P) == GLFW_PRESS) && (!printscreen_key_state)){
-        Window::getInstance()->takeScreenshot();
-        printscreen_key_state = true;
-    }
-    if (glfwGetKey(glfw_window, GLFW_KEY_P) == GLFW_RELEASE){
-        printscreen_key_state = false;
+            if(mouse_gl_pos.x < -0.85 && mouse_gl_pos.y < -0.85){
+                Mouse::getInstance()->setCursorSprite(Mouse::cursorType::DOWN_LEFT);
+            }
+            if(mouse_gl_pos.x > 0.85 && mouse_gl_pos.y < -0.85){
+                Mouse::getInstance()->setCursorSprite(Mouse::cursorType::DOWN_RIGHT);
+            }
+            if(mouse_gl_pos.x < -0.85 && mouse_gl_pos.y > 0.85){
+                Mouse::getInstance()->setCursorSprite(Mouse::cursorType::UP_LEFT);
+            }
+            if(mouse_gl_pos.x > 0.85 && mouse_gl_pos.y > 0.85){
+                Mouse::getInstance()->setCursorSprite(Mouse::cursorType::UP_RIGHT);
+            }
+        }
+
     }
 
 }

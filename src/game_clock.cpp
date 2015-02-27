@@ -3,9 +3,12 @@
 GameClock* GameClock::instance;
 
 GameClock::GameClock(){
-    current_time = last_time = glfwGetTime();
+    clock = new sf::Clock();
+
+    current_time = last_time = getCurrentTime();
     tick_count = 0;
     average_delta_time = 0.0f;
+
 }
 
 GameClock* GameClock::getInstance(){
@@ -21,7 +24,7 @@ void GameClock::tick(){
     ++tick_count;
 
     last_time = current_time;
-    current_time = glfwGetTime();
+    current_time = getCurrentTime();
     delta_time = current_time - last_time;
 
     // Calculate the moving average of the frame time
@@ -33,6 +36,10 @@ void GameClock::tick(){
 void GameClock::resetAverage(){
     tick_count = 1;
     average_delta_time = 0;
+}
+
+float GameClock::getCurrentTime(){
+    return clock->getElapsedTime().asSeconds();
 }
 
 float GameClock::getDeltaTime(){

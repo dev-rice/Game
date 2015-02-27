@@ -6,8 +6,17 @@ Window::Window(){
     should_close = false;
 }
 
-void Window::swapBuffers(){
-    glfwSwapBuffers(glfw_window);
+Window* Window::getInstance(){
+    if(instance){
+        return instance;
+    } else {
+        instance = new Window();
+        return instance;
+    }
+}
+
+void Window::display(){
+    sfml_window->display();
 }
 
 void Window::requestClose() {
@@ -15,16 +24,32 @@ void Window::requestClose() {
     should_close = true;
 }
 
+bool Window::shouldClose(){
+    return should_close;
+}
+
+
 void Window::close(){
-    glfwTerminate();
 }
 
 void Window::setVsync(bool value){
-    if (value){
-        glfwSwapInterval(1);
-    } else {
-        glfwSwapInterval(0);
-    }
+    sfml_window->setVerticalSyncEnabled(value);
+}
+
+void Window::setWidth(int width){
+    this->width = width;
+}
+
+void Window::setHeight(int height){
+    this->height = height;
+}
+
+int Window::getWidth(){
+    return width;
+}
+
+int Window::getHeight(){
+    return height;
 }
 
 void Window::takeScreenshot(){
@@ -84,65 +109,50 @@ void Window::takeScreenshot(){
     correct_data = NULL;
 }
 
-Window* Window::getInstance(){
-    if(instance){
-        return instance;
-    } else {
-        instance = new Window();
-        return instance;
-    }
+sf::Window* Window::getSFMLWindow(){
+    return sfml_window;
 }
 
 void Window::initializeWindow(){
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+    sf::ContextSettings settings;
+    settings.depthBits = 24;
+    settings.stencilBits = 8;
+    settings.majorVersion = 3;
+    settings.minorVersion = 0;
 
-    const char* windowTitle = "OpenGL";
 
-    GLFWwindow* window;
 
+    // create the window
     if (fullscreen){
-        // Fullscreen
-        window = glfwCreateWindow(width, height, windowTitle,
-            glfwGetPrimaryMonitor(), nullptr);
+        // Get all of the valid fullscreen graphics modes supported by your
+        // graphics card and monitor
+        std::vector<sf::VideoMode> fullscreen_modes = sf::VideoMode::getFullscreenModes();
+        // Pick the best one
+        sf::VideoMode fullscreen_mode = fullscreen_modes[0];
+
+        // Update this window's width and height so that the framebuffers
+        // are the correct size.
+        width = fullscreen_mode.width;
+        height = fullscreen_mode.height;
+
+        Debug::info("Loading in fullscreen with resolution %d by %d\n", width, height);
+
+        // Create the window
+        sfml_window = new sf::Window(fullscreen_mode, "OpenGL", sf::Style::Fullscreen, settings);
+
     } else {
-        // Windowed
-        window = glfwCreateWindow(width, height, windowTitle, nullptr, nullptr);
+        Debug::info("Loading in windowed with resolution %d by %d\n", width, height);
+
+        // Create the window
+        sfml_window = new sf::Window(sf::VideoMode(width, height), "OpenGL", sf::Style::Default, settings);
     }
 
-    if (!window){
-        Debug::error("GLFW window creation failed.\n");
-        glfwTerminate();
-    }
+    setVsync(Profile::getInstance()->getVsync());
+    sf::Vector2u window_size = sfml_window->getSize();
+    Debug::info("Window size: %d by %d\n", window_size.x, window_size.y);
 
-    // Set the cursor in the middle
-    glfwSetCursorPos(window, width/2, height/2);
-
-    int actual_w, actual_h;
-    glfwGetFramebufferSize(window, &actual_w, &actual_h);
-    if (actual_w != width || actual_h != height){
-        Debug::warning("Actual render size is %d by %d.\n", actual_w, actual_h);
-
-    }
-
-    width_scale = (float)actual_w / (float)width;
-    height_scale = (float)actual_h / (float)height;
-
-    this->width = actual_w;
-    this->height = actual_h;
-
-    // Hide the mouse
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-
-    // Create the OpenGL context in the window
-    glfwMakeContextCurrent(window);
-
-    // Sets the gl render resolution to the requested window resolution
-    // glViewport(0, 0, width, height);
-
+    // Hide the mouse because we have our own
+    sfml_window->setMouseCursorVisible(false);
 
     // Set up GLEW so that we can use abstracted OpenGL functions
     glewExperimental = GL_TRUE;
@@ -165,5 +175,4 @@ void Window::initializeWindow(){
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 
-    glfw_window = window;
 }

@@ -103,7 +103,7 @@ bool isAllThrees(std::string input){
 }
 
 void MeshLoader::loadMeshFromDAE(const char* filename){
-    float start_time = glfwGetTime();
+    float start_time = GameClock::getInstance()->getCurrentTime();
     this->filename = filename;
 
     // Load the document into a pugixml object
@@ -131,7 +131,7 @@ void MeshLoader::loadMeshFromDAE(const char* filename){
 
         writeFinalArrays(vertices, elements);
 
-        float delta_time = glfwGetTime() - start_time;
+        float delta_time = GameClock::getInstance()->getCurrentTime() - start_time;
         Debug::info("Collada mesh loaded from '%s' in %.5f seconds.\n", filename, delta_time);
     }
 }

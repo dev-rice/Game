@@ -6,7 +6,6 @@
 #define MeshLoader_h
 
 #include <GL/glew.h>
-#include <GLFW/glfw3.h>
 
 #if defined __APPLE__ && __MACH__
     #include <OpenGL/OpenGL.h>
@@ -28,6 +27,7 @@
 
 #include "debug.h"
 #include "vertex.h"
+#include "game_clock.h"
 
 class MeshLoader{
 public:
