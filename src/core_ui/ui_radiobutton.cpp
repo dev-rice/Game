@@ -94,8 +94,7 @@ void UIRadioButton::draw(){
             hover_icon->setPositionAndDimensions(x_pixels, y_pixels, icon_width, icon_height);
             hover_icon->draw();
 
-            // bool clicking = glfwGetMouseButton(Window::getInstance()->getGLFWWindow(), GLFW_MOUSE_BUTTON_LEFT);
-            bool clicking = false;
+            bool clicking = sf::Mouse::isButtonPressed(sf::Mouse::Left);
             if(clicking && !has_clicked){
 
                 // Run the extended execution of a potential child class

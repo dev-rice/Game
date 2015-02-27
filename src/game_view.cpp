@@ -182,61 +182,135 @@ void GameView::handleInputs(){
     sf::Window* sfml_window = window->getSFMLWindow();
     sf::Event event;
     while (sfml_window->pollEvent(event)) {
-        if (event.type == sf::Event::Closed) {
-            // end the program
-            window->requestClose();
-        }
-        else if (event.type == sf::Event::Resized) {
+
+        if (event.type == sf::Event::Resized) {
             // adjust the viewport when the sfml_window is resized
             glViewport(0, 0, event.size.width, event.size.height);
             window->setWidth(event.size.width);
             window->setHeight(event.size.height);
+        }
 
-        } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+        // Handle the window being closed
+        if (event.type == sf::Event::Closed) {
             window->requestClose();
+        }
+
+    }
+
+    // Close the window if escape is pressed
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+        window->requestClose();
+    }
+
+    // Handle the debug menu toggle
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Tab) && (!toggle_key_state)){
+        toggle_key_state = true;
+        debug_showing = !debug_showing;
+    } else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Tab)) {
+        toggle_key_state = false;
+    }
+
+    // Handle the debug console toggle
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::F8) && (!debug_console_key_state)){
+        debug_console_key_state = true;
+        DebugConsole::getInstance()->toggleShowing();
+    } else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::F8)) {
+        debug_console_key_state = false;
+    }
+
+    // Handle the graphics menu toggle
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::G) && (!graphics_menu_key_state)){
+        graphics_menu_key_state = true;
+        graphics_menu->toggleShowing();
+    } else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::G)) {
+        graphics_menu_key_state = false;
+    }
+
+    // Handle the menu toggle key
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::F10) && (!menu_key_state)){
+        menu_key_state = true;
+        menu->toggleShowing();
+    } else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::F10)) {
+        menu_key_state = false;
+    }
+
+    //Print the screen
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::P) && (!printscreen_key_state)){
+        printscreen_key_state = true;
+        Window::getInstance()->takeScreenshot();
+    } else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::P)) {
+        printscreen_key_state = false;
+    }
+
+    // Reset the average frame time calculations
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::T)){
+        GameClock::getInstance()->resetAverage();
+    }
+
+    glm::vec2 mouse_gl_pos = Mouse::getInstance()->getGLPosition();
+    glm::vec3 mouse_world_pos = level->calculateWorldPosition(mouse_gl_pos);
+    bool shift_pressed = false;
+
+    //##############################################################################
+    // Hold-Action Key Handling
+    //##############################################################################
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::H)){
+        level->issueOrder(Playable::Order::HOLD_POSITION, mouse_world_pos, shift_pressed);
+    }
+
+    //##############################################################################
+    // Stop-Action Key Handling
+    //##############################################################################
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)){
+        // level->issueOrder(Playable::Order::STOP, mouse_world_pos, shift_pressed);
+    }
+
+    //##############################################################################
+    // Attack-Action Key Handling
+    //##############################################################################
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
+        attack_command_prime = true;
+    }
+
+    //##############################################################################
+    // Camera Movement Handling
+    //##############################################################################
+    if (debug_showing){
+        // Translation
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
+            camera->moveZ(-1);
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)){
+            camera->moveZ(1);
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
+            camera->moveX(-1);
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
+            camera->moveX(1);
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)){
+            camera->moveY(-1);
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
+            camera->moveY(1);
+        }
+
+        // Rotation
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)){
+            camera->rotateY(-1);
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)){
+            camera->rotateY(1);
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::F)){
+            camera->rotateX(-1);
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
+            camera->rotateX(1);
         }
     }
 
-    //
-    // glm::vec2 gl_mouse_position = Mouse::getInstance()->getGLPosition();
-    //
-    // if (debug_showing){
-    //     Mouse::getInstance()->setCursorSprite(Mouse::cursorType::CURSOR);
-    //
-    //     // Camera controls for debug mode
-    //     // Movement
-    //     if (glfwGetKey(glfw_window, GLFW_KEY_W) == GLFW_PRESS){
-    //         camera->moveZ(-1);
-    //     }
-    //     if (glfwGetKey(glfw_window, GLFW_KEY_S) == GLFW_PRESS){
-    //         camera->moveZ(1);
-    //     }
-    //     if (glfwGetKey(glfw_window, GLFW_KEY_D) == GLFW_PRESS){
-    //         camera->moveX(1);
-    //     }
-    //     if (glfwGetKey(glfw_window, GLFW_KEY_A) == GLFW_PRESS){
-    //         camera->moveX(-1);
-    //     }
-    //     if (glfwGetKey(glfw_window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS){
-    //         camera->moveY(-1);
-    //     }
-    //     if (glfwGetKey(glfw_window, GLFW_KEY_SPACE) == GLFW_PRESS){
-    //         camera->moveY(1);
-    //     }
-    //
-    //     // Rotation
-    //     if (glfwGetKey(glfw_window, GLFW_KEY_Q) == GLFW_PRESS){
-    //         camera->rotateY(1);
-    //     }
-    //     if (glfwGetKey(glfw_window, GLFW_KEY_E) == GLFW_PRESS){
-    //         camera->rotateY(-1);
-    //     }
-    //     if (glfwGetKey(glfw_window, GLFW_KEY_R) == GLFW_PRESS){
-    //         camera->rotateX(1);
-    //     }
-    //     if (glfwGetKey(glfw_window, GLFW_KEY_F) == GLFW_PRESS){
-    //         camera->rotateX(-1);
-    //     }
     // } else {
     //     // Mouse scrolling the screen when not in debug mode
     //     if(mouse_count == 0){
@@ -378,79 +452,7 @@ void GameView::handleInputs(){
     //     right_mouse_button_unclick = true;
     // }
     //
-    // //##############################################################################
-    // // Hold-Action Key Handling
-    // //##############################################################################
-    // if (glfwGetKey(glfw_window, GLFW_KEY_H) == GLFW_PRESS){
-    //     level->issueOrder(Playable::Order::HOLD_POSITION, level->calculateWorldPosition(Mouse::getInstance()->getGLPosition()), shift_pressed);
-    // }
-    //
-    // //##############################################################################
-    // // Stop-Action Key Handling
-    // //##############################################################################
-    // if (glfwGetKey(glfw_window, GLFW_KEY_S) == GLFW_PRESS){
-    //     level->issueOrder(Playable::Order::STOP, level->calculateWorldPosition(Mouse::getInstance()->getGLPosition()), shift_pressed);
-    // }
-    //
-    // //##############################################################################
-    // // Attack-Action Key Handling
-    // //##############################################################################
-    // if (glfwGetKey(glfw_window, GLFW_KEY_A) == GLFW_PRESS){
-    //     attack_command_prime = true;
-    // }
-    //
-    // // Handle the debug toggle key
-    // if ((glfwGetKey(glfw_window, GLFW_KEY_TAB) == GLFW_PRESS) && (!toggle_key_state)){
-    //     toggle_key_state = true;
-    //     debug_showing = !debug_showing;
-    // }
-    // if (glfwGetKey(glfw_window, GLFW_KEY_TAB) == GLFW_RELEASE){
-    //     toggle_key_state = false;
-    // }
-    //
-    // // Handle the graphics menu toggle
-    // if ((glfwGetKey(glfw_window, GLFW_KEY_G) == GLFW_PRESS) && (!graphics_menu_key_state)){
-    //     graphics_menu_key_state = true;
-    //     graphics_menu->toggleShowing();
-    // }
-    // if (glfwGetKey(glfw_window, GLFW_KEY_G) == GLFW_RELEASE){
-    //     graphics_menu_key_state = false;
-    // }
-    //
-    // // Handle the debug console toggle key
-    // if ((glfwGetKey(glfw_window, GLFW_KEY_F8) == GLFW_PRESS) && (!debug_console_key_state)){
-    //     debug_console_key_state = true;
-    //     DebugConsole::getInstance()->toggleShowing();
-    // }
-    // if (glfwGetKey(glfw_window, GLFW_KEY_F8) == GLFW_RELEASE){
-    //     debug_console_key_state = false;
-    // }
-    //
-    // if (glfwGetKey(glfw_window, GLFW_KEY_C) == GLFW_PRESS){
-    //     DebugConsole::getInstance()->clearMessages();
-    // }
-    //
-    // // Handle the menu toggle key
-    // if ((glfwGetKey(glfw_window, GLFW_KEY_F10) == GLFW_PRESS) && (!menu_key_state)){
-    //     menu_key_state = true;
-    //     menu->toggleShowing();
-    // }
-    // if (glfwGetKey(glfw_window, GLFW_KEY_F10) == GLFW_RELEASE){
-    //     menu_key_state = false;
-    // }
-    //
-    // // Reset the average frame time calculations
-    // if (glfwGetKey(glfw_window, GLFW_KEY_T) == GLFW_PRESS){
-    //     GameClock::getInstance()->resetAverage();
-    // }
-    //
-    // //Print the screen
-    // if ((glfwGetKey(glfw_window, GLFW_KEY_P) == GLFW_PRESS) && (!printscreen_key_state)){
-    //     Window::getInstance()->takeScreenshot();
-    //     printscreen_key_state = true;
-    // }
-    // if (glfwGetKey(glfw_window, GLFW_KEY_P) == GLFW_RELEASE){
-    //     printscreen_key_state = false;
-    // }
+
+
 
 }

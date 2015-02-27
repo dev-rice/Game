@@ -1,15 +1,15 @@
 # Game
 
 # Dependencies
-GLEW 
-GLFW3
+GLEW
+SFML 2.2
 GLM
 SOIL
 
 ## Ubuntu installation instructions
-Run 
+Run
 
-```sudo apt-get install libglew-dev libglm-dev libglfw3-dev curl```
+```sudo apt-get install libglew-dev libglm-dev libsfml-dev curl```
 
 ```wget http://www.lonesock.net/files/soil.zip```
 
@@ -26,4 +26,3 @@ run ``` make && sudo make install```
 OR
 
 run the make command ```make configure-linux```
-

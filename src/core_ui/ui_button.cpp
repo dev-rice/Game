@@ -113,8 +113,7 @@ void UIButton::draw(){
             left_hover_image->draw();
             right_hover_image->draw();
 
-            // bool clicking = glfwGetMouseButton(Window::getInstance()->getGLFWWindow(), GLFW_MOUSE_BUTTON_LEFT);
-            bool clicking = false;
+            bool clicking = sf::Mouse::isButtonPressed(sf::Mouse::Left);
             if(clicking && !has_clicked){
 
                 // Run the extended execution of a potential child class
