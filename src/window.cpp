@@ -121,25 +121,30 @@ void Window::initializeWindow(){
     settings.majorVersion = 3;
     settings.minorVersion = 0;
 
-    // Print the valid fullscreen modes
-    std::vector<sf::VideoMode> fullscreen_modes = sf::VideoMode::getFullscreenModes();
-    int count = 0;
-    for (auto mode : fullscreen_modes){
-        Debug::info("Mode %d: %d by %d\n", count, mode.width, mode.height);
-        count++;
-    }
+
 
     // create the window
     if (fullscreen){
+        // Get all of the valid fullscreen graphics modes supported by your
+        // graphics card and monitor
+        std::vector<sf::VideoMode> fullscreen_modes = sf::VideoMode::getFullscreenModes();
+        // Pick the best one
         sf::VideoMode fullscreen_mode = fullscreen_modes[0];
+
+        // Update this window's width and height so that the framebuffers
+        // are the correct size.
         width = fullscreen_mode.width;
         height = fullscreen_mode.height;
+
         Debug::info("Loading in fullscreen with resolution %d by %d\n", width, height);
+
+        // Create the window
         sfml_window = new sf::Window(fullscreen_mode, "OpenGL", sf::Style::Fullscreen, settings);
-        sfml_window->setPosition(sf::Vector2i(0, 0));
 
     } else {
         Debug::info("Loading in windowed with resolution %d by %d\n", width, height);
+
+        // Create the window
         sfml_window = new sf::Window(sf::VideoMode(width, height), "OpenGL", sf::Style::Default, settings);
     }
 
