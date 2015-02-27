@@ -99,6 +99,7 @@ int main(int argc, char* argv[]) {
     // Create the window
     our_window->setWidth(width);
     our_window->setHeight(height);
+    our_window->setFullscreen(fullscreen);
     our_window->initializeWindow();
 
     sf::Window* sfml_window = our_window->getSFMLWindow();

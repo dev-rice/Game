@@ -43,10 +43,7 @@ public:
     float getWidthScale(){return width_scale;}
     float getHeightScale(){return height_scale;}
 
-    glm::vec2 getMousePosition();
-
     sf::Window* getSFMLWindow();
-
 
 private:
 

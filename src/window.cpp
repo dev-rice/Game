@@ -37,14 +37,6 @@ void Window::setVsync(bool value){
     sfml_window->setVerticalSyncEnabled(value);
 }
 
-glm::vec2 Window::getMousePosition(){
-    double x;
-    double y;
-    // glfwGetCursorPos(glfw_window, &x, &y);
-
-    return glm::vec2(x, y);
-}
-
 void Window::setWidth(int width){
     this->width = width;
 }
@@ -129,8 +121,28 @@ void Window::initializeWindow(){
     settings.majorVersion = 3;
     settings.minorVersion = 0;
 
+    // Print the valid fullscreen modes
+    std::vector<sf::VideoMode> fullscreen_modes = sf::VideoMode::getFullscreenModes();
+    int count = 0;
+    for (auto mode : fullscreen_modes){
+        Debug::info("Mode %d: %d by %d\n", count, mode.width, mode.height);
+        count++;
+    }
+
     // create the window
-    sfml_window = new sf::Window(sf::VideoMode(width, height), "OpenGL", sf::Style::Default, settings);
+    if (fullscreen){
+        sf::VideoMode fullscreen_mode = fullscreen_modes[0];
+        width = fullscreen_mode.width;
+        height = fullscreen_mode.height;
+        Debug::info("Loading in fullscreen with resolution %d by %d\n", width, height);
+        sfml_window = new sf::Window(fullscreen_mode, "OpenGL", sf::Style::Fullscreen, settings);
+        sfml_window->setPosition(sf::Vector2i(0, 0));
+
+    } else {
+        Debug::info("Loading in windowed with resolution %d by %d\n", width, height);
+        sfml_window = new sf::Window(sf::VideoMode(width, height), "OpenGL", sf::Style::Default, settings);
+    }
+
     setVsync(Profile::getInstance()->getVsync());
     sf::Vector2u window_size = sfml_window->getSize();
     Debug::info("Window size: %d by %d\n", window_size.x, window_size.y);
