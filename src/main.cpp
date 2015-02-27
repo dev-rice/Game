@@ -102,8 +102,6 @@ int main(int argc, char* argv[]) {
     our_window->setFullscreen(fullscreen);
     our_window->initializeWindow();
 
-    sf::Window* sfml_window = our_window->getSFMLWindow();
-
     // Create the world
     World world;
     if (has_map){
@@ -114,8 +112,6 @@ int main(int argc, char* argv[]) {
 
     // Display loop
     while(!our_window->shouldClose()) {
-
-        // draw...
         world.update();
     }
 
