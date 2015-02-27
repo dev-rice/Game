@@ -2,8 +2,11 @@
 
 # Dependencies
 GLEW
+
 SFML 2.2
+
 GLM
+
 SOIL
 
 ## Ubuntu installation instructions
