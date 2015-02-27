@@ -178,6 +178,9 @@ void GameView::handleInputs(){
     glm::mat4 proj_matrix = level->getProjection();
     Terrain* terrain = level->getTerrain();
 
+    // Set the cursor to the pointer by default
+    Mouse::getInstance()->setCursorSprite(Mouse::cursorType::CURSOR);
+
     // handle events
     sf::Window* sfml_window = window->getSFMLWindow();
     sf::Event event;
@@ -249,7 +252,75 @@ void GameView::handleInputs(){
 
     glm::vec2 mouse_gl_pos = Mouse::getInstance()->getGLPosition();
     glm::vec3 mouse_world_pos = level->calculateWorldPosition(mouse_gl_pos);
-    bool shift_pressed = false;
+
+    //##############################################################################
+    // Shift Key Handling
+    //##############################################################################
+    bool shift_pressed = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift);
+
+    //##############################################################################
+    // Left Mouse Button Handling
+    //##############################################################################
+    if (left_mouse_button_unclick){
+        left_mouse_button_unclick = false;
+    }
+
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+        // Left mouse button
+        if (attack_command_prime){
+
+            attack_command_prime = false;
+            level->issueOrder(Playable::Order::ATTACK, mouse_world_pos, shift_pressed);
+            mouse_count = -1;
+            left_mouse_button_unclick = true;
+
+        } /* Probably more orders here */
+        else if (mouse_count == 0){
+            initial_left_click_position = mouse_gl_pos;
+        } else {
+            final_left_click_position = mouse_gl_pos;
+        }
+        mouse_count++;
+    } else if(mouse_count != 0){
+        mouse_count = 0;
+        left_mouse_button_unclick = true;
+    }
+
+    //##############################################################################
+    // Middle Mouse Button Handling
+    //##############################################################################
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Middle)){
+        // Middle mouse button
+        if (!middle_mouse_button_click){
+            level->issueOrder(Playable::Order::ATTACK, mouse_world_pos, shift_pressed);
+        }
+
+        attack_command_prime = false;
+        right_mouse_button_click = true;
+    } else if (middle_mouse_button_click){
+        middle_mouse_button_click = false;
+    }
+
+    //##############################################################################
+    // Right Mouse Button Handling
+    //##############################################################################
+    if (right_mouse_button_unclick){
+        right_mouse_button_unclick = false;
+    }
+
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Right)){
+        // Right mouse button
+        if (!right_mouse_button_click){
+            level->issueOrder(Playable::Order::MOVE, mouse_world_pos, shift_pressed);
+        }
+
+        attack_command_prime = false;
+        right_mouse_button_click = true;
+
+    } else if (right_mouse_button_click){
+        right_mouse_button_click = false;
+        right_mouse_button_unclick = true;
+    }
 
     //##############################################################################
     // Hold-Action Key Handling
@@ -262,6 +333,7 @@ void GameView::handleInputs(){
     // Stop-Action Key Handling
     //##############################################################################
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)){
+        // segfaults
         // level->issueOrder(Playable::Order::STOP, mouse_world_pos, shift_pressed);
     }
 
@@ -309,150 +381,73 @@ void GameView::handleInputs(){
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
             camera->rotateX(1);
         }
+    } else {
+        // Mouse scrolling the screen when not in debug mode
+        if(mouse_count == 0){
+            // LEFT
+            if(camera->getPosition().x >= -1.0 * level->getMapWidth()/2 + 55){
+                if(mouse_gl_pos.x < -0.95){
+                    camera->moveGlobalX(-10);
+                } else if(mouse_gl_pos.x < -0.85){
+                    camera->moveGlobalX(-5);
+                }
+            }
+
+            // RIGHT
+            if(camera->getPosition().x <= 1.0 * level->getMapWidth()/2 - 55){
+                if(mouse_gl_pos.x > 0.95){
+                    camera->moveGlobalX(10);
+                } else if (mouse_gl_pos.x > 0.85){
+                    camera->moveGlobalX(5);
+                }
+            }
+
+            // DOWN
+            if(camera->getPosition().z <= 1.0 * level->getMapDepth()/2 - 3){
+                if(mouse_gl_pos.y < -0.95){
+                    camera->moveGlobalZ(10);
+                } else if(mouse_gl_pos.y < -0.85){
+                    camera->moveGlobalZ(5);
+                }
+            }
+
+            // UP                            . Compensating for the camera angle
+            if(camera->getPosition().z >= -1.0 * level->getMapDepth()/2 + 55){
+                if(mouse_gl_pos.y > 0.95){
+                    camera->moveGlobalZ(-10);
+                } else if (mouse_gl_pos.y > 0.85){
+                    camera->moveGlobalZ(-5);
+                }
+            }
+
+            // Changing the mouse cursor based on scrolling
+            if(mouse_gl_pos.x < -0.85){
+                Mouse::getInstance()->setCursorSprite(Mouse::cursorType::LEFT);
+            }
+            if(mouse_gl_pos.x > 0.85){
+                Mouse::getInstance()->setCursorSprite(Mouse::cursorType::RIGHT);
+            }
+            if(mouse_gl_pos.y > 0.85){
+                Mouse::getInstance()->setCursorSprite(Mouse::cursorType::UP);
+            }
+            if(mouse_gl_pos.y < -0.85){
+                Mouse::getInstance()->setCursorSprite(Mouse::cursorType::DOWN);
+            }
+
+            if(mouse_gl_pos.x < -0.85 && mouse_gl_pos.y < -0.85){
+                Mouse::getInstance()->setCursorSprite(Mouse::cursorType::DOWN_LEFT);
+            }
+            if(mouse_gl_pos.x > 0.85 && mouse_gl_pos.y < -0.85){
+                Mouse::getInstance()->setCursorSprite(Mouse::cursorType::DOWN_RIGHT);
+            }
+            if(mouse_gl_pos.x < -0.85 && mouse_gl_pos.y > 0.85){
+                Mouse::getInstance()->setCursorSprite(Mouse::cursorType::UP_LEFT);
+            }
+            if(mouse_gl_pos.x > 0.85 && mouse_gl_pos.y > 0.85){
+                Mouse::getInstance()->setCursorSprite(Mouse::cursorType::UP_RIGHT);
+            }
+        }
+
     }
-
-    // } else {
-    //     // Mouse scrolling the screen when not in debug mode
-    //     if(mouse_count == 0){
-    //
-    //         Mouse::getInstance()->setCursorSprite(Mouse::cursorType::CURSOR);
-    //
-    //         // LEFT
-    //         if(camera->getPosition().x >= -1.0 * level->getMapWidth()/2 + 55){
-    //             if(gl_mouse_position.x < -0.95){
-    //                 camera->moveGlobalX(-10);
-    //             } else if(gl_mouse_position.x < -0.85){
-    //                 camera->moveGlobalX(-5);
-    //             }
-    //         }
-    //
-    //         // RIGHT
-    //         if(camera->getPosition().x <= 1.0 * level->getMapWidth()/2 - 55){
-    //             if(gl_mouse_position.x > 0.95){
-    //                 camera->moveGlobalX(10);
-    //             } else if (gl_mouse_position.x > 0.85){
-    //                 camera->moveGlobalX(5);
-    //             }
-    //         }
-    //
-    //         // DOWN
-    //         if(camera->getPosition().z <= 1.0 * level->getMapDepth()/2 - 3){
-    //             if(gl_mouse_position.y < -0.95){
-    //                 camera->moveGlobalZ(10);
-    //             } else if(gl_mouse_position.y < -0.85){
-    //                 camera->moveGlobalZ(5);
-    //             }
-    //         }
-    //
-    //         // UP                            . Compensating for the camera angle
-    //         if(camera->getPosition().z >= -1.0 * level->getMapDepth()/2 + 55){
-    //             if(gl_mouse_position.y > 0.95){
-    //                 camera->moveGlobalZ(-10);
-    //             } else if (gl_mouse_position.y > 0.85){
-    //                 camera->moveGlobalZ(-5);
-    //             }
-    //         }
-    //
-    //         // Changing the mouse cursor based on scrolling
-    //         if(gl_mouse_position.x < -0.85){
-    //             Mouse::getInstance()->setCursorSprite(Mouse::cursorType::LEFT);
-    //         }
-    //         if(gl_mouse_position.x > 0.85){
-    //             Mouse::getInstance()->setCursorSprite(Mouse::cursorType::RIGHT);
-    //         }
-    //         if(gl_mouse_position.y > 0.85){
-    //             Mouse::getInstance()->setCursorSprite(Mouse::cursorType::UP);
-    //         }
-    //         if(gl_mouse_position.y < -0.85){
-    //             Mouse::getInstance()->setCursorSprite(Mouse::cursorType::DOWN);
-    //         }
-    //
-    //         if(gl_mouse_position.x < -0.85 && gl_mouse_position.y < -0.85){
-    //             Mouse::getInstance()->setCursorSprite(Mouse::cursorType::DOWN_LEFT);
-    //         }
-    //         if(gl_mouse_position.x > 0.85 && gl_mouse_position.y < -0.85){
-    //             Mouse::getInstance()->setCursorSprite(Mouse::cursorType::DOWN_RIGHT);
-    //         }
-    //         if(gl_mouse_position.x < -0.85 && gl_mouse_position.y > 0.85){
-    //             Mouse::getInstance()->setCursorSprite(Mouse::cursorType::UP_LEFT);
-    //         }
-    //         if(gl_mouse_position.x > 0.85 && gl_mouse_position.y > 0.85){
-    //             Mouse::getInstance()->setCursorSprite(Mouse::cursorType::UP_RIGHT);
-    //         }
-    //     }
-    //
-    // }
-    //
-    // //##############################################################################
-    // // Shift Key Handling
-    // //##############################################################################
-    // bool shift_pressed = (glfwGetKey(glfw_window, GLFW_KEY_LEFT_SHIFT ) == GLFW_PRESS || glfwGetKey(glfw_window, GLFW_KEY_RIGHT_SHIFT)  == GLFW_PRESS);
-    //
-    // //##############################################################################
-    // // Left Mouse Button Handling
-    // //##############################################################################
-    // if(left_mouse_button_unclick){
-    //     left_mouse_button_unclick = false;
-    // }
-    //
-    // if(glfwGetMouseButton(glfw_window, GLFW_MOUSE_BUTTON_LEFT)){
-    //     // Left mouse button
-    //     if(attack_command_prime){
-    //
-    //         attack_command_prime = false;
-    //         level->issueOrder(Playable::Order::ATTACK, level->calculateWorldPosition(Mouse::getInstance()->getGLPosition()), shift_pressed);
-    //         mouse_count = -1;
-    //         left_mouse_button_unclick = true;
-    //
-    //     } /* Probably more orders here */
-    //     else if(mouse_count == 0){
-    //         initial_left_click_position = gl_mouse_position;
-    //     } else {
-    //         final_left_click_position = gl_mouse_position;
-    //     }
-    //     mouse_count++;
-    // } else if(mouse_count != 0){
-    //     mouse_count = 0;
-    //     left_mouse_button_unclick = true;
-    // }
-    //
-    // //##############################################################################
-    // // Middle Mouse Button Handling
-    // //##############################################################################
-    // if(glfwGetMouseButton(glfw_window, GLFW_MOUSE_BUTTON_MIDDLE)){
-    //     // Middle mouse button
-    //     if(!middle_mouse_button_click){
-    //         level->issueOrder(Playable::Order::ATTACK, level->calculateWorldPosition(Mouse::getInstance()->getGLPosition()), shift_pressed);
-    //     }
-    //
-    //     attack_command_prime = false;
-    //     right_mouse_button_click = true;
-    // } else if(middle_mouse_button_click){
-    //     middle_mouse_button_click = false;
-    // }
-    //
-    // //##############################################################################
-    // // Right Mouse Button Handling
-    // //##############################################################################
-    // if(right_mouse_button_unclick){
-    //     right_mouse_button_unclick = false;
-    // }
-    //
-    // if(glfwGetMouseButton(glfw_window, GLFW_MOUSE_BUTTON_RIGHT)){
-    //     // Right mouse button
-    //     if(!right_mouse_button_click){
-    //
-    //         level->issueOrder(Playable::Order::MOVE, level->calculateWorldPosition(Mouse::getInstance()->getGLPosition()), shift_pressed);
-    //     }
-    //
-    //     attack_command_prime = false;
-    //     right_mouse_button_click = true;
-    // } else if(right_mouse_button_click){
-    //     right_mouse_button_click = false;
-    //     right_mouse_button_unclick = true;
-    // }
-    //
-
-
 
 }

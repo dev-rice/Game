@@ -30,7 +30,6 @@ bool Window::shouldClose(){
 
 
 void Window::close(){
-    // glfwTerminate();
 }
 
 void Window::setVsync(bool value){
