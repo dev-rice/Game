@@ -28,6 +28,7 @@
 #include "window.h"
 #include "mesh_loader.h"
 #include "game_clock.h"
+#include "input_handler.h"
 
 int main(int argc, char* argv[]) {
 
@@ -109,6 +110,10 @@ int main(int argc, char* argv[]) {
     } else {
         world = new World();
     }
+
+    // Start the input handler so we can use
+    // it later.
+    InputHandler::getInstance();
 
     // Display loop
     while(!our_window->shouldClose()) {

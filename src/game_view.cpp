@@ -185,20 +185,6 @@ void GameView::handleInputs(){
     glm::vec2 mouse_gl_pos = Mouse::getInstance()->getGLPosition();
     glm::vec3 mouse_world_pos = level->calculateWorldPosition(mouse_gl_pos);
 
-    SDL_Event event;
-    while (SDL_PollEvent(&event)) {
-        switch (event.type) {
-        case SDL_KEYDOWN:
-            if (event.key.keysym.sym == SDLK_ESCAPE){
-                // window->requestClose();
-            }
-            break;
-        case SDL_QUIT:
-            window->requestClose();
-            break;
-        }
-    }
-
     SDL_PumpEvents();
     const Uint8 *state = SDL_GetKeyboardState(NULL);
 
