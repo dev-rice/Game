@@ -18,6 +18,8 @@ public:
 private:
     InputHandler();
 
+    void defaultCallback(SDL_Event);
+
     std::function<void(SDL_Event)> callback;
     std::thread polling_thread;
 
