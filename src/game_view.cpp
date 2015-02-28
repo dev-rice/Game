@@ -189,39 +189,12 @@ void GameView::handleInputs(){
                 window->requestClose();
             }
             break;
-        case SDL_MOUSEMOTION:
-            // printf("Mouse moved by %d,%d to (%d,%d)\n",
-                // event.motion.xrel, event.motion.yrel, event.motion.x, event.motion.y);
-            break;
-        case SDL_MOUSEBUTTONDOWN:
-            // printf("Mouse button %d pressed at (%d,%d)\n",
-                // event.button.button, event.button.x, event.button.y);
-            break;
         case SDL_QUIT:
             window->requestClose();
             break;
         }
     }
 
-    // handle events
-    // sf::Window* sfml_window = window->getSFMLWindow();
-    // sf::Event event;
-    // while (sfml_window->pollEvent(event)) {
-    //
-    //     if (event.type == sf::Event::Resized) {
-    //         // adjust the viewport when the sfml_window is resized
-    //         glViewport(0, 0, event.size.width, event.size.height);
-    //         window->setWidth(event.size.width);
-    //         window->setHeight(event.size.height);
-    //     }
-    //
-    //     // Handle the window being closed
-    //     if (event.type == sf::Event::Closed) {
-    //         window->requestClose();
-    //     }
-    //
-    // }
-    //
     // // Close the window if escape is pressed
     // if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
     //     window->requestClose();
