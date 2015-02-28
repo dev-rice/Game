@@ -94,9 +94,7 @@ void UIRadioButton::draw(){
             hover_icon->setPositionAndDimensions(x_pixels, y_pixels, icon_width, icon_height);
             hover_icon->draw();
 
-            SDL_PumpEvents();
-            bool clicking = SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_LEFT);
-
+            bool clicking = Mouse::getInstance()->isPressed(Mouse::LEFT);
             if(clicking && !has_clicked){
 
                 // Run the extended execution of a potential child class

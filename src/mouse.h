@@ -15,11 +15,13 @@ public:
     static Mouse* getInstance();
 
     enum class cursorType { CURSOR, SELECTION, COMMAND, UP, RIGHT, DOWN, LEFT, UP_LEFT, UP_RIGHT, DOWN_RIGHT, DOWN_LEFT};
+    enum Button { LEFT, RIGHT, MIDDLE };
 
     void draw();
     void setCursorSprite(cursorType);
     void setHovering();
     bool isHovering();
+    bool isPressed(Button);
 
     glm::vec2 getGLPosition();
     glm::vec2 getScreenPosition();

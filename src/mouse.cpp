@@ -112,3 +112,20 @@ void Mouse::setHovering(){
 bool Mouse::isHovering(){
     return hovering;
 }
+
+bool Mouse::isPressed(Button button){
+    SDL_PumpEvents();
+    bool is_pressed = false;
+    switch(button){
+        case LEFT:
+            is_pressed = SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_LEFT);
+            break;
+        case RIGHT:
+            is_pressed = SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_RIGHT);
+            break;
+        case MIDDLE:
+            is_pressed = SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_MIDDLE);
+            break;
+    }
+    return is_pressed;
+}

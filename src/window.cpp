@@ -142,8 +142,8 @@ void Window::initializeWindow(){
         flags |= SDL_WINDOW_FULLSCREEN;
     }
 
-    sdl_window = SDL_CreateWindow("Game", 0,
-    	0, width, height, flags);
+    sdl_window = SDL_CreateWindow("Game", SDL_WINDOWPOS_UNDEFINED,
+        SDL_WINDOWPOS_UNDEFINED, width, height, flags);
     gl_context = SDL_GL_CreateContext(sdl_window);
 
     SDL_ShowCursor(SDL_DISABLE);

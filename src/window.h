@@ -2,7 +2,6 @@
 #define Window_h
 
 #include <GL/glew.h>
-#include <SFML/Window.hpp>
 #include <SDL2/SDL.h>
 
 #if defined __APPLE__ && __MACH__
