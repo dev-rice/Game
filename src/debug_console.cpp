@@ -87,7 +87,7 @@ void DebugConsole::handleInput(SDL_Event event){
         break;
 
     case SDL_TEXTINPUT:
-        /* Add new text onto the end of our text */
+        // Add new text onto the end of our input buffer
         input_buffer += event.text.text;
         break;
     case SDL_QUIT:
