@@ -4,6 +4,7 @@
 #include <functional>
 #include <thread>
 #include <SDL2/SDL.h>
+#include <stack>
 
 #include "debug.h"
 #include "window.h"
@@ -24,7 +25,7 @@ private:
     void defaultCallback(SDL_Event);
 
     Callback_Type callback;
-    std::vector<Callback_Type*> callbacks;
+    std::stack<Callback_Type> callbacks;
     std::thread polling_thread;
 
     static InputHandler* instance;

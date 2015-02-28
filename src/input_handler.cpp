@@ -26,7 +26,7 @@ void InputHandler::pollInputs() {
     // Continue polling until the window has been closed.
     while (!Window::getInstance()->shouldClose()){
         while (SDL_PollEvent(&event)) {
-            callback(event);
+            callbacks.top()(event);
         }
     }
 }
@@ -35,10 +35,8 @@ void InputHandler::setCallback(Callback_Type& callback){
     Debug::info("Setting callback to %p.\n", &callback);
     this->callback = callback;
 
-    callbacks.push_back(&callback);
-    for (int i = 0; i < callbacks.size(); ++i){
-        Debug::info("callbacks[%d] = %p\n", i, callbacks[i]);        
-    }
+    callbacks.push(callback);
+    Debug::info("callbacks.top() == %p", &callbacks.top());
 
 }
 
