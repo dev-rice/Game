@@ -189,58 +189,49 @@ void GameView::handleInput(SDL_Event event){
     glm::vec2 mouse_gl_pos = Mouse::getInstance()->getGLPosition();
     glm::vec3 mouse_world_pos = level->calculateWorldPosition(mouse_gl_pos);
 
-    // SDL_PumpEvents();
+    SDL_Scancode key_scancode = event.key.keysym.scancode;
+    switch(event.type){
+        case SDL_KEYDOWN:
+            if (key_scancode == SDL_SCANCODE_ESCAPE){
+                window->requestClose();
+            } else if (key_scancode == SDL_SCANCODE_T) {
+                GameClock::getInstance()->resetAverage();
+            } else if ((key_scancode == SDL_SCANCODE_TAB) && (!toggle_key_state)){
+                toggle_key_state = true;
+                debug_showing = !debug_showing;
+            } else if ((key_scancode == SDL_SCANCODE_F8) && (!debug_console_key_state)){
+                debug_console_key_state = true;
+                DebugConsole::getInstance()->toggleShowing();
+            } else if ((key_scancode == SDL_SCANCODE_G) && (!graphics_menu_key_state)){
+                graphics_menu_key_state = true;
+                graphics_menu->toggleShowing();
+            } else if ((key_scancode == SDL_SCANCODE_F10) && (!menu_key_state)){
+                menu_key_state = true;
+                menu->toggleShowing();
+            } else if ((key_scancode == SDL_SCANCODE_P) && (!printscreen_key_state)){
+                printscreen_key_state = true;
+                window->takeScreenshot();
+            }
+        break;
+
+        case SDL_KEYUP:
+            if (key_scancode == SDL_SCANCODE_TAB){
+                toggle_key_state = false;
+            } else if (key_scancode == SDL_SCANCODE_F8){
+                debug_console_key_state = false;
+            } else if (key_scancode == SDL_SCANCODE_G){
+                graphics_menu_key_state = false;
+            } else if (key_scancode == SDL_SCANCODE_F10){
+                menu_key_state = false;
+            } else if (key_scancode == SDL_SCANCODE_P){
+                printscreen_key_state = false;
+            }
+        break;
+
+    }
+
+    SDL_PumpEvents();
     const Uint8 *state = SDL_GetKeyboardState(NULL);
-
-    // Close the window if escape is pressed
-    if (state[SDL_SCANCODE_ESCAPE]) {
-        window->requestClose();
-    }
-
-    // Handle the debug menu toggle
-    if (state[SDL_SCANCODE_TAB] && (!toggle_key_state)){
-        toggle_key_state = true;
-        debug_showing = !debug_showing;
-    } else if (!state[SDL_SCANCODE_TAB]) {
-        toggle_key_state = false;
-    }
-
-    // Handle the debug console toggle
-    if (state[SDL_SCANCODE_F8] && (!debug_console_key_state)){
-        debug_console_key_state = true;
-        DebugConsole::getInstance()->toggleShowing();
-    } else if (!state[SDL_SCANCODE_F8]) {
-        debug_console_key_state = false;
-    }
-
-    // Handle the graphics menu toggle
-    if (state[SDL_SCANCODE_G] && (!graphics_menu_key_state)){
-        graphics_menu_key_state = true;
-        graphics_menu->toggleShowing();
-    } else if (!state[SDL_SCANCODE_G]) {
-        graphics_menu_key_state = false;
-    }
-
-    // Handle the menu toggle key
-    if (state[SDL_SCANCODE_F10] && (!menu_key_state)){
-        menu_key_state = true;
-        menu->toggleShowing();
-    } else if (!state[SDL_SCANCODE_F10]) {
-        menu_key_state = false;
-    }
-
-    //Print the screen
-    if (state[SDL_SCANCODE_P] && (!printscreen_key_state)){
-        printscreen_key_state = true;
-        Window::getInstance()->takeScreenshot();
-    } else if (!state[SDL_SCANCODE_P]) {
-        printscreen_key_state = false;
-    }
-
-    // Reset the average frame time calculations
-    if (state[SDL_SCANCODE_T]){
-        GameClock::getInstance()->resetAverage();
-    }
 
     //##############################################################################
     // Shift Key Handling
