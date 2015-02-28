@@ -16,7 +16,6 @@ InputHandler::InputHandler(){
     polling_thread = std::thread(&InputHandler::pollInputs, this);
     Callback_Type callback_function = std::bind(&InputHandler::defaultCallback, this, std::placeholders::_1);
 
-    Debug::info("Setting callback to %p.\n", &callback_function);
     pushCallback(callback_function);
 }
 
@@ -32,6 +31,7 @@ void InputHandler::pollInputs() {
 }
 
 void InputHandler::pushCallback(Callback_Type& callback){
+    Debug::info("Pushing callback %p to top of stack.\n", &callback);
     callbacks.push(callback);
 }
 
