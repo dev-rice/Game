@@ -2,7 +2,7 @@
 #define Window_h
 
 #include <GL/glew.h>
-#include <SFML/Window.hpp>
+#include <SDL2/SDL.h>
 
 #if defined __APPLE__ && __MACH__
     #include <OpenGL/OpenGL.h>
@@ -34,7 +34,7 @@ public:
 
     void setWidth(int w);
     void setHeight(int h);
-    void setFullscreen(bool f) {fullscreen = f;}
+    void setFullscreen(bool f);
     void setVsync(bool);
 
     int getWidth();
@@ -42,8 +42,6 @@ public:
 
     float getWidthScale(){return width_scale;}
     float getHeightScale(){return height_scale;}
-
-    sf::Window* getSFMLWindow();
 
 private:
 
@@ -59,7 +57,8 @@ private:
 
     bool should_close;
 
-    sf::Window* sfml_window;
+    SDL_Window* sdl_window;
+    SDL_GLContext gl_context;
 
     static Window* instance;
     Window();

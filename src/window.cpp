@@ -4,6 +4,8 @@ Window* Window::instance;
 
 Window::Window(){
     should_close = false;
+    //Start SDL
+    SDL_Init(SDL_INIT_EVERYTHING);
 }
 
 Window* Window::getInstance(){
@@ -16,7 +18,8 @@ Window* Window::getInstance(){
 }
 
 void Window::display(){
-    sfml_window->display();
+    //Update screen
+    SDL_GL_SwapWindow(sdl_window);
 }
 
 void Window::requestClose() {
@@ -30,10 +33,28 @@ bool Window::shouldClose(){
 
 
 void Window::close(){
+    // Quit SDL
+    SDL_GL_DeleteContext(gl_context);
+    SDL_DestroyWindow(sdl_window);
+    SDL_Quit();
 }
 
 void Window::setVsync(bool value){
-    sfml_window->setVerticalSyncEnabled(value);
+    if (value){
+        SDL_GL_SetSwapInterval(1);
+    } else {
+        SDL_GL_SetSwapInterval(0);
+    }
+}
+
+void Window::setFullscreen(bool fullscreen){
+    if (fullscreen){
+        SDL_DisplayMode mode;
+        SDL_GetDesktopDisplayMode(0, &mode);
+        width = mode.w;
+        height = mode.h;
+    }
+    this->fullscreen = fullscreen;
 }
 
 void Window::setWidth(int width){
@@ -109,50 +130,23 @@ void Window::takeScreenshot(){
     correct_data = NULL;
 }
 
-sf::Window* Window::getSFMLWindow(){
-    return sfml_window;
-}
-
 void Window::initializeWindow(){
-    sf::ContextSettings settings;
-    settings.depthBits = 24;
-    settings.stencilBits = 8;
-    settings.majorVersion = 3;
-    settings.minorVersion = 0;
+    Uint32 flags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL;
 
+    //Use OpenGL 4.1
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+    SDL_GL_SetAttribute( SDL_GL_CONTEXT_MAJOR_VERSION, 4 );
+    SDL_GL_SetAttribute( SDL_GL_CONTEXT_MINOR_VERSION, 1 );
 
-
-    // create the window
     if (fullscreen){
-        // Get all of the valid fullscreen graphics modes supported by your
-        // graphics card and monitor
-        std::vector<sf::VideoMode> fullscreen_modes = sf::VideoMode::getFullscreenModes();
-        // Pick the best one
-        sf::VideoMode fullscreen_mode = fullscreen_modes[0];
-
-        // Update this window's width and height so that the framebuffers
-        // are the correct size.
-        width = fullscreen_mode.width;
-        height = fullscreen_mode.height;
-
-        Debug::info("Loading in fullscreen with resolution %d by %d\n", width, height);
-
-        // Create the window
-        sfml_window = new sf::Window(fullscreen_mode, "OpenGL", sf::Style::Fullscreen, settings);
-
-    } else {
-        Debug::info("Loading in windowed with resolution %d by %d\n", width, height);
-
-        // Create the window
-        sfml_window = new sf::Window(sf::VideoMode(width, height), "OpenGL", sf::Style::Default, settings);
+        flags |= SDL_WINDOW_FULLSCREEN;
     }
 
-    setVsync(Profile::getInstance()->getVsync());
-    sf::Vector2u window_size = sfml_window->getSize();
-    Debug::info("Window size: %d by %d\n", window_size.x, window_size.y);
+    sdl_window = SDL_CreateWindow("Game", SDL_WINDOWPOS_UNDEFINED,
+        SDL_WINDOWPOS_UNDEFINED, width, height, flags);
+    gl_context = SDL_GL_CreateContext(sdl_window);
 
-    // Hide the mouse because we have our own
-    sfml_window->setMouseCursorVisible(false);
+    SDL_ShowCursor(SDL_DISABLE);
 
     // Set up GLEW so that we can use abstracted OpenGL functions
     glewExperimental = GL_TRUE;

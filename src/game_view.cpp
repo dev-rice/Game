@@ -181,82 +181,81 @@ void GameView::handleInputs(){
     // Set the cursor to the pointer by default
     Mouse::getInstance()->setCursorSprite(Mouse::cursorType::CURSOR);
 
-    // handle events
-    sf::Window* sfml_window = window->getSFMLWindow();
-    sf::Event event;
-    while (sfml_window->pollEvent(event)) {
+    // Get the mouse coordinates gl, and the world
+    glm::vec2 mouse_gl_pos = Mouse::getInstance()->getGLPosition();
+    glm::vec3 mouse_world_pos = level->calculateWorldPosition(mouse_gl_pos);
 
-        if (event.type == sf::Event::Resized) {
-            // adjust the viewport when the sfml_window is resized
-            glViewport(0, 0, event.size.width, event.size.height);
-            window->setWidth(event.size.width);
-            window->setHeight(event.size.height);
-        }
-
-        // Handle the window being closed
-        if (event.type == sf::Event::Closed) {
+    SDL_Event event;
+    while (SDL_PollEvent(&event)) {
+        switch (event.type) {
+        case SDL_KEYDOWN:
+            if (event.key.keysym.sym == SDLK_ESCAPE){
+                // window->requestClose();
+            }
+            break;
+        case SDL_QUIT:
             window->requestClose();
+            break;
         }
-
     }
 
+    SDL_PumpEvents();
+    const Uint8 *state = SDL_GetKeyboardState(NULL);
+
     // Close the window if escape is pressed
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+    if (state[SDL_SCANCODE_ESCAPE]) {
         window->requestClose();
     }
 
     // Handle the debug menu toggle
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Tab) && (!toggle_key_state)){
+    if (state[SDL_SCANCODE_TAB] && (!toggle_key_state)){
         toggle_key_state = true;
         debug_showing = !debug_showing;
-    } else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Tab)) {
+    } else if (!state[SDL_SCANCODE_TAB]) {
         toggle_key_state = false;
     }
 
     // Handle the debug console toggle
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::F8) && (!debug_console_key_state)){
+    if (state[SDL_SCANCODE_F8] && (!debug_console_key_state)){
         debug_console_key_state = true;
         DebugConsole::getInstance()->toggleShowing();
-    } else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::F8)) {
+    } else if (!state[SDL_SCANCODE_F8]) {
         debug_console_key_state = false;
     }
 
     // Handle the graphics menu toggle
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::G) && (!graphics_menu_key_state)){
+    if (state[SDL_SCANCODE_G] && (!graphics_menu_key_state)){
         graphics_menu_key_state = true;
         graphics_menu->toggleShowing();
-    } else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::G)) {
+    } else if (!state[SDL_SCANCODE_G]) {
         graphics_menu_key_state = false;
     }
 
     // Handle the menu toggle key
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::F10) && (!menu_key_state)){
+    if (state[SDL_SCANCODE_F10] && (!menu_key_state)){
         menu_key_state = true;
         menu->toggleShowing();
-    } else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::F10)) {
+    } else if (!state[SDL_SCANCODE_F10]) {
         menu_key_state = false;
     }
 
     //Print the screen
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::P) && (!printscreen_key_state)){
+    if (state[SDL_SCANCODE_P] && (!printscreen_key_state)){
         printscreen_key_state = true;
         Window::getInstance()->takeScreenshot();
-    } else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::P)) {
+    } else if (!state[SDL_SCANCODE_P]) {
         printscreen_key_state = false;
     }
 
     // Reset the average frame time calculations
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::T)){
+    if (state[SDL_SCANCODE_T]){
         GameClock::getInstance()->resetAverage();
     }
-
-    glm::vec2 mouse_gl_pos = Mouse::getInstance()->getGLPosition();
-    glm::vec3 mouse_world_pos = level->calculateWorldPosition(mouse_gl_pos);
 
     //##############################################################################
     // Shift Key Handling
     //##############################################################################
-    bool shift_pressed = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift);
+    bool shift_pressed = state[SDL_SCANCODE_LSHIFT] || state[SDL_SCANCODE_RSHIFT];
 
     //##############################################################################
     // Left Mouse Button Handling
@@ -265,7 +264,7 @@ void GameView::handleInputs(){
         left_mouse_button_unclick = false;
     }
 
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+    if (Mouse::getInstance()->isPressed(Mouse::LEFT)){
         // Left mouse button
         if (attack_command_prime){
 
@@ -289,7 +288,7 @@ void GameView::handleInputs(){
     //##############################################################################
     // Middle Mouse Button Handling
     //##############################################################################
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Middle)){
+    if (Mouse::getInstance()->isPressed(Mouse::MIDDLE)){
         // Middle mouse button
         if (!middle_mouse_button_click){
             level->issueOrder(Playable::Order::ATTACK, mouse_world_pos, shift_pressed);
@@ -308,7 +307,7 @@ void GameView::handleInputs(){
         right_mouse_button_unclick = false;
     }
 
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Right)){
+    if (Mouse::getInstance()->isPressed(Mouse::RIGHT)){
         // Right mouse button
         if (!right_mouse_button_click){
             level->issueOrder(Playable::Order::MOVE, mouse_world_pos, shift_pressed);
@@ -325,14 +324,14 @@ void GameView::handleInputs(){
     //##############################################################################
     // Hold-Action Key Handling
     //##############################################################################
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::H)){
+    if (state[SDL_SCANCODE_H]){
         level->issueOrder(Playable::Order::HOLD_POSITION, mouse_world_pos, shift_pressed);
     }
 
     //##############################################################################
     // Stop-Action Key Handling
     //##############################################################################
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)){
+    if (state[SDL_SCANCODE_S]){
         // segfaults
         // level->issueOrder(Playable::Order::STOP, mouse_world_pos, shift_pressed);
     }
@@ -340,45 +339,45 @@ void GameView::handleInputs(){
     //##############################################################################
     // Attack-Action Key Handling
     //##############################################################################
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
+    if (state[SDL_SCANCODE_A]){
         attack_command_prime = true;
     }
-
+    //
     //##############################################################################
     // Camera Movement Handling
     //##############################################################################
     if (debug_showing){
         // Translation
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
+        if (state[SDL_SCANCODE_W]){
             camera->moveZ(-1);
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)){
+        if (state[SDL_SCANCODE_S]){
             camera->moveZ(1);
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
+        if (state[SDL_SCANCODE_A]){
             camera->moveX(-1);
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
+        if (state[SDL_SCANCODE_D]){
             camera->moveX(1);
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)){
+        if (state[SDL_SCANCODE_LSHIFT]){
             camera->moveY(-1);
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
+        if (state[SDL_SCANCODE_SPACE]){
             camera->moveY(1);
         }
 
         // Rotation
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)){
+        if (state[SDL_SCANCODE_E]){
             camera->rotateY(-1);
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)){
+        if (state[SDL_SCANCODE_Q]){
             camera->rotateY(1);
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::F)){
+        if (state[SDL_SCANCODE_F]){
             camera->rotateX(-1);
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
+        if (state[SDL_SCANCODE_R]){
             camera->rotateX(1);
         }
     } else {

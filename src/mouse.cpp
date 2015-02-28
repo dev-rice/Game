@@ -100,9 +100,9 @@ glm::vec2 Mouse::getGLPosition(){
 }
 
 glm::vec2 Mouse::getScreenPosition(){
-    sf::Window* sfml_window = Window::getInstance()->getSFMLWindow();
-    sf::Vector2i mouse_pos = sf::Mouse::getPosition(*sfml_window);
-    return glm::vec2(mouse_pos.x, mouse_pos.y);
+    int x, y;
+    SDL_GetMouseState(&x, &y);
+    return glm::vec2(x, y);
 }
 
 void Mouse::setHovering(){
@@ -111,4 +111,21 @@ void Mouse::setHovering(){
 
 bool Mouse::isHovering(){
     return hovering;
+}
+
+bool Mouse::isPressed(Button button){
+    SDL_PumpEvents();
+    bool is_pressed = false;
+    switch(button){
+        case LEFT:
+            is_pressed = SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_LEFT);
+            break;
+        case RIGHT:
+            is_pressed = SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_RIGHT);
+            break;
+        case MIDDLE:
+            is_pressed = SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_MIDDLE);
+            break;
+    }
+    return is_pressed;
 }

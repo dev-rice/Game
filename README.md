@@ -3,7 +3,7 @@
 # Dependencies
 GLEW
 
-SFML 2.2
+SDL 2
 
 GLM
 
@@ -12,7 +12,7 @@ SOIL
 ## Ubuntu installation instructions
 Run
 
-```sudo apt-get install libglew-dev libglm-dev libsfml-dev curl```
+```sudo apt-get install libglew-dev libglm-dev libsdl2-dev curl```
 
 ```wget http://www.lonesock.net/files/soil.zip```
 

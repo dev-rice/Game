@@ -3,8 +3,6 @@
 GameClock* GameClock::instance;
 
 GameClock::GameClock(){
-    clock = new sf::Clock();
-
     current_time = last_time = getCurrentTime();
     tick_count = 0;
     average_delta_time = 0.0f;
@@ -39,7 +37,11 @@ void GameClock::resetAverage(){
 }
 
 float GameClock::getCurrentTime(){
-    return clock->getElapsedTime().asSeconds();
+    // Get the number of milliseconds since the SDL library initialization.
+    unsigned int ticks = SDL_GetTicks();
+    // Convert into seconds
+    float seconds = (float) ticks / 1000;
+    return seconds;
 }
 
 float GameClock::getDeltaTime(){
