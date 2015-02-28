@@ -17,14 +17,14 @@ public:
     static InputHandler* getInstance();
 
     void pollInputs();
-    void setCallback(Callback_Type& callback);
+    void pushCallback(Callback_Type& callback);
+    void popCallback();
 
 private:
     InputHandler();
 
     void defaultCallback(SDL_Event);
 
-    Callback_Type callback;
     std::stack<Callback_Type> callbacks;
     std::thread polling_thread;
 

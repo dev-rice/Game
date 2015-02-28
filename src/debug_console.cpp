@@ -46,12 +46,13 @@ void DebugConsole::draw(){
 
 void DebugConsole::show(){
     InputHandler::Callback_Type callback_function = std::bind(&DebugConsole::handleInput, this, std::placeholders::_1);
-    InputHandler::getInstance()->setCallback(callback_function);
+    InputHandler::getInstance()->pushCallback(callback_function);
 
     UIWindow::show();
 }
 
 void DebugConsole::hide(){
+    InputHandler::getInstance()->popCallback();
     UIWindow::hide();
 }
 

@@ -17,7 +17,7 @@ InputHandler::InputHandler(){
     Callback_Type callback_function = std::bind(&InputHandler::defaultCallback, this, std::placeholders::_1);
 
     Debug::info("Setting callback to %p.\n", &callback_function);
-    setCallback(callback_function);
+    pushCallback(callback_function);
 }
 
 void InputHandler::pollInputs() {
@@ -31,13 +31,12 @@ void InputHandler::pollInputs() {
     }
 }
 
-void InputHandler::setCallback(Callback_Type& callback){
-    Debug::info("Setting callback to %p.\n", &callback);
-    this->callback = callback;
-
+void InputHandler::pushCallback(Callback_Type& callback){
     callbacks.push(callback);
-    Debug::info("callbacks.top() == %p", &callbacks.top());
+}
 
+void InputHandler::popCallback(){
+    callbacks.pop();
 }
 
 void InputHandler::defaultCallback(SDL_Event event){
