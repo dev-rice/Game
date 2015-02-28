@@ -44,8 +44,6 @@ public:
     float getWidthScale(){return width_scale;}
     float getHeightScale(){return height_scale;}
 
-    sf::Window* getSFMLWindow();
-
 private:
 
     int width;
@@ -59,8 +57,6 @@ private:
     int requested_height;
 
     bool should_close;
-
-    sf::Window* sfml_window;
 
     SDL_Window* sdl_window;
     SDL_GLContext gl_context;

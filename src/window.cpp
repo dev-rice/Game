@@ -115,10 +115,6 @@ void Window::takeScreenshot(){
     correct_data = NULL;
 }
 
-sf::Window* Window::getSFMLWindow(){
-    return sfml_window;
-}
-
 void Window::initializeWindow(){
     //Start SDL
     SDL_Init( SDL_INIT_EVERYTHING );
@@ -133,6 +129,8 @@ void Window::initializeWindow(){
     sdl_window = SDL_CreateWindow("Game", 0,
     	0, width, height, flags);
     gl_context = SDL_GL_CreateContext(sdl_window);
+
+    SDL_ShowCursor(SDL_DISABLE);
 
     // Set up GLEW so that we can use abstracted OpenGL functions
     glewExperimental = GL_TRUE;
