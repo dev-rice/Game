@@ -17,8 +17,8 @@ public:
     void loadFromXML(std::string);
 
     void draw();
-    void show();
-    void hide();
+    virtual void show();
+    virtual void hide();
     void toggleShowing();
 
     bool isShowing() {return is_showing;}

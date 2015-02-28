@@ -44,8 +44,33 @@ void DebugConsole::draw(){
 
 }
 
+void DebugConsole::show(){
+    Debug::info("Showing debug console.\n");
+    std::function<void(SDL_Event)> callback_function = std::bind(&DebugConsole::handleInput, this, std::placeholders::_1);
+    InputHandler::getInstance()->setCallback(callback_function);
+    UIWindow::show();
+}
+
+void DebugConsole::hide(){
+    UIWindow::hide();
+}
+
 void DebugConsole::clearMessages(){
     messages.clear();
+}
+
+void DebugConsole::handleInput(SDL_Event event){
+    switch (event.type) {
+    case SDL_KEYUP:
+        Debug::info("Released: %s\n", SDL_GetKeyName(event.key.keysym.sym));
+        break;
+    case SDL_KEYDOWN:
+        Debug::info("Pressed: %s\n", SDL_GetKeyName(event.key.keysym.sym));
+        break;
+    case SDL_QUIT:
+        Window::getInstance()->requestClose();
+        break;
+    }
 }
 
 void DebugConsole::syncWithDebug(){

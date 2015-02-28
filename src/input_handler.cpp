@@ -24,17 +24,7 @@ void InputHandler::pollInputs() {
     // Continue polling until the window has been closed.
     while (!Window::getInstance()->shouldClose()){
         while (SDL_PollEvent(&event)) {
-            switch (event.type) {
-            case SDL_KEYUP:
-                Debug::info("Released: %s\n", SDL_GetKeyName(event.key.keysym.sym));
-                break;
-            case SDL_KEYDOWN:
-                Debug::info("Pressed: %s\n", SDL_GetKeyName(event.key.keysym.sym));
-                break;
-            case SDL_QUIT:
-                Window::getInstance()->requestClose();
-                break;
-            }
+            callback(event);
         }
     }
 }
