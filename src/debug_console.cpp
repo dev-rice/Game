@@ -42,7 +42,8 @@ void DebugConsole::draw(){
         }
 
         // Print the input buffer
-        text_renderer->print(x_pixels + 16, y_pixels + height_pixels - 32, input_buffer.c_str());
+        std::string input_prompt = "> " + input_buffer;
+        text_renderer->print(x_pixels + 16, y_pixels + height_pixels - 32, input_prompt.c_str());
 
     }
 
@@ -78,6 +79,10 @@ void DebugConsole::handleInput(SDL_Event event){
         }
         if (event.key.keysym.scancode == SDL_SCANCODE_BACKSPACE){
             input_buffer.pop_back();
+        }
+        if (event.key.keysym.scancode == SDL_SCANCODE_RETURN){
+            Debug::info("%s\n", input_buffer.c_str());
+            input_buffer.clear();
         }
         break;
 
