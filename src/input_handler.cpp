@@ -12,21 +12,16 @@ InputHandler* InputHandler::getInstance(){
 }
 
 InputHandler::InputHandler(){
-    // Spawn the input polling thread
-    polling_thread = std::thread(&InputHandler::pollInputs, this);
+    // Set the default callback function
     Callback_Type callback_function = std::bind(&InputHandler::defaultCallback, this, std::placeholders::_1);
-
     pushCallback(callback_function);
 }
 
 void InputHandler::pollInputs() {
     SDL_Event event;
 
-    // Continue polling until the window has been closed.
-    while (!Window::getInstance()->shouldClose()){
-        while (SDL_PollEvent(&event)) {
-            callbacks.top()(event);
-        }
+    while (SDL_PollEvent(&event)) {
+        callbacks.top()(event);
     }
 }
 

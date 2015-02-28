@@ -28,8 +28,9 @@ public:
     GameView(Level*);
 
     void update();
+    void handleInput(SDL_Event);
+
 private:
-    void handleInputs();
 
     // Mouse controls
     int mouse_count;

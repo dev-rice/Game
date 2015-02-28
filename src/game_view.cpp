@@ -55,13 +55,17 @@ GameView::GameView(Level* level){
 
     Profile::getInstance()->updateShaderSettings();
 
+    // Set the callback function to be the game view input
+    InputHandler::Callback_Type callback_function = std::bind(&GameView::handleInput, this, std::placeholders::_1);
+    InputHandler::getInstance()->pushCallback(callback_function);
+
+
 }
 
 void GameView::update(){
     // Tick the game clock.
     GameClock::getInstance()->tick();
 
-    handleInputs();
     // Swap display/rendering buffers
     window->display();
 
@@ -173,7 +177,7 @@ void GameView::update(){
 
 }
 
-void GameView::handleInputs(){
+void GameView::handleInput(SDL_Event event){
     Camera* camera = level->getCamera();
     glm::mat4 proj_matrix = level->getProjection();
     Terrain* terrain = level->getTerrain();

@@ -26,7 +26,6 @@ private:
     void defaultCallback(SDL_Event);
 
     std::stack<Callback_Type> callbacks;
-    std::thread polling_thread;
 
     static InputHandler* instance;
 

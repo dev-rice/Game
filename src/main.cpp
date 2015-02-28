@@ -117,6 +117,8 @@ int main(int argc, char* argv[]) {
 
     // Display loop
     while(!our_window->shouldClose()) {
+        // Just handle inputs in this thread.
+        InputHandler::getInstance()->pollInputs();
         world->update();
     }
 

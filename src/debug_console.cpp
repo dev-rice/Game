@@ -67,6 +67,9 @@ void DebugConsole::handleInput(SDL_Event event){
         break;
     case SDL_KEYDOWN:
         Debug::info("Pressed: %s\n", SDL_GetKeyName(event.key.keysym.sym));
+        if (event.key.keysym.scancode == SDL_SCANCODE_F8){
+            hide();
+        }
         break;
     case SDL_QUIT:
         Window::getInstance()->requestClose();
