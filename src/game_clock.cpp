@@ -39,6 +39,7 @@ void GameClock::resetAverage(){
 float GameClock::getCurrentTime(){
     // Get the number of milliseconds since the SDL library initialization.
     unsigned int ticks = SDL_GetTicks();
+    // Convert into seconds
     float seconds = (float) ticks / 1000;
     return seconds;
 }

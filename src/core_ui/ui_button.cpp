@@ -113,8 +113,8 @@ void UIButton::draw(){
             left_hover_image->draw();
             right_hover_image->draw();
 
-            bool clicking = false;
-            // bool clicking = sf::Mouse::isButtonPressed(sf::Mouse::Left);
+            SDL_PumpEvents();
+            bool clicking = SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_LEFT);
             if(clicking && !has_clicked){
 
                 // Run the extended execution of a potential child class
