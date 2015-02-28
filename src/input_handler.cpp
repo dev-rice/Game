@@ -14,7 +14,9 @@ InputHandler* InputHandler::getInstance(){
 InputHandler::InputHandler(){
     // Spawn the input polling thread
     polling_thread = std::thread(&InputHandler::pollInputs, this);
-    std::function<void(SDL_Event)> callback_function = std::bind(&InputHandler::defaultCallback, this, std::placeholders::_1);
+    Callback_Type callback_function = std::bind(&InputHandler::defaultCallback, this, std::placeholders::_1);
+
+    Debug::info("Setting callback to %p.\n", &callback_function);
     setCallback(callback_function);
 }
 
@@ -29,9 +31,15 @@ void InputHandler::pollInputs() {
     }
 }
 
-void InputHandler::setCallback(std::function<void(SDL_Event)> callback){
+void InputHandler::setCallback(Callback_Type& callback){
     Debug::info("Setting callback to %p.\n", &callback);
     this->callback = callback;
+
+    callbacks.push_back(&callback);
+    for (int i = 0; i < callbacks.size(); ++i){
+        Debug::info("callbacks[%d] = %p\n", i, callbacks[i]);        
+    }
+
 }
 
 void InputHandler::defaultCallback(SDL_Event event){

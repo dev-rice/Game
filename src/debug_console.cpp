@@ -45,9 +45,9 @@ void DebugConsole::draw(){
 }
 
 void DebugConsole::show(){
-    Debug::info("Showing debug console.\n");
-    std::function<void(SDL_Event)> callback_function = std::bind(&DebugConsole::handleInput, this, std::placeholders::_1);
+    InputHandler::Callback_Type callback_function = std::bind(&DebugConsole::handleInput, this, std::placeholders::_1);
     InputHandler::getInstance()->setCallback(callback_function);
+
     UIWindow::show();
 }
 
