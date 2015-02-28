@@ -19,7 +19,7 @@ DebugConsole::DebugConsole() : UIWindow(ShaderLoader::loadShaderProgram("shaders
     // Do this so we don't have to process a ton of messages on the first
     // draw call
     syncWithDebug();
-
+    input_buffer = "";
 }
 
 void DebugConsole::draw(){
@@ -29,17 +29,21 @@ void DebugConsole::draw(){
         UIWindow::draw();
         int start = 0;
         int end = messages.size() - 1;
-        if (messages.size() > 16){
-            start = end - 16;
+        if (messages.size() > 15){
+            start = end - 15;
         }
         for (int i = start; i <= end; ++i){
             const char* temp_buffer = messages[i].c_str();
             int x = x_pixels + 16;
-            int y_base = y_pixels + height_pixels - 32;
+            int y_base = y_pixels + height_pixels - 32 - (22);
             int y_offset = 22 * (end - i);
             int y = y_base - y_offset;
             text_renderer->print(x, y, temp_buffer);
         }
+
+        // Print the input buffer
+        text_renderer->print(x_pixels + 16, y_pixels + height_pixels - 32, input_buffer.c_str());
+
     }
 
 }
@@ -63,10 +67,11 @@ void DebugConsole::clearMessages(){
 void DebugConsole::handleInput(SDL_Event event){
     switch (event.type) {
     case SDL_KEYUP:
-        Debug::info("Released: %s\n", SDL_GetKeyName(event.key.keysym.sym));
+        // Debug::info("Released: %s\n", SDL_GetKeyName(event.key.keysym.sym));
         break;
     case SDL_KEYDOWN:
-        Debug::info("Pressed: %s\n", SDL_GetKeyName(event.key.keysym.sym));
+        // Debug::info("Pressed: %s\n", SDL_GetKeyName(event.key.keysym.sym));
+        input_buffer += SDL_GetKeyName(event.key.keysym.sym);
         if (event.key.keysym.scancode == SDL_SCANCODE_F8){
             hide();
         }

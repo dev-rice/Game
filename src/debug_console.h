@@ -25,6 +25,7 @@ private:
     void syncWithDebug();
     TextRenderer* text_renderer;
     std::vector<std::string> messages;
+    std::string input_buffer;
 
     static DebugConsole* instance;
 
