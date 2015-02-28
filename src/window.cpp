@@ -133,7 +133,7 @@ void Window::takeScreenshot(){
 void Window::initializeWindow(){
     Uint32 flags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL;
 
-    //Use OpenGL 4.1
+    // Use OpenGL 4.1 if possible
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute( SDL_GL_CONTEXT_MAJOR_VERSION, 4 );
     SDL_GL_SetAttribute( SDL_GL_CONTEXT_MINOR_VERSION, 1 );
