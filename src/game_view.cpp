@@ -181,6 +181,28 @@ void GameView::handleInputs(){
     // Set the cursor to the pointer by default
     Mouse::getInstance()->setCursorSprite(Mouse::cursorType::CURSOR);
 
+    SDL_Event event;
+    while (SDL_PollEvent(&event)) {
+        switch (event.type) {
+        case SDL_KEYDOWN:
+            if (event.key.keysym.sym == SDLK_ESCAPE){
+                window->requestClose();
+            }
+            break;
+        case SDL_MOUSEMOTION:
+            // printf("Mouse moved by %d,%d to (%d,%d)\n",
+                // event.motion.xrel, event.motion.yrel, event.motion.x, event.motion.y);
+            break;
+        case SDL_MOUSEBUTTONDOWN:
+            // printf("Mouse button %d pressed at (%d,%d)\n",
+                // event.button.button, event.button.x, event.button.y);
+            break;
+        case SDL_QUIT:
+            window->requestClose();
+            break;
+        }
+    }
+
     // handle events
     // sf::Window* sfml_window = window->getSFMLWindow();
     // sf::Event event;

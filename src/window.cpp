@@ -4,6 +4,8 @@ Window* Window::instance;
 
 Window::Window(){
     should_close = false;
+    //Start SDL
+    SDL_Init(SDL_INIT_EVERYTHING);
 }
 
 Window* Window::getInstance(){
@@ -16,7 +18,6 @@ Window* Window::getInstance(){
 }
 
 void Window::display(){
-    // sfml_window->display();
     //Update screen
     SDL_GL_SwapWindow(sdl_window);
 }
@@ -39,7 +40,21 @@ void Window::close(){
 }
 
 void Window::setVsync(bool value){
-    // sfml_window->setVerticalSyncEnabled(value);
+    if (value){
+        SDL_GL_SetSwapInterval(1);
+    } else {
+        SDL_GL_SetSwapInterval(0);
+    }
+}
+
+void Window::setFullscreen(bool fullscreen){
+    if (fullscreen){
+        SDL_DisplayMode mode;
+        SDL_GetDesktopDisplayMode(0, &mode);
+        width = mode.w;
+        height = mode.h;
+    }
+    this->fullscreen = fullscreen;
 }
 
 void Window::setWidth(int width){
@@ -116,15 +131,16 @@ void Window::takeScreenshot(){
 }
 
 void Window::initializeWindow(){
-    //Start SDL
-    SDL_Init( SDL_INIT_EVERYTHING );
-
-    Uint32 flags = SDL_WINDOW_SHOWN|SDL_WINDOW_OPENGL;
+    Uint32 flags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL;
 
     //Use OpenGL 4.1
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute( SDL_GL_CONTEXT_MAJOR_VERSION, 4 );
     SDL_GL_SetAttribute( SDL_GL_CONTEXT_MINOR_VERSION, 1 );
+
+    if (fullscreen){
+        flags |= SDL_WINDOW_FULLSCREEN;
+    }
 
     sdl_window = SDL_CreateWindow("Game", 0,
     	0, width, height, flags);

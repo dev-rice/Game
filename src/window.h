@@ -35,7 +35,7 @@ public:
 
     void setWidth(int w);
     void setHeight(int h);
-    void setFullscreen(bool f) {fullscreen = f;}
+    void setFullscreen(bool f);
     void setVsync(bool);
 
     int getWidth();

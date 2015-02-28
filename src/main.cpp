@@ -111,32 +111,8 @@ int main(int argc, char* argv[]) {
         world = World();
     }
 
-    SDL_Event event;
     // Display loop
     while(!our_window->shouldClose()) {
-        while (SDL_PollEvent(&event)) {
-            switch (event.type) {
-            case SDL_KEYDOWN:
-            case SDL_KEYUP:
-                // if (event.key.type == SDL_KEYUP)
-                    // printf("RELEASED: ");
-                // else
-                    // printf("PRESSED: ");
-                    // printf( "%s\n", SDL_GetKeyName(event.key.keysym.sym));
-                break;
-            case SDL_MOUSEMOTION:
-                // printf("Mouse moved by %d,%d to (%d,%d)\n",
-                    // event.motion.xrel, event.motion.yrel, event.motion.x, event.motion.y);
-                break;
-            case SDL_MOUSEBUTTONDOWN:
-                // printf("Mouse button %d pressed at (%d,%d)\n",
-                    // event.button.button, event.button.x, event.button.y);
-                break;
-            case SDL_QUIT:
-                our_window->requestClose();
-            }
-        }
-
         world.update();
     }
 
