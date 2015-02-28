@@ -31,11 +31,12 @@ void InputHandler::pollInputs() {
 }
 
 void InputHandler::pushCallback(Callback_Type& callback){
-    Debug::info("Pushing callback %p to top of stack.\n", &callback);
     callbacks.push(callback);
+    Debug::info("Pushed callback %p to top of stack.\n", &callbacks.top());
 }
 
 void InputHandler::popCallback(){
+    Debug::info("Popping callback %p off of the stack.\n", &callbacks.top());
     callbacks.pop();
 }
 
