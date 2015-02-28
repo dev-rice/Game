@@ -103,20 +103,23 @@ int main(int argc, char* argv[]) {
     our_window->initializeWindow();
 
     // Create the world
-    World world;
+    World* world;
     if (has_map){
-        world = World(map_filename.c_str());
+        world = new World(map_filename.c_str());
     } else {
-        world = World();
+        world = new World();
     }
 
     // Display loop
     while(!our_window->shouldClose()) {
-        world.update();
+        world->update();
     }
 
     // Close the window
     our_window->close();
+
+    delete world;
+    world = NULL;
 
     // Add a line break before going back to the terminal prompt.
     printf("\n");
