@@ -1,7 +1,7 @@
 #ifndef GameClock_h
 #define GameClock_h
 
-#include <SFML/System.hpp>
+#include <SDL2/SDL.h>
 
 #include "debug.h"
 
@@ -21,8 +21,6 @@ private:
     GameClock();
 
     static GameClock* instance;
-
-    sf::Clock* clock;
 
     float current_time;
     float last_time;

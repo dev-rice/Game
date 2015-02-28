@@ -100,9 +100,10 @@ glm::vec2 Mouse::getGLPosition(){
 }
 
 glm::vec2 Mouse::getScreenPosition(){
-    sf::Window* sfml_window = Window::getInstance()->getSFMLWindow();
-    sf::Vector2i mouse_pos = sf::Mouse::getPosition(*sfml_window);
-    return glm::vec2(mouse_pos.x, mouse_pos.y);
+    // sf::Window* sfml_window = Window::getInstance()->getSFMLWindow();
+    // sf::Vector2i mouse_pos = sf::Mouse::getPosition(*sfml_window);
+    // return glm::vec2(mouse_pos.x, mouse_pos.y);
+    return glm::vec2(0.0f, 0.0f);
 }
 
 void Mouse::setHovering(){

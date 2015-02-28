@@ -12,7 +12,7 @@ OBJECTS := $(patsubst $(SRCDIR)/%.cpp,$(OBJDIR)/%.o,$(SOURCES))
 
 EXECUTABLE := game
 
-MAC_LIBRARIES := -framework OpenGl -framework CoreFoundation -I/usr/local/include -lglew -lSOIL -lsfml-graphics -lsfml-window -lsfml-system
+MAC_LIBRARIES := -framework OpenGl -framework CoreFoundation -I/usr/local/include -lglew -lSOIL -lsfml-graphics -lsfml-window -lsfml-system `sdl2-config --cflags --libs`
 LINUX_LIBRARIES := -lGL -lGLEW -I /usr/lib/x86_64-linux-gnu/ -I /usr/local/include -lSOIL -lpthread -lsfml-graphics -lsfml-window -lsfml-system
 
 # Try to auto detect the platform to build for

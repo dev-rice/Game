@@ -14,6 +14,8 @@ Level::Level(const char* filename){
     int width  = window->getWidth();
     int height = window->getHeight();
 
+    Debug::info("Window size: %d by %d\n", width, height);
+
     proj_matrix = glm::perspective(45.0f, (float)width / (float)height, 0.1f,
         500.0f);
 

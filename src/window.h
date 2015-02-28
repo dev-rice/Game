@@ -3,6 +3,7 @@
 
 #include <GL/glew.h>
 #include <SFML/Window.hpp>
+#include <SDL2/SDL.h>
 
 #if defined __APPLE__ && __MACH__
     #include <OpenGL/OpenGL.h>
@@ -60,6 +61,9 @@ private:
     bool should_close;
 
     sf::Window* sfml_window;
+
+    SDL_Window* sdl_window;
+    SDL_GLContext gl_context;
 
     static Window* instance;
     Window();
