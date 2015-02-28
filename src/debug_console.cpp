@@ -71,10 +71,19 @@ void DebugConsole::handleInput(SDL_Event event){
         break;
     case SDL_KEYDOWN:
         // Debug::info("Pressed: %s\n", SDL_GetKeyName(event.key.keysym.sym));
-        input_buffer += SDL_GetKeyName(event.key.keysym.sym);
+        // input_buffer += SDL_GetKeyName(event.key.keysym.sym);
+        // str += (char)event.key.keysym.unicode;
         if (event.key.keysym.scancode == SDL_SCANCODE_F8){
             hide();
         }
+        if (event.key.keysym.scancode == SDL_SCANCODE_BACKSPACE){
+            input_buffer.pop_back();
+        }
+        break;
+
+    case SDL_TEXTINPUT:
+        /* Add new text onto the end of our text */
+        input_buffer += event.text.text;
         break;
     case SDL_QUIT:
         Window::getInstance()->requestClose();
