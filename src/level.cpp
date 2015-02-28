@@ -81,6 +81,7 @@ Level::Level(const char* filename){
             units.push_back(temp);
         }
     }
+
 }
 
 void Level::draw(){
@@ -430,14 +431,22 @@ void Level::issueOrder(Playable::Order order, glm::vec3 target, bool should_enqu
         float click_distance_from_unit = getDistance(unit_pos.x, unit_pos.z, target.x, target.z);
 
         if(click_distance_from_unit < units[i]->getRadius()){
+            Debug::info("Clicked inside the radius.\n");
             targeted_unit = units[i];
         }
     }
+    Debug::info("Selected units size: %d\n", selected_units.size());
 
     // If it's only one unit
-    float x_center = selected_units[0]->getPosition().x;
-    float z_center = selected_units[0]->getPosition().z;
-    float smallest_radius = selected_units[0]->getRadius();
+    float x_center, z_center, smallest_radius;
+    if (selected_units.size() != 0){
+        x_center = selected_units[0]->getPosition().x;
+        z_center = selected_units[0]->getPosition().z;
+        smallest_radius = selected_units[0]->getRadius();
+    } else {
+        // Short circuit for bug when the selected units is empty
+        return;
+    }
 
     // Make sure if it skips the click distance calculation so that it will not offset
     float click_distance = -1.0f;

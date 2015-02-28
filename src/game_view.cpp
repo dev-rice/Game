@@ -313,8 +313,7 @@ void GameView::handleInput(SDL_Event event){
     // Stop-Action Key Handling
     //##############################################################################
     if (state[SDL_SCANCODE_S]){
-        // segfaults
-        // level->issueOrder(Playable::Order::STOP, mouse_world_pos, shift_pressed);
+        level->issueOrder(Playable::Order::STOP, mouse_world_pos, shift_pressed);
     }
 
     //##############################################################################
