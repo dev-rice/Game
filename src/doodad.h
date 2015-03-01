@@ -5,7 +5,7 @@
 
 class Doodad: public Drawable {
 public:
-    Doodad () {;}
+    Doodad(Mesh*);
     Doodad(Mesh*, GLuint);
     Doodad(Mesh*, GLuint, glm::vec3, GLfloat);
 

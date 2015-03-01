@@ -33,7 +33,6 @@ public:
     void setRotationEuler(GLfloat x, GLfloat y, GLfloat z);
     void setRotationEuler(glm::vec3 rotation);
 
-
     void rotateGlobalEuler(GLfloat x, GLfloat y, GLfloat z);
     void rotateGlobalEuler(glm::vec3 rotation);
 
