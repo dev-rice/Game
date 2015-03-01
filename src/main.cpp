@@ -22,6 +22,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
 #include "debug.h"
 #include "world.h"
 #include "profile.h"
@@ -114,6 +117,44 @@ int main(int argc, char* argv[]) {
     // Start the input handler so we can use
     // it later.
     InputHandler::getInstance();
+
+    ///////////////////////////////////
+    // Freetype stuff
+    FT_Library library;
+    FT_Face     face;
+    int error;
+
+    // Initialize the library
+    error = FT_Init_FreeType( &library );
+    if (error){
+        Debug::error("Error initializing FreeType.\n");
+    }
+
+    // Load a font face
+    const char* font_filename = "res/fonts/HelveticaNeueLight.ttf";
+    error = FT_New_Face(library, font_filename, 0, &face);
+    if (error == FT_Err_Unknown_File_Format){
+        Debug::error("Invalid format of font file '%s'.\n", font_filename);
+    } else if (error) {
+        Debug::error("Error loading font face '%s'.\n", font_filename);
+    }
+
+    Debug::info("Face data:\n");
+    Debug::info("  num_glyphs == %d\n", face->num_glyphs);
+    Debug::info("  num_fixed_sizes == %d\n", face->num_fixed_sizes);
+
+    int point_size = 16;
+    error = FT_Set_Char_Size(face, 0, point_size * 64, width, height);
+    if (error){
+        Debug::error("Error setting face size to %d", point_size);
+    }
+
+    int glyph_index;
+    char to_render = 'a';
+    glyph_index = FT_Get_Char_Index(face, to_render);
+    Debug::info("The character '%c' maps to glyph index %d\n", to_render, glyph_index);
+
+    ///////////////////////////////////
 
     // Display loop
     while(!our_window->shouldClose()) {
