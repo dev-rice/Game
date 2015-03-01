@@ -8,9 +8,16 @@
 // #elif defined __gnu_linux__
 #endif
 
+#define GLM_FORCE_RADIANS
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 #include <stdio.h>
 #include <SOIL.h>
 #include <vector>
+#include <string>
+#include <map>
 
 #include "debug.h"
 
@@ -25,23 +32,12 @@ public:
     static GLuint loadGreen();
     static GLuint loadRed();
 
-    static GLuint loadTextureFromFile(const char*, GLuint);
-    static GLuint loadTextureFromPixel(std::vector<GLfloat>);
+    static GLuint loadTextureFromFile(std::string, GLuint);
+    static GLuint loadTextureFromPixel(std::string id, glm::vec4 pixel);
 
 private:
-    static GLuint pink;
-    static GLuint alpha;
-    static GLuint black;
-    static GLuint blue;
-    static GLuint green;
-    static GLuint red;
 
-    static bool loaded_pink;
-    static bool loaded_alpha;
-    static bool loaded_black;
-    static bool loaded_blue;
-    static bool loaded_green;
-    static bool loaded_red;
+    static std::map<std::string, GLuint> loaded_textures;
 
 };
 

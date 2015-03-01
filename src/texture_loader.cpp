@@ -1,153 +1,98 @@
 #include "texture_loader.h"
 
-GLuint TextureLoader::pink;
-GLuint TextureLoader::alpha;
-GLuint TextureLoader::black;
-GLuint TextureLoader::blue;
-GLuint TextureLoader::green;
-GLuint TextureLoader::red;
-
-bool TextureLoader::loaded_pink;
-bool TextureLoader::loaded_alpha;
-bool TextureLoader::loaded_black;
-bool TextureLoader::loaded_blue;
-bool TextureLoader::loaded_green;
-bool TextureLoader::loaded_red;
+std::map<std::string, GLuint> TextureLoader::loaded_textures;
 
 GLuint TextureLoader::loadPink(){
-    if (!loaded_pink){
-        std::vector<GLfloat> pink_pixel;
-        pink_pixel.push_back(1.0f);
-        pink_pixel.push_back(0.0f);
-        pink_pixel.push_back(1.0f);
-        pink_pixel.push_back(1.0f);
-
-        TextureLoader::pink = TextureLoader::loadTextureFromPixel(pink_pixel);
-        loaded_pink = true;
-    }
-    return TextureLoader::pink;
+    glm::vec4 pink_pixel = glm::vec4(1.0f, 0.0f, 1.0f, 1.00f);
+    return TextureLoader::loadTextureFromPixel("pink", pink_pixel);
 }
 
 GLuint TextureLoader::loadAlpha(){
-    if (!loaded_alpha){
-        std::vector<GLfloat> alpha_pixel;
-        alpha_pixel.push_back(0.0f);
-        alpha_pixel.push_back(0.0f);
-        alpha_pixel.push_back(0.0f);
-        alpha_pixel.push_back(0.0f);
-
-        TextureLoader::alpha = TextureLoader::loadTextureFromPixel(alpha_pixel);
-        loaded_alpha = true;
-    }
-    return TextureLoader::alpha;
-
+    glm::vec4 alpha_pixel = glm::vec4(0.0f, 0.0f, 0.0f, 0.00f);
+    return TextureLoader::loadTextureFromPixel("alpha", alpha_pixel);
 }
 
 GLuint TextureLoader::loadBlack(){
-    if (!loaded_black){
-        std::vector<GLfloat> black_pixel;
-        black_pixel.push_back(0.0f);
-        black_pixel.push_back(0.0f);
-        black_pixel.push_back(0.0f);
-        black_pixel.push_back(0.75f);
-
-        TextureLoader::black = TextureLoader::loadTextureFromPixel(black_pixel);
-        loaded_black = true;
-    }
-    return TextureLoader::black;
-
+    glm::vec4 black_pixel = glm::vec4(0.0f, 0.0f, 0.0f, 0.75f);
+    return TextureLoader::loadTextureFromPixel("black", black_pixel);
 }
 
 GLuint TextureLoader::loadBlue(){
-    if (!loaded_blue){
-        std::vector<GLfloat> blue_pixel;
-        blue_pixel.push_back(0.5f);
-        blue_pixel.push_back(0.5f);
-        blue_pixel.push_back(1.0f);
-        blue_pixel.push_back(1.0f);
-
-        TextureLoader::blue = TextureLoader::loadTextureFromPixel(blue_pixel);
-        loaded_blue = true;
-    }
-    return TextureLoader::blue;
+    glm::vec4 blue_pixel = glm::vec4(0.5f, 0.5f, 1.0f, 1.0f);
+    return TextureLoader::loadTextureFromPixel("blue", blue_pixel);
 }
 
 GLuint TextureLoader::loadGreen(){
-    if (!loaded_green){
-        std::vector<GLfloat> green_pixel;
-        green_pixel.push_back(0.172f);
-        green_pixel.push_back(0.855f);
-        green_pixel.push_back(0.424f);
-        green_pixel.push_back(1.0f);
-
-        TextureLoader::green = TextureLoader::loadTextureFromPixel(green_pixel);
-        loaded_green = true;
-    }
-    return TextureLoader::green;
+    glm::vec4 green_pixel = glm::vec4(0.172f, 0.855f, 0.424f, 1.0f);
+    return TextureLoader::loadTextureFromPixel("green", green_pixel);
 }
 
 GLuint TextureLoader::loadRed(){
-    if (!loaded_red){
-        std::vector<GLfloat> red_pixel;
-        red_pixel.push_back(0.812f);
-        red_pixel.push_back(0.267f);
-        red_pixel.push_back(0.267f);
-        red_pixel.push_back(1.0f);
-
-        TextureLoader::red = TextureLoader::loadTextureFromPixel(red_pixel);
-        loaded_red = true;
-    }
-    return TextureLoader::red;
+    glm::vec4 red_pixel = glm::vec4(0.812f, 0.267f, 0.267f, 1.0f);
+    return TextureLoader::loadTextureFromPixel("red", red_pixel);
 }
 
-GLuint TextureLoader::loadTextureFromFile(const char* filename, GLuint filter){
+GLuint TextureLoader::loadTextureFromFile(std::string filename, GLuint filter){
     GLuint texture;
-    glGenTextures(1, &texture);
 
-    // Load the texture
-    int width, height;
-    unsigned char* image;
-    // Set the active texture
-    glBindTexture(GL_TEXTURE_2D, texture);
-    // Load the image
-    image = SOIL_load_image(filename, &width, &height, 0, SOIL_LOAD_RGBA);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
-                 GL_UNSIGNED_BYTE, image);
+    std::string id = filename + std::to_string(filter);
 
-    // Set the texture wrapping to repeat
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    // Do nearest interpolation for scaling the image up and down.
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 4.0f);
-    // Mipmaps increase efficiency or something
-    glGenerateMipmap(GL_TEXTURE_2D);
-    SOIL_free_image_data(image);
+    if (loaded_textures.find(id) != loaded_textures.end()){
+        texture = loaded_textures[id];
+    } else{
+        glGenTextures(1, &texture);
+
+        // Load the texture
+        int width, height;
+        unsigned char* image;
+        // Set the active texture
+        glBindTexture(GL_TEXTURE_2D, texture);
+        // Load the image
+        image = SOIL_load_image(filename.c_str(), &width, &height, 0, SOIL_LOAD_RGBA);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
+                     GL_UNSIGNED_BYTE, image);
+
+        // Set the texture wrapping to repeat
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        // Do nearest interpolation for scaling the image up and down.
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+        // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 4.0f);
+        // Mipmaps increase efficiency or something
+        glGenerateMipmap(GL_TEXTURE_2D);
+        SOIL_free_image_data(image);
+        TextureLoader::loaded_textures[id] = texture;
+    }
 
     return texture;
 
 }
 
-GLuint TextureLoader::loadTextureFromPixel(std::vector<GLfloat> pixel){
+GLuint TextureLoader::loadTextureFromPixel(std::string id, glm::vec4 pixel){
     GLuint texture;
 
-    // Sets the default texture to be pink, 100% alpha
-    glGenTextures(1, &texture);
+    if (loaded_textures.find(id) != loaded_textures.end()){
+        texture = loaded_textures[id];
+    } else {
+        // Sets the default texture to be pink, 100% alpha
+        glGenTextures(1, &texture);
 
-    // Set the active texture
-    glBindTexture(GL_TEXTURE_2D, texture);
+        // Set the active texture
+        glBindTexture(GL_TEXTURE_2D, texture);
 
-    // Load the image
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA,
-                 GL_FLOAT, pixel.data());
-    // Set the texture wrapping to repeat
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    // Do nearest interpolation for scaling the image up and down.
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        // Load the image
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA,
+                     GL_FLOAT, glm::value_ptr(pixel));
+        // Set the texture wrapping to repeat
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        // Do nearest interpolation for scaling the image up and down.
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        TextureLoader:m:loaded_textures[id] = texture;
+    }
 
     return texture;
 }
