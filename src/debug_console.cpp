@@ -81,7 +81,7 @@ void DebugConsole::handleInput(SDL_Event event){
             input_buffer.pop_back();
         }
         if (event.key.keysym.scancode == SDL_SCANCODE_RETURN){
-            Debug::info("%s\n", input_buffer.c_str());
+            Debug::info("Unknown command: '%s'\n", input_buffer.c_str());
             input_buffer.clear();
         }
         break;

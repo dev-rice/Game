@@ -9,16 +9,17 @@ TextRenderer::TextRenderer(std::string font_filename, GLint point){
     GLuint text_shader = ShaderLoader::loadShaderProgram("shaders/text.vs",
         "shaders/text.fs");
 
-    GLuint character_texture = TextureLoader::loadTextureFromFile(font_filename.c_str(), GL_NEAREST);
+    GLuint character_texture = TextureLoader::loadTextureFromFile(font_filename.c_str(), GL_LINEAR);
 
     character_box = new CharacterDrawable(text_shader, character_texture, point);
+    character_box->setSpacing(1.0);
 
     // From http://upload.wikimedia.org/wikipedia/commons/9/95/Xterm_color_chart.png
     // at bottom of image
     colors["30"] = glm::vec3(0.0, 0.0, 0.0);
     colors["31"] = glm::vec3(0.8, 0.0, 0.0);
     colors["32"] = glm::vec3(0.0, 0.8, 0.0);
-    colors["33"] = glm::vec3(0.8, 0.8, 0.0);
+    colors["33"] = glm::vec3(0.98, 0.91, 0.28);
     colors["34"] = glm::vec3(0.0, 0.0, 0.92);
     colors["35"] = glm::vec3(0.8, 0.0, 0.8);
     colors["36"] = glm::vec3(0.0, 0.8, 0.8);

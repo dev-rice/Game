@@ -8,6 +8,7 @@ CharacterDrawable::CharacterDrawable(GLuint shader_program, GLuint texture, GLin
 
         height_pixels = point;
         width_pixels = point * (CharacterMesh::CHARACTER_WIDTH / CharacterMesh::CHARACTER_HEIGHT);
+        spacing = 0;
 
         setTextColor(1.0, 1.0, 1.0);
 
@@ -30,8 +31,12 @@ void CharacterDrawable::setTextColor(float r, float g, float b){
     setTextColor(glm::vec3(r, g, b));
 }
 
+void CharacterDrawable::setSpacing(float spacing){
+    this->spacing = spacing;
+}
+
 void CharacterDrawable::moveToNext(){
-    x_pixels += width_pixels - CharacterMesh::PADDING;
+    x_pixels += width_pixels + spacing - CharacterMesh::PADDING;
     setGLPosition(getGLPosition());
 
 }
