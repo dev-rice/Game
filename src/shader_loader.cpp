@@ -1,6 +1,7 @@
 #include "shader_loader.h"
 
 std::map<GLuint, std::string> ShaderLoader::shaders;
+std::map<std::string, GLuint> ShaderLoader::loaded_shaders;
 
 GLuint ShaderLoader::loadVertexShader(std::string filename){
     // Create the vertex shader
@@ -72,11 +73,24 @@ GLuint ShaderLoader::combineShaderProgram(GLuint vertex_shader, GLuint fragment_
 }
 
 GLuint ShaderLoader::loadShaderProgram(std::string vertex, std::string fragment) {
-    GLuint vertex_shader = ShaderLoader::loadVertexShader(vertex);
-    GLuint fragment_shader = ShaderLoader::loadFragmentShader(fragment);
-    GLuint shader_program = ShaderLoader::combineShaderProgram(vertex_shader, fragment_shader);
+    GLuint shader_program;
 
-    ShaderLoader::shaders[shader_program] = vertex;
+    // Check if this combinaton (vs and fs) of shaders has already been loaded
+    std::string full_name = vertex + fragment;
+    if (loaded_shaders.find(full_name) != loaded_shaders.end()){
+        // Just set the shader program to the one that has already
+        // been loaded.
+        shader_program = loaded_shaders[full_name];
+    } else {
+        // This is a new combination
+        GLuint vertex_shader = ShaderLoader::loadVertexShader(vertex);
+        GLuint fragment_shader = ShaderLoader::loadFragmentShader(fragment);
+        shader_program = ShaderLoader::combineShaderProgram(vertex_shader, fragment_shader);
+
+        // Update the shader maps
+        ShaderLoader::shaders[shader_program] = vertex;
+        ShaderLoader::loaded_shaders[full_name] = shader_program;
+    }
 
     return shader_program;
 }

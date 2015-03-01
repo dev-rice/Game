@@ -40,8 +40,6 @@ public:
 
 private:
 
-    void loadMeshFromOBJ(const char*);
-
     void writeFinalArrays(std::vector<Vertex>&, std::vector<GLuint>&);
     void calculateTangentsAndBinormals(std::vector<Vertex>&, std::vector<GLuint>&);
     bool getVerticesAndElements(pugi::xml_node, std::vector<Vertex>&, std::vector<GLuint>&);

@@ -12,6 +12,8 @@
 #include <string>
 #include <map>
 
+#include "debug.h"
+
 class ShaderLoader {
 public:
     static GLuint loadVertexShader(std::string);
@@ -24,6 +26,7 @@ private:
     static std::string GLSLParse(std::string);
 
     static std::map<GLuint, std::string> shaders;
+    static std::map<std::string, GLuint> loaded_shaders;
 
 };
 
