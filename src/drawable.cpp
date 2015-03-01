@@ -215,6 +215,13 @@ void Drawable::rotateAxisAngle(glm::vec3 axis, GLfloat angle){
 
 }
 
+void Drawable::setPosition(glm::vec3 position) {
+    this->position = position;
+}
+void Drawable::setPosition(GLfloat x, GLfloat y, GLfloat z) {
+    position = glm::vec3(x, y, z);
+}
+
 void Drawable::updateModelMatrix(){
     // Creates the model matrix from the Drawables position and rotation.
     glm::mat4 translation_matrix = glm::translate(glm::mat4(), position);
