@@ -66,23 +66,21 @@ void DebugConsole::clearMessages(){
 }
 
 void DebugConsole::handleInput(SDL_Event event){
+    SDL_Scancode key_scancode = event.key.keysym.scancode;
     switch (event.type) {
     case SDL_KEYUP:
         // Debug::info("Released: %s\n", SDL_GetKeyName(event.key.keysym.sym));
         break;
     case SDL_KEYDOWN:
-        // Debug::info("Pressed: %s\n", SDL_GetKeyName(event.key.keysym.sym));
-        // input_buffer += SDL_GetKeyName(event.key.keysym.sym);
-        // str += (char)event.key.keysym.unicode;
-        if (event.key.keysym.scancode == SDL_SCANCODE_F8){
+        if (key_scancode == SDL_SCANCODE_ESCAPE){
+            Window::getInstance()->requestClose();
+        } else if (key_scancode == SDL_SCANCODE_F8){
             hide();
-        }
-        if (event.key.keysym.scancode == SDL_SCANCODE_BACKSPACE){
+        } else if (key_scancode == SDL_SCANCODE_BACKSPACE){
             if (input_buffer.size() > 0){
                 input_buffer.pop_back();
             }
-        }
-        if (event.key.keysym.scancode == SDL_SCANCODE_RETURN){
+        } else if (key_scancode == SDL_SCANCODE_RETURN){
             Debug::error("Unknown command: '%s'\n", input_buffer.c_str());
             input_buffer.clear();
         }
