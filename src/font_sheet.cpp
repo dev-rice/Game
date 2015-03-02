@@ -24,10 +24,6 @@ FontSheet::FontSheet(std::string filename, int pixel_size) {
         Debug::error("Error loading font face '%s'.\n", font_filename.c_str());
     }
 
-    Debug::info("Face data:\n");
-    Debug::info("  num_glyphs == %d\n", face->num_glyphs);
-    Debug::info("  num_fixed_sizes == %d\n", face->num_fixed_sizes);
-
     error = FT_Set_Pixel_Sizes(face, 0, pixel_size);
     if (error){
         Debug::error("Cannot set face size to %d", pixel_size);
