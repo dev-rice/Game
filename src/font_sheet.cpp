@@ -75,11 +75,6 @@ FontSheet::FontSheet(std::string filename, int pixel_size) {
 
         character_map[to_render] = current_glyph;
 
-        std::string bmp_filename = "font_render/" + std::to_string(i) + ".bmp";
-        int save_result = SOIL_save_image(bmp_filename.c_str(), SOIL_SAVE_TYPE_BMP, glyph->bitmap.width, glyph->bitmap.rows, 1, glyph->bitmap.buffer);
-        if (!save_result){
-            Debug::error("Error saving %s.\n", bmp_filename.c_str());
-        }
     }
 
     float delta_time = GameClock::getInstance()->getCurrentTime() - start_time;
