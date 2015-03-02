@@ -122,21 +122,6 @@ int main(int argc, char* argv[]) {
     // it later.
     InputHandler::getInstance();
 
-    FontSheet monospace("ShareTechMono-Regular.ttf", 32);
-    FontSheet stylized("BreeSerif-Regular.ttf", 32);
-
-    Debug::info("texture id = %d", monospace.getTexture());
-    //
-    // GLuint ui_shader = ShaderLoader::loadShaderProgram("shaders/ui.vs", "shaders/ui.fs");
-    //
-    // // GLuint font_texture = TextureLoader::loadTextureFromFile("res/textures/axe_diff.png", GL_LINEAR);
-    // GLuint font_texture = monospace.getTexture();
-    // UIDrawable font_test(ui_shader, font_texture);
-    // font_test.setPixelCoordinates(200, 200, 1000, 400);
-    //
-    // monospace.renderToBMP();
-    // stylized.renderToBMP();
-
     // Display loop
     while(!our_window->shouldClose()) {
         // Just handle inputs in this thread.
