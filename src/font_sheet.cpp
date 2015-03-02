@@ -45,7 +45,12 @@ FontSheet::FontSheet(std::string filename, int pixel_size) {
     for (int i = 0; i < width * height; ++i){
         zeros[i] = 0;
     }
+
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, width, height, 0, GL_RED, GL_UNSIGNED_BYTE, zeros);
+
+    delete[] zeros;
+    zeros = NULL;
+
 
     float start_time = GameClock::getInstance()->getCurrentTime();
 
