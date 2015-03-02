@@ -83,7 +83,7 @@ void UIRadioButton::draw(){
         current_icon->setPositionAndDimensions(x_pixels, y_pixels, icon_width, icon_height);
         current_icon->draw();
 
-        text_renderer->print(x_pixels + 32, y_pixels, "%s", radio_text.c_str());
+        text_renderer->print(x_pixels + 42, y_pixels, "%s", radio_text.c_str());
 
         glm::vec2 gl_mouse_position = Mouse::getInstance()->getGLPosition();
         if(gl_mouse_position.x < position.x + width &&

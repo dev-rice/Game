@@ -47,6 +47,17 @@ FontSheet::FontSheet(std::string filename, int pixel_size) {
     delete[] zeros;
     zeros = NULL;
 
+    // Set the texture wrapping to repeat
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    // Do nearest interpolation for scaling the image up and down.
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 4.0f);
+    // Mipmaps increase efficiency or something
+    glGenerateMipmap(GL_TEXTURE_2D);
+
     float start_time = GameClock::getInstance()->getCurrentTime();
 
     int x_offset = 0;
@@ -79,18 +90,6 @@ FontSheet::FontSheet(std::string filename, int pixel_size) {
 
     float delta_time = GameClock::getInstance()->getCurrentTime() - start_time;
 
-    // Set the texture wrapping to repeat
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    // Do nearest interpolation for scaling the image up and down.
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    renderToBMP();
-    std::string bmp_filename = "/tmp/" + filename + std::to_string(point) + ".bmp";
-    texture_id = TextureLoader::loadTextureFromFile(bmp_filename, GL_LINEAR);
-
 }
 
 void FontSheet::renderToBMP(){
@@ -118,6 +117,7 @@ int FontSheet::getPointSize(){
 }
 
 GLuint FontSheet::getTexture(){
+    Debug::info("4. Texture_id = %u\n", texture_id);
     return texture_id;
 }
 
