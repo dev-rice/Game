@@ -13,7 +13,7 @@
     </constraints>
 
     <text>Particles</text>
-    <font>ShareTechMono-Regular.ttf</font>
+    <font>BreeSerif-Regular.ttf</font>
     <mode>on</mode>
     <function>toggleParticles</function>
 

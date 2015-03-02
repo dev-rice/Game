@@ -13,7 +13,7 @@
     </constraints>
 
     <text>Normal Maps</text>
-    <font>ShareTechMono-Regular.ttf</font>
+    <font>BreeSerif-Regular.ttf</font>
     <mode>on</mode>
     <function>toggleNormals</function>
 

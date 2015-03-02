@@ -11,9 +11,6 @@ TextRenderer::TextRenderer(std::string font_filename, GLint point){
 
     FontSheet* stylized = new FontSheet(font_filename, point);
 
-    // GLuint character_texture = TextureLoader::loadTextureFromFile(font_filename.c_str(), GL_LINEAR);
-    // GLuint character_texture = stylized.getTexture();
-
     character_box = new CharacterDrawable(text_shader, stylized, point);
 
     // From http://upload.wikimedia.org/wikipedia/commons/9/95/Xterm_color_chart.png

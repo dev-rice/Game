@@ -13,7 +13,7 @@
     </constraints>
 
     <text>Lighting</text>
-    <font>ShareTechMono-Regular.ttf</font>
+    <font>BreeSerif-Regular.ttf</font>
     <mode>on</mode>
     <function>toggleLighting</function>
 

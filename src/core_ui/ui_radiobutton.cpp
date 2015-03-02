@@ -31,7 +31,7 @@ void UIRadioButton::loadFromXML(std::string filepath){
     functionName = layout_node.child_value("function");
 
     // Parse radiobutton text
-    text_renderer = new TextRenderer(layout_node.child_value("font"), 28);
+    text_renderer = new TextRenderer(layout_node.child_value("font"), 22);
     radio_text = layout_node.child_value("text");
 
     // Parse constraints
@@ -83,7 +83,7 @@ void UIRadioButton::draw(){
         current_icon->setPositionAndDimensions(x_pixels, y_pixels, icon_width, icon_height);
         current_icon->draw();
 
-        text_renderer->print(x_pixels+16, y_pixels, "%s", radio_text.c_str());
+        text_renderer->print(x_pixels + 32, y_pixels, "%s", radio_text.c_str());
 
         glm::vec2 gl_mouse_position = Mouse::getInstance()->getGLPosition();
         if(gl_mouse_position.x < position.x + width &&

@@ -13,7 +13,7 @@
     </constraints>
 
     <text>Post Processing</text>
-    <font>ShareTechMono-Regular.ttf</font>
+    <font>BreeSerif-Regular.ttf</font>
     <mode>on</mode>
     <function>toggleFramebuffers</function>
 
