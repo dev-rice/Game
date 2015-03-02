@@ -13,6 +13,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include <SOIL.h>
+
 #include <stdio.h>
 #include <cstdlib>
 #include <random>
@@ -21,6 +23,10 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <algorithm>
+
+#include <ft2build.h>
+#include FT_FREETYPE_H
 
 #include "debug.h"
 #include "world.h"
@@ -29,6 +35,7 @@
 #include "mesh_loader.h"
 #include "game_clock.h"
 #include "input_handler.h"
+#include "font_sheet.h"
 
 int main(int argc, char* argv[]) {
 
@@ -120,6 +127,7 @@ int main(int argc, char* argv[]) {
         // Just handle inputs in this thread.
         InputHandler::getInstance()->pollInputs();
         world->update();
+        // font_test.draw();
     }
 
     // Close the window

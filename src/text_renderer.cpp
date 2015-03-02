@@ -9,10 +9,9 @@ TextRenderer::TextRenderer(std::string font_filename, GLint point){
     GLuint text_shader = ShaderLoader::loadShaderProgram("shaders/text.vs",
         "shaders/text.fs");
 
-    GLuint character_texture = TextureLoader::loadTextureFromFile(font_filename.c_str(), GL_LINEAR);
+    FontSheet* stylized = new FontSheet(font_filename, point);
 
-    character_box = new CharacterDrawable(text_shader, character_texture, point);
-    character_box->setSpacing(1.0);
+    character_box = new CharacterDrawable(text_shader, stylized, point);
 
     // From http://upload.wikimedia.org/wikipedia/commons/9/95/Xterm_color_chart.png
     // at bottom of image
@@ -37,6 +36,7 @@ void TextRenderer::drawString(std::string to_draw){
     // And reset is just \033[0m
     bool is_color_code = to_draw[0] == '\033';
     bool is_reset_code = to_draw.substr(0, 4) == "\033[0m";
+    bool is_newline = to_draw[0] == '\n';
     int offset = 0;
     if (is_reset_code){
         character_box->setTextColor(1.0, 1.0, 1.0);
@@ -49,7 +49,7 @@ void TextRenderer::drawString(std::string to_draw){
         glm::vec3 color = colors[color_code];
         character_box->setTextColor(color);
         offset = 6;
-    } else {
+    } else if (!is_newline) {
         character_box->setCharacter(to_draw[0]);
         character_box->moveToNext();
         character_box->draw();

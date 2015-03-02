@@ -9,5 +9,5 @@ uniform vec3 textColor;
 
 void main() {
     vec4 base = texture(base_texture, Texcoord);
-    outColor = vec4(textColor * base.rgb, base.a);
+    outColor = vec4(1.0, 1.0, 1.0, base.r) * vec4(textColor, 1.0);
 }

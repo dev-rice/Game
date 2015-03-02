@@ -20,6 +20,7 @@
 #include "shader_loader.h"
 #include "texture_loader.h"
 #include "window.h"
+#include "font_sheet.h"
 
 class TextRenderer {
 public:

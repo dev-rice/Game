@@ -14,6 +14,7 @@
     </constraints>
 
     <text>Exit Program</text>
+    <font>BreeSerif-Regular.ttf</font>
     <function>exitProgram</function>
 
 </layout>

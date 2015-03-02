@@ -14,7 +14,7 @@ DebugConsole* DebugConsole::getInstance(){
 
 DebugConsole::DebugConsole() : UIWindow(ShaderLoader::loadShaderProgram("shaders/ui.vs","shaders/ui.fs")) {
     loadFromXML("res/layouts/debug_console.xml");
-    text_renderer = new TextRenderer("res/fonts/inconsolata_bold_font.png", 22);
+    text_renderer = new TextRenderer("ShareTechMono-Regular.ttf", 18);
 
     // Do this so we don't have to process a ton of messages on the first
     // draw call
@@ -78,10 +78,12 @@ void DebugConsole::handleInput(SDL_Event event){
             hide();
         }
         if (event.key.keysym.scancode == SDL_SCANCODE_BACKSPACE){
-            input_buffer.pop_back();
+            if (input_buffer.size() > 0){
+                input_buffer.pop_back();
+            }
         }
         if (event.key.keysym.scancode == SDL_SCANCODE_RETURN){
-            Debug::info("Unknown command: '%s'\n", input_buffer.c_str());
+            Debug::error("Unknown command: '%s'\n", input_buffer.c_str());
             input_buffer.clear();
         }
         break;

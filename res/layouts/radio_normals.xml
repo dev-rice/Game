@@ -13,7 +13,7 @@
     </constraints>
 
     <text>Normal Maps</text>
-    <font>res/fonts/inconsolata_bold_font.png</font>
+    <font>BreeSerif-Regular.ttf</font>
     <mode>on</mode>
     <function>toggleNormals</function>
 

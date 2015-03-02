@@ -13,7 +13,7 @@
     </constraints>
 
     <text>Post Processing</text>
-    <font>res/fonts/inconsolata_bold_font.png</font>
+    <font>BreeSerif-Regular.ttf</font>
     <mode>on</mode>
     <function>toggleFramebuffers</function>
 

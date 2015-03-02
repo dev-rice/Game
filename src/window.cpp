@@ -50,7 +50,7 @@ void Window::setVsync(bool value){
 void Window::setFullscreen(bool fullscreen){
     if (fullscreen){
         SDL_DisplayMode mode;
-        SDL_GetDesktopDisplayMode(0, &mode);
+        SDL_GetDisplayMode(0, 0, &mode);
         width = mode.w;
         height = mode.h;
     }

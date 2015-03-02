@@ -6,10 +6,11 @@
 #include "flat_drawable.h"
 #include "character_mesh.h"
 #include "core_ui/ui_drawable.h"
+#include "font_sheet.h"
 
 class CharacterDrawable : public UIDrawable {
 public:
-    CharacterDrawable(GLuint, GLuint, GLint);
+    CharacterDrawable(GLuint, FontSheet*, GLint);
 
     void setCharacter(char);
     void setPixelPosition(int, int);
@@ -23,6 +24,12 @@ private:
     glm::vec2 uv_offset;
     glm::vec3 text_color;
     float spacing;
+
+    int base_x_pixels;
+    int base_y_pixels;
+
+    FontSheet* font_sheet;
+    Glyph current_glyph;
 };
 
 #endif
