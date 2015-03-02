@@ -72,9 +72,9 @@ Level::Level(const char* filename){
             temp->loadFromXML("res/units/testunit.xml");
 
             if (rand() % 2){
-                temp->setDiffuse(TextureLoader::loadBlue());
+                temp->setDiffuse(56);
             } else {
-                temp->setDiffuse(TextureLoader::loadGreen());
+                temp->setDiffuse(57);
             }
 
             drawables.push_back(temp);

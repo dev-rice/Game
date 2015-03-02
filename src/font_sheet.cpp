@@ -48,10 +48,12 @@ FontSheet::FontSheet(std::string filename, int pixel_size) {
         image_width += point_size;
         image_height = point_size;
     }
+    GLuint texture;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
 
-    glGenTextures(1, &texture_id);
-    glBindTexture(GL_TEXTURE_2D, texture_id);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, image_width, image_height, 0, GL_RED, GL_UNSIGNED_BYTE, 0);
 
     float start_time = GameClock::getInstance()->getCurrentTime();
@@ -87,4 +89,18 @@ FontSheet::FontSheet(std::string filename, int pixel_size) {
     }
     ///////////////////////////////////
 
+    // Set the texture wrapping to repeat
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    // Do nearest interpolation for scaling the image up and down.
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    this->texture_id = TextureLoader::loadTextureFromFile(bmp_filename, GL_LINEAR);
+    // this->texture_id = texture;
+}
+
+GLuint FontSheet::getTexture(){
+    return texture_id;
 }

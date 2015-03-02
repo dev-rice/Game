@@ -23,6 +23,7 @@
 
 #include "game_clock.h"
 #include "debug.h"
+#include "texture_loader.h"
 
 static const std::string FONT_PATH = "res/fonts/";
 
@@ -30,7 +31,7 @@ class FontSheet {
 public:
     FontSheet(std::string filename, int pixel_size);
 
-    GLuint getTexture() {return texture_id;}
+    GLuint getTexture();
 
 private:
     GLuint texture_id;
