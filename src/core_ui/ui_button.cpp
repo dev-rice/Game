@@ -34,7 +34,7 @@ void UIButton::loadFromXML(std::string filepath){
     functionName = layout_node.child_value("function");
 
     // Parse button text
-    text_renderer = new TextRenderer("res/fonts/inconsolata_bold_font.png", 28);
+    text_renderer = new TextRenderer("ShareTechMono-Regular.ttf", 28);
     button_text = layout_node.child_value("text");
 
     // Get button text size

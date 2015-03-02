@@ -13,7 +13,7 @@
     </constraints>
 
     <text>Vsync</text>
-    <font>res/fonts/inconsolata_bold_font.png</font>
+    <font>ShareTechMono-Regular.ttf</font>
     <mode>on</mode>
     <function>testFunction</function>
 

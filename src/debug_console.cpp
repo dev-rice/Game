@@ -14,7 +14,7 @@ DebugConsole* DebugConsole::getInstance(){
 
 DebugConsole::DebugConsole() : UIWindow(ShaderLoader::loadShaderProgram("shaders/ui.vs","shaders/ui.fs")) {
     loadFromXML("res/layouts/debug_console.xml");
-    text_renderer = new TextRenderer("res/fonts/inconsolata_bold_font.png", 22);
+    text_renderer = new TextRenderer("ShareTechMono-Regular.ttf", 22);
 
     // Do this so we don't have to process a ton of messages on the first
     // draw call

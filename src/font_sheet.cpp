@@ -80,7 +80,6 @@ FontSheet::FontSheet(std::string filename, int pixel_size) {
     }
 
     float delta_time = GameClock::getInstance()->getCurrentTime() - start_time;
-    Debug::info("It took %.6f seconds to generate the font sheet for %s.\n", delta_time, font_filename.c_str());
 
     // Set the texture wrapping to repeat
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);

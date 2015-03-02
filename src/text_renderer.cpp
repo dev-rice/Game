@@ -9,7 +9,7 @@ TextRenderer::TextRenderer(std::string font_filename, GLint point){
     GLuint text_shader = ShaderLoader::loadShaderProgram("shaders/text.vs",
         "shaders/text.fs");
 
-    FontSheet* stylized = new FontSheet("ShareTechMono-Regular.ttf", 16);
+    FontSheet* stylized = new FontSheet(font_filename, 16);
 
     // GLuint character_texture = TextureLoader::loadTextureFromFile(font_filename.c_str(), GL_LINEAR);
     // GLuint character_texture = stylized.getTexture();
