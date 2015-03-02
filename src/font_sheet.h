@@ -30,22 +30,26 @@ static const std::string FONT_PATH = "res/fonts/";
 
 struct Glyph {
     Glyph() {;}
-    Glyph(float w, float h, float bx, float by, float ad){
+    Glyph(double w, double h, double bx, double by, double ad){
         width = w / 64.0f;
         height = h / 64.0f;
         bearing_x = bx / 64.0f;
         bearing_y = by / 64.0f;
         advance = ad / 64.0f;
     }
-    float width;
-    float height;
-    float bearing_x;
-    float bearing_y;
-    float advance;
+    double width;
+    double height;
+    double bearing_x;
+    double bearing_y;
+    double advance;
+
+    double u_offset;
+    double v_offset;
 };
 
 class FontSheet {
 public:
+    static const int NUM_CHARS = 128;
     FontSheet(std::string filename, int pixel_size);
 
     void renderToBMP();
@@ -55,6 +59,7 @@ public:
     unsigned int getHeight();
 
     Glyph getGlyph(char);
+    int getPointSize();
 
 private:
     std::string filename;
@@ -62,6 +67,7 @@ private:
 
     unsigned int width;
     unsigned int height;
+    int point;
 
     std::unordered_map<char, Glyph> character_map;
 };

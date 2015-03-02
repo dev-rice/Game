@@ -2,17 +2,12 @@
 #define CharacterMesh_h
 
 #include "flat_mesh.h"
+#include "font_sheet.h"
 
 class CharacterMesh : public FlatMesh {
 public:
 
     static CharacterMesh* getInstance();
-
-    static const float CHARACTER_WIDTH;
-    static const float CHARACTER_HEIGHT;
-    static const float IMAGE_HEIGHT;
-    static const float IMAGE_WIDTH;
-    static const float PADDING;
 
 private:
 

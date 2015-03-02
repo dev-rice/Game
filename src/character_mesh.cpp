@@ -2,12 +2,6 @@
 
 CharacterMesh* CharacterMesh::instance;
 
-const float CharacterMesh::CHARACTER_WIDTH = 16;
-const float CharacterMesh::CHARACTER_HEIGHT = 16;
-const float CharacterMesh::IMAGE_HEIGHT = 16;
-const float CharacterMesh::IMAGE_WIDTH = 16 * 128;
-const float CharacterMesh::PADDING = 2;
-
 CharacterMesh* CharacterMesh::getInstance(){
     if(instance){
         return instance;
@@ -19,8 +13,8 @@ CharacterMesh* CharacterMesh::getInstance(){
 
 CharacterMesh::CharacterMesh(){
     // Create 2D mesh for framebuffer to draw onto.
-    float delta_v = CHARACTER_HEIGHT / IMAGE_HEIGHT;
-    float delta_u = CHARACTER_WIDTH / IMAGE_WIDTH;
+    float delta_u = 1.0 / FontSheet::NUM_CHARS;
+    float delta_v = 1.0;
 
     GLfloat planeVerts[] = {
              -1.0f,  1.0f,  0.0f, 0.0f,

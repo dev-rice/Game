@@ -2,6 +2,8 @@
 
 FontSheet::FontSheet(std::string filename, int pixel_size) {
     this->filename = filename;
+    this->point = pixel_size;
+
     std::string font_filename = FONT_PATH + filename;
 
     FT_Library library;
@@ -31,22 +33,8 @@ FontSheet::FontSheet(std::string filename, int pixel_size) {
         Debug::error("Cannot set face size to %d", pixel_size);
     }
 
-    width = 0;
-    height = 0;
-
-    for (int i = 0; i < 128; ++i){
-        char to_render = i;
-
-        int load_flags = FT_LOAD_RENDER;
-        error = FT_Load_Char(face, to_render, load_flags);
-        if (error){
-            Debug::error("Cannot load glyph %c.\n", to_render);
-        }
-
-        FT_GlyphSlot glyph = face->glyph;
-        width += pixel_size;
-        height = pixel_size;
-    }
+    width = NUM_CHARS * pixel_size;
+    height = pixel_size;
 
     glGenTextures(1, &texture_id);
     glBindTexture(GL_TEXTURE_2D, texture_id);
@@ -59,7 +47,7 @@ FontSheet::FontSheet(std::string filename, int pixel_size) {
 
     int x_offset = 0;
     int y_offset = 0;
-    for (int i = 0; i < 128; ++i){
+    for (int i = 0; i < NUM_CHARS; ++i){
         char to_render = i;
 
         int load_flags = FT_LOAD_RENDER;
@@ -74,9 +62,14 @@ FontSheet::FontSheet(std::string filename, int pixel_size) {
 
         glTexSubImage2D(GL_TEXTURE_2D, 0, x_offset, 0, glyph->bitmap.width, glyph->bitmap.rows, GL_RED, GL_UNSIGNED_BYTE, glyph->bitmap.buffer);
 
-        character_map[to_render] = Glyph(glyph->metrics.width,
-            glyph->metrics.height, glyph->metrics.horiBearingX,
-            glyph->metrics.horiBearingY, glyph->metrics.horiAdvance);
+        Glyph current_glyph(glyph->metrics.width, glyph->metrics.height,
+            glyph->metrics.horiBearingX, glyph->metrics.horiBearingY,
+            glyph->metrics.horiAdvance);
+
+        current_glyph.u_offset = (double)x_offset / (double)width;
+        current_glyph.v_offset = 0;
+
+        character_map[to_render] = current_glyph;
     }
 
     float delta_time = GameClock::getInstance()->getCurrentTime() - start_time;
@@ -113,6 +106,10 @@ void FontSheet::renderToBMP(){
 
 Glyph FontSheet::getGlyph(char glyph_char){
     return character_map[glyph_char];
+}
+
+int FontSheet::getPointSize(){
+    return point;
 }
 
 GLuint FontSheet::getTexture(){
