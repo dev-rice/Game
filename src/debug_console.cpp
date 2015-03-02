@@ -78,7 +78,9 @@ void DebugConsole::handleInput(SDL_Event event){
             hide();
         }
         if (event.key.keysym.scancode == SDL_SCANCODE_BACKSPACE){
-            input_buffer.pop_back();
+            if (input_buffer.size() > 0){
+                input_buffer.pop_back();
+            }
         }
         if (event.key.keysym.scancode == SDL_SCANCODE_RETURN){
             Debug::error("Unknown command: '%s'\n", input_buffer.c_str());

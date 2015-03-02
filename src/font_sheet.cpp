@@ -41,7 +41,11 @@ FontSheet::FontSheet(std::string filename, int pixel_size) {
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, width, height, 0, GL_RED, GL_UNSIGNED_BYTE, 0);
+    GLubyte* zeros = new GLubyte[width * height];
+    for (int i = 0; i < width * height; ++i){
+        zeros[i] = 0;
+    }
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, width, height, 0, GL_RED, GL_UNSIGNED_BYTE, zeros);
 
     float start_time = GameClock::getInstance()->getCurrentTime();
 
@@ -70,6 +74,12 @@ FontSheet::FontSheet(std::string filename, int pixel_size) {
         current_glyph.v_offset = 0;
 
         character_map[to_render] = current_glyph;
+
+        std::string bmp_filename = "font_render/" + std::to_string(i) + ".bmp";
+        int save_result = SOIL_save_image(bmp_filename.c_str(), SOIL_SAVE_TYPE_BMP, glyph->bitmap.width, glyph->bitmap.rows, 1, glyph->bitmap.buffer);
+        if (!save_result){
+            Debug::error("Error saving %s.\n", bmp_filename.c_str());
+        }
     }
 
     float delta_time = GameClock::getInstance()->getCurrentTime() - start_time;
@@ -83,13 +93,13 @@ FontSheet::FontSheet(std::string filename, int pixel_size) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     renderToBMP();
-    std::string bmp_filename = "font_render/" + filename + ".bmp";
+    std::string bmp_filename = "/tmp/" + filename + std::to_string(point) + ".bmp";
     texture_id = TextureLoader::loadTextureFromFile(bmp_filename, GL_LINEAR);
 
 }
 
 void FontSheet::renderToBMP(){
-    std::string bmp_filename = "font_render/" + filename + ".bmp";
+    std::string bmp_filename = "/tmp/" + filename + std::to_string(point) + ".bmp";
     GLubyte* image = new GLubyte[width*height];
 
     glBindTexture(GL_TEXTURE_2D, texture_id);
