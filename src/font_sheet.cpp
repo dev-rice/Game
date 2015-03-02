@@ -47,7 +47,7 @@ FontSheet::FontSheet(std::string filename, int pixel_size) {
     delete[] zeros;
     zeros = NULL;
 
-    // Set the texture wrapping to repeat
+    // Set the texture wrapping to clamp to edge
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     // Do nearest interpolation for scaling the image up and down.
