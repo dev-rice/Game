@@ -28,6 +28,8 @@ public:
     GameView(Level*);
 
     void update();
+    
+    void handleInputState();
     void handleInput(SDL_Event);
 
 private:

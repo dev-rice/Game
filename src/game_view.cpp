@@ -59,6 +59,8 @@ GameView::GameView(Level* level){
     InputHandler::Callback_Type callback_function = std::bind(&GameView::handleInput, this, std::placeholders::_1);
     InputHandler::getInstance()->pushCallback(callback_function);
 
+    InputHandler::State_Callback_Type state_callback_temp = std::bind(&GameView::handleInputState, this);
+    InputHandler::getInstance()->setStateCallback(state_callback_temp);
 
 }
 
@@ -178,58 +180,14 @@ void GameView::update(){
 
 }
 
-void GameView::handleInput(SDL_Event event){
+void GameView::handleInputState(){
     Camera* camera = level->getCamera();
     glm::mat4 proj_matrix = level->getProjection();
     Terrain* terrain = level->getTerrain();
 
-    // Set the cursor to the pointer by default
-    Mouse::getInstance()->setCursorSprite(Mouse::cursorType::CURSOR);
-
     // Get the mouse coordinates gl, and the world
     glm::vec2 mouse_gl_pos = Mouse::getInstance()->getGLPosition();
     glm::vec3 mouse_world_pos = level->calculateWorldPosition(mouse_gl_pos);
-
-    SDL_Scancode key_scancode = event.key.keysym.scancode;
-    switch(event.type){
-        case SDL_KEYDOWN:
-            if (key_scancode == SDL_SCANCODE_ESCAPE){
-                window->requestClose();
-            } else if (key_scancode == SDL_SCANCODE_T) {
-                GameClock::getInstance()->resetAverage();
-            } else if ((key_scancode == SDL_SCANCODE_TAB) && (!toggle_key_state)){
-                toggle_key_state = true;
-                debug_showing = !debug_showing;
-            } else if ((key_scancode == SDL_SCANCODE_F8) && (!debug_console_key_state)){
-                debug_console_key_state = true;
-                DebugConsole::getInstance()->toggleShowing();
-            } else if ((key_scancode == SDL_SCANCODE_G) && (!graphics_menu_key_state)){
-                graphics_menu_key_state = true;
-                graphics_menu->toggleShowing();
-            } else if ((key_scancode == SDL_SCANCODE_F10) && (!menu_key_state)){
-                menu_key_state = true;
-                menu->toggleShowing();
-            } else if ((key_scancode == SDL_SCANCODE_P) && (!printscreen_key_state)){
-                printscreen_key_state = true;
-                window->takeScreenshot();
-            }
-        break;
-
-        case SDL_KEYUP:
-            if (key_scancode == SDL_SCANCODE_TAB){
-                toggle_key_state = false;
-            } else if (key_scancode == SDL_SCANCODE_F8){
-                debug_console_key_state = false;
-            } else if (key_scancode == SDL_SCANCODE_G){
-                graphics_menu_key_state = false;
-            } else if (key_scancode == SDL_SCANCODE_F10){
-                menu_key_state = false;
-            } else if (key_scancode == SDL_SCANCODE_P){
-                printscreen_key_state = false;
-            }
-        break;
-
-    }
 
     SDL_PumpEvents();
     const Uint8 *state = SDL_GetKeyboardState(NULL);
@@ -427,6 +385,53 @@ void GameView::handleInput(SDL_Event event){
                 Mouse::getInstance()->setCursorSprite(Mouse::cursorType::UP_RIGHT);
             }
         }
+
+    }
+
+}
+
+void GameView::handleInput(SDL_Event event){
+    // Set the cursor to the pointer by default
+    Mouse::getInstance()->setCursorSprite(Mouse::cursorType::CURSOR);
+
+    SDL_Scancode key_scancode = event.key.keysym.scancode;
+    switch(event.type){
+        case SDL_KEYDOWN:
+            if (key_scancode == SDL_SCANCODE_ESCAPE){
+                window->requestClose();
+            } else if (key_scancode == SDL_SCANCODE_T) {
+                GameClock::getInstance()->resetAverage();
+            } else if ((key_scancode == SDL_SCANCODE_TAB) && (!toggle_key_state)){
+                toggle_key_state = true;
+                debug_showing = !debug_showing;
+            } else if ((key_scancode == SDL_SCANCODE_F8) && (!debug_console_key_state)){
+                debug_console_key_state = true;
+                DebugConsole::getInstance()->toggleShowing();
+            } else if ((key_scancode == SDL_SCANCODE_G) && (!graphics_menu_key_state)){
+                graphics_menu_key_state = true;
+                graphics_menu->toggleShowing();
+            } else if ((key_scancode == SDL_SCANCODE_F10) && (!menu_key_state)){
+                menu_key_state = true;
+                menu->toggleShowing();
+            } else if ((key_scancode == SDL_SCANCODE_P) && (!printscreen_key_state)){
+                printscreen_key_state = true;
+                window->takeScreenshot();
+            }
+        break;
+
+        case SDL_KEYUP:
+            if (key_scancode == SDL_SCANCODE_TAB){
+                toggle_key_state = false;
+            } else if (key_scancode == SDL_SCANCODE_F8){
+                debug_console_key_state = false;
+            } else if (key_scancode == SDL_SCANCODE_G){
+                graphics_menu_key_state = false;
+            } else if (key_scancode == SDL_SCANCODE_F10){
+                menu_key_state = false;
+            } else if (key_scancode == SDL_SCANCODE_P){
+                printscreen_key_state = false;
+            }
+        break;
 
     }
 
