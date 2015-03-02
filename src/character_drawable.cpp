@@ -1,7 +1,8 @@
 #include "character_drawable.h"
 
-CharacterDrawable::CharacterDrawable(GLuint shader_program, GLuint texture, GLint point)
-    :UIDrawable(shader_program, texture) {
+CharacterDrawable::CharacterDrawable(GLuint shader_program, FontSheet* font_sheet, GLint point)
+    :UIDrawable(shader_program, font_sheet->getTexture()) {
+        this->font_sheet = font_sheet;
         mesh = CharacterMesh::getInstance();
         this->mesh->attachGeometryToShader(shader_program);
         uv_offset = glm::vec2();
@@ -19,6 +20,8 @@ CharacterDrawable::CharacterDrawable(GLuint shader_program, GLuint texture, GLin
 void CharacterDrawable::setPixelPosition(int x, int y){
     x_pixels = x;
     y_pixels = y;
+    base_x_pixels = x;
+    base_y_pixels = y;
 
     setGLPosition(getGLPosition());
 }
@@ -36,7 +39,7 @@ void CharacterDrawable::setSpacing(float spacing){
 }
 
 void CharacterDrawable::moveToNext(){
-    x_pixels += width_pixels + spacing - CharacterMesh::PADDING;
+    base_x_pixels += current_glyph.advance;
     setGLPosition(getGLPosition());
 
 }
@@ -51,6 +54,13 @@ void CharacterDrawable::setCharacter(char to_render){
 
     uv_offset.x = column * delta_u;
     uv_offset.y = ((row) * delta_v);
+
+    current_glyph = font_sheet->getGlyph(to_render);
+
+    x_pixels = base_x_pixels + current_glyph.bearing_x;
+    y_pixels = base_y_pixels - current_glyph.bearing_y;
+    y_pixels += 16;
+    setGLPosition(getGLPosition());
 
 }
 

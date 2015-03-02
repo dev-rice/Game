@@ -73,6 +73,10 @@ FontSheet::FontSheet(std::string filename, int pixel_size) {
         x_offset += pixel_size;
 
         glTexSubImage2D(GL_TEXTURE_2D, 0, x_offset, 0, glyph->bitmap.width, glyph->bitmap.rows, GL_RED, GL_UNSIGNED_BYTE, glyph->bitmap.buffer);
+
+        character_map[to_render] = Glyph(glyph->metrics.width,
+            glyph->metrics.height, glyph->metrics.horiBearingX,
+            glyph->metrics.horiBearingY, glyph->metrics.horiAdvance);
     }
 
     float delta_time = GameClock::getInstance()->getCurrentTime() - start_time;
@@ -106,6 +110,10 @@ void FontSheet::renderToBMP(){
 
     delete[] image;
     image = NULL;
+}
+
+Glyph FontSheet::getGlyph(char glyph_char){
+    return character_map[glyph_char];
 }
 
 GLuint FontSheet::getTexture(){

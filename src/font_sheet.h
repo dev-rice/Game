@@ -20,12 +20,29 @@
 #include FT_FREETYPE_H
 
 #include <algorithm>
+#include <unordered_map>
 
 #include "game_clock.h"
 #include "debug.h"
 #include "texture_loader.h"
 
 static const std::string FONT_PATH = "res/fonts/";
+
+struct Glyph {
+    Glyph() {;}
+    Glyph(float w, float h, float bx, float by, float ad){
+        width = w / 64.0f;
+        height = h / 64.0f;
+        bearing_x = bx / 64.0f;
+        bearing_y = by / 64.0f;
+        advance = ad / 64.0f;
+    }
+    float width;
+    float height;
+    float bearing_x;
+    float bearing_y;
+    float advance;
+};
 
 class FontSheet {
 public:
@@ -37,12 +54,16 @@ public:
     unsigned int getWidth();
     unsigned int getHeight();
 
+    Glyph getGlyph(char);
+
 private:
     std::string filename;
     GLuint texture_id;
 
     unsigned int width;
     unsigned int height;
+
+    std::unordered_map<char, Glyph> character_map;
 };
 
 #endif
