@@ -13,6 +13,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include <SOIL.h>
+
 #include <stdio.h>
 #include <cstdlib>
 #include <random>
@@ -21,6 +23,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <algorithm>
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -131,7 +134,7 @@ int main(int argc, char* argv[]) {
     }
 
     // Load a font face
-    const char* font_filename = "res/fonts/HelveticaNeueLight.ttf";
+    const char* font_filename = "res/fonts/ShareTechMono-Regular.ttf";
     error = FT_New_Face(library, font_filename, 0, &face);
     if (error == FT_Err_Unknown_File_Format){
         Debug::error("Invalid format of font file '%s'.\n", font_filename);
@@ -143,16 +146,67 @@ int main(int argc, char* argv[]) {
     Debug::info("  num_glyphs == %d\n", face->num_glyphs);
     Debug::info("  num_fixed_sizes == %d\n", face->num_fixed_sizes);
 
-    int point_size = 16;
-    error = FT_Set_Char_Size(face, 0, point_size * 64, width, height);
+    int point_size = 64;
+    error = FT_Set_Pixel_Sizes(face, 0, point_size);
     if (error){
-        Debug::error("Error setting face size to %d", point_size);
+        Debug::error("Cannot set face size to %d", point_size);
     }
 
-    int glyph_index;
-    char to_render = 'a';
-    glyph_index = FT_Get_Char_Index(face, to_render);
-    Debug::info("The character '%c' maps to glyph index %d\n", to_render, glyph_index);
+    unsigned int image_width = 0;
+    unsigned int image_height = 0;
+
+    for (int i = 0; i < 128; ++i){
+        char to_render = i;
+
+        int load_flags = FT_LOAD_RENDER;
+        error = FT_Load_Char(face, to_render, load_flags);
+        if (error){
+            Debug::error("Cannot load glyph %c.\n", to_render);
+        }
+
+        FT_GlyphSlot glyph = face->glyph;
+        image_width += point_size;
+        image_height = point_size;
+    }
+
+    GLuint texture;
+    glActiveTexture(GL_TEXTURE0);
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, image_width, image_height, 0, GL_RED, GL_UNSIGNED_BYTE, 0);
+
+    float start_time = GameClock::getInstance()->getCurrentTime();
+
+    int x_offset = 0;
+    int y_offset = 0;
+    for (int i = 0; i < 128; ++i){
+        char to_render = i;
+
+        int load_flags = FT_LOAD_RENDER;
+        error = FT_Load_Char(face, to_render, load_flags);
+        if (error){
+            Debug::error("Cannot load glyph %d.\n", to_render);
+        }
+
+        FT_GlyphSlot glyph = face->glyph;
+
+        x_offset += point_size;
+
+        glTexSubImage2D(GL_TEXTURE_2D, 0, x_offset, 0, glyph->bitmap.width, glyph->bitmap.rows, GL_RED, GL_UNSIGNED_BYTE, glyph->bitmap.buffer);
+    }
+
+    float delta_time = GameClock::getInstance()->getCurrentTime() - start_time;
+    Debug::info("It took %.6f seconds to generate the font sheet for %s.\n", delta_time, font_filename);
+
+    std::string bmp_filename = "font_render/font_sheet.bmp";
+    GLubyte* image = new GLubyte[image_width*image_height];
+    glGetTexImage(GL_TEXTURE_2D, 0, GL_RED, GL_UNSIGNED_BYTE, image);
+
+    int save_result = SOIL_save_image(bmp_filename.c_str(), SOIL_SAVE_TYPE_BMP, image_width, image_height, 1, image);
+    if (!save_result){
+        Debug::error("Error saving %s.\n", bmp_filename.c_str());
+    }
 
     ///////////////////////////////////
 
