@@ -151,15 +151,15 @@ void GameView::update(){
         glm::vec2 mouse_gl_pos = Mouse::getInstance()->getGLPosition();
         glm::vec3 mouse_world_pos = level->calculateWorldPosition(mouse_gl_pos);
 
-        text_renderer->print(10, 20, "fps: %.2f",
+        text_renderer->print(10, 10, "fps: %.2f",
             1.0 / frame_time);
-        text_renderer->print(10, 40, "average frame time: %.7f s",
+        text_renderer->print(10, 30, "average frame time: %.7f s",
             average_frame_time);
-        text_renderer->print(10, 60, "camera position <x, y, z>:"
+        text_renderer->print(10, 50, "camera position <x, y, z>:"
             "%.2f, %.2f, %.2f", position.x, position.y, position.z);
-        text_renderer->print(10, 80, "camera rotation <x, y, z>:"
+        text_renderer->print(10, 70, "camera rotation <x, y, z>:"
             "%.2f, %.2f, %.2f", rotation.x, rotation.y, rotation.z);
-        text_renderer->print(10, 100, "mouse world position <x, y, z>:"
+        text_renderer->print(10, 90, "mouse world position <x, y, z>:"
             "%.2f, %.2f, %.2f", mouse_world_pos.x, mouse_world_pos.y, mouse_world_pos.z);
 
     }
