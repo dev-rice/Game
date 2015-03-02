@@ -26,10 +26,9 @@ FontSheet::FontSheet(std::string filename, int pixel_size) {
     Debug::info("  num_glyphs == %d\n", face->num_glyphs);
     Debug::info("  num_fixed_sizes == %d\n", face->num_fixed_sizes);
 
-    int point_size = 64;
-    error = FT_Set_Pixel_Sizes(face, 0, point_size);
+    error = FT_Set_Pixel_Sizes(face, 0, pixel_size);
     if (error){
-        Debug::error("Cannot set face size to %d", point_size);
+        Debug::error("Cannot set face size to %d", pixel_size);
     }
 
     width = 0;
@@ -45,8 +44,8 @@ FontSheet::FontSheet(std::string filename, int pixel_size) {
         }
 
         FT_GlyphSlot glyph = face->glyph;
-        width += point_size;
-        height = point_size;
+        width += pixel_size;
+        height = pixel_size;
     }
 
     glGenTextures(1, &texture_id);
@@ -71,7 +70,7 @@ FontSheet::FontSheet(std::string filename, int pixel_size) {
 
         FT_GlyphSlot glyph = face->glyph;
 
-        x_offset += point_size;
+        x_offset += pixel_size;
 
         glTexSubImage2D(GL_TEXTURE_2D, 0, x_offset, 0, glyph->bitmap.width, glyph->bitmap.rows, GL_RED, GL_UNSIGNED_BYTE, glyph->bitmap.buffer);
     }
@@ -86,6 +85,10 @@ FontSheet::FontSheet(std::string filename, int pixel_size) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
     // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    renderToBMP();
+    std::string bmp_filename = "font_render/" + filename + ".bmp";
+    texture_id = TextureLoader::loadTextureFromFile(bmp_filename, GL_LINEAR);
 
 }
 

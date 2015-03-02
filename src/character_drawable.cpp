@@ -43,8 +43,8 @@ void CharacterDrawable::moveToNext(){
 
 void CharacterDrawable::setCharacter(char to_render){
     int ascii = to_render;
-    int row = floor(((float)ascii - 32) / 16.0);
-    int column = (ascii - 32) - (row * 16);
+    int row = 0;
+    int column = ascii + 1;
 
     float delta_u = CharacterMesh::CHARACTER_WIDTH / CharacterMesh::IMAGE_WIDTH;
     float delta_v = CharacterMesh::CHARACTER_HEIGHT / CharacterMesh::IMAGE_HEIGHT;
