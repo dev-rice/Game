@@ -51,7 +51,6 @@ FontSheet::FontSheet(std::string filename, int pixel_size) {
     delete[] zeros;
     zeros = NULL;
 
-
     float start_time = GameClock::getInstance()->getCurrentTime();
 
     int x_offset = 0;
