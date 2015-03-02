@@ -1,7 +1,7 @@
 #include "font_sheet.h"
 
 FontSheet::FontSheet(std::string filename, int pixel_size) {
-
+    this->filename = filename;
     std::string font_filename = FONT_PATH + filename;
 
     FT_Library library;
@@ -32,8 +32,8 @@ FontSheet::FontSheet(std::string filename, int pixel_size) {
         Debug::error("Cannot set face size to %d", point_size);
     }
 
-    unsigned int image_width = 0;
-    unsigned int image_height = 0;
+    width = 0;
+    height = 0;
 
     for (int i = 0; i < 128; ++i){
         char to_render = i;
@@ -45,16 +45,16 @@ FontSheet::FontSheet(std::string filename, int pixel_size) {
         }
 
         FT_GlyphSlot glyph = face->glyph;
-        image_width += point_size;
-        image_height = point_size;
+        width += point_size;
+        height = point_size;
     }
-    GLuint texture;
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
+
+    glGenTextures(1, &texture_id);
+    glBindTexture(GL_TEXTURE_2D, texture_id);
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, image_width, image_height, 0, GL_RED, GL_UNSIGNED_BYTE, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, width, height, 0, GL_RED, GL_UNSIGNED_BYTE, 0);
 
     float start_time = GameClock::getInstance()->getCurrentTime();
 
@@ -79,16 +79,6 @@ FontSheet::FontSheet(std::string filename, int pixel_size) {
     float delta_time = GameClock::getInstance()->getCurrentTime() - start_time;
     Debug::info("It took %.6f seconds to generate the font sheet for %s.\n", delta_time, font_filename.c_str());
 
-    std::string bmp_filename = "font_render/" + filename + ".bmp";
-    GLubyte* image = new GLubyte[image_width*image_height];
-    glGetTexImage(GL_TEXTURE_2D, 0, GL_RED, GL_UNSIGNED_BYTE, image);
-
-    int save_result = SOIL_save_image(bmp_filename.c_str(), SOIL_SAVE_TYPE_BMP, image_width, image_height, 1, image);
-    if (!save_result){
-        Debug::error("Error saving %s.\n", bmp_filename.c_str());
-    }
-    ///////////////////////////////////
-
     // Set the texture wrapping to repeat
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -97,10 +87,32 @@ FontSheet::FontSheet(std::string filename, int pixel_size) {
     // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    this->texture_id = TextureLoader::loadTextureFromFile(bmp_filename, GL_LINEAR);
-    // this->texture_id = texture;
+}
+
+void FontSheet::renderToBMP(){
+    std::string bmp_filename = "font_render/" + filename + ".bmp";
+    GLubyte* image = new GLubyte[width*height];
+
+    glBindTexture(GL_TEXTURE_2D, texture_id);
+    glGetTexImage(GL_TEXTURE_2D, 0, GL_RED, GL_UNSIGNED_BYTE, image);
+
+    int save_result = SOIL_save_image(bmp_filename.c_str(), SOIL_SAVE_TYPE_BMP, width, height, 1, image);
+    if (!save_result){
+        Debug::error("Error saving %s.\n", bmp_filename.c_str());
+    }
+
+    delete[] image;
+    image = NULL;
 }
 
 GLuint FontSheet::getTexture(){
     return texture_id;
+}
+
+unsigned int FontSheet::getWidth(){
+    return width;
+}
+
+unsigned int FontSheet::getHeight(){
+    return height;
 }

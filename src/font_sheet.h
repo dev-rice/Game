@@ -31,10 +31,18 @@ class FontSheet {
 public:
     FontSheet(std::string filename, int pixel_size);
 
+    void renderToBMP();
+
     GLuint getTexture();
+    unsigned int getWidth();
+    unsigned int getHeight();
 
 private:
+    std::string filename;
     GLuint texture_id;
+
+    unsigned int width;
+    unsigned int height;
 };
 
 #endif
