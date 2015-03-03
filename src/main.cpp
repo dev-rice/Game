@@ -138,7 +138,6 @@ int main(int argc, char* argv[]) {
         float time_since_start = GameClock::getInstance()->getCurrentTime() - start_time;
         splash.setOpacity(2.0 / pow(time_since_start, 2) - 1.0);
         splash.draw();
-        // font_test.draw();
     }
 
     // Close the window
