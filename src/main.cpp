@@ -1,7 +1,6 @@
 #define GLEW_STATIC
 
 #include <GL/glew.h>
-#include <SDL2/SDL.h>
 
 #if defined __APPLE__ && __MACH__
     #include <OpenGL/OpenGL.h>
@@ -25,9 +24,6 @@
 #include <unistd.h>
 #include <algorithm>
 
-#include <ft2build.h>
-#include FT_FREETYPE_H
-
 #include "debug.h"
 #include "world.h"
 #include "profile.h"
@@ -36,6 +32,9 @@
 #include "game_clock.h"
 #include "input_handler.h"
 #include "font_sheet.h"
+#include "flat_drawable.h"
+#include "shader_loader.h"
+#include "texture_loader.h"
 
 int main(int argc, char* argv[]) {
 
@@ -109,6 +108,13 @@ int main(int argc, char* argv[]) {
     our_window->setHeight(height);
     our_window->setFullscreen(fullscreen);
     our_window->initializeWindow();
+
+    GLuint ui_shader = ShaderLoader::loadShaderProgram("shaders/ui.vs", "shaders/ui.fs");
+    FlatDrawable splash(ui_shader, 1.0, 1.0, glm::vec2(0.0, 0.0));
+    GLuint splash_texture = TextureLoader::loadTextureFromFile("res/textures/splash_screen.png", GL_LINEAR);
+    splash.attachTexture(splash_texture);
+    splash.draw();
+    our_window->display();
 
     // Create the world
     World* world;
