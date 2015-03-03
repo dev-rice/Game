@@ -32,7 +32,7 @@ void FlatDrawable::draw(){
 }
 
 void FlatDrawable::updateUniformData(){
-
+    glUniform1f(glGetUniformLocation(shader_program, "opacity"), 1.0);
 }
 
 void FlatDrawable::attachTexture(GLuint texture){
