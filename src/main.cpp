@@ -124,6 +124,8 @@ int main(int argc, char* argv[]) {
         world = new World();
     }
 
+    float start_time = GameClock::getInstance()->getCurrentTime();
+
     // Start the input handler so we can use
     // it later.
     InputHandler::getInstance();
@@ -133,6 +135,10 @@ int main(int argc, char* argv[]) {
         // Just handle inputs in this thread.
         InputHandler::getInstance()->pollInputs();
         world->update();
+
+        float time_since_start = GameClock::getInstance()->getCurrentTime() - start_time;
+        splash.setOpacity(2.0 / pow(time_since_start, 2) - 1.0);
+        splash.draw();
         // font_test.draw();
     }
 

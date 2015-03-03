@@ -6,7 +6,7 @@ FlatDrawable::FlatDrawable(GLuint shader_program, GLfloat width, GLfloat height,
     this->width = width;
     this->height = height;
     this->position = position;
-
+    opacity = 1.0;
     this->mesh->attachGeometryToShader(shader_program);
 }
 
@@ -32,7 +32,7 @@ void FlatDrawable::draw(){
 }
 
 void FlatDrawable::updateUniformData(){
-    glUniform1f(glGetUniformLocation(shader_program, "opacity"), 1.0);
+    glUniform1f(glGetUniformLocation(shader_program, "opacity"), opacity);
 }
 
 void FlatDrawable::attachTexture(GLuint texture){
@@ -40,4 +40,8 @@ void FlatDrawable::attachTexture(GLuint texture){
     glUniform1i(glGetUniformLocation(shader_program, "base_texture"), 0);
 
     this->texture = texture;
+}
+
+void FlatDrawable::setOpacity(float opacity){
+    this->opacity = opacity;
 }

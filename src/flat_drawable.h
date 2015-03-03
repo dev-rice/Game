@@ -27,6 +27,8 @@ public:
     virtual void setPosition(glm::vec2 p) {position = p;}
     virtual void setGLCoordinates(glm::vec2, glm::vec2){;}
 
+    void setOpacity(float);
+
 protected:
     virtual void updateUniformData();
 
@@ -38,6 +40,8 @@ protected:
     glm::vec2 position;
 
     GLuint texture;
+
+    float opacity;
 
     glm::mat3 transformation;
 };
