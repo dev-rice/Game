@@ -109,8 +109,7 @@ int main(int argc, char* argv[]) {
     our_window->setFullscreen(fullscreen);
     our_window->initializeWindow();
 
-    GLuint ui_shader = ShaderLoader::loadShaderProgram("shaders/ui.vs", "shaders/ui.fs");
-    FlatDrawable splash(ui_shader, 1.0, 1.0, glm::vec2(0.0, 0.0));
+    FlatDrawable splash;
     GLuint splash_texture = TextureLoader::loadTextureFromFile("res/textures/splash_screen.png", GL_LINEAR);
     splash.attachTexture(splash_texture);
     splash.draw();

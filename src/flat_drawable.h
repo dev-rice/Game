@@ -15,10 +15,13 @@
 
 #include "mesh.h"
 #include "flat_mesh.h"
+#include "shader_loader.h"
 
 class FlatDrawable {
 public:
+    FlatDrawable() : FlatDrawable(1.0, 1.0, glm::vec2()){;}
     FlatDrawable(GLuint sh) : FlatDrawable(sh, 1.0, 1.0, glm::vec2()){;}
+    FlatDrawable(GLfloat, GLfloat, glm::vec2);
     FlatDrawable(GLuint, GLfloat, GLfloat, glm::vec2);
 
     virtual void draw();
@@ -30,6 +33,8 @@ public:
     void setOpacity(float);
 
 protected:
+    void load(GLuint, GLfloat, GLfloat, glm::vec2);
+
     virtual void updateUniformData();
 
     FlatMesh* mesh;

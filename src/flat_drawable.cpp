@@ -1,6 +1,15 @@
 #include "flat_drawable.h"
 
+FlatDrawable::FlatDrawable(GLfloat width, GLfloat height, glm::vec2 position){
+    GLuint shader_program = ShaderLoader::loadShaderProgram("shaders/ui.vs", "shaders/ui.fs");
+    load(shader_program, width, height, position);
+}
+
 FlatDrawable::FlatDrawable(GLuint shader_program, GLfloat width, GLfloat height, glm::vec2 position){
+    load(shader_program, width, height, position);
+}
+
+void FlatDrawable::load(GLuint shader_program, GLfloat width, GLfloat height, glm::vec2 position){
     this->mesh = FlatMesh::getInstance();
     this->shader_program = shader_program;
     this->width = width;
