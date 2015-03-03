@@ -7,8 +7,6 @@ GameView::GameView(Level* level){
     screen = new Screenbuffer();
     framebuffer = new Framebuffer();
 
-    GLuint ui_shader = ShaderLoader::loadShaderProgram("shaders/ui.vs",
-        "shaders/ui.fs");
     GLuint mousebox_shader = ShaderLoader::loadShaderProgram("shaders/mousebox.vs",
         "shaders/mousebox.fs");
 
@@ -27,11 +25,11 @@ GameView::GameView(Level* level){
     // We should probably come up with a window manager class that keeps a list
     // of the currently showing UIWindows. This will be good for UIWindows with
     // sub windows.
-    menu = new UIWindow(ui_shader);
+    menu = new UIWindow();
     menu->loadFromXML("res/layouts/test.xml");
     menu->hide();
 
-    graphics_menu = new UIWindow(ui_shader);
+    graphics_menu = new UIWindow();
     graphics_menu->loadFromXML("res/layouts/graphics_settings.xml");
     graphics_menu->hide();
 

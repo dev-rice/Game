@@ -12,6 +12,7 @@
 
 class UIWindow : public UIDrawable {
 public:
+    UIWindow();
     UIWindow(GLuint);
 
     void loadFromXML(std::string);

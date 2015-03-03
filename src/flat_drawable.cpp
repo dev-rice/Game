@@ -1,7 +1,8 @@
 #include "flat_drawable.h"
 
 FlatDrawable::FlatDrawable(GLfloat width, GLfloat height, glm::vec2 position){
-    GLuint shader_program = ShaderLoader::loadShaderProgram("shaders/ui.vs", "shaders/ui.fs");
+    GLuint shader_program = ShaderLoader::loadShaderProgram("shaders/flat_drawable.vs",
+        "shaders/flat_drawable.fs");
     load(shader_program, width, height, position);
 }
 

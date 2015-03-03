@@ -1,6 +1,14 @@
 #include "ui_drawable.h"
 
+UIDrawable::UIDrawable(GLuint texture) : FlatDrawable(){
+    load(texture);
+}
+
 UIDrawable::UIDrawable(GLuint shader_program, GLuint texture) : FlatDrawable(shader_program){
+    load(texture);
+}
+
+void UIDrawable::load(GLuint texture){
     window_width = Window::getInstance()->getWidth();
     window_height = Window::getInstance()->getHeight();
 
@@ -13,8 +21,8 @@ UIDrawable::UIDrawable(GLuint shader_program, GLuint texture) : FlatDrawable(sha
     attachTexture(texture);
 
     parent = NULL;
-
     this->shader = shader_program;
+
 }
 
 void UIDrawable::attachTexture(GLuint texture){

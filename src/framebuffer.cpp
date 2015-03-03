@@ -37,8 +37,8 @@ Framebuffer::Framebuffer(){
         framebuffer_shader = ShaderLoader::loadShaderProgram("shaders/framebuffer_fxaa.vs",
             "shaders/framebuffer_fxaa.fs");
     } else {
-        framebuffer_shader = ShaderLoader::loadShaderProgram("shaders/framebuffer.vs",
-            "shaders/framebuffer.fs");
+        framebuffer_shader = ShaderLoader::loadShaderProgram("shaders/flat_drawable_noflip.vs",
+            "shaders/flat_drawable.fs");
     }
 
     // Create the window to draw the framebuffer onto

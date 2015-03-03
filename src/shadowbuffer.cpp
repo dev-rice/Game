@@ -32,18 +32,10 @@ Shadowbuffer::Shadowbuffer(float up_sample){
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT,
         GL_RENDERBUFFER, rboDepthStencil);
 
-    GLuint framebuffer_vs, framebuffer_fs, framebuffer_shader;
-    // Load framebuffer shader
-    if (Profile::getInstance()->getFxaaLevel()){
-        framebuffer_shader = ShaderLoader::loadShaderProgram("shaders/framebuffer_fxaa.vs",
-        "shaders/aa.fs");
-    } else {
-        framebuffer_shader = ShaderLoader::loadShaderProgram("shaders/framebuffer.vs",
-        "shaders/framebuffer.fs");
-    }
-
     // Create the window to draw the framebuffer onto
-    framebuffer_window = new FlatDrawable(framebuffer_shader, 0.25, 0.25, glm::vec2(0.75, -0.75));
+    GLuint shader_program = ShaderLoader::loadShaderProgram("shaders/flat_drawable_noflip.vs",
+        "shaders/flat_drawable.fs");
+    framebuffer_window = new FlatDrawable(0.25, 0.25, glm::vec2(0.75, -0.75));
     framebuffer_window->attachTexture(framebuffer_texture);
 }
 

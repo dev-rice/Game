@@ -19,6 +19,7 @@
 
 class UIDrawable : public FlatDrawable {
 public:
+    UIDrawable(GLuint);
     UIDrawable(GLuint, GLuint);
 
     void draw();
@@ -42,6 +43,8 @@ public:
     virtual void receiveNotification(UIDrawable*);
 
 protected:
+    void load(GLuint);
+
     GLuint shader;
 
     void parseConstraints(pugi::xml_node);

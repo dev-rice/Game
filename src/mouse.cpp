@@ -12,9 +12,7 @@ Mouse* Mouse::getInstance(){
 
 }
 
-Mouse::Mouse()
-        : UIDrawable(ShaderLoader::loadShaderProgram("shaders/ui.vs","shaders/ui.fs"),
-         TextureLoader::loadTextureFromFile("res/textures/cursor_ui.png", GL_LINEAR)) {
+Mouse::Mouse(): UIDrawable(TextureLoader::loadTextureFromFile("res/textures/cursor_ui.png", GL_LINEAR)) {
 
 
     int window_width = Window::getInstance()->getWidth();

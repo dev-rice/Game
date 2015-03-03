@@ -12,7 +12,7 @@ DebugConsole* DebugConsole::getInstance(){
 
 }
 
-DebugConsole::DebugConsole() : UIWindow(ShaderLoader::loadShaderProgram("shaders/ui.vs","shaders/ui.fs")) {
+DebugConsole::DebugConsole() : UIWindow() {
     loadFromXML("res/layouts/debug_console.xml");
     text_renderer = new TextRenderer("ShareTechMono-Regular.ttf", 18);
 
