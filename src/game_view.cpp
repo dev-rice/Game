@@ -237,7 +237,7 @@ void GameView::handleInputState(){
     //##############################################################################
     // Middle Mouse Button Handling
     //##############################################################################
-    if (Mouse::getInstance()->isPressed(Mouse::MIDDLE)){
+    if (Mouse::getInstance()->isPressed(Mouse::MIDDLE) || state[SDL_SCANCODE_M]){
         level->getTerrain()->paintSplatmap(mouse_world_pos);
     }
 
