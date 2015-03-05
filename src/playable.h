@@ -8,6 +8,7 @@
 
 #include <vector>
 #include <string>
+#include <queue>
 
 #include "pugixml.hpp" // PUGI xml library
 
@@ -65,8 +66,9 @@ private:
 
 	void updateUniformData();
 
-	std::vector<std::tuple<Playable::Order, glm::vec3>> order_queue;
-	std::vector<Playable*> targeted_units;
+	// Is this where the fuckup is?
+	std::queue<std::tuple<Playable::Order, glm::vec3>> order_queue;
+	std::queue<Playable*> target_queue;
 
 	// Current Target positions and Orders
 	glm::vec3 target_position;

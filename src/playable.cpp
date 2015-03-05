@@ -28,6 +28,7 @@ Doodad* Playable::selection_ring;
 //  ######  ########    ##     #######  ##      
 //
 //##################################################################################################
+
 Playable::Playable() : Drawable(){
 
 }
@@ -87,44 +88,54 @@ void Playable::updateUniformData(){
 //  #######  ##     ## ########  ######## ##     ##  ######  
 //
 //##################################################################################################
+
 void Playable::receiveOrder(Playable::Order order, glm::vec3 target, bool should_enqueue, std::vector<glm::vec3> path, Playable* targeted_unit){
 
+    // Error that exists: Pathing is done from current position, not future position. Need to do that.
+
+    // Are we targeting another playable?
     bool is_targeting = bool(targeted_unit);
 
+    // Get the corresponding body and final orders
     Playable::Order body_order = determineBodyOrder(order, is_targeting);
     Playable::Order last_order = determineLastOrder(order, is_targeting);
 
-    std::vector<std::tuple<Playable::Order, glm::vec3>> temp_order_queue;
+    // Allocate the temp queues
+    std::queue<std::tuple<Playable::Order, glm::vec3>> temp_order_queue;
+    std::queue<Playable*> temp_target_queue;
 
-    for(int i = 0; i < path.size(); ++i){
-        temp_order_queue.insert(temp_order_queue.begin(), std::make_tuple(body_order, path[i]));
+    // Feed the path and the body orders into the queue
+    for(int i = 0; i < path.size() - 1; ++i){
+        temp_order_queue.push(std::make_tuple(body_order, path[i]));
+        temp_target_queue.push(NULL);
     }
 
-    temp_order_queue.insert(temp_order_queue.begin(), std::make_tuple(last_order, target));
+    // Finalize the queue with the last target
+    temp_order_queue.push(std::make_tuple(last_order, target));
+    temp_target_queue.push(targeted_unit);
 
-    if(should_enqueue){
-        // This is be fuckity
-        order_queue.insert(order_queue.end(), temp_order_queue.begin(), temp_order_queue.end());
-
-    } else {
-        // Out with the old
-        targeted_units.clear();
-        order_queue.clear();
-
-        // In with the new
-        target_position = position;
-        order_queue = temp_order_queue;
+    // If we're not enqueuing the order, we should clear out the old
+    if(!should_enqueue){
+        while(! order_queue.empty()){
+            order_queue.pop();
+            target_queue.pop();
+        }
     }
 
-    if(is_targeting){
-        targeted_units.insert(targeted_units.begin(), targeted_unit);
+    // Queue them up
+    while( ! temp_order_queue.empty()){
+        order_queue.push(temp_order_queue.front());
+        target_queue.push(temp_target_queue.front());
+
+        temp_order_queue.pop();
+        temp_target_queue.pop();
     }
 
-    // First order
-    target_order = std::get<0>(order_queue.back());
-    setTargetPositionAndDirection(std::get<1>(order_queue.back()));
+    // Get the positioning and direction set up
+    target_position = position;
+    setTargetPositionAndDirection(std::get<1>(order_queue.front()));
     setRotationEuler(rotation.x, target_direction, rotation.z);
-    order_queue.pop_back();
+
 }
 
 Playable::Order Playable::determineBodyOrder(Playable::Order order, bool is_targeting){
@@ -203,6 +214,7 @@ void Playable::tempDeSelect(){
 // ########  #######   ######  ##     ##    ##    ####  #######  ##    ## 
 // 
 //##################################################################################################
+
 bool Playable::atTargetPosition(){
     if(order_queue.size() == 0){
         // We're at the last position
@@ -325,6 +337,7 @@ float Playable::distanceFromPointToLine(glm::vec2 line_0, glm::vec2 line_1, glm:
 //  #######  ##        ########  ##     ##    ##    ######## 
 // 
 //##################################################################################################
+
 void Playable::update(Terrain* ground, std::vector<Playable*> *otherUnits){
 
     // Scan all units, looking for a stuff
@@ -336,11 +349,11 @@ void Playable::update(Terrain* ground, std::vector<Playable*> *otherUnits){
     if(atTargetPosition() && order_queue.size() > 0){
 
         // Get the next order and target from the queue
-        target_order = std::get<0>(order_queue.back());
-        setTargetPositionAndDirection(std::get<1>(order_queue.back()));
-        order_queue.pop_back();
+        target_order = std::get<0>(order_queue.front());
+        setTargetPositionAndDirection(std::get<1>(order_queue.front()));
 
-        Debug::info("Next target: (%f, %f)\n", target_position.x, target_position.z);
+        order_queue.pop();
+        target_queue.pop();
 
     } else if(!atTargetPosition()){
 
@@ -374,7 +387,6 @@ void Playable::update(Terrain* ground, std::vector<Playable*> *otherUnits){
 // ########  ##     ## ##     ##  ###  ###  #### ##    ##  ######   
 //
 //##################################################################################################
-
 
 void Playable::draw(){
 
