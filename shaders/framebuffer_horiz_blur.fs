@@ -8,8 +8,8 @@ uniform sampler2D base_texture;
 uniform float opacity;
 
 void main() {
-    const int BLUR_SIZE = 17;
-    const int NUM_TEXELS = BLUR_SIZE / 2 + 1;
+    const int BLUR_RADIUS = 8;
+    const int NUM_TEXELS = BLUR_RADIUS + 1;
     vec4 texels[NUM_TEXELS];
 
     // Linear sample optimization from
