@@ -10,7 +10,6 @@ public:
     Shadowbuffer(float);
 
     void setAsRenderTarget();
-    void draw();
 };
 
 #endif

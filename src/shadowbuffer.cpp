@@ -45,10 +45,3 @@ void Shadowbuffer::setAsRenderTarget(){
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
-
-void Shadowbuffer::draw(){
-    // If this is an empty framebuffer then don't draw it
-    if (framebuffer_window != NULL){
-        framebuffer_window->draw();
-    }
-}

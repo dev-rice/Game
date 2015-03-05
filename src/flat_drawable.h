@@ -31,6 +31,7 @@ public:
     virtual void setGLCoordinates(glm::vec2, glm::vec2){;}
 
     void setOpacity(float);
+    void setShader(GLuint);
 
 protected:
     void load(GLuint, GLfloat, GLfloat, glm::vec2);

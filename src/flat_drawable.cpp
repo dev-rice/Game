@@ -12,12 +12,12 @@ FlatDrawable::FlatDrawable(GLuint shader_program, GLfloat width, GLfloat height,
 
 void FlatDrawable::load(GLuint shader_program, GLfloat width, GLfloat height, glm::vec2 position){
     this->mesh = FlatMesh::getInstance();
-    this->shader_program = shader_program;
     this->width = width;
     this->height = height;
     this->position = position;
+
     opacity = 1.0;
-    this->mesh->attachGeometryToShader(shader_program);
+    setShader(shader_program);
 }
 
 void FlatDrawable::draw(){
@@ -54,4 +54,9 @@ void FlatDrawable::attachTexture(GLuint texture){
 
 void FlatDrawable::setOpacity(float opacity){
     this->opacity = opacity;
+}
+
+void FlatDrawable::setShader(GLuint shader_program){
+    this->shader_program = shader_program;
+    mesh->attachGeometryToShader(shader_program);
 }

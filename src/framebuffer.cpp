@@ -31,15 +31,17 @@ Framebuffer::Framebuffer(){
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT,
         GL_RENDERBUFFER, rboDepthStencil);
 
-    GLuint framebuffer_vs, framebuffer_fs, framebuffer_shader;
+    GLuint framebuffer_shader;
     // Load framebuffer shader
     if (Profile::getInstance()->getFxaaLevel()){
-        framebuffer_shader = ShaderLoader::loadShaderProgram("shaders/framebuffer_fxaa.vs",
+        framebuffer_shader = ShaderLoader::loadShaderProgram("shaders/flat_drawable_noflip.vs",
             "shaders/framebuffer_fxaa.fs");
     } else {
         framebuffer_shader = ShaderLoader::loadShaderProgram("shaders/flat_drawable_noflip.vs",
             "shaders/flat_drawable.fs");
     }
+
+    addShaderPass(framebuffer_shader);
 
     // Create the window to draw the framebuffer onto
     framebuffer_window = new FlatDrawable(framebuffer_shader, 1.0, 1.0, glm::vec2(0.0, 0.0));
@@ -52,13 +54,22 @@ void Framebuffer::setAsRenderTarget(){
     glViewport(0, 0, width, height);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-
 }
 
 void Framebuffer::draw(){
     // If this is an empty framebuffer then don't draw it
     if (framebuffer_window != NULL){
-        framebuffer_window->draw();
+        // Do a draw pass for each of the shaders.
+        for (GLuint shader : shaders){
+            framebuffer_window->setShader(shader);
+            framebuffer_window->draw();
+        }
     }
+}
+
+void Framebuffer::addShaderPass(GLuint shader_program){
+    // Add a shader to the drawing passes. The pass
+    // is done in the same order as the shaders were
+    // added in
+    shaders.push_back(shader_program);
 }

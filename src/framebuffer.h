@@ -1,6 +1,8 @@
 #ifndef Framebuffer_h
 #define Framebuffer_h
 
+#include <vector>
+
 #include "flat_drawable.h"
 #include "shader_loader.h"
 #include "window.h"
@@ -12,6 +14,9 @@ public:
 
     virtual void setAsRenderTarget();
     virtual void draw();
+
+    void addShaderPass(GLuint);
+
     GLuint getTexture() {return framebuffer_texture;}
 protected:
 
@@ -20,6 +25,8 @@ protected:
 
     FlatDrawable* framebuffer_window;
     Window* window;
+
+    std::vector<GLuint> shaders;
 
     int width;
     int height;
