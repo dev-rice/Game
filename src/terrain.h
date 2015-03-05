@@ -62,8 +62,10 @@ private:
     float max_height;
 
     GLuint splatmap;
-    GLuint splatmap_painted;
     GLuint diffuse_textures[4];
+
+    GLuint splatmap_painted;
+    GLuint diffuse_painted;
 
     GLubyte brush[16];
 

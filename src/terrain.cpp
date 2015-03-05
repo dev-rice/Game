@@ -94,6 +94,8 @@ Terrain::Terrain(GLuint shader_program, std::string heightmap_filename, float am
     brush[14] = 255;
     brush[15] = 255;
 
+    diffuse_painted = TextureLoader::loadTextureFromFile("res/textures/grass.png", GL_LINEAR);
+
     // Debugging the allowed areas
     // printPathing();
 }
@@ -442,6 +444,9 @@ void Terrain::bindTextures(){
 
     glActiveTexture(GL_TEXTURE13);
     glBindTexture(GL_TEXTURE_2D, diffuse_textures[3]);
+
+    glActiveTexture(GL_TEXTURE14);
+    glBindTexture(GL_TEXTURE_2D, diffuse_painted);
 }
 
 void Terrain::setTextureLocations(){
@@ -456,6 +461,7 @@ void Terrain::setTextureLocations(){
     glUniform1i(glGetUniformLocation(shader_program, "diffuse_texture2"), 11);
     glUniform1i(glGetUniformLocation(shader_program, "diffuse_texture3"), 12);
     glUniform1i(glGetUniformLocation(shader_program, "diffuse_texture4"), 13);
+    glUniform1i(glGetUniformLocation(shader_program, "diffuse_painted"), 14);
 
 
 }

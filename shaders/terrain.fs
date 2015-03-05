@@ -25,11 +25,14 @@ uniform sampler2D specular_texture;
 uniform sampler2D normal_map;
 uniform sampler2D emissive_texture;
 uniform sampler2D shadow_map;
+
 uniform sampler2D splatmap;
-uniform sampler2D splatmap_painted;
 uniform sampler2D diffuse_texture2;
 uniform sampler2D diffuse_texture3;
 uniform sampler2D diffuse_texture4;
+
+uniform sampler2D splatmap_painted;
+uniform sampler2D diffuse_painted;
 
 vec4 diffuse;
 vec4 specular;
@@ -166,19 +169,20 @@ void main() {
     splat_values[2] = texture(splatmap, Splatcoord).g;
     splat_values[3] = texture(splatmap, Splatcoord).b;
 
-    float painted_splat_value = texture(splatmap_painted, Splatcoord).r;
-
     vec4 diffuses[4];
     diffuses[0] = texture(diffuse_texture, Texcoord);
     diffuses[1] = texture(diffuse_texture2, Texcoord);
     diffuses[2] = texture(diffuse_texture3, Texcoord);
     diffuses[3] = texture(diffuse_texture4, Texcoord);
 
+    float painted_splat_value = texture(splatmap_painted, Splatcoord).r;
+    vec4 diffuse_painted_color = texture(diffuse_painted, Texcoord);
+
     diffuse = mix(diffuse, diffuses[0], splat_values[0]);
     diffuse = mix(diffuse, diffuses[1], splat_values[1]);
     diffuse = mix(diffuse, diffuses[2], splat_values[2]);
     diffuse = mix(diffuse, diffuses[3], splat_values[3]);
-    diffuse = mix(diffuse, vec4(0.2, 0.4, 1.0, 1.0), painted_splat_value);
+    diffuse = mix(diffuse, diffuse_painted_color, painted_splat_value);
 
     specular = texture(specular_texture, Texcoord);
     emissive = texture(emissive_texture, Texcoord);
