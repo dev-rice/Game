@@ -37,6 +37,8 @@ public:
 
     bool canPath(int, int);
 
+    void paintSplatmap(glm::vec3);
+
 private:
 
     void updateUniformData();
@@ -60,7 +62,10 @@ private:
     float max_height;
 
     GLuint splatmap;
+    GLuint splatmap_painted;
     GLuint diffuse_textures[4];
+
+    GLubyte brush[16];
 
 
 };

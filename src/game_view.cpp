@@ -238,15 +238,7 @@ void GameView::handleInputState(){
     // Middle Mouse Button Handling
     //##############################################################################
     if (Mouse::getInstance()->isPressed(Mouse::MIDDLE)){
-        // Middle mouse button
-        if (!middle_mouse_button_click){
-            level->issueOrder(Playable::Order::ATTACK, mouse_world_pos, shift_pressed);
-        }
-
-        attack_command_prime = false;
-        right_mouse_button_click = true;
-    } else if (middle_mouse_button_click){
-        middle_mouse_button_click = false;
+        level->getTerrain()->paintSplatmap(mouse_world_pos);
     }
 
     //##############################################################################
