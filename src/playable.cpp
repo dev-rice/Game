@@ -91,7 +91,7 @@ void Playable::updateUniformData(){
 
 void Playable::receiveOrder(Playable::Order order, glm::vec3 target, bool should_enqueue, std::vector<glm::vec3> path, Playable* targeted_unit){
 
-    printf("Received order...\n");
+    // Error that exists: Pathing is done from current position, not future position. Need to do that.
 
     // Are we targeting another playable?
     bool is_targeting = bool(targeted_unit);
@@ -116,14 +116,14 @@ void Playable::receiveOrder(Playable::Order order, glm::vec3 target, bool should
 
     // If we're not enqueuing the order, we should clear out the old
     if(!should_enqueue){
-        for(int i = 0; i < order_queue.size(); ++i){
+        while(! order_queue.empty()){
             order_queue.pop();
             target_queue.pop();
         }
     }
 
     // Queue them up
-    for(int i = 0; i < temp_order_queue.size(); ++i){
+    while( ! temp_order_queue.empty()){
         order_queue.push(temp_order_queue.front());
         target_queue.push(temp_target_queue.front());
 
@@ -131,10 +131,11 @@ void Playable::receiveOrder(Playable::Order order, glm::vec3 target, bool should
         temp_target_queue.pop();
     }
 
-    old_target_position = position;
+    // Get the positioning and direction set up
+    target_position = position;
+    setTargetPositionAndDirection(std::get<1>(order_queue.front()));
+    setRotationEuler(rotation.x, target_direction, rotation.z);
 
-    // Print out info of the queue, for checking
-    printf("Size=%d\n\n", (int)order_queue.size());
 }
 
 Playable::Order Playable::determineBodyOrder(Playable::Order order, bool is_targeting){
@@ -350,6 +351,7 @@ void Playable::update(Terrain* ground, std::vector<Playable*> *otherUnits){
         // Get the next order and target from the queue
         target_order = std::get<0>(order_queue.front());
         setTargetPositionAndDirection(std::get<1>(order_queue.front()));
+
         order_queue.pop();
         target_queue.pop();
 
