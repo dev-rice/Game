@@ -84,14 +84,15 @@ Level::Level(const char* filename){
 
     Mesh* water_plane = new PlaneMesh();
     Doodad* water_doodad = new Doodad(water_plane);
-    // #0b9ed8f
-    GLuint water_texture = TextureLoader::loadTextureFromPixel(0.04f, 0.62f, 0.85f, 0.6f);
+
+    GLuint water_texture = TextureLoader::loadTextureFromPixel(0.1f, 0.72f, 0.95f, 0.6f);
     water_doodad->setEmissive(water_texture);
+
     water_doodad->setPosition(-30.5, 8.5, -49.0);
     water_doodad->setScale(16.0);
     water_doodad->rotateGlobalEuler(M_PI/2.0f, 0.0f, 0.0f);
 
-    drawables.push_back(water_doodad);
+    non_shadow_drawables.push_back(water_doodad);
 
 }
 
@@ -116,6 +117,11 @@ void Level::draw(){
     // Draw all the drawables
     for (int i = 0; i < drawables.size(); ++i){
         drawables[i]->draw();
+    }
+
+    // Draw all the drawables that don't need shadows.
+    for (int i = 0; i < non_shadow_drawables.size(); ++i){
+        non_shadow_drawables[i]->draw();
     }
 
     // Draw all the particle emitters

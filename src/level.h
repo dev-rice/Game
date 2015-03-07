@@ -80,6 +80,7 @@ private:
     std::vector<GLuint> textures;
     std::vector<Mesh*> meshes;
     std::vector<Drawable*> drawables;
+    std::vector<Drawable*> non_shadow_drawables;
     std::vector<Playable*> selected_units;
     std::vector<Playable*> units;
     std::vector<Emitter*> emitters;
