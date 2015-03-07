@@ -25,27 +25,9 @@
 #include "game_clock.h"
 #include "debug.h"
 #include "texture_loader.h"
+#include "glyph.h"
 
 static const std::string FONT_PATH = "res/fonts/";
-
-struct Glyph {
-    Glyph() {;}
-    Glyph(double w, double h, double bx, double by, double ad){
-        width = w / 64.0f;
-        height = h / 64.0f;
-        bearing_x = bx / 64.0f;
-        bearing_y = by / 64.0f;
-        advance = ad / 64.0f;
-    }
-    double width;
-    double height;
-    double bearing_x;
-    double bearing_y;
-    double advance;
-
-    double u_offset;
-    double v_offset;
-};
 
 class FontSheet {
 public:

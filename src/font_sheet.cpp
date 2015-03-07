@@ -73,16 +73,17 @@ FontSheet::FontSheet(std::string filename, int pixel_size) {
 
         x_offset += pixel_size;
 
-        glTexSubImage2D(GL_TEXTURE_2D, 0, x_offset, 0, glyph->bitmap.width, glyph->bitmap.rows, GL_RED, GL_UNSIGNED_BYTE, glyph->bitmap.buffer);
+        glTexSubImage2D(GL_TEXTURE_2D, 0, x_offset, 0, glyph->bitmap.width,
+            glyph->bitmap.rows, GL_RED, GL_UNSIGNED_BYTE, glyph->bitmap.buffer);
 
-        Glyph current_glyph(glyph->metrics.width, glyph->metrics.height,
-            glyph->metrics.horiBearingX, glyph->metrics.horiBearingY,
-            glyph->metrics.horiAdvance);
-
-        current_glyph.u_offset = (double)x_offset / (double)width;
-        current_glyph.v_offset = 0;
+        glm::vec2 uv_offset = glm::vec2((double)x_offset / (double)width, 0);
+        Glyph current_glyph(glyph, uv_offset);
 
         character_map[to_render] = current_glyph;
+
+        std::string glyph_str = current_glyph.toString();
+        Debug::info("Character: %c\n", to_render);
+        Debug::info(glyph_str.c_str());
 
     }
 

@@ -7,6 +7,7 @@
 #include "character_mesh.h"
 #include "core_ui/ui_drawable.h"
 #include "font_sheet.h"
+#include "glyph.h"
 
 class CharacterDrawable : public UIDrawable {
 public:
@@ -25,8 +26,8 @@ private:
     glm::vec3 text_color;
     float spacing;
 
-    int base_x_pixels;
-    int base_y_pixels;
+    int cursor_x;
+    int cursor_y;
 
     FontSheet* font_sheet;
     Glyph current_glyph;

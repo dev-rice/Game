@@ -20,10 +20,9 @@ CharacterDrawable::CharacterDrawable(GLuint shader_program, FontSheet* font_shee
 }
 
 void CharacterDrawable::setPixelPosition(int x, int y){
-    x_pixels = x;
-    y_pixels = y;
-    base_x_pixels = x;
-    base_y_pixels = y;
+    // Set the cursor position
+    cursor_x = x;
+    cursor_y = y;
 
     setGLPosition(getGLPosition());
 }
@@ -41,20 +40,24 @@ void CharacterDrawable::setSpacing(float spacing){
 }
 
 void CharacterDrawable::moveToNext(){
-    base_x_pixels += current_glyph.advance * spacing;
+    cursor_x += current_glyph.getAdvance() * spacing;
     setGLPosition(getGLPosition());
-
 }
 
 void CharacterDrawable::setCharacter(char to_render){
+    // Get the glyph in the font sheet that corresponds to the current
+    // character to be drawn.
     current_glyph = font_sheet->getGlyph(to_render);
 
-    uv_offset = glm::vec2(current_glyph.u_offset, current_glyph.v_offset);
-
-    x_pixels = base_x_pixels + current_glyph.bearing_x;
-    y_pixels = base_y_pixels - current_glyph.bearing_y + font_sheet->getPointSize();
-
+    // The actual x and y position that the character will
+    // be drawn to is dependent on the glyph.
+    x_pixels = cursor_x + current_glyph.getBearingX();
+    y_pixels = cursor_y - current_glyph.getBearingY();
+    // Update the pixel perfect position
     setGLPosition(getGLPosition());
+
+    // Update the uv offset for the character in the font sheet texture.
+    uv_offset = current_glyph.getUVOffset();
 
 }
 
