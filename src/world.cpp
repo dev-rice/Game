@@ -1,6 +1,6 @@
 #include "world.h"
 
-World::World() : World("res/maps/default.map"){}
+World::World() : World(DEFAULT_MAP){}
 
 World::World(const char* level_filename){
     this->window = Window::getInstance();

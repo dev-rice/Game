@@ -255,10 +255,11 @@ void Level::loadLevel(const char* filename){
     FILE * ifile;
     ifile = fopen(filename, "r");
 
-    if(ifile == NULL){
+    if(!ifile){
         Debug::error("Error opening file %s\n", filename);
+        Debug::error("Falling back to default map '%s'.\n", DEFAULT_MAP);
+        loadLevel(DEFAULT_MAP);
         return;
-
     }
 
      while(! feof(ifile)){

@@ -35,6 +35,7 @@
 
 static const char* MODEL_PATH = "res/models/";
 static const char* TEXTURE_PATH = "res/textures/";
+static const char* DEFAULT_MAP = "res/maps/default.map";
 
 class Level{
 public:
