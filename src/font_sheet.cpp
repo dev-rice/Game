@@ -60,6 +60,9 @@ FontSheet::FontSheet(std::string filename, int pixel_size) {
 
     int x_offset = 0;
     int y_offset = 0;
+
+    max_y_bearing = 0;
+
     for (int i = 0; i < NUM_CHARS; ++i){
         char to_render = i;
 
@@ -81,7 +84,13 @@ FontSheet::FontSheet(std::string filename, int pixel_size) {
 
         character_map[to_render] = current_glyph;
 
+        // Keep track of the maximum y bearing so that we can use it for
+        // alignment later.
+        max_y_bearing = std::fmax(max_y_bearing, current_glyph.getBearingY());
+
     }
+
+    Debug::info("Max Y Bearing: %.4f\n", max_y_bearing);
 
     float delta_time = GameClock::getInstance()->getCurrentTime() - start_time;
 
@@ -122,4 +131,8 @@ unsigned int FontSheet::getWidth(){
 
 unsigned int FontSheet::getHeight(){
     return height;
+}
+
+double FontSheet::getMaxYBearing(){
+    return max_y_bearing;
 }

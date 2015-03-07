@@ -40,6 +40,8 @@ public:
     unsigned int getWidth();
     unsigned int getHeight();
 
+    double getMaxYBearing();
+
     Glyph getGlyph(char);
     int getPointSize();
 
@@ -49,6 +51,7 @@ private:
 
     unsigned int width;
     unsigned int height;
+    double max_y_bearing;
     int point;
 
     std::unordered_map<char, Glyph> character_map;

@@ -29,6 +29,6 @@ fi
 
 FULL_HOSTNAME="http://$HOST:8080"
 
-printf "Sending POST request to $FULL_HOSTNAME\n"
+# printf "Sending POST request to $FULL_HOSTNAME\n"
 NUM=$(curl -X POST -s http://$HOST:8080)
 printf "Build Number: \033[94m%s\033[39m\n" "$NUM"

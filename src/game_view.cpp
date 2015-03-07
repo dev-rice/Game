@@ -162,7 +162,7 @@ void GameView::update(){
         glm::vec2 mouse_gl_pos = Mouse::getInstance()->getGLPosition();
         glm::vec3 mouse_world_pos = level->calculateWorldPosition(mouse_gl_pos);
 
-        text_renderer->print(0, 0, "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG.c!@#$%^&*()_+=-[{}]\"''\"?/|\"");
+        text_renderer->print(0, 0, "The Quick Brown Fox Jumps Over The Lazy Dog.");
 
         text_renderer->print(10, 40, "fps: %.2f",
             1.0 / frame_time);

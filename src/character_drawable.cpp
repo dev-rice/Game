@@ -52,7 +52,7 @@ void CharacterDrawable::setCharacter(char to_render){
     // The actual x and y position that the character will
     // be drawn to is dependent on the glyph.
     x_pixels = cursor_x + current_glyph.getBearingX();
-    y_pixels = cursor_y - current_glyph.getBearingY() + font_sheet->getPointSize();
+    y_pixels = cursor_y - current_glyph.getBearingY() + font_sheet->getMaxYBearing();
     // Update the pixel perfect position
     setGLPosition(getGLPosition());
 
