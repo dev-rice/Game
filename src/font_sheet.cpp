@@ -81,10 +81,6 @@ FontSheet::FontSheet(std::string filename, int pixel_size) {
 
         character_map[to_render] = current_glyph;
 
-        std::string glyph_str = current_glyph.toString();
-        Debug::info("Character: %c\n", to_render);
-        Debug::info(glyph_str.c_str());
-
     }
 
     float delta_time = GameClock::getInstance()->getCurrentTime() - start_time;
