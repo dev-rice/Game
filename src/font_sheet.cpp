@@ -90,8 +90,6 @@ FontSheet::FontSheet(std::string filename, int pixel_size) {
 
     }
 
-    Debug::info("Max Y Bearing: %.4f\n", max_y_bearing);
-
     float delta_time = GameClock::getInstance()->getCurrentTime() - start_time;
 
 }
@@ -121,7 +119,6 @@ int FontSheet::getPointSize(){
 }
 
 GLuint FontSheet::getTexture(){
-    Debug::info("4. Texture_id = %u\n", texture_id);
     return texture_id;
 }
 

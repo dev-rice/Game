@@ -40,7 +40,6 @@ Heightmap::~Heightmap(){
     SOIL_free_image_data(image);
 }
 
-
 float Heightmap::getMapHeight(int x, int y){
     // Scaling factor for the height map data
     int red = image[(y * width + x)*COMPONENTS + 0];
