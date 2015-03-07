@@ -33,7 +33,7 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
 	$(COMPILER) $(COMPILER_FLAGS) -I$(SRCDIR) $< -o $@
 
 configure-linux:
-	@ sudo apt-get install libglew-dev libglm-dev libsdl2-dev curl
+	@ sudo apt-get install libglew-dev libglm-dev libsdl2-dev curl nmap
 	@ wget http://www.lonesock.net/files/soil.zip
 	@ unzip soil.zip -d soil
 	@ rm soil.zip

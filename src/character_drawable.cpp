@@ -62,6 +62,8 @@ void CharacterDrawable::setCharacter(char to_render){
 }
 
 void CharacterDrawable::updateUniformData(){
-    glUniform2f(glGetUniformLocation(shader_program, "uv_offset"), uv_offset.x, uv_offset.y);
-    glUniform3f(glGetUniformLocation(shader_program, "textColor"), text_color.x, text_color.y, text_color.z);
+    glUniform2f(glGetUniformLocation(shader_program, "uv_offset"),
+        uv_offset.x, uv_offset.y);
+    glUniform3f(glGetUniformLocation(shader_program, "textColor"),
+        text_color.x, text_color.y, text_color.z);
 }
