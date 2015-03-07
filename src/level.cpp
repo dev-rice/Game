@@ -252,7 +252,7 @@ void Level::loadLevel(const char* filename){
     int objectIndex, diffIndex, specIndex, normIndex, emitIndex;
     float x, y, z, scale, x_rot, y_rot, z_rot;
 
-    FILE * ifile;
+    FILE* ifile;
     ifile = fopen(filename, "r");
 
     if(!ifile){
