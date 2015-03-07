@@ -16,6 +16,18 @@ Heightmap::Heightmap(std::string filename, float amplification){
     } else {
         Debug::error("Could not load heightmap \"%s\" into memory.\n",
             filename.c_str());
+
+        // If the hightmap file cannot be read, just create a default
+        // map of size 128 by 128 that is flat
+        width = 128;
+        height = 128;
+
+        // Initialize the image to all zeros
+        image = new unsigned char[COMPONENTS * width * height];
+        for (int i = 0; i < COMPONENTS * width * height; ++i){
+            image[i] = 0;
+        }
+
     }
 
     if(!isPowerOfTwo(width) || !isPowerOfTwo(height)){
@@ -31,9 +43,9 @@ Heightmap::~Heightmap(){
 
 float Heightmap::getMapHeight(int x, int y){
     // Scaling factor for the height map data
-    int red = image[(y * width + x)*4 + 0];
-    int green = image[(y * width + x)*4 + 1];
-    int blue = image[(y * width + x)*4 + 2];
+    int red = image[(y * width + x)*COMPONENTS + 0];
+    int green = image[(y * width + x)*COMPONENTS + 1];
+    int blue = image[(y * width + x)*COMPONENTS + 2];
 
     // Scale the height such that the value is between 0.0 and 1.0
     float map_height = float(red + green + blue) / (3.0f * 255.0);

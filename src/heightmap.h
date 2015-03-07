@@ -8,6 +8,9 @@
 
 class Heightmap {
 public:
+    // Number of components in the map image, 4 for RGBA
+    const int COMPONENTS = 4;
+
     Heightmap(std::string filename, float ampliciation);
     ~Heightmap();
 
