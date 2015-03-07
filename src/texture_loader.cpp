@@ -70,13 +70,29 @@ GLuint TextureLoader::loadTextureFromFile(std::string filename, GLuint filter){
 
 }
 
+GLuint TextureLoader::loadTextureFromPixel(glm::vec4 pixel){
+    // Generate id using the color values
+    std::string id = "";
+    id += std::to_string(pixel.x);
+    id += std::to_string(pixel.y);
+    id += std::to_string(pixel.z);
+    id += std::to_string(pixel.w);
+
+    // Load the texture using the generated id
+    return loadTextureFromPixel(id, pixel);
+}
+
+GLuint TextureLoader::loadTextureFromPixel(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha){
+    glm::vec4 pixel = glm::vec4(red, green, blue, alpha);
+    return loadTextureFromPixel(pixel);
+}
+
 GLuint TextureLoader::loadTextureFromPixel(std::string id, glm::vec4 pixel){
     GLuint texture;
 
     if (loaded_textures.find(id) != loaded_textures.end()){
         texture = loaded_textures[id];
     } else {
-        // Sets the default texture to be pink, 100% alpha
         glGenTextures(1, &texture);
 
         // Set the active texture
@@ -91,8 +107,13 @@ GLuint TextureLoader::loadTextureFromPixel(std::string id, glm::vec4 pixel){
         // Do nearest interpolation for scaling the image up and down.
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        TextureLoader:m:loaded_textures[id] = texture;
+        TextureLoader::loaded_textures[id] = texture;
     }
 
     return texture;
+}
+
+GLuint TextureLoader::loadTextureFromPixel(std::string id, GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha){
+    glm::vec4 pixel = glm::vec4(red, green, blue, alpha);
+    return loadTextureFromPixel(id, pixel);
 }

@@ -33,7 +33,12 @@ public:
     static GLuint loadRed();
 
     static GLuint loadTextureFromFile(std::string, GLuint);
+
+    static GLuint loadTextureFromPixel(glm::vec4 pixel);
+    static GLuint loadTextureFromPixel(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
+    
     static GLuint loadTextureFromPixel(std::string id, glm::vec4 pixel);
+    static GLuint loadTextureFromPixel(std::string id, GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
 
 private:
 
