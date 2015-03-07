@@ -123,8 +123,6 @@ void MeshLoader::loadMeshFromDAE(const char* filename){
     bool successful = getVerticesAndElements(geometry_node, vertices, elements);
 
     if (successful){
-
-
         // At this point the tangents and binormals still need to be
         // calculated.
         calculateTangentsAndBinormals(vertices, elements);

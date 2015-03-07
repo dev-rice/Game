@@ -20,13 +20,16 @@ FontSheet::FontSheet(std::string filename, int pixel_size) {
     error = FT_New_Face(library, font_filename.c_str(), 0, &face);
     if (error == FT_Err_Unknown_File_Format){
         Debug::error("Invalid format of font file '%s'.\n", font_filename.c_str());
+        return;
     } else if (error) {
         Debug::error("Error loading font face '%s'.\n", font_filename.c_str());
+        return;
     }
 
     error = FT_Set_Pixel_Sizes(face, 0, pixel_size);
     if (error){
         Debug::error("Cannot set face size to %d", pixel_size);
+        return;
     }
 
     width = NUM_CHARS * pixel_size;
