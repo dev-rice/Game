@@ -1,19 +1,9 @@
 #include "particles/emitter.h"
 
 Emitter::Emitter(GLuint shader_program, glm::vec3 position){
-    GLfloat planeVerts[] = {-0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
-                             0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-                            -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f,
-                             0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,};
-
-    GLuint  planeFaces[] = {2, 1, 0, 1, 2, 3};
-
     this->position = position;
 
-    std::vector<GLfloat> planeVertsVector(planeVerts, planeVerts + sizeof(planeVerts) / sizeof(GLfloat));
-    std::vector<GLuint> planeFacesVector(planeFaces, planeFaces + sizeof(planeFaces) / sizeof(GLuint));
-
-    billboard = new Mesh(planeVertsVector, planeFacesVector);
+    billboard = new PlaneMesh();
 
     particle_texture = TextureLoader::loadTextureFromFile("res/textures/snow_part.png", GL_LINEAR);
 
