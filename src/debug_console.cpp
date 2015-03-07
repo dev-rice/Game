@@ -14,7 +14,7 @@ DebugConsole* DebugConsole::getInstance(){
 
 DebugConsole::DebugConsole() : UIWindow() {
     loadFromXML("res/layouts/debug_console.xml");
-    text_renderer = new TextRenderer("ShareTechMono-Regular.ttf", 18);
+    text_renderer = new TextRenderer("Inconsolata-Bold.ttf", 18);
 
     // Do this so we don't have to process a ton of messages on the first
     // draw call

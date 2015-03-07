@@ -23,7 +23,7 @@ GameView::GameView(Level* level){
     // Unnecessary, but good to do
     Mouse::getInstance();
 
-    text_renderer = new TextRenderer("ShareTechMono-Regular.ttf", 20);
+    text_renderer = new TextRenderer("Inconsolata-Bold.ttf", 20);
 
     // Creation of selection box
     selection_box = new UIDrawable(mousebox_shader, 0);
