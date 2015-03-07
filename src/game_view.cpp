@@ -399,6 +399,10 @@ void GameView::handleInput(SDL_Event event){
 
     SDL_Scancode key_scancode = event.key.keysym.scancode;
     switch(event.type){
+        case SDL_QUIT:
+            window->requestClose();
+        break;
+
         case SDL_KEYDOWN:
             if (key_scancode == SDL_SCANCODE_ESCAPE){
                 window->requestClose();
