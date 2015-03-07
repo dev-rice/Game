@@ -20,7 +20,7 @@ GLuint ShaderLoader::loadVertexShader(std::string filename){
     if (status != GL_TRUE){
         char info_log[512];
         glGetShaderInfoLog(vertex_shader, 512, NULL, info_log);
-        printf("Error compiling the vertex shader '%s':\n%s\n", filename.c_str(),
+        Debug::error("Failed to compile the vertex shader '%s':\n%s\n", filename.c_str(),
             info_log);
     }
 
@@ -28,7 +28,7 @@ GLuint ShaderLoader::loadVertexShader(std::string filename){
 }
 
 GLuint ShaderLoader::loadFragmentShader(std::string filename){
- // Create the fragment shader
+    // Create the fragment shader
     GLuint fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
 
     std::string source = GLSLParse(filename);
@@ -44,7 +44,7 @@ GLuint ShaderLoader::loadFragmentShader(std::string filename){
     if (status != GL_TRUE){
         char info_log[512];
         glGetShaderInfoLog(fragment_shader, 512, NULL, info_log);
-        printf("Error compiling the fragment shader '%s':\n%s\n", filename.c_str(),
+        Debug::error("Failed to compile the fragment shader '%s':\n%s\n", filename.c_str(),
             info_log);
     }
 
@@ -52,7 +52,6 @@ GLuint ShaderLoader::loadFragmentShader(std::string filename){
 }
 
 GLuint ShaderLoader::combineShaderProgram(GLuint vertex_shader, GLuint fragment_shader){
-
     // Combine the shaders into a single program
     GLuint shader_program = glCreateProgram();
     glAttachShader(shader_program, vertex_shader);
@@ -103,6 +102,11 @@ std::string ShaderLoader::GLSLParse(std::string filename){
     // Open the file in read mode
     const char* filename_temp = filename.c_str();
     FILE* file = fopen(filename_temp, "r");
+
+    if (!file){
+        Debug::error("Error parsing shader '%s'.\n", filename.c_str());
+        return "";
+    }
 
     // // Count the number of characters in the file
     int size_of_file = 0;
