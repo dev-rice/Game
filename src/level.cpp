@@ -60,7 +60,7 @@ Level::Level(const char* filename){
     PathFinder::allocateArray(ground);
 
     // Creation of test playable
-    Mesh *playable_mesh = new Mesh("res/models/demo_unit.dae");
+    Mesh* playable_mesh = new Mesh("res/models/human.dae");
     GLuint playable_shader = ShaderLoader::loadShaderProgram("shaders/doodad.vs",
         "shaders/doodad.fs");
     float playable_scale = 1.0f;
