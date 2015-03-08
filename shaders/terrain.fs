@@ -89,6 +89,9 @@ const vec2 poisson_disk[8] = vec2[]( vec2(-0.1720364f, -0.2151852f),
 //                                       vec2(0.8284409f, 0.3923607f));
 
 
+const int num_tiles = 128 / 16;
+const vec2 tile_size_uv = vec2(16.0 / 128.0, 16.0 / 128.0);
+
 float rand(vec4 seed){
     float dot_product = dot(seed, vec4(12.9898,78.233,45.164,94.673));
     return fract(sin(dot_product) * 43758.5453);
@@ -170,6 +173,8 @@ void main() {
     splat_values[3] = texture(splatmap, Splatcoord).b;
 
     vec4 diffuses[4];
+    // vec2 new_texcoord = mod(Splatcoord, tile_size_uv) * num_tiles;
+    diffuse = vec4(0.0, 0.0, 0.0, 1.0);
     diffuses[0] = texture(diffuse_texture, Texcoord);
     diffuses[1] = texture(diffuse_texture2, Texcoord);
     diffuses[2] = texture(diffuse_texture3, Texcoord);
