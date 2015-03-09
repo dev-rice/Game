@@ -409,7 +409,16 @@ int Terrain::getIndex(int x, int z, int width){
 void Terrain::updateUniformData(){
     // Set the scale, this is not really going to be a thing, probably
     // ^ It's definitely a thing
-    glUniform1f(glGetUniformLocation(shader_program, "scale"), scale);
+    GLuint scale_loc = glGetUniformLocation(shader_program, "scale");
+    GLuint time_loc = glGetUniformLocation(shader_program, "time");
+    //
+    // std::string shader_name = ShaderLoader::getShaderName(shader_program);
+    // Debug::info("Shader Program: %s\n", shader_name.c_str());
+    // Debug::info("  scale_loc = %d\n", scale_loc);
+    // Debug::info("  time_loc = %d\n", time_loc);
+
+    glUniform1f(scale_loc, scale);
+    glUniform1f(time_loc, GameClock::getInstance()->getCurrentTime());
 
 }
 
@@ -450,25 +459,6 @@ void Terrain::bindTextures(){
 }
 
 void Terrain::setTextureLocations(){
-    //////////////////////
-    // Uniform testing
-    GLuint splatmap_painted_loc = glGetUniformLocation(shader_program, "splatmap_painted");
-    GLuint diffuse_painted_loc = glGetUniformLocation(shader_program, "diffuse_painted");
-
-    GLuint test_array[3];
-    test_array[0] = glGetUniformLocation(shader_program, "test_array[0]");
-    test_array[1] = glGetUniformLocation(shader_program, "test_array[1]");
-    test_array[2] = glGetUniformLocation(shader_program, "test_array[2]");
-
-    Debug::info("Shader Program: %s\n", ShaderLoader::getShaderName(shader_program).c_str());
-    Debug::info("    splatmap_painted = %d\n", splatmap_painted_loc);
-    Debug::info("    diffuse_painted  = %d\n", diffuse_painted_loc);
-    for (int i = 0; i < 3; ++i){
-        Debug::info("    test_array[%d]   = %d\n", i, test_array[i]);
-    }
-    Debug::info("\n");
-    //////////////////////
-
     // Try to set the texture locations
     glUniform1i(glGetUniformLocation(shader_program, "specular_texture"), 1);
     glUniform1i(glGetUniformLocation(shader_program, "emissive_texture"), 2);
@@ -481,11 +471,6 @@ void Terrain::setTextureLocations(){
     glUniform1i(glGetUniformLocation(shader_program, "diffuse_texture3"), 12);
     glUniform1i(glGetUniformLocation(shader_program, "diffuse_texture4"), 13);
     glUniform1i(glGetUniformLocation(shader_program, "diffuse_painted"), 14);
-
-    glUniform1i(glGetUniformLocation(shader_program, "splats[0].splatmap"), 5);
-    glUniform1i(glGetUniformLocation(shader_program, "splats[1].splatmap"), 5);
-    glUniform1i(glGetUniformLocation(shader_program, "splats[2].splatmap"), 5);
-    glUniform1i(glGetUniformLocation(shader_program, "splats[3].splatmap"), 5);
 
 }
 

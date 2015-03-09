@@ -57,11 +57,6 @@ uniform sampler2D diffuse_painted;
 
 uniform Splat splats[4];
 
-//////////////////////
-// Uniform testing
-uniform float test_float;
-uniform float test_array[3];
-
 vec4 diffuse;
 vec4 specular;
 vec4 normal;
@@ -195,9 +190,9 @@ float getShadowFactor(){
 void main() {
     float splat_values[4];
     splat_values[0] = 1.0;
-    splat_values[1] = texture(splats[0].splatmap, Splatcoord).r;
-    splat_values[2] = texture(splats[0].splatmap, Splatcoord).g;
-    splat_values[3] = texture(splats[0].splatmap, Splatcoord).b;
+    splat_values[1] = texture(splatmap, Splatcoord).r;
+    splat_values[2] = texture(splatmap, Splatcoord).g;
+    splat_values[3] = texture(splatmap, Splatcoord).b;
 
     vec4 diffuses[4];
 
