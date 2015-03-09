@@ -463,6 +463,12 @@ void Terrain::setTextureLocations(){
     glUniform1i(glGetUniformLocation(shader_program, "diffuse_texture4"), 13);
     glUniform1i(glGetUniformLocation(shader_program, "diffuse_painted"), 14);
 
+    glUniform1i(glGetUniformLocation(shader_program, "splats[0].splatmap"), 5);
+    glUniform1i(glGetUniformLocation(shader_program, "splats[1].splatmap"), 5);
+    glUniform1i(glGetUniformLocation(shader_program, "splats[2].splatmap"), 5);
+    glUniform1i(glGetUniformLocation(shader_program, "splats[3].splatmap"), 5);
+
+
 
 }
 

@@ -8,6 +8,27 @@ struct Light {
     vec3 light_to_surface;
 };
 
+struct Splat {
+    // The splatmap to get data from
+    sampler2D splatmap;
+
+    // Actual textures to be drawn
+    sampler2D diffuse;
+    sampler2D specular;
+    sampler2D normal;
+    sampler2D emissive;
+
+    // Channel to get data from
+    // 0 : red
+    // 1 : green
+    // 2 : blue
+    int channel;
+
+    // Layer number for the blending. Splats that are a higher layer number
+    // will be painted on top of those with lower layer numbers.
+    int layer;
+};
+
 const int num_lights = 3;
 
 in vec2 Texcoord;
@@ -33,6 +54,8 @@ uniform sampler2D diffuse_texture4;
 
 uniform sampler2D splatmap_painted;
 uniform sampler2D diffuse_painted;
+
+uniform Splat splats[4];
 
 vec4 diffuse;
 vec4 specular;
@@ -165,15 +188,14 @@ float getShadowFactor(){
 }
 
 void main() {
-    // Change this to take average value or luminance
     float splat_values[4];
     splat_values[0] = 1.0;
-    splat_values[1] = texture(splatmap, Splatcoord).r;
-    splat_values[2] = texture(splatmap, Splatcoord).g;
-    splat_values[3] = texture(splatmap, Splatcoord).b;
+    splat_values[1] = texture(splats[0].splatmap, Splatcoord).r;
+    splat_values[2] = texture(splats[0].splatmap, Splatcoord).g;
+    splat_values[3] = texture(splats[0].splatmap, Splatcoord).b;
 
     vec4 diffuses[4];
-    // vec2 new_texcoord = mod(Splatcoord, tile_size_uv) * num_tiles;
+
     diffuse = vec4(0.0, 0.0, 0.0, 1.0);
     diffuses[0] = texture(diffuse_texture, Texcoord);
     diffuses[1] = texture(diffuse_texture2, Texcoord);
