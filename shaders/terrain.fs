@@ -57,6 +57,11 @@ uniform sampler2D diffuse_painted;
 
 uniform Splat splats[4];
 
+//////////////////////
+// Uniform testing
+uniform float test_float;
+uniform float test_array[3];
+
 vec4 diffuse;
 vec4 specular;
 vec4 normal;

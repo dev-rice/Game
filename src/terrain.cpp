@@ -450,6 +450,25 @@ void Terrain::bindTextures(){
 }
 
 void Terrain::setTextureLocations(){
+    //////////////////////
+    // Uniform testing
+    GLuint splatmap_painted_loc = glGetUniformLocation(shader_program, "splatmap_painted");
+    GLuint diffuse_painted_loc = glGetUniformLocation(shader_program, "diffuse_painted");
+
+    GLuint test_array[3];
+    test_array[0] = glGetUniformLocation(shader_program, "test_array[0]");
+    test_array[1] = glGetUniformLocation(shader_program, "test_array[1]");
+    test_array[2] = glGetUniformLocation(shader_program, "test_array[2]");
+
+    Debug::info("Shader Program: %s\n", ShaderLoader::getShaderName(shader_program).c_str());
+    Debug::info("    splatmap_painted = %d\n", splatmap_painted_loc);
+    Debug::info("    diffuse_painted  = %d\n", diffuse_painted_loc);
+    for (int i = 0; i < 3; ++i){
+        Debug::info("    test_array[%d]   = %d\n", i, test_array[i]);
+    }
+    Debug::info("\n");
+    //////////////////////
+
     // Try to set the texture locations
     glUniform1i(glGetUniformLocation(shader_program, "specular_texture"), 1);
     glUniform1i(glGetUniformLocation(shader_program, "emissive_texture"), 2);
@@ -467,8 +486,6 @@ void Terrain::setTextureLocations(){
     glUniform1i(glGetUniformLocation(shader_program, "splats[1].splatmap"), 5);
     glUniform1i(glGetUniformLocation(shader_program, "splats[2].splatmap"), 5);
     glUniform1i(glGetUniformLocation(shader_program, "splats[3].splatmap"), 5);
-
-
 
 }
 

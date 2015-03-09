@@ -23,7 +23,7 @@ GameView::GameView(Level* level){
     // Unnecessary, but good to do
     Mouse::getInstance();
 
-    text_renderer = new TextRenderer("Inconsolata-Bold.ttf", 40);
+    text_renderer = new TextRenderer("Inconsolata-Bold.ttf", 20);
     for (int i = 32; i <= 126; ++i){
         all_chars += i;
     }
