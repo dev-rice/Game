@@ -23,7 +23,10 @@ GameView::GameView(Level* level){
     // Unnecessary, but good to do
     Mouse::getInstance();
 
-    text_renderer = new TextRenderer("Inconsolata-Bold.ttf", 20);
+    text_renderer = new TextRenderer("Inconsolata-Bold.ttf", 40);
+    for (int i = 32; i <= 126; ++i){
+        all_chars += i;
+    }
 
     // Creation of selection box
     selection_box = new UIDrawable(mousebox_shader, 0);
@@ -162,7 +165,8 @@ void GameView::update(){
         glm::vec2 mouse_gl_pos = Mouse::getInstance()->getGLPosition();
         glm::vec3 mouse_world_pos = level->calculateWorldPosition(mouse_gl_pos);
 
-        text_renderer->print(0, 0, "The Quick Brown Fox Jumps Over The Lazy Dog.");
+        // Testing text renderer pixel perfection.
+        text_renderer->print(0, 0, all_chars.c_str());
 
         text_renderer->print(10, 40, "fps: %.2f",
             1.0 / frame_time);

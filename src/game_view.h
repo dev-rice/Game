@@ -28,7 +28,7 @@ public:
     GameView(Level*);
 
     void update();
-    
+
     void handleInputState();
     void handleInput(SDL_Event);
 
@@ -74,6 +74,8 @@ private:
     bool debug_console_key_state;
 
     GLuint mouse_ubo;
+
+    std::string all_chars;
 };
 
 #endif

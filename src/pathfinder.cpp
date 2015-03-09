@@ -63,9 +63,9 @@ std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, float start_x, flo
 	Node* closest_node;
 	float closest_node_distance = 99999.0f;
 
- 	while(! frontier_nodes.empty()){
- 		count ++;
- 		Node* current_node = frontier_nodes.top();
+	while(! frontier_nodes.empty()){
+		count ++;
+		Node* current_node = frontier_nodes.top();
 
         if(current_node->x == target_x_int && current_node->y == target_y_int){
         	// Clear out the old visited nodes
@@ -127,7 +127,6 @@ std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, float start_x, flo
 	for(int i = 0; i < visited_nodes.size(); ++i){
 		node_state_array[visited_nodes[i]->x + x_offset][visited_nodes[i]->y + y_offset] = 0;
 	}
-
 	return reconstruct_path(ground, parent_of, closest_node, radius);
 }
 
@@ -265,15 +264,15 @@ bool PathFinder::checkCircle(Terrain* ground, int x0, int y0, int radius){
     int y = radius;
 
     bool radius_path = true;
- 
+	
     radius_path &= ground->canPath(x0, y0 + radius);
     radius_path &= ground->canPath(x0, y0 - radius);
     radius_path &= ground->canPath(x0 + radius, y0);
     radius_path &= ground->canPath(x0 - radius, y0);
- 
-    while(x < y) 
+
+    while(x < y)
     {
-        if(f >= 0) 
+        if(f >= 0)
         {
             y--;
             ddF_y += 2;
@@ -281,7 +280,7 @@ bool PathFinder::checkCircle(Terrain* ground, int x0, int y0, int radius){
         }
         x++;
         ddF_x += 2;
-        f += ddF_x + 1; 
+        f += ddF_x + 1;
 
         radius_path &= ground->canPath(x0 + x, y0 + y);
         radius_path &= ground->canPath(x0 - x, y0 + y);
