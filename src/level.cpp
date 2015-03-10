@@ -382,38 +382,39 @@ void Level::loadLevel(const char* filename){
         if(buffer[0] == 'g'){
             // For now, a simple comment
             int texture_number;
+            int splatmap_number;
             char diffuse_name[64];
-            char splatmap_name[64];
             char splatmap_channel;
-            sscanf(buffer, "%*c %d %c %s %s", &texture_number, &splatmap_channel, diffuse_name, splatmap_name);
-
-            Debug::info("Found a ground texture: %d %c %s %s \n", texture_number,  splatmap_channel, diffuse_name, splatmap_name);
+            sscanf(buffer, "%*c %d %d %c %s", &texture_number, &splatmap_number, &splatmap_channel, diffuse_name);
 
             char diffuse_filename[80] = "";
             strcat(diffuse_filename, TEXTURE_PATH);
             strcat(diffuse_filename, diffuse_name);
 
-            char splatmap_filename[80] = "";
-            strcat(splatmap_filename, TEXTURE_PATH);
-            strcat(splatmap_filename, splatmap_name);
-
             GLuint diffuse = TextureLoader::loadTextureFromFile(diffuse_filename, GL_LINEAR);
 
             if (texture_number == 0){
-                ground->setDiffuse(diffuse, 0, 'r');
+                ground->addDiffuse(diffuse, 0, 0, 'r');
 
             } else {
-                GLuint splatmap = TextureLoader::loadTextureFromFile(splatmap_filename, GL_LINEAR);
-                ground->setDiffuse(diffuse, texture_number, splatmap_channel);
-                ground->setSplatmap(splatmap, 0);
+                ground->addDiffuse(diffuse, splatmap_number, texture_number, splatmap_channel);
             }
 
         }
 
-    }
+        if (buffer[0] == 's'){
+            char splatmap_name[64];
+            sscanf(buffer, "%*c %s", splatmap_name);
 
-    GLuint second_splat = TextureLoader::loadTextureFromFile("res/textures/second_splat.png", GL_LINEAR);
-    ground->setSplatmap(second_splat, 1);
+            char splatmap_filename[80] = "";
+            strcat(splatmap_filename, TEXTURE_PATH);
+            strcat(splatmap_filename, splatmap_name);
+
+            GLuint splatmap = TextureLoader::loadTextureFromFile(splatmap_filename, GL_LINEAR);
+            ground->addSplatmap(splatmap);
+        }
+
+    }
 
     fclose(ifile);
 }

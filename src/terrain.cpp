@@ -15,6 +15,14 @@
 
 Terrain::Terrain(GLuint shader_program, std::string heightmap_filename, float amplification)
     : Drawable() {
+
+    unique_splatmaps = std::vector<GLuint>(2);
+    splatmaps = std::vector<GLuint>(7);
+    diffuse_textures = std::vector<GLuint>(7);
+    channels = std::vector<GLuint>(7);
+    layers = std::vector<GLuint>(7);
+    texture_index = 0;
+
     // This is where generate the new mesh and override the one passed in by
     // the constructor. This is to save space in the game files, so we don't have a terrain mesh
 
@@ -98,6 +106,7 @@ Terrain::Terrain(GLuint shader_program, std::string heightmap_filename, float am
 
     // Debugging the allowed areas
     // printPathing();
+
 }
 
 void Terrain::paintSplatmap(glm::vec3 mouse_position){
@@ -467,6 +476,21 @@ void Terrain::bindTextures(){
     glActiveTexture(GL_TEXTURE21);
     glBindTexture(GL_TEXTURE_2D, splatmaps[1]);
 
+    glActiveTexture(GL_TEXTURE22);
+    glBindTexture(GL_TEXTURE_2D, splatmaps[2]);
+
+    glActiveTexture(GL_TEXTURE23);
+    glBindTexture(GL_TEXTURE_2D, splatmaps[3]);
+
+    glActiveTexture(GL_TEXTURE24);
+    glBindTexture(GL_TEXTURE_2D, splatmaps[4]);
+
+    glActiveTexture(GL_TEXTURE25);
+    glBindTexture(GL_TEXTURE_2D, splatmaps[5]);
+
+    glActiveTexture(GL_TEXTURE26);
+    glBindTexture(GL_TEXTURE_2D, splatmaps[6]);
+
 }
 
 void Terrain::setTextureLocations(){
@@ -490,6 +514,11 @@ void Terrain::setTextureLocations(){
     // Splatmaps
     glUniform1i(glGetUniformLocation(shader_program, "splatmaps[0]"), 20);
     glUniform1i(glGetUniformLocation(shader_program, "splatmaps[1]"), 21);
+    glUniform1i(glGetUniformLocation(shader_program, "splatmaps[2]"), 22);
+    glUniform1i(glGetUniformLocation(shader_program, "splatmaps[3]"), 23);
+    glUniform1i(glGetUniformLocation(shader_program, "splatmaps[4]"), 24);
+    glUniform1i(glGetUniformLocation(shader_program, "splatmaps[5]"), 25);
+    glUniform1i(glGetUniformLocation(shader_program, "splatmaps[6]"), 26);
 
     ////////////////////
     // Channels
@@ -501,10 +530,16 @@ void Terrain::setTextureLocations(){
     glUniform1i(glGetUniformLocation(shader_program, "channels[5]"), channels[5]);
     glUniform1i(glGetUniformLocation(shader_program, "channels[6]"), channels[6]);
 
-}
+    ////////////////////
+    // Channels
+    glUniform1i(glGetUniformLocation(shader_program, "layers[0]"), layers[0]);
+    glUniform1i(glGetUniformLocation(shader_program, "layers[1]"), layers[1]);
+    glUniform1i(glGetUniformLocation(shader_program, "layers[2]"), layers[2]);
+    glUniform1i(glGetUniformLocation(shader_program, "layers[3]"), layers[3]);
+    glUniform1i(glGetUniformLocation(shader_program, "layers[4]"), layers[4]);
+    glUniform1i(glGetUniformLocation(shader_program, "layers[5]"), layers[5]);
+    glUniform1i(glGetUniformLocation(shader_program, "layers[6]"), layers[6]);
 
-void Terrain::setSplatmap(GLuint splat, int index){
-    splatmaps[index] = splat;
 }
 
 GLuint getChannelIndex(char channel){
@@ -519,12 +554,27 @@ GLuint getChannelIndex(char channel){
     }
 }
 
-void Terrain::setDiffuse(GLuint diff, int index, char channel) {
-    diffuse_textures[index] = diff;
-    GLuint channel_num =getChannelIndex(channel);
-    Debug::info("Setting layer %d to %c, which is %d\n", index, channel, channel_num);
-    channels[index] = channel_num;
-    Debug::info("channels[%d] = %d\n", index, channels[index]);
+void Terrain::addSplatmap(GLuint splat){
+    unique_splatmaps.push_back(splat);
+}
+
+void Terrain::addDiffuse(GLuint diff, GLuint splat, int layer_num, char channel) {
+    GLuint channel_num = getChannelIndex(channel);
+    GLuint splatmap_id = unique_splatmaps[splat];
+
+    Debug::info("Setting %d to:\n", texture_index);
+    Debug::info("  diffuse = %d\n", diff);
+    Debug::info("  splat = %d\n", splatmap_id);
+    Debug::info("  layer = %d\n", layer_num);
+    Debug::info("  channel = %c\n", channel);
     Debug::info("\n");
+
+    splatmaps[texture_index] = splatmap_id;
+    diffuse_textures[texture_index] = diff;
+    channels[texture_index] = channel_num;
+    layers[texture_index] = layer_num;
+
+    texture_index++;
+
     Drawable::setDiffuse(diff);
 }

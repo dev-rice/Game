@@ -37,12 +37,15 @@ p smoke -1.400000 0.500000 0.000000
 
 # Ground specification - Begin writing here (h, g)
 h mountains.png 10.0
+s all_splat.png
+s second_splat.png
+
 g 0 r rough_ground.png
 
-g 1 r bricks.png all_splat.png
-g 2 g stone.png all_splat.png
-g 3 b glacier.png all_splat.png
+g 1 0 r bricks.png
+g 2 0 g stone.png
+g 3 0 b glacier.png
 
-g 4 r dirt.png all_splat.png
-g 6 g grass.png all_splat.png
-g 5 b tile.png all_splat.png
+g 4 1 r dirt.png
+g 6 1 g grass.png
+g 5 1 b tile.png
