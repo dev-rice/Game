@@ -43,6 +43,6 @@ g 1 r bricks.png all_splat.png
 g 2 g stone.png all_splat.png
 g 3 b glacier.png all_splat.png
 
-g 4 r dirt_ground.png all_splat.png
-g 5 g grass.png all_splat.png
-g 6 b tilefloor.png all_splat.png
+g 4 r dirt.png all_splat.png
+g 6 g grass.png all_splat.png
+g 5 b tile.png all_splat.png

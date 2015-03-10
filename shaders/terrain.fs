@@ -185,6 +185,20 @@ float getShadowFactor(){
     return visibility * (1 - (3.0 * shadow_sum / 9.0));
 }
 
+float getSplatValue(sampler2D splatmap, int channel){
+    float splat_value = 0.0;
+    if (channel == 1){
+        splat_value = texture(splatmap, Splatcoord).r;
+    } else if (channel == 2){
+        splat_value = texture(splatmap, Splatcoord).g;
+    } else if (channel == 3){
+        splat_value = texture(splatmap, Splatcoord).b;
+    } else {
+        splat_value = texture(splatmap, Splatcoord).r;
+    }
+    return splat_value;
+}
+
 vec4 blendTexturesWithSplatmap(vec4 base_texture, sampler2D layer1, sampler2D layer2, sampler2D layer3, vec3 channel_vector, sampler2D splatmap){
     // Blends 4 textures together using the first argument as the base and
     // 0, 1, and 2 as the layers to paint on top.
@@ -199,9 +213,9 @@ vec4 blendTexturesWithSplatmap(vec4 base_texture, sampler2D layer1, sampler2D la
     //      vec3(red_layer, green_layer, blue_layer)
     float splat_values[4];
     splat_values[0] = 1.0;
-    splat_values[int(channel_vector.x)] = texture(splatmap, Splatcoord).r;
-    splat_values[int(channel_vector.y)] = texture(splatmap, Splatcoord).g;
-    splat_values[int(channel_vector.z)] = texture(splatmap, Splatcoord).b;
+    splat_values[1] = getSplatValue(splatmap, int(channel_vector.x));
+    splat_values[2] = getSplatValue(splatmap, int(channel_vector.y));
+    splat_values[3] = getSplatValue(splatmap, int(channel_vector.z));
 
     vec4 layers[4];
     layers[0] = base_texture;
