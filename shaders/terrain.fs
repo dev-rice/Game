@@ -184,30 +184,33 @@ float getShadowFactor(){
     return visibility * (1 - (3.0 * shadow_sum / 9.0));
 }
 
-void main() {
+vec4 blendTexturesWithSplatmap(sampler2D base_texture, sampler2D texture0, sampler2D texture1, sampler2D texture2, sampler2D splat){
+    // Blends 4 textures together using the first argument as the base and
+    // 0, 1, and 2 as the layers to paint on top.
+    vec4 blended = vec4(0.0, 0.0, 0.0, 1.0);
+
     float splat_values[4];
     splat_values[0] = 1.0;
-    splat_values[1] = texture(splatmap, Splatcoord).r;
-    splat_values[2] = texture(splatmap, Splatcoord).g;
-    splat_values[3] = texture(splatmap, Splatcoord).b;
+    splat_values[1] = texture(splat, Splatcoord).r;
+    splat_values[2] = texture(splat, Splatcoord).g;
+    splat_values[3] = texture(splat, Splatcoord).b;
 
     vec4 diffuses[4];
+    diffuses[0] = texture(base_texture, Texcoord);
+    diffuses[1] = texture(texture0, Texcoord);
+    diffuses[2] = texture(texture1, Texcoord);
+    diffuses[3] = texture(texture2, Texcoord);
 
-    diffuse = vec4(0.0, 0.0, 0.0, 1.0);
-    diffuses[0] = texture(diffuse_textures[0], Texcoord);
-    diffuses[1] = texture(diffuse_textures[1], Texcoord);
-    diffuses[2] = texture(diffuse_textures[2], Texcoord);
-    diffuses[3] = texture(diffuse_textures[3], Texcoord);
+    blended = mix(blended, diffuses[0], splat_values[0]);
+    blended = mix(blended, diffuses[1], splat_values[1]);
+    blended = mix(blended, diffuses[2], splat_values[2]);
+    blended = mix(blended, diffuses[3], splat_values[3]);
 
-    float painted_splat_value = texture(splatmap_painted, Splatcoord).r;
-    vec4 diffuse_painted_color = texture(diffuse_painted, Texcoord);
+    return blended;
+}
 
-    diffuse = mix(diffuse, diffuses[0], splat_values[0]);
-    diffuse = mix(diffuse, diffuses[1], splat_values[1]);
-    diffuse = mix(diffuse, diffuses[2], splat_values[2]);
-    diffuse = mix(diffuse, diffuses[3], splat_values[3]);
-    diffuse = mix(diffuse, diffuse_painted_color, painted_splat_value);
-
+void main() {
+    diffuse = blendTexturesWithSplatmap(diffuse_textures[0], diffuse_textures[1], diffuse_textures[2], diffuse_textures[3], splatmap);
     specular = texture(specular_texture, Texcoord);
     emissive = texture(emissive_texture, Texcoord);
 
