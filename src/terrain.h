@@ -13,6 +13,8 @@
 #include "vertex.h"
 #include "terrain_mesh.h"
 #include "game_clock.h"
+#include "layered_textures.h"
+#include "texture_layer.h"
 
 class Terrain : public Drawable {
 public:
@@ -61,18 +63,8 @@ private:
     int start_z;
     float max_height;
 
-    std::vector<GLuint> unique_splatmaps;
-    std::vector<GLuint> splatmaps;
-    std::vector<GLuint> diffuse_textures;
-    std::vector<GLuint> channels;
-    std::vector<GLuint> layers;
-    int texture_index;
-
-    GLuint splatmap_painted;
-    GLuint diffuse_painted;
-
+    LayeredTextures* layered_textures;
     GLubyte brush[16];
-
 
 };
 

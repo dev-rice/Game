@@ -16,11 +16,7 @@
 Terrain::Terrain(GLuint shader_program, std::string heightmap_filename, float amplification)
     : Drawable() {
 
-    splatmaps = std::vector<GLuint>(7);
-    diffuse_textures = std::vector<GLuint>(7);
-    channels = std::vector<GLuint>(7);
-    layers = std::vector<GLuint>(7);
-    texture_index = 0;
+    layered_textures = new LayeredTextures(7);
 
     // This is where generate the new mesh and override the one passed in by
     // the constructor. This is to save space in the game files, so we don't have a terrain mesh
@@ -57,29 +53,29 @@ Terrain::Terrain(GLuint shader_program, std::string heightmap_filename, float am
         // printf("\n");
     }
 
-    glGenTextures(1, &splatmap_painted);
-    glBindTexture(GL_TEXTURE_2D, splatmap_painted);
-
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-    GLubyte* zeros = new GLubyte[width * depth];
-    for (int i = 0; i < width * depth; ++i){
-        zeros[i] = 0;
-    }
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, width, depth, 0, GL_RED, GL_UNSIGNED_BYTE, zeros);
-
-    delete[] zeros;
-    zeros = NULL;
-
-    // Set the texture wrapping to clamp to edge
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    // Do nearest interpolation for scaling the image up and down.
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    // Mipmaps increase efficiency or something
-    glGenerateMipmap(GL_TEXTURE_2D);
+    // glGenTextures(1, &splatmap_painted);
+    // glBindTexture(GL_TEXTURE_2D, splatmap_painted);
+    //
+    // glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    //
+    // GLubyte* zeros = new GLubyte[width * depth];
+    // for (int i = 0; i < width * depth; ++i){
+    //     zeros[i] = 0;
+    // }
+    //
+    // glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, width, depth, 0, GL_RED, GL_UNSIGNED_BYTE, zeros);
+    //
+    // delete[] zeros;
+    // zeros = NULL;
+    //
+    // // Set the texture wrapping to clamp to edge
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    // // Do nearest interpolation for scaling the image up and down.
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    // // Mipmaps increase efficiency or something
+    // glGenerateMipmap(GL_TEXTURE_2D);
 
     brush[0] = 255;
     brush[1] = 255;
@@ -101,7 +97,7 @@ Terrain::Terrain(GLuint shader_program, std::string heightmap_filename, float am
     brush[14] = 255;
     brush[15] = 255;
 
-    diffuse_painted = TextureLoader::loadTextureFromFile("res/textures/grass.png", GL_LINEAR);
+    // diffuse_painted = TextureLoader::loadTextureFromFile("res/textures/grass.png", GL_LINEAR);
 
     // Debugging the allowed areas
     // printPathing();
@@ -109,10 +105,10 @@ Terrain::Terrain(GLuint shader_program, std::string heightmap_filename, float am
 }
 
 void Terrain::paintSplatmap(glm::vec3 mouse_position){
-    int x_offset = mouse_position.x - start_x;
-    int y_offset = mouse_position.z - start_z;
-    glBindTexture(GL_TEXTURE_2D, splatmap_painted);
-    glTexSubImage2D(GL_TEXTURE_2D, 0, x_offset, y_offset, 4, 4, GL_RED, GL_UNSIGNED_BYTE, brush);
+//     int x_offset = mouse_position.x - start_x;
+//     int y_offset = mouse_position.z - start_z;
+//     glBindTexture(GL_TEXTURE_2D, splatmap_painted);
+//     glTexSubImage2D(GL_TEXTURE_2D, 0, x_offset, y_offset, 4, 4, GL_RED, GL_UNSIGNED_BYTE, brush);
 }
 
 bool Terrain::canPath(int x, int z){
@@ -444,36 +440,66 @@ void Terrain::bindTextures(){
     glActiveTexture(GL_TEXTURE3);
     glBindTexture(GL_TEXTURE_2D, normal);
 
-    ////////////////////
-    // Diffuse
-    glActiveTexture(GL_TEXTURE10);
-    glBindTexture(GL_TEXTURE_2D, diffuse_textures[0]);
+    layered_textures->updateUniforms(shader_program);
 
-    glActiveTexture(GL_TEXTURE11);
-    glBindTexture(GL_TEXTURE_2D, diffuse_textures[1]);
-
-    glActiveTexture(GL_TEXTURE12);
-    glBindTexture(GL_TEXTURE_2D, diffuse_textures[2]);
-
-    glActiveTexture(GL_TEXTURE13);
-    glBindTexture(GL_TEXTURE_2D, diffuse_textures[3]);
-
-    glActiveTexture(GL_TEXTURE14);
-    glBindTexture(GL_TEXTURE_2D, diffuse_textures[4]);
-
-    glActiveTexture(GL_TEXTURE15);
-    glBindTexture(GL_TEXTURE_2D, diffuse_textures[5]);
-
-    glActiveTexture(GL_TEXTURE16);
-    glBindTexture(GL_TEXTURE_2D, diffuse_textures[6]);
-
-    ////////////////////
-    // Splatmaps
-    glActiveTexture(GL_TEXTURE20);
-    glBindTexture(GL_TEXTURE_2D, unique_splatmaps[0]);
-
-    glActiveTexture(GL_TEXTURE21);
-    glBindTexture(GL_TEXTURE_2D, unique_splatmaps[1]);
+    // ////////////////////
+    // // Diffuse
+    // glActiveTexture(GL_TEXTURE10);
+    // glBindTexture(GL_TEXTURE_2D, diffuse_textures[0]);
+    //
+    // glActiveTexture(GL_TEXTURE11);
+    // glBindTexture(GL_TEXTURE_2D, diffuse_textures[1]);
+    //
+    // glActiveTexture(GL_TEXTURE12);
+    // glBindTexture(GL_TEXTURE_2D, diffuse_textures[2]);
+    //
+    // glActiveTexture(GL_TEXTURE13);
+    // glBindTexture(GL_TEXTURE_2D, diffuse_textures[3]);
+    //
+    // glActiveTexture(GL_TEXTURE14);
+    // glBindTexture(GL_TEXTURE_2D, diffuse_textures[4]);
+    //
+    // glActiveTexture(GL_TEXTURE15);
+    // glBindTexture(GL_TEXTURE_2D, diffuse_textures[5]);
+    //
+    // glActiveTexture(GL_TEXTURE16);
+    // glBindTexture(GL_TEXTURE_2D, diffuse_textures[6]);
+    //
+    // ////////////////////
+    // // Splatmaps
+    // glActiveTexture(GL_TEXTURE20);
+    // glBindTexture(GL_TEXTURE_2D, unique_splatmaps[0]);
+    //
+    // glActiveTexture(GL_TEXTURE21);
+    // glBindTexture(GL_TEXTURE_2D, unique_splatmaps[1]);
+    //
+    // glUniform1i(glGetUniformLocation(shader_program, "splatmaps[0]"), splatmaps[0]);
+    // glUniform1i(glGetUniformLocation(shader_program, "splatmaps[1]"), splatmaps[1]);
+    // glUniform1i(glGetUniformLocation(shader_program, "splatmaps[2]"), splatmaps[2]);
+    // glUniform1i(glGetUniformLocation(shader_program, "splatmaps[3]"), splatmaps[3]);
+    // glUniform1i(glGetUniformLocation(shader_program, "splatmaps[4]"), splatmaps[4]);
+    // glUniform1i(glGetUniformLocation(shader_program, "splatmaps[5]"), splatmaps[5]);
+    // glUniform1i(glGetUniformLocation(shader_program, "splatmaps[6]"), splatmaps[6]);
+    //
+    // ////////////////////
+    // // Channels
+    // glUniform1i(glGetUniformLocation(shader_program, "channels[0]"), channels[0]);
+    // glUniform1i(glGetUniformLocation(shader_program, "channels[1]"), channels[1]);
+    // glUniform1i(glGetUniformLocation(shader_program, "channels[2]"), channels[2]);
+    // glUniform1i(glGetUniformLocation(shader_program, "channels[3]"), channels[3]);
+    // glUniform1i(glGetUniformLocation(shader_program, "channels[4]"), channels[4]);
+    // glUniform1i(glGetUniformLocation(shader_program, "channels[5]"), channels[5]);
+    // glUniform1i(glGetUniformLocation(shader_program, "channels[6]"), channels[6]);
+    //
+    // ////////////////////
+    // // Channels
+    // glUniform1i(glGetUniformLocation(shader_program, "layer_nums[0]"), layers[0]);
+    // glUniform1i(glGetUniformLocation(shader_program, "layer_nums[1]"), layers[1]);
+    // glUniform1i(glGetUniformLocation(shader_program, "layer_nums[2]"), layers[2]);
+    // glUniform1i(glGetUniformLocation(shader_program, "layer_nums[3]"), layers[3]);
+    // glUniform1i(glGetUniformLocation(shader_program, "layer_nums[4]"), layers[4]);
+    // glUniform1i(glGetUniformLocation(shader_program, "layer_nums[5]"), layers[5]);
+    // glUniform1i(glGetUniformLocation(shader_program, "layer_nums[6]"), layers[6]);
 
 }
 
@@ -484,49 +510,22 @@ void Terrain::setTextureLocations(){
     glUniform1i(glGetUniformLocation(shader_program, "normal_map"), 3);
     glUniform1i(glGetUniformLocation(shader_program, "shadow_map"), 4);
 
-    ////////////////////
-    // Diffuse
-    glUniform1i(glGetUniformLocation(shader_program, "diffuse_textures[0]"), 10);
-    glUniform1i(glGetUniformLocation(shader_program, "diffuse_textures[1]"), 11);
-    glUniform1i(glGetUniformLocation(shader_program, "diffuse_textures[2]"), 12);
-    glUniform1i(glGetUniformLocation(shader_program, "diffuse_textures[3]"), 13);
-    glUniform1i(glGetUniformLocation(shader_program, "diffuse_textures[4]"), 14);
-    glUniform1i(glGetUniformLocation(shader_program, "diffuse_textures[5]"), 15);
-    glUniform1i(glGetUniformLocation(shader_program, "diffuse_textures[6]"), 16);
+    layered_textures->setTextureLocations(shader_program);
 
-    ////////////////////
-    // Splatmaps
-    glUniform1i(glGetUniformLocation(shader_program, "unique_splatmaps[0]"), 20);
-    glUniform1i(glGetUniformLocation(shader_program, "unique_splatmaps[1]"), 21);
-
-    glUniform1i(glGetUniformLocation(shader_program, "splatmaps[0]"), splatmaps[0]);
-    glUniform1i(glGetUniformLocation(shader_program, "splatmaps[1]"), splatmaps[1]);
-    glUniform1i(glGetUniformLocation(shader_program, "splatmaps[2]"), splatmaps[2]);
-    glUniform1i(glGetUniformLocation(shader_program, "splatmaps[3]"), splatmaps[3]);
-    glUniform1i(glGetUniformLocation(shader_program, "splatmaps[4]"), splatmaps[4]);
-    glUniform1i(glGetUniformLocation(shader_program, "splatmaps[5]"), splatmaps[5]);
-    glUniform1i(glGetUniformLocation(shader_program, "splatmaps[6]"), splatmaps[6]);
-
-
-    ////////////////////
-    // Channels
-    glUniform1i(glGetUniformLocation(shader_program, "channels[0]"), channels[0]);
-    glUniform1i(glGetUniformLocation(shader_program, "channels[1]"), channels[1]);
-    glUniform1i(glGetUniformLocation(shader_program, "channels[2]"), channels[2]);
-    glUniform1i(glGetUniformLocation(shader_program, "channels[3]"), channels[3]);
-    glUniform1i(glGetUniformLocation(shader_program, "channels[4]"), channels[4]);
-    glUniform1i(glGetUniformLocation(shader_program, "channels[5]"), channels[5]);
-    glUniform1i(glGetUniformLocation(shader_program, "channels[6]"), channels[6]);
-
-    ////////////////////
-    // Channels
-    glUniform1i(glGetUniformLocation(shader_program, "layer_nums[0]"), layers[0]);
-    glUniform1i(glGetUniformLocation(shader_program, "layer_nums[1]"), layers[1]);
-    glUniform1i(glGetUniformLocation(shader_program, "layer_nums[2]"), layers[2]);
-    glUniform1i(glGetUniformLocation(shader_program, "layer_nums[3]"), layers[3]);
-    glUniform1i(glGetUniformLocation(shader_program, "layer_nums[4]"), layers[4]);
-    glUniform1i(glGetUniformLocation(shader_program, "layer_nums[5]"), layers[5]);
-    glUniform1i(glGetUniformLocation(shader_program, "layer_nums[6]"), layers[6]);
+    // ////////////////////
+    // // Diffuse
+    // glUniform1i(glGetUniformLocation(shader_program, "diffuse_textures[0]"), 10);
+    // glUniform1i(glGetUniformLocation(shader_program, "diffuse_textures[1]"), 11);
+    // glUniform1i(glGetUniformLocation(shader_program, "diffuse_textures[2]"), 12);
+    // glUniform1i(glGetUniformLocation(shader_program, "diffuse_textures[3]"), 13);
+    // glUniform1i(glGetUniformLocation(shader_program, "diffuse_textures[4]"), 14);
+    // glUniform1i(glGetUniformLocation(shader_program, "diffuse_textures[5]"), 15);
+    // glUniform1i(glGetUniformLocation(shader_program, "diffuse_textures[6]"), 16);
+    //
+    // ////////////////////
+    // // Splatmaps
+    // glUniform1i(glGetUniformLocation(shader_program, "unique_splatmaps[0]"), 20);
+    // glUniform1i(glGetUniformLocation(shader_program, "unique_splatmaps[1]"), 21);
 
 }
 
@@ -543,26 +542,28 @@ GLuint getChannelIndex(char channel){
 }
 
 void Terrain::addSplatmap(GLuint splat){
-    unique_splatmaps.push_back(splat);
+    layered_textures->addSplatmap(splat);
 }
 
 void Terrain::addDiffuse(GLuint diff, GLuint splat, int layer_num, char channel) {
-    GLuint channel_num = getChannelIndex(channel);
-
-    int index = texture_index;
-    Debug::info("Index %d:\n", index);
-    Debug::info("  diffuse = %d\n", diff);
-    Debug::info("  splat = %d\n", splat);
-    Debug::info("  layer = %d\n", layer_num);
-    Debug::info("  channel = %c => %d\n", channel, channel_num);
-    Debug::info("\n");
-
-    splatmaps[texture_index] = splat;
-    diffuse_textures[texture_index] = diff;
-    channels[texture_index] = channel_num;
-    layers[texture_index] = layer_num;
-
-    texture_index++;
+    // GLuint channel_num = getChannelIndex(channel);
+    //
+    // int index = texture_index;
+    // Debug::info("Index %d:\n", index);
+    // Debug::info("  diffuse = %d\n", diff);
+    // Debug::info("  splat = %d\n", splat);
+    // Debug::info("  layer = %d\n", layer_num);
+    // Debug::info("  channel = %c => %d\n", channel, channel_num);
+    // Debug::info("\n");
+    //
+    // splatmaps[texture_index] = splat;
+    // diffuse_textures[texture_index] = diff;
+    // channels[texture_index] = channel_num;
+    // layers[texture_index] = layer_num;
+    //
+    // texture_index++;
+    TextureLayer layer(diff, splat, channel, layer_num);
+    layered_textures->addTexture(layer);
 
     Drawable::setDiffuse(diff);
 }
