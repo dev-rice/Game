@@ -41,16 +41,13 @@ in vec4 shadow_coord;
 out vec4 outColor;
 
 uniform float time;
-uniform sampler2D diffuse_texture;
 uniform sampler2D specular_texture;
 uniform sampler2D normal_map;
 uniform sampler2D emissive_texture;
 uniform sampler2D shadow_map;
 
 uniform sampler2D splatmap;
-uniform sampler2D diffuse_texture2;
-uniform sampler2D diffuse_texture3;
-uniform sampler2D diffuse_texture4;
+uniform sampler2D diffuse_textures[4];
 
 uniform sampler2D splatmap_painted;
 uniform sampler2D diffuse_painted;
@@ -197,10 +194,10 @@ void main() {
     vec4 diffuses[4];
 
     diffuse = vec4(0.0, 0.0, 0.0, 1.0);
-    diffuses[0] = texture(diffuse_texture, Texcoord);
-    diffuses[1] = texture(diffuse_texture2, Texcoord);
-    diffuses[2] = texture(diffuse_texture3, Texcoord);
-    diffuses[3] = texture(diffuse_texture4, Texcoord);
+    diffuses[0] = texture(diffuse_textures[0], Texcoord);
+    diffuses[1] = texture(diffuse_textures[1], Texcoord);
+    diffuses[2] = texture(diffuse_textures[2], Texcoord);
+    diffuses[3] = texture(diffuse_textures[3], Texcoord);
 
     float painted_splat_value = texture(splatmap_painted, Splatcoord).r;
     vec4 diffuse_painted_color = texture(diffuse_painted, Texcoord);
