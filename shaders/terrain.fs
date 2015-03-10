@@ -8,34 +8,14 @@ struct Light {
     vec3 light_to_surface;
 };
 
-struct Splat {
-    // The splatmap to get data from
-    sampler2D splatmap;
-
-    // Actual textures to be drawn
-    sampler2D diffuse;
-    sampler2D specular;
-    sampler2D normal;
-    sampler2D emissive;
-
-    // Channel to get data from
-    // 0 : red
-    // 1 : green
-    // 2 : blue
-    int channel;
-
-    // Layer number for the blending. Splats that are a higher layer number
-    // will be painted on top of those with lower layer numbers.
-    int layer;
-};
-
-const int num_lights = 3;
+const int NUM_LIGHTS = 3;
+const int NUM_TEXTURES = 7;
 
 in vec2 Texcoord;
 in vec2 Splatcoord;
 in vec3 surface_normal;
 in vec3 camera_to_surface;
-in Light lights[num_lights];
+in Light lights[NUM_LIGHTS];
 in vec4 shadow_coord;
 
 out vec4 outColor;
@@ -46,11 +26,10 @@ uniform sampler2D normal_map;
 uniform sampler2D emissive_texture;
 uniform sampler2D shadow_map;
 
-uniform sampler2D splatmaps[7];
-uniform sampler2D diffuse_textures[7];
-uniform int channels[7];
-uniform int layer_nums[7];
-
+uniform sampler2D splatmaps[NUM_TEXTURES];
+uniform sampler2D diffuse_textures[NUM_TEXTURES];
+uniform int channels[NUM_TEXTURES];
+uniform int layer_nums[NUM_TEXTURES];
 
 vec4 diffuse;
 vec4 specular;
@@ -196,8 +175,6 @@ float getSplatValue(sampler2D splatmap, int channel){
     return splat_value;
 }
 
-const int NUM_TEXTURES = 7;
-
 void main() {
     // General mix algorithm:
     //   Given for each terrain texture i:
@@ -216,7 +193,7 @@ void main() {
     vec4 base = texture(diffuse_textures[0], Texcoord);
 
     float splat_values[NUM_TEXTURES];
-    splat_values[0] = 1.0;
+    splat_values[layer_nums[0]] = 1.0;
     splat_values[layer_nums[1]] = getSplatValue(splatmaps[1], channels[1]);
     splat_values[layer_nums[2]] = getSplatValue(splatmaps[2], channels[2]);
     splat_values[layer_nums[3]] = getSplatValue(splatmaps[3], channels[3]);

@@ -8,12 +8,12 @@ struct Light {
     vec3 light_to_surface;
 };
 
-const int num_lights = 3;
+const int NUM_LIGHTS = 3;
 
 in vec2 Texcoord;
 in vec3 surface_normal;
 in vec3 camera_to_surface;
-in Light lights[num_lights];
+in Light lights[NUM_LIGHTS];
 in vec4 shadow_coord;
 
 out vec4 outColor;

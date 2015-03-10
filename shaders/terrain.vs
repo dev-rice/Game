@@ -1,6 +1,6 @@
 #version 330
 
-const int num_lights = 3;
+const int NUM_LIGHTS = 3;
 
 struct Light {
     vec3 position;
@@ -21,7 +21,7 @@ out vec2 Texcoord;
 out vec2 Splatcoord;
 out vec3 surface_normal;
 out vec3 camera_to_surface;
-out Light lights[num_lights];
+out Light lights[NUM_LIGHTS];
 out vec4 shadow_coord;
 
 layout(std140) uniform GlobalMatrices {
@@ -100,7 +100,7 @@ void main() {
         lights[2].power = 20.0;
 
         // The first light is reserved for the directional light
-        for (int i = 1; i < num_lights; ++i){
+        for (int i = 1; i < NUM_LIGHTS; ++i){
             vec3 light_vector = (normal_basis * (view * (vec4(lights[i].position, 1.0)) -
                 (world_position))).xyz;
 
