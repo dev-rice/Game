@@ -26,8 +26,10 @@ uniform sampler2D normal_map;
 uniform sampler2D emissive_texture;
 uniform sampler2D shadow_map;
 
-uniform sampler2D splatmaps[NUM_TEXTURES];
+
+uniform sampler2D unique_splatmaps[2];
 uniform sampler2D diffuse_textures[NUM_TEXTURES];
+uniform int splatmaps[NUM_TEXTURES];
 uniform int channels[NUM_TEXTURES];
 uniform int layer_nums[NUM_TEXTURES];
 
@@ -194,12 +196,12 @@ void main() {
 
     float splat_values[NUM_TEXTURES];
     splat_values[layer_nums[0]] = 1.0;
-    splat_values[layer_nums[1]] = getSplatValue(splatmaps[1], channels[1]);
-    splat_values[layer_nums[2]] = getSplatValue(splatmaps[2], channels[2]);
-    splat_values[layer_nums[3]] = getSplatValue(splatmaps[3], channels[3]);
-    splat_values[layer_nums[4]] = getSplatValue(splatmaps[4], channels[4]);
-    splat_values[layer_nums[5]] = getSplatValue(splatmaps[4], channels[5]);
-    splat_values[layer_nums[6]] = getSplatValue(splatmaps[4], channels[6]);
+    splat_values[layer_nums[1]] = getSplatValue(unique_splatmaps[splatmaps[1]], channels[1]);
+    splat_values[layer_nums[2]] = getSplatValue(unique_splatmaps[splatmaps[2]], channels[2]);
+    splat_values[layer_nums[3]] = getSplatValue(unique_splatmaps[splatmaps[3]], channels[3]);
+    splat_values[layer_nums[4]] = getSplatValue(unique_splatmaps[splatmaps[4]], channels[4]);
+    splat_values[layer_nums[5]] = getSplatValue(unique_splatmaps[splatmaps[5]], channels[5]);
+    splat_values[layer_nums[6]] = getSplatValue(unique_splatmaps[splatmaps[6]], channels[6]);
 
     vec4 layers[NUM_TEXTURES];
     layers[layer_nums[0]] = base;
