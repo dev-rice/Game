@@ -472,8 +472,7 @@ void Terrain::addSplatmap(GLuint splat){
 }
 
 void Terrain::addDiffuse(GLuint diff, GLuint splat, int layer_num, char channel) {
-    TextureLayer layer(diff, splat, channel, layer_num);
-    layered_textures->addTexture(layer);
+    layered_textures->addTexture(diff, splat, channel, layer_num);
 
     Drawable::setDiffuse(diff);
 }

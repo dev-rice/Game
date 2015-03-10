@@ -22,7 +22,7 @@ public:
     LayeredTextures(int);
 
     void addSplatmap(GLuint splatmap);
-    void addTexture(TextureLayer layer);
+    void addTexture(GLuint diffuse, GLuint splatmap, char channel, int layer_number);
 
     void updateUniforms(GLuint);
     void setTextureLocations(GLuint);

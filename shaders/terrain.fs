@@ -31,7 +31,6 @@ uniform sampler2D unique_splatmaps[2];
 uniform sampler2D diffuse_textures[NUM_TEXTURES];
 uniform int splatmaps[NUM_TEXTURES];
 uniform int channels[NUM_TEXTURES];
-uniform int layer_nums[NUM_TEXTURES];
 
 vec4 diffuse;
 vec4 specular;
@@ -180,10 +179,12 @@ float getSplatValue(sampler2D splatmap, int channel){
 void main() {
     // General mix algorithm:
     //   Given for each terrain texture i:
-    //      - layer number
     //      - splatmap id
     //      - splatmap channel
     //      - texture id
+    //   And that the terrain textures are given
+    //   in correct layer order (higher i means)
+    //   higher layer.
     //
     //   splat_value[i] = texture(splatmap[i], channel[i]);
     //   layer[i] = texture(tex_id[i], Texcoord);
@@ -195,26 +196,30 @@ void main() {
     vec4 base = texture(diffuse_textures[0], Texcoord);
 
     float splat_values[NUM_TEXTURES];
-    splat_values[layer_nums[0]] = 1.0;
-    splat_values[layer_nums[1]] = getSplatValue(unique_splatmaps[splatmaps[1]], channels[1]);
-    splat_values[layer_nums[2]] = getSplatValue(unique_splatmaps[splatmaps[2]], channels[2]);
-    splat_values[layer_nums[3]] = getSplatValue(unique_splatmaps[splatmaps[3]], channels[3]);
-    splat_values[layer_nums[4]] = getSplatValue(unique_splatmaps[splatmaps[4]], channels[4]);
-    splat_values[layer_nums[5]] = getSplatValue(unique_splatmaps[splatmaps[5]], channels[5]);
-    splat_values[layer_nums[6]] = getSplatValue(unique_splatmaps[splatmaps[6]], channels[6]);
+    splat_values[0] = 1.0;
+    splat_values[1] = getSplatValue(unique_splatmaps[splatmaps[1]], channels[1]);
+    splat_values[2] = getSplatValue(unique_splatmaps[splatmaps[2]], channels[2]);
+    splat_values[3] = getSplatValue(unique_splatmaps[splatmaps[3]], channels[3]);
+    splat_values[4] = getSplatValue(unique_splatmaps[splatmaps[4]], channels[4]);
+    splat_values[5] = getSplatValue(unique_splatmaps[splatmaps[5]], channels[5]);
+    splat_values[6] = getSplatValue(unique_splatmaps[splatmaps[6]], channels[6]);
 
     vec4 layers[NUM_TEXTURES];
-    layers[layer_nums[0]] = base;
-    layers[layer_nums[1]] = texture(diffuse_textures[1], Texcoord);
-    layers[layer_nums[2]] = texture(diffuse_textures[2], Texcoord);
-    layers[layer_nums[3]] = texture(diffuse_textures[3], Texcoord);
-    layers[layer_nums[4]] = texture(diffuse_textures[4], Texcoord);
-    layers[layer_nums[5]] = texture(diffuse_textures[5], Texcoord);
-    layers[layer_nums[6]] = texture(diffuse_textures[6], Texcoord);
+    layers[0] = base;
+    layers[1] = texture(diffuse_textures[1], Texcoord);
+    layers[2] = texture(diffuse_textures[2], Texcoord);
+    layers[3] = texture(diffuse_textures[3], Texcoord);
+    layers[4] = texture(diffuse_textures[4], Texcoord);
+    layers[5] = texture(diffuse_textures[5], Texcoord);
+    layers[6] = texture(diffuse_textures[6], Texcoord);
 
-    for (int i = 0; i < NUM_TEXTURES; ++i){
-        base = mix(base, layers[i], splat_values[i]);
-    }
+    base = mix(base, layers[0], splat_values[0]);
+    base = mix(base, layers[1], splat_values[1]);
+    base = mix(base, layers[2], splat_values[2]);
+    base = mix(base, layers[3], splat_values[3]);
+    base = mix(base, layers[4], splat_values[4]);
+    base = mix(base, layers[5], splat_values[5]);
+    base = mix(base, layers[6], splat_values[6]);
 
     diffuse = base;
     specular = texture(specular_texture, Texcoord);

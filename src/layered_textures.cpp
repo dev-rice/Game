@@ -11,8 +11,14 @@ void LayeredTextures::addSplatmap(GLuint splatmap){
     unique_splatmaps.push_back(splatmap);
 }
 
-void LayeredTextures::addTexture(TextureLayer layer){
-    texture_layers[current_index] = layer;
+void LayeredTextures::addTexture(GLuint diffuse, GLuint splatmap, char channel, int layer_number){
+    TextureLayer layer(diffuse, splatmap, channel);
+
+    if (layer_number < size){
+        texture_layers[layer_number] = layer;
+    } else {
+        Debug::error("Layer number out of bounds: %d", layer_number);
+    }
     current_index++;
 }
 
@@ -66,15 +72,6 @@ void LayeredTextures::updateUniforms(GLuint shader_program){
     glUniform1i(glGetUniformLocation(shader_program, "channels[5]"),texture_layers[5].getChannel());
     glUniform1i(glGetUniformLocation(shader_program, "channels[6]"),texture_layers[6].getChannel());
 
-    ////////////////////
-    // Channels
-    glUniform1i(glGetUniformLocation(shader_program, "layer_nums[0]"), texture_layers[0].getLayerNumber());
-    glUniform1i(glGetUniformLocation(shader_program, "layer_nums[1]"), texture_layers[1].getLayerNumber());
-    glUniform1i(glGetUniformLocation(shader_program, "layer_nums[2]"), texture_layers[2].getLayerNumber());
-    glUniform1i(glGetUniformLocation(shader_program, "layer_nums[3]"), texture_layers[3].getLayerNumber());
-    glUniform1i(glGetUniformLocation(shader_program, "layer_nums[4]"), texture_layers[4].getLayerNumber());
-    glUniform1i(glGetUniformLocation(shader_program, "layer_nums[5]"), texture_layers[5].getLayerNumber());
-    glUniform1i(glGetUniformLocation(shader_program, "layer_nums[6]"), texture_layers[6].getLayerNumber());
 }
 
 void LayeredTextures::setTextureLocations(GLuint shader_program){
