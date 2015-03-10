@@ -51,10 +51,6 @@ uniform sampler2D diffuse_textures[7];
 uniform int channels[7];
 uniform int layer_nums[7];
 
-uniform sampler2D splatmap_painted;
-uniform sampler2D diffuse_painted;
-
-uniform Splat splats[4];
 
 vec4 diffuse;
 vec4 specular;
@@ -216,21 +212,30 @@ void main() {
     //   base = mix(base, layer[1], splat_value[1]);
     //   ...
     //   base = mix(base, layer[n], splat_value[n]);
+
     vec4 base = texture(diffuse_textures[0], Texcoord);
 
-    // float splat_values[NUM_TEXTURES];
-    // vec4 layers[NUM_TEXTURES];
-    // splat_values[0] = 1.0;
-    // layers[0] = base;
-    // for (int i = 1; i < NUM_TEXTURES; ++i){
-    //     int index = layer_nums[i];
-    //     splat_values[index] = getSplatValue(splatmaps[i], channels[i]);
-    //     layers[index] = texture(diffuse_textures[index], Texcoord);
-    // }
-    //
-    // for (int i = 0; i < NUM_TEXTURES - 1; ++i){
-    //     base = mix(layers[i], layers[i + 1], splat_values[i + 1]);
-    // }
+    float splat_values[NUM_TEXTURES];
+    splat_values[0] = 1.0;
+    splat_values[layer_nums[1]] = getSplatValue(splatmaps[1], channels[1]);
+    splat_values[layer_nums[2]] = getSplatValue(splatmaps[2], channels[2]);
+    splat_values[layer_nums[3]] = getSplatValue(splatmaps[3], channels[3]);
+    splat_values[layer_nums[4]] = getSplatValue(splatmaps[4], channels[4]);
+    splat_values[layer_nums[5]] = getSplatValue(splatmaps[4], channels[5]);
+    splat_values[layer_nums[6]] = getSplatValue(splatmaps[4], channels[6]);
+
+    vec4 layers[NUM_TEXTURES];
+    layers[layer_nums[0]] = base;
+    layers[layer_nums[1]] = texture(diffuse_textures[1], Texcoord);
+    layers[layer_nums[2]] = texture(diffuse_textures[2], Texcoord);
+    layers[layer_nums[3]] = texture(diffuse_textures[3], Texcoord);
+    layers[layer_nums[4]] = texture(diffuse_textures[4], Texcoord);
+    layers[layer_nums[5]] = texture(diffuse_textures[5], Texcoord);
+    layers[layer_nums[6]] = texture(diffuse_textures[6], Texcoord);
+
+    for (int i = 0; i < NUM_TEXTURES; ++i){
+        base = mix(base, layers[i], splat_values[i]);
+    }
 
     diffuse = base;
     specular = texture(specular_texture, Texcoord);

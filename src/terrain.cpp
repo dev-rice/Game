@@ -16,7 +16,6 @@
 Terrain::Terrain(GLuint shader_program, std::string heightmap_filename, float amplification)
     : Drawable() {
 
-    unique_splatmaps = std::vector<GLuint>(2);
     splatmaps = std::vector<GLuint>(7);
     diffuse_textures = std::vector<GLuint>(7);
     channels = std::vector<GLuint>(7);
@@ -512,6 +511,14 @@ void Terrain::setTextureLocations(){
 
     ////////////////////
     // Splatmaps
+    // Debug::info("splatmaps[0] location: %d\n", glGetUniformLocation(shader_program, "splatmaps[0]"));
+    // Debug::info("splatmaps[1] location: %d\n", glGetUniformLocation(shader_program, "splatmaps[1]"));
+    // Debug::info("splatmaps[2] location: %d\n", glGetUniformLocation(shader_program, "splatmaps[2]"));
+    // Debug::info("splatmaps[3] location: %d\n", glGetUniformLocation(shader_program, "splatmaps[3]"));
+    // Debug::info("splatmaps[4] location: %d\n", glGetUniformLocation(shader_program, "splatmaps[4]"));
+    // Debug::info("splatmaps[5] location: %d\n", glGetUniformLocation(shader_program, "splatmaps[5]"));
+    // Debug::info("splatmaps[6] location: %d\n", glGetUniformLocation(shader_program, "splatmaps[6]"));
+
     glUniform1i(glGetUniformLocation(shader_program, "splatmaps[0]"), 20);
     glUniform1i(glGetUniformLocation(shader_program, "splatmaps[1]"), 21);
     glUniform1i(glGetUniformLocation(shader_program, "splatmaps[2]"), 22);
@@ -532,13 +539,13 @@ void Terrain::setTextureLocations(){
 
     ////////////////////
     // Channels
-    glUniform1i(glGetUniformLocation(shader_program, "layers[0]"), layers[0]);
-    glUniform1i(glGetUniformLocation(shader_program, "layers[1]"), layers[1]);
-    glUniform1i(glGetUniformLocation(shader_program, "layers[2]"), layers[2]);
-    glUniform1i(glGetUniformLocation(shader_program, "layers[3]"), layers[3]);
-    glUniform1i(glGetUniformLocation(shader_program, "layers[4]"), layers[4]);
-    glUniform1i(glGetUniformLocation(shader_program, "layers[5]"), layers[5]);
-    glUniform1i(glGetUniformLocation(shader_program, "layers[6]"), layers[6]);
+    glUniform1i(glGetUniformLocation(shader_program, "layer_nums[0]"), layers[0]);
+    glUniform1i(glGetUniformLocation(shader_program, "layer_nums[1]"), layers[1]);
+    glUniform1i(glGetUniformLocation(shader_program, "layer_nums[2]"), layers[2]);
+    glUniform1i(glGetUniformLocation(shader_program, "layer_nums[3]"), layers[3]);
+    glUniform1i(glGetUniformLocation(shader_program, "layer_nums[4]"), layers[4]);
+    glUniform1i(glGetUniformLocation(shader_program, "layer_nums[5]"), layers[5]);
+    glUniform1i(glGetUniformLocation(shader_program, "layer_nums[6]"), layers[6]);
 
 }
 
@@ -562,11 +569,12 @@ void Terrain::addDiffuse(GLuint diff, GLuint splat, int layer_num, char channel)
     GLuint channel_num = getChannelIndex(channel);
     GLuint splatmap_id = unique_splatmaps[splat];
 
-    Debug::info("Setting %d to:\n", texture_index);
+    int index = texture_index;
+    Debug::info("Index %d:\n", index);
     Debug::info("  diffuse = %d\n", diff);
     Debug::info("  splat = %d\n", splatmap_id);
     Debug::info("  layer = %d\n", layer_num);
-    Debug::info("  channel = %c\n", channel);
+    Debug::info("  channel = %c => %d\n", channel, channel_num);
     Debug::info("\n");
 
     splatmaps[texture_index] = splatmap_id;
