@@ -1,25 +1,29 @@
 #include "layered_textures.h"
 
 LayeredTextures::LayeredTextures(int size){
-    this->size = size;
+    this->num_layers = size;
+    this->num_splatmaps = (size - 1) / 3;
 
-    texture_layers = std::vector<TextureLayer>(size);
-    current_index = 0;
+    texture_layers = std::vector<TextureLayer>(num_layers);
 }
 
 void LayeredTextures::addSplatmap(GLuint splatmap){
+    if (unique_splatmaps.size() >= num_splatmaps){
+        Debug::error("Too many splatmaps for %d textures.\n");
+    }
     unique_splatmaps.push_back(splatmap);
 }
 
 void LayeredTextures::addTexture(GLuint diffuse, GLuint splatmap, char channel, int layer_number){
     TextureLayer layer(diffuse, splatmap, channel);
 
-    if (layer_number < size){
-        texture_layers[layer_number] = layer;
+    if (layer_number >= num_layers){
+        Debug::error("Layer number out of bounds %d. Range is [0, %d]\n", layer_number, num_layers - 1);
+    } else if (splatmap >= num_splatmaps){
+        Debug::error("Splatmap number out of bounds %d. Range is [0, %d]\n", splatmap, num_splatmaps - 1);
     } else {
-        Debug::error("Layer number out of bounds: %d", layer_number);
+        texture_layers[layer_number] = layer;
     }
-    current_index++;
 }
 
 void LayeredTextures::updateUniforms(GLuint shader_program){
