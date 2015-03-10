@@ -1,6 +1,8 @@
 #include "layered_textures.h"
 
 LayeredTextures::LayeredTextures(int size){
+    this->size = size;
+
     texture_layers = std::vector<TextureLayer>(size);
     current_index = 0;
 }

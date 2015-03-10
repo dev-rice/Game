@@ -32,7 +32,8 @@ private:
     std::vector<GLuint> unique_splatmaps;
     std::vector<TextureLayer> texture_layers;
 
-    int current_index = 0;
+    int size;
+    int current_index;
 
 };
 
