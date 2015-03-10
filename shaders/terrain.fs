@@ -184,9 +184,10 @@ float getShadowFactor(){
     return visibility * (1 - (3.0 * shadow_sum / 9.0));
 }
 
-vec4 blendTexturesWithSplatmap(sampler2D base_texture, sampler2D texture0, sampler2D texture1, sampler2D texture2, sampler2D splat){
+vec4 blendTexturesWithSplatmap(sampler2D base_texture, sampler2D layer1, sampler2D layer2, sampler2D layer3, sampler2D splat){
     // Blends 4 textures together using the first argument as the base and
     // 0, 1, and 2 as the layers to paint on top.
+    // Assumes that layer 1 has the red component, 2 has green, and 3 has blue
     vec4 blended = vec4(0.0, 0.0, 0.0, 1.0);
 
     float splat_values[4];
@@ -197,9 +198,9 @@ vec4 blendTexturesWithSplatmap(sampler2D base_texture, sampler2D texture0, sampl
 
     vec4 diffuses[4];
     diffuses[0] = texture(base_texture, Texcoord);
-    diffuses[1] = texture(texture0, Texcoord);
-    diffuses[2] = texture(texture1, Texcoord);
-    diffuses[3] = texture(texture2, Texcoord);
+    diffuses[1] = texture(layer1, Texcoord);
+    diffuses[2] = texture(layer2, Texcoord);
+    diffuses[3] = texture(layer3, Texcoord);
 
     blended = mix(blended, diffuses[0], splat_values[0]);
     blended = mix(blended, diffuses[1], splat_values[1]);
