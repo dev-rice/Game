@@ -385,9 +385,9 @@ void Level::loadLevel(const char* filename){
             char diffuse_name[64];
             char splatmap_name[64];
             char splatmap_channel;
-            sscanf(buffer, "%*c %d %s %s %c", &texture_number, diffuse_name, splatmap_name, &splatmap_channel);
+            sscanf(buffer, "%*c %d %c %s %s", &texture_number, &splatmap_channel, diffuse_name, splatmap_name);
 
-            Debug::info("Found a ground texture: %d %s %s %c\n", texture_number, diffuse_name, splatmap_name, splatmap_channel);
+            Debug::info("Found a ground texture: %d %c %s %s \n", texture_number,  splatmap_channel, diffuse_name, splatmap_name);
 
             char diffuse_filename[80] = "";
             strcat(diffuse_filename, TEXTURE_PATH);
@@ -400,12 +400,12 @@ void Level::loadLevel(const char* filename){
             GLuint diffuse = TextureLoader::loadTextureFromFile(diffuse_filename, GL_LINEAR);
 
             if (texture_number == 0){
-                ground->setDiffuse(diffuse, 0);
+                ground->setDiffuse(diffuse, 0, 'r');
 
             } else {
                 GLuint splatmap = TextureLoader::loadTextureFromFile(splatmap_filename, GL_LINEAR);
-                ground->setDiffuse(diffuse, texture_number);
-                ground->setSplatmap(splatmap, 0, splatmap_channel);
+                ground->setDiffuse(diffuse, texture_number, splatmap_channel);
+                ground->setSplatmap(splatmap, 0);
             }
 
         }
@@ -413,7 +413,7 @@ void Level::loadLevel(const char* filename){
     }
 
     GLuint second_splat = TextureLoader::loadTextureFromFile("res/textures/second_splat.png", GL_LINEAR);
-    ground->setSplatmap(second_splat, 1, 'r');
+    ground->setSplatmap(second_splat, 1);
 
     fclose(ifile);
 }

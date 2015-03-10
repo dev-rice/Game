@@ -48,6 +48,7 @@ uniform sampler2D shadow_map;
 
 uniform sampler2D splatmaps[2];
 uniform sampler2D diffuse_textures[7];
+uniform int channels[7];
 
 uniform sampler2D splatmap_painted;
 uniform sampler2D diffuse_painted;
@@ -184,36 +185,46 @@ float getShadowFactor(){
     return visibility * (1 - (3.0 * shadow_sum / 9.0));
 }
 
-vec4 blendTexturesWithSplatmap(vec4 base_texture, sampler2D layer1, sampler2D layer2, sampler2D layer3, sampler2D splatmap){
+vec4 blendTexturesWithSplatmap(vec4 base_texture, sampler2D layer1, sampler2D layer2, sampler2D layer3, vec3 channel_vector, sampler2D splatmap){
     // Blends 4 textures together using the first argument as the base and
     // 0, 1, and 2 as the layers to paint on top.
     // Assumes that layer 1 has the red component, 2 has green, and 3 has blue
     vec4 blended = vec4(0.0, 0.0, 0.0, 1.0);
 
+    // The splat values are encased in the splatmap as the red green and blue
+    // channels. The first splat value is 1.0 because this is the base. The
+    // others are defined by the channel vector.
+    //
+    // Channel vector:
+    //      vec3(red_layer, green_layer, blue_layer)
     float splat_values[4];
     splat_values[0] = 1.0;
-    splat_values[1] = texture(splatmap, Splatcoord).r;
-    splat_values[2] = texture(splatmap, Splatcoord).g;
-    splat_values[3] = texture(splatmap, Splatcoord).b;
+    splat_values[int(channel_vector.x)] = texture(splatmap, Splatcoord).r;
+    splat_values[int(channel_vector.y)] = texture(splatmap, Splatcoord).g;
+    splat_values[int(channel_vector.z)] = texture(splatmap, Splatcoord).b;
 
-    vec4 diffuses[4];
-    diffuses[0] = base_texture;
-    diffuses[1] = texture(layer1, Texcoord);
-    diffuses[2] = texture(layer2, Texcoord);
-    diffuses[3] = texture(layer3, Texcoord);
+    vec4 layers[4];
+    layers[0] = base_texture;
+    layers[1] = texture(layer1, Texcoord);
+    layers[2] = texture(layer2, Texcoord);
+    layers[3] = texture(layer3, Texcoord);
 
-    blended = mix(blended, diffuses[0], splat_values[0]);
-    blended = mix(blended, diffuses[1], splat_values[1]);
-    blended = mix(blended, diffuses[2], splat_values[2]);
-    blended = mix(blended, diffuses[3], splat_values[3]);
+    blended = mix(blended, layers[0], splat_values[0]);
+    blended = mix(blended, layers[1], splat_values[1]);
+    blended = mix(blended, layers[2], splat_values[2]);
+    blended = mix(blended, layers[3], splat_values[3]);
 
     return blended;
 }
 
 void main() {
+    vec3 channelmaps[2];
+    channelmaps[0] = vec3(channels[1], channels[2], channels[3]);
+    channelmaps[1] = vec3(channels[4], channels[5], channels[6]);
+
     vec4 base = texture(diffuse_textures[0], Texcoord);
-    diffuse = blendTexturesWithSplatmap(base, diffuse_textures[1], diffuse_textures[2], diffuse_textures[3], splatmaps[0]);
-    diffuse = blendTexturesWithSplatmap(diffuse, diffuse_textures[4], diffuse_textures[5], diffuse_textures[6], splatmaps[1]);
+    diffuse = blendTexturesWithSplatmap(base, diffuse_textures[1], diffuse_textures[2], diffuse_textures[3], channelmaps[0], splatmaps[0]);
+    diffuse = blendTexturesWithSplatmap(diffuse, diffuse_textures[4], diffuse_textures[5], diffuse_textures[6], channelmaps[1], splatmaps[1]);
 
     specular = texture(specular_texture, Texcoord);
     emissive = texture(emissive_texture, Texcoord);

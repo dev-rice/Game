@@ -459,9 +459,6 @@ void Terrain::bindTextures(){
     glActiveTexture(GL_TEXTURE16);
     glBindTexture(GL_TEXTURE_2D, diffuse_textures[6]);
 
-    glActiveTexture(GL_TEXTURE17);
-    glBindTexture(GL_TEXTURE_2D, diffuse_painted);
-
     ////////////////////
     // Splatmaps
     glActiveTexture(GL_TEXTURE20);
@@ -470,8 +467,6 @@ void Terrain::bindTextures(){
     glActiveTexture(GL_TEXTURE21);
     glBindTexture(GL_TEXTURE_2D, splatmaps[1]);
 
-    glActiveTexture(GL_TEXTURE22);
-    glBindTexture(GL_TEXTURE_2D, splatmap_painted);
 }
 
 void Terrain::setTextureLocations(){
@@ -480,8 +475,9 @@ void Terrain::setTextureLocations(){
     glUniform1i(glGetUniformLocation(shader_program, "emissive_texture"), 2);
     glUniform1i(glGetUniformLocation(shader_program, "normal_map"), 3);
     glUniform1i(glGetUniformLocation(shader_program, "shadow_map"), 4);
-    glUniform1i(glGetUniformLocation(shader_program, "diffuse_painted"), 17);
 
+    ////////////////////
+    // Diffuse
     glUniform1i(glGetUniformLocation(shader_program, "diffuse_textures[0]"), 10);
     glUniform1i(glGetUniformLocation(shader_program, "diffuse_textures[1]"), 11);
     glUniform1i(glGetUniformLocation(shader_program, "diffuse_textures[2]"), 12);
@@ -490,17 +486,45 @@ void Terrain::setTextureLocations(){
     glUniform1i(glGetUniformLocation(shader_program, "diffuse_textures[5]"), 15);
     glUniform1i(glGetUniformLocation(shader_program, "diffuse_textures[6]"), 16);
 
+    ////////////////////
+    // Splatmaps
     glUniform1i(glGetUniformLocation(shader_program, "splatmaps[0]"), 20);
     glUniform1i(glGetUniformLocation(shader_program, "splatmaps[1]"), 21);
-    glUniform1i(glGetUniformLocation(shader_program, "splatmap_painted"), 22);
+
+    ////////////////////
+    // Channels
+    glUniform1i(glGetUniformLocation(shader_program, "channels[0]"), channels[0]);
+    glUniform1i(glGetUniformLocation(shader_program, "channels[1]"), channels[1]);
+    glUniform1i(glGetUniformLocation(shader_program, "channels[2]"), channels[2]);
+    glUniform1i(glGetUniformLocation(shader_program, "channels[3]"), channels[3]);
+    glUniform1i(glGetUniformLocation(shader_program, "channels[4]"), channels[4]);
+    glUniform1i(glGetUniformLocation(shader_program, "channels[5]"), channels[5]);
+    glUniform1i(glGetUniformLocation(shader_program, "channels[6]"), channels[6]);
 
 }
 
-void Terrain::setSplatmap(GLuint splat, int index, char channel){
+void Terrain::setSplatmap(GLuint splat, int index){
     splatmaps[index] = splat;
 }
 
-void Terrain::setDiffuse(GLuint diff, int index) {
+GLuint getChannelIndex(char channel){
+    if (channel == 'r'){
+        return 1;
+    } else if (channel == 'g'){
+        return 2;
+    } else if (channel == 'b'){
+        return 3;
+    } else {
+        return 0;
+    }
+}
+
+void Terrain::setDiffuse(GLuint diff, int index, char channel) {
     diffuse_textures[index] = diff;
+    GLuint channel_num =getChannelIndex(channel);
+    Debug::info("Setting layer %d to %c, which is %d\n", index, channel, channel_num);
+    channels[index] = channel_num;
+    Debug::info("channels[%d] = %d\n", index, channels[index]);
+    Debug::info("\n");
     Drawable::setDiffuse(diff);
 }

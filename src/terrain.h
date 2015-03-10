@@ -28,8 +28,8 @@ public:
     float getSteepness(GLfloat, GLfloat);
     float getMaxHeight(){return max_height;}
 
-    void setSplatmap(GLuint splat, int index, char channel);
-    void setDiffuse(GLuint diff, int index);
+    void setSplatmap(GLuint splat, int index);
+    void setDiffuse(GLuint diff, int index, char channel);
 
     void printPathing();
 
@@ -63,6 +63,7 @@ private:
 
     GLuint splatmaps[2];
     GLuint diffuse_textures[7];
+    GLuint channels[7];
 
     GLuint splatmap_painted;
     GLuint diffuse_painted;
