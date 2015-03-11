@@ -39,8 +39,10 @@ public:
 
     void paint(int x, int y);
 
-
 private:
+
+    int getIndex(int x, int y, int width);
+
     GLuint texture;
     GLubyte* texture_bytes;
 

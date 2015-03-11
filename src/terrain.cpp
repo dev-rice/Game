@@ -412,18 +412,6 @@ void Terrain::setTextureLocations(){
 
 }
 
-GLuint getChannelIndex(char channel){
-    if (channel == 'r'){
-        return 1;
-    } else if (channel == 'g'){
-        return 2;
-    } else if (channel == 'b'){
-        return 3;
-    } else {
-        return 0;
-    }
-}
-
 void Terrain::addSplatmap(GLuint splat){
     texture_painter->setTexture(splat);
 
