@@ -18,6 +18,9 @@ public:
     GLuint getChannel();
     char getChannelChar();
 
+    static int getIntFromChannelChar(char channel);
+    static char getCharFromChannelInt(int channel);
+
 private:
     GLuint diffuse;
     GLuint splatmap;

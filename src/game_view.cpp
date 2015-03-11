@@ -92,7 +92,7 @@ void GameView::update(){
     TexturePainter* painter = level->getTerrain()->getTexturePainter();
     LayeredTextures* layered_textures = level->getTerrain()->getLayeredTextures();
 
-    GLuint paint_texture = layered_textures->getTexture(painter->getTexture(), 'r');
+    GLuint paint_texture = layered_textures->getTexture(painter->getTexture(), painter->getChannel());
     current_paint->attachTexture(paint_texture);
     current_paint->setPixelCoordinates(20, 220, 120, 320);
 

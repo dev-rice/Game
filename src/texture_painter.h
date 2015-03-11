@@ -19,6 +19,7 @@
 
 #include "debug.h"
 #include "texture_loader.h"
+#include "texture_layer.h"
 
 // Temporary
 struct Brush{
@@ -33,12 +34,17 @@ public:
     GLuint getTexture();
     void setTexture(GLuint texture);
 
+    char getChannel();
+    void setChannel(char channel);
+
     void paint(int x, int y);
 
 
 private:
     GLuint texture;
     GLubyte* texture_bytes;
+
+    char channel;
 
     Brush brush;
 

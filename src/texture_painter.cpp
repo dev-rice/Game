@@ -25,12 +25,21 @@ void TexturePainter::setTexture(GLuint texture){
 
 }
 
+char TexturePainter::getChannel(){
+    return channel;
+}
+
+void TexturePainter::setChannel(char channel){
+    this->channel = channel;
+}
+
 void TexturePainter::paint(int x, int y){
     int width = TextureLoader::getTextureWidth(texture);
     int height = TextureLoader::getTextureHeight(texture);
 
+    int channel_int = TextureLayer::getIntFromChannelChar(channel);
     for(int i = 0; i < 4 * width * height; ++i){
-        if (i % 4 == 0){
+        if (i % 4 == (channel_int - 1)){
             texture_bytes[i] = 255;
         }
     }

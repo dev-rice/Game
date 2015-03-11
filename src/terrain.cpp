@@ -426,12 +426,13 @@ GLuint getChannelIndex(char channel){
 
 void Terrain::addSplatmap(GLuint splat){
     texture_painter->setTexture(splat);
+
     layered_textures->addSplatmap(splat);
 }
 
 void Terrain::addDiffuse(GLuint diff, GLuint splat, int layer_num, char channel) {
+    texture_painter->setChannel(channel);
     layered_textures->addTexture(diff, splat, channel, layer_num);
-
     Drawable::setDiffuse(diff);
 }
 
