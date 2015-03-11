@@ -28,14 +28,6 @@ TexturePainter::TexturePainter(GLuint texture){
     brush.width = 4;
     brush.height = 4;
 
-    Debug::info("Initial brush:\n");
-    for (int x = 0; x < 4; ++x){
-        for (int y = 0; y < 4; ++y){
-            printf("%d ", brush.bitmap[x + 4*y]);
-        }
-        printf("\n");
-    }
-
     setTexture(texture);
 }
 
@@ -70,10 +62,15 @@ void TexturePainter::paint(int x, int y, Brush::Mode mode){
 
     if (brush.width % 2 == 0){
         upper_left_x -= 1;
+        lower_right_x -= 1;
     }
     if (brush.height % 2 == 0){
         upper_left_y -= 1;
+        lower_right_y -= 1;
     }
+
+    Debug::info("width = %d\n", lower_right_x - upper_left_x);
+    Debug::info("height = %d\n", lower_right_y - upper_left_y);
 
     int brush_index = 0;
     Debug::info("Paint brush:\n");
