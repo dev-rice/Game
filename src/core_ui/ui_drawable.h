@@ -19,8 +19,8 @@
 
 class UIDrawable : public FlatDrawable {
 public:
-    UIDrawable(GLuint);
-    UIDrawable(GLuint, GLuint);
+    UIDrawable(GLuint texture);
+    UIDrawable(GLuint shader_program, GLuint texture);
 
     void draw();
     void attachTexture(GLuint);

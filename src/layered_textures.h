@@ -28,7 +28,7 @@ public:
     void setTextureLocations(GLuint);
 
     GLuint getSplatmap(int index);
-
+    GLuint getTexture(GLuint splatmap, char channel);
 private:
 
     std::vector<GLuint> unique_splatmaps;

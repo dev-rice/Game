@@ -15,6 +15,10 @@ TexturePainter::TexturePainter(GLuint texture){
     setTexture(texture);
 }
 
+GLuint TexturePainter::getTexture(){
+    return texture;
+}
+
 void TexturePainter::setTexture(GLuint texture){
     this->texture = texture;
     texture_bytes = TextureLoader::getBytesFromTexture(texture);

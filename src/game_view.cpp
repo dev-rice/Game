@@ -73,6 +73,13 @@ GameView::GameView(Level* level){
     InputHandler::State_Callback_Type state_callback_temp = std::bind(&GameView::handleInputState, this);
     InputHandler::getInstance()->setStateCallback(state_callback_temp);
 
+    TexturePainter* painter = level->getTerrain()->getTexturePainter();
+    LayeredTextures* layered_textures = level->getTerrain()->getLayeredTextures();
+
+    GLuint paint_texture = layered_textures->getTexture(painter->getTexture(), 'r');
+    current_paint = new UIDrawable(paint_texture);
+    current_paint->setPixelCoordinates(20, 220, 120, 320);
+    ui_drawables.push_back(current_paint);
 }
 
 void GameView::update(){
@@ -82,6 +89,12 @@ void GameView::update(){
     // Swap display/rendering buffers
     window->display();
 
+    TexturePainter* painter = level->getTerrain()->getTexturePainter();
+    LayeredTextures* layered_textures = level->getTerrain()->getLayeredTextures();
+
+    GLuint paint_texture = layered_textures->getTexture(painter->getTexture(), 'r');
+    current_paint->attachTexture(paint_texture);
+    current_paint->setPixelCoordinates(20, 220, 120, 320);
 
     // Render the shadow map into the shadow buffer
     if (Profile::getInstance()->isShadowsOn()){

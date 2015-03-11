@@ -42,6 +42,9 @@ public:
 
     void paintSplatmap(glm::vec3);
 
+    LayeredTextures* getLayeredTextures();
+    TexturePainter* getTexturePainter();
+
 private:
 
     void updateUniformData();

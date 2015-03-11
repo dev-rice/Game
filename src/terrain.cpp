@@ -434,3 +434,11 @@ void Terrain::addDiffuse(GLuint diff, GLuint splat, int layer_num, char channel)
 
     Drawable::setDiffuse(diff);
 }
+
+LayeredTextures* Terrain::getLayeredTextures(){
+    return layered_textures;
+}
+
+TexturePainter* Terrain::getTexturePainter(){
+    return texture_painter;
+}

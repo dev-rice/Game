@@ -29,6 +29,8 @@ class TexturePainter {
 public:
     TexturePainter();
     TexturePainter(GLuint texture);
+
+    GLuint getTexture();
     void setTexture(GLuint texture);
 
     void paint(int x, int y);

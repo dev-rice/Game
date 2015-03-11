@@ -16,11 +16,13 @@ public:
     GLuint getDiffuse();
     GLuint getSplatmap();
     GLuint getChannel();
+    char getChannelChar();
 
 private:
     GLuint diffuse;
     GLuint splatmap;
     GLuint channel;
+    char channel_char;
 };
 
 #endif

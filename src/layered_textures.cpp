@@ -34,6 +34,20 @@ GLuint LayeredTextures::getSplatmap(int index){
     }
 }
 
+GLuint LayeredTextures::getTexture(GLuint splatmap, char channel){
+    GLuint texture = 0;
+
+    // Linear search because lazy and this is a relatively
+    // smale search space
+    for (TextureLayer layer : texture_layers){
+        if (layer.getChannelChar() == channel && unique_splatmaps[layer.getSplatmap()] == splatmap){
+            texture = layer.getDiffuse();
+        }
+    }
+
+    return texture;
+}
+
 void LayeredTextures::updateUniforms(GLuint shader_program){
     ////////////////////
     // Diffuse

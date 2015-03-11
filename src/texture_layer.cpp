@@ -21,6 +21,7 @@ void TextureLayer::setSplatmap(GLuint splatmap){
 }
 
 void TextureLayer::setChannel(char channel_char){
+    this->channel_char = channel_char;
     if (channel_char == 'r'){
         setChannel((GLuint)1);
     } else if (channel_char == 'g'){
@@ -46,4 +47,8 @@ GLuint TextureLayer::getSplatmap(){
 
 GLuint TextureLayer::getChannel(){
     return channel;
+}
+
+char TextureLayer::getChannelChar(){
+    return channel_char;
 }

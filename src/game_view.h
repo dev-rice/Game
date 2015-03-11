@@ -76,6 +76,8 @@ private:
     GLuint mouse_ubo;
 
     std::string all_chars;
+
+    UIDrawable* current_paint;
 };
 
 #endif
