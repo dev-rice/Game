@@ -5,7 +5,7 @@ TexturePainter::TexturePainter() : TexturePainter(0) {}
 TexturePainter::TexturePainter(GLuint texture){
     brush.bitmap = new GLubyte[16];
     for (int i = 0; i < 16; ++i){
-        brush.bitmap[i] = 255;
+        brush.bitmap[i] = (rand() % 16) * 16;
     }
     brush.width = 4;
     brush.height = 4;
@@ -49,17 +49,25 @@ void TexturePainter::paint(int x, int y, Brush::Mode mode){
         upper_left_y -= 1;
     }
 
+    int brush_index = 0;
     for (int brush_x = upper_left_x; brush_x < lower_right_x; ++brush_x){
         for (int brush_y = upper_left_y; brush_y < lower_right_y; ++brush_y){
-            GLubyte value = 0;
-            if (mode == Brush::Mode::ERASE){
-                value = 0;
-            } else if (mode == Brush::Mode::PAINT){
-                value = 255;
-            }
+            int value = brush.bitmap[brush_index];
+            brush_index++;
 
             int index = getIndex(brush_x, brush_y, width);
-            texture_bytes[index + channel_int - 1] = value;
+            int new_value = 0;
+            if (mode == Brush::Mode::PAINT){
+                new_value = value + texture_bytes[index + channel_int - 1];
+            } else if (mode == Brush::Mode::ERASE){
+                new_value = texture_bytes[index + channel_int - 1] - value;
+            }
+
+            // Clamp the value to a byte size. This prevents the byte from
+            // overflowing.
+            new_value = std::max(0, new_value);
+            new_value = std::min(255, new_value);
+            texture_bytes[index + channel_int - 1] = new_value;
         }
     }
 
