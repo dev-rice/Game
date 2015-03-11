@@ -27,6 +27,8 @@ public:
     void updateUniforms(GLuint);
     void setTextureLocations(GLuint);
 
+    void swapLayers(GLuint layer1, GLuint layer2);
+
     GLuint getSplatmap(int index);
     GLuint getTexture(GLuint splatmap, char channel);
 

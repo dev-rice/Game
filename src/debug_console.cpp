@@ -84,7 +84,7 @@ void DebugConsole::handleInput(SDL_Event event){
             if (input_buffer.empty()){
                 hide();
             } else {
-                Debug::error("Unknown command: '%s'\n", input_buffer.c_str());
+                parseInput();
                 input_buffer.clear();
             }
         }
@@ -105,5 +105,49 @@ void DebugConsole::syncWithDebug(){
     while (Debug::hasMessages()){
         std::string new_message = Debug::popMessage();
         messages.push_back(new_message);
+    }
+}
+
+void DebugConsole::setLevel(Level* level){
+    this->level = level;
+}
+
+void DebugConsole::parseInput(){
+    // Split the string by spaces
+    std::string temp_buffer = input_buffer;
+    std::string delimiter = " ";
+
+    size_t pos = 0;
+    std::string token;
+    std::vector<std::string> tokens;
+    while ((pos = temp_buffer.find(delimiter)) != std::string::npos) {
+        token = temp_buffer.substr(0, pos);
+        tokens.push_back(token);
+        temp_buffer.erase(0, pos + delimiter.length());
+    }
+    tokens.push_back(temp_buffer);
+
+    // See if this is a valid command (beautiful code)
+    if (tokens[0] == "set"){
+        if (tokens[1] == "layer"){
+            try {
+                int layer_num = std::stoi(tokens[2]);
+                level->getTerrain()->setPaintLayer(layer_num);
+            } catch (std::invalid_argument e){
+
+            }
+        }
+    } else if (tokens[0] == "swap"){
+        if (tokens[1] == "layer"){
+            try {
+                int layer1 = std::stoi(tokens[2]);
+                int layer2 = std::stoi(tokens[3]);
+                level->getTerrain()->getLayeredTextures()->swapLayers(layer1, layer2);
+            } catch (std::invalid_argument e){
+
+            }
+        }
+    } else {
+        Debug::error("Unknown command: '%s'\n", input_buffer.c_str());
     }
 }

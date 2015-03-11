@@ -126,3 +126,12 @@ void LayeredTextures::setTextureLocations(GLuint shader_program){
     glUniform1i(glGetUniformLocation(shader_program, "unique_splatmaps[0]"), 20);
     glUniform1i(glGetUniformLocation(shader_program, "unique_splatmaps[1]"), 21);
 }
+
+void LayeredTextures::swapLayers(GLuint layer1, GLuint layer2){
+    TextureLayer temp = texture_layers[layer2];
+    texture_layers[layer2] = texture_layers[layer1];
+    texture_layers[layer1] = temp;
+
+    texture_layers[layer1].setLayerNumber(layer1);
+    texture_layers[layer2].setLayerNumber(layer2);
+}
