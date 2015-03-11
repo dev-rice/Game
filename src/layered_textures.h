@@ -27,6 +27,8 @@ public:
     void updateUniforms(GLuint);
     void setTextureLocations(GLuint);
 
+    GLuint getSplatmap(int index);
+
 private:
 
     std::vector<GLuint> unique_splatmaps;

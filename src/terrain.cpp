@@ -53,51 +53,7 @@ Terrain::Terrain(GLuint shader_program, std::string heightmap_filename, float am
         // printf("\n");
     }
 
-    // glGenTextures(1, &splatmap_painted);
-    // glBindTexture(GL_TEXTURE_2D, splatmap_painted);
-    //
-    // glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    //
-    // GLubyte* zeros = new GLubyte[width * depth];
-    // for (int i = 0; i < width * depth; ++i){
-    //     zeros[i] = 0;
-    // }
-    //
-    // glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, width, depth, 0, GL_RED, GL_UNSIGNED_BYTE, zeros);
-    //
-    // delete[] zeros;
-    // zeros = NULL;
-    //
-    // // Set the texture wrapping to clamp to edge
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    // // Do nearest interpolation for scaling the image up and down.
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    // // Mipmaps increase efficiency or something
-    // glGenerateMipmap(GL_TEXTURE_2D);
-
-    brush[0] = 255;
-    brush[1] = 255;
-    brush[2] = 255;
-    brush[3] = 255;
-
-    brush[4] = 255;
-    brush[5] = 255;
-    brush[6] = 255;
-    brush[7] = 255;
-
-    brush[8] = 255;
-    brush[9] = 255;
-    brush[10] = 255;
-    brush[11] = 255;
-
-    brush[12] = 255;
-    brush[13] = 255;
-    brush[14] = 255;
-    brush[15] = 255;
-
-    // diffuse_painted = TextureLoader::loadTextureFromFile("res/textures/grass.png", GL_LINEAR);
+    texture_painter = new TexturePainter(layered_textures->getSplatmap(0));
 
     // Debugging the allowed areas
     // printPathing();
@@ -105,10 +61,11 @@ Terrain::Terrain(GLuint shader_program, std::string heightmap_filename, float am
 }
 
 void Terrain::paintSplatmap(glm::vec3 mouse_position){
-//     int x_offset = mouse_position.x - start_x;
-//     int y_offset = mouse_position.z - start_z;
-//     glBindTexture(GL_TEXTURE_2D, splatmap_painted);
-//     glTexSubImage2D(GL_TEXTURE_2D, 0, x_offset, y_offset, 4, 4, GL_RED, GL_UNSIGNED_BYTE, brush);
+    int x_offset = mouse_position.x - start_x;
+    int y_offset = mouse_position.z - start_z;
+    texture_painter->paint(x_offset, y_offset);
+    //     glBindTexture(GL_TEXTURE_2D, splatmap_painted);
+    //     glTexSubImage2D(GL_TEXTURE_2D, 0, x_offset, y_offset, 4, 4, GL_RED, GL_UNSIGNED_BYTE, brush);
 }
 
 bool Terrain::canPath(int x, int z){
@@ -468,6 +425,7 @@ GLuint getChannelIndex(char channel){
 }
 
 void Terrain::addSplatmap(GLuint splat){
+    texture_painter->setTexture(splat);
     layered_textures->addSplatmap(splat);
 }
 

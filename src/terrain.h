@@ -15,6 +15,7 @@
 #include "game_clock.h"
 #include "layered_textures.h"
 #include "texture_layer.h"
+#include "texture_painter.h"
 
 class Terrain : public Drawable {
 public:
@@ -64,7 +65,9 @@ private:
     float max_height;
 
     LayeredTextures* layered_textures;
-    GLubyte brush[16];
+
+    TexturePainter* texture_painter;
+
 
 };
 
