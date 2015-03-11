@@ -26,7 +26,9 @@ void TexturePainter::paint(int x, int y){
     int height = TextureLoader::getTextureHeight(texture);
 
     for(int i = 0; i < 4 * width * height; ++i){
-        texture_bytes[i] = 255;
+        if (i % 4 == 0){
+            texture_bytes[i] = 255;
+        }
     }
 
     glBindTexture(GL_TEXTURE_2D, texture);
