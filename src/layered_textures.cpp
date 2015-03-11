@@ -128,6 +128,10 @@ void LayeredTextures::setTextureLocations(GLuint shader_program){
 }
 
 void LayeredTextures::swapLayers(GLuint layer1, GLuint layer2){
+    if (layer1 == 0 || layer2 == 0){
+        Debug::error("Cannot swap with the base layer (layer 0).\n");
+        return;
+    }
     TextureLayer temp = texture_layers[layer2];
     texture_layers[layer2] = texture_layers[layer1];
     texture_layers[layer1] = temp;
