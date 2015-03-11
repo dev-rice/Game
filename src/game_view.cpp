@@ -410,24 +410,6 @@ void GameView::handleInputState(){
 
     }
 
-    if (state[SDL_SCANCODE_1]){
-        level->getTerrain()->setPaintLayer(1);
-    }
-    if (state[SDL_SCANCODE_2]){
-        level->getTerrain()->setPaintLayer(2);
-    }
-    if (state[SDL_SCANCODE_3]){
-        level->getTerrain()->setPaintLayer(3);
-    }
-    if (state[SDL_SCANCODE_4]){
-        level->getTerrain()->setPaintLayer(4);
-    }
-    if (state[SDL_SCANCODE_5]){
-        level->getTerrain()->setPaintLayer(5);
-    }
-    if (state[SDL_SCANCODE_6]){
-        level->getTerrain()->setPaintLayer(6);
-    }
 }
 
 void GameView::handleInput(SDL_Event event){
@@ -448,7 +430,7 @@ void GameView::handleInput(SDL_Event event){
             } else if ((key_scancode == SDL_SCANCODE_TAB) && (!toggle_key_state)){
                 toggle_key_state = true;
                 debug_showing = !debug_showing;
-            } else if ((key_scancode == SDL_SCANCODE_F8) && (!debug_console_key_state)){
+            } else if ((key_scancode == SDL_SCANCODE_RETURN) && (!debug_console_key_state)){
                 debug_console_key_state = true;
                 DebugConsole::getInstance()->toggleShowing();
             } else if ((key_scancode == SDL_SCANCODE_G) && (!graphics_menu_key_state)){
@@ -460,13 +442,25 @@ void GameView::handleInput(SDL_Event event){
             } else if ((key_scancode == SDL_SCANCODE_P) && (!printscreen_key_state)){
                 printscreen_key_state = true;
                 window->takeScreenshot();
+            } else if (key_scancode == SDL_SCANCODE_1){
+                level->getTerrain()->setPaintLayer(1);
+            } else if (key_scancode == SDL_SCANCODE_2){
+                level->getTerrain()->setPaintLayer(2);
+            } else if (key_scancode == SDL_SCANCODE_3){
+                level->getTerrain()->setPaintLayer(3);
+            } else if (key_scancode == SDL_SCANCODE_4){
+                level->getTerrain()->setPaintLayer(4);
+            } else if (key_scancode == SDL_SCANCODE_5){
+                level->getTerrain()->setPaintLayer(5);
+            } else if (key_scancode == SDL_SCANCODE_6){
+                level->getTerrain()->setPaintLayer(6);
             }
         break;
 
         case SDL_KEYUP:
             if (key_scancode == SDL_SCANCODE_TAB){
                 toggle_key_state = false;
-            } else if (key_scancode == SDL_SCANCODE_F8){
+            } else if (key_scancode == SDL_SCANCODE_RETURN){
                 debug_console_key_state = false;
             } else if (key_scancode == SDL_SCANCODE_G){
                 graphics_menu_key_state = false;
