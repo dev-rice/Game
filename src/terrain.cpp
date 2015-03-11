@@ -53,7 +53,7 @@ Terrain::Terrain(GLuint shader_program, std::string heightmap_filename, float am
         // printf("\n");
     }
 
-    texture_painter = new TexturePainter(layered_textures->getSplatmap(0));
+    texture_painter = new TexturePainter(0);
 
     // Debugging the allowed areas
     // printPathing();

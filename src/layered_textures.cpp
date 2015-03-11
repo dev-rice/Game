@@ -27,7 +27,7 @@ void LayeredTextures::addTexture(GLuint diffuse, GLuint splatmap, char channel, 
 }
 
 GLuint LayeredTextures::getSplatmap(int index){
-    if (index > 0 && index < num_splatmaps){
+    if (index >= 0 && index < num_splatmaps){
         return unique_splatmaps[index];
     } else {
         return 0;

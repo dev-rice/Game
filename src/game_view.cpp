@@ -408,6 +408,24 @@ void GameView::handleInputState(){
 
     }
 
+    TexturePainter* painter = level->getTerrain()->getTexturePainter();
+    LayeredTextures* layered_textures = level->getTerrain()->getLayeredTextures();
+    if (state[SDL_SCANCODE_Y]){
+        painter->setChannel('r');
+    }
+    if (state[SDL_SCANCODE_U]){
+        painter->setChannel('g');
+    }
+    if (state[SDL_SCANCODE_I]){
+        painter->setChannel('b');
+    }
+    if (state[SDL_SCANCODE_1]){
+        painter->setTexture(layered_textures->getSplatmap(0));
+    }
+    if (state[SDL_SCANCODE_2]){
+        painter->setTexture(layered_textures->getSplatmap(1));
+    }
+
 }
 
 void GameView::handleInput(SDL_Event event){
