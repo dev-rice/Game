@@ -22,7 +22,6 @@ GLuint TexturePainter::getTexture(){
 void TexturePainter::setTexture(GLuint texture){
     this->texture = texture;
     texture_bytes = TextureLoader::getBytesFromTexture(texture);
-
 }
 
 char TexturePainter::getChannel(){
@@ -33,7 +32,7 @@ void TexturePainter::setChannel(char channel){
     this->channel = channel;
 }
 
-void TexturePainter::paint(int x, int y){
+void TexturePainter::paint(int x, int y, Brush::Mode mode){
     int width = TextureLoader::getTextureWidth(texture);
     int height = TextureLoader::getTextureHeight(texture);
 
@@ -43,9 +42,15 @@ void TexturePainter::paint(int x, int y){
     //         texture_bytes[i] = 255;
     //     }
     // }
-    int index = getIndex(x, y, width);
-    texture_bytes[index + channel_int - 1] = 255;
+    GLubyte value = 0;
+    if (mode == Brush::Mode::ERASE){
+        value = 0;
+    } else if (mode == Brush::Mode::PAINT){
+        value = 255;
+    }
 
+    int index = getIndex(x, y, width);
+    texture_bytes[index + channel_int - 1] = value;
 
     glBindTexture(GL_TEXTURE_2D, texture);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,

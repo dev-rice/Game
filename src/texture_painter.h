@@ -24,6 +24,7 @@
 // Temporary
 struct Brush{
     GLubyte* bitmap;
+    enum Mode {PAINT, ERASE};
 };
 
 class TexturePainter {
@@ -37,7 +38,7 @@ public:
     char getChannel();
     void setChannel(char channel);
 
-    void paint(int x, int y);
+    void paint(int x, int y, Brush::Mode mode);
 
 private:
 

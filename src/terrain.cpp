@@ -63,9 +63,13 @@ Terrain::Terrain(GLuint shader_program, std::string heightmap_filename, float am
 void Terrain::paintSplatmap(glm::vec3 mouse_position){
     int x_offset = mouse_position.x - start_x;
     int y_offset = mouse_position.z - start_z;
-    texture_painter->paint(x_offset, y_offset);
-    //     glBindTexture(GL_TEXTURE_2D, splatmap_painted);
-    //     glTexSubImage2D(GL_TEXTURE_2D, 0, x_offset, y_offset, 4, 4, GL_RED, GL_UNSIGNED_BYTE, brush);
+    texture_painter->paint(x_offset, y_offset, Brush::Mode::PAINT);
+}
+
+void Terrain::eraseSplatmap(glm::vec3 mouse_position){
+    int x_offset = mouse_position.x - start_x;
+    int y_offset = mouse_position.z - start_z;
+    texture_painter->paint(x_offset, y_offset, Brush::Mode::ERASE);
 }
 
 bool Terrain::canPath(int x, int z){
@@ -413,13 +417,10 @@ void Terrain::setTextureLocations(){
 }
 
 void Terrain::addSplatmap(GLuint splat){
-    texture_painter->setTexture(splat);
-
     layered_textures->addSplatmap(splat);
 }
 
 void Terrain::addDiffuse(GLuint diff, GLuint splat, int layer_num, char channel) {
-    texture_painter->setChannel(channel);
     layered_textures->addTexture(diff, splat, channel, layer_num);
     Drawable::setDiffuse(diff);
 }
@@ -430,4 +431,19 @@ LayeredTextures* Terrain::getLayeredTextures(){
 
 TexturePainter* Terrain::getTexturePainter(){
     return texture_painter;
+}
+
+TextureLayer Terrain::getCurrentLayer(){
+    TextureLayer layer = layered_textures->getLayer(texture_painter->getTexture(), texture_painter->getChannel());
+    return layer;
+}
+
+void Terrain::setPaintLayer(GLuint layer){
+    TextureLayer texture_layer = layered_textures->getLayer(layer);
+
+    char channel = TextureLayer::getCharFromChannelInt(texture_layer.getChannel());
+    GLuint splatmap = layered_textures->getSplatmap(texture_layer.getSplatmap());
+
+    texture_painter->setChannel(channel);
+    texture_painter->setTexture(splatmap);
 }

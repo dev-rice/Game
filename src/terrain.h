@@ -40,7 +40,10 @@ public:
 
     bool canPath(int, int);
 
-    void paintSplatmap(glm::vec3);
+    void paintSplatmap(glm::vec3 position);
+    void eraseSplatmap(glm::vec3 position);
+    TextureLayer getCurrentLayer();
+    void setPaintLayer(GLuint layer);
 
     LayeredTextures* getLayeredTextures();
     TexturePainter* getTexturePainter();

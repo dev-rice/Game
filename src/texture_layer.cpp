@@ -6,10 +6,11 @@ TextureLayer::TextureLayer(){
     channel = 1;
 }
 
-TextureLayer::TextureLayer(GLuint diffuse, GLuint splatmap, char channel){
+TextureLayer::TextureLayer(GLuint diffuse, GLuint splatmap, char channel, int layer_number){
     setDiffuse(diffuse);
     setSplatmap(splatmap);
     setChannel(channel);
+    setLayerNumber(layer_number);
 }
 
 void TextureLayer::setDiffuse(GLuint diffuse){
@@ -29,6 +30,10 @@ void TextureLayer::setChannel(GLuint channel){
     this->channel = channel;
 }
 
+void TextureLayer::setLayerNumber(GLuint layer_number){
+    this->layer_number = layer_number;
+}
+
 GLuint TextureLayer::getDiffuse(){
     return diffuse;
 }
@@ -39,6 +44,10 @@ GLuint TextureLayer::getSplatmap(){
 
 GLuint TextureLayer::getChannel(){
     return channel;
+}
+
+GLuint TextureLayer::getLayerNumber(){
+    return layer_number;
 }
 
 char TextureLayer::getChannelChar(){

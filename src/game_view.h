@@ -59,6 +59,7 @@ private:
     std::vector<UIDrawable*> ui_drawables;
 
     TextRenderer* text_renderer;
+    TextRenderer* fancy_text;
 
     bool toggle_key_state;
     bool debug_showing;

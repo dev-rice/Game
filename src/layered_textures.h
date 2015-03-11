@@ -29,6 +29,10 @@ public:
 
     GLuint getSplatmap(int index);
     GLuint getTexture(GLuint splatmap, char channel);
+
+    TextureLayer getLayer(GLuint splatmap, char channel);
+    TextureLayer getLayer(GLuint layer_number);
+
 private:
 
     std::vector<GLuint> unique_splatmaps;

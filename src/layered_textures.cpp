@@ -15,7 +15,7 @@ void LayeredTextures::addSplatmap(GLuint splatmap){
 }
 
 void LayeredTextures::addTexture(GLuint diffuse, GLuint splatmap, char channel, int layer_number){
-    TextureLayer layer(diffuse, splatmap, channel);
+    TextureLayer layer(diffuse, splatmap, channel, layer_number);
 
     if (layer_number >= num_layers){
         Debug::error("Layer number out of bounds %d. Range is [0, %d]\n", layer_number, num_layers - 1);
@@ -35,17 +35,27 @@ GLuint LayeredTextures::getSplatmap(int index){
 }
 
 GLuint LayeredTextures::getTexture(GLuint splatmap, char channel){
-    GLuint texture = 0;
+    TextureLayer layer = getLayer(splatmap, channel);
+    return layer.getDiffuse();
+}
 
-    // Linear search because lazy and this is a relatively
-    // smale search space
+TextureLayer LayeredTextures::getLayer(GLuint splatmap, char channel){
+    TextureLayer out_layer;
     for (TextureLayer layer : texture_layers){
         if (layer.getChannelChar() == channel && unique_splatmaps[layer.getSplatmap()] == splatmap){
-            texture = layer.getDiffuse();
+            out_layer = layer;
         }
     }
+    return out_layer;
+}
 
-    return texture;
+TextureLayer LayeredTextures::getLayer(GLuint layer_number){
+    if (layer_number >= 0 && layer_number < num_layers){
+        return texture_layers[layer_number];
+    } else {
+        TextureLayer layer;
+        return layer;
+    }
 }
 
 void LayeredTextures::updateUniforms(GLuint shader_program){

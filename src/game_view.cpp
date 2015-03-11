@@ -24,6 +24,7 @@ GameView::GameView(Level* level){
     Mouse::getInstance();
 
     text_renderer = new TextRenderer("Inconsolata-Bold.ttf", 20);
+    fancy_text = new TextRenderer("BreeSerif-Regular.ttf", 20);
     for (int i = 32; i <= 126; ++i){
         all_chars += i;
     }
@@ -73,10 +74,8 @@ GameView::GameView(Level* level){
     InputHandler::State_Callback_Type state_callback_temp = std::bind(&GameView::handleInputState, this);
     InputHandler::getInstance()->setStateCallback(state_callback_temp);
 
-    TexturePainter* painter = level->getTerrain()->getTexturePainter();
-    LayeredTextures* layered_textures = level->getTerrain()->getLayeredTextures();
-
-    GLuint paint_texture = layered_textures->getTexture(painter->getTexture(), 'r');
+    TextureLayer layer = level->getTerrain()->getCurrentLayer();
+    GLuint paint_texture = layer.getDiffuse();
     current_paint = new UIDrawable(paint_texture);
     current_paint->setPixelCoordinates(20, 220, 120, 320);
     ui_drawables.push_back(current_paint);
@@ -88,13 +87,6 @@ void GameView::update(){
 
     // Swap display/rendering buffers
     window->display();
-
-    TexturePainter* painter = level->getTerrain()->getTexturePainter();
-    LayeredTextures* layered_textures = level->getTerrain()->getLayeredTextures();
-
-    GLuint paint_texture = layered_textures->getTexture(painter->getTexture(), painter->getChannel());
-    current_paint->attachTexture(paint_texture);
-    current_paint->setPixelCoordinates(20, 220, 120, 320);
 
     // Render the shadow map into the shadow buffer
     if (Profile::getInstance()->isShadowsOn()){
@@ -194,7 +186,13 @@ void GameView::update(){
 
     }
 
-    // mouse_point.y = terrain->getHeightInterpolated(mouse_point.x, mouse_point.z);
+    TextureLayer current_layer = level->getTerrain()->getCurrentLayer();
+    GLuint paint_texture = current_layer.getDiffuse();
+    current_paint->attachTexture(paint_texture);
+    current_paint->setPixelCoordinates(20, 220, 120, 320);
+    fancy_text->print(20, 180, "Paint: M");
+    fancy_text->print(20, 200, "Erase: N");
+    fancy_text->print(30, 230, "%d", current_layer.getLayerNumber());
 
     glBindBuffer(GL_UNIFORM_BUFFER, mouse_ubo);
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::vec3),
@@ -258,6 +256,9 @@ void GameView::handleInputState(){
     //##############################################################################
     if (Mouse::getInstance()->isPressed(Mouse::MIDDLE) || state[SDL_SCANCODE_M]){
         level->getTerrain()->paintSplatmap(mouse_world_pos);
+    }
+    if (state[SDL_SCANCODE_N]){
+        level->getTerrain()->eraseSplatmap(mouse_world_pos);
     }
 
     //##############################################################################
@@ -408,24 +409,24 @@ void GameView::handleInputState(){
 
     }
 
-    TexturePainter* painter = level->getTerrain()->getTexturePainter();
-    LayeredTextures* layered_textures = level->getTerrain()->getLayeredTextures();
-    if (state[SDL_SCANCODE_Y]){
-        painter->setChannel('r');
-    }
-    if (state[SDL_SCANCODE_U]){
-        painter->setChannel('g');
-    }
-    if (state[SDL_SCANCODE_I]){
-        painter->setChannel('b');
-    }
     if (state[SDL_SCANCODE_1]){
-        painter->setTexture(layered_textures->getSplatmap(0));
+        level->getTerrain()->setPaintLayer(1);
     }
     if (state[SDL_SCANCODE_2]){
-        painter->setTexture(layered_textures->getSplatmap(1));
+        level->getTerrain()->setPaintLayer(2);
     }
-
+    if (state[SDL_SCANCODE_3]){
+        level->getTerrain()->setPaintLayer(3);
+    }
+    if (state[SDL_SCANCODE_4]){
+        level->getTerrain()->setPaintLayer(4);
+    }
+    if (state[SDL_SCANCODE_5]){
+        level->getTerrain()->setPaintLayer(5);
+    }
+    if (state[SDL_SCANCODE_6]){
+        level->getTerrain()->setPaintLayer(6);
+    }
 }
 
 void GameView::handleInput(SDL_Event event){
