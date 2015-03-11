@@ -24,7 +24,7 @@ GameView::GameView(Level* level){
     Mouse::getInstance();
 
     text_renderer = new TextRenderer("Inconsolata-Bold.ttf", 20);
-    fancy_text = new TextRenderer("BreeSerif-Regular.ttf", 20);
+    fancy_text = new TextRenderer("BreeSerif-Regular.ttf", 18);
     for (int i = 32; i <= 126; ++i){
         all_chars += i;
     }
@@ -190,8 +190,9 @@ void GameView::update(){
     GLuint paint_texture = current_layer.getDiffuse();
     current_paint->attachTexture(paint_texture);
     current_paint->setPixelCoordinates(20, 220, 120, 320);
-    fancy_text->print(20, 180, "Paint: M");
-    fancy_text->print(20, 200, "Erase: N");
+    fancy_text->print(20, 160, "Paint: M");
+    fancy_text->print(20, 180, "Erase: N");
+    fancy_text->print(20, 200, "Layers: 1-6");
     fancy_text->print(30, 230, "%d", current_layer.getLayerNumber());
 
     glBindBuffer(GL_UNIFORM_BUFFER, mouse_ubo);
