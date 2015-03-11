@@ -4,11 +4,37 @@ TexturePainter::TexturePainter() : TexturePainter(0) {}
 
 TexturePainter::TexturePainter(GLuint texture){
     brush.bitmap = new GLubyte[16];
-    for (int i = 0; i < 16; ++i){
-        brush.bitmap[i] = (rand() % 16) * 16;
-    }
+
+    brush.bitmap[0] = 0;
+    brush.bitmap[1] = 255;
+    brush.bitmap[2] = 255;
+    brush.bitmap[3] = 0;
+
+    brush.bitmap[4] = 255;
+    brush.bitmap[5] = 0;
+    brush.bitmap[6] = 0;
+    brush.bitmap[7] = 255;
+
+    brush.bitmap[8] = 255;
+    brush.bitmap[9] = 0;
+    brush.bitmap[10] = 0;
+    brush.bitmap[11] = 255;
+
+    brush.bitmap[12] = 0;
+    brush.bitmap[13] = 255;
+    brush.bitmap[14] = 255;
+    brush.bitmap[15] = 0;
+
     brush.width = 4;
     brush.height = 4;
+
+    Debug::info("Initial brush:\n");
+    for (int x = 0; x < 4; ++x){
+        for (int y = 0; y < 4; ++y){
+            printf("%d ", brush.bitmap[x + 4*y]);
+        }
+        printf("\n");
+    }
 
     setTexture(texture);
 }
@@ -19,7 +45,7 @@ GLuint TexturePainter::getTexture(){
 
 void TexturePainter::setTexture(GLuint texture){
     this->texture = texture;
-    texture_bytes = TextureLoader::getBytesFromTexture(texture);
+    texture_bytes = TextureLoader::getBytesFromTexture(texture, GL_RGBA);
 }
 
 char TexturePainter::getChannel(){
@@ -50,10 +76,15 @@ void TexturePainter::paint(int x, int y, Brush::Mode mode){
     }
 
     int brush_index = 0;
+    Debug::info("Paint brush:\n");
     for (int brush_x = upper_left_x; brush_x < lower_right_x; ++brush_x){
         for (int brush_y = upper_left_y; brush_y < lower_right_y; ++brush_y){
             int value = brush.bitmap[brush_index];
             brush_index++;
+            printf("%d ", value);
+            if (brush_index % 4 == 0 && brush_index != 0){
+                printf("\n");
+            }
 
             int index = getIndex(brush_x, brush_y, width);
             int new_value = 0;

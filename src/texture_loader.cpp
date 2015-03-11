@@ -118,14 +118,14 @@ GLuint TextureLoader::loadTextureFromPixel(std::string id, GLfloat red, GLfloat 
     return loadTextureFromPixel(id, pixel);
 }
 
-GLubyte* TextureLoader::getBytesFromTexture(GLuint texture_id){
+GLubyte* TextureLoader::getBytesFromTexture(GLuint texture_id, GLuint format){
     int width = getTextureWidth(texture_id);
     int height = getTextureHeight(texture_id);
 
     GLubyte* image = new GLubyte[4 * width * height];
 
     glBindTexture(GL_TEXTURE_2D, texture_id);
-    glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
+    glGetTexImage(GL_TEXTURE_2D, 0, format, GL_UNSIGNED_BYTE, image);
 
     return image;
 }

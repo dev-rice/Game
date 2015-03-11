@@ -40,7 +40,7 @@ public:
     static GLuint loadTextureFromPixel(std::string id, glm::vec4 pixel);
     static GLuint loadTextureFromPixel(std::string id, GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
 
-    static GLubyte* getBytesFromTexture(GLuint);
+    static GLubyte* getBytesFromTexture(GLuint texture_id, GLuint format);
     static GLuint getTextureWidth(GLuint texture_id);
     static GLuint getTextureHeight(GLuint texture_id);
 
