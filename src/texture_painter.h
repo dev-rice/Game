@@ -24,6 +24,7 @@
 // Temporary
 struct Brush{
     GLubyte* bitmap;
+    int width, height;
     enum Mode {PAINT, ERASE};
 };
 
