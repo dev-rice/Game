@@ -3,32 +3,10 @@
 TexturePainter::TexturePainter() : TexturePainter(0) {}
 
 TexturePainter::TexturePainter(GLuint texture){
-    brush.bitmap = new GLubyte[16];
-
-    brush.bitmap[0] = 0;
-    brush.bitmap[1] = 255;
-    brush.bitmap[2] = 255;
-    brush.bitmap[3] = 0;
-
-    brush.bitmap[4] = 255;
-    brush.bitmap[5] = 0;
-    brush.bitmap[6] = 0;
-    brush.bitmap[7] = 255;
-
-    brush.bitmap[8] = 255;
-    brush.bitmap[9] = 0;
-    brush.bitmap[10] = 0;
-    brush.bitmap[11] = 255;
-
-    brush.bitmap[12] = 0;
-    brush.bitmap[13] = 255;
-    brush.bitmap[14] = 255;
-    brush.bitmap[15] = 0;
-
-    brush.width = 4;
-    brush.height = 4;
-
-
+    GLuint brush_texture = TextureLoader::loadTextureFromFile("res/textures/test_brush.png", GL_LINEAR);
+    brush.bitmap = TextureLoader::getBytesFromTexture(brush_texture, GL_RED);
+    brush.width = TextureLoader::getTextureWidth(brush_texture);
+    brush.height = TextureLoader::getTextureHeight(brush_texture);
 
     setTexture(texture);
 }
@@ -69,16 +47,12 @@ void TexturePainter::paint(int x, int y, Brush::Mode mode){
         upper_left_y += 1;
     }
 
-    Debug::info("width = %d\n", lower_right_x - upper_left_x);
-    Debug::info("height = %d\n", lower_right_y - upper_left_y);
-
     int brush_index = 0;
-    Debug::info("Paint brush:\n");
     for (int brush_x = upper_left_x; brush_x <= lower_right_x; ++brush_x){
         for (int brush_y = upper_left_y; brush_y <= lower_right_y; ++brush_y){
             int value = brush.bitmap[brush_index];
             brush_index++;
-            
+
             int index = getIndex(brush_x, brush_y, width);
             int new_value = 0;
             if (mode == Brush::Mode::PAINT){
