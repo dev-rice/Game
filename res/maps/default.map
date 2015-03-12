@@ -44,8 +44,8 @@ g 0 0 r grass.png
 
 g 1 0 r bricks.png
 g 2 0 g stone.png
-g 3 0 b glacier.png
+g 6 0 b glacier.png
 
 g 4 1 r dirt.png
 g 5 1 g rough_ground.png
-g 6 1 b tile.png
+g 3 1 b tile.png
