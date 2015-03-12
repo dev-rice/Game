@@ -63,12 +63,10 @@ void TexturePainter::paint(int x, int y, Brush::Mode mode){
     int lower_right_y = y + (brush.height / 2);
 
     if (brush.width % 2 == 0){
-        upper_left_x -= 1;
-        lower_right_x -= 1;
+        upper_left_x += 1;
     }
     if (brush.height % 2 == 0){
-        upper_left_y -= 1;
-        lower_right_y -= 1;
+        upper_left_y += 1;
     }
 
     Debug::info("width = %d\n", lower_right_x - upper_left_x);
@@ -76,11 +74,11 @@ void TexturePainter::paint(int x, int y, Brush::Mode mode){
 
     int brush_index = 0;
     Debug::info("Paint brush:\n");
-    for (int brush_x = upper_left_x; brush_x < lower_right_x; ++brush_x){
-        for (int brush_y = upper_left_y; brush_y < lower_right_y; ++brush_y){
+    for (int brush_x = upper_left_x; brush_x <= lower_right_x; ++brush_x){
+        for (int brush_y = upper_left_y; brush_y <= lower_right_y; ++brush_y){
             int value = brush.bitmap[brush_index];
             brush_index++;
-
+            
             int index = getIndex(brush_x, brush_y, width);
             int new_value = 0;
             if (mode == Brush::Mode::PAINT){
