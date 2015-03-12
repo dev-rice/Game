@@ -145,3 +145,37 @@ GLuint TextureLoader::getTextureHeight(GLuint texture_id){
     glGetTexLevelParameteriv(GL_TEXTURE_2D, miplevel, GL_TEXTURE_HEIGHT, &height);
     return height;
 }
+
+void TextureLoader::saveTextureToFile(GLuint texture_id, GLuint format, std::string filename){
+    int channels = 0;
+    switch(format){
+        case GL_RED:
+            channels = 1;
+            break;
+        case GL_RGB:
+            channels = 3;
+            break;
+        case GL_RGBA:
+            channels = 4;
+            break;
+        default:
+            Debug::error("Image format %d is not supported.\n");
+            return;
+            break;
+
+    }
+    int width = getTextureWidth(texture_id);
+    int height = getTextureHeight(texture_id);
+    GLubyte* image = new GLubyte[channels * width * height];
+
+    glBindTexture(GL_TEXTURE_2D, texture_id);
+    glGetTexImage(GL_TEXTURE_2D, 0, format, GL_UNSIGNED_BYTE, image);
+
+    int save_result = SOIL_save_image(filename.c_str(), SOIL_SAVE_TYPE_BMP, width, height, channels, image);
+    if (!save_result){
+        Debug::error("Error saving %s.\n", filename.c_str());
+    }
+
+    delete[] image;
+    image = NULL;
+}

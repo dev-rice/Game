@@ -139,3 +139,40 @@ void LayeredTextures::swapLayers(GLuint layer1, GLuint layer2){
     texture_layers[layer1].setLayerNumber(layer1);
     texture_layers[layer2].setLayerNumber(layer2);
 }
+
+std::string LayeredTextures::saveData(std::string name){
+    // Write the splatmaps out to files
+    std::vector<std::string> splatmap_names;
+    for (GLuint& splatmap : unique_splatmaps){
+        std::string temp_name = name + "_splat_" + std::to_string(splatmap) + ".png";
+        splatmap_names.push_back(temp_name);
+        TextureLoader::saveTextureToFile(splatmap, GL_RGBA, temp_name);
+    }
+
+    // Write the diffuse texture layers out to files
+    std::vector<std::string> diffuse_names;
+    for (TextureLayer& layer : texture_layers){
+        GLuint diff_id = layer.getDiffuse();
+        std::string temp_name = name + "_diff_" + std::to_string(diff_id) + ".png";
+        diffuse_names.push_back(temp_name);
+        TextureLoader::saveTextureToFile(diff_id, GL_RGBA, temp_name);
+    }
+
+    // Generate a string based on the map file spec
+    std::string map_output = "";
+
+    for (const std::string& splatmap_name : splatmap_names){
+        map_output += "s " + splatmap_name + "\n";
+    }
+
+    int i = 0;
+    for (TextureLayer& layer : texture_layers){
+        map_output += "g " + std::to_string(layer.getLayerNumber()) + " " +
+            std::to_string(layer.getSplatmap()) + " " +
+            TextureLayer::getCharFromChannelInt(layer.getChannel()) + " " +
+            diffuse_names[i] + "\n";
+        i++;
+    }
+
+    return map_output;
+}

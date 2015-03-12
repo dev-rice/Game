@@ -147,6 +147,13 @@ void DebugConsole::parseInput(){
 
             }
         }
+    } else if (tokens[0] == "save"){
+        if (tokens[1] == "layer"){
+            if (tokens.size() > 2){
+                std::string output = level->getTerrain()->getLayeredTextures()->saveData(tokens[2]);
+                Debug::info("%s", output.c_str());              
+            }
+        }
     } else {
         Debug::error("Unknown command: '%s'\n", input_buffer.c_str());
     }

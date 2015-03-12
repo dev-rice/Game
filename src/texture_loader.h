@@ -44,6 +44,8 @@ public:
     static GLuint getTextureWidth(GLuint texture_id);
     static GLuint getTextureHeight(GLuint texture_id);
 
+    static void saveTextureToFile(GLuint texture_id, GLuint format, std::string filename);
+
 private:
 
     static std::map<std::string, GLuint> loaded_textures;
