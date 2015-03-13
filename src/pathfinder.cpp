@@ -25,7 +25,7 @@ void PathFinder::allocateArray(Terrain* ground){
 }
 
 std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, float start_x, float start_y, float target_x, float target_y, float radius){
-
+	Debug::info("Finding path.\n");
 	// No A* search if there is a straight line from start to target
 	if( canPathOnLine(ground, start_x, start_y, target_x, target_y, radius) ){
 		std::vector<glm::vec3> temp;
@@ -166,23 +166,28 @@ std::vector<glm::vec3> PathFinder::reconstruct_path(Terrain *ground, std::unorde
 	Node* previous = 0;
 
 	for(int i = 0; i < temp.size(); ++i){
-
 		// Get the current node
 		current = temp[i];
 
 		// see if we can path between the anchor and the current
-		bool line_between = i == 0 || canPathOnLine(ground, anchor->x, anchor->y, current->x, current->y, radius);
+		bool line_between = (i == 0) || (canPathOnLine(ground, anchor->x, anchor->y, current->x, current->y, radius));
 
 		if(line_between){
 			previous = current;
 		} else {
 			final.insert(final.begin(), glm::vec3(previous->x, 0.0f, previous->y));
 			anchor = previous;
-			i--;
+
+			#warning Find out why sometimes there is not a line between anchor and current
+			// ensure there is a line between the anchor and current (sanity check)
+			bool line_anchor_current = canPathOnLine(ground, anchor->x, anchor->y, current->x, current->y, radius);
+			if (line_anchor_current){
+				i--;
+			} else {
+				Debug::error("Error reconstructing path (prevented infinite loop).\n");
+			}
 		}
 	}
-
-
 
 	return final;
 }
@@ -264,7 +269,7 @@ bool PathFinder::checkCircle(Terrain* ground, int x0, int y0, int radius){
     int y = radius;
 
     bool radius_path = true;
-	
+
     radius_path &= ground->canPath(x0, y0 + radius);
     radius_path &= ground->canPath(x0, y0 - radius);
     radius_path &= ground->canPath(x0 + radius, y0);
