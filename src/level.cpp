@@ -416,6 +416,8 @@ void Level::loadLevel(const char* filename){
 
     }
 
+    ground->fillSplatmaps();
+
     fclose(ifile);
 }
 

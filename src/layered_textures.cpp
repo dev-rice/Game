@@ -176,3 +176,7 @@ std::string LayeredTextures::saveData(std::string name){
 
     return map_output;
 }
+
+bool LayeredTextures::needsSplatmaps(){
+    return num_splatmaps > unique_splatmaps.size();
+}

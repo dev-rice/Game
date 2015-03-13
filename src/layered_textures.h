@@ -29,6 +29,8 @@ public:
 
     void swapLayers(GLuint layer1, GLuint layer2);
 
+    bool needsSplatmaps();
+
     GLuint getSplatmap(int index);
     GLuint getTexture(GLuint splatmap, char channel);
 

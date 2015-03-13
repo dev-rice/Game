@@ -33,6 +33,7 @@ public:
 
     void addSplatmap(GLuint splat);
     void addDiffuse(GLuint diff, GLuint splat, int layer_num, char channel);
+    void fillSplatmaps();
 
     void printPathing();
 

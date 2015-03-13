@@ -459,3 +459,13 @@ void Terrain::setPaintLayer(GLuint layer){
     texture_painter->setChannel(channel);
     texture_painter->setTexture(splatmap);
 }
+
+void Terrain::fillSplatmaps(){
+    int i = 0;
+    while(layered_textures->needsSplatmaps()){
+        std::string id = "_splat" + std::to_string(i);
+        GLuint blank_splat = TextureLoader::loadTextureFromPixel(id, width, depth, 0.0f, 0.0f, 0.0f, 1.0f);
+        layered_textures->addSplatmap(blank_splat);
+        ++i;
+    }
+}
