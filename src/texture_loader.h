@@ -51,6 +51,7 @@ public:
     static GLuint getTextureHeight(GLuint texture_id);
 
     static void saveTextureToFile(GLuint texture_id, GLuint format, std::string filename);
+    static void saveTextureBytesToFile(GLubyte* data, GLuint width, GLuint height, GLuint channels, std::string filename);
 
 private:
 

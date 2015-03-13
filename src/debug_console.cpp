@@ -151,7 +151,12 @@ void DebugConsole::parseInput(){
         if (tokens[1] == "layer"){
             if (tokens.size() > 2){
                 std::string output = level->getTerrain()->getLayeredTextures()->saveData(tokens[2]);
-                Debug::info("%s", output.c_str());              
+                Debug::info("%s", output.c_str());
+            }
+        } else {
+            if (tokens.size() > 1){
+                std::string output = level->getTerrain()->saveData(tokens[1]);
+                Debug::info("%s", output.c_str());
             }
         }
     } else {

@@ -16,6 +16,8 @@
 Terrain::Terrain(GLuint shader_program, std::string heightmap_filename, float amplification)
     : Drawable() {
 
+    this->amplification = amplification;
+
     layered_textures = new LayeredTextures(7);
 
     // This is where generate the new mesh and override the one passed in by
@@ -468,4 +470,28 @@ void Terrain::fillSplatmaps(){
         layered_textures->addSplatmap(blank_splat);
         ++i;
     }
+}
+
+std::string Terrain::saveData(std::string name){
+    std::string output = "";
+
+    GLubyte* image_data = renderHeightmapAsImage();
+    std::string heightmap_name = name + "_heightmap.png";
+    TextureLoader::saveTextureBytesToFile(image_data, width, depth, 1, heightmap_name);
+    delete[] image_data;
+    image_data = NULL;
+
+    output += "h " + heightmap_name + "\n";
+    output += layered_textures->saveData(name);
+
+    return output;
+}
+
+GLubyte* Terrain::renderHeightmapAsImage(){
+    GLubyte* data = new GLubyte[width * depth];
+    for (int i = 0; i < width * depth; i++){
+        int height = (vertices[i].position.y / amplification) * 255;
+        data[i] = height;
+    }
+    return data;
 }

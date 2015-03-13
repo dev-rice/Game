@@ -46,12 +46,16 @@ public:
     TextureLayer getCurrentLayer();
     void setPaintLayer(GLuint layer);
 
+    std::string saveData(std::string name);
+
     LayeredTextures* getLayeredTextures();
     TexturePainter* getTexturePainter();
 
 private:
 
     void updateUniformData();
+
+    GLubyte* renderHeightmapAsImage();
 
     void initializeBaseMesh(Heightmap&);
     Mesh* generateMesh(std::string filename, float);
@@ -70,11 +74,11 @@ private:
     int start_x;
     int start_z;
     float max_height;
+    float amplification;
 
     LayeredTextures* layered_textures;
 
     TexturePainter* texture_painter;
-
 
 };
 

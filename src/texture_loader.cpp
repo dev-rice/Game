@@ -216,11 +216,15 @@ void TextureLoader::saveTextureToFile(GLuint texture_id, GLuint format, std::str
     glBindTexture(GL_TEXTURE_2D, texture_id);
     glGetTexImage(GL_TEXTURE_2D, 0, format, GL_UNSIGNED_BYTE, image);
 
-    int save_result = SOIL_save_image(filename.c_str(), SOIL_SAVE_TYPE_BMP, width, height, channels, image);
-    if (!save_result){
-        Debug::error("Error saving %s.\n", filename.c_str());
-    }
+    saveTextureBytesToFile(image, width, height, channels, filename);
 
     delete[] image;
     image = NULL;
+}
+
+void TextureLoader::saveTextureBytesToFile(GLubyte* data, GLuint width, GLuint height, GLuint channels, std::string filename){
+    int save_result = SOIL_save_image(filename.c_str(), SOIL_SAVE_TYPE_BMP, width, height, channels, data);
+    if (!save_result){
+        Debug::error("Error saving %s.\n", filename.c_str());
+    }
 }
