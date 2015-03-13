@@ -10,6 +10,7 @@ struct Light {
 
 const int NUM_LIGHTS = 3;
 const int NUM_TEXTURES = 7;
+const bool SPLAT_DEBUG = true;
 
 in vec2 Texcoord;
 in vec2 Splatcoord;
@@ -280,6 +281,8 @@ void main() {
 
     if (NORMAL_DEBUG){
         outColor = vec4(map_surface_normal, 1.0);
+    } else if (SPLAT_DEBUG) {
+        outColor = texture(unique_splatmaps[splatmaps[0]], Splatcoord);
     } else {
         outColor = texel;
     }

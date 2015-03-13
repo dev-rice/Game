@@ -427,7 +427,6 @@ void Terrain::addSplatmap(GLuint splat){
         Debug::error("Splatmap dimensions do not agree with heightmap dimensions.\n");
         GLuint blank_splat = TextureLoader::loadTextureFromPixel(std::to_string(splat), width, depth, 0.0f, 0.0f, 0.0f, 1.0f);
         layered_textures->addSplatmap(blank_splat);
-        TextureLoader::saveTextureToFile(blank_splat, GL_RGBA, "out.png");
     }
 }
 
