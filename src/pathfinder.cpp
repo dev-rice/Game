@@ -25,7 +25,6 @@ void PathFinder::allocateArray(Terrain* ground){
 }
 
 std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, float start_x, float start_y, float target_x, float target_y, float radius){
-	Debug::info("Finding path.\n");
 	// No A* search if there is a straight line from start to target
 	if( canPathOnLine(ground, start_x, start_y, target_x, target_y, radius) ){
 		std::vector<glm::vec3> temp;

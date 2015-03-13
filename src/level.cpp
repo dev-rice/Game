@@ -458,7 +458,7 @@ void Level::issueOrder(Playable::Order order, glm::vec3 target, bool should_enqu
             targeted_unit = units[i];
         }
     }
-    Debug::info("Selected units size: %d\n", selected_units.size());
+    // Debug::info("Selected units size: %d\n", selected_units.size());
 
     // If it's only one unit
     float x_center, z_center, smallest_radius;
@@ -519,7 +519,7 @@ void Level::issueOrder(Playable::Order order, glm::vec3 target, bool should_enqu
 
     // End logging and report
     float delta_time = GameClock::getInstance()->getCurrentTime() - start_time;
-    Debug::info("Took %.2f seconds to find the path.\n", delta_time);
+    // Debug::info("Took %.2f seconds to find the path.\n", delta_time);
 
     // Issue the appropriate order
     for(int i = 0; i < selected_units.size(); ++i){
