@@ -454,6 +454,8 @@ void Terrain::setPaintLayer(GLuint layer){
     char channel = TextureLayer::getCharFromChannelInt(texture_layer.getChannel());
     GLuint splatmap = layered_textures->getSplatmap(texture_layer.getSplatmap());
 
+    Debug::info("Setting paint layer splatmap to %d.\n", splatmap);
+
     texture_painter->setChannel(channel);
     texture_painter->setTexture(splatmap);
 }

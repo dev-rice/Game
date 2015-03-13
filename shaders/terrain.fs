@@ -10,7 +10,6 @@ struct Light {
 
 const int NUM_LIGHTS = 3;
 const int NUM_TEXTURES = 7;
-const bool SPLAT_DEBUG = true;
 
 in vec2 Texcoord;
 in vec2 Splatcoord;
@@ -47,6 +46,7 @@ layout(std140) uniform ProfileSettings {
 };
 
 const bool NORMAL_DEBUG = false;
+const bool SPLAT_DEBUG = false;
 
 // Range: 0 to 4
 // 0 is sharp

@@ -33,7 +33,6 @@ public:
     static GLuint loadRed();
 
     static GLuint loadTextureFromBytes(GLubyte* data, GLuint width, GLuint height, GLuint filter);
-    static GLuint loadTextureFromFloats(float* data, GLuint width, GLuint height, GLuint filter);
 
     static GLuint loadTextureFromFile(std::string, GLuint);
 

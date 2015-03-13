@@ -54,28 +54,6 @@ GLuint TextureLoader::loadTextureFromBytes(GLubyte* data, GLuint width, GLuint h
     return texture;
 }
 
-GLuint TextureLoader::loadTextureFromFloats(float* data, GLuint width, GLuint height, GLuint filter){
-    GLuint texture;
-    // Set the active texture
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
-                 GL_FLOAT, data);
-
-    // Set the texture wrapping to repeat
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    // Do nearest interpolation for scaling the image up and down.
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 4.0f);
-    // Mipmaps increase efficiency or something
-    glGenerateMipmap(GL_TEXTURE_2D);
-
-    return texture;
-}
-
 GLuint TextureLoader::loadTextureFromFile(std::string filename, GLuint filter){
     GLuint texture;
 
@@ -121,8 +99,13 @@ GLuint TextureLoader::loadTextureFromPixel(std::string id, glm::vec4 pixel){
     if (loaded_textures.find(id) != loaded_textures.end()){
         texture = loaded_textures[id];
     } else {
-        float* data = glm::value_ptr(pixel);
-        texture = loadTextureFromFloats(data, 1, 1, GL_NEAREST);
+        GLubyte* data = new GLubyte[4];
+        data[0] = pixel.x * 255;
+        data[1] = pixel.y * 255;
+        data[2] = pixel.z * 255;
+        data[3] = pixel.w * 255;
+
+        texture = loadTextureFromBytes(data, 1, 1, GL_NEAREST);
 
         TextureLoader::loaded_textures[id] = texture;
     }
@@ -159,15 +142,15 @@ GLuint TextureLoader::loadTextureFromPixel(std::string id, GLuint width, GLuint 
     if (loaded_textures.find(id) != loaded_textures.end()){
         texture = loaded_textures[id];
     } else {
-        float* data = new float[4*width*height];
+        GLubyte* data = new GLubyte[4*width*height];
         for (int i = 0; i < 4 * width * height; i += 4){
-            data[i] = pixel.x;
-            data[i + 1] = pixel.y;
-            data[i + 2] = pixel.z;
-            data[i + 3] = pixel.w;
+            data[i] = pixel.x * 255;
+            data[i + 1] = pixel.y * 255;
+            data[i + 2] = pixel.z * 255;
+            data[i + 3] = pixel.w * 255;
         }
 
-        texture = loadTextureFromFloats(data, width, height, GL_NEAREST);
+        texture = loadTextureFromBytes(data, width, height, GL_NEAREST);
 
         TextureLoader::loaded_textures[id] = texture;
     }
