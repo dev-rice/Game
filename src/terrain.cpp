@@ -417,7 +417,18 @@ void Terrain::setTextureLocations(){
 }
 
 void Terrain::addSplatmap(GLuint splat){
-    layered_textures->addSplatmap(splat);
+    // Check the dimensions of the splatmap and ensure that they are the
+    // same as the heightmap's.
+    GLuint splat_width = TextureLoader::getTextureWidth(splat);
+    GLuint splat_height = TextureLoader::getTextureHeight(splat);
+    if (splat_width == this->width && splat_height == depth){
+        layered_textures->addSplatmap(splat);
+    } else {
+        Debug::error("Splatmap dimensions do not agree with heightmap dimensions.\n");
+        GLuint blank_splat = TextureLoader::loadTextureFromPixel(std::to_string(splat), width, depth, 0.0f, 0.0f, 0.0f, 1.0f);
+        layered_textures->addSplatmap(blank_splat);
+        TextureLoader::saveTextureToFile(blank_splat, GL_RGBA, "out.png");
+    }
 }
 
 void Terrain::addDiffuse(GLuint diff, GLuint splat, int layer_num, char channel) {

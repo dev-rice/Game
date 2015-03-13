@@ -32,6 +32,9 @@ void TexturePainter::paint(int x, int y, Brush::Mode mode){
     int width = TextureLoader::getTextureWidth(texture);
     int height = TextureLoader::getTextureHeight(texture);
 
+    Debug::info("width = %d\n", width);
+    Debug::info("height = %d\n", height);
+
     int channel_int = TextureLayer::getIntFromChannelChar(channel);
 
     int upper_left_x = x - (brush.width / 2);

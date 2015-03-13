@@ -32,6 +32,50 @@ GLuint TextureLoader::loadRed(){
     return TextureLoader::loadTextureFromPixel("red", red_pixel);
 }
 
+GLuint TextureLoader::loadTextureFromBytes(GLubyte* data, GLuint width, GLuint height, GLuint filter){
+    GLuint texture;
+    // Set the active texture
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, data);
+
+    // Set the texture wrapping to repeat
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    // Do nearest interpolation for scaling the image up and down.
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 4.0f);
+    // Mipmaps increase efficiency or something
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    return texture;
+}
+
+GLuint TextureLoader::loadTextureFromFloats(float* data, GLuint width, GLuint height, GLuint filter){
+    GLuint texture;
+    // Set the active texture
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
+                 GL_FLOAT, data);
+
+    // Set the texture wrapping to repeat
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    // Do nearest interpolation for scaling the image up and down.
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 4.0f);
+    // Mipmaps increase efficiency or something
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    return texture;
+}
+
 GLuint TextureLoader::loadTextureFromFile(std::string filename, GLuint filter){
     GLuint texture;
 
@@ -40,28 +84,12 @@ GLuint TextureLoader::loadTextureFromFile(std::string filename, GLuint filter){
     if (loaded_textures.find(id) != loaded_textures.end()){
         texture = loaded_textures[id];
     } else{
-        glGenTextures(1, &texture);
 
-        // Load the texture
-        int width, height;
-        unsigned char* image;
-        // Set the active texture
-        glBindTexture(GL_TEXTURE_2D, texture);
         // Load the image
-        image = SOIL_load_image(filename.c_str(), &width, &height, 0, SOIL_LOAD_RGBA);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
-                     GL_UNSIGNED_BYTE, image);
+        int width, height;
+        GLubyte* image = SOIL_load_image(filename.c_str(), &width, &height, 0, SOIL_LOAD_RGBA);
 
-        // Set the texture wrapping to repeat
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        // Do nearest interpolation for scaling the image up and down.
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
-        // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 4.0f);
-        // Mipmaps increase efficiency or something
-        glGenerateMipmap(GL_TEXTURE_2D);
+        texture = loadTextureFromBytes(image, width, height, filter);
         SOIL_free_image_data(image);
         TextureLoader::loaded_textures[id] = texture;
     }
@@ -93,20 +121,9 @@ GLuint TextureLoader::loadTextureFromPixel(std::string id, glm::vec4 pixel){
     if (loaded_textures.find(id) != loaded_textures.end()){
         texture = loaded_textures[id];
     } else {
-        glGenTextures(1, &texture);
+        float* data = glm::value_ptr(pixel);
+        texture = loadTextureFromFloats(data, 1, 1, GL_NEAREST);
 
-        // Set the active texture
-        glBindTexture(GL_TEXTURE_2D, texture);
-
-        // Load the image
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA,
-                     GL_FLOAT, glm::value_ptr(pixel));
-        // Set the texture wrapping to repeat
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        // Do nearest interpolation for scaling the image up and down.
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         TextureLoader::loaded_textures[id] = texture;
     }
 
@@ -116,6 +133,51 @@ GLuint TextureLoader::loadTextureFromPixel(std::string id, glm::vec4 pixel){
 GLuint TextureLoader::loadTextureFromPixel(std::string id, GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha){
     glm::vec4 pixel = glm::vec4(red, green, blue, alpha);
     return loadTextureFromPixel(id, pixel);
+}
+
+GLuint TextureLoader::loadTextureFromPixel(GLuint width, GLuint height, glm::vec4 pixel){
+    // Generate id using the color values
+    std::string id = "";
+    id += std::to_string(width);
+    id += std::to_string(height);
+    id += std::to_string(pixel.x);
+    id += std::to_string(pixel.y);
+    id += std::to_string(pixel.z);
+    id += std::to_string(pixel.w);
+
+    return loadTextureFromPixel(id, width, height, pixel);
+}
+
+GLuint TextureLoader::loadTextureFromPixel(GLuint width, GLuint height, GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha){
+    glm::vec4 pixel = glm::vec4(red, green, blue, alpha);
+    return loadTextureFromPixel(width, height, pixel);
+}
+
+GLuint TextureLoader::loadTextureFromPixel(std::string id, GLuint width, GLuint height, glm::vec4 pixel){
+    GLuint texture;
+
+    if (loaded_textures.find(id) != loaded_textures.end()){
+        texture = loaded_textures[id];
+    } else {
+        float* data = new float[4*width*height];
+        for (int i = 0; i < 4 * width * height; i += 4){
+            data[i] = pixel.x;
+            data[i + 1] = pixel.y;
+            data[i + 2] = pixel.z;
+            data[i + 3] = pixel.w;
+        }
+
+        texture = loadTextureFromFloats(data, width, height, GL_NEAREST);
+
+        TextureLoader::loaded_textures[id] = texture;
+    }
+
+    return texture;
+}
+
+GLuint TextureLoader::loadTextureFromPixel(std::string id, GLuint width, GLuint height, GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha){
+    glm::vec4 pixel = glm::vec4(red, green, blue, alpha);
+    return loadTextureFromPixel(id, width, height, pixel);
 }
 
 GLubyte* TextureLoader::getBytesFromTexture(GLuint texture_id, GLuint format){
