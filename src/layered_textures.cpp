@@ -144,7 +144,7 @@ std::string LayeredTextures::saveData(std::string name){
     // Write the splatmaps out to files
     std::vector<std::string> splatmap_names;
     for (GLuint& splatmap : unique_splatmaps){
-        std::string temp_name = name + "_splat_" + std::to_string(splatmap) + ".png";
+        std::string temp_name = name + "_splat_" + std::to_string(splatmap) + ".bmp";
         splatmap_names.push_back(temp_name);
         TextureLoader::saveTextureToFile(splatmap, GL_RGBA, temp_name);
     }
@@ -153,7 +153,7 @@ std::string LayeredTextures::saveData(std::string name){
     std::vector<std::string> diffuse_names;
     for (TextureLayer& layer : texture_layers){
         GLuint diff_id = layer.getDiffuse();
-        std::string temp_name = name + "_diff_" + std::to_string(diff_id) + ".png";
+        std::string temp_name = name + "_diff_" + std::to_string(diff_id) + ".bmp";
         diffuse_names.push_back(temp_name);
         TextureLoader::saveTextureToFile(diff_id, GL_RGBA, temp_name);
     }

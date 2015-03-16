@@ -476,7 +476,7 @@ std::string Terrain::saveData(std::string name){
     std::string output = "";
 
     GLubyte* image_data = renderHeightmapAsImage();
-    std::string heightmap_name = name + "_heightmap.png";
+    std::string heightmap_name = name + "_heightmap.bmp";
     TextureLoader::saveTextureBytesToFile(image_data, width, depth, 1, heightmap_name);
     delete[] image_data;
     image_data = NULL;
