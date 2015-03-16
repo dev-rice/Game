@@ -198,12 +198,12 @@ void main() {
 
     float splat_values[NUM_TEXTURES];
     splat_values[0] = 1.0;
-    splat_values[1] = getSplatValue(unique_splatmaps[splatmaps[1]], channels[1]);
-    splat_values[2] = getSplatValue(unique_splatmaps[splatmaps[2]], channels[2]);
-    splat_values[3] = getSplatValue(unique_splatmaps[splatmaps[3]], channels[3]);
-    splat_values[4] = getSplatValue(unique_splatmaps[splatmaps[4]], channels[4]);
-    splat_values[5] = getSplatValue(unique_splatmaps[splatmaps[5]], channels[5]);
-    splat_values[6] = getSplatValue(unique_splatmaps[splatmaps[6]], channels[6]);
+    splat_values[1] = getSplatValue(unique_splatmaps[0], channels[1]);
+    splat_values[2] = getSplatValue(unique_splatmaps[0], channels[2]);
+    splat_values[3] = getSplatValue(unique_splatmaps[0], channels[3]);
+    splat_values[4] = getSplatValue(unique_splatmaps[1], channels[4]);
+    splat_values[5] = getSplatValue(unique_splatmaps[1], channels[5]);
+    splat_values[6] = getSplatValue(unique_splatmaps[1], channels[6]);
 
     vec4 layers[NUM_TEXTURES];
     layers[0] = base;
