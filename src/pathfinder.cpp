@@ -158,8 +158,6 @@ std::vector<glm::vec3> PathFinder::reconstruct_path(Terrain *ground, std::unorde
 		temp.push_back(origin);
 	}
 
-	// Still need bezier smoothing if we want it
-
 	Node* anchor = temp[0];
 	Node* current = 0;
 	Node* previous = 0;
@@ -176,15 +174,7 @@ std::vector<glm::vec3> PathFinder::reconstruct_path(Terrain *ground, std::unorde
 		} else {
 			final.insert(final.begin(), glm::vec3(previous->x, 0.0f, previous->y));
 			anchor = previous;
-
-			#warning Find out why sometimes there is not a line between anchor and current
-			// ensure there is a line between the anchor and current (sanity check)
-			bool line_anchor_current = canPathOnLine(ground, anchor->x, anchor->y, current->x, current->y, radius);
-			if (line_anchor_current){
-				i--;
-			} else {
-				Debug::error("Error reconstructing path (prevented infinite loop).\n");
-			}
+			previous = current;
 		}
 	}
 
