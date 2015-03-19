@@ -39,6 +39,10 @@ layout(std140) uniform Mouse {
     vec3 mouse_point;
 };
 
+layout(std140) uniform UnitData {
+    vec3 unit_pos;
+};
+
 layout(std140) uniform ProfileSettings {
     float lighting;
     float shadows;
@@ -83,7 +87,7 @@ void main() {
     vec4 out_position = proj * world_position;
     gl_Position = out_position;
 
-    fog_dist = length(model_position.xyz - mouse_point);
+    fog_dist = length(model_position.xyz - unit_pos);
 
     // Real directional lighting
     if (lighting_on){
