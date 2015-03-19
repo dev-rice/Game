@@ -17,6 +17,7 @@ in vec3 surface_normal;
 in vec3 camera_to_surface;
 in Light lights[NUM_LIGHTS];
 in vec4 shadow_coord;
+in float fog_dist;
 
 out vec4 outColor;
 
@@ -47,6 +48,7 @@ layout(std140) uniform ProfileSettings {
 
 const bool NORMAL_DEBUG = false;
 const bool SPLAT_DEBUG = false;
+const bool FOG_OF_WAR_ON = false;
 
 // Range: 0 to 4
 // 0 is sharp
@@ -241,6 +243,16 @@ void main() {
         visibility = getShadowFactor();
     } else{
         visibility = 1.0;
+    }
+
+    if (FOG_OF_WAR_ON){
+        // Fade off at 20
+        if (fog_dist > 20.0){
+            float old_visibility = visibility;
+            visibility = 1 / pow((fog_dist - 20), 1);
+            visibility = min(old_visibility, visibility);
+            visibility = max(0.2, visibility);
+        }
     }
 
     vec4 texel;

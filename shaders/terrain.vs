@@ -23,6 +23,7 @@ out vec3 surface_normal;
 out vec3 camera_to_surface;
 out Light lights[NUM_LIGHTS];
 out vec4 shadow_coord;
+out float fog_dist;
 
 layout(std140) uniform GlobalMatrices {
     mat4 view;
@@ -79,7 +80,10 @@ void main() {
     vec4 model_position = model * vec4(scaled_position, 1.0);
     vec4 world_position = view * model_position;
     // Order is important on the multiplication!
-    gl_Position = proj * world_position;
+    vec4 out_position = proj * world_position;
+    gl_Position = out_position;
+
+    fog_dist = length(model_position.xyz - mouse_point);
 
     // Real directional lighting
     if (lighting_on){
