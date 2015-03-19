@@ -42,7 +42,7 @@ s second_splat.png
 
 g 0 0 r grass.png
 
-g 1 0 r bricks.png
+g 1 0 r stone_tile.png
 g 2 0 g stone.png
 g 6 1 b glacier.png
 
