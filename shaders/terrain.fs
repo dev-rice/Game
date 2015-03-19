@@ -163,16 +163,16 @@ float getShadowFactor(){
     return visibility * (1 - (3.0 * shadow_sum / 9.0));
 }
 
-float getSplatValue(sampler2D splatmap, int channel){
+float getSplatValue(vec4 splatmap_values, int channel){
     float splat_value = 0.0;
     if (channel == 1){
-        splat_value = texture(splatmap, Splatcoord).r;
+        splat_value = splatmap_values.r;
     } else if (channel == 2){
-        splat_value = texture(splatmap, Splatcoord).g;
+        splat_value = splatmap_values.g;
     } else if (channel == 3){
-        splat_value = texture(splatmap, Splatcoord).b;
+        splat_value = splatmap_values.b;
     } else {
-        splat_value = texture(splatmap, Splatcoord).r;
+        splat_value = splatmap_values.r;
     }
     return splat_value;
 }
@@ -198,12 +198,12 @@ void main() {
 
     float splat_values[NUM_TEXTURES];
     splat_values[0] = 1.0;
-    splat_values[1] = getSplatValue(unique_splatmaps[0], channels[1]);
-    splat_values[2] = getSplatValue(unique_splatmaps[0], channels[2]);
-    splat_values[3] = getSplatValue(unique_splatmaps[1], channels[3]);
-    splat_values[4] = getSplatValue(unique_splatmaps[1], channels[4]);
-    splat_values[5] = getSplatValue(unique_splatmaps[1], channels[5]);
-    splat_values[6] = getSplatValue(unique_splatmaps[0], channels[6]);
+    splat_values[1] = getSplatValue(texture(unique_splatmaps[splatmaps[1]], Splatcoord), channels[1]);
+    splat_values[2] = getSplatValue(texture(unique_splatmaps[splatmaps[2]], Splatcoord), channels[2]);
+    splat_values[3] = getSplatValue(texture(unique_splatmaps[splatmaps[3]], Splatcoord), channels[3]);
+    splat_values[4] = getSplatValue(texture(unique_splatmaps[splatmaps[4]], Splatcoord), channels[4]);
+    splat_values[5] = getSplatValue(texture(unique_splatmaps[splatmaps[5]], Splatcoord), channels[5]);
+    splat_values[6] = getSplatValue(texture(unique_splatmaps[splatmaps[6]], Splatcoord), channels[6]);
 
     vec4 layers[NUM_TEXTURES];
     layers[0] = base;
