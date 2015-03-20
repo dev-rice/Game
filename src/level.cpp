@@ -52,8 +52,15 @@ Level::Level(const char* filename){
     glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::mat4) * 2, NULL, GL_STREAM_DRAW);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
+    // Create the uniform buffer object.
+    glGenBuffers(1, &unit_ubo);
+    glBindBuffer(GL_UNIFORM_BUFFER, unit_ubo);
+    glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::vec3), NULL, GL_STREAM_DRAW);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
     glBindBufferRange(GL_UNIFORM_BUFFER, 1, camera_ubo, 0, sizeof(glm::mat4) * 2);
     glBindBufferRange(GL_UNIFORM_BUFFER, 2, shadow_ubo, 0, sizeof(glm::mat4) * 2);
+    glBindBufferRange(GL_UNIFORM_BUFFER, 10, unit_ubo, 0, sizeof(glm::vec3));
 
     loadLevel(filename);
 
@@ -170,13 +177,20 @@ void Level::updateGlobalUniforms(){
         glm::value_ptr(proj_matrix));
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
-
     glBindBuffer(GL_UNIFORM_BUFFER, shadow_ubo);
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4),
         glm::value_ptr(depth_view));
     glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4),
         glm::value_ptr(depth_proj));
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+    glm::vec3 unit_pos = units[0]->getPosition();
+    glBindBuffer(GL_UNIFORM_BUFFER, unit_ubo);
+    glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::vec3),
+        glm::value_ptr(unit_pos));
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+
 
 }
 

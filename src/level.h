@@ -100,6 +100,7 @@ private:
 
     GLuint camera_ubo;
     GLuint shadow_ubo;
+    GLuint unit_ubo;
 
 };
 

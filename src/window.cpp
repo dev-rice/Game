@@ -170,3 +170,7 @@ void Window::initializeWindow(){
     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 
 }
+
+void Window::centerMouse(){
+    SDL_WarpMouseInWindow(sdl_window, width / 2, height / 2);
+}

@@ -48,6 +48,10 @@ Mouse::Mouse(): UIDrawable(TextureLoader::loadTextureFromFile("res/textures/curs
 
     // Set the cursor to the pointer by default
     setCursorSprite(Mouse::cursorType::CURSOR);
+
+    // Center the mouse on the screen
+    Window::getInstance()->centerMouse();
+
 }
 
 void Mouse::setCursorSprite(cursorType cursor_type){
@@ -99,6 +103,7 @@ glm::vec2 Mouse::getGLPosition(){
 
 glm::vec2 Mouse::getScreenPosition(){
     int x, y;
+    SDL_PumpEvents();
     SDL_GetMouseState(&x, &y);
     return glm::vec2(x, y);
 }

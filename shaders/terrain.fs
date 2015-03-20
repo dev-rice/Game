@@ -17,6 +17,7 @@ in vec3 surface_normal;
 in vec3 camera_to_surface;
 in Light lights[NUM_LIGHTS];
 in vec4 shadow_coord;
+in float fog_dist;
 
 out vec4 outColor;
 
@@ -47,6 +48,7 @@ layout(std140) uniform ProfileSettings {
 
 const bool NORMAL_DEBUG = false;
 const bool SPLAT_DEBUG = false;
+const bool FOG_OF_WAR_ON = false;
 
 // Range: 0 to 4
 // 0 is sharp
@@ -163,16 +165,16 @@ float getShadowFactor(){
     return visibility * (1 - (3.0 * shadow_sum / 9.0));
 }
 
-float getSplatValue(sampler2D splatmap, int channel){
+float getSplatValue(vec4 splatmap_values, int channel){
     float splat_value = 0.0;
     if (channel == 1){
-        splat_value = texture(splatmap, Splatcoord).r;
+        splat_value = splatmap_values.r;
     } else if (channel == 2){
-        splat_value = texture(splatmap, Splatcoord).g;
+        splat_value = splatmap_values.g;
     } else if (channel == 3){
-        splat_value = texture(splatmap, Splatcoord).b;
+        splat_value = splatmap_values.b;
     } else {
-        splat_value = texture(splatmap, Splatcoord).r;
+        splat_value = splatmap_values.r;
     }
     return splat_value;
 }
@@ -198,12 +200,12 @@ void main() {
 
     float splat_values[NUM_TEXTURES];
     splat_values[0] = 1.0;
-    splat_values[1] = getSplatValue(unique_splatmaps[0], channels[1]);
-    splat_values[2] = getSplatValue(unique_splatmaps[0], channels[2]);
-    splat_values[3] = getSplatValue(unique_splatmaps[1], channels[3]);
-    splat_values[4] = getSplatValue(unique_splatmaps[1], channels[4]);
-    splat_values[5] = getSplatValue(unique_splatmaps[1], channels[5]);
-    splat_values[6] = getSplatValue(unique_splatmaps[0], channels[6]);
+    splat_values[1] = getSplatValue(texture(unique_splatmaps[splatmaps[1]], Splatcoord), channels[1]);
+    splat_values[2] = getSplatValue(texture(unique_splatmaps[splatmaps[2]], Splatcoord), channels[2]);
+    splat_values[3] = getSplatValue(texture(unique_splatmaps[splatmaps[3]], Splatcoord), channels[3]);
+    splat_values[4] = getSplatValue(texture(unique_splatmaps[splatmaps[4]], Splatcoord), channels[4]);
+    splat_values[5] = getSplatValue(texture(unique_splatmaps[splatmaps[5]], Splatcoord), channels[5]);
+    splat_values[6] = getSplatValue(texture(unique_splatmaps[splatmaps[6]], Splatcoord), channels[6]);
 
     vec4 layers[NUM_TEXTURES];
     layers[0] = base;
@@ -214,13 +216,13 @@ void main() {
     layers[5] = texture(diffuse_textures[5], Texcoord);
     layers[6] = texture(diffuse_textures[6], Texcoord);
 
-    base = mix(base, layers[0], splat_values[0]);
-    base = mix(base, layers[1], splat_values[1]);
-    base = mix(base, layers[2], splat_values[2]);
-    base = mix(base, layers[3], splat_values[3]);
-    base = mix(base, layers[4], splat_values[4]);
-    base = mix(base, layers[5], splat_values[5]);
-    base = mix(base, layers[6], splat_values[6]);
+    base = mix(base, mix(base, layers[0], layers[0].a), splat_values[0]);
+    base = mix(base, mix(base, layers[1], layers[1].a), splat_values[1]);
+    base = mix(base, mix(base, layers[2], layers[2].a), splat_values[2]);
+    base = mix(base, mix(base, layers[3], layers[3].a), splat_values[3]);
+    base = mix(base, mix(base, layers[4], layers[4].a), splat_values[4]);
+    base = mix(base, mix(base, layers[5], layers[5].a), splat_values[5]);
+    base = mix(base, mix(base, layers[6], layers[6].a), splat_values[6]);
 
     diffuse = base;
     specular = texture(specular_texture, Texcoord);
@@ -241,6 +243,16 @@ void main() {
         visibility = getShadowFactor();
     } else{
         visibility = 1.0;
+    }
+
+    if (FOG_OF_WAR_ON){
+        // Fade off at 20
+        if (fog_dist > 20.0){
+            float old_visibility = visibility;
+            visibility = 1 / pow((fog_dist - 20), 1);
+            visibility = min(old_visibility, visibility);
+            visibility = max(0.2, visibility);
+        }
     }
 
     vec4 texel;

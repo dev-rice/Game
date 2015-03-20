@@ -52,6 +52,9 @@ void Drawable::setShader(GLuint shader_program){
     GLint mouse_point_location = glGetUniformBlockIndex(shader_program, "Mouse");
     glUniformBlockBinding(shader_program, mouse_point_location, 3);
 
+    GLint unit_data_location = glGetUniformBlockIndex(shader_program, "UnitData");
+    glUniformBlockBinding(shader_program, unit_data_location, 10);
+
     GLint settings_location = glGetUniformBlockIndex(shader_program, "ProfileSettings");
     // Debug::info("settings_location = %d\n", settings_location);
     glUniformBlockBinding(shader_program, settings_location, 4);
