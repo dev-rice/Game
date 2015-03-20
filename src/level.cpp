@@ -456,7 +456,6 @@ void Level::issueOrder(Playable::Order order, glm::vec3 target, bool should_enqu
         float click_distance_from_unit = getDistance(unit_pos.x, unit_pos.z, target.x, target.z);
 
         if(click_distance_from_unit < units[i]->getRadius()){
-            Debug::info("Clicked inside the radius.\n");
             targeted_unit = units[i];
         }
     }
@@ -521,7 +520,7 @@ void Level::issueOrder(Playable::Order order, glm::vec3 target, bool should_enqu
 
     // End logging and report
     float delta_time = GameClock::getInstance()->getCurrentTime() - start_time;
-    // Debug::info("Took %.2f seconds to find the path.\n", delta_time);
+    Debug::info("Took %.2f seconds to find the path.\n", delta_time);
 
     // Issue the appropriate order
     for(int i = 0; i < selected_units.size(); ++i){

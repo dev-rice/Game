@@ -90,7 +90,11 @@ void Playable::updateUniformData(){
 //##################################################################################################
 
 void Playable::receiveOrder(Playable::Order order, glm::vec3 target, bool should_enqueue, std::vector<glm::vec3> path, Playable* targeted_unit){
-    // Error that exists: Pathing is done from current position, not future position. Need to do that.
+
+    Debug::info("Starting receiveOrder...\n");
+
+    // Error that exists: Pathing is done from current position, not future position. Need to fix that.
+
     // Are we targeting another playable?
     bool is_targeting = bool(targeted_unit);
 
@@ -103,19 +107,33 @@ void Playable::receiveOrder(Playable::Order order, glm::vec3 target, bool should
     std::queue<Playable*> temp_target_queue;
 
     // Feed the path and the body orders into the queue
-    for(int i = 0; i < path.size() - 1; ++i){
-        temp_order_queue.push(std::make_tuple(body_order, path[i]));
-        temp_target_queue.push(NULL);
+    int size = path.size();
+
+    for(int i = 0; i < size - 1; ++i){
+        // Protect from 0-length paths
+        if(size > 0){
+            temp_order_queue.push(std::make_tuple(body_order, path[i]));
+            temp_target_queue.push(NULL);
+        }
     }
 
-    // Finalize the queue with the last target
+    // Finalize the queue with the last target and last_order
     temp_order_queue.push(std::make_tuple(last_order, target));
     temp_target_queue.push(targeted_unit);
 
+    printf("Made it past queue reordering!\n");
+
     // If we're not enqueuing the order, we should clear out the old
     if(!should_enqueue){
+
+        // These could theoretically be together, because they should always be
+        // the same length. However, I feel more comfortable with them apart.
+
         while(! order_queue.empty()){
             order_queue.pop();
+        }
+
+        while(!target_queue.empty()){
             target_queue.pop();
         }
     }
@@ -133,6 +151,8 @@ void Playable::receiveOrder(Playable::Order order, glm::vec3 target, bool should
     target_position = position;
     setTargetPositionAndDirection(std::get<1>(order_queue.front()));
     setRotationEuler(rotation.x, target_direction, rotation.z);
+
+    Debug::info("Ended receiveOrder\n");
 
 }
 
