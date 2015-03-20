@@ -121,8 +121,6 @@ void Playable::receiveOrder(Playable::Order order, glm::vec3 target, bool should
     temp_order_queue.push(std::make_tuple(last_order, target));
     temp_target_queue.push(targeted_unit);
 
-    printf("Made it past queue reordering!\n");
-
     // If we're not enqueuing the order, we should clear out the old
     if(!should_enqueue){
 
