@@ -216,13 +216,13 @@ void main() {
     layers[5] = texture(diffuse_textures[5], Texcoord);
     layers[6] = texture(diffuse_textures[6], Texcoord);
 
-    base = mix(base, layers[0], splat_values[0]);
-    base = mix(base, layers[1], splat_values[1]);
-    base = mix(base, layers[2], splat_values[2]);
-    base = mix(base, layers[3], splat_values[3]);
-    base = mix(base, layers[4], splat_values[4]);
-    base = mix(base, layers[5], splat_values[5]);
-    base = mix(base, layers[6], splat_values[6]);
+    base = mix(base, mix(base, layers[0], layers[0].a), splat_values[0]);
+    base = mix(base, mix(base, layers[1], layers[1].a), splat_values[1]);
+    base = mix(base, mix(base, layers[2], layers[2].a), splat_values[2]);
+    base = mix(base, mix(base, layers[3], layers[3].a), splat_values[3]);
+    base = mix(base, mix(base, layers[4], layers[4].a), splat_values[4]);
+    base = mix(base, mix(base, layers[5], layers[5].a), splat_values[5]);
+    base = mix(base, mix(base, layers[6], layers[6].a), splat_values[6]);
 
     diffuse = base;
     specular = texture(specular_texture, Texcoord);
