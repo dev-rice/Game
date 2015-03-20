@@ -32,6 +32,8 @@ public:
     void requestClose();
     bool shouldClose();
 
+    void centerMouse();
+
     void setWidth(int w);
     void setHeight(int h);
     void setFullscreen(bool f);
