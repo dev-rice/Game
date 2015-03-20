@@ -40,7 +40,7 @@ h mountains.png 10.0
 s all_splat.png
 s second_splat.png
 
-g 0 0 r grass.png
+g 0 0 r stylized_grass.png
 
 g 1 0 r stone_tile.png
 g 2 0 g stone.png
