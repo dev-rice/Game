@@ -6,6 +6,7 @@ out vec4 outColor;
 
 uniform sampler2D base_texture;
 uniform vec3 textColor;
+uniform float opacity;
 
 const bool TEXT_DEBUG = false;
 
@@ -17,7 +18,7 @@ void main() {
         outColor = vec4(0.0, 0.0, 0.0, 1.0) + vec4(base.r, base.r, base.r, 0.0) * vec4(textColor, 1.0);
     } else {
         // Regular
-        outColor = vec4(1.0, 1.0, 1.0, base.r) * vec4(textColor, 1.0);
+        outColor = vec4(1.0, 1.0, 1.0, base.r * opacity) * vec4(textColor, 1.0);
     }
 
 }

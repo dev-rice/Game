@@ -113,6 +113,10 @@ int main(int argc, char* argv[]) {
     GLuint splash_texture = TextureLoader::loadTextureFromFile("res/textures/splash_screen.png", GL_LINEAR);
     splash.attachTexture(splash_texture);
     splash.draw();
+
+    TextRenderer loading("CYBERTOOTH.ttf", 40);
+    loading.print(our_window->getWidth() / 2.0f - 80, 0.95 * our_window->getHeight(), "LOADING...");
+
     our_window->display();
 
     // Create the world

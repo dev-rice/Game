@@ -66,4 +66,5 @@ void CharacterDrawable::updateUniformData(){
         uv_offset.x, uv_offset.y);
     glUniform3f(glGetUniformLocation(shader_program, "textColor"),
         text_color.x, text_color.y, text_color.z);
+    UIDrawable::updateUniformData();
 }
