@@ -10,7 +10,7 @@ uniform vec3 textColor;
 const bool TEXT_DEBUG = false;
 
 void main() {
-    vec4 base = texture(base_texture, Texcoord);
+    vec4 base = textureOffset(base_texture, Texcoord, ivec2(-1.0 , -1.0));
 
     if (TEXT_DEBUG){
         // Debug

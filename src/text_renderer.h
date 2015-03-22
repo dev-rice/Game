@@ -27,6 +27,8 @@ public:
     TextRenderer(std::string, GLint);
 
     void print(int, int, const char*, ...);
+    CharacterDrawable* getCharacterBox();
+
 private:
     void drawString(std::string);
     void drawStringInitial(int x, int y, std::string to_draw);

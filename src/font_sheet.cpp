@@ -51,13 +51,11 @@ FontSheet::FontSheet(std::string filename, int pixel_size) {
     zeros = NULL;
 
     // Set the texture wrapping to clamp to edge
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
     // Do nearest interpolation for scaling the image up and down.
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    // Mipmaps increase efficiency or something
-    glGenerateMipmap(GL_TEXTURE_2D);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
     float start_time = GameClock::getInstance()->getCurrentTime();
 
@@ -99,18 +97,9 @@ FontSheet::FontSheet(std::string filename, int pixel_size) {
 
 void FontSheet::renderToBMP(){
     std::string bmp_filename = "/tmp/" + filename + std::to_string(point) + ".bmp";
-    GLubyte* image = new GLubyte[width*height];
 
-    glBindTexture(GL_TEXTURE_2D, texture_id);
-    glGetTexImage(GL_TEXTURE_2D, 0, GL_RED, GL_UNSIGNED_BYTE, image);
+    TextureLoader::saveTextureToFile(texture_id, GL_RED, bmp_filename);
 
-    int save_result = SOIL_save_image(bmp_filename.c_str(), SOIL_SAVE_TYPE_BMP, width, height, 1, image);
-    if (!save_result){
-        Debug::error("Error saving %s.\n", bmp_filename.c_str());
-    }
-
-    delete[] image;
-    image = NULL;
 }
 
 Glyph FontSheet::getGlyph(char glyph_char){

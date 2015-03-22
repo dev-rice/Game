@@ -9,9 +9,8 @@ TextRenderer::TextRenderer(std::string font_filename, GLint point){
     GLuint text_shader = ShaderLoader::loadShaderProgram("shaders/text.vs",
         "shaders/text.fs");
 
-    FontSheet* stylized = new FontSheet(font_filename, point);
-
-    character_box = new CharacterDrawable(text_shader, stylized, point);
+    FontSheet* font_sheet = new FontSheet(font_filename, point);
+    character_box = new CharacterDrawable(text_shader, font_sheet, point);
 
     // From http://upload.wikimedia.org/wikipedia/commons/9/95/Xterm_color_chart.png
     // at bottom of image
@@ -60,8 +59,21 @@ void TextRenderer::drawString(std::string to_draw){
 }
 
 void TextRenderer::drawStringInitial(int x, int y, std::string to_draw){
+    // Disable depth sorting when rendering
+    // particles.
+    // glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+    // glDepthFunc(GL_LEQUAL);
+    // glDepthMask(GL_FALSE);
+
     character_box->setPixelPosition(x, y);
     drawString(to_draw);
+
+    // Re enable depth sorting for everything else
+    // (really should not be here)
+    // glDepthFunc(GL_LESS);
+    // glDepthMask(GL_TRUE);
+    // glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+
 }
 
 void TextRenderer::print(int x, int y, const char* format, ...){
@@ -78,4 +90,8 @@ void TextRenderer::print(int x, int y, const char* format, ...){
 
     delete[] buffer;
     buffer = NULL;
+}
+
+CharacterDrawable* TextRenderer::getCharacterBox(){
+    return character_box;
 }
