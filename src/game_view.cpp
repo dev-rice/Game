@@ -194,9 +194,8 @@ void GameView::update(){
     GLuint paint_texture = current_layer.getDiffuse();
     current_paint->attachTexture(paint_texture);
     current_paint->setPixelCoordinates(20, 220, 120, 320);
-    fancy_text->print(20, 160, "Paint: M");
-    fancy_text->print(20, 180, "Erase: N");
-    fancy_text->print(20, 200, "Layers: 1-6");
+    fancy_text->print(20, 180, "Paint: M");
+    fancy_text->print(20, 200, "Erase: N");
     fancy_text->print(30, 230, "%d", current_layer.getLayerNumber());
 
     glBindBuffer(GL_UNIFORM_BUFFER, mouse_ubo);
@@ -446,18 +445,6 @@ void GameView::handleInput(SDL_Event event){
             } else if ((key_scancode == SDL_SCANCODE_P) && (!printscreen_key_state)){
                 printscreen_key_state = true;
                 window->takeScreenshot();
-            } else if (key_scancode == SDL_SCANCODE_1){
-                level->getTerrain()->setPaintLayer(1);
-            } else if (key_scancode == SDL_SCANCODE_2){
-                level->getTerrain()->setPaintLayer(2);
-            } else if (key_scancode == SDL_SCANCODE_3){
-                level->getTerrain()->setPaintLayer(3);
-            } else if (key_scancode == SDL_SCANCODE_4){
-                level->getTerrain()->setPaintLayer(4);
-            } else if (key_scancode == SDL_SCANCODE_5){
-                level->getTerrain()->setPaintLayer(5);
-            } else if (key_scancode == SDL_SCANCODE_6){
-                level->getTerrain()->setPaintLayer(6);
             }
         break;
 
