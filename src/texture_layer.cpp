@@ -4,6 +4,7 @@ TextureLayer::TextureLayer(){
     diffuse = TextureLoader::loadTextureFromPixel(0.0, 0.0, 0.0, 1.0);
     splatmap = TextureLoader::loadTextureFromPixel(0.0, 0.0, 0.0, 1.0);
     channel = 1;
+    setLayerNumber(0);
 }
 
 TextureLayer::TextureLayer(GLuint diffuse, GLuint splatmap, char channel, int layer_number){

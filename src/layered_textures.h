@@ -37,6 +37,8 @@ public:
     TextureLayer getLayer(GLuint splatmap, char channel);
     TextureLayer getLayer(GLuint layer_number);
 
+    int getNumLayers();
+
     std::string saveData(std::string name);
 
 private:

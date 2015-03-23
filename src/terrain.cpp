@@ -453,11 +453,19 @@ TextureLayer Terrain::getCurrentLayer(){
 void Terrain::setPaintLayer(GLuint layer){
     TextureLayer texture_layer = layered_textures->getLayer(layer);
 
-    char channel = TextureLayer::getCharFromChannelInt(texture_layer.getChannel());
-    GLuint splatmap = layered_textures->getSplatmap(texture_layer.getSplatmap());
+    // Sanity check
+    if (texture_layer.getLayerNumber() == layer && layer != 0){
+        char channel = TextureLayer::getCharFromChannelInt(texture_layer.getChannel());
+        GLuint splatmap = layered_textures->getSplatmap(texture_layer.getSplatmap());
 
-    texture_painter->setChannel(channel);
-    texture_painter->setTexture(splatmap);
+        texture_painter->setChannel(channel);
+        texture_painter->setTexture(splatmap);
+    } else if (layer == 0) {
+        Debug::error("Cannot use base layer as paint layer.\n");
+    } else {
+        Debug::error("Cannot set layer to %d.\n", layer);
+    }
+
 }
 
 void Terrain::fillSplatmaps(){
