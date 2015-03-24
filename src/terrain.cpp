@@ -27,7 +27,8 @@ Terrain::Terrain(GLuint shader_program, std::string heightmap_filename, float am
     // After loading in the heightmap to memory, we can make a terrain mesh
     // based on the data
     float start_time = GameClock::getInstance()->getCurrentTime();
-    mesh = generateMesh(heightmap_filename, amplification);
+    Heightmap heightmap = Heightmap(heightmap_filename, amplification);
+    mesh = generateMesh(heightmap);
     float delta_time = GameClock::getInstance()->getCurrentTime() - start_time;
     Debug::info("Took %f seconds to generate the terrain mesh.\n", delta_time);
 
@@ -272,9 +273,7 @@ void Terrain::initializeBaseMesh(Heightmap& heightmap){
     }
 }
 
-Mesh* Terrain::generateMesh(std::string filename, float amplification){
-    Heightmap heightmap = Heightmap(filename, amplification);
-
+Mesh* Terrain::generateMesh(Heightmap& heightmap){
     width = heightmap.getWidth();
     depth = heightmap.getHeight();
 

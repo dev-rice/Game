@@ -58,7 +58,7 @@ private:
     GLubyte* renderHeightmapAsImage();
 
     void initializeBaseMesh(Heightmap&);
-    Mesh* generateMesh(std::string filename, float);
+    Mesh* generateMesh(Heightmap&);
     int getIndex(int x, int y);
     int getIndex(int x, int y, int width);
 
