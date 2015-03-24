@@ -62,6 +62,7 @@ private:
 
     void initializeBaseMesh(Heightmap&);
     Mesh* generateMesh(Heightmap&);
+    void generatePathingArray();
     int getIndex(int x, int y);
     int getIndex(int x, int y, int width);
 

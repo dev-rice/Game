@@ -36,6 +36,18 @@ Terrain::Terrain(GLuint shader_program, std::string heightmap_filename, float am
     // child class.
     Drawable::load(mesh, shader_program, glm::vec3(0.0f, 0.0f, 0.0f), 1.0f);
 
+    generatePathingArray();
+
+    splatmap_painter = new TexturePainter(0);
+    heightmap_painter = new TexturePainter(heightmap->getTextureId());
+    heightmap_painter->setChannel('r');
+
+    // Debugging the allowed areas
+    // printPathing();
+
+}
+
+void Terrain::generatePathingArray(){
     // Could do bit-packing here but it really doesn't matter
     pathing_array = new bool*[depth];
     for(int i = 0; i < depth; ++i){
@@ -55,14 +67,6 @@ Terrain::Terrain(GLuint shader_program, std::string heightmap_filename, float am
         }
         // printf("\n");
     }
-
-    splatmap_painter = new TexturePainter(0);
-    heightmap_painter = new TexturePainter(heightmap->getTextureId());
-    heightmap_painter->setChannel('r');
-
-    // Debugging the allowed areas
-    // printPathing();
-
 }
 
 void Terrain::paintSplatmap(glm::vec3 mouse_position){
@@ -96,6 +100,8 @@ void Terrain::paintHeightmap(glm::vec3 mouse_position){
 
     // Regenerate the entire mesh! BOO!!!!!
     mesh = generateMesh(*heightmap);
+
+    generatePathingArray();
 
 }
 
