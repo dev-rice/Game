@@ -27,8 +27,8 @@ Terrain::Terrain(GLuint shader_program, std::string heightmap_filename, float am
     // After loading in the heightmap to memory, we can make a terrain mesh
     // based on the data
     float start_time = GameClock::getInstance()->getCurrentTime();
-    Heightmap heightmap = Heightmap(heightmap_filename, amplification);
-    mesh = generateMesh(heightmap);
+    heightmap = new Heightmap(heightmap_filename, amplification);
+    mesh = generateMesh(*heightmap);
     float delta_time = GameClock::getInstance()->getCurrentTime() - start_time;
     Debug::info("Took %f seconds to generate the terrain mesh.\n", delta_time);
 
@@ -56,7 +56,9 @@ Terrain::Terrain(GLuint shader_program, std::string heightmap_filename, float am
         // printf("\n");
     }
 
-    texture_painter = new TexturePainter(0);
+    splatmap_painter = new TexturePainter(0);
+    heightmap_painter = new TexturePainter(heightmap->getTextureId());
+    heightmap_painter->setChannel('r');
 
     // Debugging the allowed areas
     // printPathing();
@@ -66,13 +68,35 @@ Terrain::Terrain(GLuint shader_program, std::string heightmap_filename, float am
 void Terrain::paintSplatmap(glm::vec3 mouse_position){
     int x_offset = mouse_position.x - start_x;
     int y_offset = mouse_position.z - start_z;
-    texture_painter->paint(x_offset, y_offset, Brush::Mode::PAINT);
+    splatmap_painter->paint(x_offset, y_offset, Brush::Mode::PAINT);
 }
 
 void Terrain::eraseSplatmap(glm::vec3 mouse_position){
     int x_offset = mouse_position.x - start_x;
     int y_offset = mouse_position.z - start_z;
-    texture_painter->paint(x_offset, y_offset, Brush::Mode::ERASE);
+    splatmap_painter->paint(x_offset, y_offset, Brush::Mode::ERASE);
+}
+
+void Terrain::paintHeightmap(glm::vec3 mouse_position){
+    int x_offset = mouse_position.x - start_x;
+    int y_offset = mouse_position.z - start_z;
+
+    // Paint on the red green and blue channels
+    heightmap_painter->setChannel('r');
+    heightmap_painter->paint(x_offset, y_offset, Brush::Mode::PAINT);
+
+    heightmap_painter->setChannel('g');
+    heightmap_painter->paint(x_offset, y_offset, Brush::Mode::PAINT);
+
+    heightmap_painter->setChannel('b');
+    heightmap_painter->paint(x_offset, y_offset, Brush::Mode::PAINT);
+
+    // Update the image bytes from the texture
+    heightmap->updateImage();
+
+    // Regenerate the entire mesh! BOO!!!!!
+    mesh = generateMesh(*heightmap);
+
 }
 
 bool Terrain::canPath(int x, int z){
@@ -441,11 +465,11 @@ LayeredTextures* Terrain::getLayeredTextures(){
 }
 
 TexturePainter* Terrain::getTexturePainter(){
-    return texture_painter;
+    return splatmap_painter;
 }
 
 TextureLayer Terrain::getCurrentLayer(){
-    TextureLayer layer = layered_textures->getLayer(texture_painter->getTexture(), texture_painter->getChannel());
+    TextureLayer layer = layered_textures->getLayer(splatmap_painter->getTexture(), splatmap_painter->getChannel());
     return layer;
 }
 
@@ -457,8 +481,8 @@ void Terrain::setPaintLayer(GLuint layer){
         char channel = TextureLayer::getCharFromChannelInt(texture_layer.getChannel());
         GLuint splatmap = layered_textures->getSplatmap(texture_layer.getSplatmap());
 
-        texture_painter->setChannel(channel);
-        texture_painter->setTexture(splatmap);
+        splatmap_painter->setChannel(channel);
+        splatmap_painter->setTexture(splatmap);
     } else if (layer == 0) {
         Debug::error("Cannot use base layer as paint layer.\n");
     } else {
@@ -480,11 +504,11 @@ void Terrain::fillSplatmaps(){
 std::string Terrain::saveData(std::string name){
     std::string output = "";
 
-    GLubyte* image_data = renderHeightmapAsImage();
+    GLuint texture_id = heightmap->getTextureId();
     std::string heightmap_name = name + "_heightmap.bmp";
-    TextureLoader::saveTextureBytesToFile(image_data, width, depth, 1, heightmap_name);
-    delete[] image_data;
-    image_data = NULL;
+    TextureLoader::saveTextureToFile(texture_id, GL_RGBA, heightmap_name);
+    // delete[] image_data;
+    // image_data = NULL;
 
     output += "h " + heightmap_name + "\n";
     output += layered_textures->saveData(name);

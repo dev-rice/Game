@@ -7,6 +7,8 @@ int isPowerOfTwo (unsigned int x){
 
 Heightmap::Heightmap(std::string filename, float amplification){
     this->amplification = amplification;
+
+    texture_id = TextureLoader::loadTextureFromFile(filename, GL_LINEAR);
     image = SOIL_load_image(filename.c_str(), &(width), &(height),
         0, SOIL_LOAD_RGBA);
 
@@ -50,4 +52,16 @@ float Heightmap::getMapHeight(int x, int y){
     float map_height = float(red + green + blue) / (3.0f * 255.0);
     map_height *= amplification;
     return map_height;
+}
+
+void Heightmap::updateImage(){
+    image = TextureLoader::getBytesFromTexture(texture_id, GL_RGBA);
+}
+
+GLuint Heightmap::getTextureId(){
+    return texture_id;
+}
+
+unsigned char* Heightmap::getImage(){
+    return image;
 }

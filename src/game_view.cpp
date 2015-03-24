@@ -264,6 +264,9 @@ void GameView::handleInputState(){
     if (state[SDL_SCANCODE_N]){
         level->getTerrain()->eraseSplatmap(mouse_world_pos);
     }
+    if (state[SDL_SCANCODE_B]){
+        level->getTerrain()->paintHeightmap(mouse_world_pos);
+    }
 
     //##############################################################################
     // Right Mouse Button Handling
