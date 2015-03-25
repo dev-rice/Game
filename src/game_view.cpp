@@ -68,12 +68,6 @@ GameView::GameView(Level* level){
     InputHandler::State_Callback_Type state_callback_temp = std::bind(&GameView::handleInputState, this);
     InputHandler::getInstance()->setStateCallback(state_callback_temp);
 
-    TextureLayer layer = level->getTerrain()->getCurrentLayer();
-    GLuint paint_texture = layer.getDiffuse();
-    current_paint = new UIDrawable(paint_texture);
-    current_paint->setPixelCoordinates(20, 220, 120, 320);
-    ui_drawables.push_back(current_paint);
-
     DebugConsole::getInstance()->setLevel(level);
     ui_drawables.push_back(DebugConsole::getInstance());
     level->getTerrain()->setPaintLayer(1);
@@ -87,42 +81,8 @@ void GameView::update(){
     // Swap display/rendering buffers
     window->display();
 
-    // Render the shadow map into the shadow buffer
-    if (Profile::getInstance()->isShadowsOn()){
-        level->drawShadowMap();
-    }
-
-    // Render the level to the framebuffer
-    if (Profile::getInstance()->isFramebuffersOn()){
-        framebuffer->setAsRenderTarget();
-        level->draw();
-
-        // Draw the framebuffer N - 1 times (the last pass is drawn to the screen).
-        // This is how many times the fxaa shader samples the image.
-        // A good number is 4, 8 looks blurry, 1 doesn't do much.
-
-        int fxaa_level = Profile::getInstance()->getFxaaLevel();
-        if (fxaa_level){
-            for (int i = 0; i < fxaa_level - 1; ++i){
-                framebuffer->draw();
-            }
-        }
-
-        // Draw the framebuffer
-        screen->setAsRenderTarget();
-        framebuffer->draw();
-
-    } else {
-        // Draw the level
-        screen->setAsRenderTarget();
-        level->draw();
-    }
-
-
-    // Draw all of the ui elements on top of the level
-    for(int i = 0; i < ui_drawables.size(); ++i){
-        ui_drawables[i]->draw();
-    }
+    drawCore();
+    drawOtherStuff();
 
     // Calculating the mouse vector
     glm::vec3 mouse_point = level->calculateWorldPosition(Mouse::getInstance()->getGLPosition());
@@ -179,17 +139,52 @@ void GameView::update(){
 
     }
 
-    TextureLayer current_layer = level->getTerrain()->getCurrentLayer();
-    GLuint paint_texture = current_layer.getDiffuse();
-    current_paint->attachTexture(paint_texture);
-    current_paint->setPixelCoordinates(20, 220, 120, 320);
-    fancy_text->print(20, 180, "Paint: M");
-    fancy_text->print(20, 200, "Erase: N");
-    fancy_text->print(30, 230, "%d", current_layer.getLayerNumber());
-
     // The mouse draws on top of everything else
     Mouse::getInstance()->draw();
 
+}
+
+void GameView::drawCore(){
+    // Render the shadow map into the shadow buffer
+    if (Profile::getInstance()->isShadowsOn()){
+        level->drawShadowMap();
+    }
+
+    // Render the level to the framebuffer
+    if (Profile::getInstance()->isFramebuffersOn()){
+        framebuffer->setAsRenderTarget();
+        level->draw();
+
+        // Draw the framebuffer N - 1 times (the last pass is drawn to the screen).
+        // This is how many times the fxaa shader samples the image.
+        // A good number is 4, 8 looks blurry, 1 doesn't do much.
+
+        int fxaa_level = Profile::getInstance()->getFxaaLevel();
+        if (fxaa_level){
+            for (int i = 0; i < fxaa_level - 1; ++i){
+                framebuffer->draw();
+            }
+        }
+
+        // Draw the framebuffer
+        screen->setAsRenderTarget();
+        framebuffer->draw();
+
+    } else {
+        // Draw the level
+        screen->setAsRenderTarget();
+        level->draw();
+    }
+
+
+    // Draw all of the ui elements on top of the level
+    for(int i = 0; i < ui_drawables.size(); ++i){
+        ui_drawables[i]->draw();
+    }
+}
+
+void GameView::drawOtherStuff(){
+    // Empty for now
 }
 
 void GameView::handleInputState(){

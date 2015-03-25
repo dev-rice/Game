@@ -52,11 +52,12 @@ int main(int argc, char* argv[]) {
     bool debug   = false;
     bool has_map = false;
     bool vsync   = Profile::getInstance()->getVsync();
+    bool edit = false;
     char argument;
 
     std::string map_filename;
 
-    while ((argument = getopt(argc, argv, "wvfidm:x:")) != -1){
+    while ((argument = getopt(argc, argv, "wvfidme:x:")) != -1){
         // printf("Read command line option:\n");
         // printf("  argument = %c\n", argument);
         // printf("  optopt   = %c\n", optopt);
@@ -78,6 +79,8 @@ int main(int argc, char* argv[]) {
             map_filename = std::string(optarg);
         } else if (argument == 'v'){
             vsync = true;
+        } else if (argument == 'e'){
+            edit = true;
         } else {
             printf("\nCommand line options:\n");
             printf("\t-f\n");
@@ -94,7 +97,8 @@ int main(int argc, char* argv[]) {
             printf("\t\tTurn on FXAA with level <level>.\n\n");
             printf("\t-v \n");
             printf("\t\tTurn on Verticl Sync.\n\n");
-
+            printf("\t-e \n");
+            printf("\t\tRun in level edit mode.\n\n");
             return 1;
         }
     }

@@ -27,12 +27,15 @@ public:
 
     GameView(Level*);
 
-    void update();
+    virtual void update();
 
     void handleInputState();
     void handleInput(SDL_Event);
 
-private:
+protected:
+
+    void drawCore();
+    virtual void drawOtherStuff();
 
     // Mouse controls
     int mouse_count;

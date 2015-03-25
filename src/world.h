@@ -7,6 +7,7 @@
 
 #include "level.h"
 #include "game_view.h"
+#include "game_view_edit.h"
 #include "debug.h"
 #include "window.h"
 
