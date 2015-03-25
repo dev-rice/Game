@@ -13,8 +13,8 @@
 
 class World{
 public:
-    World();
-    World(const char*);
+    World(bool);
+    World(const char*, bool);
     ~World();
 
     void addLevel(const char*);
@@ -25,6 +25,8 @@ private:
     Window* window;
     GameView* game_view;
     Level* level;
+
+    bool edit_mode;
 };
 
 #endif

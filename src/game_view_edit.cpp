@@ -6,6 +6,9 @@ GameViewEdit::GameViewEdit(Level* level) : GameView(level){
     current_paint = new UIDrawable(paint_texture);
     current_paint->setPixelCoordinates(20, 220, 120, 320);
     ui_drawables.push_back(current_paint);
+
+    fancy_text = new TextRenderer("BreeSerif-Regular.ttf", 18);
+    
 }
 
 void GameViewEdit::drawOtherStuff(){

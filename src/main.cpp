@@ -57,7 +57,7 @@ int main(int argc, char* argv[]) {
 
     std::string map_filename;
 
-    while ((argument = getopt(argc, argv, "wvfidme:x:")) != -1){
+    while ((argument = getopt(argc, argv, "wvfidem:x:")) != -1){
         // printf("Read command line option:\n");
         // printf("  argument = %c\n", argument);
         // printf("  optopt   = %c\n", optopt);
@@ -126,9 +126,9 @@ int main(int argc, char* argv[]) {
     // Create the world
     World* world;
     if (has_map){
-        world = new World(map_filename.c_str());
+        world = new World(map_filename.c_str(), edit);
     } else {
-        world = new World();
+        world = new World(edit);
     }
 
     float start_time = GameClock::getInstance()->getCurrentTime();

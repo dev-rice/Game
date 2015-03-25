@@ -24,7 +24,6 @@ GameView::GameView(Level* level){
     Mouse::getInstance();
 
     text_renderer = new TextRenderer("Inconsolata-Bold.ttf", 20);
-    fancy_text = new TextRenderer("BreeSerif-Regular.ttf", 18);
     for (int i = 32; i <= 126; ++i){
         all_chars += i;
     }
