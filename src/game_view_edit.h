@@ -8,6 +8,9 @@ class GameViewEdit : public GameView {
 public:
     GameViewEdit(Level* level);
 
+    void handleInputState();
+    void handleInput(SDL_Event);
+
 protected:
     void drawOtherStuff();
 

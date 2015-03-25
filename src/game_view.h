@@ -29,8 +29,8 @@ public:
 
     virtual void update();
 
-    void handleInputState();
-    void handleInput(SDL_Event);
+    virtual void handleInputState();
+    virtual void handleInput(SDL_Event);
 
 protected:
 

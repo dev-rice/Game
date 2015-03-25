@@ -232,19 +232,6 @@ void GameView::handleInputState(){
     }
 
     //##############################################################################
-    // Middle Mouse Button Handling
-    //##############################################################################
-    if (Mouse::getInstance()->isPressed(Mouse::MIDDLE) || state[SDL_SCANCODE_M]){
-        level->getTerrain()->paintSplatmap(mouse_world_pos);
-    }
-    if (state[SDL_SCANCODE_N]){
-        level->getTerrain()->eraseSplatmap(mouse_world_pos);
-    }
-    if (state[SDL_SCANCODE_B]){
-        level->getTerrain()->paintHeightmap(mouse_world_pos);
-    }
-
-    //##############################################################################
     // Right Mouse Button Handling
     //##############################################################################
     if (right_mouse_button_unclick){

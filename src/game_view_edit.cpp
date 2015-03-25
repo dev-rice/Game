@@ -8,7 +8,7 @@ GameViewEdit::GameViewEdit(Level* level) : GameView(level){
     ui_drawables.push_back(current_paint);
 
     fancy_text = new TextRenderer("BreeSerif-Regular.ttf", 18);
-    
+
 }
 
 void GameViewEdit::drawOtherStuff(){
@@ -19,4 +19,26 @@ void GameViewEdit::drawOtherStuff(){
     fancy_text->print(20, 180, "Paint: M");
     fancy_text->print(20, 200, "Erase: N");
     fancy_text->print(30, 230, "%d", current_layer.getLayerNumber());
+}
+
+void GameViewEdit::handleInputState(){
+    GameView::handleInputState();
+
+    const Uint8 *state = SDL_GetKeyboardState(NULL);
+    // Get the mouse coordinates gl, and the world
+    glm::vec2 mouse_gl_pos = Mouse::getInstance()->getGLPosition();
+    glm::vec3 mouse_world_pos = level->calculateWorldPosition(mouse_gl_pos);
+    if (state[SDL_SCANCODE_M]){
+        level->getTerrain()->paintSplatmap(mouse_world_pos);
+    }
+    if (state[SDL_SCANCODE_N]){
+        level->getTerrain()->eraseSplatmap(mouse_world_pos);
+    }
+    if (state[SDL_SCANCODE_B]){
+        level->getTerrain()->paintHeightmap(mouse_world_pos);
+    }
+}
+
+void GameViewEdit::handleInput(SDL_Event event){
+    GameView::handleInput(event);
 }
