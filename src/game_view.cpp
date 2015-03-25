@@ -59,14 +59,6 @@ GameView::GameView(Level* level){
 
     attack_command_prime = false;
 
-    // Usually OpenGL code shouldn't be this high up but this is for cool
-    // mouse effects.
-    glGenBuffers(1, &mouse_ubo);
-    glBindBuffer(GL_UNIFORM_BUFFER, mouse_ubo);
-    glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::vec3), NULL, GL_STREAM_DRAW);
-    glBindBuffer(GL_UNIFORM_BUFFER, 0);
-    glBindBufferRange(GL_UNIFORM_BUFFER, 3, mouse_ubo, 0, sizeof(glm::vec3));
-
     Profile::getInstance()->updateShaderSettings();
 
     // Set the callback function to be the game view input
@@ -83,6 +75,7 @@ GameView::GameView(Level* level){
     ui_drawables.push_back(current_paint);
 
     DebugConsole::getInstance()->setLevel(level);
+    ui_drawables.push_back(DebugConsole::getInstance());
     level->getTerrain()->setPaintLayer(1);
 
 }
@@ -132,9 +125,6 @@ void GameView::update(){
     }
 
     // Calculating the mouse vector
-    Camera* camera = level->getCamera();
-    glm::mat4 proj_matrix = level->getProjection();
-    Terrain* terrain = level->getTerrain();
     glm::vec3 mouse_point = level->calculateWorldPosition(Mouse::getInstance()->getGLPosition());
 
     // draw selection rectangle here and change the cursor based on amount of dragging
@@ -196,13 +186,6 @@ void GameView::update(){
     fancy_text->print(20, 180, "Paint: M");
     fancy_text->print(20, 200, "Erase: N");
     fancy_text->print(30, 230, "%d", current_layer.getLayerNumber());
-
-    glBindBuffer(GL_UNIFORM_BUFFER, mouse_ubo);
-    glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::vec3),
-        glm::value_ptr(mouse_point));
-    glBindBuffer(GL_UNIFORM_BUFFER, 0);
-
-    DebugConsole::getInstance()->draw();
 
     // The mouse draws on top of everything else
     Mouse::getInstance()->draw();

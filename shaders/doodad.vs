@@ -32,10 +32,6 @@ layout(std140) uniform ShadowMatrices {
     mat4 depth_proj;
 };
 
-layout(std140) uniform Mouse {
-    vec3 mouse_point;
-};
-
 layout(std140) uniform ProfileSettings {
     float lighting;
     float shadows;
@@ -92,9 +88,9 @@ void main() {
         lights[1].color = vec3(1.0, 0.3, 0.1);
         lights[1].power = 5.0;
 
-        lights[2].position = vec3(mouse_point.x, mouse_point.y + 0.5, mouse_point.z);
+        lights[2].position = vec3(0.0, 0.0, 0.0);
         lights[2].color = vec3(0.0, 0.4, 1.0);
-        lights[2].power = 5.0;
+        lights[2].power = 0.0;
 
         // The first light is reserved for the directional light
         for (int i = 1; i < NUM_LIGHTS; ++i){
