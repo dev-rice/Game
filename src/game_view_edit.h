@@ -11,6 +11,10 @@ public:
 protected:
     void drawOtherStuff();
 
+    UIDrawable* current_paint;
+    TextRenderer* fancy_text;
+
+
 };
 
 #endif

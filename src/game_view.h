@@ -56,13 +56,11 @@ protected:
 
     Screenbuffer* screen;
     Framebuffer* framebuffer;
-    Shadowbuffer* shadowbuffer;
 
     UIDrawable* selection_box;
     std::vector<UIDrawable*> ui_drawables;
 
     TextRenderer* text_renderer;
-    TextRenderer* fancy_text;
 
     bool toggle_key_state;
     bool debug_showing;
@@ -77,11 +75,8 @@ protected:
 
     bool debug_console_key_state;
 
-    GLuint mouse_ubo;
-
     std::string all_chars;
 
-    UIDrawable* current_paint;
 };
 
 #endif
