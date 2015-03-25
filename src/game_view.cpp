@@ -42,10 +42,12 @@ GameView::GameView(Level* level){
     menu = new UIWindow();
     menu->loadFromXML("res/layouts/test.xml");
     menu->hide();
+    ui_drawables.push_back(menu);
 
     graphics_menu = new UIWindow();
     graphics_menu->loadFromXML("res/layouts/graphics_settings.xml");
     graphics_menu->hide();
+    ui_drawables.push_back(graphics_menu);
 
     toggle_key_state = false;
     debug_showing = Debug::is_on;
@@ -94,7 +96,6 @@ void GameView::update(){
 
     // Render the shadow map into the shadow buffer
     if (Profile::getInstance()->isShadowsOn()){
-        level->getShadowbuffer()->setAsRenderTarget();
         level->drawShadowMap();
     }
 
@@ -129,8 +130,6 @@ void GameView::update(){
     for(int i = 0; i < ui_drawables.size(); ++i){
         ui_drawables[i]->draw();
     }
-    menu->draw();
-    graphics_menu->draw();
 
     // Calculating the mouse vector
     Camera* camera = level->getCamera();

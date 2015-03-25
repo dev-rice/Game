@@ -143,6 +143,8 @@ void Level::draw(){
 void Level::drawShadowMap(){
     updateGlobalUniforms();
 
+    shadowbuffer->setAsRenderTarget();
+
     for (int i = 0; i < drawables.size(); ++i){
         // Save the shader this drawable is currently using
         GLuint current_shader = drawables[i]->getShader();
