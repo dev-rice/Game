@@ -37,6 +37,9 @@ void GameViewEdit::handleInputState(){
     if (state[SDL_SCANCODE_B]){
         level->getTerrain()->paintHeightmap(mouse_world_pos);
     }
+    if (state[SDL_SCANCODE_V]){
+        level->getTerrain()->eraseHeightmap(mouse_world_pos);
+    }
 }
 
 void GameViewEdit::handleInput(SDL_Event event){

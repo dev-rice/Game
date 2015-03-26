@@ -105,6 +105,30 @@ void Terrain::paintHeightmap(glm::vec3 mouse_position){
 
 }
 
+void Terrain::eraseHeightmap(glm::vec3 mouse_position){
+    int x_offset = mouse_position.x - start_x;
+    int y_offset = mouse_position.z - start_z;
+
+    // Paint on the red green and blue channels
+    heightmap_painter->setChannel('r');
+    heightmap_painter->paint(x_offset, y_offset, Brush::Mode::ERASE);
+
+    heightmap_painter->setChannel('g');
+    heightmap_painter->paint(x_offset, y_offset, Brush::Mode::ERASE);
+
+    heightmap_painter->setChannel('b');
+    heightmap_painter->paint(x_offset, y_offset, Brush::Mode::ERASE);
+
+    // Update the image bytes from the texture
+    heightmap->updateImage();
+
+    // Regenerate the entire mesh! BOO!!!!!
+    mesh = generateMesh(*heightmap);
+
+    generatePathingArray();
+
+}
+
 bool Terrain::canPath(int x, int z){
     x -= int(start_x);
     z -= int(start_z);

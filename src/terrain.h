@@ -45,6 +45,7 @@ public:
     void eraseSplatmap(glm::vec3 position);
 
     void paintHeightmap(glm::vec3 position);
+    void eraseHeightmap(glm::vec3 position);
 
     TextureLayer getCurrentLayer();
     void setPaintLayer(GLuint layer);
