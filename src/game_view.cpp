@@ -277,106 +277,9 @@ void GameView::handleInputState(){
     // Camera Movement Handling
     //##############################################################################
     if (debug_showing){
-        // Translation
-        if (state[SDL_SCANCODE_W]){
-            camera->moveZ(-1);
-        }
-        if (state[SDL_SCANCODE_S]){
-            camera->moveZ(1);
-        }
-        if (state[SDL_SCANCODE_A]){
-            camera->moveX(-1);
-        }
-        if (state[SDL_SCANCODE_D]){
-            camera->moveX(1);
-        }
-        if (state[SDL_SCANCODE_LSHIFT]){
-            camera->moveY(-1);
-        }
-        if (state[SDL_SCANCODE_SPACE]){
-            camera->moveY(1);
-        }
-
-        // Rotation
-        if (state[SDL_SCANCODE_E]){
-            camera->rotateY(-1);
-        }
-        if (state[SDL_SCANCODE_Q]){
-            camera->rotateY(1);
-        }
-        if (state[SDL_SCANCODE_F]){
-            camera->rotateX(-1);
-        }
-        if (state[SDL_SCANCODE_R]){
-            camera->rotateX(1);
-        }
+        handleKeyboardCameraMovement();
     } else {
-        // Mouse scrolling the screen when not in debug mode
-        if(mouse_count == 0){
-            // LEFT
-            if(camera->getPosition().x >= -1.0 * level->getMapWidth()/2 + 55){
-                if(mouse_gl_pos.x < -0.95){
-                    camera->moveGlobalX(-10);
-                } else if(mouse_gl_pos.x < -0.85){
-                    camera->moveGlobalX(-5);
-                }
-            }
-
-            // RIGHT
-            if(camera->getPosition().x <= 1.0 * level->getMapWidth()/2 - 55){
-                if(mouse_gl_pos.x > 0.95){
-                    camera->moveGlobalX(10);
-                } else if (mouse_gl_pos.x > 0.85){
-                    camera->moveGlobalX(5);
-                }
-            }
-
-            // DOWN
-            if(camera->getPosition().z <= 1.0 * level->getMapDepth()/2 - 3){
-                if(mouse_gl_pos.y < -0.95){
-                    camera->moveGlobalZ(10);
-                } else if(mouse_gl_pos.y < -0.85){
-                    camera->moveGlobalZ(5);
-                }
-            }
-
-            // UP                            . Compensating for the camera angle
-            if(camera->getPosition().z >= -1.0 * level->getMapDepth()/2 + 55){
-                if(mouse_gl_pos.y > 0.95){
-                    camera->moveGlobalZ(-10);
-                } else if (mouse_gl_pos.y > 0.85){
-                    camera->moveGlobalZ(-5);
-                }
-            }
-
-            // Changing the mouse cursor based on scrolling
-            if(mouse_gl_pos.x < -0.85){
-                Mouse::getInstance()->setCursorSprite(Mouse::cursorType::LEFT);
-            }
-            if(mouse_gl_pos.x > 0.85){
-                Mouse::getInstance()->setCursorSprite(Mouse::cursorType::RIGHT);
-            }
-            if(mouse_gl_pos.y > 0.85){
-                Mouse::getInstance()->setCursorSprite(Mouse::cursorType::UP);
-            }
-            if(mouse_gl_pos.y < -0.85){
-                Mouse::getInstance()->setCursorSprite(Mouse::cursorType::DOWN);
-            }
-
-            if(mouse_gl_pos.x < -0.85 && mouse_gl_pos.y < -0.85){
-                Mouse::getInstance()->setCursorSprite(Mouse::cursorType::DOWN_LEFT);
-            }
-            if(mouse_gl_pos.x > 0.85 && mouse_gl_pos.y < -0.85){
-                Mouse::getInstance()->setCursorSprite(Mouse::cursorType::DOWN_RIGHT);
-            }
-            if(mouse_gl_pos.x < -0.85 && mouse_gl_pos.y > 0.85){
-                Mouse::getInstance()->setCursorSprite(Mouse::cursorType::UP_LEFT);
-            }
-            if(mouse_gl_pos.x > 0.85 && mouse_gl_pos.y > 0.85){
-                Mouse::getInstance()->setCursorSprite(Mouse::cursorType::UP_RIGHT);
-            }
-        }
-
+        handleMouseCameraMovement();
     }
 
 }
@@ -430,4 +333,122 @@ void GameView::handleInput(SDL_Event event){
 
     }
 
+}
+
+void GameView::handleKeyboardCameraMovement(){
+    Camera* camera = level->getCamera();
+    glm::mat4 proj_matrix = level->getProjection();
+    Terrain* terrain = level->getTerrain();
+
+    const Uint8 *state = SDL_GetKeyboardState(NULL);
+
+    // Translation
+    if (state[SDL_SCANCODE_W]){
+        camera->moveZ(-1);
+    }
+    if (state[SDL_SCANCODE_S]){
+        camera->moveZ(1);
+    }
+    if (state[SDL_SCANCODE_A]){
+        camera->moveX(-1);
+    }
+    if (state[SDL_SCANCODE_D]){
+        camera->moveX(1);
+    }
+    if (state[SDL_SCANCODE_LSHIFT]){
+        camera->moveY(-1);
+    }
+    if (state[SDL_SCANCODE_SPACE]){
+        camera->moveY(1);
+    }
+
+    // Rotation
+    if (state[SDL_SCANCODE_E]){
+        camera->rotateY(-1);
+    }
+    if (state[SDL_SCANCODE_Q]){
+        camera->rotateY(1);
+    }
+    if (state[SDL_SCANCODE_F]){
+        camera->rotateX(-1);
+    }
+    if (state[SDL_SCANCODE_R]){
+        camera->rotateX(1);
+    }
+}
+
+void GameView::handleMouseCameraMovement(){
+    Camera* camera = level->getCamera();
+    glm::mat4 proj_matrix = level->getProjection();
+    Terrain* terrain = level->getTerrain();
+
+    // Get the mouse coordinates gl, and the world
+    glm::vec2 mouse_gl_pos = Mouse::getInstance()->getGLPosition();
+    glm::vec3 mouse_world_pos = level->calculateWorldPosition(mouse_gl_pos);
+
+    // Mouse scrolling the screen when not in debug mode
+    if(mouse_count == 0){
+        // LEFT
+        if(camera->getPosition().x >= -1.0 * level->getMapWidth()/2 + 55){
+            if(mouse_gl_pos.x < -0.95){
+                camera->moveGlobalX(-10);
+            } else if(mouse_gl_pos.x < -0.85){
+                camera->moveGlobalX(-5);
+            }
+        }
+
+        // RIGHT
+        if(camera->getPosition().x <= 1.0 * level->getMapWidth()/2 - 55){
+            if(mouse_gl_pos.x > 0.95){
+                camera->moveGlobalX(10);
+            } else if (mouse_gl_pos.x > 0.85){
+                camera->moveGlobalX(5);
+            }
+        }
+
+        // DOWN
+        if(camera->getPosition().z <= 1.0 * level->getMapDepth()/2 - 3){
+            if(mouse_gl_pos.y < -0.95){
+                camera->moveGlobalZ(10);
+            } else if(mouse_gl_pos.y < -0.85){
+                camera->moveGlobalZ(5);
+            }
+        }
+
+        // UP                            . Compensating for the camera angle
+        if(camera->getPosition().z >= -1.0 * level->getMapDepth()/2 + 55){
+            if(mouse_gl_pos.y > 0.95){
+                camera->moveGlobalZ(-10);
+            } else if (mouse_gl_pos.y > 0.85){
+                camera->moveGlobalZ(-5);
+            }
+        }
+
+        // Changing the mouse cursor based on scrolling
+        if(mouse_gl_pos.x < -0.85){
+            Mouse::getInstance()->setCursorSprite(Mouse::cursorType::LEFT);
+        }
+        if(mouse_gl_pos.x > 0.85){
+            Mouse::getInstance()->setCursorSprite(Mouse::cursorType::RIGHT);
+        }
+        if(mouse_gl_pos.y > 0.85){
+            Mouse::getInstance()->setCursorSprite(Mouse::cursorType::UP);
+        }
+        if(mouse_gl_pos.y < -0.85){
+            Mouse::getInstance()->setCursorSprite(Mouse::cursorType::DOWN);
+        }
+
+        if(mouse_gl_pos.x < -0.85 && mouse_gl_pos.y < -0.85){
+            Mouse::getInstance()->setCursorSprite(Mouse::cursorType::DOWN_LEFT);
+        }
+        if(mouse_gl_pos.x > 0.85 && mouse_gl_pos.y < -0.85){
+            Mouse::getInstance()->setCursorSprite(Mouse::cursorType::DOWN_RIGHT);
+        }
+        if(mouse_gl_pos.x < -0.85 && mouse_gl_pos.y > 0.85){
+            Mouse::getInstance()->setCursorSprite(Mouse::cursorType::UP_LEFT);
+        }
+        if(mouse_gl_pos.x > 0.85 && mouse_gl_pos.y > 0.85){
+            Mouse::getInstance()->setCursorSprite(Mouse::cursorType::UP_RIGHT);
+        }
+    }
 }

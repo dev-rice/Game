@@ -22,7 +22,7 @@ void GameViewEdit::drawOtherStuff(){
 }
 
 void GameViewEdit::handleInputState(){
-    // GameView::handleInputState();
+    GameView::handleMouseCameraMovement();
 
     const Uint8 *state = SDL_GetKeyboardState(NULL);
     // Get the mouse coordinates gl, and the world

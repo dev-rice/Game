@@ -37,6 +37,9 @@ protected:
     void drawCore();
     virtual void drawOtherStuff();
 
+    void handleKeyboardCameraMovement();
+    void handleMouseCameraMovement();
+
     // Mouse controls
     int mouse_count;
     bool left_mouse_button_unclick;
