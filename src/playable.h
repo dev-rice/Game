@@ -50,53 +50,50 @@ public:
 
 private:
 
-	bool atTargetPosition();
-	void setTargetPositionAndDirection(glm::vec3);
+	//################################
+	// Non-game Variables (Private)
+	//################################
 
-	static float getDistance(float, float, float, float);
-
-	float getCurrentTargetDirection();
-
-	// Steering
-	int steerToStayOnPath();
-	static float distanceFromPointToLine(glm::vec2, glm::vec2, glm::vec2);
-
-	static Playable::Order determineBodyOrder(Playable::Order, bool);
-	static Playable::Order determineLastOrder(Playable::Order, bool);
-
-	void updateUniformData();
-
-	// Is this where the fuckup is?
+	// Order queues
 	std::queue<std::tuple<Playable::Order, glm::vec3>> order_queue;
 	std::queue<Playable*> target_queue;
 
-	// Current Target positions and Orders
+	// Tracking the first turn
+	bool first_step_since_order;
+
+	// Current/Old Target Location, Direction, and Order
 	glm::vec3 target_position;
 	float target_direction;
 	Playable::Order target_order;
-
 	glm::vec3 old_target_position;
 
+	// Selection
 	static Doodad* selection_ring;
 
+	//################################
+	// In-game Variables (Private)
+	//################################
+
+	// Type
 	std::string unit_type;
 
+	// Movement
 	float speed;
 	float acceleration;
 	float turning_speed;
 	float radius;
 	float sight_radius;
 
+	// Leveling
+	int level;
 	int per_level_health_boost;
 	int per_level_strength_boost;
 
+	// Selection Status
 	bool selected;
-	int temp_selected;
+	bool temp_selected;
 
-	int level;
-
-	int strength;
-
+	// Health
 	int max_health;
 	int health;
 	int healing_rate;
@@ -106,6 +103,35 @@ private:
 	// Not implemented yet
 	// Weapon* weapon
 	// Ability* ability
+
+	//################################
+	// Orders (Private)
+	//################################
+
+	static Playable::Order determineBodyOrder(Playable::Order, bool);
+	static Playable::Order determineLastOrder(Playable::Order, bool);
+
+	//################################
+	// Location (Private)
+	//################################
+
+	bool atTargetPosition();
+	static float getDistance(float, float, float, float);
+	void setTargetPositionAndDirection(glm::vec3);
+	float getCurrentTargetDirection();
+
+	//################################
+	// Steering (Private)
+	//################################
+
+	int steerToStayOnPath();
+	static float distanceFromPointToLine(glm::vec2, glm::vec2, glm::vec2);
+
+	//################################
+	// Other Stuff (Private)
+	//################################
+
+	void updateUniformData();
 
 };
 

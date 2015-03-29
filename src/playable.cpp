@@ -43,12 +43,14 @@ Playable::Playable(Mesh* mesh, GLuint shader_program, glm::vec3 position, GLfloa
     }
 
 	selected = false;
-    temp_selected = 0;
+    temp_selected = false;
 
     #warning Fix the 90* offset bug
     rotateGlobalEuler(M_PI/2.0f, 0.0f, 0.0f);
 
     target_position = position;
+
+    first_step_since_order = false;
 }
 
 void Playable::loadFromXML(std::string filepath){
@@ -91,8 +93,6 @@ void Playable::updateUniformData(){
 
 void Playable::receiveOrder(Playable::Order order, glm::vec3 target, bool should_enqueue, std::vector<glm::vec3> path, Playable* targeted_unit){
 
-    Debug::info("Starting receiveOrder...\n");
-
     // Error that exists: Pathing is done from current position, not future position. Need to fix that.
 
     // Are we targeting another playable?
@@ -124,6 +124,8 @@ void Playable::receiveOrder(Playable::Order order, glm::vec3 target, bool should
     // If we're not enqueuing the order, we should clear out the old
     if(!should_enqueue){
 
+        first_step_since_order = true;
+
         // These could theoretically be together, because they should always be
         // the same length. However, I feel more comfortable with them apart.
 
@@ -149,8 +151,6 @@ void Playable::receiveOrder(Playable::Order order, glm::vec3 target, bool should
     target_position = position;
     setTargetPositionAndDirection(std::get<1>(order_queue.front()));
     setRotationEuler(rotation.x, target_direction, rotation.z);
-
-    Debug::info("Ended receiveOrder\n");
 
 }
 
@@ -361,6 +361,10 @@ void Playable::update(Terrain* ground, std::vector<Playable*> *otherUnits){
     // Nearest friendly town hall  - resource return
     // Nearest Enemy unit/struct   - to attack if in engage range
     // Nearest resource            - to gather
+    
+    if(first_step_since_order){
+        first_step_since_order = false;
+    }
 
     if(atTargetPosition() && order_queue.size() > 0){
 
