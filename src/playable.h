@@ -43,10 +43,16 @@ public:
 	void holdPosition();
 	void stop();
 
+	bool isEnemy(int);
+
 	bool isSelected(){ return selected; }
 	bool isTempSelected(){ return temp_selected; }
 
 	float getRadius(){ return radius; }
+
+	// Temporary - REMOVE ME LATER
+	void setTeam(int t){team_number = t;}
+
 
 private:
 
@@ -70,12 +76,23 @@ private:
 	// Selection
 	static Doodad* selection_ring;
 
+	// Attacking
+	bool can_attack;
+	bool should_attack;
+
 	//################################
 	// In-game Variables (Private)
 	//################################
 
 	// Type
 	std::string unit_type;
+
+	// Team
+	// Stuff for now
+	// 0 - reserved for computer mobs
+	// 1 - Player
+	// . - Computer
+	int team_number;
 
 	// Movement
 	float speed;

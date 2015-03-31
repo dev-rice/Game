@@ -72,7 +72,7 @@ Level::Level(const char* filename){
         "shaders/doodad.fs");
     float playable_scale = 1.0f;
 
-    for(int i = 0; i < 1; ++i){
+    for(int i = 0; i < 2; ++i){
         for(int j = 0; j < 1; ++j){
             glm::vec3 playable_position = glm::vec3(3.0f*i, 0.0f, 3.0f*j);
             Playable* temp = new Playable(playable_mesh, playable_shader, playable_position, playable_scale);
@@ -80,8 +80,10 @@ Level::Level(const char* filename){
             temp->setScale(0.8);
             if (rand() % 2){
                 temp->setDiffuse(TextureLoader::loadBlue());
+                temp->setTeam(1);
             } else {
                 temp->setDiffuse(TextureLoader::loadGreen());
+                temp->setTeam(2);
             }
 
             drawables.push_back(temp);

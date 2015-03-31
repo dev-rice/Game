@@ -17,6 +17,12 @@ Doodad* Playable::selection_ring;
 
 #define PATH_WIDTH 2.0f
 
+//#############################################
+// Text headers from 
+// http://www.network-science.de/ascii/
+// using 'banner3' setting
+//#############################################
+
 //##################################################################################################
 //
 //  ######  ######## ######## ##     ## ########
@@ -276,8 +282,6 @@ int Playable::steerToStayOnPath(){
     //  0 means none
     //  1 means CW
 
-    // NEEDS FIXING - If the turn angle is <90*, it will break
-
     // Short-circuit for the last target, we want to move precisely to it.
     if(order_queue.size() == 0){
 
@@ -344,6 +348,22 @@ float Playable::distanceFromPointToLine(glm::vec2 line_0, glm::vec2 line_1, glm:
 
 //##################################################################################################
 //
+//  ######   #######  ##     ## ########     ###    ######## 
+// ##    ## ##     ## ###   ### ##     ##   ## ##      ##    
+// ##       ##     ## #### #### ##     ##  ##   ##     ##    
+// ##       ##     ## ## ### ## ########  ##     ##    ##    
+// ##       ##     ## ##     ## ##     ## #########    ##    
+// ##    ## ##     ## ##     ## ##     ## ##     ##    ##    
+//  ######   #######  ##     ## ########  ##     ##    ##    
+//
+//##################################################################################################
+
+bool Playable::isEnemy(int t){
+    return team_number != t;
+}
+
+//##################################################################################################
+//
 // ##     ## ########  ########     ###    ######## ########
 // ##     ## ##     ## ##     ##   ## ##      ##    ##
 // ##     ## ##     ## ##     ##  ##   ##     ##    ##
@@ -357,14 +377,36 @@ float Playable::distanceFromPointToLine(glm::vec2 line_0, glm::vec2 line_1, glm:
 void Playable::update(Terrain* ground, std::vector<Playable*> *otherUnits){
 
     // Scan all units, looking for a stuff
-    // Nearest friendly, hurt unit - for healing
+    // Nearest friendly, hurt unit - for healing or repair
     // Nearest friendly town hall  - resource return
     // Nearest Enemy unit/struct   - to attack if in engage range
     // Nearest resource            - to gather
-    
+
+    std::vector<Playable*> enemies_in_range;
+
+    for(int i = 0; i < otherUnits->size(); ++i){
+
+        Playable* target = otherUnits->at(i);
+        glm::vec3 target_pos = target->getPosition();
+        float target_distance = getDistance(target_pos.x, target_position.z, position.x, position.z);
+
+        if(target != this){
+
+            // Attacking         Weapon range + our size + their size
+            if(target_distance < 10.0f && target->isEnemy(team_number)){
+                enemies_in_range.push_back(target);
+            }        
+
+        }
+    }
+
+    // Finalizing the attack
+
+    // Turning on the first step
     if(first_step_since_order){
         first_step_since_order = false;
     }
+
 
     if(atTargetPosition() && order_queue.size() > 0){
 
@@ -388,7 +430,7 @@ void Playable::update(Terrain* ground, std::vector<Playable*> *otherUnits){
 
     } else {
 
-        // Do nothing... Attack nearby enemies, randomly turn and idle animate
+        // Do nothing... Randomly turn and idle animate
 
     }
 
