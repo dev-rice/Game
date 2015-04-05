@@ -156,8 +156,6 @@ void Playable::receiveOrder(Playable::Order order, glm::vec3 target, bool should
     // Get the positioning and direction set up
     target_position = position;
     setTargetPositionAndDirection(std::get<1>(order_queue.front()));
-    setRotationEuler(rotation.x, target_direction, rotation.z);
-
 }
 
 Playable::Order Playable::determineBodyOrder(Playable::Order order, bool is_targeting){
@@ -374,7 +372,7 @@ bool Playable::isEnemy(int t){
 //
 //##################################################################################################
 
-void Playable::update(Terrain* ground, std::vector<Playable*> *otherUnits){
+nearbyPlayersStruct* Playable::getNearbyPlayablesForInteraction(std::vector<Playable*> *otherUnits){
 
     // Scan all units, looking for a stuff
     // Nearest friendly, hurt unit - for healing or repair
@@ -384,6 +382,7 @@ void Playable::update(Terrain* ground, std::vector<Playable*> *otherUnits){
 
     std::vector<Playable*> enemies_in_range;
 
+    // Scanning all units
     for(int i = 0; i < otherUnits->size(); ++i){
 
         Playable* target = otherUnits->at(i);
@@ -392,21 +391,42 @@ void Playable::update(Terrain* ground, std::vector<Playable*> *otherUnits){
 
         if(target != this){
 
-            // Attacking         Weapon range + our size + their size
-            if(target_distance < 10.0f && target->isEnemy(team_number)){
+            // Attacking         Sight range  && and they're visible
+            if(target_distance < 4.0f && target->isEnemy(team_number)){
                 enemies_in_range.push_back(target);
-            }        
+            }
+
+            // Other stuff
+
+
+
 
         }
     }
 
-    // Finalizing the attack
+    // Finalizing enemy unit to attack
+    
+
+    return NULL;
+}
+
+
+void Playable::update(Terrain* ground, std::vector<Playable*> *otherUnits){
+
+    // Setting up attack variables
+    // Playable* enemy_to_attack = getNearestEnemyToAttack(otherUnits);
+    // enemy_in_sight_range = (enemies_in_range.size() > 0);
+    // has_been_given_attack_order = (target_order == Playable::Order::ATTACK_MOVE);  
+
+    // Attacking         Weapon range + our size + their size
+
+    nearbyPlayersStruct* thing = getNearbyPlayablesForInteraction(otherUnits);
 
     // Turning on the first step
     if(first_step_since_order){
         first_step_since_order = false;
+        turning_during_first_step = true;
     }
-
 
     if(atTargetPosition() && order_queue.size() > 0){
 
@@ -419,14 +439,45 @@ void Playable::update(Terrain* ground, std::vector<Playable*> *otherUnits){
 
     } else if(!atTargetPosition()){
 
-        // All if we're not a flying or floating unit
+        // All if we're not a flying unit
 
-        int path_steer = steerToStayOnPath();
+        
 
-        position.x += sin(rotation.y + (turning_speed * path_steer))*speed;
-        position.z += cos(rotation.y + (turning_speed * path_steer))*speed;
+        if(turning_during_first_step){
 
-        setRotationEuler(rotation.x, rotation.y + (turning_speed * path_steer), rotation.z);
+            position.x += sin(target_direction)*speed;
+            position.z += cos(target_direction)*speed;
+
+            // http://stackoverflow.com/questions/1878907/the-smallest-difference-between-2-angles
+            float angle_delta = atan2(sin(target_direction-rotation.y), cos(target_direction-rotation.y));
+
+            // Needs to rotate to face the movement direction
+            if(fabs(angle_delta) > 0.01){
+
+                float sign = 1.0f;
+
+                if(angle_delta < 0){
+                    sign = -1.0f;
+                }
+
+                if(fabs(angle_delta) < turning_speed){
+                    setRotationEuler(rotation.x, target_direction, rotation.z);
+                    turning_during_first_step = false;
+                } else {
+                    setRotationEuler(rotation.x, rotation.y + (turning_speed*sign), rotation.z);
+                }
+            }
+
+        } else {
+
+            int path_steer = steerToStayOnPath();
+
+            position.x += sin(rotation.y + (turning_speed * path_steer))*speed;
+            position.z += cos(rotation.y + (turning_speed * path_steer))*speed;
+
+            setRotationEuler(rotation.x, rotation.y + (turning_speed * path_steer), rotation.z);
+
+        }
 
     } else {
 

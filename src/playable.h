@@ -19,6 +19,8 @@
 #include "terrain.h"
 #include "pathfinder.h"
 
+struct nearbyPlayersStruct;
+
 class Playable : public Drawable {
 public:
 	// Not a complete list
@@ -66,6 +68,7 @@ private:
 
 	// Tracking the first turn
 	bool first_step_since_order;
+	bool turning_during_first_step;
 
 	// Current/Old Target Location, Direction, and Order
 	glm::vec3 target_position;
@@ -77,8 +80,8 @@ private:
 	static Doodad* selection_ring;
 
 	// Attacking
-	bool can_attack;
-	bool should_attack;
+	bool enemy_in_sight_range;
+	bool has_been_given_attack_order;
 
 	//################################
 	// In-game Variables (Private)
@@ -93,6 +96,7 @@ private:
 	// 1 - Player
 	// . - Computer
 	int team_number;
+	int attack_priority;
 
 	// Movement
 	float speed;
@@ -138,6 +142,10 @@ private:
 	float getCurrentTargetDirection();
 
 	//################################
+	// Combat (Private)
+	//################################
+
+	//################################
 	// Steering (Private)
 	//################################
 
@@ -149,7 +157,28 @@ private:
 	//################################
 
 	void updateUniformData();
+	nearbyPlayersStruct* getNearbyPlayablesForInteraction(std::vector<Playable*>*);
 
+};
+
+struct nearbyPlayersStruct {
+	Playable* nearest_ally_hurt;
+	Playable* nearest_ally_town;
+	Playable* nearest_enem_unit;
+	Playable* nearest_resource;
+
+	Playable* get(int i){
+		switch(i){
+		case 0:
+			return nearest_ally_hurt;
+		case 1:
+			return nearest_ally_hurt;
+		case 2:
+			return nearest_ally_hurt;
+		case 3:
+			return nearest_ally_hurt;
+		}
+	}
 };
 
 #endif
