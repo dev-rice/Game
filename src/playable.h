@@ -17,9 +17,8 @@
 #include "mesh.h"
 #include "drawable.h"
 #include "terrain.h"
+#include "game_clock.h"
 #include "pathfinder.h"
-
-struct nearbyPlayersStruct;
 
 class Playable : public Drawable {
 public:
@@ -121,6 +120,12 @@ private:
 
 	std::vector<PlayableAttribute> attributes;
 
+	float last_attack_timestamp;
+
+	// REMOVE WE WHEN WEAPON IS IMPLEMENTED
+	float weapon_cooldown;
+	int weapon_damage;
+
 	// Not implemented yet
 	// Weapon* weapon
 	// Ability* ability
@@ -145,6 +150,9 @@ private:
 	// Combat (Private)
 	//################################
 
+	void attack(Playable*);
+	void takeDamage(int);
+
 	//################################
 	// Steering (Private)
 	//################################
@@ -157,28 +165,7 @@ private:
 	//################################
 
 	void updateUniformData();
-	nearbyPlayersStruct* getNearbyPlayablesForInteraction(std::vector<Playable*>*);
 
-};
-
-struct nearbyPlayersStruct {
-	Playable* nearest_ally_hurt;
-	Playable* nearest_ally_town;
-	Playable* nearest_enem_unit;
-	Playable* nearest_resource;
-
-	Playable* get(int i){
-		switch(i){
-		case 0:
-			return nearest_ally_hurt;
-		case 1:
-			return nearest_ally_hurt;
-		case 2:
-			return nearest_ally_hurt;
-		case 3:
-			return nearest_ally_hurt;
-		}
-	}
 };
 
 #endif

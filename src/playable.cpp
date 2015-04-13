@@ -57,6 +57,13 @@ Playable::Playable(Mesh* mesh, GLuint shader_program, glm::vec3 position, GLfloa
     target_position = position;
 
     first_step_since_order = false;
+
+    last_attack_timestamp = GameClock::getInstance()->getCurrentTime();
+
+    // remove me when weapon is implemented
+    health = 10;
+    weapon_cooldown = 0.5f; // In milliseconds
+    weapon_damage = 1;
 }
 
 void Playable::loadFromXML(std::string filepath){
@@ -360,6 +367,27 @@ bool Playable::isEnemy(int t){
     return team_number != t;
 }
 
+void Playable::attack(Playable *enemy){
+
+    if(health < 1){
+        return;
+    }
+
+    float delta_time = GameClock::getInstance()->getCurrentTime() - last_attack_timestamp;
+
+    if(delta_time > weapon_cooldown){
+        enemy->takeDamage(weapon_damage);
+        last_attack_timestamp = GameClock::getInstance()->getCurrentTime();
+    }
+}
+
+void Playable::takeDamage(int damage_amount){
+
+    health = std::max(health - damage_amount, 0);
+
+}
+
+
 //##################################################################################################
 //
 // ##     ## ########  ########     ###    ######## ########
@@ -372,45 +400,6 @@ bool Playable::isEnemy(int t){
 //
 //##################################################################################################
 
-nearbyPlayersStruct* Playable::getNearbyPlayablesForInteraction(std::vector<Playable*> *otherUnits){
-
-    // Scan all units, looking for a stuff
-    // Nearest friendly, hurt unit - for healing or repair
-    // Nearest friendly town hall  - resource return
-    // Nearest Enemy unit/struct   - to attack if in engage range
-    // Nearest resource            - to gather
-
-    std::vector<Playable*> enemies_in_range;
-
-    // Scanning all units
-    for(int i = 0; i < otherUnits->size(); ++i){
-
-        Playable* target = otherUnits->at(i);
-        glm::vec3 target_pos = target->getPosition();
-        float target_distance = getDistance(target_pos.x, target_position.z, position.x, position.z);
-
-        if(target != this){
-
-            // Attacking         Sight range  && and they're visible
-            if(target_distance < 4.0f && target->isEnemy(team_number)){
-                enemies_in_range.push_back(target);
-            }
-
-            // Other stuff
-
-
-
-
-        }
-    }
-
-    // Finalizing enemy unit to attack
-    
-
-    return NULL;
-}
-
-
 void Playable::update(Terrain* ground, std::vector<Playable*> *otherUnits){
 
     // Setting up attack variables
@@ -418,9 +407,23 @@ void Playable::update(Terrain* ground, std::vector<Playable*> *otherUnits){
     // enemy_in_sight_range = (enemies_in_range.size() > 0);
     // has_been_given_attack_order = (target_order == Playable::Order::ATTACK_MOVE);  
 
+    // Scan all units, looking for a stuff
+    // Nearest friendly, hurt unit - for healing or repair
+    // Nearest friendly town hall  - resource return
+    // Nearest Enemy unit/struct   - to attack if in engage range
+    // Nearest resource            - to gather
+
     // Attacking         Weapon range + our size + their size
 
-    nearbyPlayersStruct* thing = getNearbyPlayablesForInteraction(otherUnits);
+    // For now, just get the only other damn unit in the universe 
+    Playable* other_unit = 0; 
+    for(int i(0); i < otherUnits->size(); ++i){
+        if(otherUnits->at(i) != this){
+            other_unit = otherUnits->at(i);
+        }
+    }
+
+    attack(other_unit);
 
     // Turning on the first step
     if(first_step_since_order){
@@ -503,11 +506,14 @@ void Playable::update(Terrain* ground, std::vector<Playable*> *otherUnits){
 
 void Playable::draw(){
 
-    Drawable::draw();
+    if(health > 0){
+        Drawable::draw();
+    
 
-    if(selected || temp_selected ){
-        selection_ring->setPosition(glm::vec3(position.x, position.y + 0.5, position.z));
-        selection_ring->setRotationEuler(glm::vec3(M_PI/2.0f, rotation.y, 0.0));
-        selection_ring->draw();
+        if(selected || temp_selected ){
+            selection_ring->setPosition(glm::vec3(position.x, position.y + 0.5, position.z));
+            selection_ring->setRotationEuler(glm::vec3(M_PI/2.0f, rotation.y, 0.0));
+            selection_ring->draw();
+        }
     }
 }
