@@ -64,6 +64,7 @@ Playable::Playable(Mesh* mesh, GLuint shader_program, glm::vec3 position, GLfloa
     health = 200;
     max_health = 200;
     weapon_cooldown = 0.5f; // In milliseconds
+    weapon_range = 3.0f;
     weapon_damage = 20;
 }
 
@@ -370,8 +371,9 @@ bool Playable::isEnemy(int t){
 
 void Playable::attack(Playable *enemy){
 
-    if(health < 1){
+    if(health < 1 || enemy == NULL){
         // Can't attack when dead
+        // Also can't attack null targets
         return;
     }
 
@@ -379,22 +381,30 @@ void Playable::attack(Playable *enemy){
 
     if(delta_time > weapon_cooldown){
         int actual_damage = int(0.5 + weapon_damage*float(health)/float(max_health));
-        // actual_damage = std::max(actual_damage, int(0.5+0.25*float(weapon_damage)));
-        printf("%p attacked %p for %d damage, having %d health!\n", this, enemy, actual_damage, health);
+        // printf("%p attacked %p for %d damage, having %d health!\n", this, enemy, actual_damage, health);
         enemy->takeDamage(actual_damage);
         last_attack_timestamp = GameClock::getInstance()->getCurrentTime();
     }
 }
 
 void Playable::takeDamage(int damage_amount){
-
     health = std::max(health - damage_amount, 0);
+}
 
-    if(health == 0){
-        printf("DEATH!!!!\n");
+Playable* Playable::getUnitToAttack(std::vector<Playable*> *otherUnits){
+
+    // Find the highest priority unit -or- the unit that is attacking you
+    Playable* other_unit = 0; 
+
+    for(int i(0); i < otherUnits->size(); ++i){
+        if(otherUnits->at(i) != this){
+            other_unit = otherUnits->at(i);
+        }
     }
 
+    return other_unit;
 }
+
 
 //##################################################################################################
 //
@@ -408,6 +418,34 @@ void Playable::takeDamage(int damage_amount){
 //
 //##################################################################################################
 
+void Playable::scanUnits(std::vector<Playable*> *otherUnits){
+    // Scan all units, looking for a stuff
+    // Nearest friendly, hurt unit - for healing or repair
+    // Nearest friendly town hall  - resource return
+    // Nearest Enemy unit/struct   - to attack if in engage range
+    // Nearest resource            - to gather
+
+    attackable_units.clear();
+
+    Playable* current_unit = 0;
+
+    for(int i = 0; i < otherUnits->size(); ++i){
+
+        current_unit = otherUnits->at(i);
+
+        if(current_unit != this){
+
+            // If it is an enemy and in range, we could potentially attack it
+            float distance_to_enemy = getDistance(position.x, position.z, current_unit->getPosition().x, current_unit->getPosition().z);
+
+            if(current_unit->getTeam() != team_number && distance_to_enemy <= radius + current_unit->radius + weapon_range){
+                attackable_units.push_back(current_unit);
+            }
+
+        }
+    }
+}
+
 void Playable::update(Terrain* ground, std::vector<Playable*> *otherUnits){
 
     // Setting up attack variables
@@ -415,23 +453,23 @@ void Playable::update(Terrain* ground, std::vector<Playable*> *otherUnits){
     // enemy_in_sight_range = (enemies_in_range.size() > 0);
     // has_been_given_attack_order = (target_order == Playable::Order::ATTACK_MOVE);  
 
-    // Scan all units, looking for a stuff
-    // Nearest friendly, hurt unit - for healing or repair
-    // Nearest friendly town hall  - resource return
-    // Nearest Enemy unit/struct   - to attack if in engage range
-    // Nearest resource            - to gather
+   
 
     // Attacking         Weapon range + our size + their size
 
-    // For now, just get the only other damn unit in the universe 
-    Playable* other_unit = 0; 
-    for(int i(0); i < otherUnits->size(); ++i){
-        if(otherUnits->at(i) != this){
-            other_unit = otherUnits->at(i);
-        }
+    scanUnits(otherUnits);
+
+    Playable* unit_to_attack = getUnitToAttack(otherUnits);
+    
+    bool should_engage_enemies = target_order == Playable::Order::ATTACK_MOVE;
+
+    if(should_engage_enemies){
+        attack(unit_to_attack);
     }
 
-    attack(other_unit);
+
+
+
 
     // Turning on the first step
     if(first_step_since_order){

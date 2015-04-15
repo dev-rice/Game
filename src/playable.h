@@ -51,6 +51,8 @@ public:
 
 	float getRadius(){ return radius; }
 
+	int getTeam(){return team_number;}
+
 	// Temporary - REMOVE ME LATER
 	void setTeam(int t){team_number = t;}
 
@@ -81,6 +83,9 @@ private:
 	// Attacking
 	bool enemy_in_sight_range;
 	bool has_been_given_attack_order;
+
+	// Scanning stuff
+	std::vector<Playable*> attackable_units;
 
 	//################################
 	// In-game Variables (Private)
@@ -125,6 +130,7 @@ private:
 	// REMOVE WE WHEN WEAPON IS IMPLEMENTED
 	float weapon_cooldown;
 	int weapon_damage;
+	float weapon_range;
 
 	// Not implemented yet
 	// Weapon* weapon
@@ -152,6 +158,7 @@ private:
 
 	void attack(Playable*);
 	void takeDamage(int);
+	Playable* getUnitToAttack(std::vector<Playable*>*);
 
 	//################################
 	// Steering (Private)
@@ -164,6 +171,7 @@ private:
 	// Other Stuff (Private)
 	//################################
 
+	void scanUnits(std::vector<Playable*>*);
 	void updateUniformData();
 
 };
