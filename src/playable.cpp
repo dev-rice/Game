@@ -61,9 +61,10 @@ Playable::Playable(Mesh* mesh, GLuint shader_program, glm::vec3 position, GLfloa
     last_attack_timestamp = GameClock::getInstance()->getCurrentTime();
 
     // remove me when weapon is implemented
-    health = 10;
+    health = 200;
+    max_health = 200;
     weapon_cooldown = 0.5f; // In milliseconds
-    weapon_damage = 1;
+    weapon_damage = 20;
 }
 
 void Playable::loadFromXML(std::string filepath){
@@ -370,13 +371,17 @@ bool Playable::isEnemy(int t){
 void Playable::attack(Playable *enemy){
 
     if(health < 1){
+        // Can't attack when dead
         return;
     }
 
     float delta_time = GameClock::getInstance()->getCurrentTime() - last_attack_timestamp;
 
     if(delta_time > weapon_cooldown){
-        enemy->takeDamage(weapon_damage);
+        int actual_damage = int(0.5 + weapon_damage*float(health)/float(max_health));
+        // actual_damage = std::max(actual_damage, int(0.5+0.25*float(weapon_damage)));
+        printf("%p attacked %p for %d damage, having %d health!\n", this, enemy, actual_damage, health);
+        enemy->takeDamage(actual_damage);
         last_attack_timestamp = GameClock::getInstance()->getCurrentTime();
     }
 }
@@ -385,8 +390,11 @@ void Playable::takeDamage(int damage_amount){
 
     health = std::max(health - damage_amount, 0);
 
-}
+    if(health == 0){
+        printf("DEATH!!!!\n");
+    }
 
+}
 
 //##################################################################################################
 //
