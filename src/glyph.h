@@ -1,8 +1,7 @@
 #ifndef Glyph_h
 #define Glyph_h
 
-#include <ft2build.h>
-#include FT_FREETYPE_H
+#include "includes/freetype.hpp"
 
 #define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>

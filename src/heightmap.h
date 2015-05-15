@@ -1,13 +1,7 @@
 #ifndef Heightmap_h
 #define Heightmap_h
-#include <GL/glew.h>
 
-#if defined __APPLE__ && __MACH__
-    #include <OpenGL/OpenGL.h>
-// #elif defined __gnu_linux__
-#endif
-
-#include <SOIL.h>
+#include "includes/gl.hpp"
 
 #define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>

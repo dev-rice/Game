@@ -4,7 +4,7 @@
 #ifndef Playable_h
 #define Playable_h
 
-#include <GL/glew.h>
+#include "includes/gl.hpp"
 
 #include <vector>
 #include <string>

@@ -1,23 +1,12 @@
-#ifndef FontSheetr_h
-#define FontSheetr_h
+#ifndef FontSheet_h
+#define FontSheet_h
 
-#include <GL/glew.h>
-#include <SDL2/SDL.h>
-
-#if defined __APPLE__ && __MACH__
-    #include <OpenGL/OpenGL.h>
-// #elif defined __gnu_linux__
-#endif
-
-#define GLM_FORCE_RADIANS
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
+#include "includes/gl.hpp"
+#include "includes/sdl.hpp"
+#include "includes/glm.hpp"
+#include "includes/freetype.hpp"
 
 #include <SOIL.h>
-
-#include <ft2build.h>
-#include FT_FREETYPE_H
 
 #include <algorithm>
 #include <unordered_map>

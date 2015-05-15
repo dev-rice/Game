@@ -3,9 +3,9 @@
 
 #include <functional>
 #include <thread>
-#include <SDL2/SDL.h>
 #include <stack>
 
+#include "includes/sdl.hpp"
 #include "debug.h"
 #include "window.h"
 

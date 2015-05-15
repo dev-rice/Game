@@ -1,7 +1,7 @@
 #ifndef GameClock_h
 #define GameClock_h
 
-#include <SDL2/SDL.h>
+#include "includes/sdl.hpp"
 
 #include "debug.h"
 

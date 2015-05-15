@@ -1,17 +1,9 @@
 #ifndef Window_h
 #define Window_h
 
-#include <GL/glew.h>
-#include <SDL2/SDL.h>
-
-#if defined __APPLE__ && __MACH__
-    #include <OpenGL/OpenGL.h>
-#endif
-
-#define GLM_FORCE_RADIANS
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
+#include "includes/gl.hpp"
+#include "includes/sdl.hpp"
+#include "includes/glm.hpp"
 
 #include <SOIL.h>
 #include <ctime>

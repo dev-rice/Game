@@ -200,7 +200,7 @@ bool PathFinder::canPathOnLine(Terrain* ground, float x1, float y1, float x2, fl
  	// http://rosettacode.org/wiki/Bitmap/Bresenham%27s_line_algorithm#C.2B.2B
 	// Bresenham's line algorithm
 
-	const bool steep = (abs(y2 - y1) > abs(x2 - x1));
+	const bool steep = (fabs(y2 - y1) > fabs(x2 - x1));
 
 	if(steep){
 	  std::swap(x1, y1);
@@ -213,7 +213,7 @@ bool PathFinder::canPathOnLine(Terrain* ground, float x1, float y1, float x2, fl
 	}
 
 	const float dx = x2 - x1;
-	const float dy = abs(y2 - y1);
+	const float dy = fabs(y2 - y1);
 
 	float error = dx / 2.0f;
 	const int ystep = (y1 < y2) ? 1 : -1;
