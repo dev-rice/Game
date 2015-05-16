@@ -14,9 +14,6 @@ Level::Level(const char* filename){
     int width  = window->getWidth();
     int height = window->getHeight();
 
-    proj_matrix = glm::perspective(45.0f, (float)width / (float)height, 0.1f,
-        500.0f);
-
     camera = new Camera(glm::vec3(0.0f, 40.0f, 40.0f), glm::vec3(1.04f, 0.0f, 0.0f));
     // camera = new Camera(glm::vec3(7.39f, 2.91f, 1.13f), glm::vec3(0.07, 1.2, 0.0));
 
@@ -167,7 +164,8 @@ void Level::updateGlobalUniforms(){
     depth_view = glm::lookAt(light_direction + camera_offset, camera_offset,
         glm::vec3(0,1,0));
 
-    view_matrix = camera->getViewMatrix();
+    glm::mat4 view = camera->getViewMatrix();
+    glm::mat4 proj = camera->getProjectionMatrix();
 
     // Attach the shadow texture to location 4
     glActiveTexture(GL_TEXTURE4);
@@ -176,9 +174,9 @@ void Level::updateGlobalUniforms(){
     // Put the data in the UBO.
     glBindBuffer(GL_UNIFORM_BUFFER, camera_ubo);
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4),
-        glm::value_ptr(view_matrix));
+        glm::value_ptr(view));
     glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4),
-        glm::value_ptr(proj_matrix));
+        glm::value_ptr(proj));
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
     glBindBuffer(GL_UNIFORM_BUFFER, shadow_ubo);
@@ -193,8 +191,6 @@ void Level::updateGlobalUniforms(){
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::vec3),
         glm::value_ptr(unit_pos));
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
-
-
 
 }
 
@@ -213,7 +209,9 @@ glm::vec3 Level::getIntersection(glm::vec3 line, float height){
 
 glm::vec3 Level::calculateRay(glm::vec2 screen_point){
     glm::mat4 view = camera->getViewMatrix();
-    glm::vec3 ray = glm::vec3(glm::inverse(proj_matrix) * glm::vec4(screen_point, -1.0, 1.0));
+    glm::mat4 proj = camera->getProjectionMatrix();
+
+    glm::vec3 ray = glm::vec3(glm::inverse(proj) * glm::vec4(screen_point, -1.0, 1.0));
     ray.z = -1.0;
     ray = glm::vec3(glm::inverse(view) * glm::vec4(ray, 0.0));
     ray = glm::normalize(ray);
@@ -557,8 +555,8 @@ void Level::issueOrder(Playable::Order order, glm::vec3 target, bool should_enqu
 }
 
 float Level::getDistance(float a1, float a2, float b1, float b2){
-    float x_diff = abs(a1 - b1);
-    float z_diff = abs(a2 - b2);
+    float x_diff = fabs(a1 - b1);
+    float z_diff = fabs(a2 - b2);
     return sqrt(x_diff*x_diff + z_diff*z_diff);
 }
 

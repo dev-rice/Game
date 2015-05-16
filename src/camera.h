@@ -6,6 +6,7 @@
 #include <stdio.h>
 
 #include "game_clock.h"
+#include "window.h"
 
 const float MOVE_SENSITIVITY = 10.0;
 const float ROTATE_SENSITIVITY = 2.0;
@@ -37,8 +38,13 @@ public:
     glm::vec3 getPosition();
     glm::vec3 getRotation();
     glm::mat4 getViewMatrix();
+    glm::mat4 getProjectionMatrix();
+
 
 private:
+
+    void loadProjectionMatrix(float fov, float aspect_ratio, float near_clip, float far_clip);
+
     glm::vec3 position;
     glm::vec3 rotation;
 
@@ -48,6 +54,8 @@ private:
 
     float move_sensitivity;
     float rotate_sensitivity;
+
+    glm::mat4 proj_matrix;
 
 };
 

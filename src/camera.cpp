@@ -10,6 +10,17 @@ Camera::Camera(glm::vec3 position, glm::vec3 rotation, float move_sensitivity, f
 
     this->move_sensitivity = move_sensitivity;
     this->rotate_sensitivity = rotate_sensitivity;
+
+    // Default projection matrix
+    int width = Window::getInstance()->getWidth();
+    int height = Window::getInstance()->getHeight();
+
+    float fov = 45.0f;
+    float aspect_ratio = (float)width / (float)height;
+    float near_clip = 0.1f;
+    float far_clip = 500.0f;
+    loadProjectionMatrix(fov, aspect_ratio, near_clip, far_clip);
+
 }
 
 void Camera::setPosition(glm::vec3 position){
@@ -94,10 +105,18 @@ glm::mat4 Camera::getViewMatrix(){
     return view_matrix;
 }
 
+glm::mat4 Camera::getProjectionMatrix(){
+    return proj_matrix;
+}
+
 glm::vec3 Camera::getPosition(){
     return position;
 }
 
 glm::vec3 Camera::getRotation(){
     return rotation;
+}
+
+void Camera::loadProjectionMatrix(float fov, float aspect_ratio, float near_clip, float far_clip){
+    proj_matrix = glm::perspective(fov, aspect_ratio, near_clip, far_clip);
 }
