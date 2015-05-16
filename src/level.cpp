@@ -37,26 +37,25 @@ Level::Level(const char* filename){
     // Size of the box to render (tailored to fit current map).
     depth_proj = glm::ortho<float>(-60,60,-65, 60,-40,40);
 
-    // Create the uniform buffer object.
+    // Create the uniform buffer object for the camera.
     glGenBuffers(1, &camera_ubo);
     glBindBuffer(GL_UNIFORM_BUFFER, camera_ubo);
     glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::mat4) * 2, NULL, GL_STREAM_DRAW);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
+    glBindBufferRange(GL_UNIFORM_BUFFER, 1, camera_ubo, 0, sizeof(glm::mat4) * 2);
 
-    // Create the uniform buffer object.
+    // Create the uniform buffer object for the shadows.
     glGenBuffers(1, &shadow_ubo);
     glBindBuffer(GL_UNIFORM_BUFFER, shadow_ubo);
     glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::mat4) * 2, NULL, GL_STREAM_DRAW);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
+    glBindBufferRange(GL_UNIFORM_BUFFER, 2, shadow_ubo, 0, sizeof(glm::mat4) * 2);
 
-    // Create the uniform buffer object.
+    // Create the uniform buffer object for the unit.
     glGenBuffers(1, &unit_ubo);
     glBindBuffer(GL_UNIFORM_BUFFER, unit_ubo);
     glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::vec3), NULL, GL_STREAM_DRAW);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
-
-    glBindBufferRange(GL_UNIFORM_BUFFER, 1, camera_ubo, 0, sizeof(glm::mat4) * 2);
-    glBindBufferRange(GL_UNIFORM_BUFFER, 2, shadow_ubo, 0, sizeof(glm::mat4) * 2);
     glBindBufferRange(GL_UNIFORM_BUFFER, 10, unit_ubo, 0, sizeof(glm::vec3));
 
     loadLevel(filename);

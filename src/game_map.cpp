@@ -1,8 +1,12 @@
 #include "game_map.hpp"
 
-GameMap::GameMap(std::string map_filename) : camera(), terrain() {
+GameMap::GameMap(std::string map_filename) : camera(), terrain(), shadowbuffer() {
+
     ifstream map_input(map_filename);
     load(map_input);
+
+    initializeGlobalUniforms();
+
 }
 
 void GameMap::render(){
@@ -51,4 +55,56 @@ void GameMap::load(ifstream& map_input){
     for (const Json::Value& doodad : doodads_json){
 
     }
+}
+
+void GameMap::initializeGlobalUniforms(){
+    // Create the uniform buffer object for the camera.
+    glGenBuffers(1, &camera_ubo);
+    glBindBuffer(GL_UNIFORM_BUFFER, camera_ubo);
+    glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::mat4) * 2, NULL, GL_STREAM_DRAW);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+    glBindBufferRange(GL_UNIFORM_BUFFER, 1, camera_ubo, 0, sizeof(glm::mat4) * 2);
+
+    // Create the uniform buffer object for the shadows.
+    glGenBuffers(1, &shadow_ubo);
+    glBindBuffer(GL_UNIFORM_BUFFER, shadow_ubo);
+    glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::mat4) * 2, NULL, GL_STREAM_DRAW);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+    glBindBufferRange(GL_UNIFORM_BUFFER, 2, shadow_ubo, 0, sizeof(glm::mat4) * 2);
+
+}
+
+void GameMap::updateGlobalUniforms(){
+    // Update the shadow view matrix based on the current
+    // camera position
+    glm::vec3 light_direction = glm::vec3(1.0f, 2.0f, -0.5f);
+    glm::vec3 camera_offset = glm::vec3(camera.getPosition().x, 0, camera.getPosition().z - 40.0);
+
+    // Ideally this shouldn't be created each time
+    glm::mat4 depth_view = glm::lookAt(light_direction + camera_offset, camera_offset, glm::vec3(0,1,0));
+    glm::mat4 depth_proj = glm::ortho<float>(-60,60,-65, 60,-40,40);
+
+
+    glm::mat4 view = camera.getViewMatrix();
+    glm::mat4 proj = camera.getProjectionMatrix();
+
+    // Attach the shadow texture to location 4
+    glActiveTexture(GL_TEXTURE4);
+    glBindTexture(GL_TEXTURE_2D, shadowbuffer.getTexture());
+
+    // Put the data in the UBO.
+    glBindBuffer(GL_UNIFORM_BUFFER, camera_ubo);
+    glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4),
+        glm::value_ptr(view));
+    glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4),
+        glm::value_ptr(proj));
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+    glBindBuffer(GL_UNIFORM_BUFFER, shadow_ubo);
+    glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4),
+        glm::value_ptr(depth_view));
+    glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4),
+        glm::value_ptr(depth_proj));
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
 }

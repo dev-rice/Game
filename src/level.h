@@ -59,18 +59,18 @@ public:
 
     float getDistance(float, float, float, float);
 
-    glm::vec3 getIntersection(glm::vec3 line, float plane_height);
-    glm::vec3 calculateRay(glm::vec2 screen_point);
-    std::tuple<float, float, glm::vec3> findWorldPoint(glm::vec3 ray, int steps, float bottom, float top);
-    glm::vec3 findWorldPointInit(glm::vec3 ray, int steps);
     glm::vec3 calculateWorldPosition(glm::vec2 screen_point);
 
     Camera* getCamera() {return camera;}
-    Shadowbuffer* getShadowbuffer(){return shadowbuffer;}
 
 private:
     void loadLevel(const char *);
     GLuint getTexture(GLuint);
+
+    glm::vec3 getIntersection(glm::vec3 line, float plane_height);
+    glm::vec3 calculateRay(glm::vec2 screen_point);
+    std::tuple<float, float, glm::vec3> findWorldPoint(glm::vec3 ray, int steps, float bottom, float top);
+    glm::vec3 findWorldPointInit(glm::vec3 ray, int steps);
 
     Window* window;
     Camera* camera;
