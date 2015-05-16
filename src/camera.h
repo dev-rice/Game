@@ -16,7 +16,8 @@ public:
     Camera() : Camera(glm::vec3(), glm::vec3(), MOVE_SENSITIVITY, ROTATE_SENSITIVITY) {;}
     Camera(glm::vec3 p) : Camera(p, glm::vec3(), MOVE_SENSITIVITY, ROTATE_SENSITIVITY) {;}
     Camera(glm::vec3 p, glm::vec3 r) : Camera(p, r, MOVE_SENSITIVITY, ROTATE_SENSITIVITY) {;}
-    Camera(glm::vec3, glm::vec3, float, float);
+    Camera(glm::vec3 p, glm::vec3 r, float ms, float rs) : Camera(p, r, ms, rs, 45.0f) {;}
+    Camera(glm::vec3, glm::vec3, float, float, float);
 
     void moveX(int);
     void moveY(int);

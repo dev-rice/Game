@@ -19,6 +19,7 @@
 
 class Terrain : public Drawable {
 public:
+    Terrain() {;}
     Terrain (GLuint s, std::string h) : Terrain(s, h, 10.0f) {;}
     Terrain (GLuint, std::string, float);
 
