@@ -189,7 +189,7 @@ void GameView::drawOtherStuff(){
 
 void GameView::handleInputState(){
     Camera* camera = level->getCamera();
-    glm::mat4 proj_matrix = level->getProjection();
+    glm::mat4 proj_matrix = camera->getProjectionMatrix();
     Terrain* terrain = level->getTerrain();
 
     // Get the mouse coordinates gl, and the world

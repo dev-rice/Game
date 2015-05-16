@@ -1,6 +1,6 @@
 #include "camera.h"
 
-Camera::Camera(glm::vec3 position, glm::vec3 rotation, float move_sensitivity, float rotate_sensitivity){
+Camera::Camera(glm::vec3 position, glm::vec3 rotation, float move_sensitivity, float rotate_sensitivity, float fov){
     this->position = position;
     this->rotation = rotation;
 
@@ -16,7 +16,7 @@ Camera::Camera(glm::vec3 position, glm::vec3 rotation, float move_sensitivity, f
     int height = Window::getInstance()->getHeight();
 
     // Set intrinsic parameters
-    fov = 45.0f;
+    this->fov = fov;
     aspect_ratio = (float)width / (float)height;
     near_clip = 0.1f;
     far_clip = 500.0f;

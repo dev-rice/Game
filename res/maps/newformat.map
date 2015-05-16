@@ -6,14 +6,16 @@
         "fov": 45.0,
         "position": {
             "x": 0.0,
+            "y": 40.0,
+            "z": 40.0
+        },
+        "rotation": {
+            "x": 1.04,
             "y": 0.0,
             "z": 0.0
         },
-        "rotation": {
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
-        }
+        "move_sensitivity": 10.0,
+        "rotate_sensitivity": 2.0
     },
 
     "doodads": [
@@ -71,7 +73,7 @@
         }
     ],
 
-    "particles": [
+    "particle_emitters": [
         {
             "type": "fire",
             "position": {
