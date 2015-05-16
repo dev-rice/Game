@@ -19,7 +19,6 @@ public:
 
     void render();
 
-
 private:
 
     void load(ifstream& map);
@@ -30,7 +29,7 @@ private:
     Camera camera;
     vector<reference_wrapper<Doodad>> doodads;
     vector<reference_wrapper<Emitter>> emitters;
-    Terrain terrain;
+    Terrain ground;
 
     Shadowbuffer shadowbuffer;
 
