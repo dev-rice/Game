@@ -9,6 +9,7 @@
 #include "particles/all_emitters.hpp"
 #include "terrain.h"
 #include "includes/json.hpp"
+#include "shadowbuffer.h"
 
 using namespace std;
 
@@ -23,10 +24,18 @@ private:
 
     void load(ifstream& map);
 
+    void initializeGlobalUniforms();
+    void updateGlobalUniforms();
+
     Camera camera;
     vector<reference_wrapper<Doodad>> doodads;
     vector<reference_wrapper<Emitter>> emitters;
     Terrain terrain;
+
+    Shadowbuffer shadowbuffer;
+
+    GLuint camera_ubo;
+    GLuint shadow_ubo;
 
 };
 
