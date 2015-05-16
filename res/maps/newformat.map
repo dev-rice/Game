@@ -1,0 +1,107 @@
+{
+    "mesh_path": "res/models/",
+    "texture_path": "res/textures/",
+
+    "camera": {
+        "fov": 45.0,
+        "position": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        }
+    },
+
+    "doodads": [
+        {
+            "mesh": "fence.dae",
+            "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "textures": {
+                "diff": "fence_diff.png",
+                "norm": "fence_norm.png"
+            }
+        },
+        {
+            "mesh": "castle_tower.dae",
+            "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "textures": {
+                "diff": "castle_tower_diff.png",
+                "norm": "castle_tower_norm.png"
+            }
+        }
+    ],
+
+    "particles": [
+        {
+            "type": "fire",
+            "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "type": "smoke",
+            "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        }
+    ],
+
+    "terrain": {
+        "heightmap": "maze.png",
+        "splatmaps": [
+            {
+                "id": 0,
+                "filename": "all_splat.png"
+            },
+            {
+                "id": 1,
+                "filename": "second_splat.png"
+            }
+        ],
+        "texture_layers": [
+            {
+                "layer_number": 1,
+                "splatmap": 0,
+                "channel": "r",
+                "textures": {
+                    "diff": "stone_tile.png"
+                }
+            },
+            {
+                "layer_number": 2,
+                "splatmap": 0,
+                "channel": "g",
+                "textures": {
+                    "diff": "stone.png"
+                }
+            }
+        ]
+    }
+
+}
