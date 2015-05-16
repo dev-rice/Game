@@ -1,6 +1,6 @@
 #include "game_map.hpp"
 
-GameMap::GameMap(std::string map_filename) : camera(), terrain(), shadowbuffer() {
+GameMap::GameMap(std::string map_filename) : camera(), ground(), shadowbuffer() {
 
     ifstream map_input(map_filename);
     load(map_input);
@@ -10,6 +10,23 @@ GameMap::GameMap(std::string map_filename) : camera(), terrain(), shadowbuffer()
 }
 
 void GameMap::render(){
+    // Update the global uniforms like the camera position and shadow projections
+    updateGlobalUniforms();
+    
+    // Draw all the drawables
+    for (Doodad& doodad : doodads){
+        doodad.draw();
+    }
+
+    // Draw all the particle emitters
+    if (Profile::getInstance()->isParticlesOn()){
+        for(Emitter& emitter : emitters){
+            emitter.draw(&camera);
+        }
+    }
+
+    // Draw the ground (terrain)
+    ground.draw();
 
 }
 
@@ -83,7 +100,6 @@ void GameMap::updateGlobalUniforms(){
     // Ideally this shouldn't be created each time
     glm::mat4 depth_view = glm::lookAt(light_direction + camera_offset, camera_offset, glm::vec3(0,1,0));
     glm::mat4 depth_proj = glm::ortho<float>(-60,60,-65, 60,-40,40);
-
 
     glm::mat4 view = camera.getViewMatrix();
     glm::mat4 proj = camera.getProjectionMatrix();
