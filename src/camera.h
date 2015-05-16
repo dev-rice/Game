@@ -35,15 +35,20 @@ public:
 
     void print();
 
+    void setFOV(float fov);
+
+    void zoomIn(float zoom_amt);
+    void zoomOut(float zoom_amt);
+
     glm::vec3 getPosition();
     glm::vec3 getRotation();
     glm::mat4 getViewMatrix();
     glm::mat4 getProjectionMatrix();
-
+    float getFOV();
 
 private:
 
-    void loadProjectionMatrix(float fov, float aspect_ratio, float near_clip, float far_clip);
+    void updateProjectionMatrix();
 
     glm::vec3 position;
     glm::vec3 rotation;
@@ -55,6 +60,11 @@ private:
     float move_sensitivity;
     float rotate_sensitivity;
 
+    // Proj matrix and intrinsic values
+    float fov;
+    float aspect_ratio;
+    float near_clip;
+    float far_clip;
     glm::mat4 proj_matrix;
 
 };

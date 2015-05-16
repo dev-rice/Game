@@ -133,7 +133,8 @@ void GameView::update(){
             "%.2f, %.2f, %.2f", position.x, position.y, position.z);
         text_renderer->print(10, 100, "camera rotation <x, y, z>:"
             "%.2f, %.2f, %.2f", rotation.x, rotation.y, rotation.z);
-        text_renderer->print(10, 120, "mouse world position <x, y, z>:"
+        text_renderer->print(10, 120, "camera fov: %.4f", camera->getFOV());
+        text_renderer->print(10, 140, "mouse world position <x, y, z>:"
             "%.2f, %.2f, %.2f", mouse_world_pos.x, mouse_world_pos.y, mouse_world_pos.z);
 
     }
@@ -375,6 +376,15 @@ void GameView::handleKeyboardCameraMovement(){
     if (state[SDL_SCANCODE_R]){
         camera->rotateX(1);
     }
+
+    // FOV Changing
+    if (state[SDL_SCANCODE_MINUS]){
+        camera->zoomIn(0.01);
+    }
+    if (state[SDL_SCANCODE_EQUALS]){
+        camera->zoomOut(0.01);
+    }
+
 }
 
 void GameView::handleMouseCameraMovement(){
@@ -385,6 +395,8 @@ void GameView::handleMouseCameraMovement(){
     // Get the mouse coordinates gl, and the world
     glm::vec2 mouse_gl_pos = Mouse::getInstance()->getGLPosition();
     glm::vec3 mouse_world_pos = level->calculateWorldPosition(mouse_gl_pos);
+
+    const Uint8 *state = SDL_GetKeyboardState(NULL);
 
     // Mouse scrolling the screen when not in debug mode
     if(mouse_count == 0){
@@ -450,5 +462,13 @@ void GameView::handleMouseCameraMovement(){
         if(mouse_gl_pos.x > 0.85 && mouse_gl_pos.y > 0.85){
             Mouse::getInstance()->setCursorSprite(Mouse::cursorType::UP_RIGHT);
         }
+    }
+
+    // FOV Changing
+    if (state[SDL_SCANCODE_MINUS]){
+        camera->zoomIn(0.01);
+    }
+    if (state[SDL_SCANCODE_EQUALS]){
+        camera->zoomOut(0.01);
     }
 }

@@ -15,11 +15,12 @@ Camera::Camera(glm::vec3 position, glm::vec3 rotation, float move_sensitivity, f
     int width = Window::getInstance()->getWidth();
     int height = Window::getInstance()->getHeight();
 
-    float fov = 45.0f;
-    float aspect_ratio = (float)width / (float)height;
-    float near_clip = 0.1f;
-    float far_clip = 500.0f;
-    loadProjectionMatrix(fov, aspect_ratio, near_clip, far_clip);
+    // Set intrinsic parameters
+    fov = 45.0f;
+    aspect_ratio = (float)width / (float)height;
+    near_clip = 0.1f;
+    far_clip = 500.0f;
+    updateProjectionMatrix();
 
 }
 
@@ -29,6 +30,27 @@ void Camera::setPosition(glm::vec3 position){
 
 void Camera::setRotation(glm::vec3 rotation){
     this->rotation = rotation;
+}
+
+void Camera::setFOV(float fov){
+    this->fov = fov;
+    updateProjectionMatrix();
+}
+
+void Camera::zoomIn(float zoom_amt){
+    fov += zoom_amt;
+    if (fov > 180.0f){
+        fov = 180.0f;
+    }
+    setFOV(fov);
+}
+
+void Camera::zoomOut(float zoom_amt){
+    fov -= zoom_amt;
+    if (fov < 0.0f){
+        fov = 0.0f;
+    }
+    setFOV(fov);
 }
 
 void Camera::moveX(int direction){
@@ -117,6 +139,11 @@ glm::vec3 Camera::getRotation(){
     return rotation;
 }
 
-void Camera::loadProjectionMatrix(float fov, float aspect_ratio, float near_clip, float far_clip){
+float Camera::getFOV(){
+    return fov;
+}
+
+void Camera::updateProjectionMatrix(){
+    // Use all of the intrinsic values to create the projection matrix
     proj_matrix = glm::perspective(fov, aspect_ratio, near_clip, far_clip);
 }
