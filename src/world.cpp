@@ -15,10 +15,11 @@ World::~World(){
 void World::addLevel(const char* filename){
     Debug::info("Setting the world level to '%s'\n", filename);
     level = new Level(filename);
+    GameMap map("res/maps/newformat.map");
     if (edit_mode){
-        game_view = new GameViewEdit(level);
+        game_view = new GameViewEdit(level, map);
     } else {
-        game_view = new GameView(level);
+        game_view = new GameView(level, map);
     }
 }
 
