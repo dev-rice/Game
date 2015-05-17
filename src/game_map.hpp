@@ -20,6 +20,7 @@ public:
     GameMap(string map_filename);
 
     void render();
+    void renderToShadowMap();
     Camera& getCamera();
 
 private:
@@ -38,6 +39,8 @@ private:
 
     GLuint camera_ubo;
     GLuint shadow_ubo;
+
+    GLuint shadow_shader;
 
 };
 
