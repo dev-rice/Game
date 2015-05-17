@@ -61,8 +61,8 @@ void GameMap::load(ifstream& map_input){
 
     glm::vec3 rotation;
     rotation.x = camera_json["rotation"]["x"].asFloat();
-    rotation.x = camera_json["rotation"]["y"].asFloat();
-    rotation.x = camera_json["rotation"]["z"].asFloat();
+    rotation.y = camera_json["rotation"]["y"].asFloat();
+    rotation.z = camera_json["rotation"]["z"].asFloat();
 
     float move_sensitivity = camera_json["move_sensitivity"].asFloat();
     float rotate_sensitivity = camera_json["rotate_sensitivity"].asFloat();
