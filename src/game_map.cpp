@@ -1,8 +1,10 @@
 #include "game_map.hpp"
 
-GameMap::GameMap(string map_filename) : camera(), ground(), shadowbuffer() {
+GameMap::GameMap(string map_filename) : camera(), ground(), shadowbuffer(1.0) {
     ifstream map_input(map_filename);
     load(map_input);
+
+    shadow_shader = ShaderLoader::loadShaderProgram("shaders/shadow.vs", "shaders/shadow.fs");
 
     initializeGlobalUniforms();
 
@@ -24,9 +26,26 @@ void GameMap::render(){
     //     }
     // }
     //
-    // // Draw the ground (terrain)
-    // ground.draw();
+    // Draw the ground (terrain)
+    ground.draw();
 
+}
+
+void GameMap::renderToShadowMap(){
+    updateGlobalUniforms();
+
+    shadowbuffer.setAsRenderTarget();
+
+    for (Doodad& doodad : doodads){
+        // Save the shader this drawable is currently using
+        GLuint current_shader = doodad.getShader();
+        // Set the drawable to render with the shadow shader
+        doodad.setShader(shadow_shader);
+        // Draw the drawable from the light's perspective
+        doodad.draw();
+        // Reset the drawable's shader to what it was before
+        doodad.setShader(current_shader);
+    }
 }
 
 Camera& GameMap::getCamera(){
@@ -75,61 +94,11 @@ void GameMap::load(ifstream& map_input){
     // Read in each doodad
     const Json::Value doodads_json = root["doodads"];
     for (const Json::Value& doodad_json : doodads_json){
-        // All of this should just be in the doodad
-        string mesh_filename = doodad_json["mesh"].asString();
-        string full_path = mesh_path + mesh_filename;
-        // NOOOOOOOO!!!!!! but for now...
-        Mesh* mesh_ptr = new Mesh(full_path);
-
-        // Scale of the doodad
-        float scale = doodad_json["scale"].asFloat();
-
-        // World position of the doodad
-        glm::vec3 position;
-        position.x = doodad_json["position"]["x"].asFloat();
-        position.y = doodad_json["position"]["y"].asFloat();
-        position.z = doodad_json["position"]["z"].asFloat();
-        // Euler rotation of the doodad
-        glm::vec3 rotation;
-        position.x = doodad_json["rotation"]["x"].asFloat();
-        position.y = doodad_json["rotation"]["y"].asFloat();
-        position.z = doodad_json["rotation"]["z"].asFloat();
-
-        // Create the doodad
-        Doodad doodad(mesh_ptr);
-
-        // Load the textures
-        const Json::Value textures = doodad_json["textures"];
-        string diffuse_filename = texture_path + textures["diff"].asString();
-        // string normal_filename = texture_path + textures["norm"].asString();
-        // string specular_filename = texture_path + textures["spec"].asString();
-        // string emissive_filename = texture_path + textures["emit"].asString();
-
-        cout << diffuse_filename << endl;
-        // if (diffuse_filename != ""){
-            GLuint diff = TextureLoader::loadTextureFromFile(diffuse_filename, GL_LINEAR);
-            doodad.setDiffuse(diff);
-        // }
-        // if (normal_filename != ""){
-        //     GLuint norm = TextureLoader::loadTextureFromFile(normal_filename, GL_LINEAR);
-        //     doodad.setNormal(norm);
-        // }
-        // if (specular_filename != ""){
-        //     GLuint spec = TextureLoader::loadTextureFromFile(specular_filename, GL_LINEAR);
-        //     doodad.setSpecular(spec);
-        // }
-        // if (emissive_filename != ""){
-        //     GLuint emit = TextureLoader::loadTextureFromFile(emissive_filename, GL_LINEAR);
-        //     doodad.setEmissive(emit);
-        // }
-
-        doodad.setScale(scale);
-        doodad.setPosition(position);
-        doodad.setRotationEuler(rotation);
-
-        doodads.push_back(doodad);
+        doodads.push_back(Doodad(doodad_json, mesh_path, texture_path));
 
     }
+
+    ground = Terrain(root["terrain"], texture_path);
 }
 
 void GameMap::initializeGlobalUniforms(){

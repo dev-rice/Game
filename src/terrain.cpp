@@ -13,8 +13,46 @@
 //   ------------------
 //        width
 
-Terrain::Terrain(GLuint shader_program, std::string heightmap_filename, float amplification)
-    : Drawable() {
+Terrain::Terrain(const Json::Value& terrain_json, std::string texture_path){
+
+    // Basic terrain loading
+    std::string heightmap_filename = texture_path + terrain_json["heightmap"].asString();
+    float amplification = terrain_json["amplification"].asFloat();
+
+    GLuint shader = ShaderLoader::loadShaderProgram("shaders/terrain.vs", "shaders/terrain.fs");
+
+    initializer(shader, heightmap_filename, amplification);
+
+    // Do the textures
+    for(const Json::Value& splatmap_json : terrain_json["splatmaps"]){
+        std::string filename = texture_path + splatmap_json["filename"].asString();
+        GLuint splatmap = TextureLoader::loadTextureFromFile(filename, GL_LINEAR);
+        addSplatmap(splatmap);
+    }
+
+    for (const Json::Value& layer_json : terrain_json["texture_layers"]){
+        int layer_number = layer_json["layer_number"].asInt();
+        int splatmap_number = layer_json["splatmap"].asInt();
+        char splatmap_channel = layer_json["channel"].asString().at(0);
+        std::string diff_filename = texture_path + layer_json["textures"]["diff"].asString();
+        GLuint diffuse = TextureLoader::loadTextureFromFile(diff_filename, GL_LINEAR);
+
+        addDiffuse(diffuse, splatmap_number, layer_number, splatmap_channel);
+
+    }
+
+}
+
+Terrain::Terrain(std::string heightmap_filename, float amplification){
+    initializer(ShaderLoader::loadShaderProgram("shaders/terrain.vs", "shaders/terrain.fs"), heightmap_filename, amplification);
+}
+
+Terrain::Terrain(GLuint shader_program, std::string heightmap_filename, float amplification) : Drawable() {
+
+    initializer(shader_program, heightmap_filename, amplification);
+}
+
+void Terrain::initializer(GLuint shader_program, std::string heightmap_filename, float amplification){
 
     this->amplification = amplification;
 
