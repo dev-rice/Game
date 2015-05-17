@@ -17,20 +17,22 @@ void GameMap::render(){
     for (Doodad& doodad : doodads){
         doodad.draw();
     }
-
-    // Draw all the particle emitters
-    if (Profile::getInstance()->isParticlesOn()){
-        for(Emitter& emitter : emitters){
-            emitter.draw(&camera);
-        }
-    }
-
-    // Draw the ground (terrain)
-    ground.draw();
+    //
+    // // Draw all the particle emitters
+    // if (Profile::getInstance()->isParticlesOn()){
+    //     for(Emitter& emitter : emitters){
+    //         emitter.draw(&camera);
+    //     }
+    // }
+    //
+    // // Draw the ground (terrain)
+    // ground.draw();
 
 }
 
 void GameMap::load(ifstream& map_input){
+    Debug::info("Loading GameMap.\n");
+
     // Read the file into a string
     // http://bit.ly/1aM8TXS
     string map_contents((istreambuf_iterator<char>(map_input)), istreambuf_iterator<char>());
@@ -70,8 +72,10 @@ void GameMap::load(ifstream& map_input){
     // Read in each doodad
     const Json::Value doodads_json = root["doodads"];
     for (const Json::Value& doodad_json : doodads_json){
+        string mesh_filename = doodad_json["mesh"].asString();
+        string full_path = mesh_path + mesh_filename;
         // NOOOOOOOO!!!!!! but for now...
-        Mesh* mesh_ptr = new Mesh(doodad_json["mesh"].asString());
+        Mesh* mesh_ptr = new Mesh(full_path);
 
         glm::vec3 position;
         position.x = doodad_json["position"]["x"].asFloat();
@@ -86,6 +90,7 @@ void GameMap::load(ifstream& map_input){
         Doodad doodad(mesh_ptr);
         doodad.setPosition(position);
         doodad.setRotationEuler(rotation);
+        doodad.setEmissive(TextureLoader::loadPink());
 
         doodads.push_back(doodad);
 

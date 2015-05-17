@@ -1,6 +1,6 @@
 #include "game_view.h"
 
-GameView::GameView(Level* level){
+GameView::GameView(Level* level, GameMap& map) : game_map(map){
     this->window = Window::getInstance();
     this->level = level;
 
@@ -154,6 +154,7 @@ void GameView::drawCore(){
     if (Profile::getInstance()->isFramebuffersOn()){
         framebuffer->setAsRenderTarget();
         level->draw();
+        game_map.render();
 
         // Draw the framebuffer N - 1 times (the last pass is drawn to the screen).
         // This is how many times the fxaa shader samples the image.
@@ -173,7 +174,9 @@ void GameView::drawCore(){
     } else {
         // Draw the level
         screen->setAsRenderTarget();
-        level->draw();
+        game_map.render();
+
+        // level->draw();
     }
 
 

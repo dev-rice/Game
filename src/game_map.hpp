@@ -4,12 +4,14 @@
 #include <vector>
 #include <functional>
 #include <fstream>
+#include <iostream>
 
 #include "doodad.h"
 #include "particles/all_emitters.hpp"
 #include "terrain.h"
 #include "includes/json.hpp"
 #include "shadowbuffer.h"
+#include "texture_loader.h"
 
 using namespace std;
 
@@ -27,7 +29,7 @@ private:
     void updateGlobalUniforms();
 
     Camera camera;
-    vector<reference_wrapper<Doodad>> doodads;
+    vector<Doodad> doodads;
     vector<reference_wrapper<Emitter>> emitters;
     Terrain ground;
 
