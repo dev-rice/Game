@@ -147,13 +147,14 @@ void GameView::update(){
 void GameView::drawCore(){
     // Render the shadow map into the shadow buffer
     if (Profile::getInstance()->isShadowsOn()){
-        level->drawShadowMap();
+        // level->drawShadowMap();
+        game_map.renderToShadowMap();
     }
 
     // Render the level to the framebuffer
     if (Profile::getInstance()->isFramebuffersOn()){
         framebuffer->setAsRenderTarget();
-        level->draw();
+        // level->draw();
         game_map.render();
 
         // Draw the framebuffer N - 1 times (the last pass is drawn to the screen).

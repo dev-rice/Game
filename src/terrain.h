@@ -6,6 +6,7 @@
 #include <vector>
 #include <cmath>
 #include <unordered_map>
+#include "includes/json.hpp"
 
 #include "mesh.h"
 #include "drawable.h"
@@ -20,6 +21,8 @@
 class Terrain : public Drawable {
 public:
     Terrain() {;}
+    Terrain(const Json::Value&, std::string texture_path);
+    Terrain(std::string heightmap_filename, float amplification);
     Terrain (GLuint s, std::string h) : Terrain(s, h, 10.0f) {;}
     Terrain (GLuint, std::string, float);
 
@@ -57,7 +60,7 @@ public:
     TexturePainter* getTexturePainter();
 
 private:
-
+    void initializer(GLuint, std::string, float);
     void updateUniformData();
 
     GLubyte* renderHeightmapAsImage();
