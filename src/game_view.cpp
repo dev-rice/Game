@@ -340,52 +340,50 @@ void GameView::handleInput(SDL_Event event){
 }
 
 void GameView::handleKeyboardCameraMovement(){
-    Camera* camera = level->getCamera();
-    glm::mat4 proj_matrix = level->getProjection();
-    Terrain* terrain = level->getTerrain();
+    Camera& camera = game_map.getCamera();
 
     const Uint8 *state = SDL_GetKeyboardState(NULL);
 
     // Translation
     if (state[SDL_SCANCODE_W]){
-        camera->moveZ(-1);
+        camera.moveZ(-1);
     }
     if (state[SDL_SCANCODE_S]){
-        camera->moveZ(1);
+        camera.moveZ(1);
     }
     if (state[SDL_SCANCODE_A]){
-        camera->moveX(-1);
+        camera.moveX(-1);
     }
     if (state[SDL_SCANCODE_D]){
-        camera->moveX(1);
+        camera.moveX(1);
     }
     if (state[SDL_SCANCODE_LSHIFT]){
-        camera->moveY(-1);
+        camera.moveY(-1);
     }
     if (state[SDL_SCANCODE_SPACE]){
-        camera->moveY(1);
+        camera.moveY(1);
     }
 
     // Rotation
     if (state[SDL_SCANCODE_E]){
-        camera->rotateY(-1);
+        camera.rotateY(-1);
     }
     if (state[SDL_SCANCODE_Q]){
-        camera->rotateY(1);
+        camera.rotateY(1);
     }
     if (state[SDL_SCANCODE_F]){
-        camera->rotateX(-1);
+        camera.rotateX(-1);
     }
     if (state[SDL_SCANCODE_R]){
-        camera->rotateX(1);
+        camera.rotateX(1);
     }
 
     // FOV Changing
     if (state[SDL_SCANCODE_MINUS]){
-        camera->zoomIn(0.01);
+        camera.zoomIn(0.01);
     }
     if (state[SDL_SCANCODE_EQUALS]){
-        camera->zoomOut(0.01);
+        camera.zoomOut(0.01);
     }
 
 }

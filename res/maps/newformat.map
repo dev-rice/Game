@@ -6,11 +6,11 @@
         "fov": 45.0,
         "position": {
             "x": 0.0,
-            "y": 40.0,
-            "z": 40.0
+            "y": 2.0,
+            "z": 10.0
         },
         "rotation": {
-            "x": 1.04,
+            "x": 0.0,
             "y": 0.0,
             "z": 0.0
         },
@@ -21,6 +21,7 @@
     "doodads": [
         {
             "mesh": "fence.dae",
+            "scale": 1.0,
             "position": {
                 "x": 0.0,
                 "y": 0.0,
@@ -38,6 +39,7 @@
         },
         {
             "mesh": "castle_tower.dae",
+            "scale": 2.0,
             "position": {
                 "x": 0.0,
                 "y": 0.0,
