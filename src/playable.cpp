@@ -285,9 +285,6 @@ float Playable::getCurrentTargetDirection(){
 //##################################################################################################
 
 int Playable::steerToStayOnPath(){
-    // -1 means CCW
-    //  0 means none
-    //  1 means CW
 
     // Short-circuit for the last target, we want to move precisely to it.
     if(order_queue.size() == 0){
@@ -339,6 +336,14 @@ int Playable::steerToStayOnPath(){
     }
 
     return TURN_NONE;
+}
+
+int Playable::steerAwayFromUnit(Playable *unit){
+
+}
+
+int Playable::steerAwayFromObstacle(Terrain *ground){
+
 }
 
 float Playable::distanceFromPointToLine(glm::vec2 line_0, glm::vec2 line_1, glm::vec2 point){
@@ -393,7 +398,7 @@ void Playable::takeDamage(int damage_amount){
 
 Playable* Playable::getUnitToAttack(std::vector<Playable*> *otherUnits){
 
-    // Find the highest priority unit -or- the unit that is attacking you
+    // Find the highest priority unit -or- the unit that is attacking you -or- unit you attacked last
     Playable* other_unit = 0; 
 
     for(int i(0); i < otherUnits->size(); ++i){
@@ -436,9 +441,9 @@ void Playable::scanUnits(std::vector<Playable*> *otherUnits){
         if(current_unit != this){
 
             // If it is an enemy and in range, we could potentially attack it
-            float distance_to_enemy = getDistance(position.x, position.z, current_unit->getPosition().x, current_unit->getPosition().z);
+            float distance_to_unit = getDistance(position.x, position.z, current_unit->getPosition().x, current_unit->getPosition().z);
 
-            if(current_unit->getTeam() != team_number && distance_to_enemy <= radius + current_unit->radius + weapon_range){
+            if(current_unit->getTeam() != team_number && distance_to_unit <= radius + current_unit->radius + weapon_range){
                 attackable_units.push_back(current_unit);
             }
 

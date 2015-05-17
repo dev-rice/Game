@@ -156,6 +156,11 @@ private:
 	// Combat (Private)
 	//################################
 
+	Playable* nearest_enemy_attack;
+	Playable* nearest_friendly_hurt;
+	Playable* nearest_friendly_town_hall;
+	Playable* nearest_resource;
+
 	void attack(Playable*);
 	void takeDamage(int);
 	Playable* getUnitToAttack(std::vector<Playable*>*);
@@ -164,7 +169,9 @@ private:
 	// Steering (Private)
 	//################################
 
-	int steerToStayOnPath();
+	int steerToStayOnPath();	
+	int steerAwayFromUnit(Playable*);
+	int steerAwayFromObstacle(Terrain*);
 	static float distanceFromPointToLine(glm::vec2, glm::vec2, glm::vec2);
 
 	//################################
