@@ -1,6 +1,31 @@
 #include "camera.h"
 
+Camera::Camera(const Json::Value& camera_json){
+    float fov = camera_json["fov"].asFloat();
+
+    glm::vec3 position;
+    position.x = camera_json["position"]["x"].asFloat();
+    position.y = camera_json["position"]["y"].asFloat();
+    position.z = camera_json["position"]["z"].asFloat();
+
+    glm::vec3 rotation;
+    rotation.x = camera_json["rotation"]["x"].asFloat();
+    rotation.y = camera_json["rotation"]["y"].asFloat();
+    rotation.z = camera_json["rotation"]["z"].asFloat();
+
+    float move_sensitivity = camera_json["move_sensitivity"].asFloat();
+    float rotate_sensitivity = camera_json["rotate_sensitivity"].asFloat();
+
+    initializer(position, rotation, move_sensitivity, rotate_sensitivity, fov);
+}
+
 Camera::Camera(glm::vec3 position, glm::vec3 rotation, float move_sensitivity, float rotate_sensitivity, float fov){
+
+    initializer(position, rotation, move_sensitivity, rotate_sensitivity, fov);
+}
+
+void Camera::initializer(glm::vec3 position, glm::vec3 rotation, float move_sensitivity, float rotate_sensitivity, float fov){
+
     this->position = position;
     this->rotation = rotation;
 

@@ -72,24 +72,8 @@ void GameMap::load(ifstream& map_input){
     string texture_path = root["texture_path"].asString();
 
     // Read in the camera data
-    const Json::Value camera_json = root["camera"];
+    camera = Camera(root["camera"]);
 
-    float fov = camera_json["fov"].asFloat();
-
-    glm::vec3 position;
-    position.x = camera_json["position"]["x"].asFloat();
-    position.y = camera_json["position"]["y"].asFloat();
-    position.z = camera_json["position"]["z"].asFloat();
-
-    glm::vec3 rotation;
-    rotation.x = camera_json["rotation"]["x"].asFloat();
-    rotation.y = camera_json["rotation"]["y"].asFloat();
-    rotation.z = camera_json["rotation"]["z"].asFloat();
-
-    float move_sensitivity = camera_json["move_sensitivity"].asFloat();
-    float rotate_sensitivity = camera_json["rotate_sensitivity"].asFloat();
-
-    camera = Camera(position, rotation, move_sensitivity, rotate_sensitivity, fov);
 
     // Read in each doodad
     const Json::Value doodads_json = root["doodads"];
