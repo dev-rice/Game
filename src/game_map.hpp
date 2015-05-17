@@ -20,6 +20,7 @@ public:
     GameMap(string map_filename);
 
     void render();
+    Camera& getCamera();
 
 private:
 
