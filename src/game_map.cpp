@@ -12,7 +12,7 @@ GameMap::GameMap(std::string map_filename) : camera(), ground(), shadowbuffer() 
 void GameMap::render(){
     // Update the global uniforms like the camera position and shadow projections
     updateGlobalUniforms();
-    
+
     // Draw all the drawables
     for (Doodad& doodad : doodads){
         doodad.draw();
@@ -69,7 +69,25 @@ void GameMap::load(ifstream& map_input){
 
     // Read in each doodad
     const Json::Value doodads_json = root["doodads"];
-    for (const Json::Value& doodad : doodads_json){
+    for (const Json::Value& doodad_json : doodads_json){
+        // NOOOOOOOO!!!!!! but for now...
+        Mesh* mesh_ptr = new Mesh(doodad_json["mesh"].asString());
+
+        glm::vec3 position;
+        position.x = doodad_json["position"]["x"].asFloat();
+        position.y = doodad_json["position"]["y"].asFloat();
+        position.z = doodad_json["position"]["z"].asFloat();
+
+        glm::vec3 rotation;
+        position.x = doodad_json["rotation"]["x"].asFloat();
+        position.y = doodad_json["rotation"]["y"].asFloat();
+        position.z = doodad_json["rotation"]["z"].asFloat();
+
+        Doodad doodad(mesh_ptr);
+        doodad.setPosition(position);
+        doodad.setRotationEuler(rotation);
+
+        doodads.push_back(doodad);
 
     }
 }
