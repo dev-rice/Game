@@ -78,17 +78,19 @@
     "particle_emitters": [
         {
             "type": "fire",
+            "radius": 0.6,
             "position": {
-                "x": 0.0,
+                "x": -1.4,
                 "y": 0.0,
                 "z": 0.0
             }
         },
         {
             "type": "smoke",
+            "radius": 0.7,
             "position": {
-                "x": 0.0,
-                "y": 0.0,
+                "x": -1.4,
+                "y": 0.5,
                 "z": 0.0
             }
         }

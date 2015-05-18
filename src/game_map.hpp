@@ -22,6 +22,8 @@ public:
     void render();
     void renderToShadowMap();
 
+    void addDrawable(Drawable& drawable);
+
     glm::vec3 calculateWorldPosition(glm::vec2 screen_pos);
 
     Camera& getCamera();
@@ -41,14 +43,14 @@ private:
 
     Camera camera;
     vector<Doodad> doodads;
-    vector<reference_wrapper<Emitter>> emitters;
+    vector<Emitter*> emitters;
     Terrain ground;
 
     // Everything that will be drawn
     vector<reference_wrapper<Drawable>> drawables;
 
-    // Anything that shouldn't be drawn to the shadow map
-    vector<reference_wrapper<Drawable>> no_shadow_drawables;
+    // // Anything that shouldn't be drawn to the shadow map
+    // vector<reference_wrapper<Drawable>> no_shadow_drawables;
 
     Shadowbuffer shadowbuffer;
 

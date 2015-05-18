@@ -5,6 +5,9 @@
 
 #include "smoke_emitter.h"
 
+SmokeEmitter::SmokeEmitter(glm::vec3 position, float radius) : SmokeEmitter(ShaderLoader::loadShaderProgram("shaders/particle.vs",
+    "shaders/particle.fs"), position, radius) {;}
+
 SmokeEmitter::SmokeEmitter(GLuint shader_program, glm::vec3 position, float radius) : Emitter(shader_program, position){
     // Sets the smoke's radius
     this->radius = radius;
