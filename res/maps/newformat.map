@@ -70,7 +70,7 @@
             },
             "textures": {
                 "diff": "firepit_diff.png",
-                "norm": "firepit_emit.png"
+                "emit": "firepit_emit.png"
             }
         }
     ],
