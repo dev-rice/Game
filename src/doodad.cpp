@@ -27,27 +27,31 @@ Doodad::Doodad(const Json::Value& doodad_json, std::string mesh_path, std::strin
 
     // Load the textures
     const Json::Value textures = doodad_json["textures"];
-    std::string diffuse_filename = texture_path + textures["diff"].asString();
-    std::string normal_filename = texture_path + textures["norm"].asString();
-    std::string specular_filename = texture_path + textures["spec"].asString();
-    std::string emissive_filename = texture_path + textures["emit"].asString();
+    std::string diffuse_filename = textures["diff"].asString();
+    std::string normal_filename = textures["norm"].asString();
+    std::string specular_filename = textures["spec"].asString();
+    std::string emissive_filename = textures["emit"].asString();
 
     if (diffuse_filename != ""){
+        diffuse_filename = texture_path + diffuse_filename;
         GLuint diff = TextureLoader::loadTextureFromFile(diffuse_filename, GL_LINEAR);
         setDiffuse(diff);
     }
     if (normal_filename != ""){
+        normal_filename = texture_path + normal_filename;
         GLuint norm = TextureLoader::loadTextureFromFile(normal_filename, GL_LINEAR);
         setNormal(norm);
     }
     if (specular_filename != ""){
+        specular_filename = texture_path + specular_filename;
         GLuint spec = TextureLoader::loadTextureFromFile(specular_filename, GL_LINEAR);
         setSpecular(spec);
     }
-    // if (emissive_filename != ""){
-    //     GLuint emit = TextureLoader::loadTextureFromFile(emissive_filename, GL_LINEAR);
-    //     setEmissive(emit);
-    // }
+    if (emissive_filename != ""){
+        emissive_filename = texture_path + emissive_filename;
+        GLuint emit = TextureLoader::loadTextureFromFile(emissive_filename, GL_LINEAR);
+        setEmissive(emit);
+    }
 
 }
 
