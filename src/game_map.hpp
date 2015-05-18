@@ -22,6 +22,7 @@ public:
     void render();
     void renderToShadowMap();
     Camera& getCamera();
+    Terrain& getGround();
 
 private:
 
@@ -34,6 +35,12 @@ private:
     vector<Doodad> doodads;
     vector<reference_wrapper<Emitter>> emitters;
     Terrain ground;
+
+    // Everything that will be drawn
+    vector<reference_wrapper<Drawable>> drawables;
+
+    // Anything that shouldn't be drawn to the shadow map
+    vector<reference_wrapper<Drawable>> no_shadow_drawables;
 
     Shadowbuffer shadowbuffer;
 

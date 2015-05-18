@@ -69,7 +69,7 @@ GameView::GameView(Level* level, GameMap& map) : game_map(map){
 
     DebugConsole::getInstance()->setLevel(level);
     ui_drawables.push_back(DebugConsole::getInstance());
-    level->getTerrain()->setPaintLayer(1);
+    game_map.getGround().setPaintLayer(1);
 
 }
 
@@ -112,9 +112,9 @@ void GameView::update(){
 
     // Draw the debug information
     if (debug_showing){
-        Camera* camera = level->getCamera();
-        glm::vec3 position = camera->getPosition();
-        glm::vec3 rotation = camera->getRotation();
+        Camera& camera = game_map.getCamera();
+        glm::vec3 position = camera.getPosition();
+        glm::vec3 rotation = camera.getRotation();
 
         float frame_time = GameClock::getInstance()->getDeltaTime();
         float average_frame_time = GameClock::getInstance()->getAverageDeltaTime();
@@ -123,18 +123,16 @@ void GameView::update(){
         glm::vec3 mouse_world_pos = level->calculateWorldPosition(mouse_gl_pos);
 
         // Testing text renderer pixel perfection.
-        text_renderer->print(0, 0, all_chars.c_str());
-
-        text_renderer->print(10, 40, "fps: %.2f",
+        text_renderer->print(10, 10, "fps: %.2f",
             1.0 / frame_time);
-        text_renderer->print(10, 60, "average frame time: %.7f s",
+        text_renderer->print(10, 30, "average frame time: %.7f s",
             average_frame_time);
-        text_renderer->print(10, 80, "camera position <x, y, z>:"
+        text_renderer->print(10, 50, "camera position <x, y, z>:"
             "%.2f, %.2f, %.2f", position.x, position.y, position.z);
-        text_renderer->print(10, 100, "camera rotation <x, y, z>:"
+        text_renderer->print(10, 70, "camera rotation <x, y, z>:"
             "%.2f, %.2f, %.2f", rotation.x, rotation.y, rotation.z);
-        text_renderer->print(10, 120, "camera fov: %.4f", camera->getFOV());
-        text_renderer->print(10, 140, "mouse world position <x, y, z>:"
+        text_renderer->print(10, 90, "camera fov: %.4f", camera.getFOV());
+        text_renderer->print(10, 110, "mouse world position <x, y, z>:"
             "%.2f, %.2f, %.2f", mouse_world_pos.x, mouse_world_pos.y, mouse_world_pos.z);
 
     }
@@ -192,9 +190,9 @@ void GameView::drawOtherStuff(){
 }
 
 void GameView::handleInputState(){
-    Camera* camera = level->getCamera();
-    glm::mat4 proj_matrix = camera->getProjectionMatrix();
-    Terrain* terrain = level->getTerrain();
+    Camera& camera = game_map.getCamera();
+    glm::mat4 proj_matrix = camera.getProjectionMatrix();
+    Terrain& terrain = game_map.getGround();
 
     // Get the mouse coordinates gl, and the world
     glm::vec2 mouse_gl_pos = Mouse::getInstance()->getGLPosition();
@@ -390,9 +388,9 @@ void GameView::handleKeyboardCameraMovement(){
 }
 
 void GameView::handleMouseCameraMovement(){
-    Camera* camera = level->getCamera();
-    glm::mat4 proj_matrix = level->getProjection();
-    Terrain* terrain = level->getTerrain();
+    Camera& camera = game_map.getCamera();
+    glm::mat4 proj_matrix = camera.getProjectionMatrix();
+    Terrain& terrain = game_map.getGround();
 
     // Get the mouse coordinates gl, and the world
     glm::vec2 mouse_gl_pos = Mouse::getInstance()->getGLPosition();
@@ -403,38 +401,38 @@ void GameView::handleMouseCameraMovement(){
     // Mouse scrolling the screen when not in debug mode
     if(mouse_count == 0){
         // LEFT
-        if(camera->getPosition().x >= -1.0 * level->getMapWidth()/2 + 55){
+        if(camera.getPosition().x >= -1.0 * level->getMapWidth()/2 + 55){
             if(mouse_gl_pos.x < -0.95){
-                camera->moveGlobalX(-10);
+                camera.moveGlobalX(-10);
             } else if(mouse_gl_pos.x < -0.85){
-                camera->moveGlobalX(-5);
+                camera.moveGlobalX(-5);
             }
         }
 
         // RIGHT
-        if(camera->getPosition().x <= 1.0 * level->getMapWidth()/2 - 55){
+        if(camera.getPosition().x <= 1.0 * level->getMapWidth()/2 - 55){
             if(mouse_gl_pos.x > 0.95){
-                camera->moveGlobalX(10);
+                camera.moveGlobalX(10);
             } else if (mouse_gl_pos.x > 0.85){
-                camera->moveGlobalX(5);
+                camera.moveGlobalX(5);
             }
         }
 
         // DOWN
-        if(camera->getPosition().z <= 1.0 * level->getMapDepth()/2 - 3){
+        if(camera.getPosition().z <= 1.0 * level->getMapDepth()/2 - 3){
             if(mouse_gl_pos.y < -0.95){
-                camera->moveGlobalZ(10);
+                camera.moveGlobalZ(10);
             } else if(mouse_gl_pos.y < -0.85){
-                camera->moveGlobalZ(5);
+                camera.moveGlobalZ(5);
             }
         }
 
         // UP                            . Compensating for the camera angle
-        if(camera->getPosition().z >= -1.0 * level->getMapDepth()/2 + 55){
+        if(camera.getPosition().z >= -1.0 * level->getMapDepth()/2 + 55){
             if(mouse_gl_pos.y > 0.95){
-                camera->moveGlobalZ(-10);
+                camera.moveGlobalZ(-10);
             } else if (mouse_gl_pos.y > 0.85){
-                camera->moveGlobalZ(-5);
+                camera.moveGlobalZ(-5);
             }
         }
 
@@ -468,9 +466,9 @@ void GameView::handleMouseCameraMovement(){
 
     // FOV Changing
     if (state[SDL_SCANCODE_MINUS]){
-        camera->zoomIn(0.01);
+        camera.zoomIn(0.01);
     }
     if (state[SDL_SCANCODE_EQUALS]){
-        camera->zoomOut(0.01);
+        camera.zoomOut(0.01);
     }
 }
