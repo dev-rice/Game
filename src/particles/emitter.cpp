@@ -1,5 +1,7 @@
 #include "particles/emitter.h"
 
+Emitter::Emitter(glm::vec3 position) : Emitter(ShaderLoader::loadShaderProgram("shaders/particle.vs", "shaders/particle.vs"), position) {;}
+
 Emitter::Emitter(GLuint shader_program, glm::vec3 position){
     this->position = position;
 

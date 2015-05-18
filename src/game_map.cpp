@@ -21,6 +21,10 @@ void GameMap::render(){
 
     ground.draw();
 
+    for (Emitter* emitter : emitters){
+        emitter->draw(&camera);
+    }
+
     // // Draw all the particle emitters
     // if (Profile::getInstance()->isParticlesOn()){
     //     for(Emitter& emitter : emitters){
@@ -92,8 +96,35 @@ void GameMap::load(ifstream& map_input){
         drawables.push_back(doodads[doodads.size() - 1]);
     }
 
+    // Create each particle emitter
+    const Json::Value emitters_json = root["particle_emitters"];
+    for (const Json::Value emitter_json : emitters_json){
+        string emitter_type = emitter_json["type"].asString();
+
+        Emitter* emitter = NULL;
+
+        glm::vec3 position;
+        position.x = emitter_json["position"]["x"].asFloat();
+        position.y = emitter_json["position"]["y"].asFloat();
+        position.z = emitter_json["position"]["z"].asFloat();
+
+        float radius = emitter_json["radius"].asFloat();
+
+        if (emitter_type == "fire"){
+            emitter = new FireEmitter(position, radius);
+        } else if (emitter_type == "snow"){
+            emitter = new SnowEmitter(position);
+        } else if (emitter_type == "smoke"){
+            emitter = new SmokeEmitter(position, 0.7);
+        }
+
+        emitters.push_back(emitter);
+
+    }
+
+    // Create the ground
     ground = Terrain(root["terrain"], texture_path);
-    drawables.push_back(ground);
+
 }
 
 void GameMap::initializeGlobalUniforms(){

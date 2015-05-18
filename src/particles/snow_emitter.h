@@ -10,6 +10,7 @@
 
 class SnowEmitter : public Emitter {
 public:
+    SnowEmitter(glm::vec3);
     SnowEmitter(GLuint, glm::vec3);
 private:
     void prepareParticles(Camera*);
