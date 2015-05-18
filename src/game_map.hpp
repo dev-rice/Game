@@ -21,6 +21,9 @@ public:
 
     void render();
     void renderToShadowMap();
+
+    glm::vec3 calculateWorldPosition(glm::vec2 screen_pos);
+
     Camera& getCamera();
     Terrain& getGround();
 
@@ -30,6 +33,11 @@ private:
 
     void initializeGlobalUniforms();
     void updateGlobalUniforms();
+
+    glm::vec3 getIntersection(glm::vec3 line, float plane_height);
+    glm::vec3 calculateRay(glm::vec2 screen_point);
+    std::tuple<float, float, glm::vec3> findWorldPoint(glm::vec3 ray, int steps, float bottom, float top);
+    glm::vec3 findWorldPointInit(glm::vec3 ray, int steps);
 
     Camera camera;
     vector<Doodad> doodads;

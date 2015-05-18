@@ -84,11 +84,11 @@ void GameView::update(){
     drawOtherStuff();
 
     // Calculating the mouse vector
-    glm::vec3 mouse_point = level->calculateWorldPosition(Mouse::getInstance()->getGLPosition());
+    glm::vec3 mouse_point = game_map.calculateWorldPosition(Mouse::getInstance()->getGLPosition());
 
     // draw selection rectangle here and change the cursor based on amount of dragging
-    glm::vec3 init = level->calculateWorldPosition(initial_left_click_position);
-    glm::vec3 fina = level->calculateWorldPosition(final_left_click_position);
+    glm::vec3 init = game_map.calculateWorldPosition(initial_left_click_position);
+    glm::vec3 fina = game_map.calculateWorldPosition(final_left_click_position);
 
     bool dragged_x = fabs(initial_left_click_position.x - final_left_click_position.x) > 0.05;
     bool dragged_y = fabs(initial_left_click_position.y - final_left_click_position.y) > 0.05;
@@ -107,7 +107,7 @@ void GameView::update(){
         level->selectUnits(init, fina);
 
     } else if(left_mouse_button_unclick && !Mouse::getInstance()->isHovering()){
-        level->selectUnit(level->calculateWorldPosition(Mouse::getInstance()->getGLPosition()));
+        level->selectUnit(game_map.calculateWorldPosition(Mouse::getInstance()->getGLPosition()));
     }
 
     // Draw the debug information
@@ -120,7 +120,7 @@ void GameView::update(){
         float average_frame_time = GameClock::getInstance()->getAverageDeltaTime();
 
         glm::vec2 mouse_gl_pos = Mouse::getInstance()->getGLPosition();
-        glm::vec3 mouse_world_pos = level->calculateWorldPosition(mouse_gl_pos);
+        glm::vec3 mouse_world_pos = game_map.calculateWorldPosition(mouse_gl_pos);
 
         // Testing text renderer pixel perfection.
         text_renderer->print(10, 10, "fps: %.2f",
@@ -145,14 +145,12 @@ void GameView::update(){
 void GameView::drawCore(){
     // Render the shadow map into the shadow buffer
     if (Profile::getInstance()->isShadowsOn()){
-        // level->drawShadowMap();
         game_map.renderToShadowMap();
     }
 
     // Render the level to the framebuffer
     if (Profile::getInstance()->isFramebuffersOn()){
         framebuffer->setAsRenderTarget();
-        // level->draw();
         game_map.render();
 
         // Draw the framebuffer N - 1 times (the last pass is drawn to the screen).
@@ -174,8 +172,6 @@ void GameView::drawCore(){
         // Draw the level
         screen->setAsRenderTarget();
         game_map.render();
-
-        // level->draw();
     }
 
 
@@ -196,7 +192,7 @@ void GameView::handleInputState(){
 
     // Get the mouse coordinates gl, and the world
     glm::vec2 mouse_gl_pos = Mouse::getInstance()->getGLPosition();
-    glm::vec3 mouse_world_pos = level->calculateWorldPosition(mouse_gl_pos);
+    glm::vec3 mouse_world_pos = game_map.calculateWorldPosition(mouse_gl_pos);
 
     SDL_PumpEvents();
     const Uint8 *state = SDL_GetKeyboardState(NULL);
@@ -394,14 +390,14 @@ void GameView::handleMouseCameraMovement(){
 
     // Get the mouse coordinates gl, and the world
     glm::vec2 mouse_gl_pos = Mouse::getInstance()->getGLPosition();
-    glm::vec3 mouse_world_pos = level->calculateWorldPosition(mouse_gl_pos);
+    glm::vec3 mouse_world_pos = game_map.calculateWorldPosition(mouse_gl_pos);
 
     const Uint8 *state = SDL_GetKeyboardState(NULL);
 
     // Mouse scrolling the screen when not in debug mode
     if(mouse_count == 0){
         // LEFT
-        if(camera.getPosition().x >= -1.0 * level->getMapWidth()/2 + 55){
+        if(camera.getPosition().x >= -1.0 * game_map.getGround().getWidth()/2 + 55){
             if(mouse_gl_pos.x < -0.95){
                 camera.moveGlobalX(-10);
             } else if(mouse_gl_pos.x < -0.85){
@@ -410,7 +406,7 @@ void GameView::handleMouseCameraMovement(){
         }
 
         // RIGHT
-        if(camera.getPosition().x <= 1.0 * level->getMapWidth()/2 - 55){
+        if(camera.getPosition().x <= 1.0 * game_map.getGround().getWidth()/2 - 55){
             if(mouse_gl_pos.x > 0.95){
                 camera.moveGlobalX(10);
             } else if (mouse_gl_pos.x > 0.85){
@@ -419,7 +415,7 @@ void GameView::handleMouseCameraMovement(){
         }
 
         // DOWN
-        if(camera.getPosition().z <= 1.0 * level->getMapDepth()/2 - 3){
+        if(camera.getPosition().z <= 1.0 * game_map.getGround().getDepth()/2 - 3){
             if(mouse_gl_pos.y < -0.95){
                 camera.moveGlobalZ(10);
             } else if(mouse_gl_pos.y < -0.85){
@@ -428,7 +424,7 @@ void GameView::handleMouseCameraMovement(){
         }
 
         // UP                            . Compensating for the camera angle
-        if(camera.getPosition().z >= -1.0 * level->getMapDepth()/2 + 55){
+        if(camera.getPosition().z >= -1.0 * game_map.getGround().getDepth()/2 + 55){
             if(mouse_gl_pos.y > 0.95){
                 camera.moveGlobalZ(-10);
             } else if (mouse_gl_pos.y > 0.85){
