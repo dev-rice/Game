@@ -21,8 +21,10 @@ void GameMap::render(){
 
     ground.draw();
 
-    for (Emitter* emitter : emitters){
-        emitter->draw(&camera);
+    if (Profile::getInstance()->isParticlesOn()){
+        for (Emitter* emitter : emitters){
+            emitter->draw(&camera);
+        }
     }
 
     // // Draw all the particle emitters
