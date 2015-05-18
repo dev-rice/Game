@@ -45,7 +45,14 @@ void GameMap::renderToShadowMap(){
         // Reset the drawable's shader to what it was before
         doodad.setShader(current_shader);
     }
-    
+
+}
+
+glm::vec3 GameMap::calculateWorldPosition(glm::vec2 screen_point){
+    glm::vec3 ray = calculateRay(screen_point);
+    glm::vec3 world_point = findWorldPointInit(ray, 100);
+
+    return world_point;
 }
 
 Camera& GameMap::getCamera(){
@@ -137,5 +144,80 @@ void GameMap::updateGlobalUniforms(){
     glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4),
         glm::value_ptr(depth_proj));
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+}
+
+glm::vec3 GameMap::getIntersection(glm::vec3 line, float height){
+    glm::vec3 line_start = camera.getPosition();
+    glm::vec3 normal = glm::vec3(0.0, 1.0, 0.0);
+    glm::vec3 plane = glm::vec3(0.0, height, 0.0);
+
+    // To find the point on the plane of clicking (defined by mouse_plane)
+    // From http://en.wikipedia.org/wiki/Line%E2%80%93plane_intersection
+    float d = glm::dot((plane - line_start), normal) / glm::dot(line, normal);
+    glm::vec3 intersection = d * line + line_start;
+
+    return intersection;
+}
+
+glm::vec3 GameMap::calculateRay(glm::vec2 screen_point){
+    glm::mat4 view = camera.getViewMatrix();
+    glm::mat4 proj = camera.getProjectionMatrix();
+
+    glm::vec3 ray = glm::vec3(glm::inverse(proj) * glm::vec4(screen_point, -1.0, 1.0));
+    ray.z = -1.0;
+    ray = glm::vec3(glm::inverse(view) * glm::vec4(ray, 0.0));
+    ray = glm::normalize(ray);
+    return ray;
+}
+
+std::tuple<float, float, glm::vec3> GameMap::findWorldPoint(glm::vec3 ray, int steps, float bottom, float top){
+    // Search idea from http://bit.ly/1Jyb6pa
+    glm::vec3 world_point;
+
+    float height = top;
+    float increment = (top - bottom) / (float)steps;
+
+    float bottom_bound = bottom;
+    float top_bound = top;
+    for (int i = 0; i <= steps; ++i){
+        top_bound = height;
+        height = top - i * increment;
+        world_point = getIntersection(ray, height);
+
+        float terrain_height = ground.getHeightInterpolated(world_point.x, world_point.z);
+
+        if (height > terrain_height){
+            top_bound = height;
+        } else if (height < terrain_height){
+            bottom_bound = height;
+            break;
+        }
+    }
+
+    return std::make_tuple(bottom_bound, top_bound, world_point);
+}
+
+glm::vec3 GameMap::findWorldPointInit(glm::vec3 ray, int steps){
+    // Ideal mouse point search algorithm
+    // Do a low resolution pass of the planes and find
+    // which planes the point is between. Then repeat
+    // the process but this time only between those two
+    // planes. Do this over and over until the mouse point
+    // is valid.
+
+    float top = ground.getMaxHeight() + 1.0;
+    float bottom = 0;
+    glm::vec3 world_point;
+
+    std::tuple<float,float, glm::vec3> bounds;
+    for (int i = 0; i < 10; ++i){
+        bounds = findWorldPoint(ray, steps, bottom, top);
+        bottom = std::get<0>(bounds);
+        top = std::get<1>(bounds);
+        world_point = std::get<2>(bounds);
+    }
+
+    return world_point;
 
 }
