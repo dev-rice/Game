@@ -36,14 +36,14 @@ Doodad::Doodad(const Json::Value& doodad_json, std::string mesh_path, std::strin
         GLuint diff = TextureLoader::loadTextureFromFile(diffuse_filename, GL_LINEAR);
         setDiffuse(diff);
     }
-    // if (normal_filename != ""){
-    //     GLuint norm = TextureLoader::loadTextureFromFile(normal_filename, GL_LINEAR);
-    //     setNormal(norm);
-    // }
-    // if (specular_filename != ""){
-    //     GLuint spec = TextureLoader::loadTextureFromFile(specular_filename, GL_LINEAR);
-    //     setSpecular(spec);
-    // }
+    if (normal_filename != ""){
+        GLuint norm = TextureLoader::loadTextureFromFile(normal_filename, GL_LINEAR);
+        setNormal(norm);
+    }
+    if (specular_filename != ""){
+        GLuint spec = TextureLoader::loadTextureFromFile(specular_filename, GL_LINEAR);
+        setSpecular(spec);
+    }
     // if (emissive_filename != ""){
     //     GLuint emit = TextureLoader::loadTextureFromFile(emissive_filename, GL_LINEAR);
     //     setEmissive(emit);
