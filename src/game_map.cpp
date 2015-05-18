@@ -18,16 +18,15 @@ void GameMap::render(){
     for (Doodad& doodad : doodads){
         doodad.draw();
     }
-    //
+
+    ground.draw();
+
     // // Draw all the particle emitters
     // if (Profile::getInstance()->isParticlesOn()){
     //     for(Emitter& emitter : emitters){
     //         emitter.draw(&camera);
     //     }
     // }
-    //
-    // Draw the ground (terrain)
-    ground.draw();
 
 }
 
@@ -46,15 +45,18 @@ void GameMap::renderToShadowMap(){
         // Reset the drawable's shader to what it was before
         doodad.setShader(current_shader);
     }
+    
 }
 
 Camera& GameMap::getCamera(){
     return camera;
 }
 
-void GameMap::load(ifstream& map_input){
-    Debug::info("Loading GameMap.\n");
+Terrain& GameMap::getGround(){
+    return ground;
+}
 
+void GameMap::load(ifstream& map_input){
     // Read the file into a string
     // http://bit.ly/1aM8TXS
     string map_contents((istreambuf_iterator<char>(map_input)), istreambuf_iterator<char>());
@@ -74,15 +76,17 @@ void GameMap::load(ifstream& map_input){
     // Read in the camera data
     camera = Camera(root["camera"]);
 
-
     // Read in each doodad
     const Json::Value doodads_json = root["doodads"];
     for (const Json::Value& doodad_json : doodads_json){
         doodads.push_back(Doodad(doodad_json, mesh_path, texture_path));
 
+        // Push the doodad that we just added to drawables
+        drawables.push_back(doodads[doodads.size() - 1]);
     }
 
     ground = Terrain(root["terrain"], texture_path);
+    drawables.push_back(ground);
 }
 
 void GameMap::initializeGlobalUniforms(){
