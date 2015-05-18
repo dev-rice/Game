@@ -5,6 +5,10 @@
 
 #include "fire_emitter.h"
 
+FireEmitter::FireEmitter(glm::vec3 position, float radius) : FireEmitter(ShaderLoader::loadShaderProgram("shaders/particle.vs",
+    "shaders/particle.fs"), position, radius) {;}
+
+
 FireEmitter::FireEmitter(GLuint shader_program, glm::vec3 position, float radius) : Emitter(shader_program, position){
     // Sets the fire's radius
     this->radius = radius;

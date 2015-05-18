@@ -28,6 +28,7 @@
 class Emitter {
 public:
     ~Emitter();
+    Emitter(glm::vec3);
     Emitter(GLuint, glm::vec3);
 
     void draw(Camera*);

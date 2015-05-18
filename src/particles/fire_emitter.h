@@ -10,10 +10,11 @@
 
 class FireEmitter : public Emitter {
 public:
+    FireEmitter(glm::vec3, float);
     FireEmitter(GLuint, glm::vec3, float);
 private:
     float radius;
     void prepareParticles(Camera*);
-};  
+};
 
 #endif
