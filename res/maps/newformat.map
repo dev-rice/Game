@@ -54,6 +54,24 @@
                 "diff": "castle_tower_diff.png",
                 "norm": "castle_tower_norm.png"
             }
+        },
+        {
+            "mesh": "firepit.dae",
+            "scale": 1.8,
+            "position": {
+                "x": -1.414,
+                "y": -0.01,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 1.5707,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "textures": {
+                "diff": "firepit_diff.png",
+                "norm": "firepit_emit.png"
+            }
         }
     ],
 
