@@ -79,12 +79,13 @@ void GameMap::load(ifstream& map_input){
     string mesh_path = root["mesh_path"].asString();
     string texture_path = root["texture_path"].asString();
 
-    // Read in the camera data
+    // Create the camera from the json segment
     camera = Camera(root["camera"]);
 
     // Read in each doodad
     const Json::Value doodads_json = root["doodads"];
     for (const Json::Value& doodad_json : doodads_json){
+        // Create doodad from the json segment
         doodads.push_back(Doodad(doodad_json, mesh_path, texture_path));
 
         // Push the doodad that we just added to drawables
@@ -117,7 +118,7 @@ void GameMap::load(ifstream& map_input){
 
     }
 
-    // Create the ground
+    // Create the ground from the json segment
     ground = Terrain(root["terrain"], texture_path);
 
 }
