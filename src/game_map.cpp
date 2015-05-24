@@ -27,13 +27,6 @@ void GameMap::render(){
         }
     }
 
-    // // Draw all the particle emitters
-    // if (Profile::getInstance()->isParticlesOn()){
-    //     for(Emitter& emitter : emitters){
-    //         emitter.draw(&camera);
-    //     }
-    // }
-
 }
 
 void GameMap::renderToShadowMap(){
