@@ -10,6 +10,6 @@ cd "$(dirname "$0")"
 $1 $2 ./buildcount.sh
 
 # Handle the timeout error
-if [[ $?=124 ]]; then
+if [[ $? -eq 124 ]]; then
     echo -e "\033[1;31m[Error]\033[0m Failed to contact the buildcount server."
 fi
