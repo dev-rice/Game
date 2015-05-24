@@ -30,8 +30,8 @@ all: $(SOURCES) $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS)
 	$(COMPILER) -I$(SRCDIR) $(OBJECTS) $(LIBRARIES) -o $@
-	@ echo
-	@ $(TIMEOUT_SCRIPT) $(KILL_TIME) ./tools/buildcount.sh
+
+	@ ./tools/buildcount_timeout.sh $(TIMEOUT_SCRIPT) $(KILL_TIME)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
 	$(COMPILER) $(COMPILER_FLAGS) -I$(SRCDIR) $< -o $@
