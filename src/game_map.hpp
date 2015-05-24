@@ -47,10 +47,10 @@ private:
     Terrain ground;
 
     // Everything that will be drawn
-    vector<reference_wrapper<Drawable>> drawables;
+    // vector<Drawable> drawables;
 
     // // Anything that shouldn't be drawn to the shadow map
-    // vector<reference_wrapper<Drawable>> no_shadow_drawables;
+    // vector<Drawable> no_shadow_drawables;
 
     Shadowbuffer shadowbuffer;
 

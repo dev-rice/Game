@@ -14,7 +14,7 @@ void GameMap::render(){
     // Update the global uniforms like the camera position and shadow projections
     updateGlobalUniforms();
 
-    // Draw all the drawables
+    // Draw all the doodads
     for (Doodad& doodad : doodads){
         doodad.draw();
     }
@@ -87,9 +87,6 @@ void GameMap::load(ifstream& map_input){
     for (const Json::Value& doodad_json : doodads_json){
         // Create doodad from the json segment
         doodads.push_back(Doodad(doodad_json, mesh_path, texture_path));
-
-        // Push the doodad that we just added to drawables
-        drawables.push_back(doodads[doodads.size() - 1]);
     }
 
     // Create each particle emitter
