@@ -7,7 +7,7 @@ then
     exit 125
 fi
 
-CURL_CHECK=$(which curle)
+CURL_CHECK=$(which curl)
 if [ -z "$CURL_CHECK" ]
 then
     echo -e "\033[1;31m[Error]\033[0m Please install curl for the build count check."
