@@ -1,20 +1,17 @@
 #include "game_view.h"
 
-GameView::GameView(Level* level){
+GameView::GameView(Level* level) : gamebuffer() {
     this->window = Window::getInstance();
     this->level = level;
-
-    framebuffer = new Framebuffer();
-    ui_framebuffer = new Framebuffer();
 
     // // Gaussian Blur shaders
     // GLuint blur_horiz = ShaderLoader::loadShaderProgram("shaders/flat_drawable_noflip.vs",
     //     "shaders/framebuffer_horiz_blur.fs");
-    // framebuffer->addShaderPass(blur_horiz);
+    // gamebuffer.addShaderPass(blur_horiz);
     //
     // GLuint blur_vert = ShaderLoader::loadShaderProgram("shaders/flat_drawable_noflip.vs",
     //     "shaders/framebuffer_vert_blur.fs");
-    // framebuffer->addShaderPass(blur_vert);
+    // gamebuffer.addShaderPass(blur_vert);
 
     GLuint mousebox_shader = ShaderLoader::loadShaderProgram("shaders/mousebox.vs",
         "shaders/mousebox.fs");
@@ -115,17 +112,17 @@ void GameView::update(){
 
 void GameView::drawCore(){
 
-    // Render the level to the framebuffer
-    RenderStack::getInstance()->pushFramebuffer(framebuffer);
+    // Render the level to the gamebuffer
+    RenderStack::getInstance()->pushFramebuffer(&gamebuffer);
     level->draw();
 
-    // Draw the framebuffer N - 1 times (the last pass is drawn to the screen).
+    // Draw the gamebuffer N - 1 times (the last pass is drawn to the screen).
     // This is how many times the fxaa shader samples the image.
     // A good number is 4, 8 looks blurry, 1 doesn't do much.
     int fxaa_level = Profile::getInstance()->getFxaaLevel();
     if (fxaa_level){
         for (int i = 0; i < fxaa_level - 1; ++i){
-            framebuffer->draw();
+            gamebuffer.draw();
         }
     }
 

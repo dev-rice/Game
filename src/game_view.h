@@ -57,8 +57,7 @@ protected:
 
     Level* level;
 
-    Framebuffer* framebuffer;
-    Framebuffer* ui_framebuffer;
+    Framebuffer gamebuffer;
 
     UIDrawable* selection_box;
     std::vector<UIDrawable*> ui_drawables;
