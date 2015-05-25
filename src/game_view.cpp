@@ -129,7 +129,6 @@ void GameView::drawCore(){
         }
     }
 
-    // RenderStack::getInstance()->pushFramebuffer(ui_framebuffer);
     // Draw all of the ui elements on top of the level
     for(int i = 0; i < ui_drawables.size(); ++i){
         ui_drawables[i]->draw();
