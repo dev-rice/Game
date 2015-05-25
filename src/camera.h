@@ -49,6 +49,7 @@ public:
 private:
 
     void updateProjectionMatrix();
+    void notifyViewChanged();
 
     glm::vec3 position;
     glm::vec3 rotation;
@@ -66,6 +67,9 @@ private:
     float near_clip;
     float far_clip;
     glm::mat4 proj_matrix;
+    glm::mat4 view_matrix;
+
+    bool view_changed_since_last_calculation;
 
 };
 

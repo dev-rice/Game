@@ -31,7 +31,7 @@ Mesh::Mesh(const char* filename){
     // This constructor loads geometry data (vertices and faces) from a .obj file.
     MeshLoader mesh_loader = MeshLoader(filename);
     std::vector<GLfloat> vertices = mesh_loader.getVertexArray();
-    std::vector<GLuint>  elements = mesh_loader.getFaceArray();
+    std::vector<GLuint> elements  = mesh_loader.getFaceArray();
 
     loadMeshData(vertices, elements);
 }
