@@ -19,7 +19,6 @@ public:
 
     void addLevel(const char*);
     void update();
-    void handleInputs();
 
 private:
     Window* window;
