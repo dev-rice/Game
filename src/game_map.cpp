@@ -1,6 +1,6 @@
 #include "game_map.hpp"
 
-GameMap::GameMap(string map_filename) : camera(), ground(), shadowbuffer(8.0) {
+GameMap::GameMap(string map_filename) : camera(), ground(), shadowbuffer(1.0) {
     ifstream map_input(map_filename);
     load(map_input);
 
@@ -56,7 +56,7 @@ void GameMap::renderToShadowMap(){
 
 glm::vec3 GameMap::calculateWorldPosition(glm::vec2 screen_point){
     glm::vec3 ray = calculateRay(screen_point);
-    glm::vec3 world_point = findWorldPointInit(ray, 100);
+    glm::vec3 world_point = findMapPointInit(ray, 100);
 
     return world_point;
 }
@@ -202,7 +202,7 @@ glm::vec3 GameMap::calculateRay(glm::vec2 screen_point){
     return ray;
 }
 
-std::tuple<float, float, glm::vec3> GameMap::findWorldPoint(glm::vec3 ray, int steps, float bottom, float top){
+std::tuple<float, float, glm::vec3> GameMap::findMapPoint(glm::vec3 ray, int steps, float bottom, float top){
     // Search idea from http://bit.ly/1Jyb6pa
     glm::vec3 world_point;
 
@@ -229,7 +229,7 @@ std::tuple<float, float, glm::vec3> GameMap::findWorldPoint(glm::vec3 ray, int s
     return std::make_tuple(bottom_bound, top_bound, world_point);
 }
 
-glm::vec3 GameMap::findWorldPointInit(glm::vec3 ray, int steps){
+glm::vec3 GameMap::findMapPointInit(glm::vec3 ray, int steps){
     // Ideal mouse point search algorithm
     // Do a low resolution pass of the planes and find
     // which planes the point is between. Then repeat
@@ -243,7 +243,7 @@ glm::vec3 GameMap::findWorldPointInit(glm::vec3 ray, int steps){
 
     std::tuple<float,float, glm::vec3> bounds;
     for (int i = 0; i < 10; ++i){
-        bounds = findWorldPoint(ray, steps, bottom, top);
+        bounds = findMapPoint(ray, steps, bottom, top);
         bottom = std::get<0>(bounds);
         top = std::get<1>(bounds);
         world_point = std::get<2>(bounds);

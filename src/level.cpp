@@ -225,7 +225,7 @@ glm::vec3 Level::calculateRay(glm::vec2 screen_point){
     return ray;
 }
 
-std::tuple<float, float, glm::vec3> Level::findWorldPoint(glm::vec3 ray, int steps, float bottom, float top){
+std::tuple<float, float, glm::vec3> Level::findMapPoint(glm::vec3 ray, int steps, float bottom, float top){
     // Search idea from http://bit.ly/1Jyb6pa
     glm::vec3 world_point;
 
@@ -252,7 +252,7 @@ std::tuple<float, float, glm::vec3> Level::findWorldPoint(glm::vec3 ray, int ste
     return std::make_tuple(bottom_bound, top_bound, world_point);
 }
 
-glm::vec3 Level::findWorldPointInit(glm::vec3 ray, int steps){
+glm::vec3 Level::findMapPointInit(glm::vec3 ray, int steps){
     // Ideal mouse point search algorithm
     // Do a low resolution pass of the planes and find
     // which planes the point is between. Then repeat
@@ -266,7 +266,7 @@ glm::vec3 Level::findWorldPointInit(glm::vec3 ray, int steps){
 
     std::tuple<float,float, glm::vec3> bounds;
     for (int i = 0; i < 10; ++i){
-        bounds = findWorldPoint(ray, steps, bottom, top);
+        bounds = findMapPoint(ray, steps, bottom, top);
         bottom = std::get<0>(bounds);
         top = std::get<1>(bounds);
         world_point = std::get<2>(bounds);
@@ -278,7 +278,7 @@ glm::vec3 Level::findWorldPointInit(glm::vec3 ray, int steps){
 
 glm::vec3 Level::calculateWorldPosition(glm::vec2 screen_point){
     glm::vec3 ray = calculateRay(screen_point);
-    glm::vec3 world_point = findWorldPointInit(ray, 100);
+    glm::vec3 world_point = findMapPointInit(ray, 100);
 
     return world_point;
 }
