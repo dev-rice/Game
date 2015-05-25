@@ -12,6 +12,8 @@
 #include "includes/json.hpp"
 #include "shadowbuffer.h"
 #include "texture_loader.h"
+#include "render_stack.hpp"
+#include "profile.h"
 
 using namespace std;
 

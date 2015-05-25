@@ -1,21 +1,17 @@
 #include "game_view.h"
 
-GameView::GameView(Level* level, GameMap& map) : game_map(map){
+GameView::GameView(Level* level, GameMap& map) : game_map(map), gamebuffer() {
     this->window = Window::getInstance();
     this->level = level;
-
-    screen = new Screenbuffer();
-
-    framebuffer = new Framebuffer();
 
     // // Gaussian Blur shaders
     // GLuint blur_horiz = ShaderLoader::loadShaderProgram("shaders/flat_drawable_noflip.vs",
     //     "shaders/framebuffer_horiz_blur.fs");
-    // framebuffer->addShaderPass(blur_horiz);
+    // gamebuffer.addShaderPass(blur_horiz);
     //
     // GLuint blur_vert = ShaderLoader::loadShaderProgram("shaders/flat_drawable_noflip.vs",
     //     "shaders/framebuffer_vert_blur.fs");
-    // framebuffer->addShaderPass(blur_vert);
+    // gamebuffer.addShaderPass(blur_vert);
 
     GLuint mousebox_shader = ShaderLoader::loadShaderProgram("shaders/mousebox.vs",
         "shaders/mousebox.fs");
@@ -83,6 +79,8 @@ void GameView::update(){
     drawCore();
     drawOtherStuff();
 
+    RenderStack::getInstance()->drawAllToScreen();
+
     // Calculating the mouse vector
     glm::vec3 mouse_point = game_map.calculateWorldPosition(Mouse::getInstance()->getGLPosition());
 
@@ -108,6 +106,29 @@ void GameView::update(){
 
     } else if(left_mouse_button_unclick && !Mouse::getInstance()->isHovering()){
         level->selectUnit(game_map.calculateWorldPosition(Mouse::getInstance()->getGLPosition()));
+    }
+
+}
+
+void GameView::drawCore(){
+
+    // Render the level to the gamebuffer
+    RenderStack::getInstance()->pushFramebuffer(&gamebuffer);
+    game_map.render();
+
+    // Draw the gamebuffer N - 1 times (the last pass is drawn to the screen).
+    // This is how many times the fxaa shader samples the image.
+    // A good number is 4, 8 looks blurry, 1 doesn't do much.
+    int fxaa_level = Profile::getInstance()->getFxaaLevel();
+    if (fxaa_level){
+        for (int i = 0; i < fxaa_level - 1; ++i){
+            gamebuffer.draw();
+        }
+    }
+
+    // Draw all of the ui elements on top of the level
+    for(int i = 0; i < ui_drawables.size(); ++i){
+        ui_drawables[i]->draw();
     }
 
     // Draw the debug information
@@ -139,46 +160,6 @@ void GameView::update(){
 
     // The mouse draws on top of everything else
     Mouse::getInstance()->draw();
-
-}
-
-void GameView::drawCore(){
-    // Render the shadow map into the shadow buffer
-    if (Profile::getInstance()->isShadowsOn()){
-        game_map.renderToShadowMap();
-    }
-
-    // Render the level to the framebuffer
-    if (Profile::getInstance()->isFramebuffersOn()){
-        framebuffer->setAsRenderTarget();
-        game_map.render();
-
-        // Draw the framebuffer N - 1 times (the last pass is drawn to the screen).
-        // This is how many times the fxaa shader samples the image.
-        // A good number is 4, 8 looks blurry, 1 doesn't do much.
-
-        int fxaa_level = Profile::getInstance()->getFxaaLevel();
-        if (fxaa_level){
-            for (int i = 0; i < fxaa_level - 1; ++i){
-                framebuffer->draw();
-            }
-        }
-
-        // Draw the framebuffer
-        screen->setAsRenderTarget();
-        framebuffer->draw();
-
-    } else {
-        // Draw the level
-        screen->setAsRenderTarget();
-        game_map.render();
-    }
-
-
-    // Draw all of the ui elements on top of the level
-    for(int i = 0; i < ui_drawables.size(); ++i){
-        ui_drawables[i]->draw();
-    }
 }
 
 void GameView::drawOtherStuff(){

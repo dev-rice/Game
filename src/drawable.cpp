@@ -104,8 +104,7 @@ void Drawable::setNormal(GLuint normal) {
 
 void Drawable::bindTextures(){
     // Put each texture into the correct location for this Drawable. GL_TEXTURE0-3
-    // correspond to the uniforms set in attachTextureSet(). This is where we actually
-    // tell the graphics card which textures to use.
+    // correspond to the uniforms set in attachTextureSet(). This is where we actually tell the graphics card which textures to use.
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, diffuse);
 
@@ -135,16 +134,13 @@ void Drawable::draw(){
 
     glUseProgram(shader_program);
 
-    // Bind the Mesh's VAO. This lets us put transformations and textures on
-    // top of the geometry.
+    // Bind the Mesh's VAO. This lets us put transformations and textures on top of the geometry.
     mesh->bindVAO();
 
-    // We need to update the model matrix to account for any rotations
-    // or translations that have occured since the last draw call.
+    // We need to update the model matrix to account for any rotations or translations that have occured since the last draw call.
     updateModelMatrix();
 
-    // Update the current model, view, and projection matrices in the shader. These are standard for all
-    // Drawables so they should always be updated in draw. Child specific data is updated in updateUniformData().
+    // Update the current model, view, and projection matrices in the shader. These are standard for all Drawables so they should always be updated in draw. Child specific data is updated in updateUniformData().
     glUniformMatrix4fv(glGetUniformLocation(shader_program, "model"), 1, GL_FALSE, glm::value_ptr(model_matrix));
 
     // Update other shader data
@@ -201,8 +197,7 @@ void Drawable::rotateGlobalEuler(GLfloat x, GLfloat y, GLfloat z){
                                        sy,  0,  cy, 0,
                                        0 ,  0,  0 , 1);
 
-    // The convention followed is rotate around X-axis, then Y-axis, and finally
-    // Z-axis.
+    // The convention followed is rotate around X-axis, then Y-axis, and finally Z-axis.
     rotation_matrix = rotation_x * rotation_matrix;
     rotation_matrix = rotation_y * rotation_matrix;
     rotation_matrix = rotation_z * rotation_matrix;

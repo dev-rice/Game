@@ -1,6 +1,6 @@
 #include "game_map.hpp"
 
-GameMap::GameMap(string map_filename) : camera(), ground(), shadowbuffer(1.0) {
+GameMap::GameMap(string map_filename) : camera(), ground(), shadowbuffer(8.0) {
     ifstream map_input(map_filename);
     load(map_input);
 
@@ -11,6 +11,11 @@ GameMap::GameMap(string map_filename) : camera(), ground(), shadowbuffer(1.0) {
 }
 
 void GameMap::render(){
+    // Render the shadow map into the shadow buffer
+    if (Profile::getInstance()->isShadowsOn()){
+        renderToShadowMap();
+    }
+
     // Update the global uniforms like the camera position and shadow projections
     updateGlobalUniforms();
 
@@ -32,7 +37,7 @@ void GameMap::render(){
 void GameMap::renderToShadowMap(){
     updateGlobalUniforms();
 
-    shadowbuffer.setAsRenderTarget();
+    RenderStack::getInstance()->pushFramebuffer(&shadowbuffer);
 
     for (Doodad& doodad : doodads){
         // Save the shader this drawable is currently using
@@ -44,6 +49,8 @@ void GameMap::renderToShadowMap(){
         // Reset the drawable's shader to what it was before
         doodad.setShader(current_shader);
     }
+
+    RenderStack::getInstance()->popFramebuffer();
 
 }
 
