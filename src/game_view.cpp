@@ -4,9 +4,8 @@ GameView::GameView(Level* level){
     this->window = Window::getInstance();
     this->level = level;
 
-    screen = new Screenbuffer();
-
     framebuffer = new Framebuffer();
+    ui_framebuffer = new Framebuffer();
 
     // // Gaussian Blur shaders
     // GLuint blur_horiz = ShaderLoader::loadShaderProgram("shaders/flat_drawable_noflip.vs",
@@ -83,6 +82,8 @@ void GameView::update(){
     drawCore();
     drawOtherStuff();
 
+    RenderStack::getInstance()->drawAllToScreen();
+
     // Calculating the mouse vector
     glm::vec3 mouse_point = level->calculateWorldPosition(Mouse::getInstance()->getGLPosition());
 
@@ -108,6 +109,30 @@ void GameView::update(){
 
     } else if(left_mouse_button_unclick && !Mouse::getInstance()->isHovering()){
         level->selectUnit(level->calculateWorldPosition(Mouse::getInstance()->getGLPosition()));
+    }
+
+}
+
+void GameView::drawCore(){
+
+    // Render the level to the framebuffer
+    RenderStack::getInstance()->pushFramebuffer(framebuffer);
+    level->draw();
+
+    // Draw the framebuffer N - 1 times (the last pass is drawn to the screen).
+    // This is how many times the fxaa shader samples the image.
+    // A good number is 4, 8 looks blurry, 1 doesn't do much.
+    int fxaa_level = Profile::getInstance()->getFxaaLevel();
+    if (fxaa_level){
+        for (int i = 0; i < fxaa_level - 1; ++i){
+            framebuffer->draw();
+        }
+    }
+
+    // RenderStack::getInstance()->pushFramebuffer(ui_framebuffer);
+    // Draw all of the ui elements on top of the level
+    for(int i = 0; i < ui_drawables.size(); ++i){
+        ui_drawables[i]->draw();
     }
 
     // Draw the debug information
@@ -141,46 +166,6 @@ void GameView::update(){
 
     // The mouse draws on top of everything else
     Mouse::getInstance()->draw();
-
-}
-
-void GameView::drawCore(){
-    // Render the shadow map into the shadow buffer
-    if (Profile::getInstance()->isShadowsOn()){
-        level->drawShadowMap();
-    }
-
-    // Render the level to the framebuffer
-    if (Profile::getInstance()->isFramebuffersOn()){
-        framebuffer->setAsRenderTarget();
-        level->draw();
-
-        // Draw the framebuffer N - 1 times (the last pass is drawn to the screen).
-        // This is how many times the fxaa shader samples the image.
-        // A good number is 4, 8 looks blurry, 1 doesn't do much.
-
-        int fxaa_level = Profile::getInstance()->getFxaaLevel();
-        if (fxaa_level){
-            for (int i = 0; i < fxaa_level - 1; ++i){
-                framebuffer->draw();
-            }
-        }
-
-        // Draw the framebuffer
-        screen->setAsRenderTarget();
-        framebuffer->draw();
-
-    } else {
-        // Draw the level
-        screen->setAsRenderTarget();
-        level->draw();
-    }
-
-
-    // Draw all of the ui elements on top of the level
-    for(int i = 0; i < ui_drawables.size(); ++i){
-        ui_drawables[i]->draw();
-    }
 }
 
 void GameView::drawOtherStuff(){

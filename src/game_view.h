@@ -57,8 +57,8 @@ protected:
 
     Level* level;
 
-    Screenbuffer* screen;
     Framebuffer* framebuffer;
+    Framebuffer* ui_framebuffer;
 
     UIDrawable* selection_box;
     std::vector<UIDrawable*> ui_drawables;

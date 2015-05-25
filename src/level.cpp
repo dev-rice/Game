@@ -103,6 +103,12 @@ Level::Level(const char* filename){
 }
 
 void Level::draw(){
+
+    // Render the shadow map into the shadow buffer
+    if (Profile::getInstance()->isShadowsOn()){
+        drawShadowMap();
+    }
+
     updateGlobalUniforms();
 
     // make sure the selected units are good to go
@@ -142,7 +148,7 @@ void Level::draw(){
 void Level::drawShadowMap(){
     updateGlobalUniforms();
 
-    shadowbuffer->setAsRenderTarget();
+    RenderStack::getInstance()->pushFramebuffer(shadowbuffer);
 
     for (int i = 0; i < drawables.size(); ++i){
         // Save the shader this drawable is currently using
@@ -154,6 +160,8 @@ void Level::drawShadowMap(){
         // Reset the drawable's shader to what it was before
         drawables[i]->setShader(current_shader);
     }
+
+    RenderStack::getInstance()->popFramebuffer();
 }
 
 void Level::updateGlobalUniforms(){

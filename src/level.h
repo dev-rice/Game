@@ -29,6 +29,8 @@
 #include "particles/smoke_emitter.h"
 
 #include "shadowbuffer.h"
+#include "render_stack.hpp"
+
 #include "window.h"
 #include "profile.h"
 #include "game_clock.h"
