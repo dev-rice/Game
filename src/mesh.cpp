@@ -27,7 +27,7 @@
 
 #include "mesh.h"
 
-Mesh::Mesh(const char* filename){
+Mesh::Mesh(const char* filename) {
     // This constructor loads geometry data (vertices and faces) from a .obj file.
     MeshLoader mesh_loader = MeshLoader(filename);
     std::vector<GLfloat> vertices = mesh_loader.getVertexArray();

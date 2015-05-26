@@ -2,12 +2,12 @@
 
 RenderStack* RenderStack::instance;
 
-RenderStack::RenderStack() {
+RenderStack::RenderStack() : screen() {
     initialize();
 }
 
 void RenderStack::initialize() {
-    screen = new Screenbuffer();
+
 }
 
 RenderStack* RenderStack::getInstance() {
@@ -38,7 +38,7 @@ Framebuffer* RenderStack::getTop(){
 void RenderStack::drawAllToScreen() {
     // Goes through the render stack and draws each framebuffer to the screen. Order is retained because its a stack.
     while(!framebuffer_stack.empty()){
-        screen->setAsRenderTarget();
+        screen.setAsRenderTarget();
         getTop()->draw();
         popFramebuffer();
     }
