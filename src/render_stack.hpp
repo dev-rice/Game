@@ -25,7 +25,7 @@ private:
 
     static RenderStack* instance;
 
-    Screenbuffer* screen;
+    Screenbuffer screen;
 
 };
 
