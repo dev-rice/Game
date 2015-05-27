@@ -5,6 +5,7 @@
 
 #include "all_emitters.hpp"
 #include "../includes/json.hpp"
+#include "debug.h"
 
 using namespace std;
 
