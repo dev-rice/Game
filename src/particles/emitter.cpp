@@ -1,22 +1,30 @@
 #include "particles/emitter.h"
 
-Emitter::Emitter(glm::vec3 position) : Emitter(ShaderLoader::loadShaderProgram("shaders/particle.vs", "shaders/particle.vs"), position) {;}
+Emitter::Emitter(const Json::Value& emitter_json) {
+    glm::vec3 pos;
+    pos.x = emitter_json["position"]["x"].asFloat();
+    pos.y = emitter_json["position"]["y"].asFloat();
+    pos.z = emitter_json["position"]["z"].asFloat();
+
+    initialize(ShaderLoader::loadShaderProgram("shaders/particle.vs", "shaders/particle.fs"), pos);
+
+    // float radius = emitter_json["radius"].asFloat();
+    //
+    // if (emitter_type == "fire"){
+    //     emitter = new FireEmitter(position, radius);
+    // } else if (emitter_type == "snow"){
+    //     emitter = new SnowEmitter(position);
+    // } else if (emitter_type == "smoke"){
+    //     emitter = new SmokeEmitter(position, 0.7);
+    // }
+}
+
+Emitter::Emitter(glm::vec3 position) {
+    initialize(ShaderLoader::loadShaderProgram("shaders/particle.vs", "shaders/particle.fs"), position);
+}
 
 Emitter::Emitter(GLuint shader_program, glm::vec3 position){
-    this->position = position;
-
-    billboard = new PlaneMesh();
-
-    particle_texture = TextureLoader::loadTextureFromFile("res/textures/snow_part.png", GL_LINEAR);
-
-    this->maxParticles = 200;
-    this->lifespan = 100;
-    this->density = (this->maxParticles)/(this->lifespan);
-
-    this->isShotgun = false;
-    this->hasFired = false;
-
-    this->shader_program = shader_program;
+    initialize(shader_program, position);
 }
 
 Emitter::~Emitter(){
@@ -29,6 +37,23 @@ Emitter::~Emitter(){
         delete particles[i];
         particles[i] = NULL;
     }
+}
+
+void Emitter::initialize(GLuint shader, glm::vec3 pos) {
+    this->position = pos;
+
+    billboard = new PlaneMesh();
+
+    particle_texture = TextureLoader::loadTextureFromFile("res/textures/snow_part.png", GL_LINEAR);
+
+    this->maxParticles = 200;
+    this->lifespan = 100;
+    this->density = (this->maxParticles)/(this->lifespan);
+
+    this->isShotgun = false;
+    this->hasFired = false;
+
+    this->shader_program = shader;
 }
 
 void Emitter::setParticleDensity(int density){

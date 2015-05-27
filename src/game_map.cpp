@@ -100,27 +100,7 @@ void GameMap::load(ifstream& map_input){
     EmitterFactory emitter_factory;
     const Json::Value emitters_json = root["particle_emitters"];
     for (const Json::Value& emitter_json : emitters_json){
-        // string emitter_type = emitter_json["type"].asString();
-        //
-        // Emitter* emitter = NULL;
-        //
-        // glm::vec3 position;
-        // position.x = emitter_json["position"]["x"].asFloat();
-        // position.y = emitter_json["position"]["y"].asFloat();
-        // position.z = emitter_json["position"]["z"].asFloat();
-        //
-        // float radius = emitter_json["radius"].asFloat();
-        //
-        // if (emitter_type == "fire"){
-        //     emitter = new FireEmitter(position, radius);
-        // } else if (emitter_type == "snow"){
-        //     emitter = new SnowEmitter(position);
-        // } else if (emitter_type == "smoke"){
-        //     emitter = new SmokeEmitter(position, 0.7);
-        // }
-
         emitters.push_back(emitter_factory.build(emitter_json));
-
     }
 
     // Create the ground from the json segment

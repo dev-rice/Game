@@ -5,13 +5,23 @@
 
 #include "fire_emitter.h"
 
+FireEmitter::FireEmitter(const Json::Value& emitter_json) : Emitter(emitter_json) {
+
+    initialize(emitter_json["radius"].asFloat());
+
+}
+
 FireEmitter::FireEmitter(glm::vec3 position, float radius) : FireEmitter(ShaderLoader::loadShaderProgram("shaders/particle.vs",
     "shaders/particle.fs"), position, radius) {;}
 
 
 FireEmitter::FireEmitter(GLuint shader_program, glm::vec3 position, float radius) : Emitter(shader_program, position){
+    initialize(radius);
+}
+
+void FireEmitter::initialize(float r) {
     // Sets the fire's radius
-    this->radius = radius;
+    this->radius = r;
 
     // Hardcoded fire particle texture
     particle_texture = TextureLoader::loadTextureFromFile("res/textures/fire_part.png", GL_LINEAR);

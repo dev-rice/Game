@@ -9,11 +9,11 @@ Emitter* EmitterFactory::build(const Json::Value& emitter_json){
     float radius = 0.7;
 
     if (emitter_type == "fire"){
-        emitter = new FireEmitter(position, radius);
+        emitter = new FireEmitter(emitter_json);
     } else if (emitter_type == "snow"){
-        emitter = new SnowEmitter(position);
+        emitter = new SnowEmitter(emitter_json);
     } else if (emitter_type == "smoke"){
-        emitter = new SmokeEmitter(position, radius);
+        emitter = new SmokeEmitter(emitter_json);
     }
 
     return emitter;

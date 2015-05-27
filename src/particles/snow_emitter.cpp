@@ -3,11 +3,21 @@
 
 #include "snow_emitter.h"
 
+SnowEmitter::SnowEmitter(const Json::Value& emitter_json) : Emitter(emitter_json) {
+
+    initialize();
+}
+
 SnowEmitter::SnowEmitter(glm::vec3 position) : SnowEmitter(ShaderLoader::loadShaderProgram("shaders/particle.vs",
     "shaders/particle.fs"), position) {;}
 
 
 SnowEmitter::SnowEmitter(GLuint shader_program, glm::vec3 position) : Emitter(shader_program, position){
+
+    initialize();
+}
+
+void SnowEmitter::initialize(){
     // Hardcoded snow particle texture
     particle_texture = TextureLoader::loadTextureFromFile("res/textures/snow_part.png", GL_LINEAR);
 
