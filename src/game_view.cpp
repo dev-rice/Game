@@ -81,32 +81,7 @@ void GameView::update(){
 
     RenderStack::getInstance()->drawAllToScreen();
 
-    // Calculating the mouse vector
-    glm::vec3 mouse_point = game_map.calculateWorldPosition(Mouse::getInstance()->getGLPosition());
-
-    // draw selection rectangle here and change the cursor based on amount of dragging
-    glm::vec3 init = game_map.calculateWorldPosition(initial_left_click_position);
-    glm::vec3 fina = game_map.calculateWorldPosition(final_left_click_position);
-
-    bool dragged_x = fabs(initial_left_click_position.x - final_left_click_position.x) > 0.05;
-    bool dragged_y = fabs(initial_left_click_position.y - final_left_click_position.y) > 0.05;
-
-    if(mouse_count > 1 && !Mouse::getInstance()->isHovering() && (dragged_x || dragged_y)){
-        // draw from initial_left_click_position to final_left_click_position
-        Mouse::getInstance()->setCursorSprite(Mouse::cursorType::SELECTION);
-
-        level->tempSelectUnits(init, fina);
-
-        selection_box->setGLCoordinates(initial_left_click_position, final_left_click_position);
-        selection_box->draw();
-    }
-    if(left_mouse_button_unclick && !Mouse::getInstance()->isHovering() && (dragged_x || dragged_y)){
-
-        level->selectUnits(init, fina);
-
-    } else if(left_mouse_button_unclick && !Mouse::getInstance()->isHovering()){
-        level->selectUnit(game_map.calculateWorldPosition(Mouse::getInstance()->getGLPosition()));
-    }
+    handleMouseDragging();
 
 }
 
@@ -447,5 +422,31 @@ void GameView::handleMouseCameraMovement(){
     }
     if (state[SDL_SCANCODE_EQUALS]){
         camera.zoomOut(0.01);
+    }
+}
+
+void GameView::handleMouseDragging(){
+    // draw selection rectangle here and change the cursor based on amount of dragging
+    glm::vec3 init = game_map.calculateWorldPosition(initial_left_click_position);
+    glm::vec3 fina = game_map.calculateWorldPosition(final_left_click_position);
+
+    bool dragged_x = fabs(initial_left_click_position.x - final_left_click_position.x) > 0.05;
+    bool dragged_y = fabs(initial_left_click_position.y - final_left_click_position.y) > 0.05;
+
+    if(mouse_count > 1 && !Mouse::getInstance()->isHovering() && (dragged_x || dragged_y)){
+        // draw from initial_left_click_position to final_left_click_position
+        Mouse::getInstance()->setCursorSprite(Mouse::cursorType::SELECTION);
+
+        level->tempSelectUnits(init, fina);
+
+        selection_box->setGLCoordinates(initial_left_click_position, final_left_click_position);
+        selection_box->draw();
+    }
+    if(left_mouse_button_unclick && !Mouse::getInstance()->isHovering() && (dragged_x || dragged_y)){
+
+        level->selectUnits(init, fina);
+
+    } else if(left_mouse_button_unclick && !Mouse::getInstance()->isHovering()){
+        level->selectUnit(game_map.calculateWorldPosition(Mouse::getInstance()->getGLPosition()));
     }
 }

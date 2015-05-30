@@ -40,6 +40,7 @@ protected:
 
     void handleKeyboardCameraMovement();
     void handleMouseCameraMovement();
+    void handleMouseDragging();
 
     // Mouse controls
     int mouse_count;
