@@ -11,7 +11,7 @@
 #include "profile.h"
 
 class FunctionHelper;
-typedef void (FunctionHelper::*function)();
+typedef void (FunctionHelper::*function_thing)();
 
 class FunctionHelper {
 public:
@@ -29,7 +29,7 @@ private:
     void toggleParticles();
     void toggleFramebuffers();
 
-    std::map<std::string, function> lookup_table;
+    std::map<std::string, function_thing> lookup_table;
 };
 
 #endif

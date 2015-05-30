@@ -26,7 +26,7 @@ FunctionHelper::FunctionHelper(){
 }
 
 void FunctionHelper::runFunction(std::string function_name){
-    std::map<std::string, function>::iterator result = lookup_table.find(function_name);
+    std::map<std::string, function_thing>::iterator result = lookup_table.find(function_name);
 
     if(result != lookup_table.end()){
         auto mem = result->second;  //C++11 only
