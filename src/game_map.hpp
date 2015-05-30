@@ -14,12 +14,13 @@
 #include "render_stack.hpp"
 #include "profile.h"
 #include "particles/emitter_factory.hpp"
+#include "unit_holder.hpp"
 
 using namespace std;
 
 class GameMap {
 public:
-    GameMap(string map_filename);
+    GameMap(string map_filename, UnitHolder* unit_holder);
 
     void render();
     void renderToShadowMap();
@@ -47,6 +48,7 @@ private:
     vector<Doodad> doodads;
     vector<Emitter*> emitters;
     Terrain ground;
+    UnitHolder* unit_holder;
 
     // Everything that will be drawn
     // vector<Drawable> drawables;

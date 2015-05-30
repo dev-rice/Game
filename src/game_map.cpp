@@ -1,6 +1,7 @@
 #include "game_map.hpp"
 
-GameMap::GameMap(string map_filename) : camera(), ground(), shadowbuffer(1.0) {
+GameMap::GameMap(string map_filename, UnitHolder* units) : camera(), ground(), unit_holder(units), shadowbuffer(1.0) {
+
     ifstream map_input(map_filename);
     load(map_input);
 
@@ -24,8 +25,15 @@ void GameMap::render(){
         doodad.draw();
     }
 
+    // Draw all the units
+    for (Playable& unit : unit_holder->getUnits()){
+        unit.draw();
+    }
+
+    // Draw the ground
     ground.draw();
 
+    // Draw all of the particle emitters
     if (Profile::getInstance()->isParticlesOn()){
         for (Emitter* emitter : emitters){
             emitter->draw(&camera);
@@ -49,6 +57,7 @@ void GameMap::renderToShadowMap(){
         // Reset the drawable's shader to what it was before
         doodad.setShader(current_shader);
     }
+
     GLuint current_shader = ground.getShader();
     ground.setShader(shadow_shader);
     ground.draw();

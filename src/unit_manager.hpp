@@ -7,7 +7,7 @@
 
 class UnitManager {
 public:
-    UnitManager(GameMap& game_map, std::vector<Playable*> units);
+    UnitManager(GameMap& game_map, UnitHolder& units);
 
     void issueOrder(Playable::Order, glm::vec3, bool);
     void selectUnit(glm::vec3);
@@ -19,6 +19,7 @@ private:
 
     std::vector<Playable*> all_units;
     std::vector<Playable*> selected_units;
+    UnitHolder* unit_holder;
 
     GameMap* game_map;
 

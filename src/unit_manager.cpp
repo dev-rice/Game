@@ -1,8 +1,7 @@
 #include "unit_manager.hpp"
 
-UnitManager::UnitManager(GameMap& game_map, vector<Playable*> all_units) {
-    this->game_map = &game_map;
-    this->all_units = all_units;
+UnitManager::UnitManager(GameMap& game_map, UnitHolder& units) : game_map(&game_map), unit_holder(&units) {
+
 }
 
 void UnitManager::issueOrder(Playable::Order order, glm::vec3 target, bool should_enqueue){

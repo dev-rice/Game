@@ -9,6 +9,7 @@
 #include "game_view_edit.h"
 #include "debug.h"
 #include "window.h"
+#include "level.hpp"
 
 using namespace std;
 
@@ -21,6 +22,7 @@ public:
     void update();
 
 private:
+    Level level;
     GameView* game_view;
 
     bool edit_mode;
