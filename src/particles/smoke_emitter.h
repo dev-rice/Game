@@ -10,11 +10,14 @@
 
 class SmokeEmitter : public Emitter {
 public:
+    SmokeEmitter(const Json::Value& emitter_json);
+    SmokeEmitter(glm::vec3, float);
     SmokeEmitter(GLuint, glm::vec3, float);
 private:
     float radius;
     int count;
+    void initialize(float r);
     void prepareParticles(Camera*);
-};  
+};
 
 #endif

@@ -7,6 +7,7 @@
 
 class Shadowbuffer : public Framebuffer {
 public:
+    Shadowbuffer() : Shadowbuffer(1.0) {;}
     Shadowbuffer(float);
 
     void setAsRenderTarget();

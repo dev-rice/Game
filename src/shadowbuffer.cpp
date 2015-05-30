@@ -1,5 +1,6 @@
 #include "shadowbuffer.h"
 
+
 Shadowbuffer::Shadowbuffer(float up_sample){
     // Create frame buffer
     glGenFramebuffers(1, &framebuffer);

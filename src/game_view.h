@@ -21,11 +21,12 @@
 #include "pathfinder.h"
 #include "game_clock.h"
 #include "debug_console.h"
+#include "game_map.hpp"
 
 class GameView {
 public:
 
-    GameView(Level*);
+    GameView(Level* level, GameMap& map);
 
     virtual void update();
 
@@ -39,6 +40,7 @@ protected:
 
     void handleKeyboardCameraMovement();
     void handleMouseCameraMovement();
+    void handleMouseDragging();
 
     // Mouse controls
     int mouse_count;
@@ -56,6 +58,7 @@ protected:
     Window* window;
 
     Level* level;
+    GameMap game_map;
 
     Framebuffer gamebuffer;
 

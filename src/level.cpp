@@ -37,26 +37,25 @@ Level::Level(const char* filename){
     // Size of the box to render (tailored to fit current map).
     depth_proj = glm::ortho<float>(-60,60,-65, 60,-40,40);
 
-    // Create the uniform buffer object.
+    // Create the uniform buffer object for the camera.
     glGenBuffers(1, &camera_ubo);
     glBindBuffer(GL_UNIFORM_BUFFER, camera_ubo);
     glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::mat4) * 2, NULL, GL_STREAM_DRAW);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
+    glBindBufferRange(GL_UNIFORM_BUFFER, 1, camera_ubo, 0, sizeof(glm::mat4) * 2);
 
-    // Create the uniform buffer object.
+    // Create the uniform buffer object for the shadows.
     glGenBuffers(1, &shadow_ubo);
     glBindBuffer(GL_UNIFORM_BUFFER, shadow_ubo);
     glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::mat4) * 2, NULL, GL_STREAM_DRAW);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
+    glBindBufferRange(GL_UNIFORM_BUFFER, 2, shadow_ubo, 0, sizeof(glm::mat4) * 2);
 
-    // Create the uniform buffer object.
+    // Create the uniform buffer object for the unit.
     glGenBuffers(1, &unit_ubo);
     glBindBuffer(GL_UNIFORM_BUFFER, unit_ubo);
     glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::vec3), NULL, GL_STREAM_DRAW);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
-
-    glBindBufferRange(GL_UNIFORM_BUFFER, 1, camera_ubo, 0, sizeof(glm::mat4) * 2);
-    glBindBufferRange(GL_UNIFORM_BUFFER, 2, shadow_ubo, 0, sizeof(glm::mat4) * 2);
     glBindBufferRange(GL_UNIFORM_BUFFER, 10, unit_ubo, 0, sizeof(glm::vec3));
 
     loadLevel(filename);
@@ -226,7 +225,7 @@ glm::vec3 Level::calculateRay(glm::vec2 screen_point){
     return ray;
 }
 
-std::tuple<float, float, glm::vec3> Level::findWorldPoint(glm::vec3 ray, int steps, float bottom, float top){
+std::tuple<float, float, glm::vec3> Level::findMapPoint(glm::vec3 ray, int steps, float bottom, float top){
     // Search idea from http://bit.ly/1Jyb6pa
     glm::vec3 world_point;
 
@@ -253,7 +252,7 @@ std::tuple<float, float, glm::vec3> Level::findWorldPoint(glm::vec3 ray, int ste
     return std::make_tuple(bottom_bound, top_bound, world_point);
 }
 
-glm::vec3 Level::findWorldPointInit(glm::vec3 ray, int steps){
+glm::vec3 Level::findMapPointInit(glm::vec3 ray, int steps){
     // Ideal mouse point search algorithm
     // Do a low resolution pass of the planes and find
     // which planes the point is between. Then repeat
@@ -267,7 +266,7 @@ glm::vec3 Level::findWorldPointInit(glm::vec3 ray, int steps){
 
     std::tuple<float,float, glm::vec3> bounds;
     for (int i = 0; i < 10; ++i){
-        bounds = findWorldPoint(ray, steps, bottom, top);
+        bounds = findMapPoint(ray, steps, bottom, top);
         bottom = std::get<0>(bounds);
         top = std::get<1>(bounds);
         world_point = std::get<2>(bounds);
@@ -279,7 +278,7 @@ glm::vec3 Level::findWorldPointInit(glm::vec3 ray, int steps){
 
 glm::vec3 Level::calculateWorldPosition(glm::vec2 screen_point){
     glm::vec3 ray = calculateRay(screen_point);
-    glm::vec3 world_point = findWorldPointInit(ray, 100);
+    glm::vec3 world_point = findMapPointInit(ray, 100);
 
     return world_point;
 }

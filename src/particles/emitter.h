@@ -28,6 +28,8 @@
 class Emitter {
 public:
     ~Emitter();
+    Emitter(const Json::Value& emitter_json);
+    Emitter(glm::vec3);
     Emitter(GLuint, glm::vec3);
 
     void draw(Camera*);
@@ -35,6 +37,8 @@ public:
     void makeShotgun();
 protected:
     virtual void prepareParticles(Camera*);
+
+    void initialize(GLuint shader, glm::vec3 pos);
 
     float old_time;
 
