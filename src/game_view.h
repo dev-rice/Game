@@ -7,7 +7,6 @@
 #include "mesh.h"
 #include "drawable.h"
 #include "camera.h"
-#include "level.h"
 #include "flat_mesh.h"
 #include "flat_drawable.h"
 #include "text_renderer.h"
@@ -26,7 +25,7 @@
 class GameView {
 public:
 
-    GameView(Level* level, GameMap& map);
+    GameView(GameMap& map);
 
     virtual void update();
 
@@ -57,7 +56,6 @@ protected:
 
     Window* window;
 
-    Level* level;
     GameMap game_map;
 
     Framebuffer gamebuffer;

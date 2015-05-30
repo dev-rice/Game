@@ -1,8 +1,7 @@
 #include "game_view.h"
 
-GameView::GameView(Level* level, GameMap& map) : game_map(map), gamebuffer() {
+GameView::GameView(GameMap& map) : game_map(map), gamebuffer() {
     this->window = Window::getInstance();
-    this->level = level;
 
     // // Gaussian Blur shaders
     // GLuint blur_horiz = ShaderLoader::loadShaderProgram("shaders/flat_drawable_noflip.vs",
@@ -63,7 +62,6 @@ GameView::GameView(Level* level, GameMap& map) : game_map(map), gamebuffer() {
     InputHandler::State_Callback_Type state_callback_temp = std::bind(&GameView::handleInputState, this);
     InputHandler::getInstance()->setStateCallback(state_callback_temp);
 
-    DebugConsole::getInstance()->setLevel(level);
     ui_drawables.push_back(DebugConsole::getInstance());
     game_map.getGround().setPaintLayer(1);
 
@@ -87,7 +85,7 @@ void GameView::update(){
 
 void GameView::drawCore(){
 
-    // Render the level to the gamebuffer
+    // Render the game map to the gamebuffer
     RenderStack::getInstance()->pushFramebuffer(&gamebuffer);
     game_map.render();
 
@@ -170,7 +168,7 @@ void GameView::handleInputState(){
         if (attack_command_prime){
 
             attack_command_prime = false;
-            level->issueOrder(Playable::Order::ATTACK, mouse_world_pos, shift_pressed);
+            // level->issueOrder(Playable::Order::ATTACK, mouse_world_pos, shift_pressed);
             mouse_count = -1;
             left_mouse_button_unclick = true;
 
@@ -196,7 +194,7 @@ void GameView::handleInputState(){
     if (Mouse::getInstance()->isPressed(Mouse::RIGHT)){
         // Right mouse button
         if (!right_mouse_button_click){
-            level->issueOrder(Playable::Order::MOVE, mouse_world_pos, shift_pressed);
+            // level->issueOrder(Playable::Order::MOVE, mouse_world_pos, shift_pressed);
         }
 
         attack_command_prime = false;
@@ -211,14 +209,14 @@ void GameView::handleInputState(){
     // Hold-Action Key Handling
     //##############################################################################
     if (state[SDL_SCANCODE_H]){
-        level->issueOrder(Playable::Order::HOLD_POSITION, mouse_world_pos, shift_pressed);
+        // level->issueOrder(Playable::Order::HOLD_POSITION, mouse_world_pos, shift_pressed);
     }
 
     //##############################################################################
     // Stop-Action Key Handling
     //##############################################################################
     if (state[SDL_SCANCODE_S]){
-        level->issueOrder(Playable::Order::STOP, mouse_world_pos, shift_pressed);
+        // level->issueOrder(Playable::Order::STOP, mouse_world_pos, shift_pressed);
     }
 
     //##############################################################################
@@ -437,16 +435,16 @@ void GameView::handleMouseDragging(){
         // draw from initial_left_click_position to final_left_click_position
         Mouse::getInstance()->setCursorSprite(Mouse::cursorType::SELECTION);
 
-        level->tempSelectUnits(init, fina);
+        // level->tempSelectUnits(init, fina);
 
         selection_box->setGLCoordinates(initial_left_click_position, final_left_click_position);
         selection_box->draw();
     }
     if(left_mouse_button_unclick && !Mouse::getInstance()->isHovering() && (dragged_x || dragged_y)){
 
-        level->selectUnits(init, fina);
+        // level->selectUnits(init, fina);
 
     } else if(left_mouse_button_unclick && !Mouse::getInstance()->isHovering()){
-        level->selectUnit(game_map.calculateWorldPosition(Mouse::getInstance()->getGLPosition()));
+        // level->selectUnit(game_map.calculateWorldPosition(Mouse::getInstance()->getGLPosition()));
     }
 }

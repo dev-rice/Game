@@ -2,11 +2,10 @@
 #define GameViewEdit_h
 
 #include "game_view.h"
-#include "level.h"
 
 class GameViewEdit : public GameView {
 public:
-    GameViewEdit(Level* level, GameMap& map);
+    GameViewEdit(GameMap& map);
 
     void handleInputState();
     void handleInput(SDL_Event);

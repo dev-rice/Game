@@ -108,10 +108,6 @@ void DebugConsole::syncWithDebug(){
     }
 }
 
-void DebugConsole::setLevel(Level* level){
-    this->level = level;
-}
-
 void DebugConsole::parseInput(){
     // Split the string by spaces
     std::string temp_buffer = input_buffer;
@@ -132,7 +128,7 @@ void DebugConsole::parseInput(){
         if (tokens[1] == "layer"){
             try {
                 int layer_num = std::stoi(tokens[2]);
-                level->getTerrain()->setPaintLayer(layer_num);
+                // level->getTerrain()->setPaintLayer(layer_num);
             } catch (std::invalid_argument e){
 
             }
@@ -142,7 +138,7 @@ void DebugConsole::parseInput(){
             try {
                 int layer1 = std::stoi(tokens[2]);
                 int layer2 = std::stoi(tokens[3]);
-                level->getTerrain()->getLayeredTextures()->swapLayers(layer1, layer2);
+                // level->getTerrain()->getLayeredTextures()->swapLayers(layer1, layer2);
             } catch (std::invalid_argument e){
 
             }
@@ -150,13 +146,13 @@ void DebugConsole::parseInput(){
     } else if (tokens[0] == "save"){
         if (tokens[1] == "layer"){
             if (tokens.size() > 2){
-                std::string output = level->getTerrain()->getLayeredTextures()->saveData(tokens[2]);
-                Debug::info("%s", output.c_str());
+                // std::string output = level->getTerrain()->getLayeredTextures()->saveData(tokens[2]);
+                // Debug::info("%s", output.c_str());
             }
         } else {
             if (tokens.size() > 1){
-                std::string output = level->getTerrain()->saveData(tokens[1]);
-                Debug::info("%s", output.c_str());
+                // std::string output = level->getTerrain()->saveData(tokens[1]);
+                // Debug::info("%s", output.c_str());
             }
         }
     } else {

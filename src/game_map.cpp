@@ -49,6 +49,11 @@ void GameMap::renderToShadowMap(){
         // Reset the drawable's shader to what it was before
         doodad.setShader(current_shader);
     }
+    GLuint current_shader = ground.getShader();
+    ground.setShader(shadow_shader);
+    ground.draw();
+    ground.setShader(current_shader);
+
 
     RenderStack::getInstance()->popFramebuffer();
 

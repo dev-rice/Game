@@ -124,12 +124,11 @@ int main(int argc, char* argv[]) {
     our_window->display();
 
     // Create the world
-    World* world;
-    if (has_map){
-        world = new World(map_filename.c_str(), edit);
-    } else {
-        world = new World(edit);
+    if (!has_map){
+        map_filename = "res/maps/newformat.map";
     }
+
+    World world(map_filename.c_str(), edit);
 
     float start_time = GameClock::getInstance()->getCurrentTime();
 
@@ -141,7 +140,7 @@ int main(int argc, char* argv[]) {
     while(!our_window->shouldClose()) {
         // Just handle inputs in this thread.
         InputHandler::getInstance()->pollInputs();
-        world->update();
+        world.update();
 
         float time_since_start = GameClock::getInstance()->getCurrentTime() - start_time;
         splash.setOpacity(2.0 / pow(time_since_start, 2) - 1.0);
@@ -150,9 +149,6 @@ int main(int argc, char* argv[]) {
 
     // Close the window
     our_window->close();
-
-    delete world;
-    world = NULL;
 
     // Add a line break before going back to the terminal prompt.
     printf("\n");
