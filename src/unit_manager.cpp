@@ -2,9 +2,6 @@
 
 UnitManager::UnitManager(GameMap& game_map, UnitHolder& units) : game_map(&game_map), unit_holder(&units) {
 
-    printf("UnitHolder passed into UnitManager: %p\n", &units);
-    printf("UnitHolder in UnitManager: %p\n", unit_holder);
-
 }
 
 void UnitManager::issueOrder(Playable::Order order, glm::vec3 target, bool should_enqueue){

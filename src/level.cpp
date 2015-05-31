@@ -24,8 +24,6 @@ Level::Level(string filename) : unit_holder(), game_map(filename, unit_holder), 
         }
     }
 
-    printf("UnitHolder in Level: %p\n", &unit_holder);
-
 }
 
 GameMap& Level::getGameMap() {

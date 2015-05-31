@@ -9,8 +9,6 @@ GameMap::GameMap(string map_filename, UnitHolder& units) : camera(), ground(), u
 
     initializeGlobalUniforms();
 
-    printf("UnitHolder in GameMap: %p\n", unit_holder);
-
 }
 
 void GameMap::render(){
