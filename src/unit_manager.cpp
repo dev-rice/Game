@@ -1,6 +1,6 @@
 #include "unit_manager.hpp"
 
-UnitManager::UnitManager(GameMap& game_map, UnitHolder& units) : game_map(&game_map), unit_holder(&units) {
+UnitManager::UnitManager(GameMap& game_map, UnitHolder& units) : game_map(&game_map), unit_holder(&units), pathfinder(game_map.getGround()) {
 
 }
 
@@ -77,7 +77,7 @@ void UnitManager::issueOrder(Playable::Order order, glm::vec3 target, bool shoul
     float start_time = GameClock::getInstance()->getCurrentTime();
 
     // Create the path for all all_units in the selection
-    vector<glm::vec3> path = PathFinder::find_path(&(game_map->getGround()), int(x_center), int(z_center), int(target.x), int(target.z), smallest_radius);
+    vector<glm::vec3> path = pathfinder.find_path(int(x_center), int(z_center), int(target.x), int(target.z), smallest_radius);
 
     // End logging and report
     float delta_time = GameClock::getInstance()->getCurrentTime() - start_time;
@@ -97,6 +97,7 @@ void UnitManager::issueOrder(Playable::Order order, glm::vec3 target, bool shoul
 
         selected_units[i]->receiveOrder(order, glm::vec3(x_to_move, 0.0f, z_to_move), should_enqueue, path, targeted_unit);
     }
+
 }
 
 void UnitManager::selectUnit(glm::vec3 click){
@@ -136,7 +137,6 @@ void UnitManager::selectUnit(glm::vec3 click){
 }
 
 void UnitManager::selectUnits(glm::vec3 coord_a, glm::vec3 coord_b){
-
     vector<Playable*> selected_units_copy = selected_units;
     selected_units.clear();
 
@@ -165,6 +165,7 @@ void UnitManager::selectUnits(glm::vec3 coord_a, glm::vec3 coord_b){
             selected_units[i]->select();
         }
     }
+
 }
 
 void UnitManager::tempSelectUnits(glm::vec3 coord_a, glm::vec3 coord_b){
@@ -192,4 +193,12 @@ float UnitManager::getDistance(float a1, float a2, float b1, float b2){
     float x_diff = fabs(a1 - b1);
     float z_diff = fabs(a2 - b2);
     return sqrt(x_diff*x_diff + z_diff*z_diff);
+}
+
+void UnitManager::updateUnits(){
+    // update all the units
+    for (Playable& unit : unit_holder->getUnits()){
+        vector<Playable*> empty_units;
+        unit.update(&(game_map->getGround()), &empty_units);
+    }
 }

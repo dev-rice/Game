@@ -3,17 +3,13 @@
 
 #include "pathfinder.h"
 
-int** PathFinder::node_state_array;
-int PathFinder::depth;
-int PathFinder::width;
+PathFinder::PathFinder(Terrain& ground) : ground(&ground) {
+	allocateArray(ground);
+}
 
-const int PathFinder::UNVISITED;
-const int PathFinder::IN_FRONTIER;
-const int PathFinder::VISITED;
-
-void PathFinder::allocateArray(Terrain* ground){
-	depth = ground->getDepth();
-	width = ground->getWidth();
+void PathFinder::allocateArray(Terrain& ground){
+	depth = ground.getDepth();
+	width = ground.getWidth();
 
 	node_state_array = new int*[width];
     for(int i = 0; i < width; ++i){
@@ -24,7 +20,7 @@ void PathFinder::allocateArray(Terrain* ground){
     }
 }
 
-std::vector<glm::vec3> PathFinder::find_path(Terrain *ground, float start_x, float start_y, float target_x, float target_y, float radius){
+std::vector<glm::vec3> PathFinder::find_path(float start_x, float start_y, float target_x, float target_y, float radius){
 	// No A* search if there is a straight line from start to target
 	if( canPathOnLine(ground, start_x, start_y, target_x, target_y, radius) ){
 		std::vector<glm::vec3> temp;

@@ -69,6 +69,8 @@ void GameView::update(){
     // Swap display/rendering buffers
     Window::getInstance()->display();
 
+    level->getUnitManager().updateUnits();
+
     drawCore();
     drawOtherStuff();
 

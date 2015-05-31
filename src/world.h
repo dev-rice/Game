@@ -18,7 +18,6 @@ public:
     World(string, bool);
     ~World();
 
-    void addLevel(string);
     void update();
 
 private:

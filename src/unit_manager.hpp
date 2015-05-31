@@ -16,6 +16,8 @@ public:
     void selectUnits(glm::vec3, glm::vec3);
     void tempSelectUnits(glm::vec3, glm::vec3);
 
+    void updateUnits();
+
 private:
     float getDistance(float, float, float, float);
 
@@ -23,6 +25,7 @@ private:
     UnitHolder* unit_holder;
 
     GameMap* game_map;
+    PathFinder pathfinder;
 
 };
 

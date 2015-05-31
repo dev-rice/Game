@@ -132,6 +132,8 @@ private:
 	int weapon_damage;
 	float weapon_range;
 
+	
+
 	// Not implemented yet
 	// Weapon* weapon
 	// Ability* ability

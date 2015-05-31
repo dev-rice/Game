@@ -24,8 +24,6 @@ Level::Level(string filename) : unit_holder(), game_map(filename, unit_holder), 
         }
     }
 
-    PathFinder::allocateArray(&(game_map.getGround()));
-
 }
 
 GameMap& Level::getGameMap() {
