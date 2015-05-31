@@ -28,9 +28,9 @@ void GameMap::render(){
     }
 
     // // Draw all the units
-    // for (Playable& unit : unit_holder->getUnits()){
-    //     unit.draw();
-    // }
+    for (Playable& unit : unit_holder->getUnits()){
+        unit.draw();
+    }
 
     // Draw the ground
     ground.draw();
