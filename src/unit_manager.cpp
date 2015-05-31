@@ -77,7 +77,7 @@ void UnitManager::issueOrder(Playable::Order order, glm::vec3 target, bool shoul
     float start_time = GameClock::getInstance()->getCurrentTime();
 
     // Create the path for all all_units in the selection
-    std::vector<glm::vec3> path = PathFinder::find_path(&game_map->getGround(), int(x_center), int(z_center), int(target.x), int(target.z), smallest_radius);
+    vector<glm::vec3> path = PathFinder::find_path(&(game_map->getGround()), int(x_center), int(z_center), int(target.x), int(target.z), smallest_radius);
 
     // End logging and report
     float delta_time = GameClock::getInstance()->getCurrentTime() - start_time;
@@ -101,7 +101,7 @@ void UnitManager::issueOrder(Playable::Order order, glm::vec3 target, bool shoul
 
 void UnitManager::selectUnit(glm::vec3 click){
 
-    std::vector<Playable*> selected_units_copy = selected_units;
+    vector<Playable*> selected_units_copy = selected_units;
     selected_units.clear();
 
     float nearest = FLT_MAX;
@@ -137,14 +137,14 @@ void UnitManager::selectUnit(glm::vec3 click){
 
 void UnitManager::selectUnits(glm::vec3 coord_a, glm::vec3 coord_b){
 
-    std::vector<Playable*> selected_units_copy = selected_units;
+    vector<Playable*> selected_units_copy = selected_units;
     selected_units.clear();
 
-    float left = std::min(coord_a.x, coord_b.x);
-    float right = std::max(coord_a.x, coord_b.x);
+    float left = min(coord_a.x, coord_b.x);
+    float right = max(coord_a.x, coord_b.x);
 
-    float down = std::min(coord_a.z, coord_b.z);
-    float up = std::max(coord_a.z, coord_b.z);
+    float down = min(coord_a.z, coord_b.z);
+    float up = max(coord_a.z, coord_b.z);
 
     vector<Playable>& all_units = unit_holder->getUnits();
 
@@ -168,11 +168,11 @@ void UnitManager::selectUnits(glm::vec3 coord_a, glm::vec3 coord_b){
 }
 
 void UnitManager::tempSelectUnits(glm::vec3 coord_a, glm::vec3 coord_b){
-    float left = std::min(coord_a.x, coord_b.x);
-    float right = std::max(coord_a.x, coord_b.x);
+    float left = min(coord_a.x, coord_b.x);
+    float right = max(coord_a.x, coord_b.x);
 
-    float down = std::min(coord_a.z, coord_b.z);
-    float up = std::max(coord_a.z, coord_b.z);
+    float down = min(coord_a.z, coord_b.z);
+    float up = max(coord_a.z, coord_b.z);
 
     vector<Playable>& all_units = unit_holder->getUnits();
 
