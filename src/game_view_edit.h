@@ -5,7 +5,7 @@
 
 class GameViewEdit : public GameView {
 public:
-    GameViewEdit(GameMap& map);
+    GameViewEdit(Level& level);
 
     void handleInputState();
     void handleInput(SDL_Event);

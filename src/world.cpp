@@ -15,9 +15,9 @@ void World::addLevel(string filename){
     level = Level(filename);
 
     if (edit_mode){
-        game_view = new GameViewEdit(level.getGameMap());
+        game_view = new GameViewEdit(level);
     } else {
-        game_view = new GameView(level.getGameMap());
+        game_view = new GameView(level);
     }
 }
 

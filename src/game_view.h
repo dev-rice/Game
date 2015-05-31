@@ -21,11 +21,12 @@
 #include "game_clock.h"
 #include "debug_console.h"
 #include "game_map.hpp"
+#include "level.hpp"
 
 class GameView {
 public:
 
-    GameView(GameMap& map);
+    GameView(Level& level);
 
     virtual void update();
 
@@ -41,6 +42,18 @@ protected:
     void handleMouseCameraMovement();
     void handleMouseDragging();
 
+    Window* window;
+
+    GameMap* game_map;
+    Level* level;
+
+    Framebuffer gamebuffer;
+
+    UIDrawable* selection_box;
+    std::vector<UIDrawable*> ui_drawables;
+
+    TextRenderer* text_renderer;
+
     // Mouse controls
     int mouse_count;
     bool left_mouse_button_unclick;
@@ -54,17 +67,6 @@ protected:
 
     bool attack_command_prime;
 
-    Window* window;
-
-    GameMap game_map;
-
-    Framebuffer gamebuffer;
-
-    UIDrawable* selection_box;
-    std::vector<UIDrawable*> ui_drawables;
-
-    TextRenderer* text_renderer;
-
     bool toggle_key_state;
     bool debug_showing;
 
@@ -77,8 +79,6 @@ protected:
     bool graphics_menu_key_state;
 
     bool debug_console_key_state;
-
-    std::string all_chars;
 
 };
 
