@@ -5,6 +5,8 @@
 #include "unit_holder.hpp"
 #include "game_map.hpp"
 
+using namespace std;
+
 class UnitManager {
 public:
     UnitManager(GameMap& game_map, UnitHolder& units);
@@ -17,8 +19,7 @@ public:
 private:
     float getDistance(float, float, float, float);
 
-    std::vector<Playable*> all_units;
-    std::vector<Playable*> selected_units;
+    vector<Playable*> selected_units;
     UnitHolder* unit_holder;
 
     GameMap* game_map;

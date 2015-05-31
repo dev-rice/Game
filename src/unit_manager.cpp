@@ -14,13 +14,15 @@ void UnitManager::issueOrder(Playable::Order order, glm::vec3 target, bool shoul
     // We need to decide if it's targeting a unit with this command or not
     Playable* targeted_unit = 0;
 
+    vector<Playable>& all_units = unit_holder->getUnits();
+
     // Check all the other playables to see if one is the target
     for(int i = 0; i < all_units.size(); ++i){
-        glm::vec3 unit_pos = all_units[i]->getPosition();
+        glm::vec3 unit_pos = all_units[i].getPosition();
         float click_distance_from_unit = getDistance(unit_pos.x, unit_pos.z, target.x, target.z);
 
-        if(click_distance_from_unit < all_units[i]->getRadius()){
-            targeted_unit = all_units[i];
+        if(click_distance_from_unit < all_units[i].getRadius()){
+            targeted_unit = &all_units[i];
         }
     }
     // Debug::info("Selected all_units size: %d\n", selected_units.size());
@@ -105,16 +107,18 @@ void UnitManager::selectUnit(glm::vec3 click){
     float nearest = FLT_MAX;
     Playable* nearest_playable = 0;
 
+    vector<Playable>& all_units = unit_holder->getUnits();
+
     for(int i = 0; i < all_units.size(); ++i){
 
-        glm::vec3 unit_pos = all_units[i]->getPosition();
+        glm::vec3 unit_pos = all_units[i].getPosition();
         float distance = getDistance(unit_pos.x, unit_pos.z, click.x, click.z);
 
-        if( distance < all_units[i]->getRadius() && distance < nearest){
+        if( distance < all_units[i].getRadius() && distance < nearest){
             nearest = distance;
-            nearest_playable = all_units[i];
+            nearest_playable = &all_units[i];
         } else {
-            all_units[i]->deSelect();
+            all_units[i].deSelect();
         }
     }
 
@@ -142,13 +146,15 @@ void UnitManager::selectUnits(glm::vec3 coord_a, glm::vec3 coord_b){
     float down = std::min(coord_a.z, coord_b.z);
     float up = std::max(coord_a.z, coord_b.z);
 
+    vector<Playable>& all_units = unit_holder->getUnits();
+
     for(int i = 0; i < all_units.size(); ++i){
-        if(all_units[i]->isTempSelected()){
-            all_units[i]->select();
-            all_units[i]->tempDeSelect();
-            selected_units.push_back(all_units[i]);
+        if(all_units[i].isTempSelected()){
+            all_units[i].select();
+            all_units[i].tempDeSelect();
+            selected_units.push_back(&all_units[i]);
         } else {
-            all_units[i]->deSelect();
+            all_units[i].deSelect();
         }
     }
 
@@ -168,14 +174,16 @@ void UnitManager::tempSelectUnits(glm::vec3 coord_a, glm::vec3 coord_b){
     float down = std::min(coord_a.z, coord_b.z);
     float up = std::max(coord_a.z, coord_b.z);
 
+    vector<Playable>& all_units = unit_holder->getUnits();
+
     for(int i = 0; i < all_units.size(); ++i){
-        glm::vec3 unit_pos = all_units[i]->getPosition();
-        float radius = all_units[i]->getRadius();
+        glm::vec3 unit_pos = all_units[i].getPosition();
+        float radius = all_units[i].getRadius();
 
         if(left - radius < unit_pos.x && right + radius > unit_pos.x && down - radius < unit_pos.z && up + radius > unit_pos.z){
-            all_units[i]->tempSelect();
+            all_units[i].tempSelect();
         } else {
-            all_units[i]->tempDeSelect();
+            all_units[i].tempDeSelect();
         }
     }
 }
