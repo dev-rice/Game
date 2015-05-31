@@ -20,7 +20,7 @@ using namespace std;
 
 class GameMap {
 public:
-    GameMap(string map_filename, UnitHolder* unit_holder);
+    GameMap(string map_filename, UnitHolder& unit_holder);
 
     void render();
     void renderToShadowMap();

@@ -54,7 +54,7 @@ public:
 	int getTeam(){return team_number;}
 
 	// Temporary - REMOVE ME LATER
-	void setTeam(int t){team_number = t;}
+	void setTeam(int t);
 
 
 private:
@@ -169,7 +169,7 @@ private:
 	// Steering (Private)
 	//################################
 
-	int steerToStayOnPath();	
+	int steerToStayOnPath();
 	int steerAwayFromUnit(Playable*);
 	int steerAwayFromObstacle(Terrain*);
 	static float distanceFromPointToLine(glm::vec2, glm::vec2, glm::vec2);

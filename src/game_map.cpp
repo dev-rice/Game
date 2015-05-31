@@ -1,6 +1,6 @@
 #include "game_map.hpp"
 
-GameMap::GameMap(string map_filename, UnitHolder* units) : camera(), ground(), unit_holder(units), shadowbuffer(1.0) {
+GameMap::GameMap(string map_filename, UnitHolder& units) : camera(), ground(), unit_holder(&units), shadowbuffer(1.0) {
 
     ifstream map_input(map_filename);
     load(map_input);
@@ -8,6 +8,8 @@ GameMap::GameMap(string map_filename, UnitHolder* units) : camera(), ground(), u
     shadow_shader = ShaderLoader::loadShaderProgram("shaders/shadow.vs", "shaders/shadow.fs");
 
     initializeGlobalUniforms();
+
+    printf("UnitHolder in GameMap: %p\n", unit_holder);
 
 }
 
@@ -29,7 +31,7 @@ void GameMap::render(){
     // for (Playable& unit : unit_holder->getUnits()){
     //     unit.draw();
     // }
-    
+
     // Draw the ground
     ground.draw();
 

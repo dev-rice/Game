@@ -42,9 +42,6 @@ protected:
     void handleMouseCameraMovement();
     void handleMouseDragging();
 
-    Window* window;
-
-    GameMap* game_map;
     Level* level;
 
     Framebuffer gamebuffer;

@@ -18,7 +18,7 @@ Doodad* Playable::selection_ring;
 #define PATH_WIDTH 2.0f
 
 //#############################################
-// Text headers from 
+// Text headers from
 // http://www.network-science.de/ascii/
 // using 'banner3' setting
 //#############################################
@@ -231,6 +231,15 @@ void Playable::tempDeSelect(){
     temp_selected = false;
 }
 
+void Playable::setTeam(int t){
+    if (t == 1){
+        Drawable::setDiffuse(TextureLoader::loadBlue());
+    } else if (t == 2) {
+        Drawable::setDiffuse(TextureLoader::loadGreen());
+    }
+    team_number = t;
+}
+
 
 //##################################################################################################
 //
@@ -360,13 +369,13 @@ float Playable::distanceFromPointToLine(glm::vec2 line_0, glm::vec2 line_1, glm:
 
 //##################################################################################################
 //
-//  ######   #######  ##     ## ########     ###    ######## 
-// ##    ## ##     ## ###   ### ##     ##   ## ##      ##    
-// ##       ##     ## #### #### ##     ##  ##   ##     ##    
-// ##       ##     ## ## ### ## ########  ##     ##    ##    
-// ##       ##     ## ##     ## ##     ## #########    ##    
-// ##    ## ##     ## ##     ## ##     ## ##     ##    ##    
-//  ######   #######  ##     ## ########  ##     ##    ##    
+//  ######   #######  ##     ## ########     ###    ########
+// ##    ## ##     ## ###   ### ##     ##   ## ##      ##
+// ##       ##     ## #### #### ##     ##  ##   ##     ##
+// ##       ##     ## ## ### ## ########  ##     ##    ##
+// ##       ##     ## ##     ## ##     ## #########    ##
+// ##    ## ##     ## ##     ## ##     ## ##     ##    ##
+//  ######   #######  ##     ## ########  ##     ##    ##
 //
 //##################################################################################################
 
@@ -399,7 +408,7 @@ void Playable::takeDamage(int damage_amount){
 Playable* Playable::getUnitToAttack(std::vector<Playable*> *otherUnits){
 
     // Find the highest priority unit -or- the unit that is attacking you -or- unit you attacked last
-    Playable* other_unit = 0; 
+    Playable* other_unit = 0;
 
     for(int i(0); i < otherUnits->size(); ++i){
         if(otherUnits->at(i) != this){
@@ -456,16 +465,16 @@ void Playable::update(Terrain* ground, std::vector<Playable*> *otherUnits){
     // Setting up attack variables
     // Playable* enemy_to_attack = getNearestEnemyToAttack(otherUnits);
     // enemy_in_sight_range = (enemies_in_range.size() > 0);
-    // has_been_given_attack_order = (target_order == Playable::Order::ATTACK_MOVE);  
+    // has_been_given_attack_order = (target_order == Playable::Order::ATTACK_MOVE);
 
-   
+
 
     // Attacking         Weapon range + our size + their size
 
     scanUnits(otherUnits);
 
     Playable* unit_to_attack = getUnitToAttack(otherUnits);
-    
+
     bool should_engage_enemies = target_order == Playable::Order::ATTACK_MOVE;
 
     if(should_engage_enemies){
@@ -495,7 +504,7 @@ void Playable::update(Terrain* ground, std::vector<Playable*> *otherUnits){
 
         // All if we're not a flying unit
 
-        
+
 
         if(turning_during_first_step){
 
@@ -559,7 +568,7 @@ void Playable::draw(){
 
     if(health > 0){
         Drawable::draw();
-    
+
 
         if(selected || temp_selected ){
             selection_ring->setPosition(glm::vec3(position.x, position.y + 0.5, position.z));
