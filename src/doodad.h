@@ -5,6 +5,7 @@
 
 #include "drawable.h"
 #include "includes/json.hpp"
+#include "shader.hpp"
 
 // using namespace std;
 

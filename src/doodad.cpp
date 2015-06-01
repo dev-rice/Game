@@ -21,8 +21,8 @@ Doodad::Doodad(const Json::Value& doodad_json, std::string mesh_path, std::strin
     rotation.y = doodad_json["rotation"]["y"].asFloat();
     rotation.z = doodad_json["rotation"]["z"].asFloat();
 
-    GLuint shader_program = ShaderLoader::loadShaderProgram("shaders/doodad.vs", "shaders/doodad.fs");
-    load(mesh_ptr, shader_program, position, scale);
+    Shader shader("shaders/doodad.vs", "shaders/doodad.fs");
+    load(mesh_ptr, shader.getGLId(), position, scale);
     setRotationEuler(rotation);
 
     // Load the textures
