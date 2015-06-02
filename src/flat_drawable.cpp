@@ -56,7 +56,7 @@ void FlatDrawable::setOpacity(float opacity){
     this->opacity = opacity;
 }
 
-void FlatDrawable::setShader(GLuint shader_program){
-    this->shader_program = shader_program;
-    mesh->attachGeometryToShader(shader_program);
+void FlatDrawable::setShader(Shader shader){
+    this->shader_program = shader.getGLId();
+    mesh->attachGeometryToShader(shader);
 }

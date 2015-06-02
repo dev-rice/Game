@@ -22,7 +22,7 @@ public:
     virtual void setGLCoordinates(glm::vec2, glm::vec2){;}
 
     void setOpacity(float);
-    void setShader(GLuint);
+    void setShader(Shader shader);
 
 protected:
     void load(Shader shader, GLfloat, GLfloat, glm::vec2);

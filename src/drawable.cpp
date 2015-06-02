@@ -4,15 +4,15 @@
 
 #include "drawable.h"
 
-Drawable::Drawable(Mesh* mesh, GLuint shader_program){
-    load(mesh, shader_program, glm::vec3(0.0f, 0.0f, 0.0f), 1.0f);
+Drawable::Drawable(Mesh* mesh, Shader shader){
+    load(mesh, shader, glm::vec3(0.0f, 0.0f, 0.0f), 1.0f);
 }
 
-Drawable::Drawable(Mesh* mesh, GLuint shader_program, glm::vec3 position, GLfloat scale) {
-    load(mesh, shader_program, position, scale);
+Drawable::Drawable(Mesh* mesh, Shader shader, glm::vec3 position, GLfloat scale) {
+    load(mesh, shader, position, scale);
 }
 
-void Drawable::load(Mesh* mesh, GLuint shader_program, glm::vec3 position, GLfloat scale) {
+void Drawable::load(Mesh* mesh, Shader shader, glm::vec3 position, GLfloat scale) {
     // Set the position, rotation, scale, and mesh pointer
     this->position = position;
     this->mesh = mesh;
@@ -34,13 +34,13 @@ void Drawable::load(Mesh* mesh, GLuint shader_program, glm::vec3 position, GLflo
 
     // Set the shader program and load the geometry data
     // from the mesh onto it.
-    setShader(shader_program);
+    setShader(shader);
 
 }
 
-void Drawable::setShader(GLuint shader_program){
-    this->shader_program = shader_program;
-    this->mesh->attachGeometryToShader(shader_program);
+void Drawable::setShader(Shader shader){
+    this->shader_program = shader.getGLId();
+    this->mesh->attachGeometryToShader(shader);
 
     #warning Global uniform bindings should only ever be called once for each shader
     GLint global_matrix_location = glGetUniformBlockIndex(shader_program, "GlobalMatrices");
