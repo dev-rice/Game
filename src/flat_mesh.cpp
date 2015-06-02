@@ -47,20 +47,18 @@ void FlatMesh::bindVAO(){
 }
 
 void FlatMesh::attachGeometryToShader(Shader shader){
-    GLuint shader_program = shader.getGLId();
-
     bool already_bound = std::find(bound_shaders.begin(), bound_shaders.end(), &shader) != bound_shaders.end();
 
     if(!already_bound){
         glBindVertexArray(vao);
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-        GLint posAttrib = glGetAttribLocation(shader_program, "position");
+        GLint posAttrib = glGetAttribLocation(shader.getGLId(), "position");
         glEnableVertexAttribArray(posAttrib);
         glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE,
                                4*sizeof(float), 0);
 
-        GLint texAttrib = glGetAttribLocation(shader_program, "texcoord");
+        GLint texAttrib = glGetAttribLocation(shader.getGLId(), "texcoord");
         glEnableVertexAttribArray(texAttrib);
         glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE,
                                4*sizeof(float), (void*)(2*sizeof(float)));
