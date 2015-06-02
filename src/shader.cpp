@@ -1,5 +1,9 @@
 #include "shader.hpp"
 
+Shader::Shader(GLuint shader){
+    gl_shader_id = shader;
+}
+
 Shader::Shader(string vs_filename, string fs_filename) {
     gl_shader_id = loadShaderProgram(vs_filename, fs_filename);
 }

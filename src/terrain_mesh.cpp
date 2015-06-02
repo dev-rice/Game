@@ -46,15 +46,16 @@ TerrainMesh::TerrainMesh(std::vector<TerrainVertex> vertices, std::vector<GLuint
     TerrainMesh::loadMeshData(out_vertices, elements);
 }
 
-void TerrainMesh::attachGeometryToShader(GLuint shader_program){
+void TerrainMesh::attachGeometryToShader(Shader shader){
     // As soon as you've bound a certain VAO, every time you call glVertexAttribPointer,
     // that information will be stored in that VAO. This makes switching between different vertex data
     // and vertex formats as easy as binding a different VAO.
+    GLuint shader_program = shader.getGLId();
     glUseProgram(shader_program);
 
     // Because binding the geometry to the shader multiple times on the same vao causes problems, we
     // check we have already bound the data.
-    bool already_bound = std::find(bound_shaders.begin(), bound_shaders.end(), shader_program) != bound_shaders.end();
+    bool already_bound = std::find(bound_shaders.begin(), bound_shaders.end(), &shader) != bound_shaders.end();
 
     // If this shader does not already have the data, bind it.
     if(!already_bound){
@@ -104,7 +105,7 @@ void TerrainMesh::attachGeometryToShader(GLuint shader_program){
             (void*)(14*sizeof(float)));
 
         // Keep track of which shaders we have already bound data to
-        bound_shaders.push_back(shader_program);
+        bound_shaders.push_back(&shader);
 
         std::string shader_name = ShaderLoader::getShaderName(shader_program);
 

@@ -11,6 +11,7 @@ using namespace std;
 
 class Shader {
 public:
+    Shader(GLuint);
     Shader(string vs_filename, string fs_filename);
 
     GLuint getGLId();
