@@ -45,8 +45,6 @@ public:
 protected:
     void load(GLuint);
 
-    GLuint shader;
-
     void parseConstraints(pugi::xml_node);
     virtual bool constraintsAreValid(bool, bool, bool, bool, bool, bool);
     virtual void didLoadXML(){;}

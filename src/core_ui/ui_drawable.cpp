@@ -21,7 +21,6 @@ void UIDrawable::load(GLuint texture){
     attachTexture(texture);
 
     parent = NULL;
-    this->shader = shader_program;
 
 }
 
@@ -53,9 +52,9 @@ void UIDrawable::draw(){
     FlatDrawable::draw();
 
     if (outline){
-        glUniform1i(glGetUniformLocation(shader_program, "is_outline"), true);
+        glUniform1i(glGetUniformLocation(shader.getGLId(), "is_outline"), true);
         mesh->drawOutline();
-        glUniform1i(glGetUniformLocation(shader_program, "is_outline"), false);
+        glUniform1i(glGetUniformLocation(shader.getGLId(), "is_outline"), false);
     }
 }
 

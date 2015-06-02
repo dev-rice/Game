@@ -13,7 +13,7 @@
 
 class UIRadioButton : public UIDrawable {
 public:
-    UIRadioButton(GLuint);
+    UIRadioButton(Shader);
     void loadFromXML(std::string);
     void draw();
 

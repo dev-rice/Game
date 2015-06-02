@@ -14,12 +14,11 @@ UIImage* UIWindow::down_left_corner_image;
 UIImage* UIWindow::down_right_corner_image;
 
 UIWindow::UIWindow() : UIDrawable(TextureLoader::loadBlack()){
-    this->shader = shader_program;
     is_showing = false;
 }
 
-UIWindow::UIWindow(GLuint shader_program) : UIDrawable(shader_program, TextureLoader::loadBlack()){
-    this->shader = shader_program;
+UIWindow::UIWindow(Shader shader) : UIDrawable(shader, TextureLoader::loadBlack()){
+
     is_showing = false;
 }
 
