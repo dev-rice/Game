@@ -11,7 +11,7 @@
 
 class CharacterDrawable : public UIDrawable {
 public:
-    CharacterDrawable(GLuint, FontSheet*, GLint);
+    CharacterDrawable(Shader shader, FontSheet*, GLint);
 
     void setCharacter(char);
     void setPixelPosition(int, int);

@@ -4,7 +4,7 @@ UIDrawable::UIDrawable(GLuint texture) : FlatDrawable(){
     load(texture);
 }
 
-UIDrawable::UIDrawable(GLuint shader_program, GLuint texture) : FlatDrawable(shader_program){
+UIDrawable::UIDrawable(Shader shader, GLuint texture) : FlatDrawable(shader.getGLId()){
     load(texture);
 }
 

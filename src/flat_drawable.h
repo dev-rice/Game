@@ -11,9 +11,9 @@
 class FlatDrawable {
 public:
     FlatDrawable() : FlatDrawable(1.0, 1.0, glm::vec2()){;}
-    FlatDrawable(GLuint sh) : FlatDrawable(sh, 1.0, 1.0, glm::vec2()){;}
+    FlatDrawable(Shader shader) : FlatDrawable(shader, 1.0, 1.0, glm::vec2()){;}
     FlatDrawable(GLfloat, GLfloat, glm::vec2);
-    FlatDrawable(GLuint, GLfloat, GLfloat, glm::vec2);
+    FlatDrawable(Shader shader, GLfloat, GLfloat, glm::vec2);
 
     virtual void draw();
     virtual void attachTexture(GLuint);
@@ -25,7 +25,7 @@ public:
     void setShader(GLuint);
 
 protected:
-    void load(GLuint, GLfloat, GLfloat, glm::vec2);
+    void load(Shader shader, GLfloat, GLfloat, glm::vec2);
 
     virtual void updateUniformData();
 

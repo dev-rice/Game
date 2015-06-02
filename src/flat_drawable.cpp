@@ -1,23 +1,23 @@
 #include "flat_drawable.h"
 
 FlatDrawable::FlatDrawable(GLfloat width, GLfloat height, glm::vec2 position){
-    GLuint shader_program = ShaderLoader::loadShaderProgram("shaders/flat_drawable.vs",
+    Shader shader("shaders/flat_drawable.vs",
         "shaders/flat_drawable.fs");
-    load(shader_program, width, height, position);
+    load(shader, width, height, position);
 }
 
-FlatDrawable::FlatDrawable(GLuint shader_program, GLfloat width, GLfloat height, glm::vec2 position){
-    load(shader_program, width, height, position);
+FlatDrawable::FlatDrawable(Shader shader, GLfloat width, GLfloat height, glm::vec2 position){
+    load(shader.getGLId(), width, height, position);
 }
 
-void FlatDrawable::load(GLuint shader_program, GLfloat width, GLfloat height, glm::vec2 position){
+void FlatDrawable::load(Shader shader, GLfloat width, GLfloat height, glm::vec2 position){
     this->mesh = FlatMesh::getInstance();
     this->width = width;
     this->height = height;
     this->position = position;
 
     opacity = 1.0;
-    setShader(shader_program);
+    setShader(shader.getGLId());
 }
 
 void FlatDrawable::draw(){
