@@ -9,7 +9,7 @@
 #include "mesh.h"
 #include "camera.h"
 
-
+#include "texture.hpp"
 #include "texture_loader.h"
 
 class Drawable {
@@ -34,10 +34,10 @@ public:
     void setScale(GLfloat s) {scale = s;}
     void setShader(Shader shader);
 
-    void setDiffuse(GLuint d);
-    void setSpecular(GLuint s);
-    void setEmissive(GLuint e);
-    void setNormal(GLuint n);
+    void setDiffuse(Texture d);
+    void setSpecular(Texture s);
+    void setEmissive(Texture e);
+    void setNormal(Texture n);
 
     glm::vec3 getPosition() {return position;}
     GLfloat getScale() {return scale;}
