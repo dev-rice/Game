@@ -33,7 +33,7 @@
 #include "input_handler.h"
 #include "font_sheet.h"
 #include "flat_drawable.h"
-#include "shader_loader.h"
+
 #include "texture_loader.h"
 
 int main(int argc, char* argv[]) {

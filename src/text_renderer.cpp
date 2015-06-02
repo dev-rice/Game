@@ -6,7 +6,7 @@ TextRenderer::TextRenderer(std::string font_filename, GLint point){
 
     this->point = point;
 
-    GLuint text_shader = ShaderLoader::loadShaderProgram("shaders/text.vs",
+    Shader text_shader("shaders/text.vs",
         "shaders/text.fs");
 
     FontSheet* font_sheet = new FontSheet(font_filename, point);

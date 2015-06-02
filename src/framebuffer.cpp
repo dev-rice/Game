@@ -31,13 +31,13 @@ Framebuffer::Framebuffer(){
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT,
         GL_RENDERBUFFER, rboDepthStencil);
 
-    GLuint framebuffer_shader;
+    Shader framebuffer_shader;
     // Load framebuffer shader
     if (Profile::getInstance()->getFxaaLevel()){
-        framebuffer_shader = ShaderLoader::loadShaderProgram("shaders/flat_drawable_noflip.vs",
+        framebuffer_shader = Shader("shaders/flat_drawable_noflip.vs",
             "shaders/framebuffer_fxaa.fs");
     } else {
-        framebuffer_shader = ShaderLoader::loadShaderProgram("shaders/flat_drawable_noflip.vs",
+        framebuffer_shader = Shader("shaders/flat_drawable_noflip.vs",
             "shaders/flat_drawable.fs");
     }
 
@@ -67,9 +67,9 @@ void Framebuffer::draw(){
     }
 }
 
-void Framebuffer::addShaderPass(GLuint shader_program){
+void Framebuffer::addShaderPass(Shader shader){
     // Add a shader to the drawing passes. The pass
     // is done in the same order as the shaders were
     // added in
-    shaders.push_back(shader_program);
+    shaders.push_back(shader.getGLId());
 }

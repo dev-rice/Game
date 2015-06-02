@@ -61,7 +61,7 @@ private:
     GLuint camera_ubo;
     GLuint shadow_ubo;
 
-    GLuint shadow_shader;
+    Shader shadow_shader;
 
 };
 

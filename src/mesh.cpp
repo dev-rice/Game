@@ -102,8 +102,7 @@ void Mesh::attachGeometryToShader(Shader shader){
     // As soon as you've bound a certain VAO, every time you call glVertexAttribPointer,
     // that information will be stored in that VAO. This makes switching between different vertex data
     // and vertex formats as easy as binding a different VAO.
-    GLuint shader_program = shader.getGLId();
-    glUseProgram(shader_program);
+    glUseProgram(shader.getGLId());
 
     // Because binding the geometry to the shader multiple times on the same vao causes problems, we
     // check we have already bound the data.
@@ -117,32 +116,32 @@ void Mesh::attachGeometryToShader(Shader shader){
 
         // Get the reference to the "position" attribute defined in
         // the vertex shader
-        GLint posAttrib = glGetAttribLocation(shader_program, "position");
+        GLint posAttrib = glGetAttribLocation(shader.getGLId(), "position");
         glEnableVertexAttribArray(posAttrib);
         // Load the position attributes from our vertex spec with width 8. The position
         // values start at index 0. Tell it to load 3 values.
         glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE,
                                14*sizeof(float), 0);
 
-        GLint normalAttrib = glGetAttribLocation(shader_program, "normal");
+        GLint normalAttrib = glGetAttribLocation(shader.getGLId(), "normal");
         glEnableVertexAttribArray(normalAttrib);
         // Load the normal pointer from our vertex spec with width 8. The normal values
         // start at index 2. Tell it to load 3 values.
         glVertexAttribPointer(normalAttrib, 3, GL_FLOAT, GL_FALSE,
                                14*sizeof(float), (void*)(3*sizeof(float)));
 
-        GLint tangent_attrib = glGetAttribLocation(shader_program, "tangent");
+        GLint tangent_attrib = glGetAttribLocation(shader.getGLId(), "tangent");
         glEnableVertexAttribArray(tangent_attrib);
         glVertexAttribPointer(tangent_attrib, 3, GL_FLOAT, GL_FALSE,
         14*sizeof(float), (void*)(6*sizeof(float)));
 
-        GLint bitangent_attrib = glGetAttribLocation(shader_program, "bitangent");
+        GLint bitangent_attrib = glGetAttribLocation(shader.getGLId(), "bitangent");
         glEnableVertexAttribArray(bitangent_attrib);
         glVertexAttribPointer(bitangent_attrib, 3, GL_FLOAT, GL_FALSE,
         14*sizeof(float), (void*)(9*sizeof(float)));
 
         // Link the texture coordinates to the shader.
-        GLint texAttrib = glGetAttribLocation(shader_program, "texcoord");
+        GLint texAttrib = glGetAttribLocation(shader.getGLId(), "texcoord");
         glEnableVertexAttribArray(texAttrib);
         // Load the texture attributes from our vertex spec with width 8. The texture
         // values start at index 8. Tell it to load 2 values.
@@ -151,21 +150,6 @@ void Mesh::attachGeometryToShader(Shader shader){
 
         // Keep track of which shaders we have already bound data to
         bound_shaders.push_back(&shader);
-
-        std::string shader_name = ShaderLoader::getShaderName(shader_program);
-
-        if (posAttrib == -1){
-            Debug::warning("Position attribute for VAO %d and shader '%s' is not used.\n", vao,
-                shader_name.c_str());
-        }
-        if (normalAttrib == -1){
-            Debug::warning("Normal attribute for VAO %d and shader '%s' is not used.\n", vao,
-                shader_name.c_str());
-        }
-        if (texAttrib == -1){
-            Debug::warning("Texcoord attribute for VAO %d and shader '%s' is not used.\n", vao,
-                shader_name.c_str());
-        }
 
 
     }

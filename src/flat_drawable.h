@@ -6,7 +6,7 @@
 
 #include "mesh.h"
 #include "flat_mesh.h"
-#include "shader_loader.h"
+
 
 class FlatDrawable {
 public:

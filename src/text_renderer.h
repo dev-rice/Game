@@ -6,7 +6,7 @@
 
 #include "character_drawable.h"
 #include "character_mesh.h"
-#include "shader_loader.h"
+
 #include "texture_loader.h"
 #include "window.h"
 #include "font_sheet.h"

@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "texture_layer.h"
+#include "shader.hpp"
 
 class LayeredTextures {
 public:
@@ -15,8 +16,8 @@ public:
     void addSplatmap(GLuint splatmap);
     void addTexture(GLuint diffuse, GLuint splatmap, char channel, int layer_number);
 
-    void updateUniforms(GLuint);
-    void setTextureLocations(GLuint);
+    void updateUniforms(Shader shader);
+    void setTextureLocations(Shader shader);
 
     void swapLayers(GLuint layer1, GLuint layer2);
 

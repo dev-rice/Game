@@ -8,11 +8,11 @@ SnowEmitter::SnowEmitter(const Json::Value& emitter_json) : Emitter(emitter_json
     initialize();
 }
 
-SnowEmitter::SnowEmitter(glm::vec3 position) : SnowEmitter(ShaderLoader::loadShaderProgram("shaders/particle.vs",
+SnowEmitter::SnowEmitter(glm::vec3 position) : SnowEmitter(Shader("shaders/particle.vs",
     "shaders/particle.fs"), position) {;}
 
 
-SnowEmitter::SnowEmitter(GLuint shader_program, glm::vec3 position) : Emitter(shader_program, position){
+SnowEmitter::SnowEmitter(Shader shader, glm::vec3 position) : Emitter(shader, position){
 
     initialize();
 }
@@ -51,7 +51,7 @@ void SnowEmitter::prepareParticles(Camera* camera){
         // Weird that the pointer must be explicitly set to 0, but crashes without this
         Particle* ptr = 0;
         if(particles.size() < maxParticles){
-            ptr = new Particle(billboard, shader_program);
+            ptr = new Particle(billboard, shader);
             ptr->setEmissive(particle_texture);
         }
         if(particles.size() > 0 && particles[0]->isDead()){

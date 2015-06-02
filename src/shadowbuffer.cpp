@@ -34,8 +34,6 @@ Shadowbuffer::Shadowbuffer(float up_sample){
         GL_RENDERBUFFER, rboDepthStencil);
 
     // Create the window to draw the framebuffer onto
-    GLuint shader_program = ShaderLoader::loadShaderProgram("shaders/flat_drawable_noflip.vs",
-        "shaders/flat_drawable.fs");
     framebuffer_window = new FlatDrawable(0.25, 0.25, glm::vec2(0.75, -0.75));
     framebuffer_window->attachTexture(framebuffer_texture);
 }

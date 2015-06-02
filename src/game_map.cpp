@@ -5,7 +5,7 @@ GameMap::GameMap(string map_filename, UnitHolder& units) : camera(), ground(), u
     ifstream map_input(map_filename);
     load(map_input);
 
-    shadow_shader = ShaderLoader::loadShaderProgram("shaders/shadow.vs", "shaders/shadow.fs");
+    shadow_shader = Shader("shaders/shadow.vs", "shaders/shadow.fs");
 
     initializeGlobalUniforms();
 

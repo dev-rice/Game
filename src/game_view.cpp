@@ -2,15 +2,15 @@
 
 GameView::GameView(Level& level) : level(&level), gamebuffer() {
     // // Gaussian Blur shaders
-    // GLuint blur_horiz = ShaderLoader::loadShaderProgram("shaders/flat_drawable_noflip.vs",
+    // Shader blur_horiz("shaders/flat_drawable_noflip.vs",
     //     "shaders/framebuffer_horiz_blur.fs");
     // gamebuffer.addShaderPass(blur_horiz);
     //
-    // GLuint blur_vert = ShaderLoader::loadShaderProgram("shaders/flat_drawable_noflip.vs",
+    // GLuint blur_vert("shaders/flat_drawable_noflip.vs",
     //     "shaders/framebuffer_vert_blur.fs");
     // gamebuffer.addShaderPass(blur_vert);
 
-    GLuint mousebox_shader = ShaderLoader::loadShaderProgram("shaders/mousebox.vs",
+    Shader mousebox_shader("shaders/mousebox.vs",
         "shaders/mousebox.fs");
 
     // Unnecessary, but good to do

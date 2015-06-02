@@ -19,7 +19,7 @@ Terrain::Terrain(const Json::Value& terrain_json, std::string texture_path){
     std::string heightmap_filename = texture_path + terrain_json["heightmap"].asString();
     float amplification = terrain_json["amplification"].asFloat();
 
-    GLuint shader = ShaderLoader::loadShaderProgram("shaders/terrain.vs", "shaders/terrain.fs");
+    Shader shader("shaders/terrain.vs", "shaders/terrain.fs");
 
     initializer(shader, heightmap_filename, amplification);
 
@@ -44,7 +44,7 @@ Terrain::Terrain(const Json::Value& terrain_json, std::string texture_path){
 }
 
 Terrain::Terrain(std::string heightmap_filename, float amplification){
-    initializer(ShaderLoader::loadShaderProgram("shaders/terrain.vs", "shaders/terrain.fs"), heightmap_filename, amplification);
+    initializer(Shader("shaders/terrain.vs", "shaders/terrain.fs"), heightmap_filename, amplification);
 }
 
 Terrain::Terrain(Shader shader, std::string heightmap_filename, float amplification) : Drawable() {
@@ -469,11 +469,6 @@ void Terrain::updateUniformData(){
     // ^ It's definitely a thing
     GLuint scale_loc = glGetUniformLocation(shader.getGLId(), "scale");
     GLuint time_loc = glGetUniformLocation(shader.getGLId(), "time");
-    //
-    // std::string shader_name = ShaderLoader::getShaderName(shader.getGLId());
-    // Debug::info("Shader Program: %s\n", shader_name.c_str());
-    // Debug::info("  scale_loc = %d\n", scale_loc);
-    // Debug::info("  time_loc = %d\n", time_loc);
 
     glUniform1f(scale_loc, scale);
     glUniform1f(time_loc, GameClock::getInstance()->getCurrentTime());
