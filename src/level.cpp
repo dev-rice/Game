@@ -4,7 +4,7 @@ Level::Level(string filename) : unit_holder(), game_map(filename, unit_holder), 
 
     // Creation of test playable
     Mesh* playable_mesh = new Mesh("res/models/human.dae");
-    GLuint playable_shader = ShaderLoader::loadShaderProgram("shaders/doodad.vs",
+    Shader playable_shader("shaders/doodad.vs",
         "shaders/doodad.fs");
     float playable_scale = 1.0f;
 

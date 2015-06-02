@@ -13,7 +13,7 @@
 
 class UIButton : public UIDrawable {
 public:
-    UIButton(GLuint);
+    UIButton(Shader);
     void loadFromXML(std::string);
     void draw();
 

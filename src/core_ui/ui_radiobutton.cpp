@@ -7,7 +7,7 @@ UIImage* UIRadioButton::on_icon;
 UIImage* UIRadioButton::off_icon;
 UIImage* UIRadioButton::hover_icon;
 
-UIRadioButton::UIRadioButton(GLuint shader_program) : UIDrawable(shader_program, TextureLoader::loadPink()){
+UIRadioButton::UIRadioButton(Shader shader) : UIDrawable(shader, TextureLoader::loadPink()){
     this->has_clicked = false;
 }
 

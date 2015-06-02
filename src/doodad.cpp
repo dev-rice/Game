@@ -21,8 +21,8 @@ Doodad::Doodad(const Json::Value& doodad_json, std::string mesh_path, std::strin
     rotation.y = doodad_json["rotation"]["y"].asFloat();
     rotation.z = doodad_json["rotation"]["z"].asFloat();
 
-    GLuint shader_program = ShaderLoader::loadShaderProgram("shaders/doodad.vs", "shaders/doodad.fs");
-    load(mesh_ptr, shader_program, position, scale);
+    Shader shader("shaders/doodad.vs", "shaders/doodad.fs");
+    load(mesh_ptr, shader.getGLId(), position, scale);
     setRotationEuler(rotation);
 
     // Load the textures
@@ -56,21 +56,21 @@ Doodad::Doodad(const Json::Value& doodad_json, std::string mesh_path, std::strin
 }
 
 Doodad::Doodad(Mesh* mesh) {
-    GLuint shader_program = ShaderLoader::loadShaderProgram("shaders/doodad.vs", "shaders/doodad.fs");
-    load(mesh, shader_program, glm::vec3(0.0f, 0.0f, 0.0f), 1.0f);
+    Shader shader("shaders/doodad.vs", "shaders/doodad.fs");
+    load(mesh, shader, glm::vec3(0.0f, 0.0f, 0.0f), 1.0f);
 }
 
-Doodad::Doodad(Mesh* mesh, GLuint shader_program) : Drawable(mesh, shader_program){
+Doodad::Doodad(Mesh* mesh, Shader shader) : Drawable(mesh, shader){
 
 }
 
-Doodad::Doodad(Mesh* mesh, GLuint shader_program, glm::vec3 position, GLfloat scale):
-    Drawable(mesh, shader_program, position, scale) {
+Doodad::Doodad(Mesh* mesh, Shader shader, glm::vec3 position, GLfloat scale):
+    Drawable(mesh, shader, position, scale) {
 }
 
 void Doodad::updateUniformData(){
     // Set the scale, this is not really going to be a thing, probably
     // ^ It's definitely a thing
-    glUniform1f(glGetUniformLocation(shader_program, "scale"), scale);
+    glUniform1f(glGetUniformLocation(shader.getGLId(), "scale"), scale);
 
 }

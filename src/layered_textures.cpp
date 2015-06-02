@@ -58,7 +58,7 @@ TextureLayer LayeredTextures::getLayer(GLuint layer_number){
     }
 }
 
-void LayeredTextures::updateUniforms(GLuint shader_program){
+void LayeredTextures::updateUniforms(Shader shader){
     ////////////////////
     // Diffuse
     glActiveTexture(GL_TEXTURE10);
@@ -90,41 +90,41 @@ void LayeredTextures::updateUniforms(GLuint shader_program){
     glActiveTexture(GL_TEXTURE21);
     glBindTexture(GL_TEXTURE_2D, unique_splatmaps[1]);
 
-    glUniform1i(glGetUniformLocation(shader_program, "splatmaps[0]"), texture_layers[0].getSplatmap());
-    glUniform1i(glGetUniformLocation(shader_program, "splatmaps[1]"), texture_layers[1].getSplatmap());
-    glUniform1i(glGetUniformLocation(shader_program, "splatmaps[2]"), texture_layers[2].getSplatmap());
-    glUniform1i(glGetUniformLocation(shader_program, "splatmaps[3]"), texture_layers[3].getSplatmap());
-    glUniform1i(glGetUniformLocation(shader_program, "splatmaps[4]"), texture_layers[4].getSplatmap());
-    glUniform1i(glGetUniformLocation(shader_program, "splatmaps[5]"), texture_layers[5].getSplatmap());
-    glUniform1i(glGetUniformLocation(shader_program, "splatmaps[6]"), texture_layers[6].getSplatmap());
+    glUniform1i(glGetUniformLocation(shader.getGLId(), "splatmaps[0]"), texture_layers[0].getSplatmap());
+    glUniform1i(glGetUniformLocation(shader.getGLId(), "splatmaps[1]"), texture_layers[1].getSplatmap());
+    glUniform1i(glGetUniformLocation(shader.getGLId(), "splatmaps[2]"), texture_layers[2].getSplatmap());
+    glUniform1i(glGetUniformLocation(shader.getGLId(), "splatmaps[3]"), texture_layers[3].getSplatmap());
+    glUniform1i(glGetUniformLocation(shader.getGLId(), "splatmaps[4]"), texture_layers[4].getSplatmap());
+    glUniform1i(glGetUniformLocation(shader.getGLId(), "splatmaps[5]"), texture_layers[5].getSplatmap());
+    glUniform1i(glGetUniformLocation(shader.getGLId(), "splatmaps[6]"), texture_layers[6].getSplatmap());
 
     ////////////////////
     // Channels
-    glUniform1i(glGetUniformLocation(shader_program, "channels[0]"),texture_layers[0].getChannel());
-    glUniform1i(glGetUniformLocation(shader_program, "channels[1]"),texture_layers[1].getChannel());
-    glUniform1i(glGetUniformLocation(shader_program, "channels[2]"),texture_layers[2].getChannel());
-    glUniform1i(glGetUniformLocation(shader_program, "channels[3]"),texture_layers[3].getChannel());
-    glUniform1i(glGetUniformLocation(shader_program, "channels[4]"),texture_layers[4].getChannel());
-    glUniform1i(glGetUniformLocation(shader_program, "channels[5]"),texture_layers[5].getChannel());
-    glUniform1i(glGetUniformLocation(shader_program, "channels[6]"),texture_layers[6].getChannel());
+    glUniform1i(glGetUniformLocation(shader.getGLId(), "channels[0]"),texture_layers[0].getChannel());
+    glUniform1i(glGetUniformLocation(shader.getGLId(), "channels[1]"),texture_layers[1].getChannel());
+    glUniform1i(glGetUniformLocation(shader.getGLId(), "channels[2]"),texture_layers[2].getChannel());
+    glUniform1i(glGetUniformLocation(shader.getGLId(), "channels[3]"),texture_layers[3].getChannel());
+    glUniform1i(glGetUniformLocation(shader.getGLId(), "channels[4]"),texture_layers[4].getChannel());
+    glUniform1i(glGetUniformLocation(shader.getGLId(), "channels[5]"),texture_layers[5].getChannel());
+    glUniform1i(glGetUniformLocation(shader.getGLId(), "channels[6]"),texture_layers[6].getChannel());
 
 }
 
-void LayeredTextures::setTextureLocations(GLuint shader_program){
+void LayeredTextures::setTextureLocations(Shader shader){
     ////////////////////
     // Diffuse
-    glUniform1i(glGetUniformLocation(shader_program, "diffuse_textures[0]"), 10);
-    glUniform1i(glGetUniformLocation(shader_program, "diffuse_textures[1]"), 11);
-    glUniform1i(glGetUniformLocation(shader_program, "diffuse_textures[2]"), 12);
-    glUniform1i(glGetUniformLocation(shader_program, "diffuse_textures[3]"), 13);
-    glUniform1i(glGetUniformLocation(shader_program, "diffuse_textures[4]"), 14);
-    glUniform1i(glGetUniformLocation(shader_program, "diffuse_textures[5]"), 15);
-    glUniform1i(glGetUniformLocation(shader_program, "diffuse_textures[6]"), 16);
+    glUniform1i(glGetUniformLocation(shader.getGLId(), "diffuse_textures[0]"), 10);
+    glUniform1i(glGetUniformLocation(shader.getGLId(), "diffuse_textures[1]"), 11);
+    glUniform1i(glGetUniformLocation(shader.getGLId(), "diffuse_textures[2]"), 12);
+    glUniform1i(glGetUniformLocation(shader.getGLId(), "diffuse_textures[3]"), 13);
+    glUniform1i(glGetUniformLocation(shader.getGLId(), "diffuse_textures[4]"), 14);
+    glUniform1i(glGetUniformLocation(shader.getGLId(), "diffuse_textures[5]"), 15);
+    glUniform1i(glGetUniformLocation(shader.getGLId(), "diffuse_textures[6]"), 16);
 
     ////////////////////
     // Splatmaps
-    glUniform1i(glGetUniformLocation(shader_program, "unique_splatmaps[0]"), 20);
-    glUniform1i(glGetUniformLocation(shader_program, "unique_splatmaps[1]"), 21);
+    glUniform1i(glGetUniformLocation(shader.getGLId(), "unique_splatmaps[0]"), 20);
+    glUniform1i(glGetUniformLocation(shader.getGLId(), "unique_splatmaps[1]"), 21);
 }
 
 void LayeredTextures::swapLayers(GLuint layer1, GLuint layer2){

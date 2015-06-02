@@ -8,6 +8,7 @@
 #include <algorithm>
 
 #include "mesh_loader.h"
+#include "shader.hpp"
 
 class FlatMesh {
 public:
@@ -16,13 +17,13 @@ public:
     void draw();
     void drawOutline();
     void bindVAO();
-    void attachGeometryToShader(GLuint);
+    void attachGeometryToShader(Shader);
 
 protected:
     GLuint vao;
     GLuint vbo;
 
-    std::vector<GLuint> bound_shaders;
+    std::vector<Shader*> bound_shaders;
 
     FlatMesh();
     static FlatMesh* instance;

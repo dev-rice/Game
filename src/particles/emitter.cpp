@@ -6,25 +6,16 @@ Emitter::Emitter(const Json::Value& emitter_json) {
     pos.y = emitter_json["position"]["y"].asFloat();
     pos.z = emitter_json["position"]["z"].asFloat();
 
-    initialize(ShaderLoader::loadShaderProgram("shaders/particle.vs", "shaders/particle.fs"), pos);
+    initialize(Shader("shaders/particle.vs", "shaders/particle.fs"), pos);
 
-    // float radius = emitter_json["radius"].asFloat();
-    //
-    // if (emitter_type == "fire"){
-    //     emitter = new FireEmitter(position, radius);
-    // } else if (emitter_type == "snow"){
-    //     emitter = new SnowEmitter(position);
-    // } else if (emitter_type == "smoke"){
-    //     emitter = new SmokeEmitter(position, 0.7);
-    // }
 }
 
 Emitter::Emitter(glm::vec3 position) {
-    initialize(ShaderLoader::loadShaderProgram("shaders/particle.vs", "shaders/particle.fs"), position);
+    initialize(Shader("shaders/particle.vs", "shaders/particle.fs"), position);
 }
 
-Emitter::Emitter(GLuint shader_program, glm::vec3 position){
-    initialize(shader_program, position);
+Emitter::Emitter(Shader shader, glm::vec3 position){
+    initialize(shader, position);
 }
 
 Emitter::~Emitter(){
@@ -39,7 +30,7 @@ Emitter::~Emitter(){
     }
 }
 
-void Emitter::initialize(GLuint shader, glm::vec3 pos) {
+void Emitter::initialize(Shader shader, glm::vec3 pos) {
     this->position = pos;
 
     billboard = new PlaneMesh();
@@ -53,7 +44,7 @@ void Emitter::initialize(GLuint shader, glm::vec3 pos) {
     this->isShotgun = false;
     this->hasFired = false;
 
-    this->shader_program = shader;
+    this->shader = shader;
 }
 
 void Emitter::setParticleDensity(int density){
@@ -133,7 +124,7 @@ void Emitter::prepareParticles(Camera* camera){
         // Weird that the pointer must be explicitly set to 0, but crashes without this
         Particle* ptr = 0;
         if(particles.size() < maxParticles){
-            ptr = new Particle(billboard, shader_program);
+            ptr = new Particle(billboard, shader);
             ptr->setEmissive(particle_texture);
         }
         if(particles.size() > 0 && particles[0]->isDead()){

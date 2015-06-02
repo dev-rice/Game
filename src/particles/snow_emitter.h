@@ -12,7 +12,7 @@ class SnowEmitter : public Emitter {
 public:
     SnowEmitter(const Json::Value& emitter_json);
     SnowEmitter(glm::vec3);
-    SnowEmitter(GLuint, glm::vec3);
+    SnowEmitter(Shader shader, glm::vec3);
 private:
     void initialize();
     void prepareParticles(Camera*);

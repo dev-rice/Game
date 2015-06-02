@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "flat_drawable.h"
-#include "shader_loader.h"
+
 #include "window.h"
 #include "profile.h"
 
@@ -15,7 +15,7 @@ public:
     virtual void setAsRenderTarget();
     virtual void draw();
 
-    void addShaderPass(GLuint);
+    void addShaderPass(Shader shader);
 
     GLuint getTexture() {return framebuffer_texture;}
 protected:

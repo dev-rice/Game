@@ -9,14 +9,14 @@
 #include "mesh.h"
 #include "camera.h"
 
-#include "shader_loader.h"
+
 #include "texture_loader.h"
 
 class Drawable {
 public:
     Drawable () {;}
-    Drawable(Mesh*, GLuint);
-    Drawable(Mesh*, GLuint, glm::vec3, GLfloat);
+    Drawable(Mesh*, Shader shader);
+    Drawable(Mesh*, Shader shader, glm::vec3, GLfloat);
 
     virtual void draw();
 
@@ -32,7 +32,7 @@ public:
     void setPosition(GLfloat x, GLfloat y, GLfloat z);
 
     void setScale(GLfloat s) {scale = s;}
-    void setShader(GLuint);
+    void setShader(Shader shader);
 
     void setDiffuse(GLuint d);
     void setSpecular(GLuint s);
@@ -41,10 +41,10 @@ public:
 
     glm::vec3 getPosition() {return position;}
     GLfloat getScale() {return scale;}
-    GLuint getShader() {return shader_program;}
+    Shader& getShader() {return shader;}
 
 protected:
-    void load(Mesh*, GLuint, glm::vec3, GLfloat);
+    void load(Mesh*, Shader shader, glm::vec3, GLfloat);
     void updateModelMatrix();
 
     virtual void bindTextures();
@@ -53,7 +53,7 @@ protected:
 
     Mesh* mesh;
 
-    GLuint shader_program;
+    Shader shader;
 
     GLfloat scale;
 

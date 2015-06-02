@@ -13,7 +13,7 @@
 class UIWindow : public UIDrawable {
 public:
     UIWindow();
-    UIWindow(GLuint);
+    UIWindow(Shader shader);
 
     void loadFromXML(std::string);
 

@@ -27,7 +27,7 @@ public:
 	enum class PlayableAttribute{ MASSIVE, ARMORED, ARMY, WORKER, FLYING, INVULNERABLE, MECHANICAL };
 
 	Playable();
-	Playable(Mesh*, GLuint, glm::vec3, GLfloat);
+	Playable(Mesh*, Shader shader, glm::vec3, GLfloat);
 
 	void update(Terrain*, std::vector<Playable*>*);
 	void loadFromXML(std::string filepath);
@@ -132,7 +132,7 @@ private:
 	int weapon_damage;
 	float weapon_range;
 
-	
+
 
 	// Not implemented yet
 	// Weapon* weapon

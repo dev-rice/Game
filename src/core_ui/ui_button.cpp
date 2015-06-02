@@ -11,7 +11,7 @@ UIImage* UIButton::center_hover_image;
 UIImage* UIButton::left_hover_image;
 UIImage* UIButton::right_hover_image;
 
-UIButton::UIButton(GLuint shader_program) : UIDrawable(shader_program, TextureLoader::loadPink()){
+UIButton::UIButton(Shader shader) : UIDrawable(shader, TextureLoader::loadPink()){
 
 }
 

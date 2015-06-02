@@ -30,7 +30,7 @@ public:
     ~Emitter();
     Emitter(const Json::Value& emitter_json);
     Emitter(glm::vec3);
-    Emitter(GLuint, glm::vec3);
+    Emitter(Shader shader, glm::vec3);
 
     void draw(Camera*);
     void setParticleDensity(int);
@@ -38,7 +38,7 @@ public:
 protected:
     virtual void prepareParticles(Camera*);
 
-    void initialize(GLuint shader, glm::vec3 pos);
+    void initialize(Shader shader, glm::vec3 pos);
 
     float old_time;
 
@@ -54,7 +54,7 @@ protected:
     Mesh* billboard;
     GLuint particle_texture;
 
-    GLuint shader_program;
+    Shader shader;
 
     std::deque<Particle*> particles;
 };
