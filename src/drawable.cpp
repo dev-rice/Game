@@ -19,12 +19,6 @@ void Drawable::load(Mesh* mesh, Shader shader, glm::vec3 position, GLfloat scale
     this->scale = scale;
 
     # warning here
-    // // Setup the textures
-    // // Get the default textures for the drawable.
-    // GLuint pink = TextureLoader::loadPink();
-    // GLuint alpha = TextureLoader::loadAlpha();
-    // GLuint blue = TextureLoader::loadBlue();
-    //
     // // Setup the drawable such that if no textures
     // // are attached later, then it will be bright pink
     this->diffuse = Texture(glm::vec4(0, 0, 0, 0));

@@ -34,22 +34,22 @@ Doodad::Doodad(const Json::Value& doodad_json, std::string mesh_path, std::strin
 
     if (diffuse_filename != ""){
         diffuse_filename = texture_path + diffuse_filename;
-        GLuint diff = TextureLoader::loadTextureFromFile(diffuse_filename, GL_LINEAR);
+        Texture diff(diffuse_filename);
         setDiffuse(diff);
     }
     if (normal_filename != ""){
         normal_filename = texture_path + normal_filename;
-        GLuint norm = TextureLoader::loadTextureFromFile(normal_filename, GL_LINEAR);
+        Texture norm(normal_filename);
         setNormal(norm);
     }
     if (specular_filename != ""){
         specular_filename = texture_path + specular_filename;
-        GLuint spec = TextureLoader::loadTextureFromFile(specular_filename, GL_LINEAR);
+        Texture spec(specular_filename);
         setSpecular(spec);
     }
     if (emissive_filename != ""){
         emissive_filename = texture_path + emissive_filename;
-        GLuint emit = TextureLoader::loadTextureFromFile(emissive_filename, GL_LINEAR);
+        Texture emit(emissive_filename);
         setEmissive(emit);
     }
 
