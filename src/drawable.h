@@ -63,11 +63,11 @@ protected:
     glm::mat4 model_matrix;
     glm::mat4 rotation_matrix;
 
-    GLuint diffuse;
-    GLuint specular;
-    GLuint emissive;
-    GLuint normal;
-    GLuint gloss;
+    Texture diffuse;
+    Texture specular;
+    Texture emissive;
+    Texture normal;
+    Texture gloss;
 };
 
 #endif

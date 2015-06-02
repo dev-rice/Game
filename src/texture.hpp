@@ -12,6 +12,7 @@ using namespace std;
 
 class Texture {
 public:
+    Texture();
     Texture(GLuint id);
     Texture(GLubyte* data, GLuint width, GLuint height);
     Texture(glm::vec4 color);

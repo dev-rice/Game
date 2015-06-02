@@ -27,11 +27,11 @@ void Drawable::load(Mesh* mesh, Shader shader, glm::vec3 position, GLfloat scale
     //
     // // Setup the drawable such that if no textures
     // // are attached later, then it will be bright pink
-    this->diffuse = Texture(glm::vec4(0, 0, 0, 0)).getGLId();
-    this->specular = Texture(glm::vec4(0, 0, 0, 0)).getGLId();
-    this->emissive = Texture(glm::vec4(0, 0, 0, 0)).getGLId();
-    this->normal = Texture(glm::vec4(0.5, 0.5, 1, 1)).getGLId();
-    this->gloss = Texture(glm::vec4(0, 0, 0, 0)).getGLId();
+    this->diffuse = Texture(glm::vec4(0, 0, 0, 0));
+    this->specular = Texture(glm::vec4(0, 0, 0, 0));
+    this->emissive = Texture(glm::vec4(0, 0, 0, 0));
+    this->normal = Texture(glm::vec4(0.5, 0.5, 1, 1));
+    this->gloss = Texture(glm::vec4(0, 0, 0, 0));
 
     // Set the shader program and load the geometry data
     // from the mesh onto it.
@@ -73,7 +73,7 @@ void Drawable::setDiffuse(Texture diffuse) {
     //         // emissive is pink, set it to alpha.
     //         this->emissive = Texture(glm::vec4(0, 0, 0, 1));
     //     }
-        this->diffuse = diffuse.getGLId();
+        this->diffuse = diffuse;
     // } else {
     //     this->diffuse = Texture(glm::vec4(0, 0, 0, 1));
     // }
@@ -82,7 +82,7 @@ void Drawable::setDiffuse(Texture diffuse) {
 void Drawable::setSpecular(Texture specular) {
     # warning here
     // if (specular != 0){
-        this->specular = specular.getGLId();
+        this->specular = specular;
     // } else {
     //     this->specular = Texture(glm::vec4(0, 0, 0, 1));
     // }
@@ -90,7 +90,7 @@ void Drawable::setSpecular(Texture specular) {
 void Drawable::setEmissive(Texture emissive) {
     # warning here
     // if (emissive != 0){
-        this->emissive = emissive.getGLId();
+        this->emissive = emissive;
     // } else if (diffuse == TextureLoader::loadAlpha()) {
     //     this->emissive = Texture(glm::vec4(1, 0, 1, 1));
     // } else {
@@ -100,7 +100,7 @@ void Drawable::setEmissive(Texture emissive) {
 void Drawable::setNormal(Texture normal) {
     # warning here
     // if (normal != 0){
-        this->normal = normal.getGLId();
+        this->normal = normal;
     // } else {
     //     this->normal = Texture(glm::vec4(0.5, 0.5, 1, 1));
     // }
@@ -110,17 +110,18 @@ void Drawable::setNormal(Texture normal) {
 void Drawable::bindTextures(){
     // Put each texture into the correct location for this Drawable. GL_TEXTURE0-3
     // correspond to the uniforms set in attachTextureSet(). This is where we actually tell the graphics card which textures to use.
+    #warning make these functions in texture??
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, diffuse);
+    glBindTexture(GL_TEXTURE_2D, diffuse.getGLId());
 
     glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, specular);
+    glBindTexture(GL_TEXTURE_2D, specular.getGLId());
 
     glActiveTexture(GL_TEXTURE2);
-    glBindTexture(GL_TEXTURE_2D, emissive);
+    glBindTexture(GL_TEXTURE_2D, emissive.getGLId());
 
     glActiveTexture(GL_TEXTURE3);
-    glBindTexture(GL_TEXTURE_2D, normal);
+    glBindTexture(GL_TEXTURE_2D, normal.getGLId());
 
 }
 

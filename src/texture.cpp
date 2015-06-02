@@ -1,5 +1,9 @@
 #include "texture.hpp"
 
+Texture::Texture() {
+    gl_texture_id = 0;
+}
+
 Texture::Texture(GLuint id) {
     gl_texture_id = id;
 }
