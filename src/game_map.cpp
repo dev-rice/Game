@@ -49,7 +49,7 @@ void GameMap::renderToShadowMap(){
 
     for (Doodad& doodad : doodads){
         // Save the shader this drawable is currently using
-        GLuint current_shader = doodad.getShader();
+        Shader current_shader = doodad.getShader();
         // Set the drawable to render with the shadow shader
         doodad.setShader(shadow_shader);
         // Draw the drawable from the light's perspective
@@ -58,7 +58,7 @@ void GameMap::renderToShadowMap(){
         doodad.setShader(current_shader);
     }
 
-    GLuint current_shader = ground.getShader();
+    Shader current_shader = ground.getShader();
     ground.setShader(shadow_shader);
     ground.draw();
     ground.setShader(current_shader);

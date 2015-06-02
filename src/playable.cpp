@@ -39,11 +39,11 @@ Playable::Playable() : Drawable(){
 
 }
 
-Playable::Playable(Mesh* mesh, GLuint shader_program, glm::vec3 position, GLfloat scale) : Drawable(mesh, shader_program, position, scale) {
+Playable::Playable(Mesh* mesh, Shader shader, glm::vec3 position, GLfloat scale) : Drawable(mesh, shader, position, scale) {
 
     if(! selection_ring){
     	Mesh* selection_ring_mesh = new Mesh("res/models/selection_ring.dae");
-    	selection_ring = new Doodad(selection_ring_mesh, shader_program, position, 2.0f);
+    	selection_ring = new Doodad(selection_ring_mesh, shader, position, 2.0f);
     	selection_ring->setEmissive(TextureLoader::loadTextureFromFile("res/textures/selection_ring.png", GL_LINEAR));
         selection_ring->rotateGlobalEuler(M_PI/2.0f, 0.0f, 0.0f);
     }
@@ -91,7 +91,7 @@ void Playable::loadFromXML(std::string filepath){
 }
 
 void Playable::updateUniformData(){
-	glUniform1f(glGetUniformLocation(shader_program, "scale"), scale);
+	glUniform1f(glGetUniformLocation(shader.getGLId(), "scale"), scale);
 }
 
 //##################################################################################################

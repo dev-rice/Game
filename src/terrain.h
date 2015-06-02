@@ -23,8 +23,8 @@ public:
     Terrain() {;}
     Terrain(const Json::Value&, std::string texture_path);
     Terrain(std::string heightmap_filename, float amplification);
-    Terrain (GLuint s, std::string h) : Terrain(s, h, 10.0f) {;}
-    Terrain (GLuint, std::string, float);
+    Terrain (Shader shader, std::string h) : Terrain(shader, h, 10.0f) {;}
+    Terrain (Shader shader, std::string, float);
 
     int getDepth() {return depth;}
     int getWidth() {return width;}
@@ -60,7 +60,7 @@ public:
     TexturePainter* getTexturePainter();
 
 private:
-    void initializer(GLuint, std::string, float);
+    void initializer(Shader, std::string, float);
     void updateUniformData();
 
     GLubyte* renderHeightmapAsImage();

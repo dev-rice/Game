@@ -47,12 +47,12 @@ Terrain::Terrain(std::string heightmap_filename, float amplification){
     initializer(ShaderLoader::loadShaderProgram("shaders/terrain.vs", "shaders/terrain.fs"), heightmap_filename, amplification);
 }
 
-Terrain::Terrain(GLuint shader_program, std::string heightmap_filename, float amplification) : Drawable() {
+Terrain::Terrain(Shader shader, std::string heightmap_filename, float amplification) : Drawable() {
 
-    initializer(shader_program, heightmap_filename, amplification);
+    initializer(shader, heightmap_filename, amplification);
 }
 
-void Terrain::initializer(GLuint shader_program, std::string heightmap_filename, float amplification){
+void Terrain::initializer(Shader shader, std::string heightmap_filename, float amplification){
 
     this->amplification = amplification;
 
@@ -72,7 +72,7 @@ void Terrain::initializer(GLuint shader_program, std::string heightmap_filename,
 
     // Once we have a mesh, we can load the drawable data required for this
     // child class.
-    Drawable::load(mesh, shader_program, glm::vec3(0.0f, 0.0f, 0.0f), 1.0f);
+    Drawable::load(mesh, shader, glm::vec3(0.0f, 0.0f, 0.0f), 1.0f);
 
     generatePathingArray();
 
@@ -467,10 +467,10 @@ int Terrain::getIndex(int x, int z, int width){
 void Terrain::updateUniformData(){
     // Set the scale, this is not really going to be a thing, probably
     // ^ It's definitely a thing
-    GLuint scale_loc = glGetUniformLocation(shader_program, "scale");
-    GLuint time_loc = glGetUniformLocation(shader_program, "time");
+    GLuint scale_loc = glGetUniformLocation(shader.getGLId(), "scale");
+    GLuint time_loc = glGetUniformLocation(shader.getGLId(), "time");
     //
-    // std::string shader_name = ShaderLoader::getShaderName(shader_program);
+    // std::string shader_name = ShaderLoader::getShaderName(shader.getGLId());
     // Debug::info("Shader Program: %s\n", shader_name.c_str());
     // Debug::info("  scale_loc = %d\n", scale_loc);
     // Debug::info("  time_loc = %d\n", time_loc);
@@ -494,18 +494,18 @@ void Terrain::bindTextures(){
     glActiveTexture(GL_TEXTURE3);
     glBindTexture(GL_TEXTURE_2D, normal);
 
-    layered_textures->updateUniforms(shader_program);
+    layered_textures->updateUniforms(shader.getGLId());
 
 }
 
 void Terrain::setTextureLocations(){
     // Try to set the texture locations
-    glUniform1i(glGetUniformLocation(shader_program, "specular_texture"), 1);
-    glUniform1i(glGetUniformLocation(shader_program, "emissive_texture"), 2);
-    glUniform1i(glGetUniformLocation(shader_program, "normal_map"), 3);
-    glUniform1i(glGetUniformLocation(shader_program, "shadow_map"), 4);
+    glUniform1i(glGetUniformLocation(shader.getGLId(), "specular_texture"), 1);
+    glUniform1i(glGetUniformLocation(shader.getGLId(), "emissive_texture"), 2);
+    glUniform1i(glGetUniformLocation(shader.getGLId(), "normal_map"), 3);
+    glUniform1i(glGetUniformLocation(shader.getGLId(), "shadow_map"), 4);
 
-    layered_textures->setTextureLocations(shader_program);
+    layered_textures->setTextureLocations(shader.getGLId());
 
 }
 

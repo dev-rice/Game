@@ -41,7 +41,7 @@ public:
 
     glm::vec3 getPosition() {return position;}
     GLfloat getScale() {return scale;}
-    GLuint getShader() {return shader_program;}
+    Shader& getShader() {return shader;}
 
 protected:
     void load(Mesh*, Shader shader, glm::vec3, GLfloat);
@@ -53,7 +53,7 @@ protected:
 
     Mesh* mesh;
 
-    GLuint shader_program;
+    Shader shader;
 
     GLfloat scale;
 

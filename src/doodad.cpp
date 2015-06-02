@@ -71,6 +71,6 @@ Doodad::Doodad(Mesh* mesh, Shader shader, glm::vec3 position, GLfloat scale):
 void Doodad::updateUniformData(){
     // Set the scale, this is not really going to be a thing, probably
     // ^ It's definitely a thing
-    glUniform1f(glGetUniformLocation(shader_program, "scale"), scale);
+    glUniform1f(glGetUniformLocation(shader.getGLId(), "scale"), scale);
 
 }
