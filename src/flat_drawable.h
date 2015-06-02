@@ -30,7 +30,7 @@ protected:
     virtual void updateUniformData();
 
     FlatMesh* mesh;
-    GLuint shader_program;
+    Shader shader;
 
     GLfloat width;
     GLfloat height;

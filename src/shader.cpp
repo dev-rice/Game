@@ -1,5 +1,9 @@
 #include "shader.hpp"
 
+Shader::Shader(){
+    gl_shader_id = 0;
+}
+
 Shader::Shader(GLuint shader){
     gl_shader_id = shader;
 }
