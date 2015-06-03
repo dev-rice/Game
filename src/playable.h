@@ -12,7 +12,7 @@
 
 #include "pugixml.hpp" // PUGI xml library
 
-#include "texture_loader.h"
+
 #include "doodad.h"
 #include "mesh.h"
 #include "drawable.h"

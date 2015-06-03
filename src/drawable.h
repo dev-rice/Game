@@ -10,7 +10,7 @@
 #include "camera.h"
 
 #include "texture.hpp"
-#include "texture_loader.h"
+
 
 class Drawable {
 public:

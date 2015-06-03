@@ -11,7 +11,7 @@
 #include <string>
 
 #include "debug.h"
-#include "texture_loader.h"
+
 #include "texture.hpp"
 
 class Heightmap {

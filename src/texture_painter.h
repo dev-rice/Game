@@ -7,7 +7,7 @@
 #include <random>
 
 #include "debug.h"
-#include "texture_loader.h"
+
 #include "texture_layer.h"
 #include "texture.hpp"
 

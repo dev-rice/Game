@@ -13,7 +13,7 @@
 
 #include "game_clock.h"
 #include "debug.h"
-#include "texture_loader.h"
+
 #include "glyph.h"
 #include "texture.hpp"
 

@@ -35,7 +35,7 @@
 #include "flat_drawable.h"
 #include "texture.hpp"
 
-#include "texture_loader.h"
+
 
 int main(int argc, char* argv[]) {
 

@@ -1,7 +1,7 @@
 #ifndef TextureLayer_h
 #define TextureLayer_h
 
-#include "texture_loader.h"
+
 #include "texture.hpp"
 
 class TextureLayer {

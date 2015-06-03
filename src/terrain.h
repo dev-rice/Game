@@ -36,7 +36,7 @@ public:
     float getMaxHeight(){return max_height;}
 
     void addSplatmap(Texture splat);
-    void addDiffuse(GLuint diff, GLuint splat, int layer_num, char channel);
+    void addDiffuse(Texture diff, GLuint splat, int layer_num, char channel);
     void fillSplatmaps();
 
     void printPathing();
