@@ -15,6 +15,7 @@
 #include "debug.h"
 #include "texture_loader.h"
 #include "glyph.h"
+#include "texture.hpp"
 
 static const std::string FONT_PATH = "res/fonts/";
 
@@ -25,7 +26,7 @@ public:
 
     void renderToBMP();
 
-    GLuint getTexture();
+    Texture& getTexture();
     unsigned int getWidth();
     unsigned int getHeight();
 
@@ -36,7 +37,7 @@ public:
 
 private:
     std::string filename;
-    GLuint texture_id;
+    Texture texture;
 
     unsigned int width;
     unsigned int height;
