@@ -2,12 +2,12 @@
 
 TextureLayer::TextureLayer(){
     diffuse = Texture(glm::vec4(0.0, 0.0, 0.0, 1.0));
-    splatmap = Texture(glm::vec4(0.0, 0.0, 0.0, 1.0));
+    splatmap = 0;
     channel = 1;
     setLayerNumber(0);
 }
 
-TextureLayer::TextureLayer(Texture diffuse, Texture splatmap, char channel, int layer_number){
+TextureLayer::TextureLayer(Texture diffuse, GLuint splatmap, char channel, int layer_number){
     setDiffuse(diffuse);
     setSplatmap(splatmap);
     setChannel(channel);
@@ -18,7 +18,7 @@ void TextureLayer::setDiffuse(Texture diffuse){
     this->diffuse = diffuse;
 }
 
-void TextureLayer::setSplatmap(Texture splatmap){
+void TextureLayer::setSplatmap(GLuint splatmap){
     this->splatmap = splatmap;
 }
 
@@ -39,7 +39,7 @@ Texture TextureLayer::getDiffuse(){
     return diffuse;
 }
 
-Texture TextureLayer::getSplatmap(){
+GLuint TextureLayer::getSplatmap(){
     return splatmap;
 }
 

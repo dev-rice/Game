@@ -7,14 +7,14 @@ LayeredTextures::LayeredTextures(int size){
     texture_layers = std::vector<TextureLayer>(num_layers);
 }
 
-void LayeredTextures::addSplatmap(GLuint splatmap){
+void LayeredTextures::addSplatmap(Texture splatmap){
     if (unique_splatmaps.size() >= num_splatmaps){
         Debug::error("Too many splatmaps for %d textures.\n");
     }
-    unique_splatmaps.push_back(splatmap);
+    unique_splatmaps.push_back(splatmap.getGLId());
 }
 
-void LayeredTextures::addTexture(GLuint diffuse, GLuint splatmap, char channel, int layer_number){
+void LayeredTextures::addTexture(Texture diffuse, GLuint splatmap, char channel, int layer_number){
     TextureLayer layer(diffuse, splatmap, channel, layer_number);
 
     if (layer_number >= num_layers){
@@ -42,7 +42,7 @@ GLuint LayeredTextures::getTexture(GLuint splatmap, char channel){
 TextureLayer LayeredTextures::getLayer(GLuint splatmap, char channel){
     TextureLayer out_layer;
     for (TextureLayer layer : texture_layers){
-        if (layer.getChannelChar() == channel && unique_splatmaps[layer.getSplatmap().getGLId()] == splatmap){
+        if (layer.getChannelChar() == channel && unique_splatmaps[layer.getSplatmap()] == splatmap){
             out_layer = layer;
         }
     }
@@ -90,13 +90,13 @@ void LayeredTextures::updateUniforms(Shader shader){
     glActiveTexture(GL_TEXTURE21);
     glBindTexture(GL_TEXTURE_2D, unique_splatmaps[1]);
 
-    glUniform1i(glGetUniformLocation(shader.getGLId(), "splatmaps[0]"), texture_layers[0].getSplatmap().getGLId());
-    glUniform1i(glGetUniformLocation(shader.getGLId(), "splatmaps[1]"), texture_layers[1].getSplatmap().getGLId());
-    glUniform1i(glGetUniformLocation(shader.getGLId(), "splatmaps[2]"), texture_layers[2].getSplatmap().getGLId());
-    glUniform1i(glGetUniformLocation(shader.getGLId(), "splatmaps[3]"), texture_layers[3].getSplatmap().getGLId());
-    glUniform1i(glGetUniformLocation(shader.getGLId(), "splatmaps[4]"), texture_layers[4].getSplatmap().getGLId());
-    glUniform1i(glGetUniformLocation(shader.getGLId(), "splatmaps[5]"), texture_layers[5].getSplatmap().getGLId());
-    glUniform1i(glGetUniformLocation(shader.getGLId(), "splatmaps[6]"), texture_layers[6].getSplatmap().getGLId());
+    glUniform1i(glGetUniformLocation(shader.getGLId(), "splatmaps[0]"), texture_layers[0].getSplatmap());
+    glUniform1i(glGetUniformLocation(shader.getGLId(), "splatmaps[1]"), texture_layers[1].getSplatmap());
+    glUniform1i(glGetUniformLocation(shader.getGLId(), "splatmaps[2]"), texture_layers[2].getSplatmap());
+    glUniform1i(glGetUniformLocation(shader.getGLId(), "splatmaps[3]"), texture_layers[3].getSplatmap());
+    glUniform1i(glGetUniformLocation(shader.getGLId(), "splatmaps[4]"), texture_layers[4].getSplatmap());
+    glUniform1i(glGetUniformLocation(shader.getGLId(), "splatmaps[5]"), texture_layers[5].getSplatmap());
+    glUniform1i(glGetUniformLocation(shader.getGLId(), "splatmaps[6]"), texture_layers[6].getSplatmap());
 
     ////////////////////
     // Channels
@@ -168,7 +168,7 @@ std::string LayeredTextures::saveData(std::string name){
     int i = 0;
     for (TextureLayer& layer : texture_layers){
         map_output += "g " + std::to_string(layer.getLayerNumber()) + " " +
-            std::to_string(layer.getSplatmap().getGLId()) + " " +
+            std::to_string(layer.getSplatmap()) + " " +
             TextureLayer::getCharFromChannelInt(layer.getChannel()) + " " +
             diffuse_names[i] + "\n";
         i++;

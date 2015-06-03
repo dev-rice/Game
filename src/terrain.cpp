@@ -504,16 +504,16 @@ void Terrain::setTextureLocations(){
 
 }
 
-void Terrain::addSplatmap(GLuint splat){
+void Terrain::addSplatmap(Texture splat){
     // Check the dimensions of the splatmap and ensure that they are the
     // same as the heightmap's.
-    GLuint splat_width = TextureLoader::getTextureWidth(splat);
-    GLuint splat_height = TextureLoader::getTextureHeight(splat);
+    GLuint splat_width = splat.getWidth();
+    GLuint splat_height = splat.getHeight();
     if (splat_width == this->width && splat_height == depth){
         layered_textures->addSplatmap(splat);
     } else {
         Debug::error("Splatmap dimensions do not agree with heightmap dimensions.\n");
-        GLuint blank_splat = TextureLoader::loadTextureFromPixel(std::to_string(splat), width, depth, 0.0f, 0.0f, 0.0f, 1.0f);
+        Texture blank_splat(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f), width, depth);
         layered_textures->addSplatmap(blank_splat);
     }
 }
@@ -542,7 +542,7 @@ void Terrain::setPaintLayer(GLuint layer){
     // Sanity check
     if (texture_layer.getLayerNumber() == layer && layer != 0){
         char channel = TextureLayer::getCharFromChannelInt(texture_layer.getChannel());
-        GLuint splatmap = layered_textures->getSplatmap(texture_layer.getSplatmap().getGLId());
+        GLuint splatmap = layered_textures->getSplatmap(texture_layer.getSplatmap());
 
         splatmap_painter->setChannel(channel);
         splatmap_painter->setTexture(splatmap);
