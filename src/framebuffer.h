@@ -17,11 +17,11 @@ public:
 
     void addShaderPass(Shader shader);
 
-    GLuint getTexture() {return framebuffer_texture;}
+    Texture& getTexture() {return framebuffer_texture;}
 protected:
 
     GLuint framebuffer;
-    GLuint framebuffer_texture;
+    Texture framebuffer_texture;
 
     FlatDrawable* framebuffer_window;
     Window* window;
