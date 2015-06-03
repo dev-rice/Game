@@ -32,7 +32,7 @@ Mouse::Mouse(): UIDrawable(TextureLoader::loadTextureFromFile("res/textures/curs
     GLuint down_right = TextureLoader::loadTextureFromFile("res/textures/cursor_scroll_down_right_ui.png", GL_NEAREST);
     GLuint down_left = TextureLoader::loadTextureFromFile("res/textures/cursor_scroll_down_left_ui.png", GL_NEAREST);
 
-    mouse_sprites.push_back(texture);
+    mouse_sprites.push_back(texture.getGLId());
     mouse_sprites.push_back(selection);
     mouse_sprites.push_back(command);
     mouse_sprites.push_back(up);
