@@ -12,7 +12,7 @@ Mouse* Mouse::getInstance(){
 
 }
 
-Mouse::Mouse(): UIDrawable(TextureLoader::loadTextureFromFile("res/textures/cursor_ui.png", GL_LINEAR)) {
+Mouse::Mouse(): UIDrawable(Texture("res/textures/cursor_ui.png")) {
 
 
     int window_width = Window::getInstance()->getWidth();
@@ -21,28 +21,28 @@ Mouse::Mouse(): UIDrawable(TextureLoader::loadTextureFromFile("res/textures/curs
     inv_mouse_projection = glm::inverse(mouse_projection);
 
     // CURSOR, SELECTION, COMMAND, UP, RIGHT, DOWN, LEFT, UP_LEFT, UP_RIGHT, DOWN_RIGHT, DOWN_LEFT
-    GLuint selection = TextureLoader::loadTextureFromFile("res/textures/cursor_select_ui.png", GL_NEAREST);
-    GLuint command = TextureLoader::loadTextureFromFile("res/textures/cursor_select_ui.png", GL_NEAREST);
-    GLuint up = TextureLoader::loadTextureFromFile("res/textures/cursor_scroll_up_ui.png", GL_NEAREST);
-    GLuint right = TextureLoader::loadTextureFromFile("res/textures/cursor_scroll_right_ui.png", GL_NEAREST);
-    GLuint down = TextureLoader::loadTextureFromFile("res/textures/cursor_scroll_down_ui.png", GL_NEAREST);
-    GLuint left = TextureLoader::loadTextureFromFile("res/textures/cursor_scroll_left_ui.png", GL_NEAREST);
-    GLuint up_left = TextureLoader::loadTextureFromFile("res/textures/cursor_scroll_up_left_ui.png", GL_NEAREST);
-    GLuint up_right = TextureLoader::loadTextureFromFile("res/textures/cursor_scroll_up_right_ui.png", GL_NEAREST);
-    GLuint down_right = TextureLoader::loadTextureFromFile("res/textures/cursor_scroll_down_right_ui.png", GL_NEAREST);
-    GLuint down_left = TextureLoader::loadTextureFromFile("res/textures/cursor_scroll_down_left_ui.png", GL_NEAREST);
+    Texture selection = Texture("res/textures/cursor_select_ui.png");
+    Texture command = Texture("res/textures/cursor_select_ui.png");
+    Texture up = Texture("res/textures/cursor_scroll_up_ui.png");
+    Texture right = Texture("res/textures/cursor_scroll_right_ui.png");
+    Texture down = Texture("res/textures/cursor_scroll_down_ui.png");
+    Texture left = Texture("res/textures/cursor_scroll_left_ui.png");
+    Texture up_left = Texture("res/textures/cursor_scroll_up_left_ui.png");
+    Texture up_right = Texture("res/textures/cursor_scroll_up_right_ui.png");
+    Texture down_right = Texture("res/textures/cursor_scroll_down_right_ui.png");
+    Texture down_left = Texture("res/textures/cursor_scroll_down_left_ui.png");
 
     mouse_sprites.push_back(texture.getGLId());
-    mouse_sprites.push_back(selection);
-    mouse_sprites.push_back(command);
-    mouse_sprites.push_back(up);
-    mouse_sprites.push_back(right);
-    mouse_sprites.push_back(down);
-    mouse_sprites.push_back(left);
-    mouse_sprites.push_back(up_left);
-    mouse_sprites.push_back(up_right);
-    mouse_sprites.push_back(down_right);
-    mouse_sprites.push_back(down_left);
+    mouse_sprites.push_back(selection.getGLId());
+    mouse_sprites.push_back(command.getGLId());
+    mouse_sprites.push_back(up.getGLId());
+    mouse_sprites.push_back(right.getGLId());
+    mouse_sprites.push_back(down.getGLId());
+    mouse_sprites.push_back(left.getGLId());
+    mouse_sprites.push_back(up_left.getGLId());
+    mouse_sprites.push_back(up_right.getGLId());
+    mouse_sprites.push_back(down_right.getGLId());
+    mouse_sprites.push_back(down_left.getGLId());
 
     hovering = false;
 
