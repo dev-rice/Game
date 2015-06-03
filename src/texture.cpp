@@ -28,9 +28,38 @@ Texture::Texture(string filename) {
     gl_texture_id = loadTextureFromFile(filename, GL_LINEAR);
 }
 
+GLuint Texture::getWidth(){
+    int width;
+    int miplevel = 0;
+    glBindTexture(GL_TEXTURE_2D, gl_texture_id);
+    glGetTexLevelParameteriv(GL_TEXTURE_2D, miplevel, GL_TEXTURE_WIDTH, &width);
+    return width;
+}
+
+GLuint Texture::getHeight(){
+    int height;
+    int miplevel = 0;
+    glBindTexture(GL_TEXTURE_2D, gl_texture_id);
+    glGetTexLevelParameteriv(GL_TEXTURE_2D, miplevel, GL_TEXTURE_HEIGHT, &height);
+    return height;
+}
+
+GLubyte* Texture::getBytes(GLuint format){
+    int width = getWidth();
+    int height = getHeight();
+
+    GLubyte* image = new GLubyte[4 * width * height];
+
+    glBindTexture(GL_TEXTURE_2D, gl_texture_id);
+    glGetTexImage(GL_TEXTURE_2D, 0, format, GL_UNSIGNED_BYTE, image);
+
+    return image;
+}
+
 GLuint Texture::getGLId() {
     return gl_texture_id;
 }
+
 
 GLuint Texture::loadTextureFromBytes(GLubyte* data, GLuint width, GLuint height, GLuint filter){
     GLuint texture;
@@ -145,34 +174,6 @@ GLuint Texture::loadTextureFromPixel(string id, GLuint width, GLuint height, GLf
     return loadTextureFromPixel(id, width, height, pixel);
 }
 
-GLubyte* Texture::getBytesFromTexture(GLuint texture_id, GLuint format){
-    int width = getTextureWidth(texture_id);
-    int height = getTextureHeight(texture_id);
-
-    GLubyte* image = new GLubyte[4 * width * height];
-
-    glBindTexture(GL_TEXTURE_2D, texture_id);
-    glGetTexImage(GL_TEXTURE_2D, 0, format, GL_UNSIGNED_BYTE, image);
-
-    return image;
-}
-
-GLuint Texture::getTextureWidth(GLuint texture_id){
-    int width;
-    int miplevel = 0;
-    glBindTexture(GL_TEXTURE_2D, texture_id);
-    glGetTexLevelParameteriv(GL_TEXTURE_2D, miplevel, GL_TEXTURE_WIDTH, &width);
-    return width;
-}
-
-GLuint Texture::getTextureHeight(GLuint texture_id){
-    int height;
-    int miplevel = 0;
-    glBindTexture(GL_TEXTURE_2D, texture_id);
-    glGetTexLevelParameteriv(GL_TEXTURE_2D, miplevel, GL_TEXTURE_HEIGHT, &height);
-    return height;
-}
-
 void Texture::saveTextureToFile(GLuint texture_id, GLuint format, string filename){
     int channels = 0;
     switch(format){
@@ -191,8 +192,9 @@ void Texture::saveTextureToFile(GLuint texture_id, GLuint format, string filenam
             break;
 
     }
-    int width = getTextureWidth(texture_id);
-    int height = getTextureHeight(texture_id);
+    int width = getWidth();
+    int height = getHeight();
+    
     GLubyte* image = new GLubyte[channels * width * height];
 
     glBindTexture(GL_TEXTURE_2D, texture_id);

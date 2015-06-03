@@ -481,13 +481,13 @@ void Terrain::bindTextures(){
     // tell the graphics card which textures to use.
 
     glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, specular);
+    glBindTexture(GL_TEXTURE_2D, specular.getGLId());
 
     glActiveTexture(GL_TEXTURE2);
-    glBindTexture(GL_TEXTURE_2D, emissive);
+    glBindTexture(GL_TEXTURE_2D, emissive.getGLId());
 
     glActiveTexture(GL_TEXTURE3);
-    glBindTexture(GL_TEXTURE_2D, normal);
+    glBindTexture(GL_TEXTURE_2D, normal.getGLId());
 
     layered_textures->updateUniforms(shader.getGLId());
 
@@ -532,7 +532,7 @@ TexturePainter* Terrain::getTexturePainter(){
 }
 
 TextureLayer Terrain::getCurrentLayer(){
-    TextureLayer layer = layered_textures->getLayer(splatmap_painter->getTexture(), splatmap_painter->getChannel());
+    TextureLayer layer = layered_textures->getLayer(splatmap_painter->getTexture().getGLId(), splatmap_painter->getChannel());
     return layer;
 }
 

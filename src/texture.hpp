@@ -19,6 +19,10 @@ public:
     Texture(glm::vec4 color, GLuint width, GLuint height);
     Texture(string filename);
 
+    GLuint getWidth();
+    GLuint getHeight();
+    GLubyte* getBytes(GLuint format);
+
     GLuint getGLId();
 
 private:
@@ -35,10 +39,6 @@ private:
     GLuint loadTextureFromPixel(GLuint width, GLuint height, GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
     GLuint loadTextureFromPixel(std::string id, GLuint width, GLuint height, glm::vec4 pixel);
     GLuint loadTextureFromPixel(std::string id, GLuint width, GLuint height, GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
-
-    GLubyte* getBytesFromTexture(GLuint texture_id, GLuint format);
-    GLuint getTextureWidth(GLuint texture_id);
-    GLuint getTextureHeight(GLuint texture_id);
 
     void saveTextureToFile(GLuint texture_id, GLuint format, std::string filename);
     void saveTextureBytesToFile(GLubyte* data, GLuint width, GLuint height, GLuint channels, std::string filename);
