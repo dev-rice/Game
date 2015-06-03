@@ -36,13 +36,13 @@ GLuint LayeredTextures::getSplatmap(int index){
 
 GLuint LayeredTextures::getTexture(GLuint splatmap, char channel){
     TextureLayer layer = getLayer(splatmap, channel);
-    return layer.getDiffuse();
+    return layer.getDiffuse().getGLId();
 }
 
 TextureLayer LayeredTextures::getLayer(GLuint splatmap, char channel){
     TextureLayer out_layer;
     for (TextureLayer layer : texture_layers){
-        if (layer.getChannelChar() == channel && unique_splatmaps[layer.getSplatmap()] == splatmap){
+        if (layer.getChannelChar() == channel && unique_splatmaps[layer.getSplatmap().getGLId()] == splatmap){
             out_layer = layer;
         }
     }
@@ -62,25 +62,25 @@ void LayeredTextures::updateUniforms(Shader shader){
     ////////////////////
     // Diffuse
     glActiveTexture(GL_TEXTURE10);
-    glBindTexture(GL_TEXTURE_2D, texture_layers[0].getDiffuse());
+    glBindTexture(GL_TEXTURE_2D, texture_layers[0].getDiffuse().getGLId());
 
     glActiveTexture(GL_TEXTURE11);
-    glBindTexture(GL_TEXTURE_2D, texture_layers[1].getDiffuse());
+    glBindTexture(GL_TEXTURE_2D, texture_layers[1].getDiffuse().getGLId());
 
     glActiveTexture(GL_TEXTURE12);
-    glBindTexture(GL_TEXTURE_2D, texture_layers[2].getDiffuse());
+    glBindTexture(GL_TEXTURE_2D, texture_layers[2].getDiffuse().getGLId());
 
     glActiveTexture(GL_TEXTURE13);
-    glBindTexture(GL_TEXTURE_2D, texture_layers[3].getDiffuse());
+    glBindTexture(GL_TEXTURE_2D, texture_layers[3].getDiffuse().getGLId());
 
     glActiveTexture(GL_TEXTURE14);
-    glBindTexture(GL_TEXTURE_2D, texture_layers[4].getDiffuse());
+    glBindTexture(GL_TEXTURE_2D, texture_layers[4].getDiffuse().getGLId());
 
     glActiveTexture(GL_TEXTURE15);
-    glBindTexture(GL_TEXTURE_2D, texture_layers[5].getDiffuse());
+    glBindTexture(GL_TEXTURE_2D, texture_layers[5].getDiffuse().getGLId());
 
     glActiveTexture(GL_TEXTURE16);
-    glBindTexture(GL_TEXTURE_2D, texture_layers[6].getDiffuse());
+    glBindTexture(GL_TEXTURE_2D, texture_layers[6].getDiffuse().getGLId());
 
     ////////////////////
     // Splatmaps
@@ -90,13 +90,13 @@ void LayeredTextures::updateUniforms(Shader shader){
     glActiveTexture(GL_TEXTURE21);
     glBindTexture(GL_TEXTURE_2D, unique_splatmaps[1]);
 
-    glUniform1i(glGetUniformLocation(shader.getGLId(), "splatmaps[0]"), texture_layers[0].getSplatmap());
-    glUniform1i(glGetUniformLocation(shader.getGLId(), "splatmaps[1]"), texture_layers[1].getSplatmap());
-    glUniform1i(glGetUniformLocation(shader.getGLId(), "splatmaps[2]"), texture_layers[2].getSplatmap());
-    glUniform1i(glGetUniformLocation(shader.getGLId(), "splatmaps[3]"), texture_layers[3].getSplatmap());
-    glUniform1i(glGetUniformLocation(shader.getGLId(), "splatmaps[4]"), texture_layers[4].getSplatmap());
-    glUniform1i(glGetUniformLocation(shader.getGLId(), "splatmaps[5]"), texture_layers[5].getSplatmap());
-    glUniform1i(glGetUniformLocation(shader.getGLId(), "splatmaps[6]"), texture_layers[6].getSplatmap());
+    glUniform1i(glGetUniformLocation(shader.getGLId(), "splatmaps[0]"), texture_layers[0].getSplatmap().getGLId());
+    glUniform1i(glGetUniformLocation(shader.getGLId(), "splatmaps[1]"), texture_layers[1].getSplatmap().getGLId());
+    glUniform1i(glGetUniformLocation(shader.getGLId(), "splatmaps[2]"), texture_layers[2].getSplatmap().getGLId());
+    glUniform1i(glGetUniformLocation(shader.getGLId(), "splatmaps[3]"), texture_layers[3].getSplatmap().getGLId());
+    glUniform1i(glGetUniformLocation(shader.getGLId(), "splatmaps[4]"), texture_layers[4].getSplatmap().getGLId());
+    glUniform1i(glGetUniformLocation(shader.getGLId(), "splatmaps[5]"), texture_layers[5].getSplatmap().getGLId());
+    glUniform1i(glGetUniformLocation(shader.getGLId(), "splatmaps[6]"), texture_layers[6].getSplatmap().getGLId());
 
     ////////////////////
     // Channels
@@ -152,7 +152,7 @@ std::string LayeredTextures::saveData(std::string name){
     // Write the diffuse texture layers out to files
     std::vector<std::string> diffuse_names;
     for (TextureLayer& layer : texture_layers){
-        GLuint diff_id = layer.getDiffuse();
+        GLuint diff_id = layer.getDiffuse().getGLId();
         std::string temp_name = name + "_diff_" + std::to_string(diff_id) + ".bmp";
         diffuse_names.push_back(temp_name);
         TextureLoader::saveTextureToFile(diff_id, GL_RGBA, temp_name);
@@ -168,7 +168,7 @@ std::string LayeredTextures::saveData(std::string name){
     int i = 0;
     for (TextureLayer& layer : texture_layers){
         map_output += "g " + std::to_string(layer.getLayerNumber()) + " " +
-            std::to_string(layer.getSplatmap()) + " " +
+            std::to_string(layer.getSplatmap().getGLId()) + " " +
             TextureLayer::getCharFromChannelInt(layer.getChannel()) + " " +
             diffuse_names[i] + "\n";
         i++;

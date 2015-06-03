@@ -24,7 +24,7 @@ void SmokeEmitter::initialize(float r){
     this->radius = r;
 
     // Hardcoded smoke particle texture
-    particle_texture = TextureLoader::loadTextureFromFile("res/textures/smoke_part.png", GL_LINEAR);
+    particle_texture = Texture("res/textures/smoke_part.png");
 
     // Hardcoded density, maximum, and lifespan
     this->maxParticles = 100;

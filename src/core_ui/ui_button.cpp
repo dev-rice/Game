@@ -47,27 +47,27 @@ void UIButton::loadFromXML(std::string filepath){
 
     // Add in decorative images
     if(center_image == NULL){
-        center_image = new UIImage(shader, TextureLoader::loadTextureFromFile("res/textures/button_center.png", GL_NEAREST));
+        center_image = new UIImage(shader, Texture("res/textures/button_center.png"));
     }
 
     if(left_image == NULL){
-        left_image = new UIImage(shader, TextureLoader::loadTextureFromFile("res/textures/button_left.png", GL_NEAREST));
+        left_image = new UIImage(shader, Texture("res/textures/button_left.png"));
     }
 
     if(right_image == NULL){
-        right_image = new UIImage(shader, TextureLoader::loadTextureFromFile("res/textures/button_right.png", GL_NEAREST));
+        right_image = new UIImage(shader, Texture("res/textures/button_right.png"));
     }
 
     if(center_hover_image == NULL){
-        center_hover_image = new UIImage(shader, TextureLoader::loadTextureFromFile("res/textures/button_center_hover.png", GL_NEAREST));
+        center_hover_image = new UIImage(shader, Texture("res/textures/button_center_hover.png"));
     }
 
     if(right_hover_image == NULL){
-        right_hover_image = new UIImage(shader, TextureLoader::loadTextureFromFile("res/textures/button_right_hover.png", GL_NEAREST));
+        right_hover_image = new UIImage(shader, Texture("res/textures/button_right_hover.png"));
     }
 
     if(left_hover_image == NULL){
-        left_hover_image = new UIImage(shader, TextureLoader::loadTextureFromFile("res/textures/button_left_hover.png", GL_NEAREST));
+        left_hover_image = new UIImage(shader, Texture("res/textures/button_left_hover.png"));
     }
 
     // Convert all pixel coords into screen

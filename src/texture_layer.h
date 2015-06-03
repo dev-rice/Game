@@ -2,20 +2,21 @@
 #define TextureLayer_h
 
 #include "texture_loader.h"
+#include "texture.hpp"
 
 class TextureLayer {
 public:
     TextureLayer();
-    TextureLayer(GLuint diffuse, GLuint splatmap, char channel, int layer_number);
+    TextureLayer(Texture diffuse, Texture splatmap, char channel, int layer_number);
 
-    void setDiffuse(GLuint diffuse);
-    void setSplatmap(GLuint splatmap);
+    void setDiffuse(Texture diffuse);
+    void setSplatmap(Texture splatmap);
     void setChannel(char channel_char);
     void setChannel(GLuint channel);
     void setLayerNumber(GLuint layer_number);
 
-    GLuint getDiffuse();
-    GLuint getSplatmap();
+    Texture getDiffuse();
+    Texture getSplatmap();
     GLuint getChannel();
     GLuint getLayerNumber();
     char getChannelChar();
@@ -24,8 +25,8 @@ public:
     static char getCharFromChannelInt(int channel);
 
 private:
-    GLuint diffuse;
-    GLuint splatmap;
+    Texture diffuse;
+    Texture splatmap;
     GLuint channel;
     GLuint layer_number;
     char channel_char;

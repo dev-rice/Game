@@ -19,7 +19,7 @@ SnowEmitter::SnowEmitter(Shader shader, glm::vec3 position) : Emitter(shader, po
 
 void SnowEmitter::initialize(){
     // Hardcoded snow particle texture
-    particle_texture = TextureLoader::loadTextureFromFile("res/textures/snow_part.png", GL_LINEAR);
+    particle_texture = Texture("res/textures/snow_part.png");
 
     // Hardcoded density, maximum, and lifespan
     this->maxParticles = 1000;

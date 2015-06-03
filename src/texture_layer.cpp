@@ -1,24 +1,24 @@
 #include "texture_layer.h"
 
 TextureLayer::TextureLayer(){
-    diffuse = TextureLoader::loadTextureFromPixel(0.0, 0.0, 0.0, 1.0);
-    splatmap = TextureLoader::loadTextureFromPixel(0.0, 0.0, 0.0, 1.0);
+    diffuse = Texture(glm::vec4(0.0, 0.0, 0.0, 1.0));
+    splatmap = Texture(glm::vec4(0.0, 0.0, 0.0, 1.0));
     channel = 1;
     setLayerNumber(0);
 }
 
-TextureLayer::TextureLayer(GLuint diffuse, GLuint splatmap, char channel, int layer_number){
+TextureLayer::TextureLayer(Texture diffuse, Texture splatmap, char channel, int layer_number){
     setDiffuse(diffuse);
     setSplatmap(splatmap);
     setChannel(channel);
     setLayerNumber(layer_number);
 }
 
-void TextureLayer::setDiffuse(GLuint diffuse){
+void TextureLayer::setDiffuse(Texture diffuse){
     this->diffuse = diffuse;
 }
 
-void TextureLayer::setSplatmap(GLuint splatmap){
+void TextureLayer::setSplatmap(Texture splatmap){
     this->splatmap = splatmap;
 }
 
@@ -35,11 +35,11 @@ void TextureLayer::setLayerNumber(GLuint layer_number){
     this->layer_number = layer_number;
 }
 
-GLuint TextureLayer::getDiffuse(){
+Texture TextureLayer::getDiffuse(){
     return diffuse;
 }
 
-GLuint TextureLayer::getSplatmap(){
+Texture TextureLayer::getSplatmap(){
     return splatmap;
 }
 
