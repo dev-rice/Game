@@ -60,6 +60,37 @@ GLuint Texture::getGLId() {
     return gl_texture_id;
 }
 
+void Texture::save(GLuint format, string filename){
+    int channels = 0;
+    switch(format){
+        case GL_RED:
+            channels = 1;
+            break;
+        case GL_RGB:
+            channels = 3;
+            break;
+        case GL_RGBA:
+            channels = 4;
+            break;
+        default:
+            Debug::error("Image format %d is not supported.\n");
+            return;
+            break;
+
+    }
+    int width = getWidth();
+    int height = getHeight();
+
+    GLubyte* image = new GLubyte[channels * width * height];
+
+    glBindTexture(GL_TEXTURE_2D, gl_texture_id);
+    glGetTexImage(GL_TEXTURE_2D, 0, format, GL_UNSIGNED_BYTE, image);
+
+    saveTextureBytesToFile(image, width, height, channels, filename);
+
+    delete[] image;
+    image = NULL;
+}
 
 GLuint Texture::loadTextureFromBytes(GLubyte* data, GLuint width, GLuint height, GLuint filter){
     GLuint texture;
@@ -100,23 +131,6 @@ GLuint Texture::loadTextureFromFile(string filename, GLuint filter){
 }
 
 GLuint Texture::loadTextureFromPixel(glm::vec4 pixel){
-    // Generate id using the color values
-    string id = "";
-    id += std::to_string(pixel.x);
-    id += std::to_string(pixel.y);
-    id += std::to_string(pixel.z);
-    id += std::to_string(pixel.w);
-
-    // Load the texture using the generated id
-    return loadTextureFromPixel(id, pixel);
-}
-
-GLuint Texture::loadTextureFromPixel(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha){
-    glm::vec4 pixel = glm::vec4(red, green, blue, alpha);
-    return loadTextureFromPixel(pixel);
-}
-
-GLuint Texture::loadTextureFromPixel(string id, glm::vec4 pixel){
     GLuint texture;
 
     GLubyte* data = new GLubyte[4];
@@ -130,30 +144,8 @@ GLuint Texture::loadTextureFromPixel(string id, glm::vec4 pixel){
     return texture;
 }
 
-GLuint Texture::loadTextureFromPixel(string id, GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha){
-    glm::vec4 pixel = glm::vec4(red, green, blue, alpha);
-    return loadTextureFromPixel(id, pixel);
-}
-
 GLuint Texture::loadTextureFromPixel(GLuint width, GLuint height, glm::vec4 pixel){
-    // Generate id using the color values
-    string id = "";
-    id += std::to_string(width);
-    id += std::to_string(height);
-    id += std::to_string(pixel.x);
-    id += std::to_string(pixel.y);
-    id += std::to_string(pixel.z);
-    id += std::to_string(pixel.w);
 
-    return loadTextureFromPixel(id, width, height, pixel);
-}
-
-GLuint Texture::loadTextureFromPixel(GLuint width, GLuint height, GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha){
-    glm::vec4 pixel = glm::vec4(red, green, blue, alpha);
-    return loadTextureFromPixel(width, height, pixel);
-}
-
-GLuint Texture::loadTextureFromPixel(string id, GLuint width, GLuint height, glm::vec4 pixel){
     GLuint texture;
 
     GLubyte* data = new GLubyte[4*width*height];
@@ -167,43 +159,6 @@ GLuint Texture::loadTextureFromPixel(string id, GLuint width, GLuint height, glm
     texture = loadTextureFromBytes(data, width, height, GL_NEAREST);
 
     return texture;
-}
-
-GLuint Texture::loadTextureFromPixel(string id, GLuint width, GLuint height, GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha){
-    glm::vec4 pixel = glm::vec4(red, green, blue, alpha);
-    return loadTextureFromPixel(id, width, height, pixel);
-}
-
-void Texture::saveTextureToFile(GLuint texture_id, GLuint format, string filename){
-    int channels = 0;
-    switch(format){
-        case GL_RED:
-            channels = 1;
-            break;
-        case GL_RGB:
-            channels = 3;
-            break;
-        case GL_RGBA:
-            channels = 4;
-            break;
-        default:
-            Debug::error("Image format %d is not supported.\n");
-            return;
-            break;
-
-    }
-    int width = getWidth();
-    int height = getHeight();
-    
-    GLubyte* image = new GLubyte[channels * width * height];
-
-    glBindTexture(GL_TEXTURE_2D, texture_id);
-    glGetTexImage(GL_TEXTURE_2D, 0, format, GL_UNSIGNED_BYTE, image);
-
-    saveTextureBytesToFile(image, width, height, channels, filename);
-
-    delete[] image;
-    image = NULL;
 }
 
 void Texture::saveTextureBytesToFile(GLubyte* data, GLuint width, GLuint height, GLuint channels, string filename){
