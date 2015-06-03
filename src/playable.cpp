@@ -44,7 +44,7 @@ Playable::Playable(Mesh* mesh, Shader shader, glm::vec3 position, GLfloat scale)
     if(! selection_ring){
     	Mesh* selection_ring_mesh = new Mesh("res/models/selection_ring.dae");
     	selection_ring = new Doodad(selection_ring_mesh, shader, position, 2.0f);
-    	selection_ring->setEmissive(TextureLoader::loadTextureFromFile("res/textures/selection_ring.png", GL_LINEAR));
+    	selection_ring->setEmissive(Texture("res/textures/selection_ring.png"));
         selection_ring->rotateGlobalEuler(M_PI/2.0f, 0.0f, 0.0f);
     }
 
@@ -233,9 +233,9 @@ void Playable::tempDeSelect(){
 
 void Playable::setTeam(int t){
     if (t == 1){
-        Drawable::setDiffuse(TextureLoader::loadBlue());
+        Drawable::setDiffuse(Texture(glm::vec4(0.5, 0.5, 1, 1)));
     } else if (t == 2) {
-        Drawable::setDiffuse(TextureLoader::loadGreen());
+        Drawable::setDiffuse(Texture(glm::vec4(0.172f, 0.855f, 0.424f, 1)));
     }
     team_number = t;
 }

@@ -77,7 +77,7 @@ void Terrain::initializer(Shader shader, std::string heightmap_filename, float a
     generatePathingArray();
 
     splatmap_painter = new TexturePainter(0);
-    heightmap_painter = new TexturePainter(heightmap->getTextureId());
+    heightmap_painter = new TexturePainter(heightmap->getTexture());
     heightmap_painter->setChannel('r');
 
     // Debugging the allowed areas
@@ -567,9 +567,10 @@ void Terrain::fillSplatmaps(){
 std::string Terrain::saveData(std::string name){
     std::string output = "";
 
-    GLuint texture_id = heightmap->getTextureId();
+    Texture texture_id = heightmap->getTexture();
     std::string heightmap_name = name + "_heightmap.bmp";
-    TextureLoader::saveTextureToFile(texture_id, GL_RGBA, heightmap_name);
+    #warning here
+    // TextureLoader::saveTextureToFile(texture_id, GL_RGBA, heightmap_name);
     // delete[] image_data;
     // image_data = NULL;
 

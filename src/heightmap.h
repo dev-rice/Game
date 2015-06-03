@@ -12,6 +12,7 @@
 
 #include "debug.h"
 #include "texture_loader.h"
+#include "texture.hpp"
 
 class Heightmap {
 public:
@@ -29,13 +30,13 @@ public:
     int getWidth() {return width;}
     int getHeight() {return height;}
 
-    GLuint getTextureId();
+    Texture getTexture();
 private:
     unsigned char* image;
     int width;
     int height;
     float amplification;
-    GLuint texture_id;
+    Texture texture;
 };
 
 #endif

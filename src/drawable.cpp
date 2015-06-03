@@ -61,7 +61,7 @@ void Drawable::setShader(Shader shader){
 void Drawable::setDiffuse(Texture diffuse) {
     # warning here
     // if (diffuse != 0){
-    //     if (emissive == TextureLoader::loadPink()){
+    //     if (emissive == pink){
     //         // If this diffuse is being set right after instantiation
     //         // then the pink emissive would still override. So if the
     //         // emissive is pink, set it to alpha.
@@ -85,7 +85,7 @@ void Drawable::setEmissive(Texture emissive) {
     # warning here
     // if (emissive != 0){
         this->emissive = emissive;
-    // } else if (diffuse == TextureLoader::loadAlpha()) {
+    // } else if (diffuse == alpha) {
     //     this->emissive = Texture(glm::vec4(1, 0, 1, 1));
     // } else {
     //     this->emissive = Texture(glm::vec4(0, 0, 0, 1));
