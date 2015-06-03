@@ -35,7 +35,7 @@ void Emitter::initialize(Shader shader, glm::vec3 pos) {
 
     billboard = new PlaneMesh();
 
-    particle_texture = TextureLoader::loadTextureFromFile("res/textures/snow_part.png", GL_LINEAR);
+    particle_texture = Texture("res/textures/snow_part.png");
 
     this->maxParticles = 200;
     this->lifespan = 100;

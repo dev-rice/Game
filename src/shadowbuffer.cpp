@@ -6,8 +6,9 @@ Shadowbuffer::Shadowbuffer(float up_sample){
     glGenFramebuffers(1, &framebuffer);
 
     // Create texture for framebuffer
-    glGenTextures(1, &framebuffer_texture);
-    glBindTexture(GL_TEXTURE_2D, framebuffer_texture);
+    GLuint texture_id;
+    glGenTextures(1, &texture_id);
+    glBindTexture(GL_TEXTURE_2D, texture_id);
 
     this->width = up_sample * Window::getInstance()->getWidth();
     this->height = up_sample * Window::getInstance()->getHeight();
@@ -22,7 +23,7 @@ Shadowbuffer::Shadowbuffer(float up_sample){
     //  Bind framebuffer and link texture to it
     glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
-    framebuffer_texture, 0);
+    texture_id, 0);
 
     // Add the depth buffer to the framebuffer
     GLuint rboDepthStencil;
@@ -34,6 +35,7 @@ Shadowbuffer::Shadowbuffer(float up_sample){
         GL_RENDERBUFFER, rboDepthStencil);
 
     // Create the window to draw the framebuffer onto
+    framebuffer_texture = Texture(texture_id);
     framebuffer_window = new FlatDrawable(0.25, 0.25, glm::vec2(0.75, -0.75));
     framebuffer_window->attachTexture(framebuffer_texture);
 }

@@ -7,14 +7,14 @@ LayeredTextures::LayeredTextures(int size){
     texture_layers = std::vector<TextureLayer>(num_layers);
 }
 
-void LayeredTextures::addSplatmap(GLuint splatmap){
+void LayeredTextures::addSplatmap(Texture splatmap){
     if (unique_splatmaps.size() >= num_splatmaps){
         Debug::error("Too many splatmaps for %d textures.\n");
     }
-    unique_splatmaps.push_back(splatmap);
+    unique_splatmaps.push_back(splatmap.getGLId());
 }
 
-void LayeredTextures::addTexture(GLuint diffuse, GLuint splatmap, char channel, int layer_number){
+void LayeredTextures::addTexture(Texture diffuse, GLuint splatmap, char channel, int layer_number){
     TextureLayer layer(diffuse, splatmap, channel, layer_number);
 
     if (layer_number >= num_layers){
@@ -36,7 +36,7 @@ GLuint LayeredTextures::getSplatmap(int index){
 
 GLuint LayeredTextures::getTexture(GLuint splatmap, char channel){
     TextureLayer layer = getLayer(splatmap, channel);
-    return layer.getDiffuse();
+    return layer.getDiffuse().getGLId();
 }
 
 TextureLayer LayeredTextures::getLayer(GLuint splatmap, char channel){
@@ -62,25 +62,25 @@ void LayeredTextures::updateUniforms(Shader shader){
     ////////////////////
     // Diffuse
     glActiveTexture(GL_TEXTURE10);
-    glBindTexture(GL_TEXTURE_2D, texture_layers[0].getDiffuse());
+    glBindTexture(GL_TEXTURE_2D, texture_layers[0].getDiffuse().getGLId());
 
     glActiveTexture(GL_TEXTURE11);
-    glBindTexture(GL_TEXTURE_2D, texture_layers[1].getDiffuse());
+    glBindTexture(GL_TEXTURE_2D, texture_layers[1].getDiffuse().getGLId());
 
     glActiveTexture(GL_TEXTURE12);
-    glBindTexture(GL_TEXTURE_2D, texture_layers[2].getDiffuse());
+    glBindTexture(GL_TEXTURE_2D, texture_layers[2].getDiffuse().getGLId());
 
     glActiveTexture(GL_TEXTURE13);
-    glBindTexture(GL_TEXTURE_2D, texture_layers[3].getDiffuse());
+    glBindTexture(GL_TEXTURE_2D, texture_layers[3].getDiffuse().getGLId());
 
     glActiveTexture(GL_TEXTURE14);
-    glBindTexture(GL_TEXTURE_2D, texture_layers[4].getDiffuse());
+    glBindTexture(GL_TEXTURE_2D, texture_layers[4].getDiffuse().getGLId());
 
     glActiveTexture(GL_TEXTURE15);
-    glBindTexture(GL_TEXTURE_2D, texture_layers[5].getDiffuse());
+    glBindTexture(GL_TEXTURE_2D, texture_layers[5].getDiffuse().getGLId());
 
     glActiveTexture(GL_TEXTURE16);
-    glBindTexture(GL_TEXTURE_2D, texture_layers[6].getDiffuse());
+    glBindTexture(GL_TEXTURE_2D, texture_layers[6].getDiffuse().getGLId());
 
     ////////////////////
     // Splatmaps
@@ -146,16 +146,18 @@ std::string LayeredTextures::saveData(std::string name){
     for (GLuint& splatmap : unique_splatmaps){
         std::string temp_name = name + "_splat_" + std::to_string(splatmap) + ".bmp";
         splatmap_names.push_back(temp_name);
-        TextureLoader::saveTextureToFile(splatmap, GL_RGBA, temp_name);
+        Texture splat(splatmap);
+        splat.save(GL_RGBA, temp_name);
     }
 
     // Write the diffuse texture layers out to files
     std::vector<std::string> diffuse_names;
     for (TextureLayer& layer : texture_layers){
-        GLuint diff_id = layer.getDiffuse();
+        GLuint diff_id = layer.getDiffuse().getGLId();
         std::string temp_name = name + "_diff_" + std::to_string(diff_id) + ".bmp";
         diffuse_names.push_back(temp_name);
-        TextureLoader::saveTextureToFile(diff_id, GL_RGBA, temp_name);
+        Texture diff(diff_id);
+        diff.save(GL_RGBA, temp_name);
     }
 
     // Generate a string based on the map file spec

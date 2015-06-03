@@ -22,7 +22,6 @@ private:
     GLuint loadFragmentShader(string fs_filename);
     GLuint combineShaderProgram(GLuint vertex_shader, GLuint fragment_shader);
     GLuint loadShaderProgram(string vs_filename, string fs_filename);
-    string GLSLParse(string);
 
     GLuint gl_shader_id;
 

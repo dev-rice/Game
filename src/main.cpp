@@ -33,8 +33,9 @@
 #include "input_handler.h"
 #include "font_sheet.h"
 #include "flat_drawable.h"
+#include "texture.hpp"
 
-#include "texture_loader.h"
+
 
 int main(int argc, char* argv[]) {
 
@@ -114,7 +115,7 @@ int main(int argc, char* argv[]) {
     our_window->initializeWindow();
 
     FlatDrawable splash;
-    GLuint splash_texture = TextureLoader::loadTextureFromFile("res/textures/splash_screen.png", GL_LINEAR);
+    Texture splash_texture("res/textures/splash_screen.png");
     splash.attachTexture(splash_texture);
     splash.draw();
 

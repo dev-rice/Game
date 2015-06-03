@@ -154,7 +154,7 @@ void GameMap::updateGlobalUniforms(){
 
     // Attach the shadow texture to location 4
     glActiveTexture(GL_TEXTURE4);
-    glBindTexture(GL_TEXTURE_2D, shadowbuffer.getTexture());
+    glBindTexture(GL_TEXTURE_2D, shadowbuffer.getTexture().getGLId());
 
     // Put the data in the UBO.
     glBindBuffer(GL_UNIFORM_BUFFER, camera_ubo);

@@ -10,7 +10,7 @@
 #include "terrain.h"
 #include "includes/json.hpp"
 #include "shadowbuffer.h"
-#include "texture_loader.h"
+
 #include "render_stack.hpp"
 #include "profile.h"
 #include "particles/emitter_factory.hpp"

@@ -18,19 +18,14 @@ void Drawable::load(Mesh* mesh, Shader shader, glm::vec3 position, GLfloat scale
     this->mesh = mesh;
     this->scale = scale;
 
-    // Setup the textures
-    // Get the default textures for the drawable.
-    GLuint pink = TextureLoader::loadPink();
-    GLuint alpha = TextureLoader::loadAlpha();
-    GLuint blue = TextureLoader::loadBlue();
-
-    // Setup the drawable such that if no textures
-    // are attached later, then it will be bright pink
-    this->diffuse = alpha;
-    this->specular = alpha;
-    this->emissive = pink;
-    this->normal = blue;
-    this->gloss = alpha;
+    # warning here
+    // // Setup the drawable such that if no textures
+    // // are attached later, then it will be bright pink
+    this->diffuse = Texture(glm::vec4(0, 0, 0, 0));
+    this->specular = Texture(glm::vec4(0, 0, 0, 0));
+    this->emissive = Texture(glm::vec4(0, 0, 0, 0));
+    this->normal = Texture(glm::vec4(0.5, 0.5, 1, 1));
+    this->gloss = Texture(glm::vec4(0, 0, 0, 0));
 
     // Set the shader program and load the geometry data
     // from the mesh onto it.
@@ -63,59 +58,64 @@ void Drawable::setShader(Shader shader){
 
 }
 
-void Drawable::setDiffuse(GLuint diffuse) {
-    if (diffuse != 0){
-        if (emissive == TextureLoader::loadPink()){
-            // If this diffuse is being set right after instantiation
-            // then the pink emissive would still override. So if the
-            // emissive is pink, set it to alpha.
-            this->emissive = TextureLoader::loadAlpha();
-        }
+void Drawable::setDiffuse(Texture diffuse) {
+    # warning here
+    // if (diffuse != 0){
+    //     if (emissive == pink){
+    //         // If this diffuse is being set right after instantiation
+    //         // then the pink emissive would still override. So if the
+    //         // emissive is pink, set it to alpha.
+    //         this->emissive = Texture(glm::vec4(0, 0, 0, 1));
+    //     }
         this->diffuse = diffuse;
-    } else {
-        this->diffuse = TextureLoader::loadAlpha();
-    }
+    // } else {
+    //     this->diffuse = Texture(glm::vec4(0, 0, 0, 1));
+    // }
 }
 
-void Drawable::setSpecular(GLuint specular) {
-    if (specular != 0){
+void Drawable::setSpecular(Texture specular) {
+    # warning here
+    // if (specular != 0){
         this->specular = specular;
-    } else {
-        this->specular = TextureLoader::loadAlpha();
-    }
+    // } else {
+    //     this->specular = Texture(glm::vec4(0, 0, 0, 1));
+    // }
 }
-void Drawable::setEmissive(GLuint emissive) {
-    if (emissive != 0){
+void Drawable::setEmissive(Texture emissive) {
+    # warning here
+    // if (emissive != 0){
         this->emissive = emissive;
-    } else if (diffuse == TextureLoader::loadAlpha()) {
-        this->emissive = TextureLoader::loadPink();
-    } else {
-        this->emissive = TextureLoader::loadAlpha();
-    }
+    // } else if (diffuse == alpha) {
+    //     this->emissive = Texture(glm::vec4(1, 0, 1, 1));
+    // } else {
+    //     this->emissive = Texture(glm::vec4(0, 0, 0, 1));
+    // }
 }
-void Drawable::setNormal(GLuint normal) {
-    if (normal != 0){
+void Drawable::setNormal(Texture normal) {
+    # warning here
+    // if (normal != 0){
         this->normal = normal;
-    } else {
-        this->normal = TextureLoader::loadBlue();
-    }
+    // } else {
+    //     this->normal = Texture(glm::vec4(0.5, 0.5, 1, 1));
+    // }
 }
 
 
 void Drawable::bindTextures(){
     // Put each texture into the correct location for this Drawable. GL_TEXTURE0-3
     // correspond to the uniforms set in attachTextureSet(). This is where we actually tell the graphics card which textures to use.
+    #warning make these functions in texture??
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, diffuse);
+    glBindTexture(GL_TEXTURE_2D, diffuse.getGLId());
 
     glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, specular);
+    glBindTexture(GL_TEXTURE_2D, specular.getGLId());
 
     glActiveTexture(GL_TEXTURE2);
-    glBindTexture(GL_TEXTURE_2D, emissive);
+    glBindTexture(GL_TEXTURE_2D, emissive.getGLId());
 
     glActiveTexture(GL_TEXTURE3);
-    glBindTexture(GL_TEXTURE_2D, normal);
+    glBindTexture(GL_TEXTURE_2D, normal.getGLId());
 
 }
 

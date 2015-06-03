@@ -2,7 +2,7 @@
 
 GameViewEdit::GameViewEdit(Level& level) : GameView(level){
     TextureLayer layer = this->level->getGameMap().getGround().getCurrentLayer();
-    GLuint paint_texture = layer.getDiffuse();
+    Texture paint_texture = layer.getDiffuse();
     current_paint = new UIDrawable(paint_texture);
     current_paint->setPixelCoordinates(20, 220, 120, 320);
     ui_drawables.push_back(current_paint);
@@ -13,7 +13,7 @@ GameViewEdit::GameViewEdit(Level& level) : GameView(level){
 
 void GameViewEdit::drawOtherStuff(){
     TextureLayer current_layer = level->getGameMap().getGround().getCurrentLayer();
-    GLuint paint_texture = current_layer.getDiffuse();
+    Texture paint_texture = current_layer.getDiffuse();
     current_paint->attachTexture(paint_texture);
     current_paint->setPixelCoordinates(20, 220, 120, 320);
     fancy_text->print(20, 180, "Paint: LMB");

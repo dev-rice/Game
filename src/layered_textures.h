@@ -13,8 +13,8 @@ class LayeredTextures {
 public:
     LayeredTextures(int);
 
-    void addSplatmap(GLuint splatmap);
-    void addTexture(GLuint diffuse, GLuint splatmap, char channel, int layer_number);
+    void addSplatmap(Texture splatmap);
+    void addTexture(Texture diffuse, GLuint splatmap, char channel, int layer_number);
 
     void updateUniforms(Shader shader);
     void setTextureLocations(Shader shader);

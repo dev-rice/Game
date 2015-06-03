@@ -20,7 +20,7 @@
 
 #include "plane_mesh.h"
 #include "camera.h"
-#include "texture_loader.h"
+
 #include "game_clock.h"
 
 #include "particle.h"
@@ -52,7 +52,7 @@ protected:
     bool hasFired;
 
     Mesh* billboard;
-    GLuint particle_texture;
+    Texture particle_texture;
 
     Shader shader;
 

@@ -1,29 +1,25 @@
 #ifndef UIDrawable_h
 #define UIDrawable_h
 
-#include <GL/glew.h>
-
-#define GLM_FORCE_RADIANS
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
 #include <string>   // std::string
 #include <vector>   // std::vector
 
 #include "pugixml.hpp" // PUGI xml library
 
+#include "includes/gl.hpp"
+#include "includes/glm.hpp"
 #include "function_helper.h"
 #include "flat_drawable.h"
 #include "window.h"
+#include "texture.hpp"
 
 class UIDrawable : public FlatDrawable {
 public:
-    UIDrawable(GLuint texture);
-    UIDrawable(Shader shader, GLuint texture);
+    UIDrawable(Texture texture);
+    UIDrawable(Shader shader, Texture texture);
 
     void draw();
-    void attachTexture(GLuint);
+    void attachTexture(Texture);
 
     glm::vec2 getGLPosition();
 
@@ -43,7 +39,7 @@ public:
     virtual void receiveNotification(UIDrawable*);
 
 protected:
-    void load(GLuint);
+    void load(Texture texture);
 
     void parseConstraints(pugi::xml_node);
     virtual bool constraintsAreValid(bool, bool, bool, bool, bool, bool);

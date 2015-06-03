@@ -7,8 +7,9 @@
 #include <random>
 
 #include "debug.h"
-#include "texture_loader.h"
+
 #include "texture_layer.h"
+#include "texture.hpp"
 
 // Temporary
 struct Brush{
@@ -20,10 +21,10 @@ struct Brush{
 class TexturePainter {
 public:
     TexturePainter();
-    TexturePainter(GLuint texture);
+    TexturePainter(Texture texture);
 
-    GLuint getTexture();
-    void setTexture(GLuint texture);
+    Texture getTexture();
+    void setTexture(Texture texture);
 
     char getChannel();
     void setChannel(char channel);
@@ -34,7 +35,7 @@ private:
 
     int getIndex(int x, int y, int width);
 
-    GLuint texture;
+    Texture texture;
     GLubyte* texture_bytes;
 
     char channel;

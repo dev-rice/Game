@@ -2,7 +2,7 @@
 // Trevor Westphal
 
 #include "particle.h"
-#include "texture_loader.h"
+
 
 
 Particle::Particle(Mesh* mesh, Shader shader) : Drawable(mesh, shader){

@@ -37,7 +37,7 @@ void FlatDrawable::draw(){
     updateUniformData();
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture);
+    glBindTexture(GL_TEXTURE_2D, texture.getGLId());
 
     mesh->draw();
 }
@@ -46,7 +46,7 @@ void FlatDrawable::updateUniformData(){
     glUniform1f(glGetUniformLocation(shader.getGLId(), "opacity"), opacity);
 }
 
-void FlatDrawable::attachTexture(GLuint texture){
+void FlatDrawable::attachTexture(Texture texture){
     glUseProgram(shader.getGLId());
     glUniform1i(glGetUniformLocation(shader.getGLId(), "base_texture"), 0);
 

@@ -6,7 +6,7 @@
 
 #include "mesh.h"
 #include "flat_mesh.h"
-
+#include "texture.hpp"
 
 class FlatDrawable {
 public:
@@ -16,7 +16,7 @@ public:
     FlatDrawable(Shader shader, GLfloat, GLfloat, glm::vec2);
 
     virtual void draw();
-    virtual void attachTexture(GLuint);
+    virtual void attachTexture(Texture);
 
     virtual void setPosition(glm::vec2 p) {position = p;}
     virtual void setGLCoordinates(glm::vec2, glm::vec2){;}
@@ -36,7 +36,7 @@ protected:
     GLfloat height;
     glm::vec2 position;
 
-    GLuint texture;
+    Texture texture;
 
     float opacity;
 

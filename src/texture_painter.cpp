@@ -2,22 +2,22 @@
 
 TexturePainter::TexturePainter() : TexturePainter(0) {}
 
-TexturePainter::TexturePainter(GLuint texture){
-    GLuint brush_texture = TextureLoader::loadTextureFromFile("res/textures/test_brush.png", GL_LINEAR);
-    brush.bitmap = TextureLoader::getBytesFromTexture(brush_texture, GL_RED);
-    brush.width = TextureLoader::getTextureWidth(brush_texture);
-    brush.height = TextureLoader::getTextureHeight(brush_texture);
+TexturePainter::TexturePainter(Texture texture){
+    Texture brush_texture("res/textures/test_brush.png");
+    brush.bitmap = brush_texture.getBytes(GL_RED);
+    brush.width = brush_texture.getWidth();
+    brush.height = brush_texture.getHeight();
 
     setTexture(texture);
 }
 
-GLuint TexturePainter::getTexture(){
+Texture TexturePainter::getTexture(){
     return texture;
 }
 
-void TexturePainter::setTexture(GLuint texture){
+void TexturePainter::setTexture(Texture texture){
     this->texture = texture;
-    texture_bytes = TextureLoader::getBytesFromTexture(texture, GL_RGBA);
+    texture_bytes = texture.getBytes(GL_RGBA);
 }
 
 char TexturePainter::getChannel(){
@@ -29,8 +29,8 @@ void TexturePainter::setChannel(char channel){
 }
 
 void TexturePainter::paint(int x, int y, Brush::Mode mode){
-    int width = TextureLoader::getTextureWidth(texture);
-    int height = TextureLoader::getTextureHeight(texture);
+    int width = texture.getWidth();
+    int height = texture.getHeight();
 
     int channel_int = TextureLayer::getIntFromChannelChar(channel);
 
@@ -69,7 +69,7 @@ void TexturePainter::paint(int x, int y, Brush::Mode mode){
         }
     }
 
-    glBindTexture(GL_TEXTURE_2D, texture);
+    glBindTexture(GL_TEXTURE_2D, texture.getGLId());
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
         GL_UNSIGNED_BYTE, (GLvoid*)texture_bytes);
 }

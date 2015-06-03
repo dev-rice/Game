@@ -5,7 +5,7 @@
 #define UIRadioButton_h
 
 #include "ui_drawable.h"
-#include "texture_loader.h"
+
 #include "ui_image.h"
 #include "window.h"
 #include "mouse.h"

@@ -1,14 +1,14 @@
 #include "ui_drawable.h"
 
-UIDrawable::UIDrawable(GLuint texture) : FlatDrawable(){
+UIDrawable::UIDrawable(Texture texture) : FlatDrawable(){
     load(texture);
 }
 
-UIDrawable::UIDrawable(Shader shader, GLuint texture) : FlatDrawable(shader.getGLId()){
+UIDrawable::UIDrawable(Shader shader, Texture texture) : FlatDrawable(shader.getGLId()){
     load(texture);
 }
 
-void UIDrawable::load(GLuint texture){
+void UIDrawable::load(Texture texture){
     window_width = Window::getInstance()->getWidth();
     window_height = Window::getInstance()->getHeight();
 
@@ -24,8 +24,8 @@ void UIDrawable::load(GLuint texture){
 
 }
 
-void UIDrawable::attachTexture(GLuint texture){
-    glBindTexture(GL_TEXTURE_2D, texture);
+void UIDrawable::attachTexture(Texture texture){
+    glBindTexture(GL_TEXTURE_2D, texture.getGLId());
     int miplevel = 0;
     int w, h;
     glGetTexLevelParameteriv(GL_TEXTURE_2D, miplevel, GL_TEXTURE_WIDTH, &w);

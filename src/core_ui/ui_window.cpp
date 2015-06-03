@@ -13,11 +13,11 @@ UIImage* UIWindow::up_right_corner_image;
 UIImage* UIWindow::down_left_corner_image;
 UIImage* UIWindow::down_right_corner_image;
 
-UIWindow::UIWindow() : UIDrawable(TextureLoader::loadBlack()){
+UIWindow::UIWindow() : UIDrawable(Texture(glm::vec4(0, 0, 0, 1))){
     is_showing = false;
 }
 
-UIWindow::UIWindow(Shader shader) : UIDrawable(shader, TextureLoader::loadBlack()){
+UIWindow::UIWindow(Shader shader) : UIDrawable(shader, Texture(glm::vec4(0, 0, 0, 1))){
 
     is_showing = false;
 }
@@ -45,36 +45,36 @@ void UIWindow::loadFromXML(std::string filepath){
 
     // Creating the edges
     if(up_edge_image == NULL){
-        up_edge_image = new UIImage(shader, TextureLoader::loadTextureFromFile(edge_sprites_node.child_value("up"), GL_NEAREST));
+        up_edge_image = new UIImage(shader, Texture(edge_sprites_node.child_value("up")));
     }
 
     if(down_edge_image == NULL){
-        down_edge_image = new UIImage(shader, TextureLoader::loadTextureFromFile(edge_sprites_node.child_value("down"), GL_NEAREST));
+        down_edge_image = new UIImage(shader, Texture(edge_sprites_node.child_value("down")));
     }
 
     if(right_edge_image == NULL){
-        right_edge_image = new UIImage(shader, TextureLoader::loadTextureFromFile(edge_sprites_node.child_value("right"), GL_NEAREST));
+        right_edge_image = new UIImage(shader, Texture(edge_sprites_node.child_value("right")));
     }
 
     if(left_edge_image == NULL){
-        left_edge_image = new UIImage(shader, TextureLoader::loadTextureFromFile(edge_sprites_node.child_value("left"), GL_NEAREST));
+        left_edge_image = new UIImage(shader, Texture(edge_sprites_node.child_value("left")));
     }
 
     // Creating and Positioning the corners
     if(up_left_corner_image == NULL){
-        up_left_corner_image = new UIImage(shader, TextureLoader::loadTextureFromFile(corner_sprites_node.child_value("up_left"), GL_NEAREST));
+        up_left_corner_image = new UIImage(shader, Texture(corner_sprites_node.child_value("up_left")));
     }
 
     if(up_right_corner_image == NULL){
-        up_right_corner_image = new UIImage(shader, TextureLoader::loadTextureFromFile(corner_sprites_node.child_value("up_right"), GL_NEAREST));
+        up_right_corner_image = new UIImage(shader, Texture(corner_sprites_node.child_value("up_right")));
     }
 
     if(down_right_corner_image == NULL){
-        down_right_corner_image = new UIImage(shader, TextureLoader::loadTextureFromFile(corner_sprites_node.child_value("down_right"), GL_NEAREST));
+        down_right_corner_image = new UIImage(shader, Texture(corner_sprites_node.child_value("down_right")));
     }
 
     if(down_left_corner_image == NULL){
-        down_left_corner_image = new UIImage(shader, TextureLoader::loadTextureFromFile(corner_sprites_node.child_value("down_left"), GL_NEAREST));
+        down_left_corner_image = new UIImage(shader, Texture(corner_sprites_node.child_value("down_left")));
     }
 
     // setup the offsets

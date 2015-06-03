@@ -24,7 +24,7 @@ void FireEmitter::initialize(float r) {
     this->radius = r;
 
     // Hardcoded fire particle texture
-    particle_texture = TextureLoader::loadTextureFromFile("res/textures/fire_part.png", GL_LINEAR);
+    particle_texture = Texture("res/textures/fire_part.png");
 
     // Hardcoded density, maximum, and lifespan
     this->maxParticles = 200;
