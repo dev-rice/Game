@@ -12,11 +12,6 @@ layout(std140) uniform GlobalMatrices {
     mat4 proj;
 };
 
-layout(std140) uniform ShadowMatrices {
-    mat4 depth_view;
-    mat4 depth_proj;
-};
-
 uniform mat4 model;
 uniform float scale;
 

@@ -4,6 +4,11 @@
 out vec4 outColor;
 
 void main(){
-    // Not really needed, OpenGL does it anyway
-    outColor = vec4(vec3(1, 1, 1) * gl_FragCoord.z, 1);
+    float depth_projective = gl_FragCoord.z;
+
+    float z_near = 0.1;
+    float z_far = 500.0;
+    float depth_linear = ((z_near * z_far) / (z_near - z_far)) / ((depth_projective - z_far) / (z_far - z_near));
+
+    outColor = vec4(depth_linear * vec3(1, 1, 1), 1);
 }
