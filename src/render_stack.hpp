@@ -8,7 +8,7 @@
 
 class RenderStack {
 public:
-    static RenderStack* getInstance();
+    RenderStack();
 
     void pushFramebuffer(Framebuffer& buf);
     void popFramebufferRendering();
@@ -16,13 +16,10 @@ public:
     void drawAllToScreen();
 
 private:
-    RenderStack();
 
     Framebuffer* getTop();
 
     std::stack<Framebuffer*> framebuffer_stack;
-
-    static RenderStack* instance;
 
     Screenbuffer screen;
 

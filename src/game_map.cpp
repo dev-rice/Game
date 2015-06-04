@@ -1,6 +1,6 @@
 #include "game_map.hpp"
 
-GameMap::GameMap(string map_filename, UnitHolder& units) : camera(), ground(), unit_holder(&units), shadowbuffer(1.0), shadow_shader("shaders/shadow.vs", "shaders/shadow.fs") {
+GameMap::GameMap(string map_filename, UnitHolder& units, RenderStack& render_stack) : camera(), ground(), unit_holder(&units), shadowbuffer(1.0), shadow_shader("shaders/shadow.vs", "shaders/shadow.fs"), render_stack(&render_stack) {
 
     ifstream map_input(map_filename);
     load(map_input);
@@ -43,7 +43,7 @@ void GameMap::render(){
 void GameMap::renderToShadowMap(){
     updateGlobalUniforms();
 
-    RenderStack::getInstance()->pushFramebuffer(shadowbuffer);
+    render_stack->pushFramebuffer(shadowbuffer);
 
     for (Doodad& doodad : doodads){
         // Save the shader this drawable is currently using
@@ -62,7 +62,7 @@ void GameMap::renderToShadowMap(){
     ground.setShader(current_shader);
 
 
-    RenderStack::getInstance()->popFramebufferRendering();
+    render_stack->popFramebufferRendering();
 
 }
 

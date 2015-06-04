@@ -8,7 +8,7 @@ using namespace std;
 
 class Level {
 public:
-    Level(string filename);
+    Level(string filename, RenderStack& render_stack);
 
     GameMap& getGameMap();
     UnitManager& getUnitManager();

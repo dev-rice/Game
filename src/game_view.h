@@ -26,7 +26,7 @@
 class GameView {
 public:
 
-    GameView(Level& level);
+    GameView(Level& level, RenderStack& render_stack);
 
     virtual void update();
 
@@ -46,6 +46,7 @@ protected:
 
     Framebuffer gamebuffer;
     Framebuffer ui_buffer;
+    RenderStack* render_stack;
 
     UIDrawable* selection_box;
     std::vector<UIDrawable*> ui_drawables;

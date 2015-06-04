@@ -1,16 +1,7 @@
 #include "render_stack.hpp"
 
-RenderStack* RenderStack::instance;
-
 RenderStack::RenderStack() : screen() {
 
-}
-
-RenderStack* RenderStack::getInstance() {
-    if (!instance){
-        instance = new RenderStack();
-    }
-    return instance;
 }
 
 void RenderStack::pushFramebuffer(Framebuffer& buf) {

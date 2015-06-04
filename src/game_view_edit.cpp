@@ -1,6 +1,6 @@
 #include "game_view_edit.h"
 
-GameViewEdit::GameViewEdit(Level& level) : GameView(level){
+GameViewEdit::GameViewEdit(Level& level, RenderStack& render_stack) : GameView(level, render_stack) {
     TextureLayer layer = this->level->getGameMap().getGround().getCurrentLayer();
     Texture paint_texture = layer.getDiffuse();
     current_paint = new UIDrawable(paint_texture);

@@ -1,6 +1,6 @@
 #include "game_view.h"
 
-GameView::GameView(Level& level) : level(&level), gamebuffer(), ui_buffer() {
+GameView::GameView(Level& level, RenderStack& render_stack) : level(&level), gamebuffer(), ui_buffer(), render_stack(&render_stack) {
     // // Gaussian Blur shaders
     // Shader blur_horiz("shaders/flat_drawable_noflip.vs",
     //     "shaders/framebuffer_horiz_blur.fs");
@@ -16,7 +16,7 @@ GameView::GameView(Level& level) : level(&level), gamebuffer(), ui_buffer() {
     // Unnecessary, but good to do
     Mouse::getInstance();
 
-    text_renderer = new TextRenderer("Inconsolata-Regular.ttf", 20);
+    text_renderer = new TextRenderer("Inconsolata-Bold.ttf", 20);
 
     // Creation of selection box
     selection_box = new UIDrawable(mousebox_shader, 0);
@@ -76,7 +76,7 @@ void GameView::update(){
     drawCore();
     drawOtherStuff();
 
-    RenderStack::getInstance()->drawAllToScreen();
+    render_stack->drawAllToScreen();
 
     handleMouseDragging();
 
@@ -85,7 +85,7 @@ void GameView::update(){
 void GameView::drawCore(){
 
     // Push the ui framebuffer to the rendering stack
-    RenderStack::getInstance()->pushFramebuffer(ui_buffer);
+    render_stack->pushFramebuffer(ui_buffer);
 
     // Draw all of the ui elements on top of the level
     for(int i = 0; i < ui_drawables.size(); ++i){
@@ -123,7 +123,7 @@ void GameView::drawCore(){
     Mouse::getInstance()->draw();
 
     // Render the game map to the gamebuffer
-    RenderStack::getInstance()->pushFramebuffer(gamebuffer);
+    render_stack->pushFramebuffer(gamebuffer);
     level->getGameMap().render();
 
     // Draw the gamebuffer N - 1 times (the last pass is drawn to the screen).
