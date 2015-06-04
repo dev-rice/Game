@@ -20,6 +20,9 @@ public:
     Texture& getTexture() {return framebuffer_texture;}
 protected:
 
+    void setupFramebufferTexture(GLuint format, float up_sample); 
+    void setupDepthStencilBuffer();
+
     GLuint framebuffer;
     Texture framebuffer_texture;
 
