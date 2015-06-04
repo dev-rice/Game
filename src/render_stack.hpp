@@ -11,7 +11,7 @@ public:
     static RenderStack* getInstance();
 
     void pushFramebuffer(Framebuffer& buf);
-    void popFramebuffer();
+    void popFramebufferRendering();
 
     void drawAllToScreen();
 

@@ -62,7 +62,7 @@ void GameMap::renderToShadowMap(){
     ground.setShader(current_shader);
 
 
-    RenderStack::getInstance()->popFramebuffer();
+    RenderStack::getInstance()->popFramebufferRendering();
 
 }
 
