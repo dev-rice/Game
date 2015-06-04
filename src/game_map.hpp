@@ -24,10 +24,14 @@ public:
 
     void render();
     void renderToShadowMap();
+    void renderToDepthMap();
 
     void addDrawable(Drawable& drawable);
 
     glm::vec3 calculateWorldPosition(glm::vec2 screen_pos);
+
+    Shadowbuffer& getShadowbuffer();
+    Shadowbuffer& getDepthbuffer();
 
     Camera& getCamera();
     Terrain& getGround();
@@ -58,11 +62,13 @@ private:
     // vector<Drawable> no_shadow_drawables;
 
     Shadowbuffer shadowbuffer;
+    Shadowbuffer depthbuffer;
 
     GLuint camera_ubo;
     GLuint shadow_ubo;
 
     Shader shadow_shader;
+    Shader depth_shader;
 
 };
 
