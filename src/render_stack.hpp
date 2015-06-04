@@ -10,14 +10,13 @@ class RenderStack {
 public:
     static RenderStack* getInstance();
 
-    void pushFramebuffer(Framebuffer* buf);
+    void pushFramebuffer(Framebuffer& buf);
     void popFramebuffer();
 
     void drawAllToScreen();
 
 private:
     RenderStack();
-    void initialize();
 
     Framebuffer* getTop();
 

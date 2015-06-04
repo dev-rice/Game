@@ -6,7 +6,7 @@ Framebuffer::Framebuffer(){
     // Create frame buffer
     glGenFramebuffers(1, &framebuffer);
 
-    setupFramebufferTexture(GL_RGB, 1);
+    setupFramebufferTexture(GL_RGBA, 1);
 
     //  Bind framebuffer and link texture to it
     glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);

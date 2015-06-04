@@ -1,6 +1,6 @@
 #include "game_view.h"
 
-GameView::GameView(Level& level) : level(&level), gamebuffer() {
+GameView::GameView(Level& level) : level(&level), gamebuffer(), ui_buffer() {
     // // Gaussian Blur shaders
     // Shader blur_horiz("shaders/flat_drawable_noflip.vs",
     //     "shaders/framebuffer_horiz_blur.fs");
@@ -84,19 +84,8 @@ void GameView::update(){
 
 void GameView::drawCore(){
 
-    // Render the game map to the gamebuffer
-    RenderStack::getInstance()->pushFramebuffer(&gamebuffer);
-    level->getGameMap().render();
-
-    // Draw the gamebuffer N - 1 times (the last pass is drawn to the screen).
-    // This is how many times the fxaa shader samples the image.
-    // A good number is 4, 8 looks blurry, 1 doesn't do much.
-    int fxaa_level = Profile::getInstance()->getFxaaLevel();
-    if (fxaa_level){
-        for (int i = 0; i < fxaa_level - 1; ++i){
-            gamebuffer.draw();
-        }
-    }
+    // Push the ui framebuffer to the rendering stack
+    RenderStack::getInstance()->pushFramebuffer(ui_buffer);
 
     // Draw all of the ui elements on top of the level
     for(int i = 0; i < ui_drawables.size(); ++i){
@@ -132,6 +121,21 @@ void GameView::drawCore(){
 
     // The mouse draws on top of everything else
     Mouse::getInstance()->draw();
+
+    // Render the game map to the gamebuffer
+    RenderStack::getInstance()->pushFramebuffer(gamebuffer);
+    level->getGameMap().render();
+
+    // Draw the gamebuffer N - 1 times (the last pass is drawn to the screen).
+    // This is how many times the fxaa shader samples the image.
+    // A good number is 4, 8 looks blurry, 1 doesn't do much.
+    int fxaa_level = Profile::getInstance()->getFxaaLevel();
+    if (fxaa_level){
+        for (int i = 0; i < fxaa_level - 1; ++i){
+            gamebuffer.draw();
+        }
+    }
+
 }
 
 void GameView::drawOtherStuff(){
