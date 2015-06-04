@@ -84,7 +84,7 @@ void GameView::update(){
 
 void GameView::drawCore(){
 
-    render_stack->pushFramebuffer(level->getGameMap().getShadowbuffer());
+    render_stack->pushFramebuffer(level->getGameMap().getDepthbuffer());
 
     // Push the ui framebuffer to the rendering stack
     render_stack->pushFramebuffer(ui_buffer);
