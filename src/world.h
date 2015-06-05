@@ -23,7 +23,7 @@ public:
 private:
     Level level;
     GameView* game_view;
-    RenderStack render_stack;
+    RenderDeque render_stack;
 
     bool edit_mode;
 };

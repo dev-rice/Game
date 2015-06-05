@@ -1,6 +1,6 @@
 #include "level.hpp"
 
-Level::Level(string filename, RenderStack& render_stack) : unit_holder(), game_map(filename, unit_holder, render_stack), unit_manager(game_map, unit_holder) {
+Level::Level(string filename, RenderDeque& render_stack) : unit_holder(), game_map(filename, unit_holder, render_stack), unit_manager(game_map, unit_holder) {
 
     // Creation of test playable
     Mesh* playable_mesh = new Mesh("res/models/human.dae");

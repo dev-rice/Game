@@ -5,7 +5,7 @@
 
 class GameViewEdit : public GameView {
 public:
-    GameViewEdit(Level& level, RenderStack& render_stack);
+    GameViewEdit(Level& level, RenderDeque& render_stack);
 
     void handleInputState();
     void handleInput(SDL_Event);

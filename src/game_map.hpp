@@ -11,7 +11,7 @@
 #include "includes/json.hpp"
 #include "shadowbuffer.h"
 
-#include "render_stack.hpp"
+#include "render_deque.hpp"
 #include "profile.h"
 #include "particles/emitter_factory.hpp"
 #include "unit_holder.hpp"
@@ -20,7 +20,7 @@ using namespace std;
 
 class GameMap {
 public:
-    GameMap(string map_filename, UnitHolder& unit_holder, RenderStack& render_stack);
+    GameMap(string map_filename, UnitHolder& unit_holder, RenderDeque& render_stack);
 
     void render();
     void renderToShadowMap();
@@ -53,7 +53,7 @@ private:
     vector<Emitter*> emitters;
     Terrain ground;
     UnitHolder* unit_holder;
-    RenderStack* render_stack;
+    RenderDeque* render_stack;
 
     // Everything that will be drawn
     // vector<Drawable> drawables;

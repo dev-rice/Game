@@ -10,5 +10,5 @@ void main(){
     float z_far = 500.0;
     float depth_linear = ((z_near * z_far) / (z_near - z_far)) / ((depth_projective - z_far) / (z_far - z_near));
 
-    outColor = vec4(depth_linear * vec3(1, 1, 1), 1);
+    outColor = vec4(depth_projective * vec3(1, 1, 1), 1);
 }

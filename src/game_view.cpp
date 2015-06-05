@@ -1,6 +1,6 @@
 #include "game_view.h"
 
-GameView::GameView(Level& level, RenderStack& render_stack) : level(&level), gamebuffer(), ui_buffer(), render_stack(&render_stack) {
+GameView::GameView(Level& level, RenderDeque& render_stack) : level(&level), gamebuffer(), ui_buffer(), render_stack(&render_stack) {
     // // Gaussian Blur shaders
     // Shader blur_horiz("shaders/flat_drawable_noflip.vs",
     //     "shaders/framebuffer_horiz_blur.fs");
@@ -84,10 +84,24 @@ void GameView::update(){
 
 void GameView::drawCore(){
 
-    render_stack->pushFramebuffer(level->getGameMap().getDepthbuffer());
+    // Render the game map to the gamebuffer
+    render_stack->enqueueFramebuffer(gamebuffer);
+    level->getGameMap().render();
+
+    // Draw the gamebuffer N - 1 times (the last pass is drawn to the screen).
+    // This is how many times the fxaa shader samples the image.
+    // A good number is 4, 8 looks blurry, 1 doesn't do much.
+    int fxaa_level = Profile::getInstance()->getFxaaLevel();
+    if (fxaa_level){
+        for (int i = 0; i < fxaa_level - 1; ++i){
+            gamebuffer.draw();
+        }
+    }
+
+    render_stack->enqueueFramebuffer(level->getGameMap().getDepthbuffer());
 
     // Push the ui framebuffer to the rendering stack
-    render_stack->pushFramebuffer(ui_buffer);
+    render_stack->enqueueFramebuffer(ui_buffer);
 
     // Draw all of the ui elements on top of the level
     for(int i = 0; i < ui_drawables.size(); ++i){
@@ -123,20 +137,6 @@ void GameView::drawCore(){
 
     // The mouse draws on top of everything else
     Mouse::getInstance()->draw();
-
-    // Render the game map to the gamebuffer
-    render_stack->pushFramebuffer(gamebuffer);
-    level->getGameMap().render();
-
-    // Draw the gamebuffer N - 1 times (the last pass is drawn to the screen).
-    // This is how many times the fxaa shader samples the image.
-    // A good number is 4, 8 looks blurry, 1 doesn't do much.
-    int fxaa_level = Profile::getInstance()->getFxaaLevel();
-    if (fxaa_level){
-        for (int i = 0; i < fxaa_level - 1; ++i){
-            gamebuffer.draw();
-        }
-    }
 
 }
 

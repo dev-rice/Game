@@ -1,6 +1,6 @@
 #include "game_map.hpp"
 
-GameMap::GameMap(string map_filename, UnitHolder& units, RenderStack& render_stack) : camera(), ground(), unit_holder(&units), shadowbuffer(1.0), depthbuffer(1.0), shadow_shader("shaders/shadow.vs", "shaders/shadow.fs"), depth_shader("shaders/depth.vs", "shaders/depth.fs"), render_stack(&render_stack) {
+GameMap::GameMap(string map_filename, UnitHolder& units, RenderDeque& render_stack) : camera(), ground(), unit_holder(&units), shadowbuffer(1.0), depthbuffer(1.0), shadow_shader("shaders/shadow.vs", "shaders/shadow.fs"), depth_shader("shaders/depth.vs", "shaders/depth.fs"), render_stack(&render_stack) {
 
     ifstream map_input(map_filename);
     load(map_input);
@@ -75,7 +75,7 @@ void GameMap::renderToShadowMap(){
     ground.draw();
     ground.setShader(current_shader);
 
-    render_stack->popFramebufferRendering();
+    render_stack->popFramebuffer();
 
 }
 
@@ -113,7 +113,7 @@ void GameMap::renderToDepthMap(){
     ground.draw();
     ground.setShader(current_shader);
 
-    render_stack->popFramebufferRendering();
+    render_stack->popFramebuffer();
 
 }
 
