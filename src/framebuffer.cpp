@@ -8,11 +8,6 @@ Framebuffer::Framebuffer(){
 
     setupFramebufferTexture(GL_RGBA, 1);
 
-    //  Bind framebuffer and link texture to it
-    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
-        framebuffer_texture.getGLId(), 0);
-
     setupDepthStencilBuffer();
 
     Shader framebuffer_shader;
@@ -76,6 +71,11 @@ void Framebuffer::setupFramebufferTexture(GLuint format, float up_sample) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
     framebuffer_texture = Texture(texture_id);
+
+    //  Bind framebuffer and link texture to it
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
+        framebuffer_texture.getGLId(), 0);
 }
 
 void Framebuffer::setupDepthStencilBuffer() {
