@@ -97,9 +97,6 @@ void GameView::drawCore(){
         }
     }
 
-    // Draw the game map depthbuffer
-    render_stack->enqueueFramebuffer(level->getGameMap().getDepthbuffer(), false);
-
     // Push the ui framebuffer to the rendering stack
     render_stack->enqueueFramebuffer(ui_buffer, true);
 
