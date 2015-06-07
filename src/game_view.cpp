@@ -85,7 +85,7 @@ void GameView::update(){
 void GameView::drawCore(){
 
     // Render the game map to the gamebuffer
-    render_stack->enqueueFramebuffer(gamebuffer);
+    render_stack->enqueueFramebuffer(gamebuffer, true);
     level->getGameMap().render();
 
     // Draw the gamebuffer N - 1 times (the last pass is drawn to the screen).
@@ -99,10 +99,10 @@ void GameView::drawCore(){
     }
 
     // Draw the game map depthbuffer
-    render_stack->enqueueFramebuffer(level->getGameMap().getDepthbuffer());
+    render_stack->enqueueFramebuffer(level->getGameMap().getDepthbuffer(), false);
 
     // Push the ui framebuffer to the rendering stack
-    render_stack->enqueueFramebuffer(ui_buffer);
+    render_stack->enqueueFramebuffer(ui_buffer, true);
 
     // Draw all of the ui elements on top of the level
     for(int i = 0; i < ui_drawables.size(); ++i){

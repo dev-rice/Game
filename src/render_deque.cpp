@@ -4,7 +4,10 @@ RenderDeque::RenderDeque() : screen() {
 
 }
 
-void RenderDeque::enqueueFramebuffer(Framebuffer& buf) {
+void RenderDeque::enqueueFramebuffer(Framebuffer& buf, bool set_render_target) {
+    if (set_render_target) {
+        buf.setAsRenderTarget();
+    }
     framebuffer_deuque.push_front(&buf);
 }
 
