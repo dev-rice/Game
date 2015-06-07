@@ -91,7 +91,7 @@ void GameView::drawCore(){
     // This is how many times the fxaa shader samples the image.
     // A good number is 4, 8 looks blurry, 1 doesn't do much.
     int fxaa_level = Profile::getInstance()->getFxaaLevel();
-    if (fxaa_level){
+    if (Profile::getInstance()->isFramebuffersOn()){
         for (int i = 0; i < fxaa_level - 1; ++i){
             gamebuffer.draw();
         }
