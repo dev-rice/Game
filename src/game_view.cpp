@@ -1,13 +1,12 @@
 #include "game_view.h"
 
 GameView::GameView(Level& level, RenderDeque& render_stack) : level(&level), gamebuffer(), ui_buffer(), render_stack(&render_stack) {
+
     // // Gaussian Blur shaders
-    // Shader blur_horiz("shaders/flat_drawable_noflip.vs",
-    //     "shaders/framebuffer_horiz_blur.fs");
+    // Shader blur_horiz("shaders/flat_drawable_noflip.vs", "shaders/framebuffer_horiz_blur.fs");
     // gamebuffer.addShaderPass(blur_horiz);
     //
-    // GLuint blur_vert("shaders/flat_drawable_noflip.vs",
-    //     "shaders/framebuffer_vert_blur.fs");
+    // Shader blur_vert("shaders/flat_drawable_noflip.vs", "shaders/framebuffer_vert_blur.fs");
     // gamebuffer.addShaderPass(blur_vert);
 
     Shader mousebox_shader("shaders/mousebox.vs",
