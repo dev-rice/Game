@@ -4,6 +4,11 @@
 #define ResourceLoader_h
 
 #include <string>
+#include <vector>
+
+#include "mesh.h"
+#include "texture.hpp"
+#include "shader.hpp"
 
 using namespace std;
 
@@ -11,15 +16,22 @@ class ResourceLoader {
 public:
     ResourceLoader();
 
-    void setMeshPath(string mesh_path);
-    void setTexturePath(string texture_path);
-    void setShaderPath(string shader_path);
+    Mesh& loadMesh(string filename);
+    Texture& loadTexture(string filename);
+    Shader& loadShader(string vs_filename, string fs_filename);
 
+    void addMeshPath(string mesh_path);
+    void addTexturePath(string texture_path);
+    void addShaderPath(string shader_path);
 
 private:
-    string mesh_path;
-    string texture_path;
-    string shader_path;
+    vector<Mesh> meshes;
+    vector<Texture> textures;
+    vector<Shader> shaders;
+
+    vector<string> mesh_paths;
+    vector<string> texture_paths;
+    vector<string> shader_paths;
 
 };
 
