@@ -15,12 +15,12 @@ Texture::Texture(GLubyte* data, GLuint width, GLuint height) {
 }
 
 Texture::Texture(glm::vec4 color) {
-    gl_texture_id = loadTextureFromPixel(color);
+    gl_texture_id = loadTextureFromPixel(color, GL_NEAREST);
 }
 
 Texture::Texture(glm::vec4 color, GLuint width, GLuint height) {
 
-    gl_texture_id = loadTextureFromPixel(width, height, color);
+    gl_texture_id = loadTextureFromPixel(width, height, color, GL_LINEAR);
 
 }
 
@@ -130,7 +130,7 @@ GLuint Texture::loadTextureFromFile(string filename, GLuint filter){
 
 }
 
-GLuint Texture::loadTextureFromPixel(glm::vec4 pixel){
+GLuint Texture::loadTextureFromPixel(glm::vec4 pixel, GLuint format){
     GLuint texture;
 
     GLubyte* data = new GLubyte[4];
@@ -139,12 +139,12 @@ GLuint Texture::loadTextureFromPixel(glm::vec4 pixel){
     data[2] = pixel.z * 255;
     data[3] = pixel.w * 255;
 
-    texture = loadTextureFromBytes(data, 1, 1, GL_NEAREST);
+    texture = loadTextureFromBytes(data, 1, 1, format);
 
     return texture;
 }
 
-GLuint Texture::loadTextureFromPixel(GLuint width, GLuint height, glm::vec4 pixel){
+GLuint Texture::loadTextureFromPixel(GLuint width, GLuint height, glm::vec4 pixel, GLuint format){
 
     GLuint texture;
 
@@ -156,7 +156,7 @@ GLuint Texture::loadTextureFromPixel(GLuint width, GLuint height, glm::vec4 pixe
         data[i + 3] = pixel.w * 255;
     }
 
-    texture = loadTextureFromBytes(data, width, height, GL_NEAREST);
+    texture = loadTextureFromBytes(data, width, height, format);
 
     return texture;
 }

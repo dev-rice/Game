@@ -18,10 +18,10 @@ Terrain::Terrain(const Json::Value& terrain_json, std::string texture_path){
     // Basic terrain loading
     std::string heightmap_filename = texture_path + terrain_json["heightmap"].asString();
     float amplification = terrain_json["amplification"].asFloat();
-
+    int tile_size = terrain_json["tile_size"].asInt();
     Shader shader("shaders/terrain.vs", "shaders/terrain.fs");
 
-    initializer(shader, heightmap_filename, amplification);
+    initializer(shader, heightmap_filename, amplification, tile_size);
 
     // Do the textures
     for(const Json::Value& splatmap_json : terrain_json["splatmaps"]){
@@ -44,17 +44,18 @@ Terrain::Terrain(const Json::Value& terrain_json, std::string texture_path){
 }
 
 Terrain::Terrain(std::string heightmap_filename, float amplification){
-    initializer(Shader("shaders/terrain.vs", "shaders/terrain.fs"), heightmap_filename, amplification);
+    initializer(Shader("shaders/terrain.vs", "shaders/terrain.fs"), heightmap_filename, amplification, 16);
 }
 
 Terrain::Terrain(Shader shader, std::string heightmap_filename, float amplification) : Drawable() {
 
-    initializer(shader, heightmap_filename, amplification);
+    initializer(shader, heightmap_filename, amplification, 16);
 }
 
-void Terrain::initializer(Shader shader, std::string heightmap_filename, float amplification){
+void Terrain::initializer(Shader shader, std::string heightmap_filename, float amplification, int tile_size){
 
     this->amplification = amplification;
+    this->tile_size = tile_size;
 
     layered_textures = new LayeredTextures(7);
 
@@ -379,7 +380,7 @@ Mesh* Terrain::generateMesh(Heightmap& heightmap){
 
     // The number of terrain tiles before the
     // texture repeats.
-    int texture_size = 16;
+    int texture_size = tile_size;
 
     // This should probably definitely be rewritten because
     // it will be hard to do the normal fix afterwards. Also
@@ -509,7 +510,7 @@ void Terrain::addSplatmap(Texture splat){
     // same as the heightmap's.
     GLuint splat_width = splat.getWidth();
     GLuint splat_height = splat.getHeight();
-    if (splat_width == this->width && splat_height == depth){
+    if (splat_width == width && splat_height == depth){
         layered_textures->addSplatmap(splat);
     } else {
         Debug::error("Splatmap dimensions do not agree with heightmap dimensions.\n");

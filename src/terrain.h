@@ -60,7 +60,7 @@ public:
     TexturePainter* getTexturePainter();
 
 private:
-    void initializer(Shader, std::string, float);
+    void initializer(Shader, std::string, float, int tile_size);
     void updateUniformData();
 
     GLubyte* renderHeightmapAsImage();
@@ -84,6 +84,7 @@ private:
     int start_z;
     float max_height;
     float amplification;
+    int tile_size;
 
     LayeredTextures* layered_textures;
 

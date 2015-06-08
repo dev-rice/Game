@@ -99,6 +99,7 @@
     "terrain": {
         "heightmap": "mountains.png",
         "amplification": 10.0,
+        "tile_size": 8,
         "splatmaps": [
             {
                 "id": 0,

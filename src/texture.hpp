@@ -31,8 +31,8 @@ private:
 
     GLuint loadTextureFromFile(std::string, GLuint);
 
-    GLuint loadTextureFromPixel(glm::vec4 pixel);
-    GLuint loadTextureFromPixel(GLuint width, GLuint height, glm::vec4 pixel);
+    GLuint loadTextureFromPixel(glm::vec4 pixel, GLuint format);
+    GLuint loadTextureFromPixel(GLuint width, GLuint height, glm::vec4 pixel, GLuint format);
 
     void saveTextureBytesToFile(GLubyte* data, GLuint width, GLuint height, GLuint channels, std::string filename);
 
