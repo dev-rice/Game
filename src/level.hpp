@@ -3,6 +3,7 @@
 
 #include "game_map.hpp"
 #include "unit_manager.hpp"
+#include "resource_loader.hpp"
 
 using namespace std;
 
@@ -14,9 +15,10 @@ public:
     UnitManager& getUnitManager();
 
 private:
+    UnitHolder unit_holder;
+    ResourceLoader resource_loader;
     GameMap game_map;
     UnitManager unit_manager;
-    UnitHolder unit_holder;
 };
 
 

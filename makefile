@@ -1,7 +1,7 @@
 PLATFORM := $(shell uname)
 
 COMPILER := g++
-COMPILER_FLAGS := -c -std=c++11 `sdl2-config --cflags` `freetype-config --cflags`
+COMPILER_FLAGS := -Wreorder -c -std=c++11 `sdl2-config --cflags` `freetype-config --cflags`
 
 SRCDIR  := src
 SRCEXT  := cpp

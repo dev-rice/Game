@@ -1,6 +1,6 @@
 #include "unit_manager.hpp"
 
-UnitManager::UnitManager(GameMap& game_map, UnitHolder& units) : game_map(&game_map), unit_holder(&units), pathfinder(game_map.getGround()) {
+UnitManager::UnitManager(GameMap& game_map, UnitHolder& units) : unit_holder(&units), game_map(&game_map), pathfinder(game_map.getGround()) {
 
 }
 

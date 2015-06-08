@@ -15,12 +15,13 @@
 #include "profile.h"
 #include "particles/emitter_factory.hpp"
 #include "unit_holder.hpp"
+#include "resource_loader.hpp"
 
 using namespace std;
 
 class GameMap {
 public:
-    GameMap(string map_filename, UnitHolder& unit_holder, RenderDeque& render_stack);
+    GameMap(string map_filename, UnitHolder& unit_holder, RenderDeque& render_stack, ResourceLoader& resource_loader);
 
     void render();
     void renderToShadowMap();
@@ -48,12 +49,14 @@ private:
     std::tuple<float, float, glm::vec3> findMapPoint(glm::vec3 ray, int steps, float bottom, float top);
     glm::vec3 findMapPointInit(glm::vec3 ray, int steps);
 
-    Camera camera;
     vector<Doodad> doodads;
     vector<Emitter*> emitters;
+
+    Camera camera;
     Terrain ground;
     UnitHolder* unit_holder;
     RenderDeque* render_stack;
+    ResourceLoader* resource_loader;
 
     // Everything that will be drawn
     // vector<Drawable> drawables;

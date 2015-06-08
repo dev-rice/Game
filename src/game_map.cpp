@@ -1,6 +1,6 @@
 #include "game_map.hpp"
 
-GameMap::GameMap(string map_filename, UnitHolder& units, RenderDeque& render_stack) : camera(), ground(), unit_holder(&units), shadowbuffer(1.0), depthbuffer(1.0), shadow_shader("shaders/shadow.vs", "shaders/shadow.fs"), depth_shader("shaders/depth.vs", "shaders/depth.fs"), render_stack(&render_stack) {
+GameMap::GameMap(string map_filename, UnitHolder& units, RenderDeque& render_stack, ResourceLoader& resource_loader) : camera(), ground(), unit_holder(&units), render_stack(&render_stack),  resource_loader(&resource_loader), shadowbuffer(1.0), depthbuffer(1.0), shadow_shader("shaders/shadow.vs", "shaders/shadow.fs"), depth_shader("shaders/depth.vs", "shaders/depth.fs") {
 
     ifstream map_input(map_filename);
     load(map_input);
@@ -156,6 +156,9 @@ void GameMap::load(ifstream& map_input){
     // The filepaths for mesh and textures so we know where to load the files from
     string mesh_path = root["mesh_path"].asString();
     string texture_path = root["texture_path"].asString();
+
+    resource_loader->setMeshPath(mesh_path);
+    resource_loader->setTexturePath(texture_path);
 
     // Create the camera from the json segment
     camera = Camera(root["camera"]);

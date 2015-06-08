@@ -21,9 +21,9 @@ public:
     void update();
 
 private:
+    RenderDeque render_stack;
     Level level;
     GameView* game_view;
-    RenderDeque render_stack;
 
     bool edit_mode;
 };
