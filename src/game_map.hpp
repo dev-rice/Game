@@ -27,8 +27,6 @@ public:
     void renderToShadowMap();
     void renderToDepthMap();
 
-    void addDrawable(Drawable& drawable);
-
     glm::vec3 calculateWorldPosition(glm::vec2 screen_pos);
 
     Shadowbuffer& getShadowbuffer();
