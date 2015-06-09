@@ -57,11 +57,4 @@ void GameViewEdit::handleInputState(){
 
 void GameViewEdit::handleInput(SDL_Event event){
     GameView::handleInput(event);
-
-    SDL_Scancode key_scancode = event.key.keysym.scancode;
-    switch(event.type){
-        case SDL_KEYDOWN:
-
-        break;
-    }
 }
