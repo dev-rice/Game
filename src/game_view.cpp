@@ -57,7 +57,6 @@ GameView::GameView(Level& level, RenderDeque& render_stack) : level(&level), gam
     InputHandler::getInstance()->setStateCallback(state_callback_temp);
 
     ui_drawables.push_back(DebugConsole::getInstance());
-    this->level->getGameMap().getGround().setPaintLayer(1);
 
 }
 

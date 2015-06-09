@@ -8,6 +8,7 @@ GameViewEdit::GameViewEdit(Level& level, RenderDeque& render_stack) : GameView(l
     ui_drawables.push_back(current_paint);
 
     fancy_text = new TextRenderer("BreeSerif-Regular.ttf", 18);
+    this->level->getGameMap().getGround().setPaintLayer(1);
 
 }
 
@@ -29,21 +30,38 @@ void GameViewEdit::handleInputState(){
     glm::vec2 mouse_gl_pos = Mouse::getInstance()->getGLPosition();
     glm::vec3 mouse_world_pos = level->getGameMap().calculateWorldPosition(mouse_gl_pos);
 
-    if (state[SDL_SCANCODE_B]){
-        level->getGameMap().getGround().paintHeightmap(mouse_world_pos);
-    }
-    if (state[SDL_SCANCODE_V]){
-        level->getGameMap().getGround().eraseHeightmap(mouse_world_pos);
-    }
-
     if (Mouse::getInstance()->isPressed(Mouse::LEFT)){
         level->getGameMap().getGround().paintSplatmap(mouse_world_pos);
     }
     if (Mouse::getInstance()->isPressed(Mouse::RIGHT)){
         level->getGameMap().getGround().eraseSplatmap(mouse_world_pos);
     }
+
+    if (state[SDL_SCANCODE_1]){
+        this->level->getGameMap().getGround().setPaintLayer(1);
+    } else if (state[SDL_SCANCODE_2]){
+        this->level->getGameMap().getGround().setPaintLayer(2);
+    } else if (state[SDL_SCANCODE_3]){
+        this->level->getGameMap().getGround().setPaintLayer(3);
+    } else if (state[SDL_SCANCODE_4]){
+        this->level->getGameMap().getGround().setPaintLayer(4);
+    } else if (state[SDL_SCANCODE_5]){
+        this->level->getGameMap().getGround().setPaintLayer(5);
+    } else if (state[SDL_SCANCODE_6]){
+        this->level->getGameMap().getGround().setPaintLayer(6);
+    } else if (state[SDL_SCANCODE_7]){
+        this->level->getGameMap().getGround().setPaintLayer(7);
+    }
+
 }
 
 void GameViewEdit::handleInput(SDL_Event event){
     GameView::handleInput(event);
+
+    SDL_Scancode key_scancode = event.key.keysym.scancode;
+    switch(event.type){
+        case SDL_KEYDOWN:
+
+        break;
+    }
 }

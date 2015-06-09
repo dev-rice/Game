@@ -48,9 +48,6 @@ public:
     void paintSplatmap(glm::vec3 position);
     void eraseSplatmap(glm::vec3 position);
 
-    void paintHeightmap(glm::vec3 position);
-    void eraseHeightmap(glm::vec3 position);
-
     TextureLayer getCurrentLayer();
     void setPaintLayer(GLuint layer);
 
@@ -89,7 +86,6 @@ private:
     LayeredTextures* layered_textures;
 
     TexturePainter* splatmap_painter;
-    TexturePainter* heightmap_painter;
 
     Heightmap* heightmap;
 
