@@ -1,6 +1,7 @@
 {
     "mesh_path": "res/models/",
     "texture_path": "res/textures/",
+    "shader_path": "shaders/"
 
     "camera": {
         "fov": 45.0,

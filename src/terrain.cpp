@@ -15,7 +15,7 @@
 
 Terrain::Terrain(const Json::Value& terrain_json, ResourceLoader& resource_loader){
 
-    string texture_path = resource_loader.getDefaultTexturePath();
+    string texture_path = resource_loader.getTexturePath();
 
     // Basic terrain loading
     string heightmap_filename = texture_path + terrain_json["heightmap"].asString();

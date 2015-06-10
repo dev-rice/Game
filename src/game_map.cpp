@@ -157,8 +157,8 @@ void GameMap::load(ifstream& map_input){
     string mesh_path = root["mesh_path"].asString();
     string texture_path = root["texture_path"].asString();
 
-    resource_loader->addMeshPath(mesh_path);
-    resource_loader->addTexturePath(texture_path);
+    resource_loader->setMeshPath(mesh_path);
+    resource_loader->setTexturePath(texture_path);
 
     // Create the camera from the json segment
     camera = Camera(root["camera"]);

@@ -22,22 +22,22 @@ public:
     Texture& loadTexture(string filename);
     Shader& loadShader(string vs_filename, string fs_filename);
 
-    void addMeshPath(string mesh_path);
-    void addTexturePath(string texture_path);
-    void addShaderPath(string shader_path);
+    void setMeshPath(string mesh_path);
+    void setTexturePath(string texture_path);
+    void setShaderPath(string shader_path);
 
-    string getDefaultMeshPath();
-    string getDefaultTexturePath();
-    string getDefaultShaderPath();
+    string getMeshPath();
+    string getTexturePath();
+    string getShaderPath();
 
 private:
-    vector<Mesh> meshes;
-    vector<Texture> textures;
+    unordered_map<string, Mesh> meshes;
+    unordered_map<string, Texture> textures;
     unordered_map<string, Shader> shaders;
 
-    vector<string> mesh_paths;
-    vector<string> texture_paths;
-    vector<string> shader_paths;
+    string mesh_path;
+    string texture_path;
+    string shader_path;
 
 };
 

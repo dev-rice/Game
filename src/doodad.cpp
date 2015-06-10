@@ -2,13 +2,11 @@
 
 Doodad::Doodad(const Json::Value& doodad_json, ResourceLoader& resource_loader){
 
-    string mesh_path = resource_loader.getDefaultMeshPath();
-    string texture_path = resource_loader.getDefaultTexturePath();
+    string mesh_path = resource_loader.getMeshPath();
+    string texture_path = resource_loader.getTexturePath();
 
     std::string mesh_filename = doodad_json["mesh"].asString();
-    std::string full_path = mesh_path + mesh_filename;
-    // NOOOOOOOO!!!!!! but for now...
-    Mesh* mesh_ptr = new Mesh(full_path);
+    Mesh& mesh_ref = resource_loader.loadMesh(mesh_filename);
 
     // Scale of the doodad
     float scale = doodad_json["scale"].asFloat();
@@ -25,7 +23,7 @@ Doodad::Doodad(const Json::Value& doodad_json, ResourceLoader& resource_loader){
     rotation.z = doodad_json["rotation"]["z"].asFloat();
 
     Shader& shader_ref = resource_loader.loadShader("shaders/doodad.vs", "shaders/doodad.fs");
-    load(mesh_ptr, shader_ref, position, scale);
+    load(&mesh_ref, shader_ref, position, scale);
     setRotationEuler(rotation);
 
     // Load the textures
