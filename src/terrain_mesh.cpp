@@ -46,7 +46,7 @@ TerrainMesh::TerrainMesh(std::vector<TerrainVertex> vertices, std::vector<GLuint
     TerrainMesh::loadMeshData(out_vertices, elements);
 }
 
-void TerrainMesh::attachGeometryToShader(Shader shader){
+void TerrainMesh::attachGeometryToShader(Shader& shader){
     // As soon as you've bound a certain VAO, every time you call glVertexAttribPointer,
     // that information will be stored in that VAO. This makes switching between different vertex data
     // and vertex formats as easy as binding a different VAO.
