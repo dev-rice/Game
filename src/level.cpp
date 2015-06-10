@@ -10,7 +10,7 @@ Level::Level(string filename, RenderDeque& render_stack) : unit_holder(), resour
 
     for(int i = 0; i < 5; ++i){
         for(int j = 0; j < 5; ++j){
-            glm::vec3 playable_position = glm::vec3(5 - 3.0f*i, 0.0f, 5 - 3.0f*j);
+            glm::vec3 playable_position = glm::vec3(-10 - 3.0f*i, 0.0f, 5 - 3.0f*j);
             Playable temp(playable_mesh, playable_shader_ref, playable_position, playable_scale);
             temp.loadFromXML("res/units/testunit.xml");
             temp.setScale(0.8);
