@@ -6,15 +6,16 @@
 #include "drawable.h"
 #include "includes/json.hpp"
 #include "shader.hpp"
+#include "resource_loader.hpp"
 
 // using namespace std;
 
 class Doodad: public Drawable {
 public:
-    Doodad(const Json::Value& doodad_json, std::string mesh_path, std::string texture_path);
+    Doodad(const Json::Value& doodad_json, ResourceLoader& resource_loader);
     Doodad(Mesh*);
-    Doodad(Mesh*, Shader shader);
-    Doodad(Mesh*, Shader shader, glm::vec3, GLfloat);
+    Doodad(Mesh*, Shader& shader);
+    Doodad(Mesh*, Shader& shader, glm::vec3, GLfloat);
 
 private:
     void updateUniformData();

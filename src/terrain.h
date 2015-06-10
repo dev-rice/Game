@@ -17,14 +17,17 @@
 #include "layered_textures.h"
 #include "texture_layer.h"
 #include "texture_painter.h"
+#include "resource_loader.hpp"
+
+using namespace std;
 
 class Terrain : public Drawable {
 public:
     Terrain() {;}
-    Terrain(const Json::Value&, std::string texture_path);
-    Terrain(std::string heightmap_filename, float amplification);
-    Terrain (Shader shader, std::string h) : Terrain(shader, h, 10.0f) {;}
-    Terrain (Shader shader, std::string, float);
+    Terrain(const Json::Value&, ResourceLoader& resource_loader);
+    Terrain(string heightmap_filename, float amplification);
+    Terrain (Shader& shader, string h) : Terrain(shader, h, 10.0f) {;}
+    Terrain (Shader& shader, string, float);
 
     int getDepth() {return depth;}
     int getWidth() {return width;}
@@ -51,13 +54,13 @@ public:
     TextureLayer getCurrentLayer();
     void setPaintLayer(GLuint layer);
 
-    std::string saveData(std::string name);
+    string saveData(string name);
 
     LayeredTextures* getLayeredTextures();
     TexturePainter* getTexturePainter();
 
 private:
-    void initializer(Shader, std::string, float, int tile_size);
+    void initializer(Shader&, string, float, int tile_size);
     void updateUniformData();
 
     GLubyte* renderHeightmapAsImage();
@@ -73,7 +76,7 @@ private:
 
     bool** pathing_array;
 
-    std::vector<TerrainVertex> vertices;
+    vector<TerrainVertex> vertices;
 
     int width;
     int depth;

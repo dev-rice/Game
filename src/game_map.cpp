@@ -49,7 +49,7 @@ void GameMap::renderToShadowMap(){
 
     for (Doodad& doodad : doodads){
         // Save the shader this drawable is currently using
-        Shader current_shader = doodad.getShader();
+        Shader& current_shader = doodad.getShader();
         // Set the drawable to render with the shadow shader
         doodad.setShader(shadow_shader);
         // Draw the drawable from the light's perspective
@@ -61,7 +61,7 @@ void GameMap::renderToShadowMap(){
     // Draw all the units
     for (Playable& unit : unit_holder->getUnits()){
         // Save the shader this drawable is currently using
-        Shader current_shader = unit.getShader();
+        Shader& current_shader = unit.getShader();
         // Set the drawable to render with the shadow shader
         unit.setShader(shadow_shader);
         // Draw the drawable from the light's perspective
@@ -70,7 +70,7 @@ void GameMap::renderToShadowMap(){
         unit.setShader(current_shader);
     }
 
-    Shader current_shader = ground.getShader();
+    Shader& current_shader = ground.getShader();
     ground.setShader(shadow_shader);
     ground.draw();
     ground.setShader(current_shader);
@@ -86,7 +86,7 @@ void GameMap::renderToDepthMap(){
 
     for (Doodad& doodad : doodads){
         // Save the shader this drawable is currently using
-        Shader current_shader = doodad.getShader();
+        Shader& current_shader = doodad.getShader();
         // Set the drawable to render with the shadow shader
         doodad.setShader(depth_shader);
         // Draw the drawable from the light's perspective
@@ -98,7 +98,7 @@ void GameMap::renderToDepthMap(){
     // Draw all the units
     for (Playable& unit : unit_holder->getUnits()){
         // Save the shader this drawable is currently using
-        Shader current_shader = unit.getShader();
+        Shader& current_shader = unit.getShader();
         // Set the drawable to render with the shadow shader
         unit.setShader(depth_shader);
         // Draw the drawable from the light's perspective
@@ -108,7 +108,7 @@ void GameMap::renderToDepthMap(){
     }
 
 
-    Shader current_shader = ground.getShader();
+    Shader& current_shader = ground.getShader();
     ground.setShader(depth_shader);
     ground.draw();
     ground.setShader(current_shader);
@@ -157,8 +157,8 @@ void GameMap::load(ifstream& map_input){
     string mesh_path = root["mesh_path"].asString();
     string texture_path = root["texture_path"].asString();
 
-    resource_loader->addMeshPath(mesh_path);
-    resource_loader->addTexturePath(texture_path);
+    resource_loader->setMeshPath(mesh_path);
+    resource_loader->setTexturePath(texture_path);
 
     // Create the camera from the json segment
     camera = Camera(root["camera"]);
@@ -167,7 +167,7 @@ void GameMap::load(ifstream& map_input){
     const Json::Value doodads_json = root["doodads"];
     for (const Json::Value& doodad_json : doodads_json){
         // Create doodad from the json segment
-        doodads.push_back(Doodad(doodad_json, mesh_path, texture_path));
+        doodads.push_back(Doodad(doodad_json, *resource_loader));
     }
 
     // Create each particle emitter
@@ -178,7 +178,7 @@ void GameMap::load(ifstream& map_input){
     }
 
     // Create the ground from the json segment
-    ground = Terrain(root["terrain"], texture_path);
+    ground = Terrain(root["terrain"], *resource_loader);
 
 }
 

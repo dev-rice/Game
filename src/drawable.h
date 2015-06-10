@@ -15,8 +15,8 @@
 class Drawable {
 public:
     Drawable () {;}
-    Drawable(Mesh*, Shader shader);
-    Drawable(Mesh*, Shader shader, glm::vec3, GLfloat);
+    Drawable(Mesh*, Shader& shader);
+    Drawable(Mesh*, Shader& shader, glm::vec3, GLfloat);
 
     virtual void draw();
 
@@ -32,7 +32,7 @@ public:
     void setPosition(GLfloat x, GLfloat y, GLfloat z);
 
     void setScale(GLfloat s) {scale = s;}
-    void setShader(Shader shader);
+    void setShader(Shader& shader);
 
     void setDiffuse(Texture d);
     void setSpecular(Texture s);
@@ -41,10 +41,10 @@ public:
 
     glm::vec3 getPosition() {return position;}
     GLfloat getScale() {return scale;}
-    Shader& getShader() {return shader;}
+    Shader& getShader() {return *shader;}
 
 protected:
-    void load(Mesh*, Shader shader, glm::vec3, GLfloat);
+    void load(Mesh*, Shader& shader, glm::vec3, GLfloat);
     void updateModelMatrix();
 
     virtual void bindTextures();
@@ -53,7 +53,7 @@ protected:
 
     Mesh* mesh;
 
-    Shader shader;
+    Shader* shader;
 
     GLfloat scale;
 
