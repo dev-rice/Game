@@ -1,6 +1,9 @@
 #include "doodad.h"
 
-Doodad::Doodad(const Json::Value& doodad_json, std::string mesh_path, std::string texture_path){
+Doodad::Doodad(const Json::Value& doodad_json, ResourceLoader& resource_loader){
+
+    string mesh_path = resource_loader.getDefaultMeshPath();
+    string texture_path = resource_loader.getDefaultTexturePath();
 
     std::string mesh_filename = doodad_json["mesh"].asString();
     std::string full_path = mesh_path + mesh_filename;
@@ -21,8 +24,8 @@ Doodad::Doodad(const Json::Value& doodad_json, std::string mesh_path, std::strin
     rotation.y = doodad_json["rotation"]["y"].asFloat();
     rotation.z = doodad_json["rotation"]["z"].asFloat();
 
-    Shader shader("shaders/doodad.vs", "shaders/doodad.fs");
-    load(mesh_ptr, shader.getGLId(), position, scale);
+    Shader& shader_ref = resource_loader.loadShader("shaders/doodad.vs", "shaders/doodad.fs");
+    load(mesh_ptr, shader_ref, position, scale);
     setRotationEuler(rotation);
 
     // Load the textures
@@ -56,21 +59,21 @@ Doodad::Doodad(const Json::Value& doodad_json, std::string mesh_path, std::strin
 }
 
 Doodad::Doodad(Mesh* mesh) {
-    Shader shader("shaders/doodad.vs", "shaders/doodad.fs");
-    load(mesh, shader, glm::vec3(0.0f, 0.0f, 0.0f), 1.0f);
+    Shader* shader = new Shader("shaders/doodad.vs", "shaders/doodad.fs");
+    load(mesh, *shader, glm::vec3(0.0f, 0.0f, 0.0f), 1.0f);
 }
 
-Doodad::Doodad(Mesh* mesh, Shader shader) : Drawable(mesh, shader){
+Doodad::Doodad(Mesh* mesh, Shader& shader) : Drawable(mesh, shader){
 
 }
 
-Doodad::Doodad(Mesh* mesh, Shader shader, glm::vec3 position, GLfloat scale):
+Doodad::Doodad(Mesh* mesh, Shader& shader, glm::vec3 position, GLfloat scale):
     Drawable(mesh, shader, position, scale) {
 }
 
 void Doodad::updateUniformData(){
     // Set the scale, this is not really going to be a thing, probably
     // ^ It's definitely a thing
-    glUniform1f(glGetUniformLocation(shader.getGLId(), "scale"), scale);
+    glUniform1f(glGetUniformLocation(shader->getGLId(), "scale"), scale);
 
 }

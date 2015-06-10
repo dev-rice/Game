@@ -13,19 +13,21 @@
 //   ------------------
 //        width
 
-Terrain::Terrain(const Json::Value& terrain_json, std::string texture_path){
+Terrain::Terrain(const Json::Value& terrain_json, ResourceLoader& resource_loader){
+
+    string texture_path = resource_loader.getDefaultTexturePath();
 
     // Basic terrain loading
-    std::string heightmap_filename = texture_path + terrain_json["heightmap"].asString();
+    string heightmap_filename = texture_path + terrain_json["heightmap"].asString();
     float amplification = terrain_json["amplification"].asFloat();
     int tile_size = terrain_json["tile_size"].asInt();
-    Shader shader("shaders/terrain.vs", "shaders/terrain.fs");
+    Shader& shader_ref = resource_loader.loadShader("shaders/terrain.vs", "shaders/terrain.fs");
 
-    initializer(shader, heightmap_filename, amplification, tile_size);
+    initializer(shader_ref, heightmap_filename, amplification, tile_size);
 
     // Do the textures
     for(const Json::Value& splatmap_json : terrain_json["splatmaps"]){
-        std::string filename = texture_path + splatmap_json["filename"].asString();
+        string filename = texture_path + splatmap_json["filename"].asString();
         Texture splatmap(filename);
         addSplatmap(splatmap);
     }
@@ -34,7 +36,7 @@ Terrain::Terrain(const Json::Value& terrain_json, std::string texture_path){
         int layer_number = layer_json["layer_number"].asInt();
         int splatmap_number = layer_json["splatmap"].asInt();
         char splatmap_channel = layer_json["channel"].asString().at(0);
-        std::string diff_filename = texture_path + layer_json["textures"]["diff"].asString();
+        string diff_filename = texture_path + layer_json["textures"]["diff"].asString();
         Texture diffuse(diff_filename);
 
         addDiffuse(diffuse, splatmap_number, layer_number, splatmap_channel);
@@ -43,16 +45,17 @@ Terrain::Terrain(const Json::Value& terrain_json, std::string texture_path){
 
 }
 
-Terrain::Terrain(std::string heightmap_filename, float amplification){
-    initializer(Shader("shaders/terrain.vs", "shaders/terrain.fs"), heightmap_filename, amplification, 16);
+Terrain::Terrain(string heightmap_filename, float amplification){
+    Shader* shader = new Shader("shaders/terrain.vs", "shaders/terrain.fs");
+    initializer(*shader, heightmap_filename, amplification, 16);
 }
 
-Terrain::Terrain(Shader shader, std::string heightmap_filename, float amplification) : Drawable() {
+Terrain::Terrain(Shader& shader, string heightmap_filename, float amplification) : Drawable() {
 
     initializer(shader, heightmap_filename, amplification, 16);
 }
 
-void Terrain::initializer(Shader shader, std::string heightmap_filename, float amplification, int tile_size){
+void Terrain::initializer(Shader& shader, string heightmap_filename, float amplification, int tile_size){
 
     this->amplification = amplification;
     this->tile_size = tile_size;
@@ -247,7 +250,7 @@ void Terrain::initializeBaseMesh(Heightmap& heightmap){
     // because the actual mesh that gets drawn needs to
     // have more accurate normals and texture coordinates
     // for actually drawing things.
-    vertices = std::vector<TerrainVertex>(width * depth);
+    vertices = vector<TerrainVertex>(width * depth);
     for (int x = 0; x < width; ++x){
         for (int z = 0; z < depth; ++z){
             TerrainVertex current;
@@ -265,7 +268,7 @@ void Terrain::initializeBaseMesh(Heightmap& heightmap){
 
     // Make the edge loops to simplify the normal
     // calculations.
-    std::vector<GLuint> faces;
+    vector<GLuint> faces;
     for (int x = 0; x < width - 1; ++x){
         for (int z = 0; z < depth - 1; ++z){
             faces.push_back(getIndex(x, z));
@@ -335,9 +338,9 @@ Mesh* Terrain::generateMesh(Heightmap& heightmap){
     // This should probably definitely be rewritten because
     // it will be hard to do the normal fix afterwards. Also
     // its so many loops!
-    std::vector<GLuint> faces;
-    std::vector<TerrainVertex> textured_vertices;
-    std::unordered_map<int, bool> valid_vertices;
+    vector<GLuint> faces;
+    vector<TerrainVertex> textured_vertices;
+    unordered_map<int, bool> valid_vertices;
     for (int x = 0; x < width; x += texture_size){
         for (int z = 0; z < depth; z += texture_size){
             int start_index = textured_vertices.size();
@@ -418,8 +421,8 @@ int Terrain::getIndex(int x, int z, int width){
 void Terrain::updateUniformData(){
     // Set the scale, this is not really going to be a thing, probably
     // ^ It's definitely a thing
-    GLuint scale_loc = glGetUniformLocation(shader.getGLId(), "scale");
-    GLuint time_loc = glGetUniformLocation(shader.getGLId(), "time");
+    GLuint scale_loc = glGetUniformLocation(shader->getGLId(), "scale");
+    GLuint time_loc = glGetUniformLocation(shader->getGLId(), "time");
 
     glUniform1f(scale_loc, scale);
     glUniform1f(time_loc, GameClock::getInstance()->getCurrentTime());
@@ -440,18 +443,18 @@ void Terrain::bindTextures(){
     glActiveTexture(GL_TEXTURE3);
     glBindTexture(GL_TEXTURE_2D, normal.getGLId());
 
-    layered_textures->updateUniforms(shader.getGLId());
+    layered_textures->updateUniforms(shader->getGLId());
 
 }
 
 void Terrain::setTextureLocations(){
     // Try to set the texture locations
-    glUniform1i(glGetUniformLocation(shader.getGLId(), "specular_texture"), 1);
-    glUniform1i(glGetUniformLocation(shader.getGLId(), "emissive_texture"), 2);
-    glUniform1i(glGetUniformLocation(shader.getGLId(), "normal_map"), 3);
-    glUniform1i(glGetUniformLocation(shader.getGLId(), "shadow_map"), 4);
+    glUniform1i(glGetUniformLocation(shader->getGLId(), "specular_texture"), 1);
+    glUniform1i(glGetUniformLocation(shader->getGLId(), "emissive_texture"), 2);
+    glUniform1i(glGetUniformLocation(shader->getGLId(), "normal_map"), 3);
+    glUniform1i(glGetUniformLocation(shader->getGLId(), "shadow_map"), 4);
 
-    layered_textures->setTextureLocations(shader.getGLId());
+    layered_textures->setTextureLocations(shader->getGLId());
 
 }
 
@@ -463,7 +466,7 @@ void Terrain::addSplatmap(Texture splat){
     if (splat_width == width && splat_height == depth){
         layered_textures->addSplatmap(splat);
     } else {
-        Debug::error("Splatmap dimensions do not agree with heightmap dimensions.\n");
+        Debug::warning("Splatmap dimensions do not agree with heightmap dimensions.\n");
         Texture blank_splat(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f), width, depth);
         layered_textures->addSplatmap(blank_splat);
     }
@@ -508,18 +511,18 @@ void Terrain::setPaintLayer(GLuint layer){
 void Terrain::fillSplatmaps(){
     int i = 0;
     while(layered_textures->needsSplatmaps()){
-        std::string id = "_splat" + std::to_string(i);
+        string id = "_splat" + to_string(i);
         Texture blank_splat(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f), width, depth);
         layered_textures->addSplatmap(blank_splat);
         ++i;
     }
 }
 
-std::string Terrain::saveData(std::string name){
-    std::string output = "";
+string Terrain::saveData(string name){
+    string output = "";
 
     Texture texture = heightmap->getTexture();
-    std::string heightmap_name = name + "_heightmap.bmp";
+    string heightmap_name = name + "_heightmap.bmp";
     #warning here
     texture.save(GL_RGBA, heightmap_name);
     // delete[] image_data;

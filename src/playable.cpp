@@ -39,7 +39,7 @@ Playable::Playable() : Drawable(){
 
 }
 
-Playable::Playable(Mesh* mesh, Shader shader, glm::vec3 position, GLfloat scale) : Drawable(mesh, shader, position, scale) {
+Playable::Playable(Mesh* mesh, Shader& shader, glm::vec3 position, GLfloat scale) : Drawable(mesh, shader, position, scale) {
 
     if(! selection_ring){
     	Mesh* selection_ring_mesh = new Mesh("res/models/selection_ring.dae");
@@ -91,7 +91,7 @@ void Playable::loadFromXML(std::string filepath){
 }
 
 void Playable::updateUniformData(){
-	glUniform1f(glGetUniformLocation(shader.getGLId(), "scale"), scale);
+	glUniform1f(glGetUniformLocation(shader->getGLId(), "scale"), scale);
 }
 
 //##################################################################################################

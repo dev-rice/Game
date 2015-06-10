@@ -4,15 +4,15 @@
 
 #include "drawable.h"
 
-Drawable::Drawable(Mesh* mesh, Shader shader){
+Drawable::Drawable(Mesh* mesh, Shader& shader){
     load(mesh, shader, glm::vec3(0.0f, 0.0f, 0.0f), 1.0f);
 }
 
-Drawable::Drawable(Mesh* mesh, Shader shader, glm::vec3 position, GLfloat scale) {
+Drawable::Drawable(Mesh* mesh, Shader& shader, glm::vec3 position, GLfloat scale) {
     load(mesh, shader, position, scale);
 }
 
-void Drawable::load(Mesh* mesh, Shader shader, glm::vec3 position, GLfloat scale) {
+void Drawable::load(Mesh* mesh, Shader& shader, glm::vec3 position, GLfloat scale) {
     // Set the position, rotation, scale, and mesh pointer
     this->position = position;
     this->mesh = mesh;
@@ -33,26 +33,26 @@ void Drawable::load(Mesh* mesh, Shader shader, glm::vec3 position, GLfloat scale
 
 }
 
-void Drawable::setShader(Shader shader){
-    this->shader = shader;
-    this->mesh->attachGeometryToShader(shader);
+void Drawable::setShader(Shader& shader_ref){
+    this->shader = &shader_ref;
+    this->mesh->attachGeometryToShader(*shader);
 
     #warning Global uniform bindings should only ever be called once for each shader
-    GLint global_matrix_location = glGetUniformBlockIndex(shader.getGLId(), "GlobalMatrices");
-    glUniformBlockBinding(shader.getGLId(), global_matrix_location, 1);
+    GLint global_matrix_location = glGetUniformBlockIndex(shader->getGLId(), "GlobalMatrices");
+    glUniformBlockBinding(shader->getGLId(), global_matrix_location, 1);
 
-    GLint shadow_matrix_location = glGetUniformBlockIndex(shader.getGLId(), "ShadowMatrices");
-    glUniformBlockBinding(shader.getGLId(), shadow_matrix_location, 2);
+    GLint shadow_matrix_location = glGetUniformBlockIndex(shader->getGLId(), "ShadowMatrices");
+    glUniformBlockBinding(shader->getGLId(), shadow_matrix_location, 2);
 
-    GLint mouse_point_location = glGetUniformBlockIndex(shader.getGLId(), "Mouse");
-    glUniformBlockBinding(shader.getGLId(), mouse_point_location, 3);
+    GLint mouse_point_location = glGetUniformBlockIndex(shader->getGLId(), "Mouse");
+    glUniformBlockBinding(shader->getGLId(), mouse_point_location, 3);
 
-    GLint unit_data_location = glGetUniformBlockIndex(shader.getGLId(), "UnitData");
-    glUniformBlockBinding(shader.getGLId(), unit_data_location, 10);
+    GLint unit_data_location = glGetUniformBlockIndex(shader->getGLId(), "UnitData");
+    glUniformBlockBinding(shader->getGLId(), unit_data_location, 10);
 
-    GLint settings_location = glGetUniformBlockIndex(shader.getGLId(), "ProfileSettings");
+    GLint settings_location = glGetUniformBlockIndex(shader->getGLId(), "ProfileSettings");
     // Debug::info("settings_location = %d\n", settings_location);
-    glUniformBlockBinding(shader.getGLId(), settings_location, 4);
+    glUniformBlockBinding(shader->getGLId(), settings_location, 4);
 
     setTextureLocations();
 
@@ -121,18 +121,18 @@ void Drawable::bindTextures(){
 
 void Drawable::setTextureLocations(){
     // Try to set the texture locations
-    glUniform1i(glGetUniformLocation(shader.getGLId(), "diffuse_texture"), 0);
-    glUniform1i(glGetUniformLocation(shader.getGLId(), "specular_texture"), 1);
-    glUniform1i(glGetUniformLocation(shader.getGLId(), "emissive_texture"), 2);
-    glUniform1i(glGetUniformLocation(shader.getGLId(), "normal_map"), 3);
-    glUniform1i(glGetUniformLocation(shader.getGLId(), "shadow_map"), 4);
+    glUniform1i(glGetUniformLocation(shader->getGLId(), "diffuse_texture"), 0);
+    glUniform1i(glGetUniformLocation(shader->getGLId(), "specular_texture"), 1);
+    glUniform1i(glGetUniformLocation(shader->getGLId(), "emissive_texture"), 2);
+    glUniform1i(glGetUniformLocation(shader->getGLId(), "normal_map"), 3);
+    glUniform1i(glGetUniformLocation(shader->getGLId(), "shadow_map"), 4);
 }
 
 void Drawable::draw(){
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
 
-    glUseProgram(shader.getGLId());
+    glUseProgram(shader->getGLId());
 
     // Bind the Mesh's VAO. This lets us put transformations and textures on top of the geometry.
     mesh->bindVAO();
@@ -141,7 +141,7 @@ void Drawable::draw(){
     updateModelMatrix();
 
     // Update the current model, view, and projection matrices in the shader. These are standard for all Drawables so they should always be updated in draw. Child specific data is updated in updateUniformData().
-    glUniformMatrix4fv(glGetUniformLocation(shader.getGLId(), "model"), 1, GL_FALSE, glm::value_ptr(model_matrix));
+    glUniformMatrix4fv(glGetUniformLocation(shader->getGLId(), "model"), 1, GL_FALSE, glm::value_ptr(model_matrix));
 
     // Update other shader data
     updateUniformData();

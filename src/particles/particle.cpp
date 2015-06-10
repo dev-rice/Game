@@ -5,11 +5,11 @@
 
 
 
-Particle::Particle(Mesh* mesh, Shader shader) : Drawable(mesh, shader){
+Particle::Particle(Mesh* mesh, Shader& shader) : Drawable(mesh, shader){
 
 }
 
-Particle::Particle(Mesh* mesh, Shader shader, glm::vec3 position, GLfloat scale): Drawable(mesh, shader, position, scale) {
+Particle::Particle(Mesh* mesh, Shader& shader, glm::vec3 position, GLfloat scale): Drawable(mesh, shader, position, scale) {
 
 }
 
@@ -102,13 +102,13 @@ void Particle::draw(){
 void Particle::updateUniformData(){
     // Set the scale, this is not really going to be a thing, probably
     // ^ It's definitely a thing
-    glUniform1f(glGetUniformLocation(shader.getGLId(), "scale"), scale);
+    glUniform1f(glGetUniformLocation(shader->getGLId(), "scale"), scale);
 
     // Set the opacity in the shader
-    glUniform1f(glGetUniformLocation(shader.getGLId(), "opacity"), (float)opacity);
+    glUniform1f(glGetUniformLocation(shader->getGLId(), "opacity"), (float)opacity);
 
     // Set the planar rotation
-    glUniform1f(glGetUniformLocation(shader.getGLId(), "plane_rotation"), (float)plane_rotation);
+    glUniform1f(glGetUniformLocation(shader->getGLId(), "plane_rotation"), (float)plane_rotation);
 
 }
 

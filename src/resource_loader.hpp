@@ -5,6 +5,8 @@
 
 #include <string>
 #include <vector>
+#include <unordered_map>
+#include <utility>
 
 #include "mesh.h"
 #include "texture.hpp"
@@ -24,10 +26,14 @@ public:
     void addTexturePath(string texture_path);
     void addShaderPath(string shader_path);
 
+    string getDefaultMeshPath();
+    string getDefaultTexturePath();
+    string getDefaultShaderPath();
+
 private:
     vector<Mesh> meshes;
     vector<Texture> textures;
-    vector<Shader> shaders;
+    unordered_map<string, Shader> shaders;
 
     vector<string> mesh_paths;
     vector<string> texture_paths;
