@@ -4,8 +4,8 @@ in vec2 Texcoord;
 
 out vec4 outColor;
 
-uniform sampler2D base_texture;
 uniform float opacity;
+uniform sampler2D base_texture;
 
 void main() {
     vec4 texel = texture(base_texture, Texcoord);

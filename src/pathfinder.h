@@ -13,6 +13,8 @@
 
 #include "terrain.h"
 
+using namespace std;
+
 class Node{
 public:
 	Node(int x, int y, int g){
@@ -35,23 +37,28 @@ struct LessThanByGScore{
 
 class PathFinder {
 public:
-	static void allocateArray(Terrain*);
-	static std::vector<glm::vec3> find_path(Terrain*, float, float, float, float, float);
+	PathFinder(Terrain&);
+	vector<glm::vec3> find_path(float, float, float, float, float);
+	
 private:
-	static float distance_between(int, int, int, int);
-	static float heuristic_estimate(int, int, int, int);
-	static std::vector<glm::vec3> reconstruct_path(Terrain*, std::unordered_map<Node*, Node*>, Node*, float);
-	static std::vector<Node*> getNeighborNodes(Node*);
-	static bool canPathOnLine(Terrain*, float, float, float, float, float);
-	static bool checkCircle(Terrain*, int, int, int);
+	void allocateArray(Terrain&);
 
-	static int **node_state_array;
-	static int depth;
-	static int width;
+	float distance_between(int, int, int, int);
+	float heuristic_estimate(int, int, int, int);
+	vector<glm::vec3> reconstruct_path(Terrain*, std::unordered_map<Node*, Node*>, Node*, float);
+	std::vector<Node*> getNeighborNodes(Node*);
+	bool canPathOnLine(Terrain*, float, float, float, float, float);
+	bool checkCircle(Terrain*, int, int, int);
 
-	static const int UNVISITED = 0;
-	static const int IN_FRONTIER = 1;
-	static const int VISITED = 2;
+	int **node_state_array;
+	int depth;
+	int width;
+
+	Terrain* ground;
+
+	const int UNVISITED = 0;
+	const int IN_FRONTIER = 1;
+	const int VISITED = 2;
 };
 
 #endif

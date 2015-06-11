@@ -20,7 +20,7 @@
 
 #include "plane_mesh.h"
 #include "camera.h"
-#include "texture_loader.h"
+
 #include "game_clock.h"
 
 #include "particle.h"
@@ -28,13 +28,17 @@
 class Emitter {
 public:
     ~Emitter();
-    Emitter(GLuint, glm::vec3);
+    Emitter(const Json::Value& emitter_json);
+    Emitter(glm::vec3);
+    Emitter(Shader shader, glm::vec3);
 
     void draw(Camera*);
     void setParticleDensity(int);
     void makeShotgun();
 protected:
     virtual void prepareParticles(Camera*);
+
+    void initialize(Shader shader, glm::vec3 pos);
 
     float old_time;
 
@@ -48,9 +52,9 @@ protected:
     bool hasFired;
 
     Mesh* billboard;
-    GLuint particle_texture;
+    Texture particle_texture;
 
-    GLuint shader_program;
+    Shader shader;
 
     std::deque<Particle*> particles;
 };

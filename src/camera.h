@@ -7,6 +7,7 @@
 
 #include "game_clock.h"
 #include "window.h"
+#include "includes/json.hpp"
 
 const float MOVE_SENSITIVITY = 10.0;
 const float ROTATE_SENSITIVITY = 2.0;
@@ -14,9 +15,11 @@ const float ROTATE_SENSITIVITY = 2.0;
 class Camera {
 public:
     Camera() : Camera(glm::vec3(), glm::vec3(), MOVE_SENSITIVITY, ROTATE_SENSITIVITY) {;}
+    Camera(const Json::Value& camera_json);
     Camera(glm::vec3 p) : Camera(p, glm::vec3(), MOVE_SENSITIVITY, ROTATE_SENSITIVITY) {;}
     Camera(glm::vec3 p, glm::vec3 r) : Camera(p, r, MOVE_SENSITIVITY, ROTATE_SENSITIVITY) {;}
-    Camera(glm::vec3, glm::vec3, float, float);
+    Camera(glm::vec3 p, glm::vec3 r, float ms, float rs) : Camera(p, r, ms, rs, 45.0f) {;}
+    Camera(glm::vec3, glm::vec3, float, float, float);
 
     void moveX(int);
     void moveY(int);
@@ -47,8 +50,9 @@ public:
     float getFOV();
 
 private:
-
+    void initializer(glm::vec3, glm::vec3, float, float, float);
     void updateProjectionMatrix();
+    void notifyViewChanged();
 
     glm::vec3 position;
     glm::vec3 rotation;
@@ -66,6 +70,9 @@ private:
     float near_clip;
     float far_clip;
     glm::mat4 proj_matrix;
+    glm::mat4 view_matrix;
+
+    bool view_changed_since_last_calculation;
 
 };
 

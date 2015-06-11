@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "flat_drawable.h"
-#include "shader_loader.h"
+
 #include "window.h"
 #include "profile.h"
 
@@ -15,13 +15,16 @@ public:
     virtual void setAsRenderTarget();
     virtual void draw();
 
-    void addShaderPass(GLuint);
+    void addShaderPass(Shader shader);
 
-    GLuint getTexture() {return framebuffer_texture;}
+    Texture& getTexture() {return framebuffer_texture;}
 protected:
 
+    void setupFramebufferTexture(GLuint format, float up_sample); 
+    void setupDepthStencilBuffer();
+
     GLuint framebuffer;
-    GLuint framebuffer_texture;
+    Texture framebuffer_texture;
 
     FlatDrawable* framebuffer_window;
     Window* window;

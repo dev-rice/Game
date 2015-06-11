@@ -12,21 +12,23 @@
 #include <algorithm>
 #include <string>
 
-#include "shader_loader.h"
+
 #include "mesh_loader.h"
 #include "debug.h"
 #include "vertex.h"
+#include "shader.hpp"
 
 class Mesh {
 public:
     Mesh() {;}
     Mesh(const char*);
+    Mesh(std::string f) : Mesh(f.c_str()) {;}
     Mesh(std::vector<GLfloat>, std::vector<GLuint>);
     Mesh(std::vector<Vertex>, std::vector<GLuint>);
 
     void draw();
     void bindVAO();
-    virtual void attachGeometryToShader(GLuint);
+    virtual void attachGeometryToShader(Shader& shader);
 protected:
 
     void loadMeshData(std::vector<GLfloat>, std::vector<GLuint>);
@@ -36,7 +38,7 @@ protected:
     GLuint vao;
     GLuint vbo;
 
-    std::vector<GLuint> bound_shaders;
+    std::vector<Shader*> bound_shaders;
 
 };
 

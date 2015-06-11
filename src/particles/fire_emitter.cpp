@@ -5,12 +5,26 @@
 
 #include "fire_emitter.h"
 
-FireEmitter::FireEmitter(GLuint shader_program, glm::vec3 position, float radius) : Emitter(shader_program, position){
+FireEmitter::FireEmitter(const Json::Value& emitter_json) : Emitter(emitter_json) {
+
+    initialize(emitter_json["radius"].asFloat());
+
+}
+
+FireEmitter::FireEmitter(glm::vec3 position, float radius) : FireEmitter(Shader("shaders/particle.vs",
+    "shaders/particle.fs"), position, radius) {;}
+
+
+FireEmitter::FireEmitter(Shader shader, glm::vec3 position, float radius) : Emitter(shader, position){
+    initialize(radius);
+}
+
+void FireEmitter::initialize(float r) {
     // Sets the fire's radius
-    this->radius = radius;
+    this->radius = r;
 
     // Hardcoded fire particle texture
-    particle_texture = TextureLoader::loadTextureFromFile("res/textures/fire_part.png", GL_LINEAR);
+    particle_texture = Texture("res/textures/fire_part.png");
 
     // Hardcoded density, maximum, and lifespan
     this->maxParticles = 200;
@@ -42,7 +56,7 @@ void FireEmitter::prepareParticles(Camera* camera){
         // Weird that the pointer must be explicitly set to 0, but crashes without this
         Particle* ptr = 0;
         if(particles.size() < maxParticles){
-            ptr = new Particle(billboard, shader_program);
+            ptr = new Particle(billboard, shader);
             ptr->setEmissive(particle_texture);
         }
         if(particles.size() > 0 && particles[0]->isDead()){

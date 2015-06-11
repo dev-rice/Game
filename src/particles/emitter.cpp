@@ -1,20 +1,21 @@
 #include "particles/emitter.h"
 
-Emitter::Emitter(GLuint shader_program, glm::vec3 position){
-    this->position = position;
+Emitter::Emitter(const Json::Value& emitter_json) {
+    glm::vec3 pos;
+    pos.x = emitter_json["position"]["x"].asFloat();
+    pos.y = emitter_json["position"]["y"].asFloat();
+    pos.z = emitter_json["position"]["z"].asFloat();
 
-    billboard = new PlaneMesh();
+    initialize(Shader("shaders/particle.vs", "shaders/particle.fs"), pos);
 
-    particle_texture = TextureLoader::loadTextureFromFile("res/textures/snow_part.png", GL_LINEAR);
+}
 
-    this->maxParticles = 200;
-    this->lifespan = 100;
-    this->density = (this->maxParticles)/(this->lifespan);
+Emitter::Emitter(glm::vec3 position) {
+    initialize(Shader("shaders/particle.vs", "shaders/particle.fs"), position);
+}
 
-    this->isShotgun = false;
-    this->hasFired = false;
-
-    this->shader_program = shader_program;
+Emitter::Emitter(Shader shader, glm::vec3 position){
+    initialize(shader, position);
 }
 
 Emitter::~Emitter(){
@@ -27,6 +28,23 @@ Emitter::~Emitter(){
         delete particles[i];
         particles[i] = NULL;
     }
+}
+
+void Emitter::initialize(Shader shader, glm::vec3 pos) {
+    this->position = pos;
+
+    billboard = new PlaneMesh();
+
+    particle_texture = Texture("res/textures/snow_part.png");
+
+    this->maxParticles = 200;
+    this->lifespan = 100;
+    this->density = (this->maxParticles)/(this->lifespan);
+
+    this->isShotgun = false;
+    this->hasFired = false;
+
+    this->shader = shader;
 }
 
 void Emitter::setParticleDensity(int density){
@@ -106,7 +124,7 @@ void Emitter::prepareParticles(Camera* camera){
         // Weird that the pointer must be explicitly set to 0, but crashes without this
         Particle* ptr = 0;
         if(particles.size() < maxParticles){
-            ptr = new Particle(billboard, shader_program);
+            ptr = new Particle(billboard, shader);
             ptr->setEmissive(particle_texture);
         }
         if(particles.size() > 0 && particles[0]->isDead()){

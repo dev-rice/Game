@@ -7,7 +7,6 @@
 #include "mesh.h"
 #include "drawable.h"
 #include "camera.h"
-#include "level.h"
 #include "flat_mesh.h"
 #include "flat_drawable.h"
 #include "text_renderer.h"
@@ -21,11 +20,13 @@
 #include "pathfinder.h"
 #include "game_clock.h"
 #include "debug_console.h"
+#include "game_map.hpp"
+#include "level.hpp"
 
 class GameView {
 public:
 
-    GameView(Level*);
+    GameView(Level& level, RenderDeque& render_stack);
 
     virtual void update();
 
@@ -39,6 +40,18 @@ protected:
 
     void handleKeyboardCameraMovement();
     void handleMouseCameraMovement();
+    void handleMouseDragging();
+
+    Level* level;
+
+    Framebuffer gamebuffer;
+    Framebuffer ui_buffer;
+    RenderDeque* render_stack;
+
+    UIDrawable* selection_box;
+    std::vector<UIDrawable*> ui_drawables;
+
+    TextRenderer* text_renderer;
 
     // Mouse controls
     int mouse_count;
@@ -53,18 +66,6 @@ protected:
 
     bool attack_command_prime;
 
-    Window* window;
-
-    Level* level;
-
-    Screenbuffer* screen;
-    Framebuffer* framebuffer;
-
-    UIDrawable* selection_box;
-    std::vector<UIDrawable*> ui_drawables;
-
-    TextRenderer* text_renderer;
-
     bool toggle_key_state;
     bool debug_showing;
 
@@ -77,8 +78,6 @@ protected:
     bool graphics_menu_key_state;
 
     bool debug_console_key_state;
-
-    std::string all_chars;
 
 };
 

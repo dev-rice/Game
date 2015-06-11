@@ -12,7 +12,7 @@
 
 #include "pugixml.hpp" // PUGI xml library
 
-#include "texture_loader.h"
+
 #include "doodad.h"
 #include "mesh.h"
 #include "drawable.h"
@@ -27,7 +27,7 @@ public:
 	enum class PlayableAttribute{ MASSIVE, ARMORED, ARMY, WORKER, FLYING, INVULNERABLE, MECHANICAL };
 
 	Playable();
-	Playable(Mesh*, GLuint, glm::vec3, GLfloat);
+	Playable(Mesh*, Shader& shader, glm::vec3, GLfloat);
 
 	void update(Terrain*, std::vector<Playable*>*);
 	void loadFromXML(std::string filepath);
@@ -54,7 +54,7 @@ public:
 	int getTeam(){return team_number;}
 
 	// Temporary - REMOVE ME LATER
-	void setTeam(int t){team_number = t;}
+	void setTeam(int t);
 
 
 private:
@@ -132,6 +132,8 @@ private:
 	int weapon_damage;
 	float weapon_range;
 
+
+
 	// Not implemented yet
 	// Weapon* weapon
 	// Ability* ability
@@ -169,7 +171,7 @@ private:
 	// Steering (Private)
 	//################################
 
-	int steerToStayOnPath();	
+	int steerToStayOnPath();
 	int steerAwayFromUnit(Playable*);
 	int steerAwayFromObstacle(Terrain*);
 	static float distanceFromPointToLine(glm::vec2, glm::vec2, glm::vec2);

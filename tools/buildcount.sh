@@ -3,14 +3,15 @@
 NMAP_CHECK=$(which nmap)
 if [ -z "$NMAP_CHECK" ]
 then
-    echo "Please install nmap for the build count check."
-    exit 0
+    echo -e "\033[1;31m[Error]\033[0m Please install nmap for the build count check."
+    exit 125
 fi
 
 CURL_CHECK=$(which curl)
 if [ -z "$CURL_CHECK" ]
 then
-    echo "Please install curl for the build count check."
+    echo -e "\033[1;31m[Error]\033[0m Please install curl for the build count check."
+    exit 125
 fi
 
 # Check if you are on the local network

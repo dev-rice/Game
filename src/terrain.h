@@ -6,6 +6,7 @@
 #include <vector>
 #include <cmath>
 #include <unordered_map>
+#include "includes/json.hpp"
 
 #include "mesh.h"
 #include "drawable.h"
@@ -16,11 +17,17 @@
 #include "layered_textures.h"
 #include "texture_layer.h"
 #include "texture_painter.h"
+#include "resource_loader.hpp"
+
+using namespace std;
 
 class Terrain : public Drawable {
 public:
-    Terrain (GLuint s, std::string h) : Terrain(s, h, 10.0f) {;}
-    Terrain (GLuint, std::string, float);
+    Terrain() {;}
+    Terrain(const Json::Value&, ResourceLoader& resource_loader);
+    Terrain(string heightmap_filename, float amplification);
+    Terrain (Shader& shader, string h) : Terrain(shader, h, 10.0f) {;}
+    Terrain (Shader& shader, string, float);
 
     int getDepth() {return depth;}
     int getWidth() {return width;}
@@ -31,8 +38,8 @@ public:
     float getSteepness(GLfloat, GLfloat);
     float getMaxHeight(){return max_height;}
 
-    void addSplatmap(GLuint splat);
-    void addDiffuse(GLuint diff, GLuint splat, int layer_num, char channel);
+    void addSplatmap(Texture splat);
+    void addDiffuse(Texture diff, GLuint splat, int layer_num, char channel);
     void fillSplatmaps();
 
     void printPathing();
@@ -44,19 +51,16 @@ public:
     void paintSplatmap(glm::vec3 position);
     void eraseSplatmap(glm::vec3 position);
 
-    void paintHeightmap(glm::vec3 position);
-    void eraseHeightmap(glm::vec3 position);
-
     TextureLayer getCurrentLayer();
     void setPaintLayer(GLuint layer);
 
-    std::string saveData(std::string name);
+    string saveData(string name);
 
     LayeredTextures* getLayeredTextures();
     TexturePainter* getTexturePainter();
 
 private:
-
+    void initializer(Shader&, string, float, int tile_size);
     void updateUniformData();
 
     GLubyte* renderHeightmapAsImage();
@@ -72,7 +76,7 @@ private:
 
     bool** pathing_array;
 
-    std::vector<TerrainVertex> vertices;
+    vector<TerrainVertex> vertices;
 
     int width;
     int depth;
@@ -80,11 +84,11 @@ private:
     int start_z;
     float max_height;
     float amplification;
+    int tile_size;
 
     LayeredTextures* layered_textures;
 
     TexturePainter* splatmap_painter;
-    TexturePainter* heightmap_painter;
 
     Heightmap* heightmap;
 

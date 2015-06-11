@@ -4,148 +4,144 @@
 
 #include "drawable.h"
 
-Drawable::Drawable(Mesh* mesh, GLuint shader_program){
-    load(mesh, shader_program, glm::vec3(0.0f, 0.0f, 0.0f), 1.0f);
+Drawable::Drawable(Mesh* mesh, Shader& shader){
+    load(mesh, shader, glm::vec3(0.0f, 0.0f, 0.0f), 1.0f);
 }
 
-Drawable::Drawable(Mesh* mesh, GLuint shader_program, glm::vec3 position, GLfloat scale) {
-    load(mesh, shader_program, position, scale);
+Drawable::Drawable(Mesh* mesh, Shader& shader, glm::vec3 position, GLfloat scale) {
+    load(mesh, shader, position, scale);
 }
 
-void Drawable::load(Mesh* mesh, GLuint shader_program, glm::vec3 position, GLfloat scale) {
+void Drawable::load(Mesh* mesh, Shader& shader, glm::vec3 position, GLfloat scale) {
     // Set the position, rotation, scale, and mesh pointer
     this->position = position;
     this->mesh = mesh;
     this->scale = scale;
 
-    // Setup the textures
-    // Get the default textures for the drawable.
-    GLuint pink = TextureLoader::loadPink();
-    GLuint alpha = TextureLoader::loadAlpha();
-    GLuint blue = TextureLoader::loadBlue();
-
-    // Setup the drawable such that if no textures
-    // are attached later, then it will be bright pink
-    this->diffuse = alpha;
-    this->specular = alpha;
-    this->emissive = pink;
-    this->normal = blue;
-    this->gloss = alpha;
+    # warning here
+    // // Setup the drawable such that if no textures
+    // // are attached later, then it will be bright pink
+    this->diffuse = Texture(glm::vec4(0, 0, 0, 0));
+    this->specular = Texture(glm::vec4(0, 0, 0, 0));
+    this->emissive = Texture(glm::vec4(0, 0, 0, 0));
+    this->normal = Texture(glm::vec4(0.5, 0.5, 1, 1));
+    this->gloss = Texture(glm::vec4(0, 0, 0, 0));
 
     // Set the shader program and load the geometry data
     // from the mesh onto it.
-    setShader(shader_program);
+    setShader(shader);
 
 }
 
-void Drawable::setShader(GLuint shader_program){
-    this->shader_program = shader_program;
-    this->mesh->attachGeometryToShader(shader_program);
+void Drawable::setShader(Shader& shader_ref){
+    this->shader = &shader_ref;
+    this->mesh->attachGeometryToShader(*shader);
 
     #warning Global uniform bindings should only ever be called once for each shader
-    GLint global_matrix_location = glGetUniformBlockIndex(shader_program, "GlobalMatrices");
-    glUniformBlockBinding(shader_program, global_matrix_location, 1);
+    GLint global_matrix_location = glGetUniformBlockIndex(shader->getGLId(), "GlobalMatrices");
+    glUniformBlockBinding(shader->getGLId(), global_matrix_location, 1);
 
-    GLint shadow_matrix_location = glGetUniformBlockIndex(shader_program, "ShadowMatrices");
-    glUniformBlockBinding(shader_program, shadow_matrix_location, 2);
+    GLint shadow_matrix_location = glGetUniformBlockIndex(shader->getGLId(), "ShadowMatrices");
+    glUniformBlockBinding(shader->getGLId(), shadow_matrix_location, 2);
 
-    GLint mouse_point_location = glGetUniformBlockIndex(shader_program, "Mouse");
-    glUniformBlockBinding(shader_program, mouse_point_location, 3);
+    GLint mouse_point_location = glGetUniformBlockIndex(shader->getGLId(), "Mouse");
+    glUniformBlockBinding(shader->getGLId(), mouse_point_location, 3);
 
-    GLint unit_data_location = glGetUniformBlockIndex(shader_program, "UnitData");
-    glUniformBlockBinding(shader_program, unit_data_location, 10);
+    GLint unit_data_location = glGetUniformBlockIndex(shader->getGLId(), "UnitData");
+    glUniformBlockBinding(shader->getGLId(), unit_data_location, 10);
 
-    GLint settings_location = glGetUniformBlockIndex(shader_program, "ProfileSettings");
+    GLint settings_location = glGetUniformBlockIndex(shader->getGLId(), "ProfileSettings");
     // Debug::info("settings_location = %d\n", settings_location);
-    glUniformBlockBinding(shader_program, settings_location, 4);
+    glUniformBlockBinding(shader->getGLId(), settings_location, 4);
 
     setTextureLocations();
 
 }
 
-void Drawable::setDiffuse(GLuint diffuse) {
-    if (diffuse != 0){
-        if (emissive == TextureLoader::loadPink()){
-            // If this diffuse is being set right after instantiation
-            // then the pink emissive would still override. So if the
-            // emissive is pink, set it to alpha.
-            this->emissive = TextureLoader::loadAlpha();
-        }
+void Drawable::setDiffuse(Texture diffuse) {
+    # warning here
+    // if (diffuse != 0){
+    //     if (emissive == pink){
+    //         // If this diffuse is being set right after instantiation
+    //         // then the pink emissive would still override. So if the
+    //         // emissive is pink, set it to alpha.
+    //         this->emissive = Texture(glm::vec4(0, 0, 0, 1));
+    //     }
         this->diffuse = diffuse;
-    } else {
-        this->diffuse = TextureLoader::loadAlpha();
-    }
+    // } else {
+    //     this->diffuse = Texture(glm::vec4(0, 0, 0, 1));
+    // }
 }
 
-void Drawable::setSpecular(GLuint specular) {
-    if (specular != 0){
+void Drawable::setSpecular(Texture specular) {
+    # warning here
+    // if (specular != 0){
         this->specular = specular;
-    } else {
-        this->specular = TextureLoader::loadAlpha();
-    }
+    // } else {
+    //     this->specular = Texture(glm::vec4(0, 0, 0, 1));
+    // }
 }
-void Drawable::setEmissive(GLuint emissive) {
-    if (emissive != 0){
+void Drawable::setEmissive(Texture emissive) {
+    # warning here
+    // if (emissive != 0){
         this->emissive = emissive;
-    } else if (diffuse == TextureLoader::loadAlpha()) {
-        this->emissive = TextureLoader::loadPink();
-    } else {
-        this->emissive = TextureLoader::loadAlpha();
-    }
+    // } else if (diffuse == alpha) {
+    //     this->emissive = Texture(glm::vec4(1, 0, 1, 1));
+    // } else {
+    //     this->emissive = Texture(glm::vec4(0, 0, 0, 1));
+    // }
 }
-void Drawable::setNormal(GLuint normal) {
-    if (normal != 0){
+void Drawable::setNormal(Texture normal) {
+    # warning here
+    // if (normal != 0){
         this->normal = normal;
-    } else {
-        this->normal = TextureLoader::loadBlue();
-    }
+    // } else {
+    //     this->normal = Texture(glm::vec4(0.5, 0.5, 1, 1));
+    // }
 }
 
 
 void Drawable::bindTextures(){
     // Put each texture into the correct location for this Drawable. GL_TEXTURE0-3
-    // correspond to the uniforms set in attachTextureSet(). This is where we actually
-    // tell the graphics card which textures to use.
+    // correspond to the uniforms set in attachTextureSet(). This is where we actually tell the graphics card which textures to use.
+    #warning make these functions in texture??
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, diffuse);
+    glBindTexture(GL_TEXTURE_2D, diffuse.getGLId());
 
     glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, specular);
+    glBindTexture(GL_TEXTURE_2D, specular.getGLId());
 
     glActiveTexture(GL_TEXTURE2);
-    glBindTexture(GL_TEXTURE_2D, emissive);
+    glBindTexture(GL_TEXTURE_2D, emissive.getGLId());
 
     glActiveTexture(GL_TEXTURE3);
-    glBindTexture(GL_TEXTURE_2D, normal);
+    glBindTexture(GL_TEXTURE_2D, normal.getGLId());
 
 }
 
 void Drawable::setTextureLocations(){
     // Try to set the texture locations
-    glUniform1i(glGetUniformLocation(shader_program, "diffuse_texture"), 0);
-    glUniform1i(glGetUniformLocation(shader_program, "specular_texture"), 1);
-    glUniform1i(glGetUniformLocation(shader_program, "emissive_texture"), 2);
-    glUniform1i(glGetUniformLocation(shader_program, "normal_map"), 3);
-    glUniform1i(glGetUniformLocation(shader_program, "shadow_map"), 4);
+    glUniform1i(glGetUniformLocation(shader->getGLId(), "diffuse_texture"), 0);
+    glUniform1i(glGetUniformLocation(shader->getGLId(), "specular_texture"), 1);
+    glUniform1i(glGetUniformLocation(shader->getGLId(), "emissive_texture"), 2);
+    glUniform1i(glGetUniformLocation(shader->getGLId(), "normal_map"), 3);
+    glUniform1i(glGetUniformLocation(shader->getGLId(), "shadow_map"), 4);
 }
 
 void Drawable::draw(){
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
 
-    glUseProgram(shader_program);
+    glUseProgram(shader->getGLId());
 
-    // Bind the Mesh's VAO. This lets us put transformations and textures on
-    // top of the geometry.
+    // Bind the Mesh's VAO. This lets us put transformations and textures on top of the geometry.
     mesh->bindVAO();
 
-    // We need to update the model matrix to account for any rotations
-    // or translations that have occured since the last draw call.
+    // We need to update the model matrix to account for any rotations or translations that have occured since the last draw call.
     updateModelMatrix();
 
-    // Update the current model, view, and projection matrices in the shader. These are standard for all
-    // Drawables so they should always be updated in draw. Child specific data is updated in updateUniformData().
-    glUniformMatrix4fv(glGetUniformLocation(shader_program, "model"), 1, GL_FALSE, glm::value_ptr(model_matrix));
+    // Update the current model, view, and projection matrices in the shader. These are standard for all Drawables so they should always be updated in draw. Child specific data is updated in updateUniformData().
+    glUniformMatrix4fv(glGetUniformLocation(shader->getGLId(), "model"), 1, GL_FALSE, glm::value_ptr(model_matrix));
 
     // Update other shader data
     updateUniformData();
@@ -201,8 +197,7 @@ void Drawable::rotateGlobalEuler(GLfloat x, GLfloat y, GLfloat z){
                                        sy,  0,  cy, 0,
                                        0 ,  0,  0 , 1);
 
-    // The convention followed is rotate around X-axis, then Y-axis, and finally
-    // Z-axis.
+    // The convention followed is rotate around X-axis, then Y-axis, and finally Z-axis.
     rotation_matrix = rotation_x * rotation_matrix;
     rotation_matrix = rotation_y * rotation_matrix;
     rotation_matrix = rotation_z * rotation_matrix;

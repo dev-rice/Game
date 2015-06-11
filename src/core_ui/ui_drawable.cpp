@@ -1,14 +1,14 @@
 #include "ui_drawable.h"
 
-UIDrawable::UIDrawable(GLuint texture) : FlatDrawable(){
+UIDrawable::UIDrawable(Texture texture) : FlatDrawable(){
     load(texture);
 }
 
-UIDrawable::UIDrawable(GLuint shader_program, GLuint texture) : FlatDrawable(shader_program){
+UIDrawable::UIDrawable(Shader shader, Texture texture) : FlatDrawable(shader.getGLId()){
     load(texture);
 }
 
-void UIDrawable::load(GLuint texture){
+void UIDrawable::load(Texture texture){
     window_width = Window::getInstance()->getWidth();
     window_height = Window::getInstance()->getHeight();
 
@@ -21,12 +21,11 @@ void UIDrawable::load(GLuint texture){
     attachTexture(texture);
 
     parent = NULL;
-    this->shader = shader_program;
 
 }
 
-void UIDrawable::attachTexture(GLuint texture){
-    glBindTexture(GL_TEXTURE_2D, texture);
+void UIDrawable::attachTexture(Texture texture){
+    glBindTexture(GL_TEXTURE_2D, texture.getGLId());
     int miplevel = 0;
     int w, h;
     glGetTexLevelParameteriv(GL_TEXTURE_2D, miplevel, GL_TEXTURE_WIDTH, &w);
@@ -53,9 +52,9 @@ void UIDrawable::draw(){
     FlatDrawable::draw();
 
     if (outline){
-        glUniform1i(glGetUniformLocation(shader_program, "is_outline"), true);
+        glUniform1i(glGetUniformLocation(shader.getGLId(), "is_outline"), true);
         mesh->drawOutline();
-        glUniform1i(glGetUniformLocation(shader_program, "is_outline"), false);
+        glUniform1i(glGetUniformLocation(shader.getGLId(), "is_outline"), false);
     }
 }
 

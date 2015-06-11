@@ -4,7 +4,7 @@
 #ifndef UIWindow_h
 #define UIWindow_h
 
-#include "texture_loader.h"
+
 #include "ui_drawable.h"
 #include "ui_image.h"
 #include "ui_radiobutton.h"
@@ -13,7 +13,7 @@
 class UIWindow : public UIDrawable {
 public:
     UIWindow();
-    UIWindow(GLuint);
+    UIWindow(Shader shader);
 
     void loadFromXML(std::string);
 

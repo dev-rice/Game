@@ -32,7 +32,11 @@ Profile::Profile(){
 }
 
 int Profile::getFxaaLevel(){
-	return fxaa_level;
+	if (framebuffers_on){
+		return fxaa_level;
+	} else {
+		return 0;
+	}
 }
 
 bool Profile::getVsync(){

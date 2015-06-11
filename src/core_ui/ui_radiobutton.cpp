@@ -7,7 +7,7 @@ UIImage* UIRadioButton::on_icon;
 UIImage* UIRadioButton::off_icon;
 UIImage* UIRadioButton::hover_icon;
 
-UIRadioButton::UIRadioButton(GLuint shader_program) : UIDrawable(shader_program, TextureLoader::loadPink()){
+UIRadioButton::UIRadioButton(Shader shader) : UIDrawable(shader,Texture(glm::vec4(1, 0, 1, 1))){
     this->has_clicked = false;
 }
 
@@ -45,15 +45,15 @@ void UIRadioButton::loadFromXML(std::string filepath){
 
     // Create and position the button icon and hover highlight
     if(on_icon == NULL){
-        on_icon = new UIImage(shader, TextureLoader::loadTextureFromFile(sprites_node.child_value("on_icon"), GL_NEAREST));
+        on_icon = new UIImage(shader, Texture(sprites_node.child_value("on_icon")));
     }
 
     if(off_icon == NULL){
-        off_icon = new UIImage(shader, TextureLoader::loadTextureFromFile(sprites_node.child_value("off_icon"), GL_NEAREST));
+        off_icon = new UIImage(shader, Texture(sprites_node.child_value("off_icon")));
     }
 
     if(hover_icon == NULL){
-        hover_icon = new UIImage(shader, TextureLoader::loadTextureFromFile(sprites_node.child_value("hover_icon"), GL_NEAREST));
+        hover_icon = new UIImage(shader, Texture(sprites_node.child_value("hover_icon")));
     }
 
     icon_width = atoi(sprites_node.child_value("width"));

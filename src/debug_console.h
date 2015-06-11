@@ -7,7 +7,6 @@
 #include "core_ui/ui_window.h"
 #include "debug.h"
 #include "input_handler.h"
-#include "level.h"
 
 class DebugConsole : public UIWindow {
 public:
@@ -20,8 +19,6 @@ public:
 
     void handleInput(SDL_Event);
 
-    void setLevel(Level* level);
-
 private:
     DebugConsole();
 
@@ -30,8 +27,6 @@ private:
     TextRenderer* text_renderer;
     std::vector<std::string> messages;
     std::string input_buffer;
-
-    Level* level;
 
     static DebugConsole* instance;
 

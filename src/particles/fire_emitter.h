@@ -10,10 +10,13 @@
 
 class FireEmitter : public Emitter {
 public:
-    FireEmitter(GLuint, glm::vec3, float);
+    FireEmitter(const Json::Value& emitter_json);
+    FireEmitter(glm::vec3, float);
+    FireEmitter(Shader shader, glm::vec3, float);
 private:
     float radius;
+    void initialize(float);
     void prepareParticles(Camera*);
-};  
+};
 
 #endif

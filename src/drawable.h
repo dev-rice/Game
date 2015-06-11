@@ -9,14 +9,14 @@
 #include "mesh.h"
 #include "camera.h"
 
-#include "shader_loader.h"
-#include "texture_loader.h"
+#include "texture.hpp"
+
 
 class Drawable {
 public:
     Drawable () {;}
-    Drawable(Mesh*, GLuint);
-    Drawable(Mesh*, GLuint, glm::vec3, GLfloat);
+    Drawable(Mesh*, Shader& shader);
+    Drawable(Mesh*, Shader& shader, glm::vec3, GLfloat);
 
     virtual void draw();
 
@@ -32,19 +32,19 @@ public:
     void setPosition(GLfloat x, GLfloat y, GLfloat z);
 
     void setScale(GLfloat s) {scale = s;}
-    void setShader(GLuint);
+    void setShader(Shader& shader);
 
-    void setDiffuse(GLuint d);
-    void setSpecular(GLuint s);
-    void setEmissive(GLuint e);
-    void setNormal(GLuint n);
+    void setDiffuse(Texture d);
+    void setSpecular(Texture s);
+    void setEmissive(Texture e);
+    void setNormal(Texture n);
 
     glm::vec3 getPosition() {return position;}
     GLfloat getScale() {return scale;}
-    GLuint getShader() {return shader_program;}
+    Shader& getShader() {return *shader;}
 
 protected:
-    void load(Mesh*, GLuint, glm::vec3, GLfloat);
+    void load(Mesh*, Shader& shader, glm::vec3, GLfloat);
     void updateModelMatrix();
 
     virtual void bindTextures();
@@ -53,7 +53,7 @@ protected:
 
     Mesh* mesh;
 
-    GLuint shader_program;
+    Shader* shader;
 
     GLfloat scale;
 
@@ -63,11 +63,11 @@ protected:
     glm::mat4 model_matrix;
     glm::mat4 rotation_matrix;
 
-    GLuint diffuse;
-    GLuint specular;
-    GLuint emissive;
-    GLuint normal;
-    GLuint gloss;
+    Texture diffuse;
+    Texture specular;
+    Texture emissive;
+    Texture normal;
+    Texture gloss;
 };
 
 #endif

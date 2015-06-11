@@ -1,9 +1,9 @@
 #include "character_drawable.h"
 
-CharacterDrawable::CharacterDrawable(GLuint shader_program, FontSheet* font_sheet, GLint point)
-    :UIDrawable(shader_program, font_sheet->getTexture()) {
+CharacterDrawable::CharacterDrawable(Shader shader, FontSheet* font_sheet, GLint point)
+    :UIDrawable(shader.getGLId(), font_sheet->getTexture()) {
         mesh = CharacterMesh::getInstance();
-        this->mesh->attachGeometryToShader(shader_program);
+        this->mesh->attachGeometryToShader(shader);
         uv_offset = glm::vec2();
 
         height_pixels = point;
@@ -62,9 +62,9 @@ void CharacterDrawable::setCharacter(char to_render){
 }
 
 void CharacterDrawable::updateUniformData(){
-    glUniform2f(glGetUniformLocation(shader_program, "uv_offset"),
+    glUniform2f(glGetUniformLocation(shader.getGLId(), "uv_offset"),
         uv_offset.x, uv_offset.y);
-    glUniform3f(glGetUniformLocation(shader_program, "textColor"),
+    glUniform3f(glGetUniformLocation(shader.getGLId(), "textColor"),
         text_color.x, text_color.y, text_color.z);
     UIDrawable::updateUniformData();
 }

@@ -35,6 +35,7 @@ FontSheet::FontSheet(std::string filename, int pixel_size) {
     width = NUM_CHARS * pixel_size;
     height = pixel_size;
 
+    GLuint texture_id;
     glGenTextures(1, &texture_id);
     glBindTexture(GL_TEXTURE_2D, texture_id);
 
@@ -93,12 +94,14 @@ FontSheet::FontSheet(std::string filename, int pixel_size) {
 
     float delta_time = GameClock::getInstance()->getCurrentTime() - start_time;
 
+    texture = Texture(texture_id);
+
 }
 
 void FontSheet::renderToBMP(){
     std::string bmp_filename = "/tmp/" + filename + std::to_string(point) + ".bmp";
 
-    TextureLoader::saveTextureToFile(texture_id, GL_RED, bmp_filename);
+    texture.save(GL_RED, bmp_filename);
 
 }
 
@@ -110,8 +113,8 @@ int FontSheet::getPointSize(){
     return point;
 }
 
-GLuint FontSheet::getTexture(){
-    return texture_id;
+Texture& FontSheet::getTexture(){
+    return texture;
 }
 
 unsigned int FontSheet::getWidth(){

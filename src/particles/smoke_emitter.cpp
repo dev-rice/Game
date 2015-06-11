@@ -5,12 +5,26 @@
 
 #include "smoke_emitter.h"
 
-SmokeEmitter::SmokeEmitter(GLuint shader_program, glm::vec3 position, float radius) : Emitter(shader_program, position){
+SmokeEmitter::SmokeEmitter(const Json::Value& emitter_json) : Emitter(emitter_json) {
+
+    initialize(emitter_json["radius"].asFloat());
+
+}
+
+SmokeEmitter::SmokeEmitter(glm::vec3 position, float radius) : SmokeEmitter(Shader("shaders/particle.vs",
+    "shaders/particle.fs"), position, radius) {;}
+
+SmokeEmitter::SmokeEmitter(Shader shader, glm::vec3 position, float radius) : Emitter(shader, position){
+
+    initialize(radius);
+}
+
+void SmokeEmitter::initialize(float r){
     // Sets the smoke's radius
-    this->radius = radius;
+    this->radius = r;
 
     // Hardcoded smoke particle texture
-    particle_texture = TextureLoader::loadTextureFromFile("res/textures/smoke_part.png", GL_LINEAR);
+    particle_texture = Texture("res/textures/smoke_part.png");
 
     // Hardcoded density, maximum, and lifespan
     this->maxParticles = 100;
@@ -52,7 +66,7 @@ void SmokeEmitter::prepareParticles(Camera* camera){
         // Weird that the pointer must be explicitly set to 0, but crashes without this
         Particle* ptr = 0;
         if(particles.size() < maxParticles){
-            ptr = new Particle(billboard, shader_program);
+            ptr = new Particle(billboard, shader);
             ptr->setEmissive(particle_texture);
         }
         if(particles.size() > 0 && particles[0]->isDead()){
