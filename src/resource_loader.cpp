@@ -6,10 +6,8 @@ ResourceLoader::ResourceLoader() : mesh_path(""), texture_path(""), shader_path(
 
 Mesh& ResourceLoader::loadMesh(string filename) {
     string mesh_id = mesh_path + filename;
-    unordered_map<string, Mesh>::const_iterator key_iter = meshes.find (mesh_id);
 
-    bool has_key = key_iter != meshes.end();
-
+    bool has_key = hasKey<Mesh>(mesh_id);
     if (!has_key){
         meshes[mesh_id] = Mesh(mesh_id);
     }
@@ -18,26 +16,44 @@ Mesh& ResourceLoader::loadMesh(string filename) {
 
 Texture& ResourceLoader::loadTexture(string filename) {
     string texture_id = texture_path + filename;
-    unordered_map<string, Texture>::const_iterator key_iter = textures.find (texture_id);
 
-    bool has_key = key_iter != textures.end();
-
+    bool has_key = hasKey<Texture>(texture_id);
     if (!has_key){
         textures[texture_id] = Texture(texture_id);
     }
+
     return textures[texture_id];
 }
 
 Shader& ResourceLoader::loadShader(string vs_filename, string fs_filename) {
     string shader_id = shader_path + vs_filename + fs_filename;
-    unordered_map<string, Shader>::const_iterator key_iter = shaders.find (shader_id);
 
-    bool has_key = key_iter != shaders.end();
-
+    bool has_key = hasKey<Shader>(shader_id);
     if (!has_key){
         shaders[shader_id] = Shader(vs_filename, fs_filename);
     }
     return shaders[shader_id];
+
+}
+
+template <class type> bool ResourceLoader::hasKey(string id) {
+    bool is_mesh = is_same<type, Mesh>::value;
+    bool is_texture = is_same<type, Texture>::value;
+    bool is_shader = is_same<type, Shader>::value;
+
+    bool has_key = false;
+    if (is_mesh){
+        unordered_map<string, Mesh>::const_iterator key_iter = meshes.find(id);
+        has_key = key_iter != meshes.end();
+    } else if (is_texture){
+        unordered_map<string, Texture>::const_iterator key_iter = textures.find(id);
+        has_key = key_iter != textures.end();
+    } else if (is_shader){
+        unordered_map<string, Shader>::const_iterator key_iter = shaders.find(id);
+        has_key = key_iter != shaders.end();
+    }
+
+    return has_key;
 
 }
 
