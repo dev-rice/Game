@@ -40,6 +40,11 @@ void GameMap::render(){
         }
     }
 
+    // Draw all the doodads
+    for (Drawable* drawable : drawables){
+        drawable->draw();
+    }
+
 }
 
 void GameMap::renderToShadowMap(){
@@ -122,6 +127,10 @@ glm::vec3 GameMap::calculateWorldPosition(glm::vec2 screen_point){
     glm::vec3 world_point = findMapPointInit(ray, 100);
 
     return world_point;
+}
+
+void GameMap::addDrawable(Drawable& drawable) {
+    drawables.push_back(&drawable);
 }
 
 Shadowbuffer& GameMap::getShadowbuffer() {

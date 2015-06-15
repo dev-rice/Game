@@ -28,12 +28,14 @@ public:
     void renderToDepthMap();
 
     glm::vec3 calculateWorldPosition(glm::vec2 screen_pos);
+    void addDrawable(Drawable& drawable);
 
     Shadowbuffer& getShadowbuffer();
     Shadowbuffer& getDepthbuffer();
 
     Camera& getCamera();
     Terrain& getGround();
+
 
 private:
 
@@ -57,7 +59,7 @@ private:
     ResourceLoader* resource_loader;
 
     // Everything that will be drawn
-    // vector<Drawable> drawables;
+    vector<Drawable*> drawables;
 
     // // Anything that shouldn't be drawn to the shadow map
     // vector<Drawable> no_shadow_drawables;
