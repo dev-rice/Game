@@ -22,6 +22,7 @@ FunctionHelper::FunctionHelper(){
     lookup_table["toggleLighting"] = &FunctionHelper::toggleLighting;
     lookup_table["toggleParticles"] = &FunctionHelper::toggleParticles;
     lookup_table["toggleFramebuffers"] = &FunctionHelper::toggleFramebuffers;
+    lookup_table["toggleDepthmap"] = &FunctionHelper::toggleDepthmap;
 
 }
 
@@ -58,6 +59,10 @@ void FunctionHelper::toggleParticles(){
 
 void FunctionHelper::toggleFramebuffers(){
     Profile::getInstance()->toggleFramebuffers();
+}
+
+void FunctionHelper::toggleDepthmap(){
+    Profile::getInstance()->toggleDepthmap();
 }
 
 void FunctionHelper::exitProgram(){

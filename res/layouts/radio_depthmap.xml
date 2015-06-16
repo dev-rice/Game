@@ -8,14 +8,14 @@
         </x>
         <y>
             <anchor>centered</anchor>
-            <offset>-100</offset>
+            <offset>150</offset>
         </y>
     </constraints>
 
-    <text>Normal Maps</text>
+    <text>Depthmap</text>
     <font>BreeSerif-Regular.ttf</font>
     <mode>on</mode>
-    <function>toggleNormals</function>
+    <function>toggleDepthmap</function>
 
     <sprites>
         <width>28</width>

@@ -15,7 +15,9 @@ void GameMap::render(){
         renderToShadowMap();
     }
 
-    renderToDepthMap();
+    if (Profile::getInstance()->isDepthmapOn()){
+        renderToDepthMap();        
+    }
 
     renderAllNoShader();
 

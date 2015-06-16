@@ -28,6 +28,7 @@ private:
     void toggleLighting();
     void toggleParticles();
     void toggleFramebuffers();
+    void toggleDepthmap();
 
     std::map<std::string, function_thing> lookup_table;
 };

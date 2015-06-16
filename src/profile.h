@@ -24,6 +24,7 @@ public:
 	bool isShadowsOn() {return shadows_on;}
 	bool isFramebuffersOn() {return framebuffers_on;}
 	bool isLightingOn() {return lighting_on;}
+	bool isDepthmapOn() { return depthmap_on;}
 	int getWindowHeight();
 	int getWindowWidth();
 
@@ -34,6 +35,7 @@ public:
 	void toggleLighting();
 	void toggleParticles();
 	void toggleFramebuffers();
+	void toggleDepthmap();
 
 	void updateShaderSettings();
 
@@ -46,6 +48,8 @@ private:
 	bool framebuffers_on;
 	bool lighting_on;
 	bool normals_on;
+	bool depthmap_on;
+	
 	int resolution_index;
 	std::map<int, std::tuple<int, int>> resolution_map;
 

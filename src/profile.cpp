@@ -73,6 +73,9 @@ void Profile::toggleVsync(){
 	Window::getInstance()->setVsync(vsync_on);
 }
 
+void Profile::toggleDepthmap() {
+	depthmap_on = !depthmap_on;
+}
 
 bool Profile::getWindowed(){
 	return windowed_on;
@@ -129,6 +132,8 @@ void Profile::loadSettings(){
 				lighting_on = (strcmp(value, "true") == 0);
 			} else if(strcmp(keyword, "normals") == 0){
 				normals_on = (strcmp(value, "true") == 0);
+			} else if(strcmp(keyword, "depthmap") == 0){
+				depthmap_on = (strcmp(value, "true") == 0);
 			}
         }
     }
