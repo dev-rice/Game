@@ -146,7 +146,6 @@ void GameMap::setTempDrawable(Drawable& drawable) {
 void GameMap::placeTempDrawable() {
     Drawable* new_drawable = temp_drawable->clone();
     addDrawable(*new_drawable);
-    has_temp_drawable = false;
 }
 
 void GameMap::removeTempDrawable() {

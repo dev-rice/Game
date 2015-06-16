@@ -19,8 +19,7 @@ public:
     void update(glm::vec3 mouse_world_pos);
     void handleInput(SDL_Event event);
 
-    void initializeNewDoodad();
-
+    void activate();
     void deactivate();
 
 private:

@@ -1,6 +1,7 @@
 #include "drawable_placer.hpp"
 
 DrawablePlacer::DrawablePlacer(Level& level) : level(&level) {
+    current_drawable = createDefaultDoodad();
 }
 
 void DrawablePlacer::setDrawable(Drawable& drawable) {
@@ -63,13 +64,11 @@ void DrawablePlacer::handleInput(SDL_Event event) {
 
     if (place_doodad) {
         this->level->getGameMap().placeTempDrawable();
-        initializeNewDoodad();
     }
 
 }
 
-void DrawablePlacer::initializeNewDoodad() {
-    current_drawable = createDefaultDoodad();
+void DrawablePlacer::activate() {
     this->level->getGameMap().setTempDrawable(*current_drawable);
 }
 
