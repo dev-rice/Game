@@ -24,7 +24,6 @@ void DrawablePlacer::handleInput(SDL_Event event) {
     glm::vec3 rotate_amt;
     float rotate_diff = 0.01;
 
-    SDL_Scancode key_scancode = event.key.keysym.scancode;
     SDL_Keycode keycode = event.key.keysym.sym;
     switch(event.type){
         case SDL_KEYDOWN:
