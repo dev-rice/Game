@@ -1,6 +1,7 @@
 #include "drawable_placer.hpp"
 
-DrawablePlacer::DrawablePlacer() : resource_loader() {
+DrawablePlacer::DrawablePlacer(Level& level) : level(&level) {
+    ResourceLoader& resource_loader = this->level->getResourceLoader();
     resource_loader.setMeshPath("res/models/");
     resource_loader.setTexturePath("res/textures/");
 
@@ -15,10 +16,6 @@ DrawablePlacer::DrawablePlacer() : resource_loader() {
 
 void DrawablePlacer::setDrawable(Drawable& drawable) {
     current_drawable = &drawable;
-}
-
-void DrawablePlacer::placeCurrentDrawable() {
-
 }
 
 void DrawablePlacer::update(glm::vec3 mouse_world_pos) {

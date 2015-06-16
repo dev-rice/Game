@@ -15,6 +15,7 @@
 
 class UIDrawable : public FlatDrawable {
 public:
+    UIDrawable();
     UIDrawable(Texture texture);
     UIDrawable(Shader shader, Texture texture);
 

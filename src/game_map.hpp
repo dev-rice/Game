@@ -39,6 +39,9 @@ public:
 
 private:
 
+    void renderAllNoShader();
+    void renderAllWithShader(Shader& shader, Framebuffer& buf);
+
     void load(ifstream& map);
 
     void initializeGlobalUniforms();
@@ -61,17 +64,15 @@ private:
     // Everything that will be drawn
     vector<Drawable*> drawables;
 
-    // // Anything that shouldn't be drawn to the shadow map
-    // vector<Drawable> no_shadow_drawables;
-
     Shadowbuffer shadowbuffer;
     Shadowbuffer depthbuffer;
+    
+    Shader shadow_shader;
+    Shader depth_shader;
 
     GLuint camera_ubo;
     GLuint shadow_ubo;
 
-    Shader shadow_shader;
-    Shader depth_shader;
 
 };
 

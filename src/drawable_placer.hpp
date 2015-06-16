@@ -5,24 +5,23 @@
 #include "drawable.h"
 #include "resource_loader.hpp"
 #include "doodad.h"
+#include "level.hpp"
 
 class DrawablePlacer {
 public:
-    DrawablePlacer();
+    DrawablePlacer(Level& level);
 
     void setDrawable(Drawable& drawable);
 
-    void placeCurrentDrawable();
     void update(glm::vec3 mouse_world_pos);
 
     Drawable& getDrawable();
 
 private:
+    Level* level;
     Drawable* current_drawable;
     glm::vec3 axis;
 
-    // This is only a temporary setback
-    ResourceLoader resource_loader;
 };
 
 #endif

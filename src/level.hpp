@@ -13,6 +13,7 @@ public:
 
     GameMap& getGameMap();
     UnitManager& getUnitManager();
+    ResourceLoader& getResourceLoader();
 
 private:
     UnitHolder unit_holder;

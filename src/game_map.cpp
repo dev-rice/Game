@@ -17,8 +17,26 @@ void GameMap::render(){
 
     renderToDepthMap();
 
+    renderAllNoShader();
+
+}
+
+void GameMap::renderToShadowMap(){
+    renderAllWithShader(shadow_shader, shadowbuffer);
+}
+
+void GameMap::renderToDepthMap(){
+    renderAllWithShader(depth_shader, depthbuffer);
+}
+
+void GameMap::renderAllNoShader() {
     // Update the global uniforms like the camera position and shadow projections
     updateGlobalUniforms();
+
+    // Draw all the drawables
+    for (Drawable* drawable : drawables){
+        drawable->draw();
+    }
 
     // Draw all the doodads
     for (Doodad& doodad : doodads){
@@ -40,23 +58,30 @@ void GameMap::render(){
         }
     }
 
-    // Draw all the doodads
+
+}
+
+void GameMap::renderAllWithShader(Shader& shader, Framebuffer& buf) {
+    updateGlobalUniforms();
+
+    render_stack->pushFramebuffer(buf);
+
+    // Draw all the drawables
     for (Drawable* drawable : drawables){
+        // Save the shader this drawable is currently using
+        Shader& current_shader = drawable->getShader();
+        // Set the drawable to render with the shadow shader
+        drawable->setShader(shader);
         drawable->draw();
+        // Reset the drawable's shader to what it was before
+        drawable->setShader(current_shader);
     }
-
-}
-
-void GameMap::renderToShadowMap(){
-    updateGlobalUniforms();
-
-    render_stack->pushFramebuffer(shadowbuffer);
 
     for (Doodad& doodad : doodads){
         // Save the shader this drawable is currently using
         Shader& current_shader = doodad.getShader();
         // Set the drawable to render with the shadow shader
-        doodad.setShader(shadow_shader);
+        doodad.setShader(shader);
         // Draw the drawable from the light's perspective
         doodad.draw();
         // Reset the drawable's shader to what it was before
@@ -68,44 +93,7 @@ void GameMap::renderToShadowMap(){
         // Save the shader this drawable is currently using
         Shader& current_shader = unit.getShader();
         // Set the drawable to render with the shadow shader
-        unit.setShader(shadow_shader);
-        // Draw the drawable from the light's perspective
-        unit.draw();
-        // Reset the drawable's shader to what it was before
-        unit.setShader(current_shader);
-    }
-
-    Shader& current_shader = ground.getShader();
-    ground.setShader(shadow_shader);
-    ground.draw();
-    ground.setShader(current_shader);
-
-    render_stack->popFramebuffer();
-
-}
-
-void GameMap::renderToDepthMap(){
-    updateGlobalUniforms();
-
-    render_stack->pushFramebuffer(depthbuffer);
-
-    for (Doodad& doodad : doodads){
-        // Save the shader this drawable is currently using
-        Shader& current_shader = doodad.getShader();
-        // Set the drawable to render with the shadow shader
-        doodad.setShader(depth_shader);
-        // Draw the drawable from the light's perspective
-        doodad.draw();
-        // Reset the drawable's shader to what it was before
-        doodad.setShader(current_shader);
-    }
-
-    // Draw all the units
-    for (Playable& unit : unit_holder->getUnits()){
-        // Save the shader this drawable is currently using
-        Shader& current_shader = unit.getShader();
-        // Set the drawable to render with the shadow shader
-        unit.setShader(depth_shader);
+        unit.setShader(shader);
         // Draw the drawable from the light's perspective
         unit.draw();
         // Reset the drawable's shader to what it was before
@@ -114,12 +102,11 @@ void GameMap::renderToDepthMap(){
 
 
     Shader& current_shader = ground.getShader();
-    ground.setShader(depth_shader);
+    ground.setShader(shader);
     ground.draw();
     ground.setShader(current_shader);
 
     render_stack->popFramebuffer();
-
 }
 
 glm::vec3 GameMap::calculateWorldPosition(glm::vec2 screen_point){
