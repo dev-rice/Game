@@ -1,12 +1,9 @@
 #include "game_view_edit.h"
 
-GameViewEdit::GameViewEdit(Level& level, RenderDeque& render_stack) : GameView(level, render_stack), placer(level) {
-
+GameViewEdit::GameViewEdit(Level& level, RenderDeque& render_stack) : GameView(level, render_stack), fancy_text("BreeSerif-Regular.ttf", 18), header_text("BreeSerif-Regular.ttf", 32), placer(level) {
 
     current_paint = new UIDrawable();
     current_paint->setPixelCoordinates(20, 220, 120, 320);
-
-    fancy_text = new TextRenderer("BreeSerif-Regular.ttf", 18);
 
     setMode(Painting);
 
@@ -39,14 +36,14 @@ void GameViewEdit::drawPaintingUI() {
     Texture paint_texture = current_layer.getDiffuse();
     current_paint->attachTexture(paint_texture);
     current_paint->setPixelCoordinates(20, 220, 120, 320);
-    fancy_text->print(20, 180, "Paint: LMB");
-    fancy_text->print(20, 200, "Erase: RMB");
-    fancy_text->print(30, 230, "%d", current_layer.getLayerNumber());
+    header_text.print(20, 140, "Painting Mode");
+    fancy_text.print(20, 180, "Paint: LMB");
+    fancy_text.print(20, 200, "Erase: RMB");
+    fancy_text.print(30, 230, "%d", current_layer.getLayerNumber());
 }
 
 void GameViewEdit::drawPlacingUI() {
-    fancy_text->print(20, 180, "Placing Mode");
-
+    header_text.print(20, 140, "Placing Mode");
 }
 
 void GameViewEdit::handleInputState(){

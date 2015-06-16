@@ -24,7 +24,9 @@ protected:
     void cycleMode();
 
     UIDrawable* current_paint;
-    TextRenderer* fancy_text;
+
+    TextRenderer fancy_text;
+    TextRenderer header_text;
 
     DrawablePlacer placer;
 
