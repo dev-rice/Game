@@ -20,23 +20,26 @@ void DrawablePlacer::handleInput(SDL_Event event) {
     bool scale_up = false;
     bool scale_down = false;
     bool place_doodad = false;
+
     glm::vec3 rotate_amt;
+    float rotate_diff = 0.01;
 
     SDL_Scancode key_scancode = event.key.keysym.scancode;
+    SDL_Keycode keycode = event.key.keysym.sym;
     switch(event.type){
         case SDL_KEYDOWN:
-            if (key_scancode == SDL_SCANCODE_T) {
-                rotate_amt.x = 0.01f;
-            } else if (key_scancode == SDL_SCANCODE_B) {
-                rotate_amt.x = -0.01f;
-            } else if (key_scancode == SDL_SCANCODE_F) {
-                rotate_amt.y = 0.01f;
-            } else if (key_scancode == SDL_SCANCODE_H) {
-                rotate_amt.y = -0.01f;
-            } else if (key_scancode == SDL_SCANCODE_R) {
-                rotate_amt.z = -0.01f;
-            } else if (key_scancode == SDL_SCANCODE_Y) {
-                rotate_amt.z = 0.01f;
+            if (keycode == 't') {
+                rotate_amt.x = rotate_diff;
+            } else if (keycode == 'b') {
+                rotate_amt.x = -rotate_diff;
+            } else if (keycode == 'f') {
+                rotate_amt.y = rotate_diff;
+            } else if (keycode == 'h') {
+                rotate_amt.y = -rotate_diff;
+            } else if (keycode == 'r') {
+                rotate_amt.z = -rotate_diff;
+            } else if (keycode == 'y') {
+                rotate_amt.z = rotate_diff;
             }
         break;
         case SDL_MOUSEWHEEL:
