@@ -17,6 +17,7 @@ public:
     Drawable () {;}
     Drawable(Mesh*, Shader& shader);
     Drawable(Mesh*, Shader& shader, glm::vec3, GLfloat);
+    virtual Drawable* clone() = 0;
 
     virtual void draw();
 

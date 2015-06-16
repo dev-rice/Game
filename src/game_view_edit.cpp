@@ -113,8 +113,7 @@ void GameViewEdit::setMode(Mode mode) {
     if (mode == Painting) {
         this->level->getGameMap().getGround().setPaintLayer(1);
     } else if (mode == Placing) {
-        Drawable& drawable_ref = placer.getDrawable();
-        this->level->getGameMap().addDrawable(drawable_ref);
+        placer.initializeNewDoodad();
     }
 }
 

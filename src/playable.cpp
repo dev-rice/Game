@@ -68,6 +68,10 @@ Playable::Playable(Mesh* mesh, Shader& shader, glm::vec3 position, GLfloat scale
     weapon_damage = 20;
 }
 
+Drawable* Playable::clone() {
+    return new Playable(*this);
+}
+
 void Playable::loadFromXML(std::string filepath){
     pugi::xml_document doc;
     pugi::xml_parse_result result = doc.load_file(filepath.c_str());

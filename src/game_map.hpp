@@ -30,6 +30,9 @@ public:
     glm::vec3 calculateWorldPosition(glm::vec2 screen_pos);
     void addDrawable(Drawable& drawable);
 
+    void setTempDrawable(Drawable& drawable);
+    void placeTempDrawable();
+
     Shadowbuffer& getShadowbuffer();
     Shadowbuffer& getDepthbuffer();
 
@@ -64,9 +67,13 @@ private:
     // Everything that will be drawn
     vector<Drawable*> drawables;
 
+    // Temporary drawable for adding new things through drawable placer
+    bool has_temp_drawable;
+    Drawable* temp_drawable;
+
     Shadowbuffer shadowbuffer;
     Shadowbuffer depthbuffer;
-    
+
     Shader shadow_shader;
     Shader depth_shader;
 

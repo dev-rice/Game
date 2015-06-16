@@ -19,7 +19,12 @@ public:
     void update(glm::vec3 mouse_world_pos);
     void handleInput(SDL_Event event);
 
+    void initializeNewDoodad();
+
 private:
+
+    Drawable* createDefaultDoodad();
+
     Level* level;
     Drawable* current_drawable;
     glm::vec3 axis;

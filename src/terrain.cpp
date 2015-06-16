@@ -55,6 +55,10 @@ Terrain::Terrain(Shader& shader, string heightmap_filename, float amplification)
     initializer(shader, heightmap_filename, amplification, 16);
 }
 
+Drawable* Terrain::clone() {
+    return new Terrain(*this);
+}
+
 void Terrain::initializer(Shader& shader, string heightmap_filename, float amplification, int tile_size){
 
     this->amplification = amplification;

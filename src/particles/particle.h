@@ -18,6 +18,7 @@ public:
 
     Particle(Mesh*, Shader& shader);
     Particle(Mesh*, Shader& shader, glm::vec3, GLfloat);
+    Drawable* clone();
 
     // ~Particle();
 

@@ -1,6 +1,6 @@
 #include "game_map.hpp"
 
-GameMap::GameMap(string map_filename, UnitHolder& units, RenderDeque& render_stack, ResourceLoader& resource_loader) : camera(), ground(), unit_holder(&units), render_stack(&render_stack),  resource_loader(&resource_loader), shadowbuffer(1.0), depthbuffer(1.0), shadow_shader("shaders/shadow.vs", "shaders/shadow.fs"), depth_shader("shaders/depth.vs", "shaders/depth.fs") {
+GameMap::GameMap(string map_filename, UnitHolder& units, RenderDeque& render_stack, ResourceLoader& resource_loader) : camera(), ground(), unit_holder(&units), render_stack(&render_stack),  resource_loader(&resource_loader), shadowbuffer(1.0), depthbuffer(1.0), shadow_shader("shaders/shadow.vs", "shaders/shadow.fs"), depth_shader("shaders/depth.vs", "shaders/depth.fs"), has_temp_drawable(false) {
 
     ifstream map_input(map_filename);
     load(map_input);
@@ -16,7 +16,7 @@ void GameMap::render(){
     }
 
     if (Profile::getInstance()->isDepthmapOn()){
-        renderToDepthMap();        
+        renderToDepthMap();
     }
 
     renderAllNoShader();
@@ -38,6 +38,10 @@ void GameMap::renderAllNoShader() {
     // Draw all the drawables
     for (Drawable* drawable : drawables){
         drawable->draw();
+    }
+
+    if (has_temp_drawable) {
+        temp_drawable->draw();        
     }
 
     // Draw all the doodads
@@ -74,9 +78,21 @@ void GameMap::renderAllWithShader(Shader& shader, Framebuffer& buf) {
         Shader& current_shader = drawable->getShader();
         // Set the drawable to render with the shadow shader
         drawable->setShader(shader);
+        // Draw the drawable from the light's perspective
         drawable->draw();
         // Reset the drawable's shader to what it was before
         drawable->setShader(current_shader);
+    }
+
+    if (has_temp_drawable) {
+        // Save the shader this drawable is currently using
+        Shader& temp_shader = temp_drawable->getShader();
+        // Set the drawable to render with the shadow shader
+        temp_drawable->setShader(shader);
+        // Draw the drawable from the light's perspective
+        temp_drawable->draw();
+        // Reset the drawable's shader to what it was before
+        temp_drawable->setShader(temp_shader);
     }
 
     for (Doodad& doodad : doodads){
@@ -120,6 +136,17 @@ glm::vec3 GameMap::calculateWorldPosition(glm::vec2 screen_point){
 
 void GameMap::addDrawable(Drawable& drawable) {
     drawables.push_back(&drawable);
+}
+
+void GameMap::setTempDrawable(Drawable& drawable) {
+    temp_drawable = &drawable;
+    has_temp_drawable = true;
+}
+
+void GameMap::placeTempDrawable() {
+    Drawable* new_drawable = temp_drawable->clone();
+    addDrawable(*new_drawable);
+    has_temp_drawable = false;
 }
 
 Shadowbuffer& GameMap::getShadowbuffer() {
