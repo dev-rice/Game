@@ -2,6 +2,8 @@
 #define DrawablePlacer_h
 
 #include "includes/glm.hpp"
+#include "includes/sdl.hpp"
+
 #include "drawable.h"
 #include "resource_loader.hpp"
 #include "doodad.h"
@@ -12,10 +14,10 @@ public:
     DrawablePlacer(Level& level);
 
     void setDrawable(Drawable& drawable);
+    Drawable& getDrawable();
 
     void update(glm::vec3 mouse_world_pos);
-
-    Drawable& getDrawable();
+    void handleInput(SDL_Event event);
 
 private:
     Level* level;

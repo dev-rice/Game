@@ -3,6 +3,7 @@
 
 #include "game_view.h"
 #include "drawable_placer.hpp"
+#include "includes/sdl.hpp"
 
 class GameViewEdit : public GameView {
 public:

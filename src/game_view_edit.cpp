@@ -98,6 +98,13 @@ void GameViewEdit::handleInput(SDL_Event event){
             }
         break;
     }
+
+    // Handle input for current mode
+    if (current_mode == Painting) {
+
+    } else if (current_mode == Placing) {
+        placer.handleInput(event);
+    }
 }
 
 void GameViewEdit::setMode(Mode mode) {

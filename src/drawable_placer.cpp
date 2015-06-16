@@ -25,3 +25,34 @@ void DrawablePlacer::update(glm::vec3 mouse_world_pos) {
 Drawable& DrawablePlacer::getDrawable() {
     return *current_drawable;
 }
+
+void DrawablePlacer::handleInput(SDL_Event event) {
+    bool scroll_up = false;
+    bool scroll_down = false;
+
+    SDL_Scancode key_scancode = event.key.keysym.scancode;
+    switch(event.type){
+        case SDL_KEYDOWN:
+            if (key_scancode == SDL_SCANCODE_UP){
+                scroll_up = true;
+            } else if (key_scancode == SDL_SCANCODE_DOWN) {
+                scroll_down = true;
+            }
+        break;
+        case SDL_MOUSEWHEEL:
+            scroll_up = event.wheel.y > 0;
+            scroll_down = event.wheel.y < 0;
+        break;
+
+        default:
+        break;
+    }
+
+    float scale_diff = 0.05f;
+    float current_scale = current_drawable->getScale();
+    if (scroll_up) {
+        current_drawable->setScale(current_scale + scale_diff);
+    } else if (scroll_down) {
+        current_drawable->setScale(current_scale - scale_diff);
+    }
+}
