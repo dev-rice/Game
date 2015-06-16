@@ -121,6 +121,7 @@ void GameViewEdit::cycleMode() {
     if (current_mode == Painting) {
         setMode(Placing);
     } else if (current_mode == Placing) {
+        placer.deactivate();
         setMode(Painting);
     }
 }

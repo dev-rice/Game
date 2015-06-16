@@ -41,7 +41,7 @@ void GameMap::renderAllNoShader() {
     }
 
     if (has_temp_drawable) {
-        temp_drawable->draw();        
+        temp_drawable->draw();
     }
 
     // Draw all the doodads
@@ -146,6 +146,11 @@ void GameMap::setTempDrawable(Drawable& drawable) {
 void GameMap::placeTempDrawable() {
     Drawable* new_drawable = temp_drawable->clone();
     addDrawable(*new_drawable);
+    has_temp_drawable = false;
+}
+
+void GameMap::removeTempDrawable() {
+    temp_drawable = NULL;
     has_temp_drawable = false;
 }
 

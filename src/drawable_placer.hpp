@@ -21,6 +21,8 @@ public:
 
     void initializeNewDoodad();
 
+    void deactivate();
+
 private:
 
     Drawable* createDefaultDoodad();

@@ -32,7 +32,7 @@ public:
     void setPosition(glm::vec3 p);
     void setPosition(GLfloat x, GLfloat y, GLfloat z);
 
-    void setScale(GLfloat s) {scale = s;}
+    void setScale(GLfloat s);
     void setShader(Shader& shader);
 
     void setDiffuse(Texture d);

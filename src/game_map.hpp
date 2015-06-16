@@ -32,6 +32,7 @@ public:
 
     void setTempDrawable(Drawable& drawable);
     void placeTempDrawable();
+    void removeTempDrawable();
 
     Shadowbuffer& getShadowbuffer();
     Shadowbuffer& getDepthbuffer();

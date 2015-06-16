@@ -1,7 +1,6 @@
 #include "drawable_placer.hpp"
 
 DrawablePlacer::DrawablePlacer(Level& level) : level(&level) {
-    initializeNewDoodad();
 }
 
 void DrawablePlacer::setDrawable(Drawable& drawable) {
@@ -17,21 +16,26 @@ Drawable& DrawablePlacer::getDrawable() {
 }
 
 void DrawablePlacer::handleInput(SDL_Event event) {
-    bool scroll_up = false;
-    bool scroll_down = false;
+    bool scale_up = false;
+    bool scale_down = false;
+    bool place_doodad = false;
 
     SDL_Scancode key_scancode = event.key.keysym.scancode;
     switch(event.type){
         case SDL_KEYDOWN:
             if (key_scancode == SDL_SCANCODE_UP){
-                scroll_up = true;
+                scale_up = true;
             } else if (key_scancode == SDL_SCANCODE_DOWN) {
-                scroll_down = true;
+                scale_down = true;
             }
         break;
         case SDL_MOUSEWHEEL:
-            scroll_up = event.wheel.y > 0;
-            scroll_down = event.wheel.y < 0;
+            scale_up = event.wheel.y > 0;
+            scale_down = event.wheel.y < 0;
+        break;
+
+        case SDL_MOUSEBUTTONDOWN:
+            place_doodad = event.button.button == SDL_BUTTON_LEFT;
         break;
 
         default:
@@ -40,16 +44,25 @@ void DrawablePlacer::handleInput(SDL_Event event) {
 
     float scale_diff = 0.1f;
     float current_scale = current_drawable->getScale();
-    if (scroll_up) {
+    if (scale_up) {
         current_drawable->setScale(current_scale + scale_diff);
-    } else if (scroll_down) {
+    } else if (scale_down) {
         current_drawable->setScale(current_scale - scale_diff);
+    }
+
+    if (place_doodad) {
+        this->level->getGameMap().placeTempDrawable();
+        initializeNewDoodad();
     }
 }
 
 void DrawablePlacer::initializeNewDoodad() {
     current_drawable = createDefaultDoodad();
     this->level->getGameMap().setTempDrawable(*current_drawable);
+}
+
+void DrawablePlacer::deactivate() {
+    this->level->getGameMap().removeTempDrawable();
 }
 
 Drawable* DrawablePlacer::createDefaultDoodad() {
