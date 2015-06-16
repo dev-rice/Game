@@ -19,14 +19,23 @@ void DrawablePlacer::handleInput(SDL_Event event) {
     bool scale_up = false;
     bool scale_down = false;
     bool place_doodad = false;
+    glm::vec3 rotate_amt;
 
     SDL_Scancode key_scancode = event.key.keysym.scancode;
     switch(event.type){
         case SDL_KEYDOWN:
-            if (key_scancode == SDL_SCANCODE_UP){
-                scale_up = true;
-            } else if (key_scancode == SDL_SCANCODE_DOWN) {
-                scale_down = true;
+            if (key_scancode == SDL_SCANCODE_T) {
+                rotate_amt.x = 0.01f;
+            } else if (key_scancode == SDL_SCANCODE_B) {
+                rotate_amt.x = -0.01f;
+            } else if (key_scancode == SDL_SCANCODE_F) {
+                rotate_amt.y = 0.01f;
+            } else if (key_scancode == SDL_SCANCODE_H) {
+                rotate_amt.y = -0.01f;
+            } else if (key_scancode == SDL_SCANCODE_R) {
+                rotate_amt.z = -0.01f;
+            } else if (key_scancode == SDL_SCANCODE_Y) {
+                rotate_amt.z = 0.01f;
             }
         break;
         case SDL_MOUSEWHEEL:
@@ -50,10 +59,13 @@ void DrawablePlacer::handleInput(SDL_Event event) {
         current_drawable->setScale(current_scale - scale_diff);
     }
 
+    current_drawable->rotateGlobalEuler(rotate_amt);
+
     if (place_doodad) {
         this->level->getGameMap().placeTempDrawable();
         initializeNewDoodad();
     }
+
 }
 
 void DrawablePlacer::initializeNewDoodad() {
@@ -71,13 +83,16 @@ Drawable* DrawablePlacer::createDefaultDoodad() {
     resource_loader.setMeshPath("res/models/");
     resource_loader.setTexturePath("res/textures/");
 
-    Mesh& mesh_ref = resource_loader.loadMesh("castle_tower.dae");
+    Mesh& mesh_ref = resource_loader.loadMesh("sword.dae");
     Drawable* new_drawable = new Doodad(&mesh_ref);
     new_drawable->setRotationEuler(M_PI / 2.0, 0, 0);
     new_drawable->setScale(3);
 
-    Texture& diff_ref = resource_loader.loadTexture("castle_tower_diff.png");
+    Texture& diff_ref = resource_loader.loadTexture("sword_diff.png");
     new_drawable->setDiffuse(diff_ref);
+
+    Texture& spec_ref = resource_loader.loadTexture("sword_spec.png");
+    new_drawable->setSpecular(spec_ref);
 
     return new_drawable;
 }
