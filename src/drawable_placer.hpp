@@ -21,6 +21,9 @@ public:
     void update(glm::vec3 mouse_world_pos);
     void handleInput(SDL_Event event);
 
+    float getScaleSensitivity();
+    float getRotateSensitivity();
+
     void activate();
     void deactivate();
 
@@ -32,6 +35,9 @@ private:
     Level* level;
     Drawable* current_drawable;
     glm::vec3 axis;
+
+    float scale_sensitivity;
+    float rotate_sensitivity;
 
 };
 

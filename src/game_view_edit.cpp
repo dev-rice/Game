@@ -44,6 +44,8 @@ void GameViewEdit::drawPaintingUI() {
 
 void GameViewEdit::drawPlacingUI() {
     header_text.print(20, 140, "Placing Mode");
+    fancy_text.print(20, 180, "Scale Sensitivity: %.2f", placer.getScaleSensitivity());
+    fancy_text.print(20, 200, "Rotate Sensitivity: %.2f", placer.getRotateSensitivity());
 }
 
 void GameViewEdit::handleInputState(){

@@ -1,7 +1,9 @@
 #include "drawable_placer.hpp"
 
-DrawablePlacer::DrawablePlacer(Level& level) : level(&level), selector(level) {
+DrawablePlacer::DrawablePlacer(Level& level) : level(&level), selector(level), scale_sensitivity(1.0), rotate_sensitivity(1.0) {
+
     current_drawable = &(selector.getCurrentDrawable());
+
 }
 
 void DrawablePlacer::setDrawable(Drawable& drawable) {
@@ -23,11 +25,9 @@ void DrawablePlacer::handleInput(SDL_Event event) {
     bool scale_down = false;
     bool place_doodad = false;
 
-    float scale_sensitivity = 1.5;
     float scale_diff = scale_sensitivity *  GameClock::getInstance()->getDeltaTime();
 
     glm::vec3 rotate_amt;
-    float rotate_sensitivity = 1.0;
     float rotate_diff = rotate_sensitivity * GameClock::getInstance()->getDeltaTime();
 
     selector.handleInput(event);
@@ -47,6 +47,14 @@ void DrawablePlacer::handleInput(SDL_Event event) {
                 rotate_amt.z = -rotate_diff;
             } else if (keycode == 'y') {
                 rotate_amt.z = rotate_diff;
+            } else if (keycode == 'u') {
+                scale_sensitivity += 0.1;
+            } else if (keycode == 'j') {
+                scale_sensitivity -= 0.1;
+            } else if (keycode == 'i') {
+                rotate_sensitivity += 0.1;
+            } else if (keycode == 'k') {
+                rotate_sensitivity -= 0.1;
             }
         break;
         case SDL_MOUSEWHEEL:
@@ -83,4 +91,12 @@ void DrawablePlacer::activate() {
 
 void DrawablePlacer::deactivate() {
     this->level->getGameMap().removeTempDrawable();
+}
+
+float DrawablePlacer::getScaleSensitivity() {
+    return scale_sensitivity;
+}
+
+float DrawablePlacer::getRotateSensitivity() {
+    return rotate_sensitivity;
 }
