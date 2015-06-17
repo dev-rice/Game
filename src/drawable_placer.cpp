@@ -1,6 +1,7 @@
 #include "drawable_placer.hpp"
 
 DrawablePlacer::DrawablePlacer(Level& level) : level(&level), selector(level) {
+    current_drawable = &(selector.getCurrentDrawable());
 }
 
 void DrawablePlacer::setDrawable(Drawable& drawable) {
@@ -22,8 +23,12 @@ void DrawablePlacer::handleInput(SDL_Event event) {
     bool scale_down = false;
     bool place_doodad = false;
 
+    float scale_sensitivity = 1.0;
+    float scale_diff = scale_sensitivity *  GameClock::getInstance()->getDeltaTime();
+
     glm::vec3 rotate_amt;
-    float rotate_diff = 0.01;
+    float rotate_sensitivity = 0.2;
+    float rotate_diff = rotate_sensitivity * GameClock::getInstance()->getDeltaTime();
 
     selector.handleInput(event);
 
@@ -57,7 +62,6 @@ void DrawablePlacer::handleInput(SDL_Event event) {
         break;
     }
 
-    float scale_diff = 0.1f;
     float current_scale = current_drawable->getScale();
     if (scale_up) {
         current_drawable->setScale(current_scale + scale_diff);

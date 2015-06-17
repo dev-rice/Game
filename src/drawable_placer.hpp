@@ -9,6 +9,7 @@
 #include "doodad.h"
 #include "level.hpp"
 #include "drawable_selector.hpp"
+#include "game_clock.h"
 
 class DrawablePlacer {
 public:
