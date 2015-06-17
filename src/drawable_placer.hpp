@@ -8,6 +8,7 @@
 #include "resource_loader.hpp"
 #include "doodad.h"
 #include "level.hpp"
+#include "drawable_selector.hpp"
 
 class DrawablePlacer {
 public:
@@ -26,6 +27,7 @@ private:
 
     Drawable* createDefaultDoodad();
 
+    DrawableSelector selector;
     Level* level;
     Drawable* current_drawable;
     glm::vec3 axis;

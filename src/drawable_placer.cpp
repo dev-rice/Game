@@ -1,14 +1,15 @@
 #include "drawable_placer.hpp"
 
-DrawablePlacer::DrawablePlacer(Level& level) : level(&level) {
-    current_drawable = createDefaultDoodad();
+DrawablePlacer::DrawablePlacer(Level& level) : level(&level), selector(level) {
 }
 
 void DrawablePlacer::setDrawable(Drawable& drawable) {
     current_drawable = &drawable;
+    this->level->getGameMap().setTempDrawable(*current_drawable);
 }
 
 void DrawablePlacer::update(glm::vec3 mouse_world_pos) {
+    setDrawable(selector.getCurrentDrawable());
     current_drawable->setPosition(mouse_world_pos);
 }
 
@@ -23,6 +24,8 @@ void DrawablePlacer::handleInput(SDL_Event event) {
 
     glm::vec3 rotate_amt;
     float rotate_diff = 0.01;
+
+    selector.handleInput(event);
 
     SDL_Keycode keycode = event.key.keysym.sym;
     switch(event.type){
@@ -71,29 +74,9 @@ void DrawablePlacer::handleInput(SDL_Event event) {
 }
 
 void DrawablePlacer::activate() {
-    this->level->getGameMap().setTempDrawable(*current_drawable);
+    setDrawable(*current_drawable);
 }
 
 void DrawablePlacer::deactivate() {
     this->level->getGameMap().removeTempDrawable();
-}
-
-Drawable* DrawablePlacer::createDefaultDoodad() {
-
-    ResourceLoader& resource_loader = this->level->getResourceLoader();
-    resource_loader.setMeshPath("res/models/");
-    resource_loader.setTexturePath("res/textures/");
-
-    Mesh& mesh_ref = resource_loader.loadMesh("sword.dae");
-    Drawable* new_drawable = new Doodad(&mesh_ref);
-    new_drawable->setRotationEuler(M_PI / 2.0, 0, 0);
-    new_drawable->setScale(3);
-
-    Texture& diff_ref = resource_loader.loadTexture("sword_diff.png");
-    new_drawable->setDiffuse(diff_ref);
-
-    Texture& spec_ref = resource_loader.loadTexture("sword_spec.png");
-    new_drawable->setSpecular(spec_ref);
-
-    return new_drawable;
 }
