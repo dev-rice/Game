@@ -10,6 +10,7 @@
 class DrawableSelector {
 public:
     DrawableSelector(Level& level);
+    ~DrawableSelector();
 
     Drawable& getCurrentDrawable();
 
@@ -25,7 +26,6 @@ private:
     Drawable& createDefaultDoodad();
     Drawable& createOtherDoodad();
     Drawable& createOtherOtherDoodad();
-
 
     // Pointers are owned by DrawableSelector
     vector<Drawable*> templates;

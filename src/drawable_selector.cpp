@@ -9,6 +9,15 @@ DrawableSelector::DrawableSelector(Level& level) : level(&level) {
 
 }
 
+DrawableSelector::~DrawableSelector() {
+    for (int i = 0; i < templates.size(); ++i){
+        delete templates[i];
+        templates[i] = NULL;
+    }
+
+    templates.clear();
+}
+
 void DrawableSelector::moveToNext() {
     ++index;
     if (index > getNumDrawables() - 1) {
