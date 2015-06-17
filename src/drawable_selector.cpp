@@ -68,16 +68,13 @@ Drawable& DrawableSelector::createDefaultDoodad() {
     resource_loader.setMeshPath("res/models/");
     resource_loader.setTexturePath("res/textures/");
 
-    Mesh& mesh_ref = resource_loader.loadMesh("sword.dae");
+    Mesh& mesh_ref = resource_loader.loadMesh("rock1.dae");
     Drawable* new_drawable = new Doodad(&mesh_ref);
     new_drawable->setRotationEuler(M_PI / 2.0, 0, 0);
     new_drawable->setScale(3);
 
-    Texture& diff_ref = resource_loader.loadTexture("sword_diff.png");
+    Texture& diff_ref = resource_loader.loadTexture("rock1.png");
     new_drawable->setDiffuse(diff_ref);
-
-    Texture& spec_ref = resource_loader.loadTexture("sword_spec.png");
-    new_drawable->setSpecular(spec_ref);
 
     return *new_drawable;
 }

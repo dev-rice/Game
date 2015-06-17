@@ -23,11 +23,11 @@ void DrawablePlacer::handleInput(SDL_Event event) {
     bool scale_down = false;
     bool place_doodad = false;
 
-    float scale_sensitivity = 1.0;
+    float scale_sensitivity = 1.5;
     float scale_diff = scale_sensitivity *  GameClock::getInstance()->getDeltaTime();
 
     glm::vec3 rotate_amt;
-    float rotate_sensitivity = 0.2;
+    float rotate_sensitivity = 1.0;
     float rotate_diff = rotate_sensitivity * GameClock::getInstance()->getDeltaTime();
 
     selector.handleInput(event);
