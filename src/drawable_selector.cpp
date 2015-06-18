@@ -102,12 +102,12 @@ Drawable& DrawableSelector::createOtherOtherDoodad() {
     resource_loader.setMeshPath("res/models/");
     resource_loader.setTexturePath("res/textures/");
 
-    Mesh& mesh_ref = resource_loader.loadMesh("castle_tower.dae");
+    Mesh& mesh_ref = resource_loader.loadMesh("tree_stump.dae");
     Drawable* new_drawable = new Doodad(&mesh_ref);
     new_drawable->setRotationEuler(M_PI / 2.0, 0, 0);
     new_drawable->setScale(3);
 
-    Texture& diff_ref = resource_loader.loadTexture("castle_tower_diff.png");
+    Texture& diff_ref = resource_loader.loadTexture("tree_stump.png");
     new_drawable->setDiffuse(diff_ref);
 
     return *new_drawable;
