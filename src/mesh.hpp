@@ -16,13 +16,15 @@
 #include "debug.h"
 #include "vertex.h"
 #include "shader.hpp"
+#include "file.hpp"
 
 using namespace std;
 
 class Mesh {
 public:
     Mesh() {;}
-    Mesh(string filename);
+    Mesh(File path);
+    Mesh(string fullpath);
     Mesh(std::vector<GLfloat>, std::vector<GLuint>);
     Mesh(std::vector<Vertex>, std::vector<GLuint>);
 
@@ -43,7 +45,7 @@ protected:
 
     std::vector<Shader*> bound_shaders;
 
-    string filename;
+    File path;
 
 };
 

@@ -27,10 +27,18 @@
 
 #include "mesh.hpp"
 
-Mesh::Mesh(string filename) : filename(filename) {
+Mesh::Mesh(File path) : path(path) {
     #warning make sure all meshes have filenames even if they are not loaded from a file
     // This constructor loads geometry data (vertices and faces) from a .obj file.
-    MeshLoader mesh_loader = MeshLoader(filename);
+    MeshLoader mesh_loader = MeshLoader(path.getFilepath());
+    std::vector<GLfloat> vertices = mesh_loader.getVertexArray();
+    std::vector<GLuint> elements  = mesh_loader.getFaceArray();
+
+    loadMeshData(vertices, elements);
+}
+
+Mesh::Mesh(string fullpath) {
+    MeshLoader mesh_loader = MeshLoader(fullpath);
     std::vector<GLfloat> vertices = mesh_loader.getVertexArray();
     std::vector<GLuint> elements  = mesh_loader.getFaceArray();
 
@@ -104,13 +112,13 @@ string Mesh::asJsonString() {
     // A single mesh is represented as (example):
     //      "mesh": "fence.dae",
     string json_string = "\"mesh\": ";
-    json_string += "\"" + filename + "\",\n";
+    json_string += "\"" + path.getFilename() + "\",\n";
 
     // If the filename is blank then this is not a 'saveable' mesh
-    if (filename == "") {
+    if (path.isBlank()) {
         json_string = "";
     }
-    
+
     return json_string;
 }
 

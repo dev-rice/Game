@@ -42,7 +42,7 @@ Playable::Playable() : Drawable(){
 Playable::Playable(Mesh* mesh, Shader& shader, glm::vec3 position, GLfloat scale) : Drawable(mesh, shader, position, scale) {
 
     if(! selection_ring){
-    	Mesh* selection_ring_mesh = new Mesh("res/models/selection_ring.dae");
+    	Mesh* selection_ring_mesh = new Mesh(File("res/models", "selection_ring.dae"));
     	selection_ring = new Doodad(selection_ring_mesh, shader, position, 2.0f);
     	selection_ring->setEmissive(Texture("res/textures/selection_ring.png"));
         selection_ring->rotateGlobalEuler(M_PI/2.0f, 0.0f, 0.0f);

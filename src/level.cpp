@@ -4,7 +4,7 @@ Level::Level(string filename, RenderDeque& render_stack) : unit_holder(), resour
 
     // Creation of test playable
 # warning Move mesh loading into playable loading
-    Mesh* playable_mesh = new Mesh("res/models/airship.dae");
+    Mesh* playable_mesh = new Mesh(File("res/models", "airship.dae"));
     Shader& playable_shader_ref = resource_loader.loadShader("shaders/doodad.vs",
         "shaders/doodad.fs");
     float playable_scale = 1.0f;
@@ -25,8 +25,6 @@ Level::Level(string filename, RenderDeque& render_stack) : unit_holder(), resour
             unit_holder.addUnit(temp);
         }
     }
-
-    printf("%s\n", game_map.asJsonString().c_str());
 
 }
 
