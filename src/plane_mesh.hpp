@@ -1,7 +1,7 @@
 #ifndef PlaneMesh_h
 #define PlaneMesh_h
 
-#include "mesh.h"
+#include "mesh.hpp"
 
 class PlaneMesh : public Mesh {
 public:

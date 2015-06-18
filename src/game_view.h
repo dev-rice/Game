@@ -4,7 +4,7 @@
 #include <ctime>
 #include <vector>
 
-#include "mesh.h"
+#include "mesh.hpp"
 #include "drawable.h"
 #include "camera.h"
 #include "flat_mesh.h"

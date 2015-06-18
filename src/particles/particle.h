@@ -9,7 +9,7 @@
 
 #include "drawable.h"
 #include "camera.h"
-#include "mesh.h"
+#include "mesh.hpp"
 
 class Particle : public Drawable {
 public:

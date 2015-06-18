@@ -6,7 +6,7 @@
 
 #include <cmath>
 
-#include "mesh.h"
+#include "mesh.hpp"
 #include "camera.h"
 
 #include "texture.hpp"

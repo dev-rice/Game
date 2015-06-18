@@ -1,7 +1,7 @@
 #ifndef TerrainMesh_h
 #define TerrainMesh_h
 
-#include "mesh.h"
+#include "mesh.hpp"
 
 class TerrainMesh : public Mesh {
 public:

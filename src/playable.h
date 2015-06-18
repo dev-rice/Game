@@ -14,7 +14,7 @@
 
 
 #include "doodad.h"
-#include "mesh.h"
+#include "mesh.hpp"
 #include "drawable.h"
 #include "terrain.h"
 #include "game_clock.h"

@@ -25,7 +25,7 @@
 //      u = U texture coordinate on UV map
 //      v = V texture coordinate on UV map
 
-#include "mesh.h"
+#include "mesh.hpp"
 
 Mesh::Mesh(const char* filename) {
     // This constructor loads geometry data (vertices and faces) from a .obj file.

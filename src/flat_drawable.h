@@ -4,7 +4,7 @@
 #include "includes/gl.hpp"
 #include "includes/glm.hpp"
 
-#include "mesh.h"
+#include "mesh.hpp"
 #include "flat_mesh.h"
 #include "texture.hpp"
 

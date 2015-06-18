@@ -8,7 +8,7 @@
 #include <unordered_map>
 #include "includes/json.hpp"
 
-#include "mesh.h"
+#include "mesh.hpp"
 #include "drawable.h"
 #include "heightmap.h"
 #include "vertex.h"

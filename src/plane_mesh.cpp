@@ -1,4 +1,4 @@
-#include "plane_mesh.h"
+#include "plane_mesh.hpp"
 
 PlaneMesh::PlaneMesh() : Mesh() {
     GLfloat plane_verts[] = {-0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,

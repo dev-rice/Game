@@ -8,7 +8,7 @@
 #include <unordered_map>
 #include <utility>
 
-#include "mesh.h"
+#include "mesh.hpp"
 #include "texture.hpp"
 #include "shader.hpp"
 

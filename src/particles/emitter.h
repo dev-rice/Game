@@ -18,7 +18,7 @@
 #include <algorithm>
 #include <math.h>
 
-#include "plane_mesh.h"
+#include "plane_mesh.hpp"
 #include "camera.h"
 
 #include "game_clock.h"
