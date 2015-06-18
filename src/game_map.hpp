@@ -34,6 +34,8 @@ public:
     void placeTempDrawable();
     void removeTempDrawable();
 
+    string asJsonString();
+
     Shadowbuffer& getShadowbuffer();
     Shadowbuffer& getDepthbuffer();
 

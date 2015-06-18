@@ -126,6 +126,37 @@ void Camera::rotateZ(int direction){
     notifyViewChanged();
 }
 
+string Camera::asJsonString() {
+    // Returns the json formatted string of this camera
+    // Example:
+    //      "camera": {
+    //          "fov": 45.0,
+    //          "position": {
+    //              "x": 0.0,
+    //              "y": 40.0,
+    //              "z": 40.0
+    //          },
+    //          "rotation": {
+    //              "x": 1.04,
+    //              "y": 0.0,
+    //              "z": 0.0
+    //          },
+    //          "move_sensitivity": 10.0,
+    //          "rotate_sensitivity": 2.0
+    //      },
+
+    string json_string = "\"camera\": {\n";
+
+    json_string += "\"fov\": " + to_string(fov) + ",\n";
+    json_string += vec3AsJsonString(position, "position");
+    json_string += vec3AsJsonString(rotation, "rotation");
+    json_string += "\"move_sensitivity\": " + to_string(move_sensitivity) + ",\n";
+    json_string += "\"rotate_sensitivity\": " + to_string(rotate_sensitivity) + ",\n";
+    json_string += "},\n";
+
+    return json_string;
+}
+
 glm::mat4 Camera::getViewMatrix(){
     if (view_changed_since_last_calculation){
         // Original vectors

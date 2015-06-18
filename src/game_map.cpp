@@ -153,6 +153,33 @@ void GameMap::removeTempDrawable() {
     has_temp_drawable = false;
 }
 
+string GameMap::asJsonString() {
+    // Returns the game map as a json formatted string
+    // The game map is essentially the full 'map' file (minus the ResourceLoader), so the format is (template):
+    //      camera_json
+    //      doodads_json
+    //      emitters_json
+    //      terrain_json
+
+    string json_string = "";
+
+    // Camera
+    json_string += camera.asJsonString();
+
+    // Doodads (idk about all the drawables yet)
+    json_string += "\"doodads\": [\n";
+    for (Doodad& doodad : doodads) {
+        json_string += doodad.asJsonString();
+    }
+    json_string += "],\n";
+
+    // Particle emitters
+
+    // Terrain
+
+    return json_string;
+}
+
 Shadowbuffer& GameMap::getShadowbuffer() {
     return shadowbuffer;
 }
@@ -196,7 +223,8 @@ void GameMap::load(ifstream& map_input){
     const Json::Value doodads_json = root["doodads"];
     for (const Json::Value& doodad_json : doodads_json){
         // Create doodad from the json segment
-        doodads.push_back(Doodad(doodad_json, *resource_loader));
+        Doodad temp = Doodad(doodad_json, *resource_loader);
+        doodads.push_back(temp);
     }
 
     // Create each particle emitter

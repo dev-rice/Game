@@ -12,11 +12,12 @@
 #include <algorithm>
 #include <string>
 
-
 #include "mesh_loader.h"
 #include "debug.h"
 #include "vertex.h"
 #include "shader.hpp"
+
+using namespace std;
 
 class Mesh {
 public:
@@ -27,6 +28,9 @@ public:
 
     void draw();
     void bindVAO();
+
+    string asJsonString();
+
     virtual void attachGeometryToShader(Shader& shader);
 protected:
 
@@ -38,6 +42,8 @@ protected:
     GLuint vbo;
 
     std::vector<Shader*> bound_shaders;
+
+    string filename;
 
 };
 

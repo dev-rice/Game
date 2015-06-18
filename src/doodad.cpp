@@ -73,6 +73,51 @@ Drawable* Doodad::clone() {
     return new Doodad(*this);
 }
 
+string Doodad::asJsonString() {
+    // Returns this dooad as a json string
+    // A single doodad is represented as (example):
+    // {
+    //     "mesh": "fence.dae",
+    //     "scale": 1.0,
+    //     "position": {
+    //         "x": 0.0,
+    //         "y": 0.0,
+    //         "z": 0.0
+    //     },
+    //     "rotation": {
+    //         "x": 1.5707,
+    //         "y": 0.0,
+    //         "z": 0.0
+    //     },
+    //     "textures": {
+    //         "diff": "fence_diff.png",
+    //         "norm": "fence_norm.png",
+    //         "spec": "fence_spec.png",
+    //         "emit": "fence_emit.png"
+    //     }
+    // },
+    string json_string = "{\n";
+
+    // Mesh
+    json_string += mesh->asJsonString();
+
+    // Scale, position and rotation (should be moved to game map eventually)
+    json_string += "\"scale\": " + to_string(scale) + ",\n";
+    json_string += vec3AsJsonString(position, "position");
+    json_string += vec3AsJsonString(rotation, "rotation");
+
+    // Textures
+    json_string += "\"textures\": {\n";
+    json_string += diffuse.asJsonString("diff");
+    json_string += specular.asJsonString("spec");
+    json_string += normal.asJsonString("norm");
+    json_string += emissive.asJsonString("emit");
+    json_string += "}\n";
+
+    json_string += "},\n";
+    return json_string;
+}
+
 void Doodad::updateUniformData(){
     // Set the scale, this is not really going to be a thing, probably
     // ^ It's definitely a thing

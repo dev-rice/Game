@@ -7,8 +7,9 @@
 #include "includes/json.hpp"
 #include "shader.hpp"
 #include "resource_loader.hpp"
+#include "glm_helpers.hpp"
 
-// using namespace std;
+using namespace std;
 
 class Doodad: public Drawable {
 public:
@@ -17,6 +18,8 @@ public:
     Doodad(Mesh*, Shader& shader);
     Doodad(Mesh*, Shader& shader, glm::vec3, GLfloat);
     Drawable* clone();
+
+    string asJsonString();
 
 private:
     void updateUniformData();

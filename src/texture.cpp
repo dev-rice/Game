@@ -24,8 +24,25 @@ Texture::Texture(glm::vec4 color, GLuint width, GLuint height) {
 
 }
 
-Texture::Texture(string filename) {
+Texture::Texture(string filename) : filename(filename) {
     gl_texture_id = loadTextureFromFile(filename, GL_LINEAR);
+}
+
+string Texture::asJsonString(string type) {
+    // Returns the texture as a json string
+    // The type is diff, spec, norm, emit, etc...
+    // Example:
+    //      "diff": "fence_diff.png",
+
+    string json_string = "\"" + type + "\": \"" + filename + "\",\n";
+
+    // If there is no filename, then this is not a "saveable" texture.
+    if (filename == "") {
+        json_string = "";
+    }
+
+
+    return json_string;
 }
 
 GLuint Texture::getWidth(){

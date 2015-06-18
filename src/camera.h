@@ -8,9 +8,12 @@
 #include "game_clock.h"
 #include "window.h"
 #include "includes/json.hpp"
+#include "glm_helpers.hpp"
 
 const float MOVE_SENSITIVITY = 10.0;
 const float ROTATE_SENSITIVITY = 2.0;
+
+using namespace std;
 
 class Camera {
 public:
@@ -42,6 +45,8 @@ public:
 
     void zoomIn(float zoom_amt);
     void zoomOut(float zoom_amt);
+
+    string asJsonString();
 
     glm::vec3 getPosition();
     glm::vec3 getRotation();

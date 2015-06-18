@@ -27,7 +27,8 @@
 
 #include "mesh.hpp"
 
-Mesh::Mesh(string filename) {
+Mesh::Mesh(string filename) : filename(filename) {
+    #warning make sure all meshes have filenames even if they are not loaded from a file
     // This constructor loads geometry data (vertices and faces) from a .obj file.
     MeshLoader mesh_loader = MeshLoader(filename);
     std::vector<GLfloat> vertices = mesh_loader.getVertexArray();
@@ -96,6 +97,21 @@ void Mesh::draw(){
     // Draws the actual geometry. Textures and everything else are attached at a higher level.
     glDrawElements(GL_TRIANGLES, this->num_faces, GL_UNSIGNED_INT, 0);
 
+}
+
+string Mesh::asJsonString() {
+    // Returns the json formatted string of the mesh.
+    // A single mesh is represented as (example):
+    //      "mesh": "fence.dae",
+    string json_string = "\"mesh\": ";
+    json_string += "\"" + filename + "\",\n";
+
+    // If the filename is blank then this is not a 'saveable' mesh
+    if (filename == "") {
+        json_string = "";
+    }
+    
+    return json_string;
 }
 
 void Mesh::attachGeometryToShader(Shader& shader){

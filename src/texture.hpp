@@ -19,6 +19,8 @@ public:
     Texture(glm::vec4 color, GLuint width, GLuint height);
     Texture(string filename);
 
+    string asJsonString(string type);
+
     GLuint getWidth();
     GLuint getHeight();
     GLubyte* getBytes(GLuint format);
@@ -37,6 +39,8 @@ private:
     void saveTextureBytesToFile(GLubyte* data, GLuint width, GLuint height, GLuint channels, std::string filename);
 
     GLuint gl_texture_id;
+
+    string filename;
 
 };
 

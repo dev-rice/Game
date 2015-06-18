@@ -26,6 +26,8 @@ Level::Level(string filename, RenderDeque& render_stack) : unit_holder(), resour
         }
     }
 
+    printf("%s\n", game_map.asJsonString().c_str());
+
 }
 
 GameMap& Level::getGameMap() {
