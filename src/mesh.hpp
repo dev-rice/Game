@@ -21,8 +21,7 @@
 class Mesh {
 public:
     Mesh() {;}
-    Mesh(const char*);
-    Mesh(std::string f) : Mesh(f.c_str()) {;}
+    Mesh(string filename);
     Mesh(std::vector<GLfloat>, std::vector<GLuint>);
     Mesh(std::vector<Vertex>, std::vector<GLuint>);
 

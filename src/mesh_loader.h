@@ -20,17 +20,18 @@
 #include "vertex.h"
 #include "game_clock.h"
 
+using namespace std;
+
 class MeshLoader{
 public:
-    MeshLoader(const char*);
+    MeshLoader(string filename);
 
     std::vector<GLfloat> getVertexArray() {return final_vertices;}
     std::vector<GLuint>  getFaceArray() {return final_faces;}
 
-    void loadMeshFromDAE(const char*);
 
 private:
-
+    void loadMeshFromDAE(string filename);
     void writeFinalArrays(std::vector<Vertex>&, std::vector<GLuint>&);
     void calculateTangentsAndBinormals(std::vector<Vertex>&, std::vector<GLuint>&);
     bool getVerticesAndElements(pugi::xml_node, std::vector<Vertex>&, std::vector<GLuint>&);
@@ -41,7 +42,7 @@ private:
     std::vector<Vertex> unique_vertices;
     std::map<int, int> vertex_to_unique;
 
-    const char* filename;
+    string filename;
 
     bool flat_shading;
 };

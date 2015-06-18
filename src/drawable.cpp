@@ -33,6 +33,14 @@ void Drawable::load(Mesh* mesh, Shader& shader, glm::vec3 position, GLfloat scal
 
 }
 
+void Drawable::setScale(GLfloat scale) {
+    if (scale < 0) {
+        scale = 0;
+    }
+
+    this->scale = scale;
+}
+
 void Drawable::setShader(Shader& shader_ref){
     this->shader = &shader_ref;
     this->mesh->attachGeometryToShader(*shader);

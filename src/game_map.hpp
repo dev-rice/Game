@@ -28,6 +28,11 @@ public:
     void renderToDepthMap();
 
     glm::vec3 calculateWorldPosition(glm::vec2 screen_pos);
+    void addDrawable(Drawable& drawable);
+
+    void setTempDrawable(Drawable& drawable);
+    void placeTempDrawable();
+    void removeTempDrawable();
 
     Shadowbuffer& getShadowbuffer();
     Shadowbuffer& getDepthbuffer();
@@ -35,7 +40,11 @@ public:
     Camera& getCamera();
     Terrain& getGround();
 
+
 private:
+
+    void renderAllNoShader();
+    void renderAllWithShader(Shader& shader, Framebuffer& buf);
 
     void load(ifstream& map);
 
@@ -57,19 +66,21 @@ private:
     ResourceLoader* resource_loader;
 
     // Everything that will be drawn
-    // vector<Drawable> drawables;
+    vector<Drawable*> drawables;
 
-    // // Anything that shouldn't be drawn to the shadow map
-    // vector<Drawable> no_shadow_drawables;
+    // Temporary drawable for adding new things through drawable placer
+    bool has_temp_drawable;
+    Drawable* temp_drawable;
 
     Shadowbuffer shadowbuffer;
     Shadowbuffer depthbuffer;
 
+    Shader shadow_shader;
+    Shader depth_shader;
+
     GLuint camera_ubo;
     GLuint shadow_ubo;
 
-    Shader shadow_shader;
-    Shader depth_shader;
 
 };
 

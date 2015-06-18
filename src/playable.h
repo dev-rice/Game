@@ -28,6 +28,7 @@ public:
 
 	Playable();
 	Playable(Mesh*, Shader& shader, glm::vec3, GLfloat);
+	Drawable* clone();
 
 	void update(Terrain*, std::vector<Playable*>*);
 	void loadFromXML(std::string filepath);

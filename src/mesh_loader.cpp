@@ -10,7 +10,7 @@
 
 #include "mesh_loader.h"
 
-MeshLoader::MeshLoader(const char* filename){
+MeshLoader::MeshLoader(string filename){
     flat_shading = false;
     loadMeshFromDAE(filename);
 }
@@ -102,13 +102,13 @@ bool isAllThrees(std::string input){
     return result;
 }
 
-void MeshLoader::loadMeshFromDAE(const char* filename){
+void MeshLoader::loadMeshFromDAE(string filename){
     float start_time = GameClock::getInstance()->getCurrentTime();
     this->filename = filename;
 
     // Load the document into a pugixml object
     pugi::xml_document doc;
-    pugi::xml_parse_result result = doc.load_file(filename);
+    pugi::xml_parse_result result = doc.load_file(filename.c_str());
 
     // Get the node that contains geometry data for each mesh.
     pugi::xml_node mesh_list_node = doc.child("COLLADA").child("library_geometries");
@@ -130,7 +130,7 @@ void MeshLoader::loadMeshFromDAE(const char* filename){
         writeFinalArrays(vertices, elements);
 
         float delta_time = GameClock::getInstance()->getCurrentTime() - start_time;
-        Debug::info("Collada mesh loaded from '%s' in %.5f seconds.\n", filename, delta_time);
+        Debug::info("Collada mesh loaded from '%s' in %.5f seconds.\n", filename.c_str(), delta_time);
     }
 }
 
@@ -282,7 +282,7 @@ bool MeshLoader::getVerticesAndElements(pugi::xml_node geometry_node, std::vecto
                 // Check if the array width is correct for the positions
                 if (stride != 3){
                     Debug::error("Invalid array width for vertex array in %s",
-                        filename);
+                        filename.c_str());
                 } else {
                     std::string vertex_array_string = mesh_data_node.child_value("float_array");
                     positions = breakStringIntoVec3s(vertex_array_string);
@@ -292,7 +292,7 @@ bool MeshLoader::getVerticesAndElements(pugi::xml_node geometry_node, std::vecto
                 // Check if the array width is correct for the normals
                 if (stride != 3){
                     Debug::error("Invalid array width for normal array in %s",
-                        filename);
+                        filename.c_str());
                 } else {
                     std::string normal_array_string = mesh_data_node.child_value("float_array");
                     normals = breakStringIntoVec3s(normal_array_string);
@@ -303,7 +303,7 @@ bool MeshLoader::getVerticesAndElements(pugi::xml_node geometry_node, std::vecto
                 // coordinates
                 if (stride != 2){
                     Debug::error("Invalid array width for uv array in %s",
-                        filename);
+                        filename.c_str());
                 } else {
                     std::string uv_array_string = mesh_data_node.child_value("float_array");
                     texcoords = breakStringIntoVec2s(uv_array_string);
@@ -322,7 +322,7 @@ bool MeshLoader::getVerticesAndElements(pugi::xml_node geometry_node, std::vecto
                 faces = getIntsFromString(faces_str, ' ');
             } else {
                 Debug::error("The faces in mesh '%s' are not triangulated.\n",
-                    filename);
+                    filename.c_str());
             }
         }
     }
@@ -366,7 +366,7 @@ bool MeshLoader::getVerticesAndElements(pugi::xml_node geometry_node, std::vecto
         }
 
     } else {
-        Debug::error("Failed to load mesh data from '%s'.\n", filename);
+        Debug::error("Failed to load mesh data from '%s'.\n", filename.c_str());
         success = false;
     }
 

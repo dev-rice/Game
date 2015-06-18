@@ -28,6 +28,7 @@ public:
     Terrain(string heightmap_filename, float amplification);
     Terrain (Shader& shader, string h) : Terrain(shader, h, 10.0f) {;}
     Terrain (Shader& shader, string, float);
+    Drawable* clone();
 
     int getDepth() {return depth;}
     int getWidth() {return width;}

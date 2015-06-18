@@ -253,7 +253,7 @@ void GameView::handleInput(SDL_Event event){
                 Window::getInstance()->requestClose();
             } else if (key_scancode == SDL_SCANCODE_T) {
                 GameClock::getInstance()->resetAverage();
-            } else if ((key_scancode == SDL_SCANCODE_TAB) && (!toggle_key_state)){
+            } else if ((key_scancode == SDL_SCANCODE_F1) && (!toggle_key_state)){
                 toggle_key_state = true;
                 debug_showing = !debug_showing;
             } else if ((key_scancode == SDL_SCANCODE_RETURN) && (!debug_console_key_state)){
@@ -272,7 +272,7 @@ void GameView::handleInput(SDL_Event event){
         break;
 
         case SDL_KEYUP:
-            if (key_scancode == SDL_SCANCODE_TAB){
+            if (key_scancode == SDL_SCANCODE_F1){
                 toggle_key_state = false;
             } else if (key_scancode == SDL_SCANCODE_RETURN){
                 debug_console_key_state = false;

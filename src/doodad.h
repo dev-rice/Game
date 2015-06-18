@@ -16,6 +16,7 @@ public:
     Doodad(Mesh*);
     Doodad(Mesh*, Shader& shader);
     Doodad(Mesh*, Shader& shader, glm::vec3, GLfloat);
+    Drawable* clone();
 
 private:
     void updateUniformData();

@@ -13,6 +13,10 @@ Particle::Particle(Mesh* mesh, Shader& shader, glm::vec3 position, GLfloat scale
 
 }
 
+Drawable* Particle::clone() {
+    return new Particle(*this);
+}
+
 void Particle::setInitialValues(glm::vec3 position, glm::vec3 velocity, glm::vec3 acceleration, float rotationSpeed, int lifespan, ScalingOption scaleWithAge, FadingOption alphaWithAge){
     this->position = position;
     this->velocity = velocity;

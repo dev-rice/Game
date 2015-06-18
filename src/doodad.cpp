@@ -69,6 +69,10 @@ Doodad::Doodad(Mesh* mesh, Shader& shader, glm::vec3 position, GLfloat scale):
     Drawable(mesh, shader, position, scale) {
 }
 
+Drawable* Doodad::clone() {
+    return new Doodad(*this);
+}
+
 void Doodad::updateUniformData(){
     // Set the scale, this is not really going to be a thing, probably
     // ^ It's definitely a thing

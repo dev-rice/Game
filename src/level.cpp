@@ -35,3 +35,7 @@ GameMap& Level::getGameMap() {
 UnitManager& Level::getUnitManager() {
     return unit_manager;
 }
+
+ResourceLoader& Level::getResourceLoader() {
+    return resource_loader;
+}

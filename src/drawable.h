@@ -17,6 +17,7 @@ public:
     Drawable () {;}
     Drawable(Mesh*, Shader& shader);
     Drawable(Mesh*, Shader& shader, glm::vec3, GLfloat);
+    virtual Drawable* clone() = 0;
 
     virtual void draw();
 
@@ -31,7 +32,7 @@ public:
     void setPosition(glm::vec3 p);
     void setPosition(GLfloat x, GLfloat y, GLfloat z);
 
-    void setScale(GLfloat s) {scale = s;}
+    void setScale(GLfloat s);
     void setShader(Shader& shader);
 
     void setDiffuse(Texture d);

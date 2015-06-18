@@ -31,6 +31,9 @@ public:
     string getShaderPath();
 
 private:
+
+    template <class type> bool hasKey(string id);
+
     unordered_map<string, Mesh> meshes;
     unordered_map<string, Texture> textures;
     unordered_map<string, Shader> shaders;
