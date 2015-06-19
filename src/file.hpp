@@ -20,6 +20,9 @@ public:
     string getDirectory();
     string getFilepath();
 
+    void save();
+    virtual void saveAs(string filepath);
+
 private:
     string filename;
     string directory;

@@ -54,3 +54,12 @@ string File::getDirectory() {
 string File::getFilepath() {
     return directory + filename;
 }
+
+void File::save() {
+    // Overwrite the file that this was loaded from
+    saveAs(getFilepath());
+}
+
+void File::saveAs(string filepath) {
+    // Generic file, doesn't really know how to save
+}

@@ -50,13 +50,9 @@ string Level::asJsonString() {
     return json_string;
 }
 
-void Level::save() {
-    // Overwrite the file that the level was loaded from
-    saveAs(getFilepath());
-}
-
 void Level::saveAs(string filepath) {
     Debug::info("Saving level to %s\n", filepath.c_str());
+
     // Write level to file
     ofstream myfile;
     myfile.open(filepath);

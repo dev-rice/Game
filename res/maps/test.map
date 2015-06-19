@@ -148,6 +148,134 @@
 },
 "textures": {
 "diff": "tree_stump.png"}
+},
+{
+"mesh": "rock1.dae",
+"scale": 3.000000,
+"position": {
+"x": -6.718001,
+"y": 0.040821,
+"z": 21.040979
+},
+"rotation": {
+"x": 1.570796,
+"y": 0.000000,
+"z": 0.000000
+},
+"textures": {
+"diff": "rock1.png"}
+},
+{
+"mesh": "rock1.dae",
+"scale": 3.000000,
+"position": {
+"x": -7.411998,
+"y": 0.000000,
+"z": 14.405891
+},
+"rotation": {
+"x": 1.570796,
+"y": 0.000000,
+"z": 0.000000
+},
+"textures": {
+"diff": "rock1.png"}
+},
+{
+"mesh": "rock1.dae",
+"scale": 3.000000,
+"position": {
+"x": -18.378242,
+"y": 0.000000,
+"z": 9.869844
+},
+"rotation": {
+"x": 2.344793,
+"y": 0.000000,
+"z": 0.840000
+},
+"textures": {
+"diff": "rock1.png"}
+},
+{
+"mesh": "rock1.dae",
+"scale": 3.000000,
+"position": {
+"x": -20.360806,
+"y": 0.000000,
+"z": 13.275867
+},
+"rotation": {
+"x": 0.578790,
+"y": 0.000000,
+"z": 0.840000
+},
+"textures": {
+"diff": "rock1.png"}
+},
+{
+"mesh": "rock1.dae",
+"scale": 3.000000,
+"position": {
+"x": -17.726795,
+"y": 0.000000,
+"z": 13.985302
+},
+"rotation": {
+"x": 0.578790,
+"y": -0.605000,
+"z": 0.840000
+},
+"textures": {
+"diff": "rock1.png"}
+},
+{
+"mesh": "rock1.dae",
+"scale": 3.000000,
+"position": {
+"x": -24.482096,
+"y": 0.008228,
+"z": 13.209848
+},
+"rotation": {
+"x": 0.578790,
+"y": 0.177004,
+"z": 0.840000
+},
+"textures": {
+"diff": "rock1.png"}
+},
+{
+"mesh": "rock1.dae",
+"scale": 2.564999,
+"position": {
+"x": -6.763564,
+"y": 0.000000,
+"z": 17.574909
+},
+"rotation": {
+"x": 1.938785,
+"y": 0.177004,
+"z": 0.840000
+},
+"textures": {
+"diff": "rock1.png"}
+},
+{
+"mesh": "rock1.dae",
+"scale": 2.564999,
+"position": {
+"x": -9.726929,
+"y": 0.000000,
+"z": 18.028652
+},
+"rotation": {
+"x": 2.147785,
+"y": -0.250998,
+"z": 0.840000
+},
+"textures": {
+"diff": "rock1.png"}
 }
 ],
 "terrain": {

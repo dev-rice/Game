@@ -20,7 +20,6 @@ public:
 
     string asJsonString();
 
-    void save();
     void saveAs(string filename);
 
 private:
