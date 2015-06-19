@@ -6,6 +6,19 @@ File::File() {
     setDirectory("");
 }
 
+File::File(string filepath) {
+    path_delimiter = '/';
+
+    // Split the filepath into a directory and a filename
+    int beginIdx = filepath.rfind(path_delimiter);
+    string filename = filepath.substr(beginIdx + 1);
+    string directory = filepath.substr(0, beginIdx);
+
+    setFilename(filename);
+    setDirectory(directory);
+
+}
+
 File::File(string directory, string filename) {
     path_delimiter = '/';
     setFilename(filename);

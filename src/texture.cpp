@@ -24,7 +24,7 @@ Texture::Texture(glm::vec4 color, GLuint width, GLuint height) {
 
 }
 
-Texture::Texture(string filename) : filename(filename) {
+Texture::Texture(string filename) : File(filename) {
     gl_texture_id = loadTextureFromFile(filename, GL_LINEAR);
 }
 
@@ -34,10 +34,10 @@ string Texture::asJsonString(string type) {
     // Example:
     //      "diff": "fence_diff.png",
 
-    string json_string = "\"" + type + "\": \"" + filename + "\",\n";
+    string json_string = "\"" + type + "\": \"" + getFilename() + "\",\n";
 
     // If there is no filename, then this is not a "saveable" texture.
-    if (filename == "") {
+    if (isBlank()) {
         json_string = "";
     }
 
