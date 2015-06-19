@@ -1,0 +1,352 @@
+{
+"mesh_path": "res/models/",
+"texture_path": "res/textures/",
+"shader_path": "",
+"camera": {
+"fov": 45.000000,
+"position": {
+"x": 0.000000,
+"y": 40.000000,
+"z": 40.000000
+},
+"rotation": {
+"x": 1.040000,
+"y": 0.000000,
+"z": 0.000000
+},
+"move_sensitivity": 10.000000,
+"rotate_sensitivity": 2.000000
+},
+"doodads": [
+{
+"mesh": "fence.dae",
+"scale": 1.000000,
+"position": {
+"x": 0.000000,
+"y": 0.000000,
+"z": 0.000000
+},
+"rotation": {
+"x": 1.570700,
+"y": 0.000000,
+"z": 0.000000
+},
+"textures": {
+"diff": "fence_diff.png",
+"norm": "fence_norm.png"}
+},
+{
+"mesh": "castle_tower.dae",
+"scale": 2.500000,
+"position": {
+"x": 4.500000,
+"y": 0.000000,
+"z": -6.200000
+},
+"rotation": {
+"x": 1.570700,
+"y": 0.000000,
+"z": 0.000000
+},
+"textures": {
+"diff": "castle_tower_diff.png",
+"norm": "castle_tower_norm.png"}
+},
+{
+"mesh": "firepit.dae",
+"scale": 1.800000,
+"position": {
+"x": -1.414000,
+"y": -0.010000,
+"z": 0.000000
+},
+"rotation": {
+"x": 1.570700,
+"y": 0.000000,
+"z": 0.000000
+},
+"textures": {
+"diff": "firepit_diff.png",
+"emit": "firepit_emit.png"}
+},
+{
+"mesh": "tree_stump.dae",
+"scale": 3.000000,
+"position": {
+"x": 6.329284,
+"y": 0.000000,
+"z": 18.093100
+},
+"rotation": {
+"x": 1.570796,
+"y": 0.000000,
+"z": 0.000000
+},
+"textures": {
+"diff": "tree_stump.png"}
+},
+{
+"mesh": "fence.dae",
+"scale": 3.000000,
+"position": {
+"x": -13.951621,
+"y": 0.000000,
+"z": 18.859364
+},
+"rotation": {
+"x": 1.570796,
+"y": 0.000000,
+"z": 0.000000
+},
+"textures": {
+"diff": "fence_diff.png"}
+},
+{
+"mesh": "tree_stump.dae",
+"scale": 3.740995,
+"position": {
+"x": 16.689299,
+"y": 0.039215,
+"z": 6.571957
+},
+"rotation": {
+"x": 1.570796,
+"y": 0.000000,
+"z": 0.000000
+},
+"textures": {
+"diff": "tree_stump.png"}
+},
+{
+"mesh": "tree_stump.dae",
+"scale": 2.384001,
+"position": {
+"x": 14.444593,
+"y": 0.039215,
+"z": 16.007475
+},
+"rotation": {
+"x": 1.570796,
+"y": -0.863003,
+"z": 0.000000
+},
+"textures": {
+"diff": "tree_stump.png"}
+},
+{
+"mesh": "tree_stump.dae",
+"scale": 1.924000,
+"position": {
+"x": -2.522643,
+"y": 0.000000,
+"z": 10.099411
+},
+"rotation": {
+"x": 1.570796,
+"y": -2.519003,
+"z": 0.000000
+},
+"textures": {
+"diff": "tree_stump.png"}
+},
+{
+"mesh": "rock1.dae",
+"scale": 3.000000,
+"position": {
+"x": -6.718001,
+"y": 0.040821,
+"z": 21.040979
+},
+"rotation": {
+"x": 1.570796,
+"y": 0.000000,
+"z": 0.000000
+},
+"textures": {
+"diff": "rock1.png"}
+},
+{
+"mesh": "rock1.dae",
+"scale": 3.000000,
+"position": {
+"x": -7.411998,
+"y": 0.000000,
+"z": 14.405891
+},
+"rotation": {
+"x": 1.570796,
+"y": 0.000000,
+"z": 0.000000
+},
+"textures": {
+"diff": "rock1.png"}
+},
+{
+"mesh": "rock1.dae",
+"scale": 3.000000,
+"position": {
+"x": -18.378242,
+"y": 0.000000,
+"z": 9.869844
+},
+"rotation": {
+"x": 2.344793,
+"y": 0.000000,
+"z": 0.840000
+},
+"textures": {
+"diff": "rock1.png"}
+},
+{
+"mesh": "rock1.dae",
+"scale": 3.000000,
+"position": {
+"x": -20.360806,
+"y": 0.000000,
+"z": 13.275867
+},
+"rotation": {
+"x": 0.578790,
+"y": 0.000000,
+"z": 0.840000
+},
+"textures": {
+"diff": "rock1.png"}
+},
+{
+"mesh": "rock1.dae",
+"scale": 3.000000,
+"position": {
+"x": -17.726795,
+"y": 0.000000,
+"z": 13.985302
+},
+"rotation": {
+"x": 0.578790,
+"y": -0.605000,
+"z": 0.840000
+},
+"textures": {
+"diff": "rock1.png"}
+},
+{
+"mesh": "rock1.dae",
+"scale": 3.000000,
+"position": {
+"x": -24.482096,
+"y": 0.008228,
+"z": 13.209848
+},
+"rotation": {
+"x": 0.578790,
+"y": 0.177004,
+"z": 0.840000
+},
+"textures": {
+"diff": "rock1.png"}
+},
+{
+"mesh": "rock1.dae",
+"scale": 2.564999,
+"position": {
+"x": -6.763564,
+"y": 0.000000,
+"z": 17.574909
+},
+"rotation": {
+"x": 1.938785,
+"y": 0.177004,
+"z": 0.840000
+},
+"textures": {
+"diff": "rock1.png"}
+},
+{
+"mesh": "rock1.dae",
+"scale": 2.564999,
+"position": {
+"x": -9.726929,
+"y": 0.000000,
+"z": 18.028652
+},
+"rotation": {
+"x": 2.147785,
+"y": -0.250998,
+"z": 0.840000
+},
+"textures": {
+"diff": "rock1.png"}
+}
+],
+"terrain": {
+"heightmap": "heightmap.png",
+"amplification": 10.000000,
+"tile_size": 8,
+"splatmaps": [
+{
+"id": 0,
+"filename": "splat0.png"},
+{
+"id": 1,
+"filename": "splat1.png"}
+],
+"texture_layers": [
+{
+"layer_number": 0,
+"splatmap": 0,
+"channel": "r",
+"textures": {
+"diff": "stylized_grass.png"
+}
+},
+{
+"layer_number": 1,
+"splatmap": 0,
+"channel": "r",
+"textures": {
+"diff": "stone_tile.png"
+}
+},
+{
+"layer_number": 2,
+"splatmap": 0,
+"channel": "g",
+"textures": {
+"diff": "stone.png"
+}
+},
+{
+"layer_number": 3,
+"splatmap": 0,
+"channel": "b",
+"textures": {
+"diff": "glacier.png"
+}
+},
+{
+"layer_number": 4,
+"splatmap": 1,
+"channel": "r",
+"textures": {
+"diff": "flowers.png"
+}
+},
+{
+"layer_number": 5,
+"splatmap": 1,
+"channel": "g",
+"textures": {
+"diff": "rough_ground.png"
+}
+},
+{
+"layer_number": 6,
+"splatmap": 1,
+"channel": "b",
+"textures": {
+"diff": "tile.png"
+}
+}
+]
+}
+}

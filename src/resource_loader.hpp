@@ -30,6 +30,8 @@ public:
     string getTexturePath();
     string getShaderPath();
 
+    string asJsonString();
+
 private:
 
     template <class type> bool hasKey(string id);

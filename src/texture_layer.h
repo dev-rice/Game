@@ -21,6 +21,8 @@ public:
     GLuint getLayerNumber();
     char getChannelChar();
 
+    string asJsonString();
+
     static int getIntFromChannelChar(char channel);
     static char getCharFromChannelInt(int channel);
 

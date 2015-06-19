@@ -73,8 +73,8 @@ void Terrain::initializer(Shader& shader, string heightmap_filename, float ampli
     // After loading in the heightmap to memory, we can make a terrain mesh
     // based on the data
     float start_time = GameClock::getInstance()->getCurrentTime();
-    heightmap = new Heightmap(heightmap_filename, amplification);
-    mesh = generateMesh(*heightmap);
+    heightmap = Heightmap(heightmap_filename, amplification);
+    mesh = generateMesh(heightmap);
     float delta_time = GameClock::getInstance()->getCurrentTime() - start_time;
     Debug::info("Took %f seconds to generate the terrain mesh.\n", delta_time);
 
@@ -500,7 +500,7 @@ void Terrain::setPaintLayer(GLuint layer){
     // Sanity check
     if (texture_layer.getLayerNumber() == layer && layer != 0){
         char channel = TextureLayer::getCharFromChannelInt(texture_layer.getChannel());
-        GLuint splatmap = layered_textures->getSplatmap(texture_layer.getSplatmap());
+        GLuint splatmap = layered_textures->getSplatmap(texture_layer.getSplatmap()).getGLId();
 
         splatmap_painter->setChannel(channel);
         splatmap_painter->setTexture(splatmap);
@@ -522,10 +522,71 @@ void Terrain::fillSplatmaps(){
     }
 }
 
+string Terrain::asJsonString() {
+    // Outputs the formatted json string for this terrain object
+    // Example:
+        // "terrain": {
+        //     "heightmap": "heightmap.png",
+        //     "amplification": 10.0,
+        //     "tile_size": 8,
+        //     "splatmaps": [
+        //         {
+        //             "id": 0,
+        //             "filename": "all_splat.png"
+        //         },
+        //         {
+        //             "id": 1,
+        //             "filename": "second_splat.png"
+        //         }
+        //     ],
+        //     "texture_layers": [
+        //         {
+        //             "layer_number": 0,
+        //             "splatmap": 0,
+        //             "channel": "r",
+        //             "textures": {
+        //                 "diff": "stylized_grass.png"
+        //             }
+        //         },
+        //         {
+        //             "layer_number": 1,
+        //             "splatmap": 0,
+        //             "channel": "r",
+        //             "textures": {
+        //                 "diff": "stone_tile.png"
+        //             }
+        //         },
+        //         {
+        //             "layer_number": 2,
+        //             "splatmap": 0,
+        //             "channel": "g",
+        //             "textures": {
+        //                 "diff": "stone.png"
+        //             }
+        //         },
+        //         ...
+        //     ]
+        // }
+
+    string json_string = "\"terrain\": {\n";
+
+    // Basic terrain data
+    json_string += "\"heightmap\": \"" + heightmap.getFilename() + "\",\n";
+    json_string += "\"amplification\": " + to_string(amplification) + ",\n";
+    json_string += "\"tile_size\": " + to_string(tile_size) + ",\n";
+
+    // Splatmaps and Texture Layers are both handled by LayeredTextures
+    json_string += layered_textures->asJsonString() + "\n";
+
+    json_string += "}";
+
+    return json_string;
+}
+
 string Terrain::saveData(string name){
     string output = "";
 
-    Texture texture = heightmap->getTexture();
+    Texture texture = heightmap.getTexture();
     string heightmap_name = name + "_heightmap.bmp";
     #warning here
     texture.save(GL_RGBA, heightmap_name);
@@ -533,7 +594,6 @@ string Terrain::saveData(string name){
     // image_data = NULL;
 
     output += "h " + heightmap_name + "\n";
-    output += layered_textures->saveData(name);
 
     return output;
 }

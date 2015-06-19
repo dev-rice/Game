@@ -20,11 +20,11 @@
 
 using namespace std;
 
-class Mesh {
+class Mesh : public File {
 public:
     Mesh() {;}
-    Mesh(File path);
     Mesh(string fullpath);
+    Mesh(string directory, string filename);
     Mesh(std::vector<GLfloat>, std::vector<GLuint>);
     Mesh(std::vector<Vertex>, std::vector<GLuint>);
 
@@ -44,8 +44,6 @@ protected:
     GLuint vbo;
 
     std::vector<Shader*> bound_shaders;
-
-    File path;
 
 };
 

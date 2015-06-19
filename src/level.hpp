@@ -1,19 +1,26 @@
 #ifndef Level_h
 #define Level_h
 
+#include <fstream>
+
 #include "game_map.hpp"
 #include "unit_manager.hpp"
 #include "resource_loader.hpp"
+#include "file.hpp"
 
 using namespace std;
 
-class Level {
+class Level : public File {
 public:
     Level(string filename, RenderDeque& render_stack);
 
     GameMap& getGameMap();
     UnitManager& getUnitManager();
     ResourceLoader& getResourceLoader();
+
+    string asJsonString();
+
+    void saveAs(string filename);
 
 private:
     UnitHolder unit_holder;

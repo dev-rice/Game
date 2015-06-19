@@ -7,10 +7,11 @@
 #include "includes/glm.hpp"
 #include "includes/soil.hpp"
 #include "debug.h"
+#include "file.hpp"
 
 using namespace std;
 
-class Texture {
+class Texture : public File {
 public:
     Texture();
     Texture(GLuint id);
@@ -39,8 +40,6 @@ private:
     void saveTextureBytesToFile(GLubyte* data, GLuint width, GLuint height, GLuint channels, std::string filename);
 
     GLuint gl_texture_id;
-
-    string filename;
 
 };
 

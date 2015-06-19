@@ -9,7 +9,6 @@ Texture::Texture(GLuint id) {
 }
 
 Texture::Texture(GLubyte* data, GLuint width, GLuint height) {
-
     gl_texture_id = loadTextureFromBytes(data, width, height, GL_LINEAR);
 
 }
@@ -19,13 +18,11 @@ Texture::Texture(glm::vec4 color) {
 }
 
 Texture::Texture(glm::vec4 color, GLuint width, GLuint height) {
-
     gl_texture_id = loadTextureFromPixel(width, height, color, GL_LINEAR);
-
 }
 
-Texture::Texture(string filename) : filename(filename) {
-    gl_texture_id = loadTextureFromFile(filename, GL_LINEAR);
+Texture::Texture(string filepath) : File(filepath) {
+    gl_texture_id = loadTextureFromFile(filepath, GL_LINEAR);
 }
 
 string Texture::asJsonString(string type) {
@@ -34,13 +31,12 @@ string Texture::asJsonString(string type) {
     // Example:
     //      "diff": "fence_diff.png",
 
-    string json_string = "\"" + type + "\": \"" + filename + "\",\n";
+    string json_string = "\"" + type + "\": \"" + getFilename() + "\"";
 
-    // If there is no filename, then this is not a "saveable" texture.
-    if (filename == "") {
+    // If there is no filename, then this is not am "saveable" texture.
+    if (isBlank()) {
         json_string = "";
     }
-
 
     return json_string;
 }

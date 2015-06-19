@@ -50,6 +50,8 @@ public:
 	bool isSelected(){ return selected; }
 	bool isTempSelected(){ return temp_selected; }
 
+	string asJsonString();
+
 	float getRadius(){ return radius; }
 
 	int getTeam(){return team_number;}

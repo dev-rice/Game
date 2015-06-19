@@ -80,3 +80,18 @@ string ResourceLoader::getTexturePath() {
 string ResourceLoader::getShaderPath() {
         return shader_path;
 }
+
+string ResourceLoader::asJsonString() {
+    // Example:
+        // "mesh_path": "res/models/",
+        // "texture_path": "res/textures/",
+        // "shader_path": "shaders/",
+
+    string json_string = "";
+
+    json_string += "\"mesh_path\": \"" + mesh_path + "\",\n";
+    json_string += "\"texture_path\": \"" + texture_path + "\",\n";
+    json_string += "\"shader_path\": \"" + shader_path + "\"";
+
+    return json_string;
+}

@@ -5,9 +5,12 @@
 #include "includes/glm.hpp"
 
 #include <vector>
+#include <string>
 
 #include "texture_layer.h"
 #include "shader.hpp"
+
+using namespace std;
 
 class LayeredTextures {
 public:
@@ -23,7 +26,7 @@ public:
 
     bool needsSplatmaps();
 
-    GLuint getSplatmap(int index);
+    Texture& getSplatmap(int index);
     GLuint getTexture(GLuint splatmap, char channel);
 
     TextureLayer getLayer(GLuint splatmap, char channel);
@@ -31,11 +34,11 @@ public:
 
     int getNumLayers();
 
-    std::string saveData(std::string name);
+    string asJsonString();
 
 private:
 
-    std::vector<GLuint> unique_splatmaps;
+    std::vector<Texture> unique_splatmaps;
     std::vector<TextureLayer> texture_layers;
 
     int num_layers;

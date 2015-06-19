@@ -8,6 +8,7 @@ using namespace std;
 class File {
 public:
     File();
+    File(string filepath);
     File(string directory, string filename);
 
     bool isBlank();
@@ -18,6 +19,9 @@ public:
     string getFilename();
     string getDirectory();
     string getFilepath();
+
+    void save();
+    virtual void saveAs(string filepath);
 
 private:
     string filename;

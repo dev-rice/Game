@@ -65,17 +65,17 @@ void GameViewEdit::handleInputState(){
         }
 
         if (state[SDL_SCANCODE_1]){
-            this->level->getGameMap().getGround().setPaintLayer(1);
+            level->getGameMap().getGround().setPaintLayer(1);
         } else if (state[SDL_SCANCODE_2]){
-            this->level->getGameMap().getGround().setPaintLayer(2);
+            level->getGameMap().getGround().setPaintLayer(2);
         } else if (state[SDL_SCANCODE_3]){
-            this->level->getGameMap().getGround().setPaintLayer(3);
+            level->getGameMap().getGround().setPaintLayer(3);
         } else if (state[SDL_SCANCODE_4]){
-            this->level->getGameMap().getGround().setPaintLayer(4);
+            level->getGameMap().getGround().setPaintLayer(4);
         } else if (state[SDL_SCANCODE_5]){
-            this->level->getGameMap().getGround().setPaintLayer(5);
+            level->getGameMap().getGround().setPaintLayer(5);
         } else if (state[SDL_SCANCODE_6]){
-            this->level->getGameMap().getGround().setPaintLayer(6);
+            level->getGameMap().getGround().setPaintLayer(6);
         }
     }
 
@@ -86,11 +86,16 @@ void GameViewEdit::handleInput(SDL_Event event){
     GameView::handleInput(event);
 
     SDL_Scancode key_scancode = event.key.keysym.scancode;
+    SDL_Keycode keycode = event.key.keysym.sym;
     switch(event.type){
         case SDL_KEYDOWN:
             if ((key_scancode == SDL_SCANCODE_TAB) && (!tab_key_state)) {
                 tab_key_state = true;
                 cycleMode();
+            }
+            if (keycode == 'm') {
+                // m is for save!
+                level->save();
             }
         break;
 

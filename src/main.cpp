@@ -23,6 +23,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <algorithm>
+#include <iostream>
 
 #include "debug.h"
 #include "world.h"
@@ -34,8 +35,9 @@
 #include "font_sheet.h"
 #include "flat_drawable.h"
 #include "texture.hpp"
+#include "file.hpp"
 
-
+using namespace std;
 
 int main(int argc, char* argv[]) {
 

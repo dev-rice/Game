@@ -119,3 +119,10 @@ void Particle::updateUniformData(){
 bool Particle::isDead(){
     return (!(age<lifespan));
 }
+
+string Particle::asJsonString() {
+    // No defined format for a particle in json string
+    string json_string = "";
+
+    return json_string;
+}

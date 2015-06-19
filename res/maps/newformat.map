@@ -104,11 +104,11 @@
         "splatmaps": [
             {
                 "id": 0,
-                "filename": "all_splat.png"
+                "filename": "splat0.png"
             },
             {
                 "id": 1,
-                "filename": "second_splat.png"
+                "filename": "splat1.png"
             }
         ],
         "texture_layers": [

@@ -28,6 +28,8 @@ public:
     bool isDead();
     void enablePhysics(float);
 
+    string asJsonString();
+
 private:
     void updateUniformData();
 
