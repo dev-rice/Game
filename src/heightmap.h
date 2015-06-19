@@ -13,14 +13,14 @@
 #include "debug.h"
 
 #include "texture.hpp"
+#include "file.hpp"
 
-class Heightmap {
+using namespace std;
+
+class Heightmap : public File {
 public:
-    // Number of components in the map image, 4 for RGBA
-    const int COMPONENTS = 4;
-
-    Heightmap(std::string filename, float ampliciation);
-    ~Heightmap();
+    Heightmap();
+    Heightmap(string filename, float ampliciation);
 
     float getMapHeight(int x, int y);
 
@@ -37,6 +37,9 @@ private:
     int height;
     float amplification;
     Texture texture;
+
+    // Number of components in the map image, 4 for RGBA
+    int components;
 };
 
 #endif

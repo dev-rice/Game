@@ -581,3 +581,10 @@ void Playable::draw(){
         }
     }
 }
+
+string Playable::asJsonString() {
+    // No defined format for a playable in json string
+    string json_string = "";
+
+    return json_string;
+}

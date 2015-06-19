@@ -5,8 +5,15 @@ int isPowerOfTwo (unsigned int x){
     return ((x != 0) && ((x & (~x + 1)) == x));
 }
 
-Heightmap::Heightmap(std::string filename, float amplification){
+Heightmap::Heightmap() {
+
+}
+
+Heightmap::Heightmap(std::string filename, float amplification) : File(filename) {
     this->amplification = amplification;
+
+    // Number of components in the map image, 4 for RGBA
+    components = 4;
 
     texture = Texture(filename);
     image = SOIL_load_image(filename.c_str(), &(width), &(height),
@@ -25,8 +32,8 @@ Heightmap::Heightmap(std::string filename, float amplification){
         height = 128;
 
         // Initialize the image to all zeros
-        image = new unsigned char[COMPONENTS * width * height];
-        for (int i = 0; i < COMPONENTS * width * height; ++i){
+        image = new unsigned char[components * width * height];
+        for (int i = 0; i < components * width * height; ++i){
             image[i] = 0;
         }
 
@@ -38,15 +45,11 @@ Heightmap::Heightmap(std::string filename, float amplification){
     }
 }
 
-Heightmap::~Heightmap(){
-    SOIL_free_image_data(image);
-}
-
 float Heightmap::getMapHeight(int x, int y){
     // Scaling factor for the height map data
-    int red = image[(y * width + x)*COMPONENTS + 0];
-    int green = image[(y * width + x)*COMPONENTS + 1];
-    int blue = image[(y * width + x)*COMPONENTS + 2];
+    int red = image[(y * width + x)*components + 0];
+    int green = image[(y * width + x)*components + 1];
+    int blue = image[(y * width + x)*components + 2];
 
     // Scale the height such that the value is between 0.0 and 1.0
     float map_height = float(red + green + blue) / (3.0f * 255.0);

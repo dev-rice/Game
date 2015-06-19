@@ -176,6 +176,7 @@ string GameMap::asJsonString() {
     // Particle emitters
 
     // Terrain
+    json_string += ground.asJsonString();
 
     return json_string;
 }

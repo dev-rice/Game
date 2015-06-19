@@ -40,6 +40,8 @@ public:
     void setEmissive(Texture e);
     void setNormal(Texture n);
 
+    virtual string asJsonString() = 0;
+
     glm::vec3 getPosition() {return position;}
     GLfloat getScale() {return scale;}
     Shader& getShader() {return *shader;}

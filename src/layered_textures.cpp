@@ -140,6 +140,19 @@ void LayeredTextures::swapLayers(GLuint layer1, GLuint layer2){
     texture_layers[layer2].setLayerNumber(layer2);
 }
 
+string LayeredTextures::asJsonString() {
+    string json_string = "";
+
+    // Texture layers
+    json_string += "\"texture_layers\": [\n";
+    for (TextureLayer& layer : texture_layers) {
+        json_string += layer.asJsonString();
+    }
+    json_string += "]\n";
+
+    return json_string;
+}
+
 std::string LayeredTextures::saveData(std::string name){
     // Write the splatmaps out to files
     std::vector<std::string> splatmap_names;

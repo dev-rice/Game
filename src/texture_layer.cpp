@@ -14,6 +14,40 @@ TextureLayer::TextureLayer(Texture diffuse, GLuint splatmap, char channel, int l
     setLayerNumber(layer_number);
 }
 
+string TextureLayer::asJsonString() {
+    // Example:
+    //         {
+    //             "layer_number": 0,
+    //             "splatmap": 0,
+    //             "channel": "r",
+    //             "textures": {
+    //                 "diff": "stylized_grass.png"
+    //             }
+    //         },
+
+    string json_string = "{\n";
+
+    // layer number
+    json_string += "\"layer_number\": " + to_string(layer_number) + ",\n";
+
+    // splatmap number
+    json_string += "\"splatmap\": " + to_string(splatmap) + ",\n";
+
+    // channel character (can't be all in one line for some weird reason)
+    json_string += "\"channel\": \"";
+    json_string += channel_char;
+    json_string += "\",\n";
+
+    // textures
+    json_string += "\"textures\": {\n";
+    json_string += "\"diff\": \"" + diffuse.getFilename() + "\",\n";
+    json_string += "}\n";
+
+    json_string += "},\n";
+
+    return json_string;
+}
+
 void TextureLayer::setDiffuse(Texture diffuse){
     this->diffuse = diffuse;
 }

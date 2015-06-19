@@ -55,6 +55,8 @@ public:
     TextureLayer getCurrentLayer();
     void setPaintLayer(GLuint layer);
 
+    string asJsonString();
+
     string saveData(string name);
 
     LayeredTextures* getLayeredTextures();
@@ -91,7 +93,7 @@ private:
 
     TexturePainter* splatmap_painter;
 
-    Heightmap* heightmap;
+    Heightmap heightmap;
 
 };
 

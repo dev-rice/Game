@@ -20,7 +20,7 @@
 
 using namespace std;
 
-class Mesh : public File{
+class Mesh : public File {
 public:
     Mesh() {;}
     Mesh(string fullpath);
