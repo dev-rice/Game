@@ -398,9 +398,7 @@ void Playable::attack(Playable *enemy){
     float delta_time = GameClock::getInstance()->getCurrentTime() - last_attack_timestamp;
 
     if(delta_time > weapon_cooldown){
-        int actual_damage = int(0.5 + weapon_damage*float(health)/float(max_health));
-        // printf("%p attacked %p for %d damage, having %d health!\n", this, enemy, actual_damage, health);
-        enemy->takeDamage(actual_damage);
+        enemy->takeDamage(weapon_damage);
         last_attack_timestamp = GameClock::getInstance()->getCurrentTime();
     }
 }
