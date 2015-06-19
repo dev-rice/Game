@@ -25,7 +25,7 @@ Level::Level(string filename, RenderDeque& render_stack) : unit_holder(), resour
         }
     }
 
-    printf("%s\n", game_map.asJsonString().c_str());
+    printf("%s\n", asJsonString().c_str());
 
 }
 
@@ -39,4 +39,15 @@ UnitManager& Level::getUnitManager() {
 
 ResourceLoader& Level::getResourceLoader() {
     return resource_loader;
+}
+
+string Level::asJsonString() {
+    string json_string = "{\n";
+
+    json_string += resource_loader.asJsonString();
+    json_string += game_map.asJsonString();
+
+    json_string += "}\n";
+
+    return json_string;
 }

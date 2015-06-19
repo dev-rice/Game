@@ -26,7 +26,7 @@ public:
 
     bool needsSplatmaps();
 
-    GLuint getSplatmap(int index);
+    Texture& getSplatmap(int index);
     GLuint getTexture(GLuint splatmap, char channel);
 
     TextureLayer getLayer(GLuint splatmap, char channel);
@@ -36,11 +36,9 @@ public:
 
     string asJsonString();
 
-    std::string saveData(string name);
-
 private:
 
-    std::vector<GLuint> unique_splatmaps;
+    std::vector<Texture> unique_splatmaps;
     std::vector<TextureLayer> texture_layers;
 
     int num_layers;

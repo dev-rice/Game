@@ -15,6 +15,8 @@ public:
     UnitManager& getUnitManager();
     ResourceLoader& getResourceLoader();
 
+    string asJsonString();
+
 private:
     UnitHolder unit_holder;
     ResourceLoader resource_loader;

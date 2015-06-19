@@ -11,7 +11,7 @@ void LayeredTextures::addSplatmap(Texture splatmap){
     if (unique_splatmaps.size() >= num_splatmaps){
         Debug::error("Too many splatmaps for %d textures.\n");
     }
-    unique_splatmaps.push_back(splatmap.getGLId());
+    unique_splatmaps.push_back(splatmap);
 }
 
 void LayeredTextures::addTexture(Texture diffuse, GLuint splatmap, char channel, int layer_number){
@@ -26,11 +26,12 @@ void LayeredTextures::addTexture(Texture diffuse, GLuint splatmap, char channel,
     }
 }
 
-GLuint LayeredTextures::getSplatmap(int index){
+Texture& LayeredTextures::getSplatmap(int index){
     if (index >= 0 && index < num_splatmaps){
         return unique_splatmaps[index];
     } else {
-        return 0;
+        Texture tex(0);
+        return tex;
     }
 }
 
@@ -42,7 +43,7 @@ GLuint LayeredTextures::getTexture(GLuint splatmap, char channel){
 TextureLayer LayeredTextures::getLayer(GLuint splatmap, char channel){
     TextureLayer out_layer;
     for (TextureLayer layer : texture_layers){
-        if (layer.getChannelChar() == channel && unique_splatmaps[layer.getSplatmap()] == splatmap){
+        if (layer.getChannelChar() == channel && unique_splatmaps[layer.getSplatmap()].getGLId() == splatmap){
             out_layer = layer;
         }
     }
@@ -85,10 +86,10 @@ void LayeredTextures::updateUniforms(Shader shader){
     ////////////////////
     // Splatmaps
     glActiveTexture(GL_TEXTURE20);
-    glBindTexture(GL_TEXTURE_2D, unique_splatmaps[0]);
+    glBindTexture(GL_TEXTURE_2D, unique_splatmaps[0].getGLId());
 
     glActiveTexture(GL_TEXTURE21);
-    glBindTexture(GL_TEXTURE_2D, unique_splatmaps[1]);
+    glBindTexture(GL_TEXTURE_2D, unique_splatmaps[1].getGLId());
 
     glUniform1i(glGetUniformLocation(shader.getGLId(), "splatmaps[0]"), texture_layers[0].getSplatmap());
     glUniform1i(glGetUniformLocation(shader.getGLId(), "splatmaps[1]"), texture_layers[1].getSplatmap());
@@ -141,7 +142,58 @@ void LayeredTextures::swapLayers(GLuint layer1, GLuint layer2){
 }
 
 string LayeredTextures::asJsonString() {
+    // Example:
+    //     "splatmaps": [
+    //         {
+    //             "id": 0,
+    //             "filename": "all_splat.png"
+    //         },
+    //         {
+    //             "id": 1,
+    //             "filename": "second_splat.png"
+    //         }
+    //     ],
+    //     "texture_layers": [
+    //         {
+    //             "layer_number": 0,
+    //             "splatmap": 0,
+    //             "channel": "r",
+    //             "textures": {
+    //                 "diff": "stylized_grass.png"
+    //             }
+    //         },
+    //         {
+    //             "layer_number": 1,
+    //             "splatmap": 0,
+    //             "channel": "r",
+    //             "textures": {
+    //                 "diff": "stone_tile.png"
+    //             }
+    //         },
+    //         {
+    //             "layer_number": 2,
+    //             "splatmap": 0,
+    //             "channel": "g",
+    //             "textures": {
+    //                 "diff": "stone.png"
+    //             }
+    //         },
+    //         ...
+    //     ]
+
     string json_string = "";
+
+    // Splatmaps
+    json_string += "\"splatmaps\": [\n";
+    int id = 0;
+    for (Texture& splatmap : unique_splatmaps) {
+        json_string += "{\n";
+        json_string += "\"id\": " + to_string(id) + ",\n";
+        json_string += splatmap.asJsonString("filename");
+        json_string += "},\n";
+        ++id;
+    }
+    json_string += "],\n";
 
     // Texture layers
     json_string += "\"texture_layers\": [\n";
@@ -151,45 +203,6 @@ string LayeredTextures::asJsonString() {
     json_string += "]\n";
 
     return json_string;
-}
-
-std::string LayeredTextures::saveData(std::string name){
-    // Write the splatmaps out to files
-    std::vector<std::string> splatmap_names;
-    for (GLuint& splatmap : unique_splatmaps){
-        std::string temp_name = name + "_splat_" + std::to_string(splatmap) + ".bmp";
-        splatmap_names.push_back(temp_name);
-        Texture splat(splatmap);
-        splat.save(GL_RGBA, temp_name);
-    }
-
-    // Write the diffuse texture layers out to files
-    std::vector<std::string> diffuse_names;
-    for (TextureLayer& layer : texture_layers){
-        GLuint diff_id = layer.getDiffuse().getGLId();
-        std::string temp_name = name + "_diff_" + std::to_string(diff_id) + ".bmp";
-        diffuse_names.push_back(temp_name);
-        Texture diff(diff_id);
-        diff.save(GL_RGBA, temp_name);
-    }
-
-    // Generate a string based on the map file spec
-    std::string map_output = "";
-
-    for (const std::string& splatmap_name : splatmap_names){
-        map_output += "s " + splatmap_name + "\n";
-    }
-
-    int i = 0;
-    for (TextureLayer& layer : texture_layers){
-        map_output += "g " + std::to_string(layer.getLayerNumber()) + " " +
-            std::to_string(layer.getSplatmap()) + " " +
-            TextureLayer::getCharFromChannelInt(layer.getChannel()) + " " +
-            diffuse_names[i] + "\n";
-        i++;
-    }
-
-    return map_output;
 }
 
 bool LayeredTextures::needsSplatmaps(){
