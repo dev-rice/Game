@@ -151,7 +151,7 @@ string Camera::asJsonString() {
     json_string += vec3AsJsonString(position, "position");
     json_string += vec3AsJsonString(rotation, "rotation");
     json_string += "\"move_sensitivity\": " + to_string(move_sensitivity) + ",\n";
-    json_string += "\"rotate_sensitivity\": " + to_string(rotate_sensitivity) + ",\n";
+    json_string += "\"rotate_sensitivity\": " + to_string(rotate_sensitivity) + "\n";
     json_string += "},\n";
 
     return json_string;

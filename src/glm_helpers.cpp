@@ -12,7 +12,7 @@ string vec3AsJsonString(glm::vec3 vector, string name) {
 
     json_string += "\"x\": " + to_string(vector.x) + ",\n";
     json_string += "\"y\": " + to_string(vector.y) + ",\n";
-    json_string += "\"z\": " + to_string(vector.z) + ",\n";
+    json_string += "\"z\": " + to_string(vector.z) + "\n";
 
     json_string += "},\n";
 
