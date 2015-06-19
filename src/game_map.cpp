@@ -164,12 +164,17 @@ string GameMap::asJsonString() {
     string json_string = "";
 
     // Camera
-    json_string += camera.asJsonString();
+    json_string += camera.asJsonString() + ",\n";
 
     // Doodads (idk about all the drawables yet)
     json_string += "\"doodads\": [\n";
     for (Doodad& doodad : doodads) {
         json_string += doodad.asJsonString();
+        if (&doodad == &(doodads.back())){
+            json_string += "\n";
+        } else {
+            json_string += ",\n";
+        }
     }
     json_string += "],\n";
 

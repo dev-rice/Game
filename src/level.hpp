@@ -1,6 +1,8 @@
 #ifndef Level_h
 #define Level_h
 
+#include <fstream>
+
 #include "game_map.hpp"
 #include "unit_manager.hpp"
 #include "resource_loader.hpp"

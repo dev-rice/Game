@@ -576,9 +576,9 @@ string Terrain::asJsonString() {
     json_string += "\"tile_size\": " + to_string(tile_size) + ",\n";
 
     // Splatmaps and Texture Layers are both handled by LayeredTextures
-    json_string += layered_textures->asJsonString();
+    json_string += layered_textures->asJsonString() + "\n";
 
-    json_string += "},\n";
+    json_string += "}";
 
     return json_string;
 }

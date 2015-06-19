@@ -31,13 +31,12 @@ string Texture::asJsonString(string type) {
     // Example:
     //      "diff": "fence_diff.png",
 
-    string json_string = "\"" + type + "\": \"" + getFilename() + "\",\n";
+    string json_string = "\"" + type + "\": \"" + getFilename() + "\"";
 
     // If there is no filename, then this is not am "saveable" texture.
     if (isBlank()) {
         json_string = "";
     }
-
 
     return json_string;
 }

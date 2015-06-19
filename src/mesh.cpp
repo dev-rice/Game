@@ -112,7 +112,7 @@ string Mesh::asJsonString() {
     // A single mesh is represented as (example):
     //      "mesh": "fence.dae",
     string json_string = "\"mesh\": ";
-    json_string += "\"" + getFilename() + "\",\n";
+    json_string += "\"" + getFilename() + "\"";
 
     // If the filename is blank then this is not a 'saveable' mesh
     if (isBlank()) {

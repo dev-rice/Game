@@ -30,8 +30,8 @@ Texture& LayeredTextures::getSplatmap(int index){
     if (index >= 0 && index < num_splatmaps){
         return unique_splatmaps[index];
     } else {
-        Texture tex(0);
-        return tex;
+        Texture* tex = new Texture(0);
+        return *tex;
     }
 }
 
@@ -177,7 +177,7 @@ string LayeredTextures::asJsonString() {
     //             "textures": {
     //                 "diff": "stone.png"
     //             }
-    //         },
+    //         }
     //         ...
     //     ]
 
@@ -186,12 +186,16 @@ string LayeredTextures::asJsonString() {
     // Splatmaps
     json_string += "\"splatmaps\": [\n";
     int id = 0;
-    for (Texture& splatmap : unique_splatmaps) {
+    for (int id = 0; id < unique_splatmaps.size(); ++id) {
+        Texture& splatmap = unique_splatmaps[id];
         json_string += "{\n";
         json_string += "\"id\": " + to_string(id) + ",\n";
         json_string += splatmap.asJsonString("filename");
-        json_string += "},\n";
-        ++id;
+        if (id == (unique_splatmaps.size() - 1)){
+            json_string += "}\n";
+        } else {
+            json_string += "},\n";
+        }
     }
     json_string += "],\n";
 
@@ -199,8 +203,13 @@ string LayeredTextures::asJsonString() {
     json_string += "\"texture_layers\": [\n";
     for (TextureLayer& layer : texture_layers) {
         json_string += layer.asJsonString();
+        if (&layer == &(texture_layers.back())){
+            json_string += "\n";
+        } else {
+            json_string += ",\n";
+        }
     }
-    json_string += "]\n";
+    json_string += "]";
 
     return json_string;
 }

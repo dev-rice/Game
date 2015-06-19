@@ -91,7 +91,7 @@ string ResourceLoader::asJsonString() {
 
     json_string += "\"mesh_path\": \"" + mesh_path + "\",\n";
     json_string += "\"texture_path\": \"" + texture_path + "\",\n";
-    json_string += "\"shader_path\": \"" + shader_path + "\",\n";
+    json_string += "\"shader_path\": \"" + shader_path + "\"";
 
     return json_string;
 }

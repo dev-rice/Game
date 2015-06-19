@@ -99,22 +99,40 @@ string Doodad::asJsonString() {
     string json_string = "{\n";
 
     // Mesh
-    json_string += mesh->asJsonString();
+    json_string += mesh->asJsonString() + ",\n";
 
     // Scale, position and rotation (should be moved to game map eventually)
     json_string += "\"scale\": " + to_string(scale) + ",\n";
-    json_string += vec3AsJsonString(position, "position");
-    json_string += vec3AsJsonString(rotation, "rotation");
+    json_string += vec3AsJsonString(position, "position") + ",\n";
+    json_string += vec3AsJsonString(rotation, "rotation") + ",\n";
 
-    // Textures
+    // Textures (grrrrrrr json spec sucks)
     json_string += "\"textures\": {\n";
-    json_string += diffuse.asJsonString("diff");
-    json_string += specular.asJsonString("spec");
-    json_string += normal.asJsonString("norm");
-    json_string += emissive.asJsonString("emit");
+
+    string diffuse_str = diffuse.asJsonString("diff");
+    string specular_str = specular.asJsonString("spec");
+    string normal_str = normal.asJsonString("norm");
+    string emissive_str = emissive.asJsonString("emit");
+
+    if (diffuse_str != ""){
+        json_string += diffuse.asJsonString("diff") + ",\n";
+    }
+    if (specular_str != ""){
+        json_string += specular.asJsonString("spec") + ",\n";
+    }
+    if (normal_str != ""){
+        json_string += normal.asJsonString("norm") + ",\n";
+    }
+    if (emissive_str != ""){
+        json_string += emissive.asJsonString("emit") + ",\n";
+    }
+
+    // Remove the last two characters because dumb comma issue
+    json_string.pop_back();
+    json_string.pop_back();
     json_string += "}\n";
 
-    json_string += "},\n";
+    json_string += "}";
     return json_string;
 }
 

@@ -128,7 +128,7 @@ int main(int argc, char* argv[]) {
 
     // Create the world
     if (!has_map){
-        map_filename = "res/maps/test.map";
+        map_filename = "res/maps/newformat.map";
     }
 
     World world(map_filename.c_str(), edit);

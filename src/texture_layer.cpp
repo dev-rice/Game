@@ -40,10 +40,10 @@ string TextureLayer::asJsonString() {
 
     // textures
     json_string += "\"textures\": {\n";
-    json_string += "\"diff\": \"" + diffuse.getFilename() + "\",\n";
+    json_string += diffuse.asJsonString("diff") + "\n";
     json_string += "}\n";
 
-    json_string += "},\n";
+    json_string += "}";
 
     return json_string;
 }
