@@ -176,7 +176,20 @@ string GameMap::asJsonString() {
             json_string += ",\n";
         }
     }
+    // This is temporary!!!
+    json_string.pop_back();
+    json_string += ",\n";
+    for (Drawable* drawable : drawables) {
+        json_string += drawable->asJsonString();
+        if (drawable == drawables.back()){
+            json_string += "\n";
+        } else {
+            json_string += ",\n";
+        }
+    }
     json_string += "],\n";
+
+
 
     // Particle emitters
 

@@ -19,6 +19,8 @@ public:
 
     string asJsonString();
 
+    void saveToFile(string filename);
+
 private:
     UnitHolder unit_holder;
     ResourceLoader resource_loader;

@@ -25,13 +25,6 @@ Level::Level(string filename, RenderDeque& render_stack) : unit_holder(), resour
         }
     }
 
-
-    // Write level to file
-    ofstream myfile;
-    myfile.open("res/maps/test.map");
-    myfile << asJsonString();
-    myfile.close();
-
 }
 
 GameMap& Level::getGameMap() {
@@ -55,4 +48,12 @@ string Level::asJsonString() {
     json_string += "}";
 
     return json_string;
+}
+
+void Level::saveToFile(string filename) {
+    // Write level to file
+    ofstream myfile;
+    myfile.open(filename);
+    myfile << asJsonString();
+    myfile.close();
 }
