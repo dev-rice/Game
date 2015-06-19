@@ -1,6 +1,6 @@
 #include "level.hpp"
 
-Level::Level(string filename, RenderDeque& render_stack) : unit_holder(), resource_loader(), game_map(filename, unit_holder, render_stack, resource_loader), unit_manager(game_map, unit_holder) {
+Level::Level(string filename, RenderDeque& render_stack) : File(filename), unit_holder(), resource_loader(), game_map(filename, unit_holder, render_stack, resource_loader), unit_manager(game_map, unit_holder) {
 
     // Creation of test playable
     # warning Move mesh loading into playable loading
@@ -50,10 +50,16 @@ string Level::asJsonString() {
     return json_string;
 }
 
-void Level::saveToFile(string filename) {
+void Level::save() {
+    // Overwrite the file that the level was loaded from
+    saveAs(getFilepath());
+}
+
+void Level::saveAs(string filepath) {
+    Debug::info("Saving level to %s\n", filepath.c_str());
     // Write level to file
     ofstream myfile;
-    myfile.open(filename);
+    myfile.open(filepath);
     myfile << asJsonString();
     myfile.close();
 }

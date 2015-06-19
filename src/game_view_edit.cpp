@@ -95,7 +95,7 @@ void GameViewEdit::handleInput(SDL_Event event){
             }
             if (keycode == 'm') {
                 // m is for save!
-                level->saveToFile("res/maps/test.map");
+                level->saveAs("res/maps/test.map");
             }
         break;
 

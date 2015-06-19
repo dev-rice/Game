@@ -6,10 +6,11 @@
 #include "game_map.hpp"
 #include "unit_manager.hpp"
 #include "resource_loader.hpp"
+#include "file.hpp"
 
 using namespace std;
 
-class Level {
+class Level : public File {
 public:
     Level(string filename, RenderDeque& render_stack);
 
@@ -19,7 +20,8 @@ public:
 
     string asJsonString();
 
-    void saveToFile(string filename);
+    void save();
+    void saveAs(string filename);
 
 private:
     UnitHolder unit_holder;
