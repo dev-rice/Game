@@ -187,9 +187,8 @@ string GameMap::asJsonString() {
             json_string += ",\n";
         }
     }
+    // End temporary stuff
     json_string += "],\n";
-
-
 
     // Particle emitters
 
