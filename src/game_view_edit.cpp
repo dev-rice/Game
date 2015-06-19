@@ -115,8 +115,17 @@ void GameViewEdit::handleInput(SDL_Event event){
 }
 
 void GameViewEdit::setMode(Mode mode) {
+    // Deactivate the current mode
+    if (current_mode == Painting) {
+        // Nothing right now
+    } else if (current_mode == Placing) {
+        placer.deactivate();
+    }
+
+    // Set the new mode
     current_mode = mode;
 
+    // Activate the new mode
     if (mode == Painting) {
         this->level->getGameMap().getGround().setPaintLayer(1);
     } else if (mode == Placing) {
@@ -128,7 +137,6 @@ void GameViewEdit::cycleMode() {
     if (current_mode == Painting) {
         setMode(Placing);
     } else if (current_mode == Placing) {
-        placer.deactivate();
         setMode(Painting);
     }
 }
