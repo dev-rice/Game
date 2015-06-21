@@ -27,7 +27,7 @@ public:
 	enum class PlayableAttribute{ MASSIVE, ARMORED, ARMY, WORKER, FLYING, INVULNERABLE, MECHANICAL };
 
 	Playable();
-	Playable(Mesh*, Shader& shader, glm::vec3, GLfloat);
+	Playable(Mesh&, Shader& shader, glm::vec3, GLfloat);
 	Drawable* clone();
 
 	void update(Terrain*, std::vector<Playable*>*);

@@ -69,7 +69,7 @@ Drawable& DrawableSelector::createDefaultDoodad() {
     resource_loader.setTexturePath("res/textures/");
 
     Mesh& mesh_ref = resource_loader.loadMesh("rock1.dae");
-    Drawable* new_drawable = new Doodad(&mesh_ref);
+    Drawable* new_drawable = new Doodad(mesh_ref, resource_loader);
     new_drawable->setRotationEuler(M_PI / 2.0, 0, 0);
     new_drawable->setScale(3);
 
@@ -86,7 +86,7 @@ Drawable& DrawableSelector::createOtherDoodad() {
     resource_loader.setTexturePath("res/textures/");
 
     Mesh& mesh_ref = resource_loader.loadMesh("fence.dae");
-    Drawable* new_drawable = new Doodad(&mesh_ref);
+    Drawable* new_drawable = new Doodad(mesh_ref, resource_loader);
     new_drawable->setRotationEuler(M_PI / 2.0, 0, 0);
     new_drawable->setScale(3);
 
@@ -103,7 +103,7 @@ Drawable& DrawableSelector::createOtherOtherDoodad() {
     resource_loader.setTexturePath("res/textures/");
 
     Mesh& mesh_ref = resource_loader.loadMesh("tree_stump.dae");
-    Drawable* new_drawable = new Doodad(&mesh_ref);
+    Drawable* new_drawable = new Doodad(mesh_ref, resource_loader);
     new_drawable->setRotationEuler(M_PI / 2.0, 0, 0);
     new_drawable->setScale(3);
 

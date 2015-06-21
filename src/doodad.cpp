@@ -23,7 +23,7 @@ Doodad::Doodad(const Json::Value& doodad_json, ResourceLoader& resource_loader){
     rotation.z = doodad_json["rotation"]["z"].asFloat();
 
     Shader& shader_ref = resource_loader.loadShader("shaders/doodad.vs", "shaders/doodad.fs");
-    load(&mesh_ref, shader_ref, position, scale);
+    load(mesh_ref, shader_ref, position, scale);
     setRotationEuler(rotation);
 
     // Load the textures
@@ -56,16 +56,16 @@ Doodad::Doodad(const Json::Value& doodad_json, ResourceLoader& resource_loader){
 
 }
 
-Doodad::Doodad(Mesh* mesh) {
-    Shader* shader = new Shader("shaders/doodad.vs", "shaders/doodad.fs");
-    load(mesh, *shader, glm::vec3(0.0f, 0.0f, 0.0f), 1.0f);
+Doodad::Doodad(Mesh& mesh, ResourceLoader& resource_loader) {
+    Shader& shader_ref = resource_loader.loadShader("shaders/doodad.vs", "shaders/doodad.fs");
+    load(mesh, shader_ref, glm::vec3(0.0f, 0.0f, 0.0f), 1.0f);
 }
 
-Doodad::Doodad(Mesh* mesh, Shader& shader) : Drawable(mesh, shader){
+Doodad::Doodad(Mesh& mesh, Shader& shader) : Drawable(mesh, shader){
 
 }
 
-Doodad::Doodad(Mesh* mesh, Shader& shader, glm::vec3 position, GLfloat scale):
+Doodad::Doodad(Mesh& mesh, Shader& shader, glm::vec3 position, GLfloat scale):
     Drawable(mesh, shader, position, scale) {
 }
 

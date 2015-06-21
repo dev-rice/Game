@@ -56,7 +56,7 @@ void FireEmitter::prepareParticles(Camera* camera){
         // Weird that the pointer must be explicitly set to 0, but crashes without this
         Particle* ptr = 0;
         if(particles.size() < maxParticles){
-            ptr = new Particle(billboard, shader);
+            ptr = new Particle(*billboard, shader);
             ptr->setEmissive(particle_texture);
         }
         if(particles.size() > 0 && particles[0]->isDead()){

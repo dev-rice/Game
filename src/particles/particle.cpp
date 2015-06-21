@@ -5,11 +5,11 @@
 
 
 
-Particle::Particle(Mesh* mesh, Shader& shader) : Drawable(mesh, shader){
+Particle::Particle(Mesh& mesh, Shader& shader) : Drawable(mesh, shader){
 
 }
 
-Particle::Particle(Mesh* mesh, Shader& shader, glm::vec3 position, GLfloat scale): Drawable(mesh, shader, position, scale) {
+Particle::Particle(Mesh& mesh, Shader& shader, glm::vec3 position, GLfloat scale): Drawable(mesh, shader, position, scale) {
 
 }
 

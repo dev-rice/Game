@@ -101,7 +101,8 @@ FontSheet::FontSheet(std::string filename, int pixel_size) {
 void FontSheet::renderToBMP(){
     std::string bmp_filename = "/tmp/" + filename + std::to_string(point) + ".bmp";
 
-    texture.save(GL_RED, bmp_filename);
+    texture.setFormat(GL_RED);
+    texture.saveAs(bmp_filename);
 
 }
 

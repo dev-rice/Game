@@ -4,7 +4,8 @@ TexturePainter::TexturePainter() : TexturePainter(0) {}
 
 TexturePainter::TexturePainter(Texture texture){
     Texture brush_texture("res/textures/test_brush.png");
-    brush.bitmap = brush_texture.getBytes(GL_RED);
+    brush_texture.setFormat(GL_RED);
+    brush.bitmap = brush_texture.getBytes();
     brush.width = brush_texture.getWidth();
     brush.height = brush_texture.getHeight();
 
@@ -17,7 +18,8 @@ Texture TexturePainter::getTexture(){
 
 void TexturePainter::setTexture(Texture texture){
     this->texture = texture;
-    texture_bytes = texture.getBytes(GL_RGBA);
+    texture.setFormat(GL_RGBA);
+    texture_bytes = texture.getBytes();
 }
 
 char TexturePainter::getChannel(){

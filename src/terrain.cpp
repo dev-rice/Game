@@ -80,7 +80,7 @@ void Terrain::initializer(Shader& shader, string heightmap_filename, float ampli
 
     // Once we have a mesh, we can load the drawable data required for this
     // child class.
-    Drawable::load(mesh, shader, glm::vec3(0.0f, 0.0f, 0.0f), 1.0f);
+    Drawable::load(*mesh, shader, glm::vec3(0.0f, 0.0f, 0.0f), 1.0f);
 
     generatePathingArray();
 
@@ -583,19 +583,12 @@ string Terrain::asJsonString() {
     return json_string;
 }
 
-string Terrain::saveData(string name){
-    string output = "";
-
-    Texture texture = heightmap.getTexture();
+void Terrain::saveData(string name){
+    Texture& texture = heightmap.getTexture();
     string heightmap_name = name + "_heightmap.bmp";
-    #warning here
-    texture.save(GL_RGBA, heightmap_name);
-    // delete[] image_data;
-    // image_data = NULL;
+    texture.setFormat(GL_RGBA);
+    texture.saveAs(heightmap_name);
 
-    output += "h " + heightmap_name + "\n";
-
-    return output;
 }
 
 GLubyte* Terrain::renderHeightmapAsImage(){

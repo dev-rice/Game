@@ -57,7 +57,7 @@ public:
 
     string asJsonString();
 
-    string saveData(string name);
+    void saveData(string name);
 
     LayeredTextures* getLayeredTextures();
     TexturePainter* getTexturePainter();

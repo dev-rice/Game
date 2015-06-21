@@ -15,8 +15,8 @@
 class Drawable {
 public:
     Drawable () {;}
-    Drawable(Mesh*, Shader& shader);
-    Drawable(Mesh*, Shader& shader, glm::vec3, GLfloat);
+    Drawable(Mesh&, Shader& shader);
+    Drawable(Mesh&, Shader& shader, glm::vec3, GLfloat);
     virtual Drawable* clone() = 0;
 
     virtual void draw();
@@ -47,7 +47,7 @@ public:
     Shader& getShader() {return *shader;}
 
 protected:
-    void load(Mesh*, Shader& shader, glm::vec3, GLfloat);
+    void load(Mesh&, Shader& shader, glm::vec3, GLfloat);
     void updateModelMatrix();
 
     virtual void bindTextures();

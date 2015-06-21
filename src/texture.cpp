@@ -25,6 +25,38 @@ Texture::Texture(string filepath) : File(filepath) {
     gl_texture_id = loadTextureFromFile(filepath, GL_LINEAR);
 }
 
+void Texture::saveAs(string filepath){
+    int channels = 0;
+    switch(format){
+        case GL_RED:
+            channels = 1;
+            break;
+        case GL_RGB:
+            channels = 3;
+            break;
+        case GL_RGBA:
+            channels = 4;
+            break;
+        default:
+            Debug::error("Image format %d is not supported.\n");
+            return;
+            break;
+
+    }
+    int width = getWidth();
+    int height = getHeight();
+
+    GLubyte* image = new GLubyte[channels * width * height];
+
+    glBindTexture(GL_TEXTURE_2D, gl_texture_id);
+    glGetTexImage(GL_TEXTURE_2D, 0, format, GL_UNSIGNED_BYTE, image);
+
+    saveTextureBytesToFile(image, width, height, channels, filepath);
+
+    delete[] image;
+    image = NULL;
+}
+
 string Texture::asJsonString(string type) {
     // Returns the texture as a json string
     // The type is diff, spec, norm, emit, etc...
@@ -57,7 +89,7 @@ GLuint Texture::getHeight(){
     return height;
 }
 
-GLubyte* Texture::getBytes(GLuint format){
+GLubyte* Texture::getBytes(){
     int width = getWidth();
     int height = getHeight();
 
@@ -73,36 +105,12 @@ GLuint Texture::getGLId() {
     return gl_texture_id;
 }
 
-void Texture::save(GLuint format, string filename){
-    int channels = 0;
-    switch(format){
-        case GL_RED:
-            channels = 1;
-            break;
-        case GL_RGB:
-            channels = 3;
-            break;
-        case GL_RGBA:
-            channels = 4;
-            break;
-        default:
-            Debug::error("Image format %d is not supported.\n");
-            return;
-            break;
+GLuint Texture::getFormat() {
+    return format;
+}
 
-    }
-    int width = getWidth();
-    int height = getHeight();
-
-    GLubyte* image = new GLubyte[channels * width * height];
-
-    glBindTexture(GL_TEXTURE_2D, gl_texture_id);
-    glGetTexImage(GL_TEXTURE_2D, 0, format, GL_UNSIGNED_BYTE, image);
-
-    saveTextureBytesToFile(image, width, height, channels, filename);
-
-    delete[] image;
-    image = NULL;
+void Texture::setFormat(GLuint format){
+    this->format = format;
 }
 
 GLuint Texture::loadTextureFromBytes(GLubyte* data, GLuint width, GLuint height, GLuint filter){

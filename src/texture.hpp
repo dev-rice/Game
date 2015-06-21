@@ -20,14 +20,16 @@ public:
     Texture(glm::vec4 color, GLuint width, GLuint height);
     Texture(string filename);
 
+    void saveAs(string filename);
     string asJsonString(string type);
 
     GLuint getWidth();
     GLuint getHeight();
-    GLubyte* getBytes(GLuint format);
+    GLubyte* getBytes();
     GLuint getGLId();
 
-    void save(GLuint format, string filename);
+    GLuint getFormat();
+    void setFormat(GLuint format);
 
 private:
     GLuint loadTextureFromBytes(GLubyte* data, GLuint width, GLuint height, GLuint filter);
@@ -40,6 +42,8 @@ private:
     void saveTextureBytesToFile(GLubyte* data, GLuint width, GLuint height, GLuint channels, std::string filename);
 
     GLuint gl_texture_id;
+
+    GLuint format;
 
 };
 

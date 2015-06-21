@@ -16,28 +16,9 @@ Heightmap::Heightmap(std::string filename, float amplification) : File(filename)
     components = 4;
 
     texture = Texture(filename);
-    image = SOIL_load_image(filename.c_str(), &(width), &(height),
-        0, SOIL_LOAD_RGBA);
+    texture.setFormat(GL_RGBA);
 
-    if(image){
-        Debug::info("Loaded heightmap \"%s\" (%d by %d) into memory.\n",
-            filename.c_str(), width, height );
-    } else {
-        Debug::error("Could not load heightmap \"%s\" into memory.\n",
-            filename.c_str());
-
-        // If the hightmap file cannot be read, just create a default
-        // map of size 128 by 128 that is flat
-        width = 128;
-        height = 128;
-
-        // Initialize the image to all zeros
-        image = new unsigned char[components * width * height];
-        for (int i = 0; i < components * width * height; ++i){
-            image[i] = 0;
-        }
-
-    }
+    updateImage();
 
     if(!isPowerOfTwo(width) || !isPowerOfTwo(height)){
         Debug::warning("Terrain map size is not base 2."
@@ -58,10 +39,16 @@ float Heightmap::getMapHeight(int x, int y){
 }
 
 void Heightmap::updateImage(){
-    image = texture.getBytes(GL_RGBA);
+    // Get the texture bytes
+    texture.setFormat(GL_RGBA);
+    image = texture.getBytes();
+
+    // Update the dimensions, shouldn't ever need to be updated but is here for safety
+    width = texture.getWidth();
+    height = texture.getHeight();
 }
 
-Texture Heightmap::getTexture(){
+Texture& Heightmap::getTexture(){
     return texture;
 }
 

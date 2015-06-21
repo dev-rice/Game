@@ -4,7 +4,7 @@ Level::Level(string filename, RenderDeque& render_stack) : File(filename), unit_
 
     // Creation of test playable
     # warning Move mesh loading into playable loading
-    Mesh* playable_mesh = new Mesh("res/models/airship.dae");
+    Mesh& playable_mesh_ref = resource_loader.loadMesh("airship.dae");
     Shader& playable_shader_ref = resource_loader.loadShader("shaders/doodad.vs",
         "shaders/doodad.fs");
     float playable_scale = 1.0f;
@@ -12,7 +12,7 @@ Level::Level(string filename, RenderDeque& render_stack) : File(filename), unit_
     for(int i = 0; i < 1; ++i){
         for(int j = 0; j < 1; ++j){
             glm::vec3 playable_position = glm::vec3(-10 - 3.0f*i, 0.0f, 5 - 3.0f*j);
-            Playable temp(playable_mesh, playable_shader_ref, playable_position, playable_scale);
+            Playable temp(playable_mesh_ref, playable_shader_ref, playable_position, playable_scale);
             temp.loadFromXML("res/units/airship.xml");
             temp.setScale(0.8);
             if (rand() % 2){

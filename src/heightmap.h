@@ -30,7 +30,7 @@ public:
     int getWidth() {return width;}
     int getHeight() {return height;}
 
-    Texture getTexture();
+    Texture& getTexture();
 private:
     unsigned char* image;
     int width;

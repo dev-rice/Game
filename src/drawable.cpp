@@ -4,18 +4,19 @@
 
 #include "drawable.h"
 
-Drawable::Drawable(Mesh* mesh, Shader& shader){
+Drawable::Drawable(Mesh& mesh, Shader& shader){
     load(mesh, shader, glm::vec3(0.0f, 0.0f, 0.0f), 1.0f);
 }
 
-Drawable::Drawable(Mesh* mesh, Shader& shader, glm::vec3 position, GLfloat scale) {
+Drawable::Drawable(Mesh& mesh, Shader& shader, glm::vec3 position, GLfloat scale) {
+
     load(mesh, shader, position, scale);
 }
 
-void Drawable::load(Mesh* mesh, Shader& shader, glm::vec3 position, GLfloat scale) {
+void Drawable::load(Mesh& mesh, Shader& shader, glm::vec3 position, GLfloat scale) {
     // Set the position, rotation, scale, and mesh pointer
     this->position = position;
-    this->mesh = mesh;
+    this->mesh = &mesh;
     this->scale = scale;
 
     # warning here
