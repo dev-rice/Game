@@ -59,21 +59,8 @@ void TextRenderer::drawString(std::string to_draw){
 }
 
 void TextRenderer::drawStringInitial(int x, int y, std::string to_draw){
-    // Disable depth sorting when rendering
-    // particles.
-    // glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-    // glDepthFunc(GL_LEQUAL);
-    // glDepthMask(GL_FALSE);
-
     character_box->setPixelPosition(x, y);
     drawString(to_draw);
-
-    // Re enable depth sorting for everything else
-    // (really should not be here)
-    // glDepthFunc(GL_LESS);
-    // glDepthMask(GL_TRUE);
-    // glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-
 }
 
 void TextRenderer::print(int x, int y, const char* format, ...){
