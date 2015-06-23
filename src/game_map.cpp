@@ -9,16 +9,10 @@ GameMap::GameMap(string map_filename, UnitHolder& units, RenderDeque& render_sta
 
     // Billboard test for stuff like health bars
     billboard_test.setScale(5);
-    drawables.push_back(&billboard_test);
 
 }
 
 void GameMap::render(){
-    // Temporary for billboard testing
-    glm::vec3 unit_pos = unit_holder->getUnits()[0].getPosition();
-    glm::vec3 new_pos = unit_pos + glm::vec3(0, 10, 0);
-    billboard_test.setPosition(new_pos);
-
     // Render the shadow map into the shadow buffer
     if (Profile::getInstance()->isShadowsOn()){
         renderToShadowMap();
@@ -29,6 +23,14 @@ void GameMap::render(){
     }
 
     renderAllNoShader();
+
+    // Temporary for billboard testing
+    glm::vec3 unit_pos = unit_holder->getUnits()[0].getPosition();
+    glm::vec3 new_pos = unit_pos + glm::vec3(0, 10, 0);
+    billboard_test.setPosition(new_pos);
+
+    // Draw the billboard (should be drawn last)
+    billboard_test.draw();
 
 }
 

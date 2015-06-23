@@ -21,17 +21,17 @@ Drawable* BillboardDrawable::clone() {
 }
 
 void BillboardDrawable::draw() {
-    // // Disable depth sorting when rendering
-    // // particles.
-    // glDepthFunc(GL_LEQUAL);
-    // glDepthMask(GL_FALSE);
+    // Disable depth sorting when rendering
+    // particles.
+    glDepthFunc(GL_LEQUAL);
+    glDepthMask(GL_FALSE);
 
     Drawable::draw();
 
-    // // Re enable depth sorting for everything else
-    // // (really should not be here)
-    // glDepthFunc(GL_LESS);
-    // glDepthMask(GL_TRUE);
+    // Re enable depth sorting for everything else
+    // (really should not be here)
+    glDepthFunc(GL_LESS);
+    glDepthMask(GL_TRUE);
 }
 
 void BillboardDrawable::updateUniformData(){
