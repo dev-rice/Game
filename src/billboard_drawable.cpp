@@ -3,7 +3,7 @@
 BillboardDrawable::BillboardDrawable(ResourceLoader& resource_loader) : opacity(1), plane_rotation(0) {
 
     Mesh* plane_mesh = new PlaneMesh();
-    Shader& shader_ref = resource_loader.loadShader("shaders/particle.vs", "shaders/particle.fs");
+    Shader& shader_ref = resource_loader.loadShader("shaders/billboard.vs", "shaders/billboard.fs");
 
     load(*plane_mesh, shader_ref, glm::vec3(0, 0, 0), 1.0);
 

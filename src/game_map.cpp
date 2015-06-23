@@ -7,9 +7,7 @@ GameMap::GameMap(string map_filename, UnitHolder& units, RenderDeque& render_sta
 
     initializeGlobalUniforms();
 
-    // // Billboard test for stuff like health bars
-    // Texture emit("res/textures/billboard.png");
-    // billboard_test.setEmissive(emit);
+    // Billboard test for stuff like health bars
     billboard_test.setScale(5);
     drawables.push_back(&billboard_test);
 
@@ -31,8 +29,6 @@ void GameMap::render(){
     }
 
     renderAllNoShader();
-
-    // particle_billboard_test.draw();
 
 }
 
