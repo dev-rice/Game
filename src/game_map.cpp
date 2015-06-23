@@ -1,11 +1,16 @@
 #include "game_map.hpp"
 
-GameMap::GameMap(string map_filename, UnitHolder& units, RenderDeque& render_stack, ResourceLoader& resource_loader) : camera(), ground(), unit_holder(&units), render_stack(&render_stack),  resource_loader(&resource_loader), shadowbuffer(1.0), depthbuffer(1.0), shadow_shader("shaders/shadow.vs", "shaders/shadow.fs"), depth_shader("shaders/depth.vs", "shaders/depth.fs"), has_temp_drawable(false) {
+GameMap::GameMap(string map_filename, UnitHolder& units, RenderDeque& render_stack, ResourceLoader& resource_loader) : camera(), ground(), unit_holder(&units), render_stack(&render_stack),  resource_loader(&resource_loader), shadowbuffer(1.0), depthbuffer(1.0),  has_temp_drawable(false), shadow_shader("shaders/shadow.vs", "shaders/shadow.fs"), depth_shader("shaders/depth.vs", "shaders/depth.fs"), billboard_test(resource_loader) {
 
     ifstream map_input(map_filename);
     load(map_input);
 
     initializeGlobalUniforms();
+
+    // Billboard test for stuff like health bars
+    billboard_test.setScale(5);
+    billboard_test.setPosition(glm::vec3(0, 10, 0));
+    drawables.push_back(&billboard_test);
 
 }
 
