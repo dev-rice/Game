@@ -8,8 +8,11 @@ GameMap::GameMap(string map_filename, UnitHolder& units, RenderDeque& render_sta
     initializeGlobalUniforms();
 
     // Billboard test for stuff like health bars
+    Texture emit("res/textures/snow_part.png");
+
     billboard_test.setScale(5);
     billboard_test.setPosition(glm::vec3(0, 10, 0));
+    billboard_test.setEmissive(emit);
     drawables.push_back(&billboard_test);
 
 }

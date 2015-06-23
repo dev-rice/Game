@@ -2,12 +2,12 @@
 
 BillboardDrawable::BillboardDrawable(ResourceLoader& resource_loader) {
     Mesh* plane_mesh = new PlaneMesh();
-    Shader& shader_ref = resource_loader.loadShader("shaders/billboard.vs", "shaders/billboard.fs");
+    Shader& shader_ref = resource_loader.loadShader("shaders/particle.vs", "shaders/particle.fs");
 
     load(*plane_mesh, shader_ref, glm::vec3(0, 0, 0), 1.0);
 
-    Texture& billboard_texture = resource_loader.loadTexture("fire_part.png");
-    setEmissive(billboard_texture);
+    // Texture& billboard_texture = resource_loader.loadTexture("fire_part.png");
+    // setEmissive(billboard_texture);
 }
 
 BillboardDrawable::~BillboardDrawable(){

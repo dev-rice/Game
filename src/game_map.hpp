@@ -86,7 +86,6 @@ private:
 
     BillboardDrawable billboard_test;
 
-
 };
 
 #endif
