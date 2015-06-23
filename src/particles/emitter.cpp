@@ -58,7 +58,7 @@ void Emitter::setParticleDensity(int density){
     this->density = density;
 }
 
-void Emitter::draw(Camera* camera){
+void Emitter::draw(){
     // Disable depth sorting when rendering
     // particles.
     glDepthFunc(GL_LEQUAL);
@@ -68,15 +68,13 @@ void Emitter::draw(Camera* camera){
     int frames = int((new_time*60.0f)) + 1;
     frames = std::max(frames, 0);
 
-    glm::mat4 view_matrix = camera->getViewMatrix();
-
     for(int j = 0; j < frames; ++j){
         for(int i = 0; i < particles.size(); ++i){
             particles[i]->update();
         }
     }
 
-    prepareParticles(camera);
+    prepareParticles();
     for(int i = 0; i < particles.size(); ++i){
         particles[i]->draw();
     }
@@ -93,7 +91,7 @@ void Emitter::makeShotgun(){
     hasFired = false;
 }
 
-void Emitter::prepareParticles(Camera* camera){
+void Emitter::prepareParticles(){
 
     // Shotgun stuff
     if(hasFired && isShotgun){

@@ -27,7 +27,7 @@ void SnowEmitter::initialize(){
     this->density = (this->maxParticles)/(this->lifespan);
 }
 
-void SnowEmitter::prepareParticles(Camera* camera){
+void SnowEmitter::prepareParticles(){
     for(int i(0); i < density; ++i){
 
         // range -10.0 < x < 10.0
@@ -42,7 +42,7 @@ void SnowEmitter::prepareParticles(Camera* camera){
         }
 
         glm::vec3 newPosition(random1, 1.0f, random2+5.0f);
-        newPosition += camera->getPosition();
+        // newPosition += camera->getPosition();
 
         glm::vec3 velocity(random3, -0.02, 0.0f);
         glm::vec3 acceleration(0.0f, 0.0f, 0.0f);

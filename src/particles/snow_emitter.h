@@ -15,7 +15,7 @@ public:
     SnowEmitter(Shader shader, glm::vec3);
 private:
     void initialize();
-    void prepareParticles(Camera*);
+    void prepareParticles();
 };
 
 #endif

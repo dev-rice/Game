@@ -16,7 +16,7 @@ public:
 private:
     float radius;
     void initialize(float);
-    void prepareParticles(Camera*);
+    void prepareParticles();
 };
 
 #endif

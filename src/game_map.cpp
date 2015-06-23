@@ -60,10 +60,9 @@ void GameMap::renderAllNoShader() {
     // Draw all of the particle emitters
     if (Profile::getInstance()->isParticlesOn()){
         for (Emitter* emitter : emitters){
-            emitter->draw(&camera);
+            emitter->draw();
         }
     }
-
 
 }
 
@@ -254,6 +253,10 @@ void GameMap::load(ifstream& map_input){
 
     // Create the ground from the json segment
     ground = Terrain(root["terrain"], *resource_loader);
+
+    // Add all the doodads to drawables
+
+    // Add all the emitters to drawables
 
 }
 

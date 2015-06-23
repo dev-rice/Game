@@ -34,7 +34,7 @@ void SmokeEmitter::initialize(float r){
     count = 0;
 }
 
-void SmokeEmitter::prepareParticles(Camera* camera){
+void SmokeEmitter::prepareParticles(){
 
     if(count <  20){
         count++;

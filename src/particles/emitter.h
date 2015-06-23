@@ -32,11 +32,11 @@ public:
     Emitter(glm::vec3);
     Emitter(Shader shader, glm::vec3);
 
-    void draw(Camera*);
+    void draw();
     void setParticleDensity(int);
     void makeShotgun();
 protected:
-    virtual void prepareParticles(Camera*);
+    virtual void prepareParticles();
 
     void initialize(Shader shader, glm::vec3 pos);
 

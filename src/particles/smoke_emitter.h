@@ -17,7 +17,7 @@ private:
     float radius;
     int count;
     void initialize(float r);
-    void prepareParticles(Camera*);
+    void prepareParticles();
 };
 
 #endif

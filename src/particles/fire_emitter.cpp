@@ -32,7 +32,7 @@ void FireEmitter::initialize(float r) {
     this->density = (this->maxParticles)/(this->lifespan);
 }
 
-void FireEmitter::prepareParticles(Camera* camera){
+void FireEmitter::prepareParticles(){
     for(int i(0); i < density; ++i){
 
         // range 0.0 < x < 6.28 (for theta)
