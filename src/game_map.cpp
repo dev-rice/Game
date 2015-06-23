@@ -1,23 +1,26 @@
 #include "game_map.hpp"
 
-GameMap::GameMap(string map_filename, UnitHolder& units, RenderDeque& render_stack, ResourceLoader& resource_loader) : camera(), ground(), unit_holder(&units), render_stack(&render_stack),  resource_loader(&resource_loader), shadowbuffer(1.0), depthbuffer(1.0),  has_temp_drawable(false), shadow_shader("shaders/shadow.vs", "shaders/shadow.fs"), depth_shader("shaders/depth.vs", "shaders/depth.fs"), billboard_test(resource_loader) {
+GameMap::GameMap(string map_filename, UnitHolder& units, RenderDeque& render_stack, ResourceLoader& resource_loader) : camera(), ground(), unit_holder(&units), render_stack(&render_stack),  resource_loader(&resource_loader),has_temp_drawable(false),  shadowbuffer(1.0), depthbuffer(1.0), shadow_shader("shaders/shadow.vs", "shaders/shadow.fs"), depth_shader("shaders/depth.vs", "shaders/depth.fs"), billboard_test(resource_loader) {
 
     ifstream map_input(map_filename);
     load(map_input);
 
     initializeGlobalUniforms();
 
-    // Billboard test for stuff like health bars
-    Texture emit("res/textures/snow_part.png");
-
+    // // Billboard test for stuff like health bars
+    // Texture emit("res/textures/billboard.png");
+    // billboard_test.setEmissive(emit);
     billboard_test.setScale(5);
-    billboard_test.setPosition(glm::vec3(0, 10, 0));
-    billboard_test.setEmissive(emit);
     drawables.push_back(&billboard_test);
 
 }
 
 void GameMap::render(){
+    // Temporary for billboard testing
+    glm::vec3 unit_pos = unit_holder->getUnits()[0].getPosition();
+    glm::vec3 new_pos = unit_pos + glm::vec3(0, 10, 0);
+    billboard_test.setPosition(new_pos);
+
     // Render the shadow map into the shadow buffer
     if (Profile::getInstance()->isShadowsOn()){
         renderToShadowMap();
@@ -28,6 +31,8 @@ void GameMap::render(){
     }
 
     renderAllNoShader();
+
+    // particle_billboard_test.draw();
 
 }
 
