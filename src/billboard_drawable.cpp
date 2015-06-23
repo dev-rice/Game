@@ -1,13 +1,14 @@
 #include "billboard_drawable.hpp"
 
-BillboardDrawable::BillboardDrawable(ResourceLoader& resource_loader) {
+BillboardDrawable::BillboardDrawable(ResourceLoader& resource_loader) : opacity(1), plane_rotation(0) {
+
     Mesh* plane_mesh = new PlaneMesh();
     Shader& shader_ref = resource_loader.loadShader("shaders/particle.vs", "shaders/particle.fs");
 
     load(*plane_mesh, shader_ref, glm::vec3(0, 0, 0), 1.0);
 
-    // Texture& billboard_texture = resource_loader.loadTexture("fire_part.png");
-    // setEmissive(billboard_texture);
+    Texture billboard_texture("res/textures/billboard.png");
+    setEmissive(billboard_texture);
 }
 
 BillboardDrawable::~BillboardDrawable(){
@@ -39,10 +40,10 @@ void BillboardDrawable::updateUniformData(){
     glUniform1f(glGetUniformLocation(shader->getGLId(), "scale"), scale);
 
     // Set the opacity in the shader
-    glUniform1f(glGetUniformLocation(shader->getGLId(), "opacity"), (float)opacity);
+    glUniform1f(glGetUniformLocation(shader->getGLId(), "opacity"), opacity);
 
     // Set the planar rotation
-    glUniform1f(glGetUniformLocation(shader->getGLId(), "plane_rotation"), (float)plane_rotation);
+    glUniform1f(glGetUniformLocation(shader->getGLId(), "plane_rotation"), plane_rotation);
 
 }
 
