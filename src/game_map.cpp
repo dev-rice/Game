@@ -10,6 +10,7 @@ GameMap::GameMap(string map_filename, UnitHolder& units, RenderDeque& render_sta
     // Billboard test for stuff like health bars
     billboard_test.setScale(5);
 
+
 }
 
 void GameMap::render(){
@@ -31,6 +32,9 @@ void GameMap::render(){
 
     // Draw the billboard (should be drawn last)
     billboard_test.draw();
+
+    glm::vec3 screen_pos = unit_holder->getUnits()[0].getScreenPosition(camera);
+    // Debug::info("unit screen pos = <%2f, %2f, %2f>\n", screen_pos.x, screen_pos.y, screen_pos.z);
 
 }
 

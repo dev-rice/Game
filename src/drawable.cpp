@@ -236,3 +236,18 @@ void Drawable::updateModelMatrix(){
     model_matrix = rotation_matrix;
     model_matrix = translation_matrix * model_matrix;
 }
+
+glm::vec3 Drawable::getScreenPosition(Camera& camera) {
+    glm::mat4 view = camera.getViewMatrix();
+    glm::mat4 proj = camera.getProjectionMatrix();
+
+    glm::vec4 position4(position.x, position.y, position.z, 1.0);
+    glm::vec4 view_space = view * (model_matrix * position4);
+    view_space = glm::vec4(view_space.x, view_space.y, view_space.z, 1);
+
+    glm::vec4 homogeneous = proj * view_space;
+    glm::vec3 normalized = glm::vec3(homogeneous.x, homogeneous.y, homogeneous.z) / homogeneous.w;
+
+    return normalized;
+
+}

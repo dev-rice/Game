@@ -46,6 +46,8 @@ public:
     GLfloat getScale() {return scale;}
     Shader& getShader() {return *shader;}
 
+    glm::vec3 getScreenPosition(Camera& camera);
+
 protected:
     void load(Mesh&, Shader& shader, glm::vec3, GLfloat);
     void updateModelMatrix();
