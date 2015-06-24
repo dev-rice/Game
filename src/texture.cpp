@@ -9,7 +9,7 @@ Texture::Texture(GLuint id) {
 }
 
 Texture::Texture(GLubyte* data, GLuint width, GLuint height) {
-    gl_texture_id = loadTextureFromBytes(data, width, height, GL_LINEAR);
+    gl_texture_id = loadTextureFromBytes(data, width, height, GL_LINEAR, true);
 
 }
 
@@ -22,7 +22,11 @@ Texture::Texture(glm::vec4 color, GLuint width, GLuint height) {
 }
 
 Texture::Texture(string filepath) : File(filepath) {
-    gl_texture_id = loadTextureFromFile(filepath, GL_LINEAR);
+    gl_texture_id = loadTextureFromFile(filepath, GL_LINEAR, true);
+}
+
+Texture::Texture(string filepath, GLuint filter, bool anisotropic_filtering) : File(filepath) {
+    gl_texture_id = loadTextureFromFile(filepath, filter, anisotropic_filtering);
 }
 
 void Texture::saveAs(string filepath){
@@ -113,7 +117,7 @@ void Texture::setFormat(GLuint format){
     this->format = format;
 }
 
-GLuint Texture::loadTextureFromBytes(GLubyte* data, GLuint width, GLuint height, GLuint filter){
+GLuint Texture::loadTextureFromBytes(GLubyte* data, GLuint width, GLuint height, GLuint filter, bool anisotropic_filtering){
     GLuint texture;
     // Set the active texture
     glGenTextures(1, &texture);
@@ -126,16 +130,27 @@ GLuint Texture::loadTextureFromBytes(GLubyte* data, GLuint width, GLuint height,
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     // Do nearest interpolation for scaling the image up and down.
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
+
+    // Min and max filter modes.
+    if (!anisotropic_filtering){
+        // When anisotropic filtering is off, it is best to set the minimizing filter as well as the maximizing filter
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
+    }
+    // Maximizing filter is good to do regardless of AF
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 4.0f);
+
+    // Anisotropic filtering
+    if (anisotropic_filtering){
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 4.0f);
+    }
+
     // Mipmaps increase efficiency or something
     glGenerateMipmap(GL_TEXTURE_2D);
 
     return texture;
 }
 
-GLuint Texture::loadTextureFromFile(string filename, GLuint filter){
+GLuint Texture::loadTextureFromFile(string filename, GLuint filter, bool anisotropic_filtering){
     GLuint texture;
 
     string id = filename + std::to_string(filter);
@@ -144,7 +159,7 @@ GLuint Texture::loadTextureFromFile(string filename, GLuint filter){
     int width, height;
     GLubyte* image = SOIL_load_image(filename.c_str(), &width, &height, 0, SOIL_LOAD_RGBA);
 
-    texture = loadTextureFromBytes(image, width, height, filter);
+    texture = loadTextureFromBytes(image, width, height, filter, anisotropic_filtering);
     SOIL_free_image_data(image);
 
     return texture;
@@ -160,7 +175,7 @@ GLuint Texture::loadTextureFromPixel(glm::vec4 pixel, GLuint format){
     data[2] = pixel.z * 255;
     data[3] = pixel.w * 255;
 
-    texture = loadTextureFromBytes(data, 1, 1, format);
+    texture = loadTextureFromBytes(data, 1, 1, format, false);
 
     return texture;
 }
@@ -177,12 +192,13 @@ GLuint Texture::loadTextureFromPixel(GLuint width, GLuint height, glm::vec4 pixe
         data[i + 3] = pixel.w * 255;
     }
 
-    texture = loadTextureFromBytes(data, width, height, format);
+    texture = loadTextureFromBytes(data, width, height, format, false);
 
     return texture;
 }
 
 void Texture::saveTextureBytesToFile(GLubyte* data, GLuint width, GLuint height, GLuint channels, string filename){
+
     int save_result = SOIL_save_image(filename.c_str(), SOIL_SAVE_TYPE_BMP, width, height, channels, data);
     if (!save_result){
         Debug::error("Error saving %s.\n", filename.c_str());

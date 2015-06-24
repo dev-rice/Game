@@ -1,6 +1,6 @@
 #include "game_view.h"
 
-GameView::GameView(Level& level, RenderDeque& render_stack) : level(&level), gamebuffer(), ui_buffer(), render_stack(&render_stack), healthbar(Texture("res/textures/healthbar_test.png")) {
+GameView::GameView(Level& level, RenderDeque& render_stack) : level(&level), gamebuffer(), ui_buffer(), render_stack(&render_stack), healthbar(Texture("res/textures/healthbar_test.png", GL_NEAREST, false)) {
 
     // // Gaussian Blur shaders
     // Shader blur_horiz("shaders/flat_drawable_noflip.vs", "shaders/framebuffer_horiz_blur.fs");
