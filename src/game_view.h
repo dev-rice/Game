@@ -22,6 +22,7 @@
 #include "debug_console.h"
 #include "game_map.hpp"
 #include "level.hpp"
+#include "glm_helpers.hpp"
 
 class GameView {
 public:

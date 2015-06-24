@@ -106,28 +106,13 @@ void GameView::drawCore(){
 
     // Draw the debug information
     if (debug_showing){
-        Camera& camera = level->getGameMap().getCamera();
-        glm::vec3 position = camera.getPosition();
-        glm::vec3 rotation = camera.getRotation();
-
         float frame_time = GameClock::getInstance()->getDeltaTime();
         float average_frame_time = GameClock::getInstance()->getAverageDeltaTime();
-
-        glm::vec2 mouse_gl_pos = Mouse::getInstance()->getGLPosition();
-        glm::vec3 mouse_world_pos = level->getGameMap().calculateWorldPosition(mouse_gl_pos);
 
         // Testing text renderer pixel perfection.
         text_renderer->print(10, 10, "fps: %.2f",
             1.0 / frame_time);
-        text_renderer->print(10, 30, "average frame time: %.7f s",
-            average_frame_time);
-        text_renderer->print(10, 50, "camera position <x, y, z>:"
-            "%.2f, %.2f, %.2f", position.x, position.y, position.z);
-        text_renderer->print(10, 70, "camera rotation <x, y, z>:"
-            "%.2f, %.2f, %.2f", rotation.x, rotation.y, rotation.z);
-        text_renderer->print(10, 90, "camera fov: %.4f", camera.getFOV());
-        text_renderer->print(10, 110, "mouse world position <x, y, z>:"
-            "%.2f, %.2f, %.2f", mouse_world_pos.x, mouse_world_pos.y, mouse_world_pos.z);
+        text_renderer->print(10, 30, "avg: %.2f", 1.0 / average_frame_time);
 
     }
 

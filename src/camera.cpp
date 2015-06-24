@@ -148,8 +148,8 @@ string Camera::asJsonString() {
     string json_string = "\"camera\": {\n";
 
     json_string += "\"fov\": " + to_string(fov) + ",\n";
-    json_string += vec3AsJsonString(position, "position") + ",\n";
-    json_string += vec3AsJsonString(rotation, "rotation") + ",\n";
+    json_string += GLMHelpers::vec3AsJsonString(position, "position") + ",\n";
+    json_string += GLMHelpers::vec3AsJsonString(rotation, "rotation") + ",\n";
     json_string += "\"move_sensitivity\": " + to_string(move_sensitivity) + ",\n";
     json_string += "\"rotate_sensitivity\": " + to_string(rotate_sensitivity) + "\n";
     json_string += "}";

@@ -33,9 +33,6 @@ void GameMap::render(){
     // Draw the billboard (should be drawn last)
     billboard_test.draw();
 
-    glm::vec3 screen_pos = unit_holder->getUnits()[0].getScreenPosition(camera);
-    // Debug::info("unit screen pos = <%2f, %2f, %2f>\n", screen_pos.x, screen_pos.y, screen_pos.z);
-
 }
 
 void GameMap::renderToShadowMap(){

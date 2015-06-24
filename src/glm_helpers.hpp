@@ -7,6 +7,10 @@
 
 using namespace std;
 
-string vec3AsJsonString(glm::vec3 vector, string name);
+namespace GLMHelpers {
+    string vec3AsJsonString(glm::vec3 vector, string name);
+    glm::vec2 calculateScreenPosition(glm::mat4 proj, glm::mat4 view, glm::vec3 world_point);
+}
+
 
 #endif

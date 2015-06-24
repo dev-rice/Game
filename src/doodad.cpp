@@ -103,8 +103,8 @@ string Doodad::asJsonString() {
 
     // Scale, position and rotation (should be moved to game map eventually)
     json_string += "\"scale\": " + to_string(scale) + ",\n";
-    json_string += vec3AsJsonString(position, "position") + ",\n";
-    json_string += vec3AsJsonString(rotation, "rotation") + ",\n";
+    json_string += GLMHelpers::vec3AsJsonString(position, "position") + ",\n";
+    json_string += GLMHelpers::vec3AsJsonString(rotation, "rotation") + ",\n";
 
     // Textures (grrrrrrr json spec sucks)
     json_string += "\"textures\": {\n";
