@@ -58,7 +58,7 @@ GameView::GameView(Level& level, RenderDeque& render_stack) : level(&level), gam
 
     ui_drawables.push_back(DebugConsole::getInstance());
 
-    healthbar.setPixelCoordinates(0, 0, 192, 42);
+    healthbar.setPixelCoordinates(0, 0, 196, 43);
     healthbar.setGLPosition(glm::vec2(0, 0));
 }
 
