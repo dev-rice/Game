@@ -7,9 +7,8 @@ GameMap::GameMap(string map_filename, UnitHolder& units, RenderDeque& render_sta
 
     initializeGlobalUniforms();
 
-    // Billboard test for stuff like health bars
-    billboard_test.setScale(5);
-
+    // // Billboard test for stuff like health bars
+    // billboard_test.setScale(5);
 
 }
 
@@ -25,13 +24,13 @@ void GameMap::render(){
 
     renderAllNoShader();
 
-    // Temporary for billboard testing
-    glm::vec3 unit_pos = unit_holder->getUnits()[0].getPosition();
-    glm::vec3 new_pos = unit_pos + glm::vec3(0, 10, 0);
-    billboard_test.setPosition(new_pos);
-
-    // Draw the billboard (should be drawn last)
-    billboard_test.draw();
+    // // Temporary for billboard testing
+    // glm::vec3 unit_pos = unit_holder->getUnits()[0].getPosition();
+    // glm::vec3 new_pos = unit_pos + glm::vec3(0, 10, 0);
+    // billboard_test.setPosition(new_pos);
+    //
+    // // Draw the billboard (should be drawn last)
+    // billboard_test.draw();
 
 }
 

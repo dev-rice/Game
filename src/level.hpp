@@ -17,7 +17,8 @@ public:
     GameMap& getGameMap();
     UnitManager& getUnitManager();
     ResourceLoader& getResourceLoader();
-
+    UnitHolder& getUnitHolder();
+    
     string asJsonString();
 
     void saveAs(string filename);

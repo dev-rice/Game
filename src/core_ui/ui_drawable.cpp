@@ -43,6 +43,8 @@ void UIDrawable::attachTexture(Texture texture){
     height = gl_mesh_size.y;
 
     FlatDrawable::attachTexture(texture);
+
+    // updateDimensions();
 }
 
 glm::vec2 UIDrawable::getGLPosition(){

@@ -39,6 +39,10 @@ ResourceLoader& Level::getResourceLoader() {
     return resource_loader;
 }
 
+UnitHolder& Level::getUnitHolder() {
+    return unit_holder;
+}
+
 string Level::asJsonString() {
     string json_string = "{\n";
 

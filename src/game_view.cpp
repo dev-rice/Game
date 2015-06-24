@@ -1,6 +1,6 @@
 #include "game_view.h"
 
-GameView::GameView(Level& level, RenderDeque& render_stack) : level(&level), gamebuffer(), ui_buffer(), render_stack(&render_stack) {
+GameView::GameView(Level& level, RenderDeque& render_stack) : level(&level), gamebuffer(), ui_buffer(), render_stack(&render_stack), healthbar(Texture("res/textures/healthbar_test.png")) {
 
     // // Gaussian Blur shaders
     // Shader blur_horiz("shaders/flat_drawable_noflip.vs", "shaders/framebuffer_horiz_blur.fs");
@@ -58,6 +58,8 @@ GameView::GameView(Level& level, RenderDeque& render_stack) : level(&level), gam
 
     ui_drawables.push_back(DebugConsole::getInstance());
 
+    healthbar.setPixelCoordinates(0, 0, 192, 32);
+    healthbar.setGLPosition(glm::vec2(0, 0));
 }
 
 void GameView::update(){
@@ -98,6 +100,13 @@ void GameView::drawCore(){
 
     // Push the ui framebuffer to the rendering stack
     render_stack->enqueueFramebuffer(ui_buffer, true);
+
+    glm::vec3 unit_pos = level->getUnitHolder().getUnits()[0].getPosition();
+    Camera& camera = level->getGameMap().getCamera();
+    glm::vec2 healthbar_pos = GLMHelpers::calculateScreenPosition(camera.getProjectionMatrix(), camera.getViewMatrix(), (unit_pos + glm::vec3(0, 10, 0)));
+    healthbar_pos += glm::vec2(0, 0.01);
+    healthbar.setGLPosition(healthbar_pos);
+    healthbar.draw();
 
     // Draw all of the ui elements on top of the level
     for(int i = 0; i < ui_drawables.size(); ++i){

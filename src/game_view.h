@@ -80,6 +80,8 @@ protected:
 
     bool debug_console_key_state;
 
+    UIDrawable healthbar;
+
 };
 
 #endif
