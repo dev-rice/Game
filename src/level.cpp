@@ -4,7 +4,7 @@ Level::Level(string filename, RenderDeque& render_stack) : File(filename), unit_
 
     // Creation of test playable
     # warning Move mesh loading into playable loading
-    Mesh& playable_mesh_ref = resource_loader.loadMesh("airship.dae");
+    Mesh& playable_mesh_ref = resource_loader.loadMesh("small_airship.dae");
     Shader& playable_shader_ref = resource_loader.loadShader("shaders/doodad.vs",
         "shaders/doodad.fs");
     float playable_scale = 1.0f;
@@ -15,6 +15,10 @@ Level::Level(string filename, RenderDeque& render_stack) : File(filename), unit_
             Playable temp(playable_mesh_ref, playable_shader_ref, playable_position, playable_scale);
             temp.loadFromXML("res/units/airship.xml");
             temp.setScale(0.8);
+            temp.setFlying(true);
+
+            Texture& diff_ref = resource_loader.loadTexture("small_airship.png");
+            temp.setDiffuse(diff_ref);
             if (rand() % 2){
                 temp.setTeam(1);
             } else {

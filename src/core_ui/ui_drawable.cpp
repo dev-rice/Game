@@ -17,9 +17,9 @@ void UIDrawable::load(Texture texture){
     window_width = Window::getInstance()->getWidth();
     window_height = Window::getInstance()->getHeight();
 
-    glm::mat3 mesh_projection = glm::mat3( window_width, 0.0f  , 0.0f,
-                                      0.0f , window_height, 0.0f,
-                                      0.0f , 0.0f  , 1.0f );
+    glm::mat3 mesh_projection = glm::mat3(  window_width, 0.0f  , 0.0f,
+                                            0.0f , window_height, 0.0f,
+                                            0.0f , 0.0f  , 1.0f );
 
     inv_mesh_projection = glm::transpose(mesh_projection);
 

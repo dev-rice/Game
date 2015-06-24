@@ -103,7 +103,7 @@ void GameView::drawCore(){
 
     glm::vec3 unit_pos = level->getUnitHolder().getUnits()[0].getPosition();
     Camera& camera = level->getGameMap().getCamera();
-    glm::vec2 healthbar_pos = GLMHelpers::calculateScreenPosition(camera.getProjectionMatrix(), camera.getViewMatrix(), (unit_pos + glm::vec3(0, 10, 0)));
+    glm::vec2 healthbar_pos = GLMHelpers::calculateScreenPosition(camera.getProjectionMatrix(), camera.getViewMatrix(), (unit_pos + glm::vec3(0, 5, 0)));
     healthbar_pos += glm::vec2(0, 0.01);
     healthbar.setGLPosition(healthbar_pos);
     healthbar.draw();

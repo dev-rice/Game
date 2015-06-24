@@ -52,7 +52,7 @@ Playable::Playable(Mesh& mesh, Shader& shader, glm::vec3 position, GLfloat scale
     temp_selected = false;
 
     #warning Fix the 90* offset bug
-    rotateGlobalEuler(M_PI/2.0f, 0.0f, 0.0f);
+    // rotateGlobalEuler(M_PI/2.0f, 0.0f, 0.0f);
 
     target_position = position;
 
@@ -237,9 +237,9 @@ void Playable::tempDeSelect(){
 
 void Playable::setTeam(int t){
     if (t == 1){
-        Drawable::setDiffuse(Texture(glm::vec4(0.5, 0.5, 1, 1)));
+        Drawable::setEmissive(Texture(glm::vec4(0.5, 0.5, 1, 0.1)));
     } else if (t == 2) {
-        Drawable::setDiffuse(Texture(glm::vec4(0.172f, 0.855f, 0.424f, 1)));
+        Drawable::setEmissive(Texture(glm::vec4(0.172f, 0.855f, 0.424f, 0.1)));
     }
     team_number = t;
 }
@@ -370,6 +370,15 @@ float Playable::distanceFromPointToLine(glm::vec2 line_0, glm::vec2 line_1, glm:
      glm::vec2 Pb = line_0 + (b * v);
      return getDistance(point.x, point.y, Pb.x, Pb.y);
 }
+
+void Playable::setFlying(bool flying) {
+    if (flying) {
+        distance_off_ground = 7.0;
+    } else {
+        distance_off_ground = 0.0;
+    }
+}
+
 
 //##################################################################################################
 //
@@ -550,8 +559,8 @@ void Playable::update(Terrain* ground, std::vector<Playable*> *otherUnits){
 
     }
 
-    position.y = ground->getHeightInterpolated(position.x, position.z);
-
+    ground_pos = ground->getHeightInterpolated(position.x, position.z);
+    position.y = ground_pos + distance_off_ground;
 }
 
 //##################################################################################################
@@ -573,7 +582,7 @@ void Playable::draw(){
 
 
         if(selected || temp_selected ){
-            selection_ring->setPosition(glm::vec3(position.x, position.y + 0.5, position.z));
+            selection_ring->setPosition(glm::vec3(position.x, ground_pos + 0.5, position.z));
             selection_ring->setRotationEuler(glm::vec3(M_PI/2.0f, rotation.y, 0.0));
             selection_ring->draw();
         }

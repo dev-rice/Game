@@ -45,6 +45,8 @@ public:
 	void holdPosition();
 	void stop();
 
+	void setFlying(bool flying);
+
 	bool isEnemy(int);
 
 	bool isSelected(){ return selected; }
@@ -111,6 +113,8 @@ private:
 	float turning_speed;
 	float radius;
 	float sight_radius;
+	float distance_off_ground;
+	float ground_pos;
 
 	// Leveling
 	int level;
@@ -134,8 +138,6 @@ private:
 	float weapon_cooldown;
 	int weapon_damage;
 	float weapon_range;
-
-
 
 	// Not implemented yet
 	// Weapon* weapon
