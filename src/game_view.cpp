@@ -210,7 +210,7 @@ void GameView::handleInputState(){
     //##############################################################################
     // Stop-Action Key Handling
     //##############################################################################
-    if (state[SDL_SCANCODE_S]){
+    if (state[SDL_SCANCODE_S] && !debug_showing){
         level->getUnitManager().issueOrder(Playable::Order::STOP, mouse_world_pos, shift_pressed);
     }
 
