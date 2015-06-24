@@ -19,6 +19,8 @@ public:
     UIDrawable(Texture texture);
     UIDrawable(Shader shader, Texture texture);
 
+    enum PositioningMode { Regular, CenterHorizontal, CenterVertical, Center };
+
     void draw();
     void attachTexture(Texture);
 
@@ -30,6 +32,8 @@ public:
     void setGLCoordinates(glm::vec2, glm::vec2);
 
     void setParent(UIDrawable*);
+
+    void setPositioningMode(PositioningMode mode);
 
     int getXPixels(){ return x_pixels;}
     int getYPixels(){ return y_pixels;}
@@ -63,6 +67,8 @@ protected:
 
     bool outline;
     glm::mat3 inv_mesh_projection;
+
+    PositioningMode pos_mode;
 
     UIDrawable* parent;
 };

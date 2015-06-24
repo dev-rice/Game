@@ -24,8 +24,11 @@ void UIDrawable::load(Texture texture){
     inv_mesh_projection = glm::transpose(mesh_projection);
 
     attachTexture(texture);
+    setPixelCoordinates(0, 0, texture.getWidth(), texture.getHeight());
 
     parent = NULL;
+
+    pos_mode = Regular;
 
 }
 
@@ -44,7 +47,7 @@ void UIDrawable::attachTexture(Texture texture){
 
     FlatDrawable::attachTexture(texture);
 
-    // updateDimensions();
+    updateDimensions();
 }
 
 glm::vec2 UIDrawable::getGLPosition(){
@@ -52,7 +55,17 @@ glm::vec2 UIDrawable::getGLPosition(){
 }
 
 void UIDrawable::setGLPosition(glm::vec2 position){
-    this->position = glm::vec2(position.x + width, position.y - height);
+    glm::vec2 new_pos;
+    if (pos_mode == Regular) {
+        new_pos = glm::vec2(position.x + width, position.y - height);
+    } else if (pos_mode == CenterHorizontal) {
+        new_pos = glm::vec2(position.x, position.y - height);
+    } else if (pos_mode == CenterVertical) {
+        new_pos = glm::vec2(position.x + width, position.y);
+    } else if (pos_mode == Center) {
+        new_pos = glm::vec2(position.x, position.y);
+    }
+    this->position = new_pos;
 }
 
 void UIDrawable::draw(){
@@ -69,6 +82,10 @@ void UIDrawable::setGLCoordinates(glm::vec2 start, glm::vec2 end){
     this->width = (end.x - start.x)/2;
     this->height = (end.y - start.y)/2;
     this->position = glm::vec2(start.x + width, start.y + height);
+}
+
+void UIDrawable::setPositioningMode(PositioningMode mode) {
+    pos_mode = mode;
 }
 
 void UIDrawable::updateDimensions(){
@@ -170,10 +187,12 @@ int UIDrawable::parseAnchor(const char* anchor, bool is_x){
 }
 
 void UIDrawable::setPixelCoordinates(int new_x, int new_y, int new_x2, int new_y2){
-    x_pixels = new_x;
-    y_pixels = new_y;
+
     width_pixels = new_x2 - new_x;
     height_pixels = new_y2 - new_y;
+
+    x_pixels = new_x;
+    y_pixels = new_y;
 
     updateDimensions();
     setGLPosition(getGLPosition());
