@@ -2,18 +2,22 @@
 
 UIDrawable::UIDrawable() {
     Texture texture(glm::vec4(1.0, 0.0, 1.0, 1.0));
-    load(texture);
+    load(texture, Regular);
 }
 
 UIDrawable::UIDrawable(Texture texture) : FlatDrawable(){
-    load(texture);
+    load(texture, Regular);
+}
+
+UIDrawable::UIDrawable(Texture texture, PositioningMode mode) : FlatDrawable(){
+    load(texture, mode);
 }
 
 UIDrawable::UIDrawable(Shader shader, Texture texture) : FlatDrawable(shader.getGLId()){
-    load(texture);
+    load(texture, Regular);
 }
 
-void UIDrawable::load(Texture texture){
+void UIDrawable::load(Texture texture, PositioningMode mode){
     window_width = Window::getInstance()->getWidth();
     window_height = Window::getInstance()->getHeight();
 
@@ -28,7 +32,7 @@ void UIDrawable::load(Texture texture){
 
     parent = NULL;
 
-    pos_mode = Regular;
+    pos_mode = mode;
 
 }
 

@@ -15,11 +15,12 @@
 
 class UIDrawable : public FlatDrawable {
 public:
+    enum PositioningMode { Regular, CenterHorizontal, CenterVertical, Center };
+
     UIDrawable();
     UIDrawable(Texture texture);
+    UIDrawable(Texture texture, PositioningMode mode);
     UIDrawable(Shader shader, Texture texture);
-
-    enum PositioningMode { Regular, CenterHorizontal, CenterVertical, Center };
 
     void draw();
     void attachTexture(Texture);
@@ -44,7 +45,7 @@ public:
     virtual void receiveNotification(UIDrawable*);
 
 protected:
-    void load(Texture texture);
+    void load(Texture texture, PositioningMode mode);
 
     void parseConstraints(pugi::xml_node);
     virtual bool constraintsAreValid(bool, bool, bool, bool, bool, bool);
