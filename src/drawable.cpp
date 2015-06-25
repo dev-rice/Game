@@ -2,7 +2,7 @@
 //      The Drawable class is a parent class for any object that needs to be rendered in our 3D world.
 //      It has a position, rotation (local), a shader, and a pointer to a Mesh (geometry data).
 
-#include "drawable.h"
+#include "drawable.hpp"
 
 Drawable::Drawable(Mesh& mesh, Shader& shader){
     load(mesh, shader, glm::vec3(0.0f, 0.0f, 0.0f), 1.0f);

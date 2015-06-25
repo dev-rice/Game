@@ -1,4 +1,4 @@
-#include "doodad.h"
+#include "doodad.hpp"
 
 Doodad::Doodad(const Json::Value& doodad_json, ResourceLoader& resource_loader){
 

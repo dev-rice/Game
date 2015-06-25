@@ -1,4 +1,4 @@
-#include "camera.h"
+#include "camera.hpp"
 
 Camera::Camera(const Json::Value& camera_json){
     float fov = camera_json["fov"].asFloat();

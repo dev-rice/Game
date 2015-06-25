@@ -1,4 +1,4 @@
-#include "debug.h"
+#include "debug.hpp"
 
 const char* Debug::INFO = "\033[1;36m";
 const char* Debug::ERROR = "\033[1;31m";

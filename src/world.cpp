@@ -1,4 +1,4 @@
-#include "world.h"
+#include "world.hpp"
 
 World::World(string level_filename, bool edit_mode) : render_stack(), level(level_filename, render_stack){
     this->edit_mode = edit_mode;

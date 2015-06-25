@@ -1,4 +1,4 @@
-#include "debug_console.h"
+#include "debug_console.hpp"
 
 DebugConsole* DebugConsole::instance;
 

@@ -1,7 +1,7 @@
 // pathfinder.cpp
 // Trevor Westphal
 
-#include "pathfinder.h"
+#include "pathfinder.hpp"
 
 PathFinder::PathFinder(Terrain& ground) : ground(&ground) {
 	allocateArray(ground);

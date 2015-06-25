@@ -1,4 +1,4 @@
-#include "shadowbuffer.h"
+#include "shadowbuffer.hpp"
 
 
 Shadowbuffer::Shadowbuffer(float up_sample){

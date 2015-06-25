@@ -3,7 +3,7 @@
 
 #include <math.h>
 
-#include "fire_emitter.h"
+#include "fire_emitter.hpp"
 
 FireEmitter::FireEmitter(const Json::Value& emitter_json) : Emitter(emitter_json) {
 

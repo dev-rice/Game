@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "drawable.h"
+#include "drawable.hpp"
 #include "resource_loader.hpp"
 #include "plane_mesh.hpp"
 

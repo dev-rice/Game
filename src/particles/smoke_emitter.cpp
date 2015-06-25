@@ -3,7 +3,7 @@
 
 #include <math.h>
 
-#include "smoke_emitter.h"
+#include "smoke_emitter.hpp"
 
 SmokeEmitter::SmokeEmitter(const Json::Value& emitter_json) : Emitter(emitter_json) {
 

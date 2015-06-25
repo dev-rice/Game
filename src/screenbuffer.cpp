@@ -1,4 +1,4 @@
-#include "screenbuffer.h"
+#include "screenbuffer.hpp"
 
 Screenbuffer::Screenbuffer(){
     framebuffer = 0;

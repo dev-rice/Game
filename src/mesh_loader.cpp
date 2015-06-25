@@ -8,7 +8,7 @@
 #include <map>     // map
 #include <array>   // array
 
-#include "mesh_loader.h"
+#include "mesh_loader.hpp"
 
 MeshLoader::MeshLoader(string filename){
     flat_shading = false;

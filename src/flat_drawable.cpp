@@ -1,4 +1,4 @@
-#include "flat_drawable.h"
+#include "flat_drawable.hpp"
 
 FlatDrawable::FlatDrawable(GLfloat width, GLfloat height, glm::vec2 position) : FlatDrawable(Shader("shaders/flat_drawable.vs",
     "shaders/flat_drawable.fs"), width, height, position){

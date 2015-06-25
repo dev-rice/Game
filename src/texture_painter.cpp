@@ -1,4 +1,4 @@
-#include "texture_painter.h"
+#include "texture_painter.hpp"
 
 TexturePainter::TexturePainter() : TexturePainter(0) {}
 

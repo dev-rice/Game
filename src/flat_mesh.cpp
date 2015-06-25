@@ -1,4 +1,4 @@
-#include "flat_mesh.h"
+#include "flat_mesh.hpp"
 
 FlatMesh* FlatMesh::instance;
 

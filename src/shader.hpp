@@ -5,7 +5,7 @@
 #include <fstream>
 
 #include "includes/gl.hpp"
-#include "debug.h"
+#include "debug.hpp"
 
 using namespace std;
 

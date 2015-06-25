@@ -1,4 +1,4 @@
-#include "particles/emitter.h"
+#include "particles/emitter.hpp"
 
 Emitter::Emitter(const Json::Value& emitter_json) {
     glm::vec3 pos;

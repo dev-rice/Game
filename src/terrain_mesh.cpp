@@ -1,4 +1,4 @@
-#include "terrain_mesh.h"
+#include "terrain_mesh.hpp"
 
 // The single vertex specification is:
 //      x, y, z, nx, ny, nz, tx, ty, tz, bx, by, bz, u, v, su, sv

@@ -6,7 +6,7 @@
 #include "includes/gl.hpp"
 #include "includes/glm.hpp"
 #include "includes/soil.hpp"
-#include "debug.h"
+#include "debug.hpp"
 #include "file.hpp"
 
 using namespace std;

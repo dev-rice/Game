@@ -1,4 +1,4 @@
-#include "game_view.h"
+#include "game_view.hpp"
 
 GameView::GameView(Level& level, RenderDeque& render_stack) : level(&level), gamebuffer(), ui_buffer(), render_stack(&render_stack), healthbar(Texture("res/textures/healthbar_test.png", GL_NEAREST, false), UIDrawable::Center) {
 

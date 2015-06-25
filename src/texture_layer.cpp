@@ -1,4 +1,4 @@
-#include "texture_layer.h"
+#include "texture_layer.hpp"
 
 TextureLayer::TextureLayer(){
     diffuse = Texture(glm::vec4(0.0, 0.0, 0.0, 1.0));

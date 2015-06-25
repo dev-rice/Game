@@ -3,8 +3,8 @@
 
 #include <vector>
 
-#include "drawable.h"
-#include "doodad.h"
+#include "drawable.hpp"
+#include "doodad.hpp"
 #include "level.hpp"
 
 class DrawableSelector {

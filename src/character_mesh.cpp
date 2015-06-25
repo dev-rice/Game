@@ -1,4 +1,4 @@
-#include "character_mesh.h"
+#include "character_mesh.hpp"
 
 CharacterMesh* CharacterMesh::instance;
 

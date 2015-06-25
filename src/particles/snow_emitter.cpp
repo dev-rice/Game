@@ -1,7 +1,7 @@
 // snow_emitter.cpp
 // Trevor Westphal
 
-#include "snow_emitter.h"
+#include "snow_emitter.hpp"
 
 SnowEmitter::SnowEmitter(const Json::Value& emitter_json) : Emitter(emitter_json) {
 

@@ -1,4 +1,4 @@
-#include "character_drawable.h"
+#include "character_drawable.hpp"
 
 CharacterDrawable::CharacterDrawable(Shader shader, FontSheet* font_sheet, GLint point)
     :UIDrawable(shader.getGLId(), font_sheet->getTexture()) {

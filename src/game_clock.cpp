@@ -1,4 +1,4 @@
-#include "game_clock.h"
+#include "game_clock.hpp"
 
 GameClock* GameClock::instance;
 

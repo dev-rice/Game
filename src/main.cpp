@@ -25,15 +25,15 @@
 #include <algorithm>
 #include <iostream>
 
-#include "debug.h"
-#include "world.h"
-#include "profile.h"
-#include "window.h"
-#include "mesh_loader.h"
-#include "game_clock.h"
-#include "input_handler.h"
-#include "font_sheet.h"
-#include "flat_drawable.h"
+#include "debug.hpp"
+#include "world.hpp"
+#include "profile.hpp"
+#include "window.hpp"
+#include "mesh_loader.hpp"
+#include "game_clock.hpp"
+#include "input_handler.hpp"
+#include "font_sheet.hpp"
+#include "flat_drawable.hpp"
 #include "texture.hpp"
 #include "file.hpp"
 

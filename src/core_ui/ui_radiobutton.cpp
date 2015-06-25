@@ -1,7 +1,7 @@
 // ui_radiobutton.cpp
 // Trevor Westphal
 
-#include "ui_radiobutton.h"
+#include "ui_radiobutton.hpp"
 
 UIImage* UIRadioButton::on_icon;
 UIImage* UIRadioButton::off_icon;

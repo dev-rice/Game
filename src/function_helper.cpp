@@ -1,7 +1,7 @@
 // function_helper.cpp
 // Trevor Westphal
 
-#include "function_helper.h"
+#include "function_helper.hpp"
 
 FunctionHelper* FunctionHelper::instance;
 

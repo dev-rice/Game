@@ -1,4 +1,4 @@
-#include "framebuffer.h"
+#include "framebuffer.hpp"
 
 Framebuffer::Framebuffer(){
     this->window = Window::getInstance();

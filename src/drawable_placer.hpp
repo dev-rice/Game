@@ -4,12 +4,12 @@
 #include "includes/glm.hpp"
 #include "includes/sdl.hpp"
 
-#include "drawable.h"
+#include "drawable.hpp"
 #include "resource_loader.hpp"
-#include "doodad.h"
+#include "doodad.hpp"
 #include "level.hpp"
 #include "drawable_selector.hpp"
-#include "game_clock.h"
+#include "game_clock.hpp"
 
 class DrawablePlacer {
 public:

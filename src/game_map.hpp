@@ -6,13 +6,13 @@
 #include <fstream>
 #include <iostream>
 
-#include "doodad.h"
-#include "terrain.h"
+#include "doodad.hpp"
+#include "terrain.hpp"
 #include "includes/json.hpp"
-#include "shadowbuffer.h"
+#include "shadowbuffer.hpp"
 
 #include "render_deque.hpp"
-#include "profile.h"
+#include "profile.hpp"
 #include "particles/emitter_factory.hpp"
 #include "unit_holder.hpp"
 #include "resource_loader.hpp"

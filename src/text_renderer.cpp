@@ -1,4 +1,4 @@
-#include "text_renderer.h"
+#include "text_renderer.hpp"
 
 TextRenderer::TextRenderer(std::string font_filename, GLint point){
     int width = Window::getInstance()->getWidth();

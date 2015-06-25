@@ -1,7 +1,7 @@
 // ui_button.cpp
 // Trevor Westphal
 
-#include "ui_button.h"
+#include "ui_button.hpp"
 
 UIImage* UIButton::center_image;
 UIImage* UIButton::left_image;

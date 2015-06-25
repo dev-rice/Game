@@ -1,7 +1,7 @@
 // ui_window.cpp
 // Trevor Westphal
 
-#include "ui_window.h"
+#include "ui_window.hpp"
 
 UIImage* UIWindow::up_edge_image;
 UIImage* UIWindow::right_edge_image;

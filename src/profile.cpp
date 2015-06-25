@@ -1,7 +1,7 @@
 // profile.cpp
 // Trevor Westphal
 
-#include "profile.h"
+#include "profile.hpp"
 
 Profile* Profile::instance;
 

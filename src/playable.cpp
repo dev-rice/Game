@@ -1,7 +1,7 @@
 // playable.cpp
 // Trevor Westphal
 
-#include "playable.h"
+#include "playable.hpp"
 
 Doodad* Playable::selection_ring;
 

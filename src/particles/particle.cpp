@@ -1,7 +1,7 @@
 // particle.cpp
 // Trevor Westphal
 
-#include "particle.h"
+#include "particle.hpp"
 
 
 

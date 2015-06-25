@@ -1,4 +1,4 @@
-#include "game_view_edit.h"
+#include "game_view_edit.hpp"
 
 GameViewEdit::GameViewEdit(Level& level, RenderDeque& render_stack) : GameView(level, render_stack), fancy_text("BreeSerif-Regular.ttf", 18), header_text("BreeSerif-Regular.ttf", 32), placer(level) {
 

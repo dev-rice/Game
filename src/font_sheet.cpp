@@ -1,4 +1,4 @@
-#include "font_sheet.h"
+#include "font_sheet.hpp"
 
 FontSheet::FontSheet(std::string filename, int pixel_size) {
     this->filename = filename;

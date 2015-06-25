@@ -1,4 +1,4 @@
-#include "input_handler.h"
+#include "input_handler.hpp"
 
 InputHandler* InputHandler::instance;
 

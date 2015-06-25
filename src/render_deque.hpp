@@ -3,8 +3,8 @@
 
 #include <deque>
 
-#include "screenbuffer.h"
-#include "framebuffer.h"
+#include "screenbuffer.hpp"
+#include "framebuffer.hpp"
 
 class RenderDeque {
 public:

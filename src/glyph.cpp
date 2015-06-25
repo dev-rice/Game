@@ -1,4 +1,4 @@
-#include "glyph.h"
+#include "glyph.hpp"
 
 Glyph::Glyph(FT_GlyphSlot& glyph, glm::vec2 uv_offset){
     this->advance = glyph->metrics.horiAdvance / 64.0;

@@ -1,4 +1,4 @@
-#include "layered_textures.h"
+#include "layered_textures.hpp"
 
 LayeredTextures::LayeredTextures(int size){
     this->num_layers = size;

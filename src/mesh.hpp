@@ -12,9 +12,9 @@
 #include <algorithm>
 #include <string>
 
-#include "mesh_loader.h"
-#include "debug.h"
-#include "vertex.h"
+#include "mesh_loader.hpp"
+#include "debug.hpp"
+#include "vertex.hpp"
 #include "shader.hpp"
 #include "file.hpp"
 
