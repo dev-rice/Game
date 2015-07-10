@@ -18,6 +18,7 @@ Texture::Texture(glm::vec4 color) {
 }
 
 Texture::Texture(glm::vec4 color, GLuint width, GLuint height) {
+    format = GL_RGBA;
     gl_texture_id = loadTextureFromPixel(width, height, color, GL_LINEAR);
 }
 

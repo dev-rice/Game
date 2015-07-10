@@ -3,7 +3,11 @@
 GameMap::GameMap(string map_filename, UnitHolder& units, RenderDeque& render_stack, ResourceLoader& resource_loader) : camera(), ground(), unit_holder(&units), render_stack(&render_stack),  resource_loader(&resource_loader),has_temp_drawable(false),  shadowbuffer(1.0), depthbuffer(1.0), shadow_shader("shaders/shadow.vs", "shaders/shadow.fs"), depth_shader("shaders/depth.vs", "shaders/depth.fs"), billboard_test(resource_loader) {
 
     ifstream map_input(map_filename);
-    load(map_input);
+    if (map_input) {
+        load(map_input);
+    } else {
+        loadBlankGameMap();
+    }
 
     initializeGlobalUniforms();
 
@@ -235,6 +239,7 @@ void GameMap::load(ifstream& map_input){
     bool parsing_successful = reader.parse(map_contents, root);
     if (!parsing_successful){
         Debug::error("Failed to parse map\n%s", reader.getFormattedErrorMessages().c_str());
+        loadBlankGameMap();
     }
 
     // The filepaths for mesh and textures so we know where to load the files from
@@ -268,6 +273,25 @@ void GameMap::load(ifstream& map_input){
     // Add all the doodads to drawables
 
     // Add all the emitters to drawables
+
+}
+
+void GameMap::loadBlankGameMap() {
+    // WOAH this is hardcode
+
+    // Initialize the resource loader with the base paths
+    resource_loader->setMeshPath("res/models/");
+    resource_loader->setTexturePath("res/textues/");
+
+    // Initialize camera at the "normal position"
+    glm::vec3 pos(-15.95, 40, 68.75);
+    glm::vec3 rot(1.04, 0, 0);
+    camera = Camera(pos, rot);
+
+    // Initialize the flat terrain
+    Texture blank(glm::vec4(0, 0, 0, 1), 512, 512);
+    blank.saveAs("res/textures/blank_heightmap.png");
+    ground = Terrain("res/textues/heightmap.png", 1);
 
 }
 

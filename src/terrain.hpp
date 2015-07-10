@@ -41,7 +41,6 @@ public:
 
     void addSplatmap(Texture splat);
     void addDiffuse(Texture diff, GLuint splat, int layer_num, char channel);
-    void fillSplatmaps();
 
     void printPathing();
 
@@ -65,6 +64,9 @@ public:
 private:
     void initializer(Shader&, string, float, int tile_size);
     void updateUniformData();
+
+    void fillSplatmaps();
+    void fillTextureLayers();
 
     GLubyte* renderHeightmapAsImage();
 

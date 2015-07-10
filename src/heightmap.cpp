@@ -16,9 +16,11 @@ Heightmap::Heightmap(std::string filename, float amplification) : File(filename)
     components = 4;
 
     texture = Texture(filename);
-    texture.setFormat(GL_RGBA);
+    // texture.setFormat(GL_RGBA);
 
     updateImage();
+
+    printf("%d, %d", width, height);
 
     if(!isPowerOfTwo(width) || !isPowerOfTwo(height)){
         Debug::warning("Terrain map size is not base 2."

@@ -43,16 +43,26 @@ Terrain::Terrain(const Json::Value& terrain_json, ResourceLoader& resource_loade
 
     }
 
+    fillSplatmaps();
+
 }
 
 Terrain::Terrain(string heightmap_filename, float amplification){
     Shader* shader = new Shader("shaders/terrain.vs", "shaders/terrain.fs");
     initializer(*shader, heightmap_filename, amplification, 16);
+
+    // Load some stuff for the splatmaps and texture layers
+    fillSplatmaps();
+    fillTextureLayers();
+
 }
 
 Terrain::Terrain(Shader& shader, string heightmap_filename, float amplification) : Drawable() {
 
     initializer(shader, heightmap_filename, amplification, 16);
+
+    fillSplatmaps();
+    fillTextureLayers();
 }
 
 Drawable* Terrain::clone() {
@@ -88,7 +98,6 @@ void Terrain::initializer(Shader& shader, string heightmap_filename, float ampli
 
     // Debugging the allowed areas
     // printPathing();
-
 }
 
 void Terrain::generatePathingArray(){
@@ -477,7 +486,10 @@ void Terrain::addSplatmap(Texture splat){
 }
 
 void Terrain::addDiffuse(Texture diff, GLuint splat, int layer_num, char channel) {
+
     layered_textures->addTexture(diff, splat, channel, layer_num);
+
+    // Pretty sure this dont do anything
     Drawable::setDiffuse(diff);
 }
 
@@ -520,6 +532,12 @@ void Terrain::fillSplatmaps(){
         layered_textures->addSplatmap(blank_splat);
         ++i;
     }
+}
+
+void Terrain::fillTextureLayers() {
+    Texture diffuse("res/textures/stylized_grass.png");
+    addDiffuse(diffuse, 0, 0, 'r');
+    addDiffuse(diffuse, 0, 1, 'r');
 }
 
 string Terrain::asJsonString() {
