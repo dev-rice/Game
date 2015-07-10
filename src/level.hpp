@@ -18,7 +18,7 @@ public:
     UnitManager& getUnitManager();
     ResourceLoader& getResourceLoader();
     UnitHolder& getUnitHolder();
-    
+
     string asJsonString();
 
     void saveAs(string filename);
@@ -28,6 +28,7 @@ private:
     ResourceLoader resource_loader;
     GameMap game_map;
     UnitManager unit_manager;
+    
 };
 
 

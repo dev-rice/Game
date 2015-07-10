@@ -13,6 +13,8 @@ public:
 
     vector<Playable>& getUnits();
 
+    void populate(ResourceLoader& resource_loader);
+
 private:
     vector<Playable> units;
 
