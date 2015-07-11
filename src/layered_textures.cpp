@@ -5,18 +5,9 @@ LayeredTextures::LayeredTextures(int size){
     this->num_splatmaps = (size - 1) / 3;
 
     texture_layers = std::vector<TextureLayer>(num_layers);
-    for (TextureLayer& layer : texture_layers) {
-        // Set the layer to a random color
-        float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-        float g = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-        float b = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-        Texture random_diff(glm::vec4(r, g, b, 1));
-        layer.setDiffuse(random_diff);
 
-        // Set the channel and splatmap number accordingly
-        layer.setChannel('r');
-        layer.setSplatmap(1);
-    }
+    fillLayers();
+
 }
 
 void LayeredTextures::addSplatmap(Texture splatmap){
@@ -232,4 +223,34 @@ bool LayeredTextures::needsSplatmaps(){
 
 int LayeredTextures::getNumLayers(){
     return num_layers;
+}
+
+void LayeredTextures::fillLayers() {
+    for (int layer_num = 0; layer_num < texture_layers.size(); ++layer_num) {
+        TextureLayer& layer = texture_layers[layer_num];
+
+        // Set the layer to a random color
+        float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+        float g = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+        float b = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+        Texture random_diff(glm::vec4(r, g, b, 1));
+        layer.setDiffuse(random_diff);
+
+        // Set the layer attributes correctly
+        layer.setLayerNumber(layer_num);
+        if (layer_num <= 3) {
+            layer.setSplatmap(0);
+        } else {
+            layer.setSplatmap(1);
+        }
+        if (layer_num == 0) {
+            layer.setChannel('r');
+        } else if (layer_num % 3 == 1) {
+            layer.setChannel('r');
+        } else if (layer_num % 3 == 2) {
+            layer.setChannel('g');
+        } else if (layer_num % 3 == 0) {
+            layer.setChannel('b');
+       }
+    }
 }

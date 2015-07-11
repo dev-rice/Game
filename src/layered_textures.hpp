@@ -38,6 +38,8 @@ public:
 
 private:
 
+    void fillLayers();
+
     std::vector<Texture> unique_splatmaps;
     std::vector<TextureLayer> texture_layers;
 

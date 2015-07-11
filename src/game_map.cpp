@@ -281,7 +281,7 @@ void GameMap::loadBlankGameMap() {
 
     // Initialize the resource loader with the base paths
     resource_loader->setMeshPath("res/models/");
-    resource_loader->setTexturePath("res/textues/");
+    resource_loader->setTexturePath("res/textures/");
 
     // Initialize camera at the "normal position"
     glm::vec3 pos(-15.95, 40, 68.75);
@@ -291,7 +291,7 @@ void GameMap::loadBlankGameMap() {
     // Initialize the flat terrain
     Texture blank(glm::vec4(0, 0, 0, 1), 512, 512);
     blank.saveAs("res/textures/blank_heightmap.png");
-    ground = Terrain("res/textues/heightmap.png", 1);
+    ground = Terrain("res/textues/heightmap.png", 10);
 
 }
 
