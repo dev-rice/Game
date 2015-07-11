@@ -50,7 +50,7 @@ Terrain::Terrain(const Json::Value& terrain_json, ResourceLoader& resource_loade
 Terrain::Terrain(string heightmap_filename, float amplification){
     Shader* shader = new Shader("shaders/terrain.vs", "shaders/terrain.fs");
 
-    initializer(*shader, "res/textures/heightmap.png", amplification, 16);
+    initializer(*shader, heightmap_filename, amplification, 16);
 
     // Load some stuff for the splatmaps and texture layers
     fillSplatmaps();

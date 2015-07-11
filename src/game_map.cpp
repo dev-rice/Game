@@ -291,7 +291,7 @@ void GameMap::loadBlankGameMap() {
     // Initialize the flat terrain
     Texture blank(glm::vec4(0, 0, 0, 1), 512, 512);
     blank.saveAs("res/textures/blank_heightmap.png");
-    ground = Terrain("res/textues/heightmap.png", 10);
+    ground = Terrain("res/textures/blank_heightmap.png", 10);
 
 }
 
