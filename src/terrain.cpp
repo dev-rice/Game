@@ -49,11 +49,11 @@ Terrain::Terrain(const Json::Value& terrain_json, ResourceLoader& resource_loade
 
 Terrain::Terrain(string heightmap_filename, float amplification){
     Shader* shader = new Shader("shaders/terrain.vs", "shaders/terrain.fs");
-    initializer(*shader, heightmap_filename, amplification, 16);
+
+    initializer(*shader, "res/textures/heightmap.png", amplification, 16);
 
     // Load some stuff for the splatmaps and texture layers
     fillSplatmaps();
-    fillTextureLayers();
 
 }
 
@@ -62,7 +62,6 @@ Terrain::Terrain(Shader& shader, string heightmap_filename, float amplification)
     initializer(shader, heightmap_filename, amplification, 16);
 
     fillSplatmaps();
-    fillTextureLayers();
 }
 
 Drawable* Terrain::clone() {
@@ -532,12 +531,6 @@ void Terrain::fillSplatmaps(){
         layered_textures->addSplatmap(blank_splat);
         ++i;
     }
-}
-
-void Terrain::fillTextureLayers() {
-    Texture diffuse("res/textures/stylized_grass.png");
-    addDiffuse(diffuse, 0, 0, 'r');
-    addDiffuse(diffuse, 0, 1, 'r');
 }
 
 string Terrain::asJsonString() {

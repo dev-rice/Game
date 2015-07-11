@@ -14,6 +14,7 @@ Texture::Texture(GLubyte* data, GLuint width, GLuint height) {
 }
 
 Texture::Texture(glm::vec4 color) {
+    format = GL_RGBA;
     gl_texture_id = loadTextureFromPixel(color, GL_NEAREST);
 }
 

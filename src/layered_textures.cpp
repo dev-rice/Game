@@ -5,6 +5,18 @@ LayeredTextures::LayeredTextures(int size){
     this->num_splatmaps = (size - 1) / 3;
 
     texture_layers = std::vector<TextureLayer>(num_layers);
+    for (TextureLayer& layer : texture_layers) {
+        // Set the layer to a random color
+        float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+        float g = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+        float b = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+        Texture random_diff(glm::vec4(r, g, b, 1));
+        layer.setDiffuse(random_diff);
+
+        // Set the channel and splatmap number accordingly
+        layer.setChannel('r');
+        layer.setSplatmap(1);
+    }
 }
 
 void LayeredTextures::addSplatmap(Texture splatmap){

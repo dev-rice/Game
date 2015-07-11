@@ -66,7 +66,6 @@ private:
     void updateUniformData();
 
     void fillSplatmaps();
-    void fillTextureLayers();
 
     GLubyte* renderHeightmapAsImage();
 
