@@ -43,7 +43,6 @@ Terrain::Terrain(const Json::Value& terrain_json, ResourceLoader& resource_loade
 
     }
 
-    fillSplatmaps();
 
 }
 
@@ -52,16 +51,12 @@ Terrain::Terrain(string heightmap_filename, float amplification){
 
     initializer(*shader, heightmap_filename, amplification, 16);
 
-    // Load some stuff for the splatmaps and texture layers
-    fillSplatmaps();
-
 }
 
 Terrain::Terrain(Shader& shader, string heightmap_filename, float amplification) : Drawable() {
 
     initializer(shader, heightmap_filename, amplification, 16);
 
-    fillSplatmaps();
 }
 
 Drawable* Terrain::clone() {
@@ -72,8 +67,6 @@ void Terrain::initializer(Shader& shader, string heightmap_filename, float ampli
 
     this->amplification = amplification;
     this->tile_size = tile_size;
-
-    layered_textures = new LayeredTextures(7);
 
     // This is where generate the new mesh and override the one passed in by
     // the constructor. This is to save space in the game files, so we don't have a terrain mesh
@@ -97,6 +90,10 @@ void Terrain::initializer(Shader& shader, string heightmap_filename, float ampli
 
     // Debugging the allowed areas
     // printPathing();
+
+    // Initialize the layered textures
+    layered_textures = new LayeredTextures(7, width, depth);
+
 }
 
 void Terrain::generatePathingArray(){
@@ -521,16 +518,6 @@ void Terrain::setPaintLayer(GLuint layer){
         Debug::error("Cannot set layer to %d.\n", layer);
     }
 
-}
-
-void Terrain::fillSplatmaps(){
-    int i = 0;
-    while(layered_textures->needsSplatmaps()){
-        string id = "_splat" + to_string(i);
-        Texture blank_splat(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f), width, depth);
-        layered_textures->addSplatmap(blank_splat);
-        ++i;
-    }
 }
 
 string Terrain::asJsonString() {

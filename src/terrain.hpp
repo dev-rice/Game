@@ -65,8 +65,6 @@ private:
     void initializer(Shader&, string, float, int tile_size);
     void updateUniformData();
 
-    void fillSplatmaps();
-
     GLubyte* renderHeightmapAsImage();
 
     void initializeBaseMesh(Heightmap&);

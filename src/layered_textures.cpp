@@ -1,11 +1,12 @@
 #include "layered_textures.hpp"
 
-LayeredTextures::LayeredTextures(int size){
-    this->num_layers = size;
-    this->num_splatmaps = (size - 1) / 3;
+LayeredTextures::LayeredTextures(int size, int width, int height) :  num_layers(size), width(width), height(height) {
+
+    num_splatmaps = (size - 1) / 3;
 
     texture_layers = std::vector<TextureLayer>(num_layers);
 
+    fillSplatmaps();
     fillLayers();
 
 }
@@ -252,5 +253,14 @@ void LayeredTextures::fillLayers() {
         } else if (layer_num % 3 == 0) {
             layer.setChannel('b');
        }
+    }
+}
+
+void LayeredTextures::fillSplatmaps() {
+    int i = 0;
+    while(needsSplatmaps()){
+        Texture blank_splat(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f), width, height);
+        addSplatmap(blank_splat);
+        ++i;
     }
 }

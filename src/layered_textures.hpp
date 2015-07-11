@@ -14,7 +14,7 @@ using namespace std;
 
 class LayeredTextures {
 public:
-    LayeredTextures(int);
+    LayeredTextures(int size, int width, int height);
 
     void addSplatmap(Texture splatmap);
     void addTexture(Texture diffuse, GLuint splatmap, char channel, int layer_number);
@@ -38,6 +38,7 @@ public:
 
 private:
 
+    void fillSplatmaps();
     void fillLayers();
 
     std::vector<Texture> unique_splatmaps;
@@ -45,6 +46,9 @@ private:
 
     int num_layers;
     int num_splatmaps;
+
+    int width;
+    int height;
 
 };
 
