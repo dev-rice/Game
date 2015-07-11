@@ -284,14 +284,20 @@ void GameMap::loadBlankGameMap() {
     resource_loader->setTexturePath("res/textures/");
 
     // Initialize camera at the "normal position"
-    glm::vec3 pos(-15.95, 40, 68.75);
+    glm::vec3 pos(-0, 40, 40);
     glm::vec3 rot(1.04, 0, 0);
     camera = Camera(pos, rot);
 
     // Initialize the flat terrain
     Texture blank(glm::vec4(0, 0, 0, 1), 512, 512);
-    blank.saveAs("res/textures/blank_heightmap.png");
-    ground = Terrain("res/textures/blank_heightmap.png", 10);
+
+    // Workaround because the Terrain constructor needs a filename. Can just change it to accept a texture eventually.
+    string blank_filename = "/tmp/blank_heightmap.png";
+    blank.saveAs(blank_filename);
+    ground = Terrain(blank_filename, 10);
+
+    // Dont need the file anymore
+    remove(blank_filename.c_str());
 
 }
 

@@ -5,6 +5,7 @@
 #include <functional>
 #include <fstream>
 #include <iostream>
+#include <cstdio>
 
 #include "doodad.hpp"
 #include "terrain.hpp"
