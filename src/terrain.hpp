@@ -18,10 +18,11 @@
 #include "texture_layer.hpp"
 #include "texture_painter.hpp"
 #include "resource_loader.hpp"
+#include "jsonable.hpp"
 
 using namespace std;
 
-class Terrain : public Drawable {
+class Terrain : public Drawable, public Jsonable {
 public:
     Terrain() {;}
     Terrain(const Json::Value&, ResourceLoader& resource_loader);
