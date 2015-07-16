@@ -5,17 +5,18 @@ LayeredTextures::LayeredTextures(int size, int width, int height) :  num_layers(
     num_splatmaps = (size - 1) / 3;
 
     texture_layers = std::vector<TextureLayer>(num_layers);
+    unique_splatmaps = std::vector<Texture>(num_splatmaps);
 
     fillSplatmaps();
     fillLayers();
 
 }
 
-void LayeredTextures::addSplatmap(Texture splatmap){
-    if (unique_splatmaps.size() >= num_splatmaps){
-        Debug::error("Too many splatmaps for %d textures.\n");
+void LayeredTextures::addSplatmap(Texture splatmap, int id){
+    if (id >= num_splatmaps){
+        Debug::error("Too many splatmaps for %d textures.\n", num_layers);
     }
-    unique_splatmaps.push_back(splatmap);
+    unique_splatmaps[id] = splatmap;
 }
 
 void LayeredTextures::addTexture(Texture diffuse, GLuint splatmap, char channel, int layer_number){
@@ -257,10 +258,8 @@ void LayeredTextures::fillLayers() {
 }
 
 void LayeredTextures::fillSplatmaps() {
-    int i = 0;
-    while(needsSplatmaps()){
+    for (int i = 0; i < num_splatmaps; ++i){
         Texture blank_splat(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f), width, height);
-        addSplatmap(blank_splat);
-        ++i;
+        addSplatmap(blank_splat, i);
     }
 }

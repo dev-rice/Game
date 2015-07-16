@@ -26,12 +26,16 @@ Terrain::Terrain(const Json::Value& terrain_json, ResourceLoader& resource_loade
     initializer(shader_ref, heightmap_filename, amplification, tile_size);
 
     // Do the textures
+
+    // Splatmaps
     for(const Json::Value& splatmap_json : terrain_json["splatmaps"]){
         string filename = texture_path + splatmap_json["filename"].asString();
+        int id = splatmap_json["id"].asInt();
         Texture splatmap(filename);
-        addSplatmap(splatmap);
+        layered_textures->addSplatmap(splatmap, id);
     }
 
+    // Layers
     for (const Json::Value& layer_json : terrain_json["texture_layers"]){
         int layer_number = layer_json["layer_number"].asInt();
         int splatmap_number = layer_json["splatmap"].asInt();
@@ -468,17 +472,17 @@ void Terrain::setTextureLocations(){
 }
 
 void Terrain::addSplatmap(Texture splat){
-    // Check the dimensions of the splatmap and ensure that they are the
-    // same as the heightmap's.
-    GLuint splat_width = splat.getWidth();
-    GLuint splat_height = splat.getHeight();
-    if (splat_width == width && splat_height == depth){
-        layered_textures->addSplatmap(splat);
-    } else {
-        Debug::warning("Splatmap dimensions do not agree with heightmap dimensions.\n");
-        Texture blank_splat(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f), width, depth);
-        layered_textures->addSplatmap(blank_splat);
-    }
+    // // Check the dimensions of the splatmap and ensure that they are the
+    // // same as the heightmap's.
+    // GLuint splat_width = splat.getWidth();
+    // GLuint splat_height = splat.getHeight();
+    // if (splat_width == width && splat_height == depth){
+    //     layered_textures->addSplatmap(splat);
+    // } else {
+    //     Debug::warning("Splatmap dimensions do not agree with heightmap dimensions.\n");
+    //     Texture blank_splat(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f), width, depth);
+    //     layered_textures->addSplatmap(blank_splat);
+    // }
 }
 
 void Terrain::addDiffuse(Texture diff, GLuint splat, int layer_num, char channel) {
