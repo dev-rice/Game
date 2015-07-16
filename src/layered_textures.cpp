@@ -12,20 +12,20 @@ LayeredTextures::LayeredTextures(int size, int width, int height) :  num_layers(
 
 }
 
-void LayeredTextures::addSplatmap(Texture splatmap, int id){
-    if (id >= num_splatmaps){
-        Debug::error("Too many splatmaps for %d textures.\n", num_layers);
+void LayeredTextures::addSplatmap(Texture splatmap, int splat_index){
+    if (splat_index >= num_splatmaps){
+        Debug::error("Splatmap number out of bounds %d. Range is [0, %d]\n", splat_index, num_splatmaps - 1);
     }
-    unique_splatmaps[id] = splatmap;
+    unique_splatmaps[splat_index] = splatmap;
 }
 
-void LayeredTextures::addTexture(Texture diffuse, GLuint splatmap, char channel, int layer_number){
-    TextureLayer layer(diffuse, splatmap, channel, layer_number);
+void LayeredTextures::addTexture(Texture diffuse, GLuint splat_index, char channel, int layer_number){
+    TextureLayer layer(diffuse, splat_index, channel, layer_number);
 
     if (layer_number >= num_layers){
         Debug::error("Layer number out of bounds %d. Range is [0, %d]\n", layer_number, num_layers - 1);
-    } else if (splatmap >= num_splatmaps){
-        Debug::error("Splatmap number out of bounds %d. Range is [0, %d]\n", splatmap, num_splatmaps - 1);
+    } else if (splat_index >= num_splatmaps){
+        Debug::error("Splatmap number out of bounds %d. Range is [0, %d]\n", splat_index, num_splatmaps - 1);
     } else {
         texture_layers[layer_number] = layer;
     }
