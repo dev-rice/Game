@@ -192,7 +192,11 @@ string GameMap::asJsonString() {
     }
     // This is temporary!!!
     json_string.pop_back();
-    json_string += ",\n";
+
+    if (!drawables.empty()) {
+        json_string += ",\n";
+    }
+
     for (Drawable* drawable : drawables) {
         json_string += drawable->asJsonString();
         if (drawable == drawables.back()){
@@ -201,6 +205,7 @@ string GameMap::asJsonString() {
             json_string += ",\n";
         }
     }
+
     // End temporary stuff
     json_string += "],\n";
 

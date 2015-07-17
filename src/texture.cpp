@@ -24,10 +24,13 @@ Texture::Texture(glm::vec4 color, GLuint width, GLuint height) {
 }
 
 Texture::Texture(string filepath) : File(filepath) {
+    format = GL_RGBA;
     gl_texture_id = loadTextureFromFile(filepath, GL_LINEAR, true);
 }
 
 Texture::Texture(string filepath, GLuint filter, bool anisotropic_filtering) : File(filepath) {
+
+    format = GL_RGBA;
     gl_texture_id = loadTextureFromFile(filepath, filter, anisotropic_filtering);
 }
 

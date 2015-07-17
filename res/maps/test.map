@@ -596,8 +596,7 @@
 },
 "textures": {
 "diff": "fence_diff.png"}
-}
-],
+}],
 "terrain": {
 "heightmap": "heightmap.png",
 "amplification": 10.000000,
