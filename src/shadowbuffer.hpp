@@ -10,7 +10,7 @@ public:
     Shadowbuffer() : Shadowbuffer(1.0) {;}
     Shadowbuffer(float);
 
-    void setAsRenderTarget();
+    void setAsRenderTarget(bool clear = true);
 };
 
 #endif

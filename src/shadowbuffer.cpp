@@ -13,9 +13,12 @@ Shadowbuffer::Shadowbuffer(float up_sample){
     framebuffer_window->attachTexture(framebuffer_texture);
 }
 
-void Shadowbuffer::setAsRenderTarget(){
+void Shadowbuffer::setAsRenderTarget(bool clear){
     glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
     glViewport(0, 0, width, height);
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    if (clear) {
+        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    }
 }

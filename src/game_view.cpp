@@ -83,7 +83,7 @@ void GameView::update(){
 void GameView::drawCore(){
 
     // Render the game map to the gamebuffer
-    render_stack->enqueueFramebuffer(gamebuffer, true);
+    render_stack->enqueueFramebuffer(gamebuffer);
     level->getGameMap().render();
 
     // Draw the gamebuffer N - 1 times (the last pass is drawn to the screen).
@@ -97,7 +97,7 @@ void GameView::drawCore(){
     }
 
     // Push the ui framebuffer to the rendering stack
-    render_stack->enqueueFramebuffer(ui_buffer, true);
+    render_stack->enqueueFramebuffer(ui_buffer);
 
     glm::vec3 unit_pos = level->getUnitHolder().getUnits()[0].getPosition();
     Camera& camera = level->getGameMap().getCamera();

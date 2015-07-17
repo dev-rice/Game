@@ -10,8 +10,8 @@ class RenderDeque {
 public:
     RenderDeque();
 
-    void enqueueFramebuffer(Framebuffer& buf, bool set_render_target);
-    void pushFramebuffer(Framebuffer& buf);
+    void enqueueFramebuffer(Framebuffer& buf, bool clear = true);
+    void pushFramebuffer(Framebuffer& buf, bool clear = true);
     void popFramebuffer();
 
     void drawAllToScreen();

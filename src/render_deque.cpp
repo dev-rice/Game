@@ -4,15 +4,13 @@ RenderDeque::RenderDeque() : screen() {
 
 }
 
-void RenderDeque::enqueueFramebuffer(Framebuffer& buf, bool set_render_target) {
-    if (set_render_target) {
-        buf.setAsRenderTarget();
-    }
+void RenderDeque::enqueueFramebuffer(Framebuffer& buf, bool clear) {
+    buf.setAsRenderTarget(clear);
     framebuffer_deuque.push_front(&buf);
 }
 
-void RenderDeque::pushFramebuffer(Framebuffer& buf) {
-    buf.setAsRenderTarget();
+void RenderDeque::pushFramebuffer(Framebuffer& buf, bool clear) {
+    buf.setAsRenderTarget(clear);
     framebuffer_deuque.push_front(&buf);
 }
 

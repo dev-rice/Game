@@ -28,11 +28,14 @@ Framebuffer::Framebuffer(){
 
 }
 
-void Framebuffer::setAsRenderTarget(){
+void Framebuffer::setAsRenderTarget(bool clear){
     glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
     glViewport(0, 0, width, height);
-    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    if (clear) {
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    }
 }
 
 void Framebuffer::draw(){

@@ -12,7 +12,7 @@ class Framebuffer {
 public:
     Framebuffer();
 
-    virtual void setAsRenderTarget();
+    virtual void setAsRenderTarget(bool clear = true);
     virtual void draw();
 
     void addShaderPass(Shader shader);
@@ -20,7 +20,7 @@ public:
     Texture& getTexture() {return framebuffer_texture;}
 protected:
 
-    void setupFramebufferTexture(GLuint format, float up_sample); 
+    void setupFramebufferTexture(GLuint format, float up_sample);
     void setupDepthStencilBuffer();
 
     GLuint framebuffer;
