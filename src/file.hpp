@@ -22,9 +22,13 @@ public:
 
     void save();
     virtual void saveAs(string filepath);
-    
+
 
 private:
+
+    bool hasLeadingDirectory(string filepath, int delim_index);
+    bool needsTrailingDelimiter(string directory);
+
     string filename;
     string directory;
 

@@ -1,6 +1,6 @@
 #include "game_map.hpp"
 
-GameMap::GameMap(string map_filename, UnitHolder& units, RenderDeque& render_stack, ResourceLoader& resource_loader) : camera(), ground(), unit_holder(&units), render_stack(&render_stack),  resource_loader(&resource_loader),has_temp_drawable(false),  shadowbuffer(1.0), depthbuffer(1.0), shadow_shader("shaders/shadow.vs", "shaders/shadow.fs"), depth_shader("shaders/depth.vs", "shaders/depth.fs"), billboard_test(resource_loader) {
+GameMap::GameMap(string map_filename, UnitHolder& units, RenderDeque& render_stack, ResourceLoader& resource_loader) : camera(), ground(), unit_holder(&units), render_stack(&render_stack),  resource_loader(&resource_loader),has_temp_drawable(false),  shadowbuffer(1.0), depthbuffer(1.0), shadow_shader("shaders/shadow.vs", "shaders/shadow.fs"), depth_shader("shaders/depth.vs", "shaders/depth.fs") {
 
     ifstream map_input(map_filename);
     if (map_input) {
@@ -279,25 +279,27 @@ void GameMap::load(ifstream& map_input){
 void GameMap::loadBlankGameMap() {
     // WOAH this is hardcode
 
-    // Initialize the resource loader with the base paths
-    resource_loader->setMeshPath("res/models/");
-    resource_loader->setTexturePath("res/textures/");
+    Debug::error("Cannot load map file, please specify an existing map.");
 
-    // Initialize camera at the "normal position"
-    glm::vec3 pos(-0, 40, 40);
-    glm::vec3 rot(1.04, 0, 0);
-    camera = Camera(pos, rot);
-
-    // Initialize the flat terrain
-    Texture blank(glm::vec4(0, 0, 0, 1), 512, 512);
-
-    // Workaround because the Terrain constructor needs a filename. Can just change it to accept a texture eventually.
-    string blank_filename = "/tmp/blank_heightmap.png";
-    blank.saveAs(blank_filename);
-    ground = Terrain(blank_filename, 10);
-
-    // Dont need the file anymore
-    remove(blank_filename.c_str());
+    // // Initialize the resource loader with the base paths
+    // resource_loader->setMeshPath("res/models/");
+    // resource_loader->setTexturePath("res/textures/");
+    //
+    // // Initialize camera at the "normal position"
+    // glm::vec3 pos(-0, 40, 40);
+    // glm::vec3 rot(1.04, 0, 0);
+    // camera = Camera(pos, rot);
+    //
+    // // Initialize the flat terrain
+    // Texture blank(glm::vec4(0, 0, 0, 1), 512, 512);
+    //
+    // // Workaround because the Terrain constructor needs a filename. Can just change it to accept a texture eventually.
+    // string blank_filename = "/tmp/blank_heightmap.png";
+    // blank.saveAs(blank_filename);
+    // ground = Terrain(blank_filename, 10);
+    //
+    // // Dont need the file anymore
+    // remove(blank_filename.c_str());
 
 }
 

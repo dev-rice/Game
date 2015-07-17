@@ -17,7 +17,6 @@
 #include "particles/emitter_factory.hpp"
 #include "unit_holder.hpp"
 #include "resource_loader.hpp"
-#include "billboard_drawable.hpp"
 
 using namespace std;
 
@@ -86,8 +85,6 @@ private:
 
     GLuint camera_ubo;
     GLuint shadow_ubo;
-
-    BillboardDrawable billboard_test;
 
 };
 

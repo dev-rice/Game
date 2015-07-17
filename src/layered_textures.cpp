@@ -196,6 +196,7 @@ string LayeredTextures::asJsonString() {
         json_string += "{\n";
         json_string += "\"id\": " + to_string(id) + ",\n";
         json_string += splatmap.asJsonString("filename");
+        splatmap.save();
         if (id == (unique_splatmaps.size() - 1)){
             json_string += "}\n";
         } else {
